@@ -20,7 +20,7 @@ public class WorldWar {
     private List<L1War> _allWarList;
 
     private WorldWar() {
-        this._allWars = new CopyOnWriteArrayList<L1War>(); // 全部戰爭
+        this._allWars = new CopyOnWriteArrayList<>(); // 全部戰爭
     }
 
     public static WorldWar get() {

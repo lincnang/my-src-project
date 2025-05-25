@@ -24,7 +24,7 @@ import java.util.Random;
 public class GetbackTable {
     private static final Log _log = LogFactory.getLog(GetbackTable.class);
     private static Random _random = new Random();
-    private static Map<Integer, ArrayList<GetbackTable>> _getback = new HashMap<Integer, ArrayList<GetbackTable>>();
+    private static Map<Integer, ArrayList<GetbackTable>> _getback = new HashMap<>();
     private int _areaX1;
     private int _areaY1;
     private int _areaX2;
@@ -74,11 +74,7 @@ public class GetbackTable {
                 getback._getbackTownIdForElf = rs.getInt("getback_townid_elf");
                 getback._getbackTownIdForDarkelf = rs.getInt("getback_townid_darkelf");
                 // getback._escapable = rs.getBoolean("scrollescape");
-                ArrayList<GetbackTable> getbackList = _getback.get(getback._areaMapId);
-                if (getbackList == null) {
-                    getbackList = new ArrayList<GetbackTable>();
-                    _getback.put(getback._areaMapId, getbackList);
-                }
+                ArrayList<GetbackTable> getbackList = _getback.computeIfAbsent(getback._areaMapId, k -> new ArrayList<>());
                 getbackList.add(getback);
             }
         } catch (final Exception e) {

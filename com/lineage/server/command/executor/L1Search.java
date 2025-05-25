@@ -23,7 +23,7 @@ public class L1Search implements L1CommandExecutor {
         try {
             StringTokenizer st = new StringTokenizer(arg);
             String type = "";
-            String name = "";
+            StringBuilder name = new StringBuilder();
             String add = "";
             boolean simpleS = true;
             int itCount = 0;
@@ -40,14 +40,14 @@ public class L1Search implements L1CommandExecutor {
                     simpleS = false;
                     type = tempVar;
                 } else {
-                    name = name + add + tempVar;
+                    name.append(add).append(tempVar);
                 }
                 itCount++;
             }
             if (simpleS == false) {
-                find_object(pc, type, name);
+                find_object(pc, type, name.toString());
             } else {
-                find_object(pc, name);
+                find_object(pc, name.toString());
             }
         } catch (Exception e) {
             pc.sendPackets(new S_SystemMessage("請輸入 .找東西 [防具,武器,道具,變身,NPC] [物件名稱]"));
@@ -65,19 +65,26 @@ public class L1Search implements L1CommandExecutor {
             PreparedStatement statement = null;
             boolean error = false;
             pc.sendPackets(new S_SystemMessage(" "));
-            if (type.equals("防具")) {
-                statement = con.prepareStatement("SELECT item_id,name,bless FROM armor WHERE name Like '%" + name + "%'");
-            } else if (type.equals("武器")) {
-                statement = con.prepareStatement("SELECT item_id,name,bless FROM weapon WHERE name Like '%" + name + "%'");
-            } else if (type.equals("道具")) {
-                statement = con.prepareStatement("SELECT item_id,name,bless FROM etcitem WHERE name Like '%" + name + "%'");
-            } else if (type.equals("變身")) {
-                statement = con.prepareStatement("SELECT polyid,name FROM polymorphs WHERE name Like '%" + name + "%'");
-            } else if (type.equals("NPC")) {
-                statement = con.prepareStatement("SELECT npcid,name FROM npc WHERE name Like '%" + name + "%'");
-            } else {
-                error = true;
-                pc.sendPackets(new S_SystemMessage("請輸入 .找東西 [防具,武器,道具,變身,NPC] [物件名稱]"));
+            switch (type) {
+                case "防具":
+                    statement = con.prepareStatement("SELECT item_id,name,bless FROM armor WHERE name Like '%" + name + "%'");
+                    break;
+                case "武器":
+                    statement = con.prepareStatement("SELECT item_id,name,bless FROM weapon WHERE name Like '%" + name + "%'");
+                    break;
+                case "道具":
+                    statement = con.prepareStatement("SELECT item_id,name,bless FROM etcitem WHERE name Like '%" + name + "%'");
+                    break;
+                case "變身":
+                    statement = con.prepareStatement("SELECT polyid,name FROM polymorphs WHERE name Like '%" + name + "%'");
+                    break;
+                case "NPC":
+                    statement = con.prepareStatement("SELECT npcid,name FROM npc WHERE name Like '%" + name + "%'");
+                    break;
+                default:
+                    error = true;
+                    pc.sendPackets(new S_SystemMessage("請輸入 .找東西 [防具,武器,道具,變身,NPC] [物件名稱]"));
+                    break;
             }
             String blessed = null;
             if (error == false) {

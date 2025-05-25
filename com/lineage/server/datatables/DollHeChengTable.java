@@ -40,7 +40,7 @@ import java.util.HashMap;
 public class DollHeChengTable {
     private static final Log _log = LogFactory.getLog(DollHeChengTable.class);
     private static DollHeChengTable _instance;
-    private final HashMap<Integer, L1DollHeCheng> _itemidIndex = new HashMap<Integer, L1DollHeCheng>();
+    private final HashMap<Integer, L1DollHeCheng> _itemidIndex = new HashMap<>();
 
     public static DollHeChengTable getInstance() {
         if (_instance == null) {
@@ -89,6 +89,6 @@ public class DollHeChengTable {
     }
 
     public L1DollHeCheng[] getItemIdList() {
-        return _itemidIndex.values().toArray(new L1DollHeCheng[_itemidIndex.size()]);
+        return _itemidIndex.values().toArray(new L1DollHeCheng[0]);
     }
 }

@@ -359,7 +359,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             }
             int objid = CharObjidTable.get().charObjid(charName);
             if (objid != 0) {
-                CharItemsReading.get().delUserItems(Integer.valueOf(objid));
+                CharItemsReading.get().delUserItems(objid);
             }
             pstm = con.prepareStatement("DELETE FROM character_buddys WHERE char_id IN (SELECT objid FROM characters WHERE char_name = ?)");
             pstm.setString(1, charName);

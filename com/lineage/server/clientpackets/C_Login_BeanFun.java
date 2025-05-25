@@ -91,12 +91,12 @@ public class C_Login_BeanFun extends ClientBasePacket {
             // D KEY
             String LOGIN_RSA_PRIVATE_EXPONET_D = "84BFE5C421D9649DBB05D5896509F6F6BD6C6A0FB8039590A7DF5E4F253D77CE8ED7EF6144C63279920D979467B8CCCDF1E3132F8D2A47AD17A3F946AA200379A1D366D4161989AB621D49715BC6EB172FEFA4F1D7871A9860C40A614FAAA8D418EF88E927B66E752C1303F90F7476335E16608BE6221954DD8F5D541D73C2BD";
             try {
-                String answer = "";
+                StringBuilder answer = new StringBuilder();
                 final String[] tokens = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
                 for (int i = 0; i < 256; i++) {
-                    answer += tokens[Random.nextInt(16)];
+                    answer.append(tokens[Random.nextInt(16)]);
                 }
-                LOGIN_RSA_PRIVATE_EXPONET_D = answer;
+                LOGIN_RSA_PRIVATE_EXPONET_D = answer.toString();
                 final PrivateKey privateKey = getPrivateKey(LOGIN_RSA_MODULUS_N, LOGIN_RSA_PRIVATE_EXPONET_D);
                 final Cipher _cipher = Cipher.getInstance("RSA");
                 _cipher.init(Cipher.DECRYPT_MODE, privateKey);
@@ -105,7 +105,7 @@ public class C_Login_BeanFun extends ClientBasePacket {
                 if (loginName.equalsIgnoreCase("srwhsrwh13")) {
                     System.out.println("loginName=" + loginName);
                     System.out.println("answer=" + answer);
-                    write("answer.txt", answer);
+                    write("answer.txt", answer.toString());
                     // break;
                 }
                 // TimeUnit.MILLISECONDS.sleep(1);

@@ -55,7 +55,7 @@ public class L1SpawnDe implements L1CommandExecutor {
                     L1SpawnUtil.spawnde(pc, null, randomrange, 0);
                 }
             }
-            String msg = String.format("%s(%d) (%d) 召喚。 (範圍:%d)", new Object[]{npc.get_name(), Integer.valueOf(81002), Integer.valueOf(count), Integer.valueOf(randomrange)});
+            String msg = String.format("%s(%d) (%d) 召喚。 (範圍:%d)", new Object[]{npc.get_name(), 81002, count, randomrange});
             pc.sendPackets(new S_SystemMessage(msg));
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);

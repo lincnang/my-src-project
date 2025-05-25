@@ -7,6 +7,7 @@ import com.lineage.server.utils.SQLUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -143,7 +144,7 @@ public final class Config {
         // TODO 伺服器捆綁
         Properties pack = new Properties();
         try {
-            InputStream is = new FileInputStream(new File("./config/pack.properties"));
+            InputStream is = Files.newInputStream(new File("./config/pack.properties").toPath());
             pack.load(is);
             is.close();
             LOGINS_TO_AUTOENTICATION = Boolean.parseBoolean(pack.getProperty("Autoentication", "false"));
@@ -157,7 +158,7 @@ public final class Config {
         // _log.info("載入服務器基礎設置!");
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(SERVER_CONFIG_FILE));
+            final InputStream is = Files.newInputStream(new File(SERVER_CONFIG_FILE).toPath());
             set.load(is);
             is.close();
             GUI = Boolean.parseBoolean(set.getProperty("GUI", "true"));

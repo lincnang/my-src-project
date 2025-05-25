@@ -25,9 +25,9 @@ public class L1PolyRace {
     private static int POLY_EFFECT = 15566;
     private static int SPEED_EFFECT = 18333;
     private int[] polyList = {936, 3134, 1642, 931, 96, 4038, 938, 929, 1540, 3783, 2145, 934, 3918, 3199, 3184, 3132, 3107, 3188, 3211, 3143, 3182, 3156, 3154, 3178, 4133, 5089, 945, 4171, 2541, 2001, 1649, 29};
-    private FastTable<L1PcInstance> playerList = new FastTable<L1PcInstance>();
-    private FastTable<L1PcInstance> orderList = new FastTable<L1PcInstance>();
-    private FastTable<L1PcInstance> position = new FastTable<L1PcInstance>();
+    private FastTable<L1PcInstance> playerList = new FastTable<>();
+    private FastTable<L1PcInstance> orderList = new FastTable<>();
+    private FastTable<L1PcInstance> position = new FastTable<>();
     private int _status = 0;
     private int _time = 0;
     private L1PcInstance _winner = null;
@@ -213,7 +213,7 @@ public class L1PolyRace {
     }
 
     private void comparePosition() {
-        FastTable<L1PcInstance> temp = new FastTable<L1PcInstance>();
+        FastTable<L1PcInstance> temp = new FastTable<>();
         int size = playerList.size();
         int count = 0;
         while (size > count) {

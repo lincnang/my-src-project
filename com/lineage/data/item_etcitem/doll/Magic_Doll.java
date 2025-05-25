@@ -72,7 +72,7 @@ public class Magic_Doll extends ItemExecutor {// src016
             if (level <= 0) {
                 level = 0;
             }
-            if (Integer.valueOf(mete[level]).intValue() <= pc.getDolls().size()) {
+            if (Integer.parseInt(mete[level]) <= pc.getDolls().size()) {
                 pc.sendPackets(new S_ServerMessage(319));
                 return;
             }
@@ -87,8 +87,7 @@ public class Magic_Doll extends ItemExecutor {// src016
                     }
                 } else {
                     final List<L1War> warList = WorldWar.get().getWarList(); // 全部戰爭清單
-                    for (final Iterator<L1War> iter = warList.iterator(); iter.hasNext(); ) {
-                        final L1War war = iter.next();
+                    for (final L1War war : warList) {
                         if (war.checkClanInWar(pc.getClan().getClanName())) { // 戰爭中
                             inWar = true;
                             break;

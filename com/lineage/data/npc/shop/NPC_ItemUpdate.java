@@ -108,12 +108,12 @@ public class NPC_ItemUpdate extends NpcExecutor {
             int[] needids = newitem.get_needids();
             int[] needcounts = newitem.get_needcounts();
             L1Item getitem = ItemTable.get().getTemplate(toids);
-            String need = "";
+            StringBuilder need = new StringBuilder();
             for (int i = 0; i < needids.length; i++) {
                 L1Item l1item = ItemTable.get().getTemplate(needids[i]);
-                need = need + l1item.getName() + "(" + needcounts[i] + ")  ";
+                need.append(l1item.getName()).append("(").append(needcounts[i]).append(")  ");
             }
-            String[] date = {tgitem.getItem().getName(), getitem.getName(), need};
+            String[] date = {tgitem.getItem().getName(), getitem.getName(), need.toString()};
             pc.set_check_item(true);
             pc.sendPackets(new S_ItemCount(npc.getId(), 1, 1, "y_up_i2", "ut" + index, date));
         } catch (Exception e) {
@@ -123,7 +123,7 @@ public class NPC_ItemUpdate extends NpcExecutor {
 
     private void show_item(L1PcInstance pc, L1NpcInstance npc) {
         try {
-            ArrayList<L1ItemInstance> list = new ArrayList<L1ItemInstance>();
+            ArrayList<L1ItemInstance> list = new ArrayList<>();
             List<L1ItemInstance> items = pc.getInventory().getItems();
             for (L1ItemInstance item : items) {
                 if (!item.getItem().isStackable()) {

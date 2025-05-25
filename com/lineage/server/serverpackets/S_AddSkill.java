@@ -14,7 +14,7 @@ import java.util.TreeMap;
  */
 public class S_AddSkill extends ServerBasePacket {
     // TODO 先暫時這樣取得正確的輸出精靈魔法屬性封包 日後再調整結構
-    private static final Map<Integer, Integer> _elfAttrMap = new TreeMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _elfAttrMap = new TreeMap<>();
 
     static {
         _elfAttrMap.put(0, 0);// ElfAttr:0.無屬性

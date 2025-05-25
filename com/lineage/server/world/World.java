@@ -1147,8 +1147,7 @@ public class World { // src016
 
     // 抽抽樂
     public void broadcastPacketToPandora(ServerBasePacket packet) {
-        for (Iterator<L1PcInstance> iter = getAllPlayers().iterator(); iter.hasNext(); ) {
-            L1PcInstance tgpc = (L1PcInstance) iter.next();
+        for (L1PcInstance tgpc : getAllPlayers()) {
             if ((check(tgpc)) && (tgpc.isShow_Open_PandoraMsg())) {
                 tgpc.sendPackets(packet);
             }

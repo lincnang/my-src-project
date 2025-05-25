@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class QuestTable {
     private static final Log _log = LogFactory.getLog(QuestTable.class);
-    private static final HashMap<Integer, L1Quest> _questList = new HashMap<Integer, L1Quest>();
+    private static final HashMap<Integer, L1Quest> _questList = new HashMap<>();
     public static int MINQID = 0;
     public static int MAXQID = 0;
     private static QuestTable _instance;
@@ -66,7 +66,7 @@ public class QuestTable {
                             quest.set_difficulty(difficulty);
                             quest.set_note(note);
                             QuestClass.get().addList(id, questclass);
-                            _questList.put(new Integer(id), quest);
+                            _questList.put(id, quest);
                         }
                     }
                 }
@@ -94,7 +94,7 @@ public class QuestTable {
     }
 
     public L1Quest getTemplate(int id) {
-        return (L1Quest) _questList.get(new Integer(id));
+        return (L1Quest) _questList.get(id);
     }
 
     public HashMap<Integer, L1Quest> getList() {
@@ -110,7 +110,7 @@ public class QuestTable {
         for (Integer key : _questList.keySet()) {
             L1Quest value = (L1Quest) _questList.get(key);
             if (level >= value.get_questlevel()) {
-                if (!pc.getQuest().isEnd(key.intValue())) {
+                if (!pc.getQuest().isEnd(key)) {
                     if (value.check(pc)) {
                         i++;
                     }

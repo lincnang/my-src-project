@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class UBSpawnTable {
     private static final Log _log = LogFactory.getLog(UBSpawnTable.class);
-    private static final Map<Integer, L1UbSpawn> _spawnTable = new HashMap<Integer, L1UbSpawn>();
+    private static final Map<Integer, L1UbSpawn> _spawnTable = new HashMap<>();
     private static UBSpawnTable _instance;
 
     public static UBSpawnTable getInstance() {
@@ -70,7 +70,7 @@ public class UBSpawnTable {
                     spawnDat.setAmount(rs.getInt(7));
                     spawnDat.setSpawnDelay(rs.getInt(8));
                     spawnDat.setSealCount(rs.getInt(9));
-                    _spawnTable.put(Integer.valueOf(spawnDat.getId()), spawnDat);
+                    _spawnTable.put(spawnDat.getId(), spawnDat);
                 }
             }
         } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class UBSpawnTable {
     }
 
     public L1UbSpawn getSpawn(int spawnId) {
-        return (L1UbSpawn) _spawnTable.get(Integer.valueOf(spawnId));
+        return (L1UbSpawn) _spawnTable.get(spawnId);
     }
 
     public int getMaxPattern(int ubId) {

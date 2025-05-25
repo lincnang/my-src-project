@@ -42,7 +42,7 @@ public class S_ShopBuyListCn extends ServerBasePacket {
         writeH(assessedItems.size());
         for (L1ItemInstance key : assessedItems.keySet()) {
             writeD(key.getId());
-            writeD(((Integer) assessedItems.get(key)).intValue());
+            writeD((Integer) assessedItems.get(key));
         }
         writeH(0x0000); // 0x0000:無顯示 0x0001:珍珠 0x0007:金幣 0x17d4:商城幣
         // final L1Item adena_Dis =
@@ -51,7 +51,7 @@ public class S_ShopBuyListCn extends ServerBasePacket {
     }
 
     private Map<L1ItemInstance, Integer> assessItems(L1PcInventory inv) {
-        Map<L1ItemInstance, Integer> result = new HashMap<L1ItemInstance, Integer>();
+        Map<L1ItemInstance, Integer> result = new HashMap<>();
         for (L1ItemInstance item : inv.getItems()) {
             switch (item.getItem().getItemId()) {
                 case 40308: // 金幣
@@ -73,7 +73,7 @@ public class S_ShopBuyListCn extends ServerBasePacket {
                         }
                         ArrayList<Integer> cnlist = ShopCnTable.get().get_cnitemidlist();// 商城販賣物品列表
                         ArrayList<Integer> uplist = ItemPowerUpdateTable.get().get_updeatitemidlist();// 升級物品列表
-                        ArrayList<Integer> allcnlist = new ArrayList<Integer>();
+                        ArrayList<Integer> allcnlist = new ArrayList<>();
                         allcnlist.addAll(cnlist);
                         allcnlist.addAll(uplist);
                         if (!allcnlist.contains(itemid)) {// 如果不在所有商城物品列表中則略過
@@ -124,7 +124,7 @@ public class S_ShopBuyListCn extends ServerBasePacket {
                             // + price);
                         }
                         if (price > 0) {
-                            result.put(item, Integer.valueOf(price));
+                            result.put(item, price);
                         }
                     }
                     break;

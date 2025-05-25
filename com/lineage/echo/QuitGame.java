@@ -219,7 +219,7 @@ public class QuitGame {
             if (pc.getSkins() != null) {
                 Map<Integer, L1SkinInstance> skinList = pc.getSkins();
                 for (Integer gfxid : skinList.keySet()) {
-                    pc.getSkin(gfxid.intValue()).deleteMe();
+                    pc.getSkin(gfxid).deleteMe();
                 }
             }
         } catch (final Exception e) {

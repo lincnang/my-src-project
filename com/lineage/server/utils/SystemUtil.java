@@ -12,10 +12,10 @@ public class SystemUtil {    //src026
         int counter = 0;
         while (data.hasRemaining()) {
             if (counter % 16 == 0) {
-                result.append(String.format("%04X: ", new Object[]{Integer.valueOf(counter)}));
+                result.append(String.format("%04X: ", new Object[]{counter}));
             }
             int b = data.get() & 0xFF;
-            result.append(String.format("%02X ", new Object[]{Integer.valueOf(b)}));
+            result.append(String.format("%02X ", new Object[]{b}));
             counter++;
             if (counter % 16 == 0) {
                 result.append("  ");

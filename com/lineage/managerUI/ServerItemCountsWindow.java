@@ -131,13 +131,11 @@ public class ServerItemCountsWindow extends JInternalFrame {
         txt_ArmorScroll = new JTextField();
         txt_ArmorScroll.setText("100");
         btn_Search = new JButton("搜索");
-        btn_Search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (Eva.isServerStarted) {
-                    dataSearch();
-                } else {
-                    Eva.errorMsg(Eva.NoServerStartMSG);
-                }
+        btn_Search.addActionListener(e -> {
+            if (Eva.isServerStarted) {
+                dataSearch();
+            } else {
+                Eva.errorMsg(Eva.NoServerStartMSG);
             }
         });
         String[] modelColName = {"賬號", "角色名", "連接狀態", "金幣", "天寶", "祝福武卷", "祝福防卷"};

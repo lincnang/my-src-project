@@ -56,8 +56,8 @@ public class L1PolyMorph {
     private static final int RING_EQUIP = 512;
     private static final int BOOTS_EQUIP = 1024;
     private static final int GUARDER_EQUIP = 2048;
-    private static final Map<Integer, Integer> weaponFlgMap = new HashMap<Integer, Integer>();
-    private static final Map<Integer, Integer> armorFlgMap = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> weaponFlgMap = new HashMap<>();
+    private static final Map<Integer, Integer> armorFlgMap = new HashMap<>();
 
     static {
         weaponFlgMap.put(1, SWORD_EQUIP);// 劍
@@ -498,9 +498,9 @@ public class L1PolyMorph {
             if (poly == null) {
                 return true;
             }
-            Integer flg = (Integer) weaponFlgMap.get(Integer.valueOf(weaponType));
+            Integer flg = (Integer) weaponFlgMap.get(weaponType);
             if (flg != null) {
-                return (poly.getWeaponEquipFlg() & flg.intValue()) != 0;
+                return (poly.getWeaponEquipFlg() & flg) != 0;
             }
             return true;
         } catch (Exception e) {
@@ -519,9 +519,9 @@ public class L1PolyMorph {
             if (poly == null) {
                 return true;
             }
-            Integer flg = (Integer) armorFlgMap.get(Integer.valueOf(armorType));
+            Integer flg = (Integer) armorFlgMap.get(armorType);
             if (flg != null) {
-                return (poly.getArmorEquipFlg() & flg.intValue()) != 0;
+                return (poly.getArmorEquipFlg() & flg) != 0;
             }
             return true;
         } catch (Exception e) {

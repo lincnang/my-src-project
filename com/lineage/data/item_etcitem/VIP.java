@@ -84,7 +84,7 @@ public class VIP extends ItemExecutor {
                  * item.set_time(ts);
                  */
                 long time = System.currentTimeMillis();// 目前時間豪秒
-                long x1 = itemTime.get_remain_time() * 60;// 指定分鐘耗用秒數
+                long x1 = itemTime.get_remain_time() * 60L;// 指定分鐘耗用秒數
                 long x2 = x1 * 1000;// 轉為豪秒
                 long upTime = x2 + time;// 目前時間 加上指定天數耗用秒數
                 // 時間數據

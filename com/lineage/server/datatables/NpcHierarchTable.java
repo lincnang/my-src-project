@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class NpcHierarchTable {
     private static final Log _log = LogFactory.getLog(NpcHierarchTable.class);
-    private static final HashMap<Integer, L1Hierarch> _powerMap = new HashMap<Integer, L1Hierarch>();
+    private static final HashMap<Integer, L1Hierarch> _powerMap = new HashMap<>();
     private static NpcHierarchTable _instance;
 
     private NpcHierarchTable() {
@@ -62,10 +62,8 @@ public class NpcHierarchTable {
                 L1Hierarch hierarch = new L1Hierarch();
                 hierarch.setSkillId(SkillId);
                 hierarch.setSkillMp(SkillMp);
-                _powerMap.put(Integer.valueOf(npc_id), hierarch);
+                _powerMap.put(npc_id, hierarch);
             }
-        } catch (SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -77,8 +75,8 @@ public class NpcHierarchTable {
     }
 
     public L1Hierarch getHierarch(int key) {
-        if (_powerMap.containsKey(Integer.valueOf(key))) {
-            return (L1Hierarch) _powerMap.get(Integer.valueOf(key));
+        if (_powerMap.containsKey(key)) {
+            return (L1Hierarch) _powerMap.get(key);
         }
         return null;
     }

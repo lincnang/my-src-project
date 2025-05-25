@@ -46,7 +46,7 @@ public class S_PrivateShop extends ServerBasePacket {
         writeC(type);
         writeD(objectId);
         if (type == 0) {
-            Map<Integer, L1ItemInstance> sellList = new HashMap<Integer, L1ItemInstance>();
+            Map<Integer, L1ItemInstance> sellList = new HashMap<>();
             Map<L1ItemInstance, Integer> map = shopDe.get_sellList();
             if (map.isEmpty()) {
                 writeH(0);
@@ -61,7 +61,7 @@ public class S_PrivateShop extends ServerBasePacket {
             for (L1ItemInstance item : map.keySet()) {
                 writeC(i);
                 writeD((int) item.getCount());
-                int price = ((Integer) map.get(item)).intValue();
+                int price = (Integer) map.get(item);
                 writeD(price);
                 writeH(item.getItem().getGfxId());
                 writeC(item.getEnchantLevel());
@@ -82,7 +82,7 @@ public class S_PrivateShop extends ServerBasePacket {
                 } else {
                     writeC(0);
                 }
-                sellList.put(Integer.valueOf(i), item);
+                sellList.put(i, item);
                 i++;
             }
             pc.get_otherList().DELIST.clear();
@@ -98,15 +98,14 @@ public class S_PrivateShop extends ServerBasePacket {
                 return;
             }
             writeH(list.size());
-            for (Iterator<Integer> iterator = list.keySet().iterator(); iterator.hasNext(); ) {
-                int key = ((Integer) iterator.next()).intValue();
-                int buyitem[] = (int[]) list.get(Integer.valueOf(key));
+            for (Integer integer : list.keySet()) {
+                int key = integer;
+                int buyitem[] = (int[]) list.get(key);
                 int count = buyitem[2];
                 int level = buyitem[1];
                 int price = buyitem[0];
                 int i = 0;
-                for (Iterator<?> iterator2 = pc.getInventory().getItems().iterator(); iterator2.hasNext(); ) {
-                    L1ItemInstance pcItem = (L1ItemInstance) iterator2.next();
+                for (L1ItemInstance pcItem : pc.getInventory().getItems()) {
                     if (pcItem.getItemId() == key && pcItem.getEnchantLevel() == level) {
                         writeC(i);
                         writeD(pcItem.getId());
@@ -206,7 +205,7 @@ public class S_PrivateShop extends ServerBasePacket {
             //					}
             //			}
             ArrayList<L1PrivateShopBuyList> list = shopPc.getBuyList();
-            Map<Integer, L1PrivateShopBuyList> havelist = new HashMap<Integer, L1PrivateShopBuyList>();
+            Map<Integer, L1PrivateShopBuyList> havelist = new HashMap<>();
             // ArrayList<L1ItemInstance> pchavelist = new
             // ArrayList<L1ItemInstance>();
             L1PrivateShopBuyList psbl = null;

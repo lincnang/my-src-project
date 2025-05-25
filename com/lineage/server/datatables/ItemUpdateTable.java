@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class ItemUpdateTable {
     private static final Log _log = LogFactory.getLog(ItemUpdateTable.class);
-    private static Map<Integer, ArrayList<L1ItemUpdate>> _updateMap = new HashMap<Integer, ArrayList<L1ItemUpdate>>();
+    private static Map<Integer, ArrayList<L1ItemUpdate>> _updateMap = new HashMap<>();
     private static ItemUpdateTable _instance;
 
     public static ItemUpdateTable get() {
@@ -84,14 +84,14 @@ public class ItemUpdateTable {
                             tmp.set_toid(toid);
                             tmp.set_needids(needids);
                             tmp.set_needcounts(needcounts);
-                            ArrayList<L1ItemUpdate> value = (ArrayList<L1ItemUpdate>) _updateMap.get(Integer.valueOf(item_id));
+                            ArrayList<L1ItemUpdate> value = (ArrayList<L1ItemUpdate>) _updateMap.get(item_id);
                             if (value == null) {
-                                value = new ArrayList<L1ItemUpdate>();
+                                value = new ArrayList<>();
                                 value.add(tmp);
                             } else {
                                 value.add(tmp);
                             }
-                            _updateMap.put(Integer.valueOf(item_id), value);
+                            _updateMap.put(item_id, value);
                         }
                     }
                 }
@@ -107,7 +107,7 @@ public class ItemUpdateTable {
     }
 
     public ArrayList<L1ItemUpdate> get(int key) {
-        return (ArrayList<L1ItemUpdate>) _updateMap.get(Integer.valueOf(key));
+        return (ArrayList<L1ItemUpdate>) _updateMap.get(key);
     }
 
     public Map<Integer, ArrayList<L1ItemUpdate>> map() {

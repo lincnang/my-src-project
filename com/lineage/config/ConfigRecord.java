@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -32,7 +33,7 @@ public final class ConfigRecord {
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            InputStream is = new FileInputStream(new File(RECORD_FILE));
+            InputStream is = Files.newInputStream(new File(RECORD_FILE).toPath());
             set.load(is);
             is.close();
             LOGGING_BAN_ENCHANT = Boolean.parseBoolean(set.getProperty("LoggingBanEnchant", "false"));

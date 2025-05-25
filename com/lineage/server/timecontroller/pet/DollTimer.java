@@ -47,8 +47,8 @@ public class DollTimer extends TimerTask {
             if (allDoll.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = allDoll.iterator(); iter.hasNext(); ) {
-                L1DollInstance doll = (L1DollInstance) iter.next();
+            for (Object o : allDoll) {
+                L1DollInstance doll = (L1DollInstance) o;
                 int time = doll.get_time() - 30;// 減少30秒
                 if (time <= 0) {
                     outDoll(doll);

@@ -78,7 +78,7 @@ public class Npc_ClanRanking extends NpcExecutor {
         int i = -1;
         // 傳回數字選項
         if (cmd.matches("[0-9]+")) {
-            i = Integer.valueOf(cmd).intValue();
+            i = Integer.parseInt(cmd);
         }
         if (i != -1) {
             final String tg = clanNameList[i];

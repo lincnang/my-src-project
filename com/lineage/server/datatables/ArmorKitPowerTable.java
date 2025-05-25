@@ -17,7 +17,7 @@ import java.util.Map;
 
 public final class ArmorKitPowerTable {
     private static final Log _log = LogFactory.getLog(ArmorKitPowerTable.class);
-    private static final Map<Integer, L1ArmorKitPower> _armorKitPowerList = new LinkedHashMap<Integer, L1ArmorKitPower>();
+    private static final Map<Integer, L1ArmorKitPower> _armorKitPowerList = new LinkedHashMap<>();
     private static ArmorKitPowerTable _instance;
 
     public static ArmorKitPowerTable getInstance() {
@@ -27,7 +27,7 @@ public final class ArmorKitPowerTable {
         return _instance;
     }
 
-    public static final void effectBuff(final L1PcInstance pc, final L1ArmorKitPower value, final int negative) {
+    public static void effectBuff(final L1PcInstance pc, final L1ArmorKitPower value, final int negative) {
         pc.addAc(value.getAc() * negative);
         pc.addMaxHp(value.getHp() * negative);
         pc.addMaxMp(value.getMp() * negative);
@@ -60,7 +60,7 @@ public final class ArmorKitPowerTable {
         pc.addRegistBlind(value.getRegistBlind() * negative);
     }
 
-    public final void load() {
+    public void load() {
         final PerformanceTimer timer = new PerformanceTimer();
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -117,7 +117,7 @@ public final class ArmorKitPowerTable {
         _log.info("讀取->[系統]_套裝能力資料設置數量: " + _armorKitPowerList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final L1ArmorKitPower get(final int armorType, final int armorKitCount) {
+    public L1ArmorKitPower get(final int armorType, final int armorKitCount) {
         final int index = armorType * 10000 + armorKitCount;
         final L1ArmorKitPower temp = _armorKitPowerList.get(index);
         if (temp != null) {

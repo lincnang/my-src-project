@@ -60,7 +60,7 @@ public class KINGDOM_STUN extends SkillMode {
 
         Random random = new Random();
         String[] sec = ConfigSkillKnight.STUN_SEC.split("~");
-        int shock = random.nextInt(Integer.valueOf(sec[1]).intValue() - Integer.valueOf(sec[0]).intValue() + 1) + Integer.valueOf(sec[0]).intValue();
+        int shock = random.nextInt(Integer.parseInt(sec[1]) - Integer.parseInt(sec[0]) + 1) + Integer.parseInt(sec[0]);
         // 註解：從伺服器配置中讀取暈眩時間範圍，並隨機生成具體時間。
 
         if ((cha instanceof L1PcInstance) && cha.hasSkillEffect(87)) {

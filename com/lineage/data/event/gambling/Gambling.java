@@ -10,7 +10,7 @@ import java.util.Random;
  * @author dexc
  */
 public class Gambling extends GamblingConfig {
-    private final Map<Integer, GamblingNpc> _npcidMap = new HashMap<Integer, GamblingNpc>();
+    private final Map<Integer, GamblingNpc> _npcidMap = new HashMap<>();
     // private int _no;
     public int WIN;
     // 冠軍參賽者
@@ -61,10 +61,10 @@ public class Gambling extends GamblingConfig {
         int i = 0;
         while (_npcidMap.size() < 5) {
             final int npcid = NPCID[_random.nextInt(NPCID.length)];
-            if (_npcidMap.get(new Integer(npcid)) == null) {
+            if (_npcidMap.get(npcid) == null) {
                 final GamblingNpc gamnpc = new GamblingNpc(this);
                 gamnpc.showNpc(npcid, i++);
-                _npcidMap.put(new Integer(npcid), gamnpc);
+                _npcidMap.put(npcid, gamnpc);
             }
         }
         // 加入累積金
@@ -107,7 +107,7 @@ public class Gambling extends GamblingConfig {
         double chip = npc.get_adena();// 該NPC總共下注金額
         if (adena != 0 && chip != 0) {
             // 收取10%佣金
-            double aftertp = adena * (1 - 10 / 100);
+            double aftertp = adena;
             double rate = aftertp / chip;// 賠率
             // 設置最高賠率限制條件
             if (rate > 100.0D) {

@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class CharacterAdenaTradeTable implements CharacterAdenaTradeStorage {
     private static final Log _log = LogFactory.getLog(CharacterAdenaTradeTable.class);
-    private final Map<Integer, L1CharacterAdenaTrade> _adenaTrades = new HashMap<Integer, L1CharacterAdenaTrade>();
+    private final Map<Integer, L1CharacterAdenaTrade> _adenaTrades = new HashMap<>();
     private int _maxId = 999;
     private Collection<L1CharacterAdenaTrade> _allValues;
 

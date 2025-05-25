@@ -66,11 +66,7 @@ public final class SkillEnhanceTable {
                 int bookLevel = data.getBookLevel();
 
                 // 建立多層Map存放
-                Map<Integer, L1SkillEnhance> lvMap = _enhanceMap.get(data.getSkillId());
-                if (lvMap == null) {
-                    lvMap = new HashMap<>();
-                    _enhanceMap.put(data.getSkillId(), lvMap);
-                }
+                Map<Integer, L1SkillEnhance> lvMap = _enhanceMap.computeIfAbsent(data.getSkillId(), k -> new HashMap<>());
                 lvMap.put(data.getBookLevel(), data);
                 count++;
             }

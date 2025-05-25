@@ -22,7 +22,7 @@ public class TimeMap extends TimerTask {
      * 提示信息.
      */
     private static final Log _log = LogFactory.getLog(TimeMap.class);
-    CopyOnWriteArrayList<L1PcInstance> pclist = new CopyOnWriteArrayList<L1PcInstance>();
+    CopyOnWriteArrayList<L1PcInstance> pclist = new CopyOnWriteArrayList<>();
     int mapid;
     int id;
     int maptime;

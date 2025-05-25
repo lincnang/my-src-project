@@ -18,7 +18,7 @@ import java.util.TimeZone;
 
 public class AuctionBoardTable implements AuctionBoardStorage {
     private static final Log _log = LogFactory.getLog(AuctionBoardTable.class);
-    private static final Map<Integer, L1AuctionBoardTmp> _boards = new HashMap<Integer, L1AuctionBoardTmp>();
+    private static final Map<Integer, L1AuctionBoardTmp> _boards = new HashMap<>();
 
     private Calendar timestampToCalendar(Timestamp ts) {
         Calendar cal = Calendar.getInstance();
@@ -76,7 +76,7 @@ public class AuctionBoardTable implements AuctionBoardStorage {
                 board.setOldOwnerId(old_owner_id);
                 board.setBidder(bidder);
                 board.setBidderId(bidder_id);
-                _boards.put(Integer.valueOf(board.getHouseId()), board);
+                _boards.put(board.getHouseId(), board);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -93,7 +93,7 @@ public class AuctionBoardTable implements AuctionBoardStorage {
     }
 
     public L1AuctionBoardTmp getAuctionBoardTable(int houseId) {
-        return (L1AuctionBoardTmp) _boards.get(Integer.valueOf(houseId));
+        return (L1AuctionBoardTmp) _boards.get(houseId);
     }
 
     public void insertAuctionBoard(L1AuctionBoardTmp board) {
@@ -116,7 +116,7 @@ public class AuctionBoardTable implements AuctionBoardStorage {
             pstm.setString(9, board.getBidder());
             pstm.setInt(10, board.getBidderId());
             pstm.execute();
-            _boards.put(Integer.valueOf(board.getHouseId()), board);
+            _boards.put(board.getHouseId(), board);
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -160,7 +160,7 @@ public class AuctionBoardTable implements AuctionBoardStorage {
             pstm = con.prepareStatement("DELETE FROM `server_board_auction_盟屋` WHERE `house_id`=?");
             pstm.setInt(1, houseId);
             pstm.execute();
-            _boards.remove(Integer.valueOf(houseId));
+            _boards.remove(houseId);
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

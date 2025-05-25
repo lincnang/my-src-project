@@ -148,7 +148,7 @@ public class Npc_ShopX extends NpcExecutor {
                 return;
             }
             pc.get_other().set_item(null);
-            long time = ShopXSet.DATE * 24 * 60 * 60 * 1000;
+            long time = (long) ShopXSet.DATE * 24 * 60 * 60 * 1000;
             final Timestamp overTime = new Timestamp(System.currentTimeMillis() + time); // 到期時間
             final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String key = sdf.format(overTime);
@@ -222,7 +222,7 @@ public class Npc_ShopX extends NpcExecutor {
                 pc.sendPackets(new S_CloseList(pc.getId()));
                 return;
             }
-            final List<L1ItemInstance> itemsx = new CopyOnWriteArrayList<L1ItemInstance>();
+            final List<L1ItemInstance> itemsx = new CopyOnWriteArrayList<>();
             final List<L1ItemInstance> items = pc.getInventory().getItems();
             for (L1ItemInstance item : items) {
                 if (ShopXTable.get().getTemplate(item.getItem().getItemId()) != null) {// 不可托售物品
@@ -358,12 +358,12 @@ public class Npc_ShopX extends NpcExecutor {
         final int or = page * 10;
         // System.out.println("OR:"+or);
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append((page + 1) + "/" + allpage + ",");
+        stringBuilder.append((page + 1)).append("/").append(allpage).append(",");
         // 每頁顯示10筆(showId + 10)資料
         for (int key = or; key < or + 10; key++) {
             final L1ShopS shopS = list.get(key);
             if (shopS != null) {
-                stringBuilder.append(shopS.get_none() + " / " + shopS.get_adena() + ",");
+                stringBuilder.append(shopS.get_none()).append(" / ").append(shopS.get_adena()).append(",");
                 switch (shopS.get_end()) {
                     case 0:// 出售中
                         stringBuilder.append("出售中,");

@@ -26,9 +26,9 @@ import java.util.logging.Logger;
  * 線上抽獎系統
  */
 public class William_Online_Reward {
-    public static final HashMap<Integer, William_Online_Reward> _itemIdIndex = new HashMap<Integer, William_Online_Reward>();
+    public static final HashMap<Integer, William_Online_Reward> _itemIdIndex = new HashMap<>();
     private static final Log _logx = LogFactory.getLog(William_Online_Reward.class.getName());
-    private static final ConcurrentHashMap<String, L1PcInstance> playerList = new ConcurrentHashMap<String, L1PcInstance>();
+    private static final ConcurrentHashMap<String, L1PcInstance> playerList = new ConcurrentHashMap<>();
     private static final int _int8 = 128;
     private static final int _int7 = 64;
     private static final int _int6 = 32;
@@ -169,7 +169,7 @@ public class William_Online_Reward {
     }
 
     public static L1PcInstance[] getAllPlayersToArray() {
-        return playerList.values().toArray(new L1PcInstance[playerList.size()]);
+        return playerList.values().toArray(new L1PcInstance[0]);
     }
 
     public static void RandomGiftsOnline(final int people, final int itemId, final int max, final int min, final int level, final int lvturn, final int prestige, final int mapid, final int class_id, final int vip) {
@@ -275,7 +275,7 @@ public class William_Online_Reward {
     }
 
     public William_Online_Reward[] getDissolveList() {
-        return _itemIdIndex.values().toArray(new William_Online_Reward[_itemIdIndex.size()]);
+        return _itemIdIndex.values().toArray(new William_Online_Reward[0]);
     }
 
     public int getDayWeek() {

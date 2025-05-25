@@ -15,7 +15,7 @@ import java.util.Map;
 
 public final class A_ResolventTable {
     private static final Log _log = LogFactory.getLog(A_ResolventTable.class);
-    private static final Map<Integer, Integer> _resolvent = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _resolvent = new HashMap<>();
     private static A_ResolventTable _instance;
 
     public static A_ResolventTable get() {
@@ -36,7 +36,7 @@ public final class A_ResolventTable {
             for (rs = ps.executeQuery(); rs.next(); ) {
                 final int itemId = rs.getInt("武防編號");
                 final int crystalCount = rs.getInt("歷練值");
-                _resolvent.put(new Integer(itemId), crystalCount);
+                _resolvent.put(itemId, crystalCount);
             }
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class ActivityNoticeTable {
     private static final Log _log = LogFactory.getLog(ActivityNoticeTable.class);
     private static ActivityNoticeTable _notice;
-    private HashMap<Integer, ActivityNotice> list = new HashMap<Integer, ActivityNotice>();
+    private HashMap<Integer, ActivityNotice> list = new HashMap<>();
 
     public static ActivityNoticeTable get() {
         if (_notice == null) {

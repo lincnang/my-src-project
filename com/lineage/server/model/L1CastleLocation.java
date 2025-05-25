@@ -141,16 +141,16 @@ public class L1CastleLocation {
     private static final int DIAD_Y2 = 32953;
     private static final short DIAD_MAP = 320;
     private static final short DIAD_INNER_CASTLE_MAP = 330;
-    private static final Map<Integer, L1Location> _towers = new HashMap<Integer, L1Location>();
-    private static final Map<Integer, L1MapArea> _areas = new HashMap<Integer, L1MapArea>();
-    private static final Map<Integer, Integer> _innerTowerMaps = new HashMap<Integer, Integer>();
-    private static final Map<Integer, L1Location> _subTowers = new HashMap<Integer, L1Location>();
-    private static final Map<Integer, L1Clan> _isCastle = new HashMap<Integer, L1Clan>();
-    private static final Map<Integer, L1Location> _catapultG = new HashMap<Integer, L1Location>();
-    private static final Map<Integer, L1Location> _catapultK = new HashMap<Integer, L1Location>();
-    private static final Map<Integer, L1Location> _catapultO = new HashMap<Integer, L1Location>();
+    private static final Map<Integer, L1Location> _towers = new HashMap<>();
+    private static final Map<Integer, L1MapArea> _areas = new HashMap<>();
+    private static final Map<Integer, Integer> _innerTowerMaps = new HashMap<>();
+    private static final Map<Integer, L1Location> _subTowers = new HashMap<>();
+    private static final Map<Integer, L1Clan> _isCastle = new HashMap<>();
+    private static final Map<Integer, L1Location> _catapultG = new HashMap<>();
+    private static final Map<Integer, L1Location> _catapultK = new HashMap<>();
+    private static final Map<Integer, L1Location> _catapultO = new HashMap<>();
     // 各城稅率保管HashMap(用)
-    private static Map<Integer, Integer> _castleTaxRate = new HashMap<Integer, Integer>();
+    private static Map<Integer, Integer> _castleTaxRate = new HashMap<>();
     private static L1CastleTaxRateListener _listener;
 
     static {

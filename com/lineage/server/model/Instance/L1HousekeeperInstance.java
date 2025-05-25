@@ -65,8 +65,8 @@ public class L1HousekeeperInstance extends L1NpcInstance {
                 String clanName = null;
                 String leaderName = null;
                 Collection<?> allClans = WorldClan.get().getAllClans();
-                for (Iterator<?> iter = allClans.iterator(); iter.hasNext(); ) {
-                    L1Clan targetClan = (L1Clan) iter.next();
+                for (Object allClan : allClans) {
+                    L1Clan targetClan = (L1Clan) allClan;
                     if (targetHouse.getHouseId() == targetClan.getHouseId()) {
                         isOccupy = true;
                         clanName = targetClan.getClanName();

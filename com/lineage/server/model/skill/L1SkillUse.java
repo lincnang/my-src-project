@@ -24,10 +24,7 @@ import com.lineage.server.world.WorldWar;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.lineage.server.model.skill.L1SkillId.*;
@@ -246,7 +243,7 @@ public class L1SkillUse {
      */
     public boolean checkUseSkill(L1PcInstance player, int skillid, int target_id, int x, int y, int time, int type, L1Character attacker, int actid, int gfxid) {
         setCheckedUseSkill(true);
-        _targetList = new ArrayList<TargetStatus>(); // ターゲットリストの初期化
+        _targetList = new ArrayList<>(); // ターゲットリストの初期化
         _skill = SkillsTable.get().getTemplate(skillid);
         if (_skill == null) {
             // System.out.println("檢查點1");
@@ -353,7 +350,7 @@ public class L1SkillUse {
                 String[] nocds = ConfigOtherSet2.NO_CD.split(",");
                 int i = 0;
                 while (i < nocds.length) {
-                    if (Integer.valueOf(nocds[i]).intValue() == this._skillId) {
+                    if (Integer.parseInt(nocds[i]) == this._skillId) {
                         nocd = true;
                         break;
                     }
@@ -2790,7 +2787,7 @@ public class L1SkillUse {
                             L1Character.writeReceivelog(_user, cha, "技能編號:" + _skillId + ",技能名稱: " + _skill.getName(), this._dmg, cha.getCurrentHp());
                         }
                     } catch (Exception e) {
-                        System.out.println("傷害記錄LOG發生錯誤" + e.getMessage() + "," + e.getStackTrace());
+                        System.out.println("傷害記錄LOG發生錯誤" + e.getMessage() + "," + Arrays.toString(e.getStackTrace()));
                     }
                     magic.commit(this._dmg, drainMana); // ダメージ系、回覆系の值をターゲットにコミットする。
                 }

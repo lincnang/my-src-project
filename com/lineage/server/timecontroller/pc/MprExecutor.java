@@ -16,8 +16,8 @@ import static com.lineage.server.model.skill.L1SkillId.*;
 
 public class MprExecutor {
     private static final Log _log = LogFactory.getLog(MprExecutor.class);
-    private static final Map<Integer, Integer> _skill = new HashMap<Integer, Integer>();
-    private static final Map<Integer, Integer> _mapId = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _skill = new HashMap<>();
+    private static final Map<Integer, Integer> _mapId = new HashMap<>();
     private static MprExecutor _instance;
 
     private MprExecutor() {
@@ -107,10 +107,10 @@ public class MprExecutor {
                     }
                 }
                 for (Integer skillid : _skill.keySet()) {
-                    if (tgpc.hasSkillEffect(skillid.intValue())) {
+                    if (tgpc.hasSkillEffect(skillid)) {
                         Integer integer = (Integer) _skill.get(skillid);
                         if (integer != null) {
-                            baseMpr += integer.intValue();
+                            baseMpr += integer;
                         }
                     }
                 }
@@ -141,9 +141,9 @@ public class MprExecutor {
         if (L1HouseLocation.isInHouse(tgpc.getMapId())) {
             baseMpr += ConfigOther.HOMEMPR;
         }
-        @SuppressWarnings("unlikely-arg-type") Integer rmp = (Integer) _mapId.get(Short.valueOf(tgpc.getMapId()));
+        @SuppressWarnings("unlikely-arg-type") Integer rmp = (Integer) _mapId.get(tgpc.getMapId());
         if (rmp != null) {
-            baseMpr += rmp.intValue();
+            baseMpr += rmp;
         }
         if ((tgpc.isElf()) && (tgpc.getMapId() == 4) && (tgpc.getLocation().isInScreen(new Point(33055, 32336)))) {
             baseMpr += ConfigOther.FORESTMPR;

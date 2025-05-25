@@ -9,12 +9,12 @@ import com.lineage.server.utils.PerformanceTimer;
 import com.lineage.server.utils.SQLUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -35,7 +35,7 @@ public class CharOtherTable1
             ps.execute();
 
             // 同步從快取 Map 中移除
-            _otherMap.remove(Integer.valueOf(objid));
+            _otherMap.remove(objid);
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -45,10 +45,7 @@ public class CharOtherTable1
     }
 
     private static void addMap(int objId, L1PcOther1 other) {
-        L1PcOther1 otherTmp = _otherMap.get(Integer.valueOf(objId));
-        if (otherTmp == null) {
-            _otherMap.put(Integer.valueOf(objId), other);
-        }
+        _otherMap.putIfAbsent(objId, other);
     }
 
     private static int[] getArray(String s) {
@@ -221,12 +218,12 @@ public class CharOtherTable1
      * @return L1PcOther1 內掛設定物件
      */
     public L1PcOther1 getOther(L1PcInstance pc) {
-        L1PcOther1 otherTmp = _otherMap.get(Integer.valueOf(pc.getId()));
+        L1PcOther1 otherTmp = _otherMap.get(pc.getId());
         return otherTmp;
     }
 
     public void storeOther(int objId, L1PcOther1 other) {
-        L1PcOther1 otherTmp = _otherMap.get(Integer.valueOf(objId));
+        L1PcOther1 otherTmp = _otherMap.get(objId);
         if (otherTmp == null) {
             addMap(objId, other);
             addNewOther(other);
@@ -497,10 +494,8 @@ public class CharOtherTable1
         PreparedStatement ps = null;
         try {
             // 先從快取 Map 中建立一個迭代器（雖然這裡根本沒用到，但可能是預留未來要針對每個角色操作）
-            Iterator<L1PcOther1> iterator = _otherMap.values().iterator();
-            while (iterator.hasNext()) {
+            for (L1PcOther1 l1PcOther1 : _otherMap.values()) {
                 // 取得每一個 L1PcOther1 物件（目前這裡沒有進一步操作）
-                L1PcOther1 l1PcOther1 = iterator.next();
                 // ❗這段目前是空轉的，可能是未來要個別清空設定或寫進 log
             }
             // 建立資料庫連線

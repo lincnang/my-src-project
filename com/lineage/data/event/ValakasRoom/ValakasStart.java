@@ -63,11 +63,7 @@ public class ValakasStart implements Runnable {  //src022
                 Sleep(300);
                 checkPc();
                 if (NpcList != null) {
-                    for (L1NpcInstance npc : NpcList) {
-                        if (npc == null || npc.isDead()) {
-                            NpcList.remove(npc);
-                        }
-                    }
+                    NpcList.removeIf(npc -> npc == null || npc.isDead());
                 }
                 // (4070019);
                 if (leo1 != null && leo1.isDead() && ((briddge1.getOpenStatus() == ActionCodes.ACTION_Close))) {

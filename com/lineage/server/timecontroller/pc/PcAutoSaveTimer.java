@@ -27,12 +27,12 @@ public class PcAutoSaveTimer extends TimerTask {
             if (allClien.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = allClien.iterator(); iter.hasNext(); ) {
-                ClientExecutor client = (ClientExecutor) iter.next();
+            for (Object o : allClien) {
+                ClientExecutor client = (ClientExecutor) o;
                 int time = client.get_savePc();
                 if (time != -1) {
                     time--;
-                    save(client, Integer.valueOf(time));
+                    save(client, time);
                 }
             }
         } catch (Exception e) {
@@ -48,8 +48,8 @@ public class PcAutoSaveTimer extends TimerTask {
             if (client.get_socket() == null) {
                 return;
             }
-            if (time.intValue() > 0) {
-                client.set_savePc(time.intValue());
+            if (time > 0) {
+                client.set_savePc(time);
             } else {
                 client.set_savePc(Config.AUTOSAVE_INTERVAL);
                 L1PcInstance pc = client.getActiveChar();

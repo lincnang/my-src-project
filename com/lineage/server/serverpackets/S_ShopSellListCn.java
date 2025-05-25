@@ -29,12 +29,7 @@ public class S_ShopSellListCn extends ServerBasePacket {
         this.writeD(tgObjid);
         final ArrayList<L1ShopItem> shopItems = ShopCnTable.get().get(npcid);
         //排序
-        Collections.sort(shopItems, new Comparator<L1ShopItem>() {
-            @Override
-            public int compare(L1ShopItem o1, L1ShopItem o2) {
-                return o1.getId() - o2.getId();
-            }
-        });
+        shopItems.sort((o1, o2) -> o1.getId() - o2.getId());
         if (shopItems.size() <= 0) {
             this.writeH(0x0000);
             return;

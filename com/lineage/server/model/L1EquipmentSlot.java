@@ -30,8 +30,8 @@ public class L1EquipmentSlot {  //src039
 
     public L1EquipmentSlot(L1PcInstance owner) {
         _owner = owner;
-        _armors = new ArrayList<L1ItemInstance>();
-        _currentArmorSet = new ArrayList<ArmorSet>();
+        _armors = new ArrayList<>();
+        _currentArmorSet = new ArrayList<>();
     }
 
     public L1ItemInstance getWeapon() {
@@ -816,9 +816,9 @@ public class L1EquipmentSlot {  //src039
         if (eq.get_power_bless() != null) {
             L1ItemPower_bless power = eq.get_power_bless();
             final int stonePower[] = {power.get_hole_1(), power.get_hole_2(), power.get_hole_3(), power.get_hole_4(), power.get_hole_5()};
-            for (int i = 0; i < stonePower.length; i++) {
-                if (stonePower[i] != 0) {
-                    final int id = stonePower[i];
+            for (int j : stonePower) {
+                if (j != 0) {
+                    final int id = j;
                     final L1StonePower stone_power = StonePowerTable.getInstance().get(id);
                     if (stone_power != null) {
                         final int ac = stone_power.getAc();
@@ -973,9 +973,9 @@ public class L1EquipmentSlot {  //src039
                 _owner.addBowcounterattack(80);
             }
             final int superRune[] = {power.get_super_rune_1(), power.get_super_rune_2(), power.get_super_rune_3()};
-            for (int i = 0; i < superRune.length; i++) {
-                if (superRune[i] != 0) {
-                    final int id = superRune[i];
+            for (int j : superRune) {
+                if (j != 0) {
+                    final int id = j;
                     final L1SuperRune super_rune = SuperRuneTable.getInstance().get(id);
                     if (super_rune != null) {
                         final int ac = super_rune.getAc();
@@ -1297,9 +1297,9 @@ public class L1EquipmentSlot {  //src039
         if (eq.get_power_bless() != null) {
             L1ItemPower_bless power = eq.get_power_bless();
             final int stonePower[] = {power.get_hole_1(), power.get_hole_2(), power.get_hole_3(), power.get_hole_4(), power.get_hole_5()};
-            for (int i = 0; i < stonePower.length; i++) {
-                if (stonePower[i] != 0) {
-                    final int id = stonePower[i];
+            for (int j : stonePower) {
+                if (j != 0) {
+                    final int id = j;
                     final L1StonePower stone_power = StonePowerTable.getInstance().get(id);
                     if (stone_power != null) {
                         final int ac = stone_power.getAc();
@@ -1454,9 +1454,9 @@ public class L1EquipmentSlot {  //src039
                 _owner.addBowcounterattack(80);
             }
             final int superRune[] = {power.get_super_rune_1(), power.get_super_rune_2(), power.get_super_rune_3()};
-            for (int i = 0; i < superRune.length; i++) {
-                if (superRune[i] != 0) {
-                    final int id = superRune[i];
+            for (int j : superRune) {
+                if (j != 0) {
+                    final int id = j;
                     final L1SuperRune super_rune = SuperRuneTable.getInstance().get(id);
                     if (super_rune != null) {
                         final int ac = super_rune.getAc();
@@ -1760,9 +1760,9 @@ public class L1EquipmentSlot {  //src039
         if (eq.get_power_bless() != null) {
             L1ItemPower_bless power = eq.get_power_bless();
             final int stonePower[] = {power.get_hole_1(), power.get_hole_2(), power.get_hole_3(), power.get_hole_4(), power.get_hole_5()};
-            for (int i = 0; i < stonePower.length; i++) {
-                if (stonePower[i] != 0) {
-                    final int id = stonePower[i];
+            for (int j : stonePower) {
+                if (j != 0) {
+                    final int id = j;
                     final L1StonePower l1StonePower = StonePowerTable.getInstance().get(id);
                     if (l1StonePower != null) {
                         final int ac = l1StonePower.getAc();
@@ -1919,9 +1919,9 @@ public class L1EquipmentSlot {  //src039
                 _owner.addBowcounterattack(-(80));
             }
             final int superRune[] = {power.get_super_rune_1(), power.get_super_rune_2(), power.get_super_rune_3()};
-            for (int i = 0; i < superRune.length; i++) {
-                if (superRune[i] != 0) {
-                    final int id = superRune[i];
+            for (int j : superRune) {
+                if (j != 0) {
+                    final int id = j;
                     final L1SuperRune super_rune_1 = SuperRuneTable.getInstance().get(id);
                     if (super_rune_1 != null) {
                         final int ac = super_rune_1.getAc();
@@ -2250,9 +2250,9 @@ public class L1EquipmentSlot {  //src039
                 _owner.addBowcounterattack(-(80));
             }
             final int superRune[] = {power.get_super_rune_1(), power.get_super_rune_2(), power.get_super_rune_3()};
-            for (int i = 0; i < superRune.length; i++) {
-                if (superRune[i] != 0) {
-                    final int id = superRune[i];
+            for (int j : superRune) {
+                if (j != 0) {
+                    final int id = j;
                     final L1SuperRune super_rune_1 = SuperRuneTable.getInstance().get(id);
                     if (super_rune_1 != null) {
                         final int ac = super_rune_1.getAc();
@@ -2383,9 +2383,9 @@ public class L1EquipmentSlot {  //src039
         if (eq.get_power_bless() != null) {
             L1ItemPower_bless power = eq.get_power_bless();
             final int stonePower[] = {power.get_hole_1(), power.get_hole_2(), power.get_hole_3(), power.get_hole_4(), power.get_hole_5()};
-            for (int i = 0; i < stonePower.length; i++) {
-                if (stonePower[i] != 0) {
-                    final int id = stonePower[i];
+            for (int j : stonePower) {
+                if (j != 0) {
+                    final int id = j;
                     final L1StonePower l1StonePower = StonePowerTable.getInstance().get(id);
                     if (l1StonePower != null) {
                         final int ac = l1StonePower.getAc();
@@ -2751,7 +2751,7 @@ public class L1EquipmentSlot {  //src039
 				final Timestamp ts = new Timestamp(upTime);
 				item.set_time(ts);*/
                 long time = System.currentTimeMillis();// 目前時間豪秒
-                long x1 = itemTime.get_remain_time() * 60;// 指定分鐘耗用秒數
+                long x1 = itemTime.get_remain_time() * 60L;// 指定分鐘耗用秒數
                 long x2 = x1 * 1000;// 轉為豪秒
                 long upTime = x2 + time;// 目前時間 加上指定天數耗用秒數
                 // 時間數據

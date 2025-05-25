@@ -86,8 +86,7 @@ public class EffectAISet extends EventExecutor {
                 if (all.isEmpty()) {
                     return;
                 }
-                for (Iterator<L1PcInstance> iter = all.iterator(); iter.hasNext(); ) {
-                    L1PcInstance tgpc = (L1PcInstance) iter.next();
+                for (L1PcInstance tgpc : all) {
                     if (tgpc != null) {
                         int map_id = tgpc.getMapId();
                         if (!ServerAIMapIdTable.get().checkCantAI(map_id)) {

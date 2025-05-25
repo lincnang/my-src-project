@@ -42,8 +42,8 @@ public class PcDeleteTimer extends TimerTask {
             if (all.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = all.iterator(); iter.hasNext(); ) {
-                L1PcInstance tgpc = (L1PcInstance) iter.next();
+            for (Object o : all) {
+                L1PcInstance tgpc = (L1PcInstance) o;
                 if (tgpc.isDead()) {
                     if (tgpc.get_delete_time() > 0) {
                         int newtime = tgpc.get_delete_time() - 1;

@@ -13,7 +13,7 @@ public class C_SelectTarget extends ClientBasePacket {
             int petId = readD();
             //int type = readC();
             int targetId = readD();
-            L1PetInstance pet = WorldPet.get().get(Integer.valueOf(petId));
+            L1PetInstance pet = WorldPet.get().get(petId);
             if (pet == null) {
                 return;
             }

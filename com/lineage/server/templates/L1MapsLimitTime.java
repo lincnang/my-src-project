@@ -44,31 +44,31 @@ public final class L1MapsLimitTime {
         _outMapId = outMapId;
     }
 
-    public final int getOrderId() {
+    public int getOrderId() {
         return _orderId;
     }
 
-    public final List<Integer> getMapList() {
+    public List<Integer> getMapList() {
         return _mapList;
     }
 
-    public final String getMapName() {
+    public String getMapName() {
         return _mapName;
     }
 
-    public final int getLimitTime() {
+    public int getLimitTime() {
         return _limitTime;
     }
 
-    public final int getOutMapX() {
+    public int getOutMapX() {
         return _outMapX;
     }
 
-    public final int getOutMapY() {
+    public int getOutMapY() {
         return _outMapY;
     }
 
-    public final short getOutMapId() {
+    public short getOutMapId() {
         return _outMapId;
     }
 }

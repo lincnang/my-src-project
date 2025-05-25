@@ -21,7 +21,7 @@ public class WorldElf {
     private Collection<L1PcInstance> _allPlayer;
 
     private WorldElf() {
-        _isElf = new ConcurrentHashMap<Integer, L1PcInstance>();
+        _isElf = new ConcurrentHashMap<>();
     }
 
     public static WorldElf get() {

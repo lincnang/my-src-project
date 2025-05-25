@@ -22,7 +22,7 @@ public class VIPTimer extends TimerTask {
 
     private static void checkVIP(Integer objid) {
         try {
-            L1Object target = World.get().findObject(objid.intValue());
+            L1Object target = World.get().findObject(objid);
             if (target != null) {
                 boolean isOut = false;
                 if (!isOut) {
@@ -54,7 +54,7 @@ public class VIPTimer extends TimerTask {
             for (Integer objid : map.keySet()) {
                 Timestamp time = (Timestamp) map.get(objid);
                 if (time.before(ts)) {
-                    VIPReading.get().delOther(objid.intValue());
+                    VIPReading.get().delOther(objid);
                     checkVIP(objid);
                 }
                 TimeUnit.MILLISECONDS.sleep(5L);

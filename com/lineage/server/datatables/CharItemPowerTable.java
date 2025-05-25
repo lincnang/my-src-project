@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CharItemPowerTable {
     private static final Log _log = LogFactory.getLog(CharItemPowerTable.class);
     // <ITEMOBJID, POWERSET>
-    private static final Map<Integer, L1CharItemPower> _itemUpdate = new ConcurrentHashMap<Integer, L1CharItemPower>();
+    private static final Map<Integer, L1CharItemPower> _itemUpdate = new ConcurrentHashMap<>();
     private static CharItemPowerTable _instance;
 
     public static CharItemPowerTable get() {

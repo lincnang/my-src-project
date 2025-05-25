@@ -38,23 +38,23 @@ public final class L1NpcBox {
         _mobNpcIdList = mobNpcIdList;
     }
 
-    public final int get_needKeyId() {
+    public int get_needKeyId() {
         return _needKeyId;
     }
 
-    public final int get_resetTimeSecsMin() {
+    public int get_resetTimeSecsMin() {
         return _resetTimeSecsMin;
     }
 
-    public final int get_resetTimeSecsMax() {
+    public int get_resetTimeSecsMax() {
         return _resetTimeSecsMax;
     }
 
-    public final List<L1ItemBox> get_createItemBoxes() {
+    public List<L1ItemBox> get_createItemBoxes() {
         return _createItemBoxes;
     }
 
-    public final List<Integer> get_mobNpcIdList() {
+    public List<Integer> get_mobNpcIdList() {
         return _mobNpcIdList;
     }
 }

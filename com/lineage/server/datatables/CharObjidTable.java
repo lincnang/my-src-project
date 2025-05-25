@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public class CharObjidTable {
     private static final Log _log = LogFactory.getLog(CharObjidTable.class);
-    private static final Map<Integer, String> _objList = new HashMap<Integer, String>();
-    private static final Map<Integer, String> _objClanList = new HashMap<Integer, String>();
+    private static final Map<Integer, String> _objList = new HashMap<>();
+    private static final Map<Integer, String> _objClanList = new HashMap<>();
     private static CharObjidTable _instance;
 
     public static CharObjidTable get() {

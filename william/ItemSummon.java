@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class ItemSummon {
     private static Logger _log = Logger.getLogger(ItemSummon.class.getName());
     private static ItemSummon _instance;
-    private final HashMap<Integer, L1WilliamItemSummon> _itemIdIndex = new HashMap<Integer, L1WilliamItemSummon>();
+    private final HashMap<Integer, L1WilliamItemSummon> _itemIdIndex = new HashMap<>();
 
     private ItemSummon() {
         loadItemSummon();
@@ -60,12 +60,12 @@ public class ItemSummon {
             int onlyOne = rs.getInt("onlyOne");
             int removeItem = rs.getInt("removeItem");
             L1WilliamItemSummon Item_Summon = new L1WilliamItemSummon(item_id, checkLevel, checkClass, checkItem, hpConsume, mpConsume, material, material_count, summon_id, summonCost, onlyOne, removeItem);
-            _itemIdIndex.put(Integer.valueOf(item_id), Item_Summon);
+            _itemIdIndex.put(item_id, Item_Summon);
         }
     }
 
     public L1WilliamItemSummon getTemplate(int itemId) {
-        return (L1WilliamItemSummon) _itemIdIndex.get(Integer.valueOf(itemId));
+        return (L1WilliamItemSummon) _itemIdIndex.get(itemId);
     }
 }
 /*

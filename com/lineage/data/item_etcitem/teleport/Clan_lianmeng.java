@@ -59,8 +59,8 @@ public class Clan_lianmeng extends ItemExecutor {
             if (m != null) {
                 String map = m.replaceAll("", "");
                 final String[] mapid = map.split(",");
-                for (int i = 0; i < mapid.length; i++) {
-                    int m1 = Integer.parseInt(mapid[i]);
+                for (String s : mapid) {
+                    int m1 = Integer.parseInt(s);
                     if (pc.getMapId() == m1) {
                         error = true;
                         break;

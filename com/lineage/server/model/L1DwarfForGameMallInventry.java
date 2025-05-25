@@ -18,7 +18,7 @@ public class L1DwarfForGameMallInventry {
     private static final Log _log = LogFactory.getLog(L1DwarfForGameMallInventry.class);
     public final Object _key = new Object();
     private final L1PcInstance _owner;
-    protected List<T_ShopWarehouseModel> _wareHouseList = new CopyOnWriteArrayList<T_ShopWarehouseModel>();
+    protected List<T_ShopWarehouseModel> _wareHouseList = new CopyOnWriteArrayList<>();
 
     public L1DwarfForGameMallInventry(final L1PcInstance owner) {
         _owner = owner;

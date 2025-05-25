@@ -18,7 +18,7 @@ import java.util.Map;
 public class QuestClass {
     private static final Log _log = LogFactory.getLog(QuestClass.class);
     // Quest 執行類清單<QuestId, 執行類位置>
-    private static final Map<Integer, QuestExecutor> _classList = new HashMap<Integer, QuestExecutor>();
+    private static final Map<Integer, QuestExecutor> _classList = new HashMap<>();
     private static QuestClass _instance;
 
     public static QuestClass get() {
@@ -42,20 +42,13 @@ public class QuestClass {
             stringBuilder.append(className);
             final Class<?> cls = Class.forName(stringBuilder.toString());
             final QuestExecutor exe = (QuestExecutor) cls.getMethod("get").invoke(null);
-            _classList.put(new Integer(questid), exe);
+            _classList.put(questid, exe);
         } catch (final ClassNotFoundException e) {
             String error = "發生[Quest(任務)檔案]錯誤, 檢查檔案是否存在:" + className + " QuestId:" + questid;
             _log.error(error);
             DataError.isError(_log, error, e);
-        } catch (final IllegalArgumentException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (final IllegalAccessException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (final InvocationTargetException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (final SecurityException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (final NoSuchMethodException e) {
+        } catch (final IllegalArgumentException | NoSuchMethodException | SecurityException |
+                       InvocationTargetException | IllegalAccessException e) {
             _log.error(e.getLocalizedMessage(), e);
         }
     }
@@ -67,7 +60,7 @@ public class QuestClass {
     public void execute(final L1Quest quest) {
         try {
             // CLASS執行位置取回
-            final QuestExecutor exe = _classList.get(new Integer(quest.get_id()));
+            final QuestExecutor exe = _classList.get(quest.get_id());
             if (exe != null) {
                 exe.execute(quest);
             }
@@ -85,7 +78,7 @@ public class QuestClass {
     public void startQuest(final L1PcInstance pc, final int questid) {
         try {
             // CLASS執行位置取回
-            final QuestExecutor exe = _classList.get(new Integer(questid));
+            final QuestExecutor exe = _classList.get(questid);
             if (exe != null) {
                 exe.startQuest(pc);
             }
@@ -103,7 +96,7 @@ public class QuestClass {
     public void endQuest(final L1PcInstance pc, final int questid) {
         try {
             // CLASS執行位置取回
-            final QuestExecutor exe = _classList.get(new Integer(questid));
+            final QuestExecutor exe = _classList.get(questid);
             if (exe != null) {
                 exe.endQuest(pc);
             }
@@ -119,7 +112,7 @@ public class QuestClass {
     public void showQuest(final L1PcInstance pc, final int questid) {
         try {
             // CLASS執行位置取回
-            final QuestExecutor exe = _classList.get(new Integer(questid));
+            final QuestExecutor exe = _classList.get(questid);
             if (exe != null) {
                 exe.showQuest(pc);
             }
@@ -135,7 +128,7 @@ public class QuestClass {
     public void stopQuest(L1PcInstance pc, int questid) {
         try {
             // CLASS執行位置取回
-            final QuestExecutor exe = _classList.get(new Integer(questid));
+            final QuestExecutor exe = _classList.get(questid);
             if (exe != null) {
                 exe.stopQuest(pc);
             }

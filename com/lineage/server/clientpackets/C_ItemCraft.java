@@ -170,7 +170,7 @@ public class C_ItemCraft extends ClientBasePacket {
                         }
                     }
                 }
-                ArrayList<L1ObjectAmount<Integer>> aidMaterialItemIds = new ArrayList<L1ObjectAmount<Integer>>();
+                ArrayList<L1ObjectAmount<Integer>> aidMaterialItemIds = new ArrayList<>();
                 for (int i = 0; i < aidMaterialsSize; i++) {
                     descId = materialItemDescs.get(materialsSize + i);
                     materialObj = aidMaterials.get(i);

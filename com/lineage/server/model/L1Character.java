@@ -35,14 +35,14 @@ public class L1Character extends L1Object {
     private static final long serialVersionUID = 1L;
     private static BufferedWriter out;
     private static Random _random = new Random();
-    private final Map<Integer, L1NpcInstance> _petlist = new HashMap<Integer, L1NpcInstance>();
-    private final HashMap<Integer, L1SkillTimer> _skillEffect = new HashMap<Integer, L1SkillTimer>();
-    private final Map<Integer, L1ItemDelay.ItemDelayTimer> _itemdelay = new HashMap<Integer, L1ItemDelay.ItemDelayTimer>();
-    private final Map<Integer, L1FollowerInstance> _followerlist = new HashMap<Integer, L1FollowerInstance>();
-    private final Map<Integer, L1DollInstance> _dolls = new HashMap<Integer, L1DollInstance>();
-    private final List<L1Object> _knownObjects = new CopyOnWriteArrayList<L1Object>();
-    private final List<L1PcInstance> _knownPlayer = new CopyOnWriteArrayList<L1PcInstance>();
-    private final Map<Integer, L1DollInstance2> _dolls2 = new HashMap<Integer, L1DollInstance2>();
+    private final Map<Integer, L1NpcInstance> _petlist = new HashMap<>();
+    private final HashMap<Integer, L1SkillTimer> _skillEffect = new HashMap<>();
+    private final Map<Integer, L1ItemDelay.ItemDelayTimer> _itemdelay = new HashMap<>();
+    private final Map<Integer, L1FollowerInstance> _followerlist = new HashMap<>();
+    private final Map<Integer, L1DollInstance> _dolls = new HashMap<>();
+    private final List<L1Object> _knownObjects = new CopyOnWriteArrayList<>();
+    private final List<L1PcInstance> _knownPlayer = new CopyOnWriteArrayList<>();
+    private final Map<Integer, L1DollInstance2> _dolls2 = new HashMap<>();
     L1Paralysis _paralysis;
     private L1Poison _poison = null;
     private boolean _sleeped;
@@ -144,7 +144,7 @@ public class L1Character extends L1Object {
     private short _add_magic_plus = 0;
     private short _add_damage_plus = 0;
     private short _add_range_plus = 0;
-    private ArrayList<L1EffectInstance> _TrueTargetEffectList = new ArrayList<L1EffectInstance>();
+    private ArrayList<L1EffectInstance> _TrueTargetEffectList = new ArrayList<>();
     private int _registFear = 0;
     private int _trueRegistFear = 0;
     /**
@@ -188,7 +188,7 @@ public class L1Character extends L1Object {
                 out.close();
             }
             String p1name = "";
-            Short p1map = 0;
+            short p1map = 0;
             String p2name = "";
             if (player1 != null) {
                 p1name = player1.getName();
@@ -895,7 +895,7 @@ public class L1Character extends L1Object {
      *
      * @param type true:顯示 false:關閉
      */
-    private final void sendPetCtrlMenu(L1NpcInstance npc, boolean type) {
+    private void sendPetCtrlMenu(L1NpcInstance npc, boolean type) {
         if ((npc instanceof L1PetInstance)) {
             L1PetInstance pet = (L1PetInstance) npc;
             L1Character cha = pet.getMaster();

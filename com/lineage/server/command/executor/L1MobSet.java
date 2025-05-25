@@ -60,7 +60,7 @@ public class L1MobSet implements L1CommandExecutor {
 			}*/
             SpawnTable.storeSpawn(pc, template);
             L1SpawnUtil.spawn(pc, npcId, 0, 0);
-            msg = new StringBuilder().append(template.get_name()).append(" (" + npcId + ") ").append("新增到資料庫中。").toString();
+            msg = new StringBuilder().append(template.get_name()).append(" (").append(npcId).append(") ").append("新增到資料庫中。").toString();
         } catch (Exception e) {
             _log.error("錯誤的GM指令格式: " + this.getClass().getSimpleName() + " 執行的GM:" + pc.getName());
             msg = cmdName + " MOBID 請輸入。";

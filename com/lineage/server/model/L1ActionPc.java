@@ -1445,7 +1445,7 @@ public class L1ActionPc {
                 final L1ActionShowHtml show = new L1ActionShowHtml(_pc);
                 show.showQuestMap(page);
             } else if (cmd.equalsIgnoreCase("q0")) {// 頁面內指定位置
-                final int key = (_pc.get_other().get_page() * 10) + 0;
+                final int key = (_pc.get_other().get_page() * 10);
                 showPage(key);
             } else if (cmd.equalsIgnoreCase("q1")) {// 頁面內指定位置
                 final int key = (_pc.get_other().get_page() * 10) + 1;
@@ -1655,7 +1655,7 @@ public class L1ActionPc {
     }
 
     private Boolean IsBossSpawn(L1Spawn spawn) {
-        long existTime = spawn.get_existTime() * 60 * 1000;
+        long existTime = (long) spawn.get_existTime() * 60 * 1000;
         long spawnTime = spawn.get_nextSpawnTime().getTimeInMillis();
         long nowTime = System.currentTimeMillis();
         return !(existTime + spawnTime > nowTime);
@@ -1677,7 +1677,7 @@ public class L1ActionPc {
                     } else {
                         status = "狀態:(存活中)";
                     }
-                    s.append(name + status + ",");
+                    s.append(name).append(status).append(",");
                     //*			s.append(".........................,");
                 }
             }
@@ -2383,7 +2383,7 @@ public class L1ActionPc {
                         }
                     }
                     if (_pc.getTempObjects().size() > 0) {
-                        _pc.getTempObjects().sort(new DataComparatorCharacterTrade<Object>());
+                        _pc.getTempObjects().sort(new DataComparatorCharacterTrade<>());
                         ;
                     }
                     showCharacterTradeHtml(0);
@@ -2638,7 +2638,7 @@ public class L1ActionPc {
                 if (m >= 28) {
                     break;
                 }
-                final int charTradeId = ((Integer) _pc.getTempObjects().get(n)).intValue();
+                final int charTradeId = (Integer) _pc.getTempObjects().get(n);
                 final L1CharaterTrade charaterTrade = CharaterTradeReading.get().getCharaterTrade(charTradeId);
                 data1[m] = charaterTrade.getName();
                 data1[m + 1] = String.valueOf(charaterTrade.get_money_count());
@@ -2669,7 +2669,7 @@ public class L1ActionPc {
             return;
         }
         if (_pc.getTempObjects().get(index) instanceof Integer) {
-            final int charTradeId = ((Integer) _pc.getTempObjects().get(index)).intValue();
+            final int charTradeId = (Integer) _pc.getTempObjects().get(index);
             final L1CharaterTrade charaterTrade = CharaterTradeReading.get().getCharaterTrade(charTradeId);
             synchronized (charaterTrade) {
                 if (charaterTrade.get_state() == 0) {
@@ -3454,7 +3454,7 @@ public class L1ActionPc {
             if (shopItems > 0) {
                 for (final Object itemObject : pc.getRemoveItemInventory().getItems()) {
                     final L1ItemInstance itemTemplate = (L1ItemInstance) itemObject;
-                    name.append("【" + itemTemplate.getName() + "】");
+                    name.append("【").append(itemTemplate.getName()).append("】");
                     AutoRemoveItem = name.toString(); // 輔助(自動刪物)->刪物的物品
                 }
             } else {

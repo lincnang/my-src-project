@@ -219,8 +219,8 @@ public class holyPolySet {
     }
 
     public boolean hasNeedQuests(final int questId) {
-        for (int i = 0; i < _needquest.length; i++) {
-            if (_needquest[i] == questId) {
+        for (int j : _needquest) {
+            if (j == questId) {
                 return true;
             }
         }

@@ -25,8 +25,6 @@ public class DatabaseFactoryLogin {
             _source.setUser(_user);
             _source.setPassword(_password);
             _source.getConnection().close();
-        } catch (SQLException e) {
-            _log.fatal("資料庫讀取錯誤!", e);
         } catch (Exception e) {
             _log.fatal("資料庫讀取錯誤!", e);
         }

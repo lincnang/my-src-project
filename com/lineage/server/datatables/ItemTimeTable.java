@@ -19,7 +19,7 @@ import java.util.Map;
  *
  */
 public class ItemTimeTable {
-    public static final Map<Integer, L1ItemTime> TIME = new HashMap<Integer, L1ItemTime>();
+    public static final Map<Integer, L1ItemTime> TIME = new HashMap<>();
     private static final Log _log = LogFactory.getLog(ItemTimeTable.class);
     private static ItemTimeTable _instance;
 

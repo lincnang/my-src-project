@@ -112,9 +112,9 @@ public class EquipCollectCmd {
     private String[] getCollectDetail(final L1PcInstance pc, final L1EquipCollect equipCollect) {
         final StringBuilder stringBuilder = new StringBuilder();
         // #0
-        stringBuilder.append(equipCollect.get_note() + ",");
+        stringBuilder.append(equipCollect.get_note()).append(",");
         // #1
-        stringBuilder.append(equipCollect.get_givebuff() + ",");
+        stringBuilder.append(equipCollect.get_givebuff()).append(",");
         // #2
         stringBuilder.append(",");
         // #3
@@ -132,7 +132,7 @@ public class EquipCollectCmd {
             String itemName = item.getName();
             // 數量
             String itemCount = "(" + equipCollect.getMaterials_count()[i] + ") 個";
-            stringBuilder.append(enchant + itemName + itemCount + ",");
+            stringBuilder.append(enchant).append(itemName).append(itemCount).append(",");
         }
         for (int i = 4; i <= 50 - equipCollect.get_materials_enchants().length; i++) {
             stringBuilder.append(",");

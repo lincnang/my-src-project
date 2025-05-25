@@ -95,7 +95,7 @@ public class Npc_Yuki extends NpcExecutor {
             quest.set_info(false);
             Integer time = QuestMapTable.get().getTime(9000);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             L1PolyMorph.undoPoly(pc);
             L1BuffUtil.cancelAbsoluteBarrier(pc);

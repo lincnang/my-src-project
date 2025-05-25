@@ -28,8 +28,8 @@ public class DragonKeyNew extends ItemExecutor {
             return;
         }
         boolean isChecked = false;
-        for (Iterator<Integer> i$ = ConfigOtherSet2.DRAGON_KEY_MAP_LIST.iterator(); i$.hasNext(); ) {
-            int mapid = ((Integer) i$.next()).intValue();
+        for (Integer integer : ConfigOtherSet2.DRAGON_KEY_MAP_LIST) {
+            int mapid = integer;
             if (mapid == pc.getMapId()) {
                 isChecked = true;
                 break;

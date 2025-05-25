@@ -20,7 +20,7 @@ import java.util.Map;
 public class SkillsProbabilityTable {
     private static final Log _log = LogFactory.getLog(SkillsProbabilityTable.class);
     private static SkillsProbabilityTable _instance;
-    private final Map<Integer, L1Skills> _skills = new HashMap<Integer, L1Skills>();
+    private final Map<Integer, L1Skills> _skills = new HashMap<>();
 
     private SkillsProbabilityTable() {
         load();
@@ -63,7 +63,7 @@ public class SkillsProbabilityTable {
                 l1skills.setProbability_Mr(rs.getInt("被攻擊者魔防扣幾率百分比"));
                 l1skills.set_intel_add_probability(rs.getInt("自身智力增加幾率百分比"));
                 l1skills.set_intel_add_probability_max(rs.getInt("自身智力增加幾率上限"));
-                _skills.put(new Integer(skill_id), l1skills);
+                _skills.put(skill_id, l1skills);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

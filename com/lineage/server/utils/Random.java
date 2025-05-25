@@ -58,7 +58,7 @@ public class Random {
 
     // 隨機長整數
     public static long nextLong() {
-        long l = nextInt(Integer.MAX_VALUE) << 32 + nextInt(Integer.MAX_VALUE);
+        long l = (long) nextInt(Integer.MAX_VALUE) << 32 + nextInt(Integer.MAX_VALUE);
         return l;
     }
 

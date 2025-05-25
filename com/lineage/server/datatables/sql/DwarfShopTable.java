@@ -20,14 +20,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DwarfShopTable implements DwarfShopStorage {
     private static final Log _log = LogFactory.getLog(DwarfShopTable.class);
-    private static final Map<Integer, L1ItemInstance> _itemList = new ConcurrentHashMap<Integer, L1ItemInstance>();
-    private static final Map<Integer, L1ShopS> _shopSList = new ConcurrentHashMap<Integer, L1ShopS>();
+    private static final Map<Integer, L1ItemInstance> _itemList = new ConcurrentHashMap<>();
+    private static final Map<Integer, L1ShopS> _shopSList = new ConcurrentHashMap<>();
     private static int _id = 0;
 
     private static void addItem(int key, L1ItemInstance value) {
-        if (_itemList.get(Integer.valueOf(key)) == null) {
-            _itemList.put(Integer.valueOf(key), value);
-        }
+        _itemList.putIfAbsent(key, value);
         if (World.get().findObject(key) == null) {
             World.get().storeObject(value);
         }
@@ -64,7 +62,7 @@ public class DwarfShopTable implements DwarfShopStorage {
                     case 0:
                     case 1:
                     case 3:
-                        L1ItemInstance item = (L1ItemInstance) _itemList.get(Integer.valueOf(item_obj_id));
+                        L1ItemInstance item = (L1ItemInstance) _itemList.get(item_obj_id);
                         shopS.set_item(item);
                         break;
                     case 2:
@@ -83,9 +81,7 @@ public class DwarfShopTable implements DwarfShopStorage {
     }
 
     private static void userMap(int key, L1ShopS value) {
-        if (_shopSList.get(Integer.valueOf(key)) == null) {
-            _shopSList.put(Integer.valueOf(key), value);
-        }
+        _shopSList.putIfAbsent(key, value);
     }
 
     private static void errorItem(int objid) {
@@ -215,10 +211,10 @@ public class DwarfShopTable implements DwarfShopStorage {
     }
 
     public HashMap<Integer, L1ShopS> allShopS() {
-        HashMap<Integer, L1ShopS> shopSList = new HashMap<Integer, L1ShopS>();
+        HashMap<Integer, L1ShopS> shopSList = new HashMap<>();
         for (L1ShopS value : _shopSList.values()) {
             if (value.get_end() == 0) {
-                shopSList.put(Integer.valueOf(value.get_id()), value);
+                shopSList.put(value.get_id(), value);
             }
         }
         return shopSList;
@@ -246,12 +242,12 @@ public class DwarfShopTable implements DwarfShopStorage {
     }
 
     public HashMap<Integer, L1ShopS> getShopSMap(int pcobjid) {
-        HashMap<Integer, L1ShopS> shopSMap = new HashMap<Integer, L1ShopS>();
+        HashMap<Integer, L1ShopS> shopSMap = new HashMap<>();
         int index = 0;
         for (int i = _shopSList.size() + 1; i > 0; i--) {
-            L1ShopS value = (L1ShopS) _shopSList.get(Integer.valueOf(i));
+            L1ShopS value = (L1ShopS) _shopSList.get(i);
             if ((value != null) && (value.get_user_obj_id() == pcobjid)) {
-                shopSMap.put(Integer.valueOf(index), value);
+                shopSMap.put(index, value);
                 index++;
             }
         }
@@ -356,9 +352,9 @@ public class DwarfShopTable implements DwarfShopStorage {
     }
 
     public void deleteItem(int key) {
-        L1ItemInstance item = (L1ItemInstance) _itemList.get(Integer.valueOf(key));
+        L1ItemInstance item = (L1ItemInstance) _itemList.get(key);
         if (item != null) {
-            _itemList.remove(Integer.valueOf(key));
+            _itemList.remove(key);
             errorItem(key);
         }
     }

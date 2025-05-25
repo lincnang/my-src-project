@@ -39,7 +39,7 @@ public class RefineTable { // src016
     }
 
     private ArrayList<L1Refine> allRefineList() {
-        ArrayList<L1Refine> refineList = new ArrayList<L1Refine>();
+        ArrayList<L1Refine> refineList = new ArrayList<>();
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;

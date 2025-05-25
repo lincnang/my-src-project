@@ -30,7 +30,7 @@ public class EzpayTable3 implements EzpayStorage3 {
         Connection co = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Map<Integer, int[]> list = new HashMap<Integer, int[]>();
+        Map<Integer, int[]> list = new HashMap<>();
         try {
             co = DatabaseFactoryLogin.get().getConnection();
             String sqlstr = "SELECT * FROM `系統_即時發放獎勵` WHERE `指定發送玩家帳號`=? ORDER BY `流水號`";
@@ -48,7 +48,7 @@ public class EzpayTable3 implements EzpayStorage3 {
                     value[0] = key;
                     value[1] = p_id;
                     value[2] = count;
-                    list.put(Integer.valueOf(key), value);
+                    list.put(key, value);
                 }
             }
         } catch (Exception e) {

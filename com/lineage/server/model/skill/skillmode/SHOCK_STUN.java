@@ -37,7 +37,7 @@ public class SHOCK_STUN extends SkillMode {
     public int start(L1NpcInstance npc, L1Character cha, L1Magic magic, int integer) throws Exception {
         Random random = new Random();
         String[] sec = ConfigSkillKnight.STUN_SEC.split("~");
-        int shock = random.nextInt(Integer.valueOf(sec[1]).intValue() - Integer.valueOf(sec[0]).intValue() + 1) + Integer.valueOf(sec[0]).intValue();
+        int shock = random.nextInt(Integer.parseInt(sec[1]) - Integer.parseInt(sec[0]) + 1) + Integer.parseInt(sec[0]);
         // 取回目標是否已被施展沖暈
         if ((cha instanceof L1PcInstance) && cha.hasSkillEffect(87)) {
             shock += cha.getSkillEffectTimeSec(87);// 累計時間

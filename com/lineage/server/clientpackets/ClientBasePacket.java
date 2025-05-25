@@ -314,7 +314,6 @@ public abstract class ClientBasePacket {
             s = new String(this._decrypt, this._off, length, CLIENT_LANGUAGE_CODE);
             s = s.substring(0, s.indexOf(0));
             this._off += s.getBytes(CLIENT_LANGUAGE_CODE).length + 1;
-        } catch (StringIndexOutOfBoundsException localStringIndexOutOfBoundsException) {
         } catch (Exception localException) {
         }
         return s;
@@ -357,15 +356,15 @@ public abstract class ClientBasePacket {
 
     public long readLong() {
         int tempOff = this._off;
-        ArrayList<Integer> decryptArray = new ArrayList<Integer>();
+        ArrayList<Integer> decryptArray = new ArrayList<>();
         for (int j = tempOff; j < this._decrypt.length; j++) {
             int k = this._decrypt[j] & 0xFF;
             if (k <= 127) {
-                decryptArray.add(Integer.valueOf(k));
+                decryptArray.add(k);
                 this._off += 1;
                 break;
             }
-            decryptArray.add(Integer.valueOf(k));
+            decryptArray.add(k);
             this._off += 1;
         }
         return decrypt(toArray(decryptArray));
@@ -374,7 +373,7 @@ public abstract class ClientBasePacket {
     private int[] toArray(ArrayList<Integer> arr) {
         int[] a = new int[arr.size()];
         for (int i = 0; i < a.length; i++) {
-            a[i] = ((Integer) arr.get(i)).intValue();
+            a[i] = (Integer) arr.get(i);
         }
         return a;
     }
@@ -401,7 +400,7 @@ public abstract class ClientBasePacket {
         String s = null;
         if (this._decrypt.length > this._off) {
             long i = this._decrypt[this._off] & 0xFF;
-            if (i == _baseNumber * index + 2) {
+            if (i == (long) _baseNumber * index + 2) {
                 try {
                     this._off += 1;
                     int length = (int) readLong();
@@ -419,7 +418,7 @@ public abstract class ClientBasePacket {
         BigInteger b = null;
         if (this._decrypt.length > this._off) {
             long i = this._decrypt[this._off] & 0xFF;
-            if (i == _baseNumber * index) {
+            if (i == (long) _baseNumber * index) {
                 this._off += 1;
                 i = readLong();
             } else {
@@ -434,7 +433,7 @@ public abstract class ClientBasePacket {
         byte[] result = null;
         if (this._decrypt.length > this._off) {
             long i = this._decrypt[this._off] & 0xFF;
-            if (i == _baseNumber * index + 2) {
+            if (i == (long) _baseNumber * index + 2) {
                 this._off += 1;
                 int length = (int) readLong();
                 result = new byte[length];
@@ -505,26 +504,24 @@ public abstract class ClientBasePacket {
     }
 
     public String readPB_SHA(byte[] config) {
-        String hs = "";
+        StringBuilder hs = new StringBuilder();
         try {
             for (byte element : config) {
                 String stmp = Integer.toHexString(element & 0xFF);
                 if (stmp.length() == 1) {
-                    hs = hs + "0" + stmp;
+                    hs.append("0").append(stmp);
                 } else {
-                    hs = hs + stmp;
+                    hs.append(stmp);
                 }
             }
         } catch (Exception localException) {
         }
-        return hs.toUpperCase();
+        return hs.toString().toUpperCase();
     }
 
     public byte[] read(int length) {
         byte[] array = new byte[length];
-        for (int i = this._off; i < this._off + length; i++) {
-            array[(i - this._off)] = this._decrypt[i];
-        }
+        System.arraycopy(this._decrypt, this._off, array, this._off - this._off, this._off + length - this._off);
         this._off += length;
         return array;
     }

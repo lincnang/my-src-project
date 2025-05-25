@@ -223,7 +223,7 @@ public class CharItemsReading {
         _lock.lock();
         boolean tmp = false;
         try {
-            tmp = _storage.getUserItems(Integer.valueOf(pcObjId), objid, count);
+            tmp = _storage.getUserItems(pcObjId, objid, count);
         } finally {
             _lock.unlock();
         }

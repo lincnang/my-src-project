@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DwarfForChaTable implements DwarfForChaStorage {
     private static final Log _log = LogFactory.getLog(DwarfForChaTable.class);
-    private static final Map<String, CopyOnWriteArrayList<L1ItemInstance>> _itemList = new ConcurrentHashMap<String, CopyOnWriteArrayList<L1ItemInstance>>();
+    private static final Map<String, CopyOnWriteArrayList<L1ItemInstance>> _itemList = new ConcurrentHashMap<>();
 
     private static void errorItem(int objid) {
         Connection co = null;
@@ -45,7 +45,7 @@ public class DwarfForChaTable implements DwarfForChaStorage {
         // System.out.println("建立資料-角色專屬倉庫");
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(owner_name);
         if (list == null) {
-            list = new CopyOnWriteArrayList<L1ItemInstance>();
+            list = new CopyOnWriteArrayList<>();
             if (!list.contains(item)) {
                 list.add(item);
             }

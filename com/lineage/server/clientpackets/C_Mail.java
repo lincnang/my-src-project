@@ -303,7 +303,7 @@ public class C_Mail extends ClientBasePacket {
      * 讀取指定id的信件
      *
      */
-    private final void clientPackB(final L1PcInstance pc, final int type, final int id) {
+    private void clientPackB(final L1PcInstance pc, final int type, final int id) {
         try {
             final L1Mail mail = MailReading.get().getMail(id);
             if (mail != null) {
@@ -321,7 +321,7 @@ public class C_Mail extends ClientBasePacket {
      * 讀取全信件標題
      *
      */
-    private final void clientPackA(final L1PcInstance pc, final int type/*
+    private void clientPackA(final L1PcInstance pc, final int type/*
      * , final int count
      */) {
         try {

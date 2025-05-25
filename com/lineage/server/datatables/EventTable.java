@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class EventTable {
     private static final Log _log = LogFactory.getLog(EventTable.class);
-    private static final Map<Integer, L1Event> _eventList = new HashMap<Integer, L1Event>();
+    private static final Map<Integer, L1Event> _eventList = new HashMap<>();
     private static EventTable _instance;
 
     public static EventTable get() {
@@ -53,7 +53,7 @@ public class EventTable {
                     event.set_eventother2(eventother2);
                     event.set_next_time(rs.getTimestamp("next_time"));
                     EventClass.get().addList(id, eventclass);
-                    _eventList.put(new Integer(id), event);
+                    _eventList.put(id, event);
                     EventClass.get().startEvent(event);
                 }
             }
@@ -92,7 +92,7 @@ public class EventTable {
                     event.set_eventother(eventother);
                     event.set_eventother2(eventother2);
                     EventClass.get().addList(id, eventclass);
-                    _eventList.put(new Integer(id), event);
+                    _eventList.put(id, event);
                     EventClass.get().startEvent(event);
                 }
             }
@@ -107,7 +107,7 @@ public class EventTable {
     }
 
     public L1Event getTemplate(int id) {
-        return (L1Event) _eventList.get(new Integer(id));
+        return (L1Event) _eventList.get(id);
     }
 
     public Map<Integer, L1Event> getList() {

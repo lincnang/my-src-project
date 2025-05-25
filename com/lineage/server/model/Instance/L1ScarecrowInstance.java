@@ -48,9 +48,9 @@ public class L1ScarecrowInstance extends L1NpcInstance {
                 } else
                     //if (player.getLevel() < 5) { // ＬＶ制限もうける場合はここを変更
                     if (player.getLevel() < 5 && getNpcId() != 4070082) {
-                        final ArrayList<L1PcInstance> targetList = new ArrayList<L1PcInstance>();
+                        final ArrayList<L1PcInstance> targetList = new ArrayList<>();
                         targetList.add(player);
-                        final ArrayList<Integer> hateList = new ArrayList<Integer>();
+                        final ArrayList<Integer> hateList = new ArrayList<>();
                         hateList.add(1);
                         final int exp = (int) this.getExp();
                         CalcExp.calcExp(player, this.getId(), targetList, hateList, exp);

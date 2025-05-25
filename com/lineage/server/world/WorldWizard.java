@@ -21,7 +21,7 @@ public class WorldWizard {
     private Collection<L1PcInstance> _allPlayer;
 
     private WorldWizard() {
-        _isWizard = new ConcurrentHashMap<Integer, L1PcInstance>();
+        _isWizard = new ConcurrentHashMap<>();
     }
 
     public static WorldWizard get() {

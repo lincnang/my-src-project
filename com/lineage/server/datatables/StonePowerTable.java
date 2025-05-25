@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class StonePowerTable {  //src039
     private static final Log _log = LogFactory.getLog(StonePowerTable.class);
-    private static final Map<Integer, L1StonePower> _stoneList = new LinkedHashMap<Integer, L1StonePower>();
+    private static final Map<Integer, L1StonePower> _stoneList = new LinkedHashMap<>();
     private static StonePowerTable _instance;
 
     public static StonePowerTable getInstance() {

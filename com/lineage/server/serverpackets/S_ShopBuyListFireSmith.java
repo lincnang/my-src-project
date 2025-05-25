@@ -28,13 +28,13 @@ public class S_ShopBuyListFireSmith extends ServerBasePacket {
         writeH(assessedItems.size());
         for (L1ItemInstance key : assessedItems.keySet()) {
             writeD(key.getId());
-            writeD(((Integer) assessedItems.get(key)).intValue());
+            writeD((Integer) assessedItems.get(key));
         }
         writeH(0x0000); // 0x0000:無顯示 0x0001:珍珠 0x0007:金幣 0x17d4:天寶
     }
 
     private Map<L1ItemInstance, Integer> assessItems(L1PcInventory inv) {
-        Map<L1ItemInstance, Integer> result = new HashMap<L1ItemInstance, Integer>();
+        Map<L1ItemInstance, Integer> result = new HashMap<>();
         for (L1ItemInstance item : inv.getItems()) {
             switch (item.getItem().getItemId()) {
                 case 40308: // 金幣

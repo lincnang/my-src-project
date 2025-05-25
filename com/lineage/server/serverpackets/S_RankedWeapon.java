@@ -16,8 +16,7 @@ public class S_RankedWeapon extends ServerBasePacket {
         writeD(T_RankTable._basedTime);
         writeD(weaponRanked.size());
         int enchantKind = 0;
-        for (int i = 0; i < weaponRanked.size(); i++) {
-            final T_WeaponRankModel model = weaponRanked.get(i);
+        for (final T_WeaponRankModel model : weaponRanked) {
             if (model.getWeaponAttrKind() == 1) {
                 enchantKind = 4;
             } else if (model.getWeaponAttrKind() == 2) {

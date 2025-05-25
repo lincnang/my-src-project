@@ -106,7 +106,7 @@ public class ItemSpecialAttributeTable {
                 attr.add物理格檔(add物理格檔);
                 attr.add魔法格檔(add魔法格檔);
                 attr.addShanghaijianmian(addDamageReductionByArmor);
-                _atrrList.put(Integer.valueOf(id), attr);
+                _atrrList.put(id, attr);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

@@ -18,8 +18,8 @@ import java.util.Map;
 
 public class CharaterTradeTable implements CharaterTradeStorage {
     private static final Log _log = LogFactory.getLog(CharaterTradeTable.class);
-    private final Map<Integer, L1CharaterTrade> _alltemps = new FastMap<Integer, L1CharaterTrade>();
-    private final Map<Integer, L1PcInstance> _allpcs = new FastMap<Integer, L1PcInstance>();
+    private final Map<Integer, L1CharaterTrade> _alltemps = new FastMap<>();
+    private final Map<Integer, L1PcInstance> _allpcs = new FastMap<>();
     private int _nextId = 1000;
     private Collection<L1CharaterTrade> _allCharterTradeValues;
 

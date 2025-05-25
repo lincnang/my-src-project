@@ -63,8 +63,7 @@ public class Clan_Letter extends ItemExecutor {
     private boolean writeClanLetter(final int itemId, final L1PcInstance pc, final int letterCode, final String letterReceiver, final byte[] letterText) {
         L1Clan targetClan = null;
         final Collection<L1Clan> allClans = WorldClan.get().getAllClans();
-        for (final Iterator<L1Clan> iter = allClans.iterator(); iter.hasNext(); ) {
-            final L1Clan clan = iter.next();
+        for (final L1Clan clan : allClans) {
             if (clan.getClanName().toLowerCase().equals(letterReceiver.toLowerCase())) {
                 targetClan = clan;
                 break;
@@ -75,14 +74,14 @@ public class Clan_Letter extends ItemExecutor {
             return false;
         }
         final String memberName[] = targetClan.getAllMembers();
-        for (int i = 0; i < memberName.length; i++) {
+        for (String s : memberName) {
             final L1ItemInstance item = ItemTable.get().createItem(49016);
             if (item == null) {
                 return false;
             }
             item.setCount(1);
-            if (this.sendLetter(pc, memberName[i], item, false)) {
-                this.saveLetter(item.getId(), letterCode, pc.getName(), memberName[i], letterText);
+            if (this.sendLetter(pc, s, item, false)) {
+                this.saveLetter(item.getId(), letterCode, pc.getName(), s, letterText);
             }
         }
         return true;

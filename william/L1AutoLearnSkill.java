@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 
 public class L1AutoLearnSkill {
     public static final String TOKEN = ",";
-    private static ArrayList<ArrayList<Object>> aData = new ArrayList<ArrayList<Object>>();
+    private static ArrayList<ArrayList<Object>> aData = new ArrayList<>();
     private static boolean NO_MORE_GET_DATA = false;
 
     private L1AutoLearnSkill() {
@@ -42,63 +42,55 @@ public class L1AutoLearnSkill {
             NO_MORE_GET_DATA = true;
             getData();
         }
-        for (int i = 0; i < aData.size(); i++) {
-            aTempData = (ArrayList<?>) aData.get(i);
-            if (pc.getLevel() >= ((Integer) aTempData.get(0)).intValue()) {
+        for (ArrayList<Object> aDatum : aData) {
+            aTempData = (ArrayList<?>) aDatum;
+            if (pc.getLevel() >= (Integer) aTempData.get(0)) {
                 int[] id = (int[]) aTempData.get(1);
                 // 王族
-                if (((Integer) aTempData.get(2)).intValue() == 0 && pc.isCrown()) {
-                    for (int l = 0; l < id.length; l++) {
-                        int skillid = id[l];
+                if ((Integer) aTempData.get(2) == 0 && pc.isCrown()) {
+                    for (int skillid : id) {
                         Skill(pc, skillid);
                     }
                 }
                 // 騎士
-                else if (((Integer) aTempData.get(2)).intValue() == 1 && pc.isKnight()) {
-                    for (int l = 0; l < id.length; l++) {
-                        int skillid = id[l];
+                else if ((Integer) aTempData.get(2) == 1 && pc.isKnight()) {
+                    for (int skillid : id) {
                         Skill(pc, skillid);
                     }
                 }
                 // 法師
-                else if (((Integer) aTempData.get(2)).intValue() == 2 && pc.isWizard()) {
-                    for (int l = 0; l < id.length; l++) {
-                        int skillid = id[l];
+                else if ((Integer) aTempData.get(2) == 2 && pc.isWizard()) {
+                    for (int skillid : id) {
                         Skill(pc, skillid);
                     }
                 }
                 // 妖精
-                else if (((Integer) aTempData.get(2)).intValue() == 3 && pc.isElf()) {
-                    for (int l = 0; l < id.length; l++) {
-                        int skillid = id[l];
+                else if ((Integer) aTempData.get(2) == 3 && pc.isElf()) {
+                    for (int skillid : id) {
                         Skill(pc, skillid);
                     }
                 }
                 // 黑暗妖精
-                else if (((Integer) aTempData.get(2)).intValue() == 4 && pc.isDarkelf()) {
-                    for (int l = 0; l < id.length; l++) {
-                        int skillid = id[l];
+                else if ((Integer) aTempData.get(2) == 4 && pc.isDarkelf()) {
+                    for (int skillid : id) {
                         Skill(pc, skillid);
                     }
                 }
                 // 龍騎士
-                else if (((Integer) aTempData.get(2)).intValue() == 5 && pc.isDragonKnight()) {
-                    for (int l = 0; l < id.length; l++) {
-                        int skillid = id[l];
+                else if ((Integer) aTempData.get(2) == 5 && pc.isDragonKnight()) {
+                    for (int skillid : id) {
                         Skill(pc, skillid);
                     }
                 }
                 // 幻術士
-                else if (((Integer) aTempData.get(2)).intValue() == 6 && pc.isIllusionist()) {
-                    for (int l = 0; l < id.length; l++) {
-                        int skillid = id[l];
+                else if ((Integer) aTempData.get(2) == 6 && pc.isIllusionist()) {
+                    for (int skillid : id) {
                         Skill(pc, skillid);
                     }
                 }
                 // 戰士
-                else if (((Integer) aTempData.get(2)).intValue() == 7 && pc.isWarrior()) {
-                    for (int l = 0; l < id.length; l++) {
-                        int skillid = id[l];
+                else if ((Integer) aTempData.get(2) == 7 && pc.isWarrior()) {
+                    for (int skillid : id) {
                         Skill(pc, skillid);
                     }
                 }
@@ -115,14 +107,14 @@ public class L1AutoLearnSkill {
             ArrayList<Object> aReturn = null;
             if (rset != null) {
                 while (rset.next()) {
-                    aReturn = new ArrayList<Object>();
-                    aReturn.add(0, new Integer(rset.getInt("等級")));
+                    aReturn = new ArrayList<>();
+                    aReturn.add(0, rset.getInt("等級"));
                     if (rset.getString("技能編號") != null && !rset.getString("技能編號").equals("") && !rset.getString("技能編號").equals("0")) {
                         aReturn.add(1, getArray(rset.getString("技能編號"), TOKEN, 1));
                     } else {
                         aReturn.add(1, null);
                     }
-                    aReturn.add(2, new Integer(rset.getInt("職業代號")));
+                    aReturn.add(2, rset.getInt("職業代號"));
                     aData.add(aReturn);
                 }
             }

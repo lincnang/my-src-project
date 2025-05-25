@@ -48,7 +48,7 @@ public class Zhufu {
     private static Zhufu _instance;
 
     private final HashMap<Integer, L1Zhufu> _itemidIndex
-            = new HashMap<Integer, L1Zhufu>();
+            = new HashMap<>();
 
     private Zhufu() {
         loadItemIdOrginal();
@@ -130,11 +130,11 @@ public class Zhufu {
         L1Item item = ItemTable.get().getTemplate(itemid);
         if (item == null) {
             if (WeaponTypes().get(type) != null) {
-                return WeaponTypes().get(type).intValue();
+                return WeaponTypes().get(type);
             }
 
             if (ArmorTypes().get(type) != null) {
-                return ArmorTypes().get(type).intValue();
+                return ArmorTypes().get(type);
             }
 
             return 0;
@@ -144,12 +144,12 @@ public class Zhufu {
             if (WeaponTypes().get(type) == null)
                 return 0;
 
-            return WeaponTypes().get(type).intValue();
+            return WeaponTypes().get(type);
         } else if (item.getType2() == 2) {    // 防具,飾品
             if (ArmorTypes().get(type) == null)
                 return 0;
 
-            return ArmorTypes().get(type).intValue();
+            return ArmorTypes().get(type);
         }
 
         return 0;
@@ -186,6 +186,6 @@ public class Zhufu {
     }
 
     public L1Zhufu[] getItemIdList() {
-        return _itemidIndex.values().toArray(new L1Zhufu[_itemidIndex.size()]);
+        return _itemidIndex.values().toArray(new L1Zhufu[0]);
     }
 }

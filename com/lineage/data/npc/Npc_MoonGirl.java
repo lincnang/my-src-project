@@ -33,9 +33,9 @@ public class Npc_MoonGirl extends NpcExecutor {
         int newItem = 86007;// 圓月寶珠
         boolean success = false;
         if (cmd.equalsIgnoreCase("a")) {
-            for (int i = 0; i < oldweapon.length; i++) {
-                if (pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L)) {// 是否具有活動武器
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 8, 1L);// 刪除活動武器
+            for (int j : oldweapon) {
+                if (pc.getInventory().checkEnchantItem(j, 8, 1L)) {// 是否具有活動武器
+                    pc.getInventory().consumeEnchantItem(j, 8, 1L);// 刪除活動武器
                     final L1ItemInstance item = ItemTable.get().createItem(newItem);
                     pc.getInventory().storeItem(item);
                     pc.sendPackets(new S_ServerMessage(143, npc.getNpcTemplate().get_name(), item.getLogName()));

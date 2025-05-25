@@ -27,8 +27,8 @@ public class L1ToMap implements L1CommandExecutor {
     @Override
     public void execute(final L1PcInstance pc, final String cmdName, final String arg) {
         try {
-            Integer mapId = Integer.parseInt(arg);
-            final L1Map mapData = L1WorldMap.get().getMap(mapId.shortValue());
+            int mapId = Integer.parseInt(arg);
+            final L1Map mapData = L1WorldMap.get().getMap((short) mapId);
             if (mapData == null) {
                 _log.error("指定地圖不存在" + mapId);
                 return;
@@ -39,11 +39,11 @@ public class L1ToMap implements L1CommandExecutor {
             final int width = mapData.getWidth();
             final int newx = x + (height / 2);
             final int newy = y + (width / 2);
-            final L1Location loc = new L1Location(newx, newy, mapId.intValue());
+            final L1Location loc = new L1Location(newx, newy, mapId);
             final L1Location newLocation = loc.randomLocation(200, true);
             final int newX = newLocation.getX();
             final int newY = newLocation.getY();
-            L1Teleport.teleport(pc, newX, newY, mapId.shortValue(), 5, true);
+            L1Teleport.teleport(pc, newX, newY, (short) mapId, 5, true);
         } catch (final Exception e) {
             _log.error("錯誤的GM指令格式: " + this.getClass().getSimpleName() + " 執行的GM:" + pc.getName());
             // 261 \f1指令錯誤。

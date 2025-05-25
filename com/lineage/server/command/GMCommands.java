@@ -32,7 +32,7 @@ import java.util.logging.Level;
 public class GMCommands {
     private static final Log _log = LogFactory.getLog(GMCommands.class);
     private static GMCommands _instance;
-    private static Map<Integer, String> _lastCommands = new HashMap<Integer, String>();
+    private static Map<Integer, String> _lastCommands = new HashMap<>();
 
     private GMCommands() {
     }
@@ -192,14 +192,14 @@ public class GMCommands {
             _log.error("管理者指令空白!");
             return;
         }
-        String param = "";
+        StringBuilder param = new StringBuilder();
         while (token.hasMoreTokens()) {
-            param = param + token.nextToken() + ' ';
+            param.append(token.nextToken()).append(' ');
         }
         // 返回字符串的副本，忽略前導空白和尾部空白。(命令中段)
-        param = param.trim();
+        param = new StringBuilder(param.toString().trim());
         // 指令記錄
-        if (this.executeDatabaseCommand(gm, cmd, param)) {
+        if (this.executeDatabaseCommand(gm, cmd, param.toString())) {
             if (!cmd.equalsIgnoreCase("r")) {
                 _lastCommands.put(gm.getId(), cmdLine);
             }
@@ -211,7 +211,7 @@ public class GMCommands {
                 gm.sendPackets(new S_ServerMessage(261));
                 return;
             }
-            this.redo(gm, param);
+            this.redo(gm, param.toString());
             return;
         }
         // 329 \f1沒有具有 %0%o。

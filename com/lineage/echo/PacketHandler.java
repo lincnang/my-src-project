@@ -16,7 +16,7 @@ import java.util.Map;
 public class PacketHandler extends PacketHandlerExecutor {
     private static final Log _log = LogFactory.getLog(PacketHandler.class);
     // Map<K,V>
-    private static final Map<Integer, ClientBasePacket> _opListClient = new HashMap<Integer, ClientBasePacket>();
+    private static final Map<Integer, ClientBasePacket> _opListClient = new HashMap<>();
     private final ClientExecutor _client;
 
     public PacketHandler(final ClientExecutor client) {
@@ -264,13 +264,13 @@ public class PacketHandler extends PacketHandlerExecutor {
      *
      */
     public String DataToPacket(byte[] data, int len) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int counter = 0;
         for (int i = 0; i < len; i++) {
             if (counter % 16 == 0) {
-                result.append(HexToDex(i, 4) + ": ");
+                result.append(HexToDex(i, 4)).append(": ");
             }
-            result.append(HexToDex(data[i] & 0xff, 2) + " ");
+            result.append(HexToDex(data[i] & 0xff, 2)).append(" ");
             counter++;
             if (counter == 16) {
                 result.append("   ");
@@ -311,10 +311,10 @@ public class PacketHandler extends PacketHandlerExecutor {
      *
      */
     private String HexToDex(int data, int digits) {
-        String number = Integer.toHexString(data);
+        StringBuilder number = new StringBuilder(Integer.toHexString(data));
         for (int i = number.length(); i < digits; i++) {
-            number = "0" + number;
+            number.insert(0, "0");
         }
-        return number;
+        return number.toString();
     }
 }

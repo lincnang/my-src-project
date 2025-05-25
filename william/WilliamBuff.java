@@ -24,7 +24,7 @@ import java.util.ArrayList;
  */
 public class WilliamBuff {
     private static final Log _log = LogFactory.getLog(WilliamBuff.class);
-    private static final ArrayList<ArrayList<Object>> datas = new ArrayList<ArrayList<Object>>();
+    private static final ArrayList<ArrayList<Object>> datas = new ArrayList<>();
 
     public static boolean giveBuff(L1PcInstance pc, L1NpcInstance npc, String args) {
         boolean f = false;
@@ -51,7 +51,7 @@ public class WilliamBuff {
                     int[] times = (int[]) os.get(3);
                     int[] m = (int[]) os.get(4);
                     int[] mc = (int[]) os.get(5);
-                    if (((Integer) os.get(6)).intValue() != 0) {
+                    if ((Integer) os.get(6) != 0) {
                         byte class_id = 0;
                         String msg = "";
                         if (pc.isCrown()) {
@@ -71,7 +71,7 @@ public class WilliamBuff {
                         } else if (pc.isWarrior()) {
                             class_id = 8;
                         }
-                        switch (((Integer) os.get(6)).intValue()) {
+                        switch ((Integer) os.get(6)) {
                             case 1:
                                 msg = "王族";
                                 break;
@@ -96,43 +96,43 @@ public class WilliamBuff {
                             case 8:
                                 msg = "戰士";
                         }
-                        if (((Integer) os.get(6)).intValue() != class_id) {
+                        if ((Integer) os.get(6) != class_id) {
                             pc.sendPackets(new S_SystemMessage("你的職業無法使用" + msg + "的專屬魔法輔助。"));
                             return true;
                         }
                     }
-                    if (((Integer) os.get(7)).intValue() != 0) {
-                        final String typeName = C1_Name_Table.get().get(((Integer) os.get(7)).intValue());
+                    if ((Integer) os.get(7) != 0) {
+                        final String typeName = C1_Name_Table.get().get((Integer) os.get(7));
                         if (pc.get_c_power() == null) {
                             pc.sendPackets(new S_ServerMessage("你的陣營必須是" + typeName + "才可使用此魔法輔助。"));
                             return true;
                         }
-                        if (pc.get_c_power().get_c1_type() >= 0 && pc.get_c_power().get_c1_type() != ((Integer) os.get(7)).intValue()) {
+                        if (pc.get_c_power().get_c1_type() >= 0 && pc.get_c_power().get_c1_type() != (Integer) os.get(7)) {
                             pc.sendPackets(new S_SystemMessage("你的陣營必須是" + typeName + "才可使用此魔法輔助。"));
                             return true;
                         }
                     }
-                    if (((Integer) os.get(8)).intValue() != 0 && ((Integer) os.get(9)).intValue() == 0) {
-                        if (pc.getLevel() < ((Integer) os.get(8)).intValue()) {
-                            pc.sendPackets(new S_SystemMessage("你的等級必須要大於" + ((Integer) os.get(8)).intValue() + "才可使用此魔法輔助。"));
+                    if ((Integer) os.get(8) != 0 && (Integer) os.get(9) == 0) {
+                        if (pc.getLevel() < (Integer) os.get(8)) {
+                            pc.sendPackets(new S_SystemMessage("你的等級必須要大於" + (Integer) os.get(8) + "才可使用此魔法輔助。"));
                             return true;
                         }
                     }
-                    if (((Integer) os.get(8)).intValue() == 0 && ((Integer) os.get(9)).intValue() != 0) {
-                        if (pc.getLevel() > ((Integer) os.get(9)).intValue()) {
-                            pc.sendPackets(new S_SystemMessage("你的等級必須要小於" + ((Integer) os.get(9)).intValue() + "才可使用此魔法輔助。"));
+                    if ((Integer) os.get(8) == 0 && (Integer) os.get(9) != 0) {
+                        if (pc.getLevel() > (Integer) os.get(9)) {
+                            pc.sendPackets(new S_SystemMessage("你的等級必須要小於" + (Integer) os.get(9) + "才可使用此魔法輔助。"));
                             return true;
                         }
                     }
-                    if (((Integer) os.get(8)).intValue() != 0 && ((Integer) os.get(9)).intValue() != 0) {
-                        if (pc.getLevel() > ((Integer) os.get(9)).intValue() || pc.getLevel() < ((Integer) os.get(8)).intValue()) {
-                            pc.sendPackets(new S_SystemMessage("你的等級必須要介於" + ((Integer) os.get(8)).intValue() + "~" + ((Integer) os.get(9)).intValue() + "之間才可使用此魔法輔助。"));
+                    if ((Integer) os.get(8) != 0 && (Integer) os.get(9) != 0) {
+                        if (pc.getLevel() > (Integer) os.get(9) || pc.getLevel() < (Integer) os.get(8)) {
+                            pc.sendPackets(new S_SystemMessage("你的等級必須要介於" + (Integer) os.get(8) + "~" + (Integer) os.get(9) + "之間才可使用此魔法輔助。"));
                             return true;
                         }
                     }
-                    if (((Integer) os.get(10)).intValue() != 0) {
-                        if (pc.getMeteLevel() < ((Integer) os.get(10)).intValue()) {
-                            pc.sendPackets(new S_SystemMessage("你的轉生等級必須要大於" + ((Integer) os.get(10)).intValue() + "才可使用此魔法輔助。"));
+                    if ((Integer) os.get(10) != 0) {
+                        if (pc.getMeteLevel() < (Integer) os.get(10)) {
+                            pc.sendPackets(new S_SystemMessage("你的轉生等級必須要大於" + (Integer) os.get(10) + "才可使用此魔法輔助。"));
                             return true;
                         }
                     }
@@ -165,18 +165,18 @@ public class WilliamBuff {
             pstm = con.prepareStatement("SELECT * FROM `其他_npc魔法輔助系統`");
             rs = pstm.executeQuery();
             while (rs.next()) {
-                ArrayList<Object> data = new ArrayList<Object>();
+                ArrayList<Object> data = new ArrayList<>();
                 data.add(convert(rs.getString("NPC編號").split(",")));
                 data.add(rs.getString("指令按鈕").split(","));
                 data.add(convert(rs.getString("技能編號").split(",")));
                 data.add(convert(rs.getString("技能時間").split(",")));
                 data.add(convert(rs.getString("所需道具").split(",")));
                 data.add(convert(rs.getString("所需道具數量").split(",")));
-                data.add(6, new Integer(rs.getInt("職業判斷")));
-                data.add(7, new Integer(rs.getInt("陣營判斷")));
-                data.add(8, new Integer(rs.getInt("等級最低判斷")));
-                data.add(9, new Integer(rs.getInt("等級最高判斷")));
-                data.add(10, new Integer(rs.getInt("轉身判斷")));
+                data.add(6, rs.getInt("職業判斷"));
+                data.add(7, rs.getInt("陣營判斷"));
+                data.add(8, rs.getInt("等級最低判斷"));
+                data.add(9, rs.getInt("等級最高判斷"));
+                data.add(10, rs.getInt("轉身判斷"));
                 datas.add(data);
             }
         } catch (SQLException e) {

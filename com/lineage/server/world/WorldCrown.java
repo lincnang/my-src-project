@@ -21,7 +21,7 @@ public class WorldCrown {
     private Collection<L1PcInstance> _allPlayer;
 
     private WorldCrown() {
-        _isCrown = new ConcurrentHashMap<Integer, L1PcInstance>();
+        _isCrown = new ConcurrentHashMap<>();
     }
 
     public static WorldCrown get() {

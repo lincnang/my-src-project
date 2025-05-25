@@ -11,43 +11,43 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Lists {
     public static <E> List<E> newList() {
-        return new FastTable<E>();
+        return new FastTable<>();
     }
 
     public static <E> List<E> newList(int n) {
-        return new FastTable<E>(n);
+        return new FastTable<>(n);
     }
 
     public static <E> List<E> newList(Collection<E> from) {
-        return new FastTable<E>(from);
+        return new FastTable<>(from);
     }
 
     public static <E> List<E> newList(Set<E> from) {
-        return new FastTable<E>(from);
+        return new FastTable<>(from);
     }
 
     public static <E> List<E> newConcurrentList() {
-        return new CopyOnWriteArrayList<E>();
+        return new CopyOnWriteArrayList<>();
     }
 
     public static <E> List<E> newConcurrentList(List<E> from) {
-        return new CopyOnWriteArrayList<E>(from);
+        return new CopyOnWriteArrayList<>(from);
     }
 
     public static <E> List<E> newSerializableList() {
-        return new SerializableArrayList<E>();
+        return new SerializableArrayList<>();
     }
 
     public static <E> List<E> newSerializableList(int n) {
-        return new SerializableArrayList<E>(n);
+        return new SerializableArrayList<>(n);
     }
 
     public static <E> ArrayList<E> newArrayList() {
-        return new ArrayList<E>();
+        return new ArrayList<>();
     }
 
     public static <E> ArrayList<E> newArrayList(Collection<? extends E> c) {
-        return new ArrayList<E>(c);
+        return new ArrayList<>(c);
     }
 
     public static class SerializableArrayList<E> extends FastTable<E> implements Serializable {

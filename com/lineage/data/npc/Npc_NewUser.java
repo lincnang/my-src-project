@@ -19,8 +19,7 @@ public class Npc_NewUser extends NpcExecutor {
             return;
         }
         int[] allBuffSkill = {79, 48, 42, 26};
-        for (int i = 0; i < allBuffSkill.length; i++) {
-            int skillid = allBuffSkill[i];
+        for (int skillid : allBuffSkill) {
             startSkill(pc, npc, skillid);
         }
     }

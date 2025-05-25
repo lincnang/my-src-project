@@ -64,82 +64,78 @@ public class ServerPolyWindow extends JInternalFrame {
             }
         });
         btn_Search = new JButton("搜索");
-        btn_Search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (Eva.isServerStarted) {
+        btn_Search.addActionListener(e -> {
+            if (Eva.isServerStarted) {
+                try {
+                    DefaultTableModel tModel = (DefaultTableModel) jJTable.getModel();
+                    for (int i = tModel.getRowCount() - 1; i >= 0; i--) {
+                        tModel.removeRow(i);
+                    }
+                    String[] poly = new String[2];
+                    int polyId = 0;
+                    Connection con = null;
+                    PreparedStatement pstm = null;
+                    ResultSet rs = null;
                     try {
-                        DefaultTableModel tModel = (DefaultTableModel) jJTable.getModel();
-                        for (int i = tModel.getRowCount() - 1; i >= 0; i--) {
-                            tModel.removeRow(i);
-                        }
-                        String[] poly = new String[2];
-                        int polyId = 0;
-                        Connection con = null;
-                        PreparedStatement pstm = null;
-                        ResultSet rs = null;
-                        try {
-                            polyId = Integer.parseInt(txt_PolyNameSearch.getText());
-                            con = DatabaseFactory.get().getConnection();
-                            pstm = con.prepareStatement("SELECT * FROM polymorphs where polyid = ?");
-                            pstm.setInt(1, polyId);
-                            rs = pstm.executeQuery();
-                            while (rs.next()) {
-                                poly[0] = String.valueOf(rs.getInt("polyid"));
-                                poly[1] = rs.getString("name");
-                                model.addRow(poly);
-                            }
-                        } catch (Exception ex) {
-                            con = DatabaseFactory.get().getConnection();
-                            pstm = con.prepareStatement("SELECT * FROM polymorphs where name = ?");
-                            pstm.setString(1, txt_PolyNameSearch.getText());
-                            rs = pstm.executeQuery();
-                            while (rs.next()) {
-                                poly[0] = String.valueOf(rs.getInt("polyid"));
-                                poly[1] = rs.getString("name");
-                                model.addRow(poly);
-                            }
-                        } finally {
-                            SQLUtil.close(rs);
-                            SQLUtil.close(pstm);
-                            SQLUtil.close(con);
+                        polyId = Integer.parseInt(txt_PolyNameSearch.getText());
+                        con = DatabaseFactory.get().getConnection();
+                        pstm = con.prepareStatement("SELECT * FROM polymorphs where polyid = ?");
+                        pstm.setInt(1, polyId);
+                        rs = pstm.executeQuery();
+                        while (rs.next()) {
+                            poly[0] = String.valueOf(rs.getInt("polyid"));
+                            poly[1] = rs.getString("name");
+                            model.addRow(poly);
                         }
                     } catch (Exception ex) {
+                        con = DatabaseFactory.get().getConnection();
+                        pstm = con.prepareStatement("SELECT * FROM polymorphs where name = ?");
+                        pstm.setString(1, txt_PolyNameSearch.getText());
+                        rs = pstm.executeQuery();
+                        while (rs.next()) {
+                            poly[0] = String.valueOf(rs.getInt("polyid"));
+                            poly[1] = rs.getString("name");
+                            model.addRow(poly);
+                        }
+                    } finally {
+                        SQLUtil.close(rs);
+                        SQLUtil.close(pstm);
+                        SQLUtil.close(con);
                     }
-                } else {
-                    Eva.errorMsg(Eva.NoServerStartMSG);
+                } catch (Exception ex) {
                 }
+            } else {
+                Eva.errorMsg(Eva.NoServerStartMSG);
             }
         });
         btn_Poly = new JButton("變身");
-        btn_Poly.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (Eva.isServerStarted) {
-                    try {
-                        if (txt_UserName.getText().equalsIgnoreCase("")) {
-                            Eva.errorMsg(Eva.blankSetUser);
-                            return;
-                        }
-                        L1Poly l1poly = null;
-                        for (L1PcInstance pc : World.get().getAllPlayers()) {
-                            if (pc.getName().equalsIgnoreCase(txt_UserName.getText()) || txt_UserName.getText().equalsIgnoreCase("전체유저")) {
-                                int polyId = Integer.parseInt(txt_PolyId.getText());
-                                if (pc.isPrivateShop()) {
-                                    continue;
-                                }
-                                l1poly = new L1Poly();
-                                String arg = pc.getName() + " " + polyId;
-                                if (pc.getMapId() != 5302 && pc.getMapId() != 5153 && pc.getMapId() != 511 && pc.getMapId() != 9100) {
-                                    l1poly.execute(pc, pc.getName(), arg);
-                                }
-                                pc.sendPackets(new S_SystemMessage("受到GM的變身. "));
-                                Eva.LogServerAppend(pc.getName() + "已變成了指定的怪物樣貌.", "請確認");
-                            }
-                        }
-                    } catch (Exception ex) {
+        btn_Poly.addActionListener(e -> {
+            if (Eva.isServerStarted) {
+                try {
+                    if (txt_UserName.getText().equalsIgnoreCase("")) {
+                        Eva.errorMsg(Eva.blankSetUser);
+                        return;
                     }
-                } else {
-                    Eva.errorMsg(Eva.NoServerStartMSG);
+                    L1Poly l1poly = null;
+                    for (L1PcInstance pc : World.get().getAllPlayers()) {
+                        if (pc.getName().equalsIgnoreCase(txt_UserName.getText()) || txt_UserName.getText().equalsIgnoreCase("전체유저")) {
+                            int polyId = Integer.parseInt(txt_PolyId.getText());
+                            if (pc.isPrivateShop()) {
+                                continue;
+                            }
+                            l1poly = new L1Poly();
+                            String arg = pc.getName() + " " + polyId;
+                            if (pc.getMapId() != 5302 && pc.getMapId() != 5153 && pc.getMapId() != 511 && pc.getMapId() != 9100) {
+                                l1poly.execute(pc, pc.getName(), arg);
+                            }
+                            pc.sendPackets(new S_SystemMessage("受到GM的變身. "));
+                            Eva.LogServerAppend(pc.getName() + "已變成了指定的怪物樣貌.", "請確認");
+                        }
+                    }
+                } catch (Exception ex) {
                 }
+            } else {
+                Eva.errorMsg(Eva.NoServerStartMSG);
             }
         });
         String[] modelColName = {"編號", "名稱"};

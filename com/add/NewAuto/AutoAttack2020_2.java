@@ -45,7 +45,7 @@ public class AutoAttack2020_2 extends TimerTask {
     private int 卡牆用 = 0;
     private int h = -1;
     private int error = 0;
-    private ArrayList<Integer> _list = new ArrayList<Integer>();
+    private ArrayList<Integer> _list = new ArrayList<>();
     private ScheduledFuture<?> _timer;
     private int courceRange = 200;
 
@@ -112,7 +112,7 @@ public class AutoAttack2020_2 extends TimerTask {
             pc.sendPackets(new S_CharVisualUpdate(pc));
             pc.killSkillEffectTimer(32);// 冥想術
             pc.setCallClanId(0);
-            final HashSet<L1PcInstance> subjects = new HashSet<L1PcInstance>();
+            final HashSet<L1PcInstance> subjects = new HashSet<>();
             subjects.add(pc);
             if (!pc.isGhost()) {
                 // 可以攜帶寵物
@@ -583,6 +583,7 @@ public class AutoAttack2020_2 extends TimerTask {
                         for (Integer id : pc.TargetList()) {
                             if (mob.getId() == id) {
                                 HaveTargetList = true;
+                                break;
                             }
                         }
                         if (HaveTargetList) {
@@ -768,7 +769,7 @@ public class AutoAttack2020_2 extends TimerTask {
         int[] locCopy;
         int[] dirFront = new int[5];
         boolean serchMap[][] = new boolean[locCenter * 2 + 1][locCenter * 2 + 1];
-        LinkedList<int[]> queueSerch = new LinkedList<int[]>();
+        LinkedList<int[]> queueSerch = new LinkedList<>();
         // 探索用設定
         for (int j = courceRange * 2 + 1; j > 0; j--) {
             for (i = courceRange - Math.abs(locCenter - j); i >= 0; i--) {

@@ -20,9 +20,9 @@ public class S_TestPacket extends ServerBasePacket {
             case a:
                 writeC(0x00);
                 writeC(0x08);
-                writeBit(gfxid * 2);
+                writeBit(gfxid * 2L);
                 writeC(0x10);
-                writeBit(messageCode * 2);
+                writeBit(messageCode * 2L);
                 writeC(0x1a);
                 writeC(0x03);
                 StringTokenizer st = new StringTokenizer(color.toString());

@@ -58,9 +58,9 @@ public class Chapter01R implements Runnable {
     private static int[][] _light_loc1 = new int[][]{{32803, 32866}, {32801, 32865}, {32800, 32864}, {32798, 32866}, {32799, 32872}, {32800, 32873}, {32803, 32873},};// 8
     private static int[] _light_loc2 = new int[]{32801, 32869 // 黑地標
     };// 1個黑地標 座標
-    private final ArrayList<L1DoorInstance> _doors = new ArrayList<L1DoorInstance>();// 黑門的清單
-    private final ArrayList<L1FieldObjectInstance> _dooropens = new ArrayList<L1FieldObjectInstance>();// 黑牆的清單
-    private final ConcurrentHashMap<Integer, L1NpcInstance> _npclist = new ConcurrentHashMap<Integer, L1NpcInstance>();
+    private final ArrayList<L1DoorInstance> _doors = new ArrayList<>();// 黑門的清單
+    private final ArrayList<L1FieldObjectInstance> _dooropens = new ArrayList<>();// 黑牆的清單
+    private final ConcurrentHashMap<Integer, L1NpcInstance> _npclist = new ConcurrentHashMap<>();
     public boolean DOOR_1 = false;// 第1個門
     public boolean DOOR_2 = false;// 第2個門
     public boolean DOOR_3 = false;// 第3個門

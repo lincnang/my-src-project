@@ -17,7 +17,7 @@ public class C_BoardWrite extends ClientBasePacket {
                 return;
             }
             int objId = readD();
-            L1NpcInstance npc = (L1NpcInstance) WorldNpc.get().map().get(Integer.valueOf(objId));
+            L1NpcInstance npc = (L1NpcInstance) WorldNpc.get().map().get(objId);
             if (npc == null) {
                 return;
             }

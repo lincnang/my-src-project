@@ -103,22 +103,22 @@ public class S_WarriorSkill extends ServerBasePacket {
         // S_OPCODE_CRAFTSYSTEM
         writeC(subcode);
         writeC(0x01);
-        for (int i = 0; i < skills.length; i++) {
-            if (skills[i] == 1) {
+        for (int skill : skills) {
+            if (skill == 1) {
                 warriorSkill_1 = true;
-            } else if (skills[i] == 2) {
+            } else if (skill == 2) {
                 warriorSkill_2 = true;
-            } else if (skills[i] == 3) {
+            } else if (skill == 3) {
                 warriorSkill_3 = true;
-            } else if (skills[i] == 5) {
+            } else if (skill == 5) {
                 warriorSkill_5 = true;
-            } else if (skills[i] == 6) {
+            } else if (skill == 6) {
                 warriorSkill_6 = true;
-            } else if (skills[i] == 7) {
+            } else if (skill == 7) {
                 warriorSkill_7 = true;
-            } else if (skills[i] == 8) {
+            } else if (skill == 8) {
                 warriorSkill_8 = true;
-            } else if (skills[i] == 9) {// 熾烈鬥志
+            } else if (skill == 9) {// 熾烈鬥志
                 warriorSkill_9 = true;
             }
         }

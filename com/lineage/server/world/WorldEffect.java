@@ -27,7 +27,7 @@ public class WorldEffect {
     private Collection<L1EffectInstance> _allEffValues;
 
     private WorldEffect() {
-        _isEff = new ConcurrentHashMap<Integer, L1EffectInstance>();
+        _isEff = new ConcurrentHashMap<>();
     }
 
     public static WorldEffect get() {
@@ -91,8 +91,7 @@ public class WorldEffect {
      * @return true:有 false:沒有
      */
     public boolean isEffect(final L1Location loc, int npcid) {
-        for (final Iterator<L1EffectInstance> iter = all().iterator(); iter.hasNext(); ) {
-            final L1EffectInstance element = iter.next();
+        for (final L1EffectInstance element : all()) {
             // for (final L1EffectInstance element : this._isEff.values()) {
             // 地圖編號不相等
             if (loc.getMapId() != element.getMap().getId()) {
@@ -116,9 +115,8 @@ public class WorldEffect {
      * @param loc 原始座標
      */
     public ArrayList<L1EffectInstance> getVisibleEffect(final L1Location loc) {
-        final ArrayList<L1EffectInstance> result = new ArrayList<L1EffectInstance>();
-        for (final Iterator<L1EffectInstance> iter = all().iterator(); iter.hasNext(); ) {
-            final L1EffectInstance element = iter.next();
+        final ArrayList<L1EffectInstance> result = new ArrayList<>();
+        for (final L1EffectInstance element : all()) {
             // for (final L1EffectInstance element : this._isEff.values()) {
             // 地圖編號不相等
             if (loc.getMapId() != element.getMap().getId()) {
@@ -140,9 +138,8 @@ public class WorldEffect {
     public ArrayList<L1EffectInstance> getVisibleEffect(final L1EffectInstance src) {
         final L1Map map = src.getMap();
         final Point pt = src.getLocation();
-        final ArrayList<L1EffectInstance> result = new ArrayList<L1EffectInstance>();
-        for (final Iterator<L1EffectInstance> iter = all().iterator(); iter.hasNext(); ) {
-            final L1EffectInstance element = iter.next();
+        final ArrayList<L1EffectInstance> result = new ArrayList<>();
+        for (final L1EffectInstance element : all()) {
             // for (final L1EffectInstance element : this._isEff.values()) {
             if (element.equals(src)) {
                 continue;
@@ -171,8 +168,7 @@ public class WorldEffect {
         final L1Map map = src.getMap();
         final Point pt = src.getLocation();
         int count = 0;
-        for (final Iterator<L1EffectInstance> iter = all().iterator(); iter.hasNext(); ) {
-            final L1EffectInstance element = iter.next();
+        for (final L1EffectInstance element : all()) {
             // for (final L1EffectInstance element : this._isEff.values()) {
             if (element.equals(src)) {
                 continue;
@@ -198,7 +194,7 @@ public class WorldEffect {
     public ArrayList<L1Character> getFirewall(final L1EffectInstance firewall) {
         final L1Map map = firewall.getMap();
         final Point pt = firewall.getLocation();
-        final ArrayList<L1Character> result = new ArrayList<L1Character>();
+        final ArrayList<L1Character> result = new ArrayList<>();
         // 取回原地圖資料
         final ArrayList<L1Object> mapSrc = World.get().getVisibleObjects(firewall, 2);
         if (mapSrc == null) {

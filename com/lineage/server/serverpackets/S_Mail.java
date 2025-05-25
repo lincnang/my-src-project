@@ -39,8 +39,7 @@ public class S_Mail extends ServerBasePacket {
         if (mails.isEmpty()) {
             return;
         }
-        for (int i = 0; i < mails.size(); i++) {
-            final L1Mail mail = mails.get(i);
+        for (final L1Mail mail : mails) {
             writeD(mail.getId());
             writeC(mail.getReadStatus());
             writeD((int) (mail.getDate().getTime() / 1000)); // 信件發送日期
@@ -86,8 +85,7 @@ public class S_Mail extends ServerBasePacket {
         writeC(S_EXTENDED_PROTOBUF);
         writeC(type);
         writeH(mails.size());
-        for (int i = 0; i < mails.size(); i++) {
-            final L1Mail mail = mails.get(i);
+        for (final L1Mail mail : mails) {
             writeD(mail.getId());
             writeC(mail.getReadStatus()); // 是否已讀取
             writeD((int) (mail.getDate().getTime() / 1000)); // 信件發送日期

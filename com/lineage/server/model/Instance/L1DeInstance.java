@@ -29,10 +29,10 @@ public class L1DeInstance extends L1NpcInstance {
     private static final long serialVersionUID = 1L;
     private static final Log _log = LogFactory.getLog(L1DeInstance.class);
     private static final Random _random = new Random();
-    private static final ArrayList<DeName> _denameList = new ArrayList<DeName>();
+    private static final ArrayList<DeName> _denameList = new ArrayList<>();
     private static final int[][] _class_list = {{0, 61, 138, 734, 2786, 6658, 6671}, {1, 48, 37, 1186, 2796, 6661, 6650}};
-    private final Map<L1ItemInstance, Integer> _sellList = new HashMap<L1ItemInstance, Integer>();
-    private final Map<Integer, int[]> _buyList = new HashMap<Integer, int[]>();
+    private final Map<L1ItemInstance, Integer> _sellList = new HashMap<>();
+    private final Map<Integer, int[]> _buyList = new HashMap<>();
     private String _shop_chat1 = null;
     private String _shop_chat2 = null;
     private boolean _is_shop = false;
@@ -314,8 +314,7 @@ public class L1DeInstance extends L1NpcInstance {
 				}
 			}*/
             // 黑名單
-            for (Iterator<L1PcInstance> iter = World.get().getAllPlayers().iterator(); iter.hasNext(); ) {
-                L1PcInstance listner = (L1PcInstance) iter.next();
+            for (L1PcInstance listner : World.get().getAllPlayers()) {
                 L1ExcludingList spamList20 = SpamTable.getInstance().getExcludeTable(listner.getId());
                 if (!spamList20.contains(0, getNameId())) {
                     if (listner.isShowTradeChat()) {
@@ -428,8 +427,7 @@ public class L1DeInstance extends L1NpcInstance {
                 _hateList.add(targetNpc, 0);
                 _target = targetNpc;
                 if (!getPetList().isEmpty()) {
-                    for (Iterator<?> iter = getPetList().values().iterator(); iter.hasNext(); ) {
-                        L1NpcInstance summon = (L1NpcInstance) iter.next();
+                    for (L1NpcInstance summon : getPetList().values()) {
                         if ((summon != null) && ((summon instanceof L1SummonInstance))) {
                             L1SummonInstance su = (L1SummonInstance) summon;
                             su.setMasterTarget(_target);

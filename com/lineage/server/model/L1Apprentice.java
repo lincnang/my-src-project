@@ -3,6 +3,7 @@ package com.lineage.server.model;
 import com.lineage.server.model.Instance.L1PcInstance;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public final class L1Apprentice {
     private final ArrayList<L1PcInstance> totalList;
@@ -10,32 +11,30 @@ public final class L1Apprentice {
 
     public L1Apprentice(L1PcInstance master, L1PcInstance[] mentorList) {
         _master = master;
-        totalList = new ArrayList<L1PcInstance>(4);
-        for (L1PcInstance apprentice : mentorList) {
-            totalList.add(apprentice);
-        }
+        totalList = new ArrayList<>(4);
+        Collections.addAll(totalList, mentorList);
     }
 
-    public final L1PcInstance getMaster() {
+    public L1PcInstance getMaster() {
         return _master;
     }
 
-    public final void setMaster(L1PcInstance master) {
+    public void setMaster(L1PcInstance master) {
         _master = master;
     }
 
-    public final ArrayList<L1PcInstance> getTotalList() {
+    public ArrayList<L1PcInstance> getTotalList() {
         return totalList;
     }
 
-    public final boolean addApprentice(L1PcInstance l1char) {
+    public boolean addApprentice(L1PcInstance l1char) {
         if (checkSize()) {
             return totalList.add(l1char);
         }
         return false;
     }
 
-    public final boolean checkSize() {
+    public boolean checkSize() {
         return totalList.size() < 4;
     }
 }

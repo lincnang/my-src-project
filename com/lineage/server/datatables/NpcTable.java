@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class NpcTable {
     private static final Log _log = LogFactory.getLog(NpcTable.class);
-    private static final Map<Integer, L1Npc> _npcs = new HashMap<Integer, L1Npc>();
-    private static final Map<String, Constructor<?>> _constructorCache = new HashMap<String, Constructor<?>>();
+    private static final Map<Integer, L1Npc> _npcs = new HashMap<>();
+    private static final Map<String, Constructor<?>> _constructorCache = new HashMap<>();
     public static int ORC = -1;
     private static final Map<String, Integer> _familyTypes = buildFamily();
     private static NpcTable _instance;
@@ -37,7 +37,7 @@ public class NpcTable {
      *
      */
     private static Map<String, Integer> buildFamily() {
-        final Map<String, Integer> result = new HashMap<String, Integer>();
+        final Map<String, Integer> result = new HashMap<>();
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
@@ -145,7 +145,7 @@ public class NpcTable {
                 if (family == null) {
                     npc.set_family(0);
                 } else {
-                    npc.set_family(family.intValue());
+                    npc.set_family(family);
                 }
                 int agrofamily = rs.getInt("agrofamily");
                 if ((npc.get_family() == 0) && (agrofamily == 1)) {
@@ -187,7 +187,7 @@ public class NpcTable {
                 npc.setDropGround(rs.getInt("掉落範圍"));
                 npc.setWeaponSoulExp(rs.getInt("劍靈值")); // 武器劍靈系統
                 registerConstructorCache(npc.getImpl());
-                _npcs.put(Integer.valueOf(npcId), npc);
+                _npcs.put(npcId, npc);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -207,7 +207,7 @@ public class NpcTable {
             if (!className.equals("0")) {
                 String newclass = className;
                 String[] set = null;
-                if (className.indexOf(" ") != -1) {
+                if (className.contains(" ")) {
                     set = className.split(" ");
                     try {
                         newclass = set[0];

@@ -222,11 +222,11 @@ public class ItemTable {
 
     private L1Item _allTemplates[];
 
-    public static final Map<String, Integer> ArmorTypes() {
+    public static Map<String, Integer> ArmorTypes() {
         return _armorTypes;
     }
 
-    public static final Map<String, Integer> WeaponTypes() {
+    public static Map<String, Integer> WeaponTypes() {
         return _weaponTypes;
     }
 

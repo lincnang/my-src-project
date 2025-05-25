@@ -105,7 +105,7 @@ public class C_Shop extends ClientBasePacket {
                         pc.sendPackets(new S_ServerMessage(141));
                         return;
                     }
-                    if (checkItem != null && ItemRestrictionsTable.RESTRICTIONS.contains(Integer.valueOf(checkItem.getItemId()))) {
+                    if (checkItem != null && ItemRestrictionsTable.RESTRICTIONS.contains(checkItem.getItemId())) {
                         pc.sendPackets(new S_ServerMessage(210, checkItem.getItem().getNameId()));
                         return;
                     }
@@ -189,7 +189,7 @@ public class C_Shop extends ClientBasePacket {
                             pc.sendPackets(new S_ServerMessage(141));
                             return;
                         }
-                        if (checkItem != null && ItemRestrictionsTable.RESTRICTIONS.contains(Integer.valueOf(checkItem.getItemId()))) {
+                        if (checkItem != null && ItemRestrictionsTable.RESTRICTIONS.contains(checkItem.getItemId())) {
                             pc.sendPackets(new S_ServerMessage(210, checkItem.getItem().getNameId()));
                             return;
                         }

@@ -31,7 +31,7 @@ public class Game_ZhuduiPK {
     private static Logger _log = Logger.getLogger(Game_ZhuduiPK.class.getName());
     private static String enemyClanName = "";
     private static String clanName = "";
-    private final ArrayList<L1PcInstance> _members = new ArrayList<L1PcInstance>();
+    private final ArrayList<L1PcInstance> _members = new ArrayList<>();
     private int _ZhuduiPKStatus = STATUS_NONE;
 
     public static Game_ZhuduiPK getInstance() {
@@ -188,7 +188,7 @@ public class Game_ZhuduiPK {
     }
 
     private L1PcInstance[] getMembersArray() {
-        return _members.toArray(new L1PcInstance[_members.size()]);
+        return _members.toArray(new L1PcInstance[0]);
     }
 
     private int getMembersCount() {

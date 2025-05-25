@@ -34,8 +34,7 @@ public class NpcRestTimer extends TimerTask {
             if (allMob.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1NpcInstance> iter = allMob.iterator(); iter.hasNext(); ) {
-                final L1NpcInstance npc = iter.next();
+            for (final L1NpcInstance npc : allMob) {
                 if (npc == null) {
                     continue;
                 }

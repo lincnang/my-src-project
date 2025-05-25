@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -33,7 +34,7 @@ public final class ConfigSkillIllusion {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigSkillIllusion));
+            final InputStream is = Files.newInputStream(new File(ConfigSkillIllusion).toPath());
             set.load(is);
             is.close();
             IS2 = Double.parseDouble(set.getProperty("Illusion_damage_Turn2", "0.1"));

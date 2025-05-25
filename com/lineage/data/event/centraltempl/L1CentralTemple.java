@@ -20,8 +20,8 @@ public class L1CentralTemple {
     private L1CentralTemple() {
         //L1V1Map map=(L1V1Map)L1WorldMap.get().getMap((short)1936);
         int[] mapid = {1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945};
-        for (int i = 0; i < mapid.length; i++) {
-            L1V1Map map = (L1V1Map) L1WorldMap.get().getMap((short) mapid[i]);
+        for (int j : mapid) {
+            L1V1Map map = (L1V1Map) L1WorldMap.get().getMap((short) j);
             //一排3個怪
             for (int x = 32799; x <= 32800; x++) {
                 for (int y = 32843; y <= 32851; y++) {

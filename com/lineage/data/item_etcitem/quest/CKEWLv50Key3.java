@@ -42,8 +42,7 @@ public class CKEWLv50Key3 extends ItemExecutor {
             pc.sendPackets(new S_ServerMessage(79));
             return;
         }
-        final HashMap<Integer, L1Object> mapList = new HashMap<Integer, L1Object>();
-        mapList.putAll(World.get().getVisibleObjects(CKEWLv50_1.MAPID));
+        final HashMap<Integer, L1Object> mapList = new HashMap<>(World.get().getVisibleObjects(CKEWLv50_1.MAPID));
         int itemid = 49166;
         int i = 0;
         for (L1Object tgobj : mapList.values()) {

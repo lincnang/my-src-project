@@ -55,7 +55,7 @@ public class L1DeathMatch {
     // 競技參加中
     private final List<L1PcInstance> playerList = Lists.newArrayList();
     // 最終利用時間
-    private final HashMap<String, Date> lastPlayTime = new HashMap<String, Date>();
+    private final HashMap<String, Date> lastPlayTime = new HashMap<>();
     /**
      * 1270 最小參加人數5名滿、決鬥強制終了。 1000返。 1273
      * 選Lv%0?Lv%1參加。 1521 一日參加回數%0回超。
@@ -64,7 +64,7 @@ public class L1DeathMatch {
     private final List<L1PcInstance> orderList = Lists.newArrayList();
     //
     // 予約
-    private final HashMap<String, Integer> orderCancelList = new HashMap<String, Integer>();
+    private final HashMap<String, Integer> orderCancelList = new HashMap<>();
     long startTime;// = System.currentTimeMillis();
     private short mapId;
     private int _status = 0;

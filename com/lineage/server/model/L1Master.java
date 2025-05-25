@@ -20,8 +20,8 @@ import static com.lineage.server.model.skill.L1SkillId.*;
 
 public class L1Master {
     private static L1Master _instance;
-    private static HashMap<Integer, ArrayList<L1PcInstance>> list = new HashMap<Integer, ArrayList<L1PcInstance>>();
-    private static HashMap<Integer, String> master_name_list = new HashMap<Integer, String>();
+    private static HashMap<Integer, ArrayList<L1PcInstance>> list = new HashMap<>();
+    private static HashMap<Integer, String> master_name_list = new HashMap<>();
 
     private L1Master() {
         Connection con = null;
@@ -114,7 +114,7 @@ public class L1Master {
 
     // 線上弟子清單
     public ArrayList<L1PcInstance> getOnlineDiscipleList(int masterID) {
-        ArrayList<L1PcInstance> onlineList = new ArrayList<L1PcInstance>();
+        ArrayList<L1PcInstance> onlineList = new ArrayList<>();
         for (L1PcInstance disciple : list.get(masterID)) {
             L1Object obj = World.get().findObject(disciple.getId());
             if (obj instanceof L1PcInstance) {
@@ -134,7 +134,7 @@ public class L1Master {
         if (list.containsKey(masterID)) {
             list.get(masterID).add(disciple);
         } else {
-            ArrayList<L1PcInstance> disciple_list = new ArrayList<L1PcInstance>();
+            ArrayList<L1PcInstance> disciple_list = new ArrayList<>();
             disciple_list.add(disciple);
             list.put(masterID, disciple_list);
         }

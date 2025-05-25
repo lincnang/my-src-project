@@ -15,7 +15,7 @@ public class L1HouseLocation {
     private static final Point[] TELEPORT_LOC_HEINE = {new Point(33604, 33236), new Point(33649, 33413), new Point(33553, 32712), new Point(32702, 32842)};
     private static final Point[] TELEPORT_LOC_ADEN = {new Point(33966, 33253), new Point(33921, 33177), new Point(33553, 32712), new Point(32702, 32842)};
     private static final Point[] TELEPORT_LOC_GLUDIN = {new Point(32628, 32807), new Point(32623, 32729), new Point(33553, 32712), new Point(32702, 32842)};
-    private static final Map<Integer, L1HouseLocTmp> _houseLoc = new HashMap<Integer, L1HouseLocTmp>();
+    private static final Map<Integer, L1HouseLocTmp> _houseLoc = new HashMap<>();
 
     public static void put(Integer e, L1HouseLocTmp loc) {
         _houseLoc.put(e, loc);
@@ -153,7 +153,7 @@ public class L1HouseLocation {
 
     public static boolean isInHouse(int locx, int locy, short mapid) {
         for (Integer houseId : _houseLoc.keySet()) {
-            if (isInHouseLoc(houseId.intValue(), locx, locy, mapid)) {
+            if (isInHouseLoc(houseId, locx, locy, mapid)) {
                 return true;
             }
         }
@@ -162,7 +162,7 @@ public class L1HouseLocation {
 
     public static boolean isInHouseLoc(int houseId, int locx, int locy, short mapid) {
         try {
-            L1HouseLocTmp loc = (L1HouseLocTmp) _houseLoc.get(new Integer(houseId));
+            L1HouseLocTmp loc = (L1HouseLocTmp) _houseLoc.get(houseId);
             if (loc != null) {
                 int locx1 = loc.get_locx1();
                 int locx2 = loc.get_locx2();
@@ -193,7 +193,7 @@ public class L1HouseLocation {
     public static int[] getHouseLoc(int houseId) {
         int[] loc = new int[3];
         try {
-            L1HouseLocTmp locTmp = (L1HouseLocTmp) _houseLoc.get(new Integer(houseId));
+            L1HouseLocTmp locTmp = (L1HouseLocTmp) _houseLoc.get(houseId);
             if (loc != null) {
                 loc[0] = locTmp.get_homelocx();
                 loc[1] = locTmp.get_homelocy();

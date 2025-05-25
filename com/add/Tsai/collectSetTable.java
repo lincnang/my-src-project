@@ -61,9 +61,7 @@ public class collectSetTable {
                 String needname = rs.getString("需求的變身卡名稱").replaceAll(" ", "");
                 final String[] needn_tmp = needname.split(",");
                 final String[] neednames = new String[needn_tmp.length];
-                for (int j = 0; j < needn_tmp.length; j++) {
-                    neednames[j] = needn_tmp[j];
-                }
+                System.arraycopy(needn_tmp, 0, neednames, 0, needn_tmp.length);
                 final int questid = rs.getInt("任務紀錄編號");
                 final int str = rs.getInt("力量");
                 final int dex = rs.getInt("敏捷");

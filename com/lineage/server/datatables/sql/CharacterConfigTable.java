@@ -25,7 +25,7 @@ public class CharacterConfigTable implements CharacterConfigStorage {
 
     private static final Log _log = LogFactory.getLog(CharacterConfigTable.class);
 
-    private static final Map<Integer, L1Config> _configList = new HashMap<Integer, L1Config>();
+    private static final Map<Integer, L1Config> _configList = new HashMap<>();
 
     /**
      * 刪除遺失資料

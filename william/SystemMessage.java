@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 public class SystemMessage {
     private static Logger _log = Logger.getLogger(SystemMessage.class.getName());
     private static SystemMessage _instance;
-    private final HashMap<Integer, L1WilliamSystemMessage> _itemIdIndex = new HashMap<Integer, L1WilliamSystemMessage>();
+    private final HashMap<Integer, L1WilliamSystemMessage> _itemIdIndex = new HashMap<>();
 
     private SystemMessage() {
         loadSystemMessage();

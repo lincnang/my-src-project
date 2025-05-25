@@ -21,7 +21,7 @@ import java.util.StringTokenizer;
 public final class ResolventEXTable {
     private static final Log _log = LogFactory.getLog(ResolventEXTable.class);
     private static ResolventEXTable _instance;
-    private final Map<Integer, Gift> _resolvent = new HashMap<Integer, Gift>();
+    private final Map<Integer, Gift> _resolvent = new HashMap<>();
 
     private ResolventEXTable() {
         load();
@@ -72,7 +72,7 @@ public final class ResolventEXTable {
                 g._crystal_id = crystalId;
                 g._crystalMincount = crystalMincount;
                 g._crystalMaxcount = crystalMaxcount;
-                this._resolvent.put(new Integer(itemId), g);
+                this._resolvent.put(itemId, g);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -85,8 +85,8 @@ public final class ResolventEXTable {
     }
 
     public boolean getCrystalCount(L1PcInstance pc, int itemId) {
-        if (this._resolvent.containsKey(Integer.valueOf(itemId))) {
-            Gift g = (Gift) this._resolvent.get(Integer.valueOf(itemId));
+        if (this._resolvent.containsKey(itemId)) {
+            Gift g = (Gift) this._resolvent.get(itemId);
             int[] item_id = g._crystal_id;
             int[] min_count = g._crystalMincount;
             int[] max_count = g._crystalMaxcount;

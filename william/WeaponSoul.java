@@ -21,7 +21,7 @@ public class WeaponSoul {
     private static final Log _logx = LogFactory.getLog(WeaponSoul.class.getName());
     private static Logger _log = Logger.getLogger(WeaponSoul.class.getName());
     private static WeaponSoul _instance;
-    private final HashMap<Integer, L1WeaponSoul> _weaponSoulIndex = new HashMap<Integer, L1WeaponSoul>();
+    private final HashMap<Integer, L1WeaponSoul> _weaponSoulIndex = new HashMap<>();
 
     private WeaponSoul() {
         loadWeaponSoul();
@@ -68,16 +68,16 @@ public class WeaponSoul {
             int soul_Mp = rs.getInt("soul_mp");
             String soul_name = rs.getString("soul_name");
             L1WeaponSoul weaponSoul = new L1WeaponSoul(weapon_id, soul_exp_limit, soul_min_exp, soul_gfx_id, soul_level, soul_Str, soul_Con, soul_Dex, soul_Int, soul_Wis, soul_Mp, soul_name);
-            this._weaponSoulIndex.put(Integer.valueOf(weapon_id), weaponSoul);
+            this._weaponSoulIndex.put(weapon_id, weaponSoul);
         }
         _logx.info("讀取->寶_武器劍靈系統資料數量: " + this._weaponSoulIndex.size() + "(" + timer.get() + "ms)");
     }
 
     public L1WeaponSoul getTemplate(int weaponId) {
-        return (L1WeaponSoul) this._weaponSoulIndex.get(Integer.valueOf(weaponId));
+        return (L1WeaponSoul) this._weaponSoulIndex.get(weaponId);
     }
 
     public L1WeaponSoul[] getWeaponIdList() {
-        return (L1WeaponSoul[]) this._weaponSoulIndex.values().toArray(new L1WeaponSoul[this._weaponSoulIndex.size()]);
+        return (L1WeaponSoul[]) this._weaponSoulIndex.values().toArray(new L1WeaponSoul[0]);
     }
 }

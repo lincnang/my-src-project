@@ -34,11 +34,11 @@ public class C_UsePetItem extends ClientBasePacket {
             if (pc == null) {
                 return;
             }
-            L1PetInstance pet = WorldPet.get().get(Integer.valueOf(petId));
+            L1PetInstance pet = WorldPet.get().get(petId);
             if (pet == null) {
                 return;
             }
-            if (pc.getPetList().get(Integer.valueOf(petId)) == null) {
+            if (pc.getPetList().get(petId) == null) {
                 return;
             }
             switch (pet.getNpcId()) {// 未進化的寵物

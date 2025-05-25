@@ -43,8 +43,8 @@ public class SummonTimer extends TimerTask {
             if (allPet.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = allPet.iterator(); iter.hasNext(); ) {
-                L1SummonInstance summon = (L1SummonInstance) iter.next();
+            for (Object o : allPet) {
+                L1SummonInstance summon = (L1SummonInstance) o;
                 int time = summon.get_time() - 60;
                 if (time <= 0) {
                     outSummon(summon);

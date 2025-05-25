@@ -36,7 +36,7 @@ public class ArmorSetImpl extends ArmorSet {
         this._id = id;
         this._ids = ids;
         this._gfxids = gfxids;
-        this._effects = new ArrayList<ArmorSetEffect>();
+        this._effects = new ArrayList<>();
         _addEffectId = addEffectId;
         _addInterval = addInterval;
     }

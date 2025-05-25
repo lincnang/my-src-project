@@ -49,8 +49,7 @@ public class RankingWealthTimer extends TimerTask {
             _load = true;
             // 重置所有排行
             restart();
-            for (final Iterator<L1PcInstance> iter = allPc.iterator(); iter.hasNext(); ) {
-                final L1PcInstance tgpc = iter.next();
+            for (final L1PcInstance tgpc : allPc) {
                 if (tgpc == null) {
                     continue;
                 }

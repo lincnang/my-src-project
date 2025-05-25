@@ -82,7 +82,7 @@ public class Npc_Aras extends NpcExecutor {
                 case 2:
                     try {
                         if (cmd.matches("[0-9]+")) {
-                            status2(pc, npc, Integer.valueOf(cmd).intValue());
+                            status2(pc, npc, Integer.parseInt(cmd));
                         }
                     } catch (Exception e) {
                         _log.error(e.getLocalizedMessage(), e);

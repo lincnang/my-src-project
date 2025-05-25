@@ -26,7 +26,7 @@ public class NpcExistTimer extends TimerTask {
             Map<Integer, L1Spawn> BossSpawn = SpawnBossReading.get().get_bossSpawnTable();
             for (L1Spawn spawn : BossSpawn.values()) {
                 if (spawn.get_existTime() > 0) {// 具有BOSS存在時間限制(分)
-                    long existTime = spawn.get_existTime() * 60 * 1000;// 存在時間限制轉換成毫秒
+                    long existTime = (long) spawn.get_existTime() * 60 * 1000;// 存在時間限制轉換成毫秒
                     long spawnTime = spawn.get_nextSpawnTime().getTimeInMillis();// 出生時間轉換成毫秒
                     long nowTime = System.currentTimeMillis();// 現在時間
                     L1NpcInstance npc = spawn.getNpcTemp();

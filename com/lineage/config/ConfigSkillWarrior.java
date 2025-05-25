@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -48,7 +49,7 @@ public final class ConfigSkillWarrior {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigSkillWarrior));
+            final InputStream is = Files.newInputStream(new File(ConfigSkillWarrior).toPath());
             set.load(is);
             is.close();
             //戰士魔法 泰坦:子彈 泰坦:魔法 泰坦:岩石 血量低於多少%才發動(0.4=40%  正服設定40%)

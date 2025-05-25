@@ -21,8 +21,8 @@ public class ValakasRoomSystem {
     /**
      * 準備副本線程列表
      */
-    private final Map<Integer, ValakasReady> _readylist = new ConcurrentHashMap<Integer, ValakasReady>();
-    private final Map<Integer, ValakasStart> _startlist = new ConcurrentHashMap<Integer, ValakasStart>();
+    private final Map<Integer, ValakasReady> _readylist = new ConcurrentHashMap<>();
+    private final Map<Integer, ValakasStart> _startlist = new ConcurrentHashMap<>();
 
     public static ValakasRoomSystem getInstance() {
         if (_instance == null) {
@@ -53,8 +53,8 @@ public class ValakasRoomSystem {
         if (_pc != null && (_pc.getMapId() < 2600 || _pc.getMapId() > 2698)) {
             L1ItemInstance[] item = _pc.getInventory().findItemsId(5010);
             if (item != null && item.length > 0) {
-                for (int i = 0; i < item.length; i++) {
-                    _pc.getInventory().removeItem(item[i]);
+                for (L1ItemInstance l1ItemInstance : item) {
+                    _pc.getInventory().removeItem(l1ItemInstance);
                 }
             }
         }

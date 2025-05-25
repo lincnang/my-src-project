@@ -19,8 +19,8 @@ import java.util.Set;
 
 public class PetTypeTable {
     private static final Log _log = LogFactory.getLog(PetTypeTable.class);
-    private static final Map<Integer, L1PetType> _types = new HashMap<Integer, L1PetType>();
-    private static final Set<String> _defaultNames = new HashSet<String>();
+    private static final Map<Integer, L1PetType> _types = new HashMap<>();
+    private static final Set<String> _defaultNames = new HashSet<>();
     private static PetTypeTable _instance;
 
     private PetTypeTable() {
@@ -62,7 +62,7 @@ public class PetTypeTable {
                 int defyMsgId = rs.getInt("DefyMessageId");
                 RangeInt hpUpRange = new RangeInt(hpUpMin, hpUpMax);
                 RangeInt mpUpRange = new RangeInt(mpUpMin, mpUpMax);
-                _types.put(Integer.valueOf(baseNpcId), new L1PetType(baseNpcId, name, itemIdForTaming, hpUpRange, mpUpRange, evolvItemId, npcIdForEvolving, msgIds, defyMsgId));
+                _types.put(baseNpcId, new L1PetType(baseNpcId, name, itemIdForTaming, hpUpRange, mpUpRange, evolvItemId, npcIdForEvolving, msgIds, defyMsgId));
                 _defaultNames.add(name.toLowerCase());
             }
         } catch (SQLException e) {
@@ -75,7 +75,7 @@ public class PetTypeTable {
     }
 
     public L1PetType get(int baseNpcId) {
-        return (L1PetType) _types.get(Integer.valueOf(baseNpcId));
+        return (L1PetType) _types.get(baseNpcId);
     }
 
     public boolean isNameDefault(String name) {

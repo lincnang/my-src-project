@@ -88,9 +88,7 @@ public class L1SpawnCmd implements L1CommandExecutor {
             }
             final String msg = String.format("%s(%d) (%d) 召喚。 (範圍:%d)", npc.get_name(), npcid, count, randomrange);
             pc.sendPackets(new S_SystemMessage(msg));
-        } catch (final NoSuchElementException e) {
-            this.sendErrorMessage(pc, cmdName);
-        } catch (final NumberFormatException e) {
+        } catch (final NoSuchElementException | NumberFormatException e) {
             this.sendErrorMessage(pc, cmdName);
         } catch (final Exception e) {
             _log.error("錯誤的GM指令格式: " + this.getClass().getSimpleName() + " 執行的GM:" + pc.getName());

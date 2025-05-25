@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  **/
 public class BraveavatarController implements Runnable {
     private static BraveavatarController _instance;
-    private final ArrayList<L1PcInstance> _pbalist = new ArrayList<L1PcInstance>();
+    private final ArrayList<L1PcInstance> _pbalist = new ArrayList<>();
 
     public static BraveavatarController getInstance() {
         if (_instance == null) {
@@ -63,8 +63,8 @@ public class BraveavatarController implements Runnable {
         try {
             if (_pbalist.size() > 0) {
                 L1PcInstance pc = null;
-                for (int i = 0; i < _pbalist.size(); i++) {
-                    pc = _pbalist.get(i);
+                for (L1PcInstance l1PcInstance : _pbalist) {
+                    pc = l1PcInstance;
                     if (pc != null) {
                         int count = partycount(pc);
                         if (!pc.getPbavatar()) {

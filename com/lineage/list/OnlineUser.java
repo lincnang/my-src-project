@@ -26,7 +26,7 @@ public class OnlineUser {
     private Collection<ClientExecutor> _allClient;
 
     private OnlineUser() {
-        _clientList = new ConcurrentHashMap<String, ClientExecutor>();
+        _clientList = new ConcurrentHashMap<>();
     }
 
     public static OnlineUser get() {

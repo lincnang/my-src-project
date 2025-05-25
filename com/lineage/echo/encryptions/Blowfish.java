@@ -25,9 +25,9 @@ public class Blowfish {
         for (i = 0; i < PSIZE; i++) {
             long k = 0L;
             if ((i & 1) != 0) {
-                k = ((c[4] & 0xFF) << 24) | ((c[5] & 0xff) << 16) | ((c[6] & 0xff) << 8) | (c[7] & 0xff);
+                k = ((long) (c[4] & 0xFF) << 24) | ((c[5] & 0xff) << 16) | ((c[6] & 0xff) << 8) | (c[7] & 0xff);
             } else {
-                k = ((c[0] & 0xFF) << 24) | ((c[1] & 0xff) << 16) | ((c[2] & 0xff) << 8) | (c[3] & 0xff);
+                k = ((long) (c[0] & 0xFF) << 24) | ((c[1] & 0xff) << 16) | ((c[2] & 0xff) << 8) | (c[3] & 0xff);
             }
             P[i] ^= k;
         }

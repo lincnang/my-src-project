@@ -68,25 +68,25 @@ public class L1PcOtherList {
 
     public L1PcOtherList(final L1PcInstance pc) {
         this._pc = pc;
-        this.DELIST = new HashMap<Integer, L1ItemInstance>();
-        this._cnList = new HashMap<Integer, L1ShopItem>();
-        this._autoHpList = new HashMap<Integer, L1ShopAutoHp>(); // 特殊商店 -> 購買自動喝水補魔道具
-        this._removeItemSellList = new HashMap<Integer, L1ItemInstance>();// 特殊商店 -> 添加刪除物品
-        this._removeItemBuyList = new HashMap<Integer, L1ItemInstance>();// 特殊商店 -> 取消刪除物品
-        this._cnSList = new HashMap<Integer, L1ItemInstance>();
-        this._gamList = new HashMap<Integer, GamblingNpc>();
-        this._gamSellList = new HashMap<Integer, L1Gambling>();
-        this._illusoryList = new HashMap<Integer, L1IllusoryInstance>();
-        this._teleport = new HashMap<Integer, L1TeleportLoc>();
-        this._uplevelList = new HashMap<Integer, Integer>();
-        this._shiftingList = new HashMap<Integer, String[]>();
-        this._sitemList = new HashMap<Integer, L1ItemInstance>();
-        this._sitemList2 = new HashMap<Integer, Integer>();
-        this.QUESTMAP = new HashMap<Integer, L1Quest>();
-        this.SHOPXMAP = new HashMap<Integer, L1ShopS>();
-        this.ATKNPC = new ArrayList<Integer>();
-        this.EZPAYLIST = new HashMap<Integer, Integer>();
-        this.SHOPLIST = new HashMap<Integer, int[]>();
+        this.DELIST = new HashMap<>();
+        this._cnList = new HashMap<>();
+        this._autoHpList = new HashMap<>(); // 特殊商店 -> 購買自動喝水補魔道具
+        this._removeItemSellList = new HashMap<>();// 特殊商店 -> 添加刪除物品
+        this._removeItemBuyList = new HashMap<>();// 特殊商店 -> 取消刪除物品
+        this._cnSList = new HashMap<>();
+        this._gamList = new HashMap<>();
+        this._gamSellList = new HashMap<>();
+        this._illusoryList = new HashMap<>();
+        this._teleport = new HashMap<>();
+        this._uplevelList = new HashMap<>();
+        this._shiftingList = new HashMap<>();
+        this._sitemList = new HashMap<>();
+        this._sitemList2 = new HashMap<>();
+        this.QUESTMAP = new HashMap<>();
+        this.SHOPXMAP = new HashMap<>();
+        this.ATKNPC = new ArrayList<>();
+        this.EZPAYLIST = new HashMap<>();
+        this.SHOPLIST = new HashMap<>();
     }
 
     /**
@@ -484,7 +484,7 @@ public class L1PcOtherList {
      *
      */
     public void add_gamList(final GamblingNpc element, final int index) {
-        this._gamList.put(new Integer(index), element);
+        this._gamList.put(index, element);
     }
 
     /**
@@ -515,7 +515,7 @@ public class L1PcOtherList {
             }
             final int npcid = element.get_npc().getNpcId();// 比賽者NPCID
             final int no = GamblingTime.get_gamblingNo();// 比賽場次編號
-            final long adena = GamblingSet.GAMADENA * count;// 需要數量
+            final long adena = (long) GamblingSet.GAMADENA * count;// 需要數量
             final long srcCount = this._pc.getInventory().countItems(GamblingSet.ADENAITEM);// 現有數量
             // 奇巖賭場 下注使用物品編號(預設金幣40308)檢查
             if (srcCount >= adena) {
@@ -551,7 +551,7 @@ public class L1PcOtherList {
      * 加入購買托售管理員物品
      */
     public void add_cnSList(final L1ItemInstance shopItem, final int index) {
-        this._cnSList.put(new Integer(index), shopItem);
+        this._cnSList.put(index, shopItem);
     }
 
     /**
@@ -564,7 +564,7 @@ public class L1PcOtherList {
                 final int count = cnMap.get(integer);
                 if (count > 0) {
                     // 取回賣出視窗對應排序編號物品
-                    final L1ItemInstance element = this._cnSList.get(integer.intValue());
+                    final L1ItemInstance element = this._cnSList.get(integer);
                     final L1ShopS shopS = DwarfShopReading.get().getShopS(element.getId());
                     if (element != null && shopS != null) {
                         if (shopS.get_end() != 0) {// 物品非出售中
@@ -691,7 +691,7 @@ public class L1PcOtherList {
      *
      */
     public void add_autoHpList(final L1ShopAutoHp shopItem, final int index) {
-        this._autoHpList.put(new Integer(index), shopItem);
+        this._autoHpList.put(index, shopItem);
     }
 
     /**
@@ -766,7 +766,7 @@ public class L1PcOtherList {
      *
      */
     public void add_removeItemSellList(final L1ItemInstance shopItem, final int index) {
-        this._removeItemSellList.put(new Integer(index), shopItem);
+        this._removeItemSellList.put(index, shopItem);
     }
 
     /**
@@ -816,7 +816,7 @@ public class L1PcOtherList {
      *
      */
     public void add_removeItemBuyList(final L1ItemInstance item, final int index) {
-        this._removeItemBuyList.put(new Integer(index), item);
+        this._removeItemBuyList.put(index, item);
     }
 
     /**
@@ -873,10 +873,10 @@ public class L1PcOtherList {
                 if (tgpc.isGm()) {
                     final StringBuilder topc = new StringBuilder();
                     if (mode) {// 買入
-                        topc.append("人物:" + this._pc.getName() + " 買入:" + itemtmp.getName() + " 花費商城幣:" + adenaCount);
+                        topc.append("人物:").append(this._pc.getName()).append(" 買入:").append(itemtmp.getName()).append(" 花費商城幣:").append(adenaCount);
                         tgpc.sendPackets(new S_ServerMessage(166, topc.toString()));
                     } else {// 賣出
-                        topc.append("人物:" + this._pc.getName() + " 賣出:" + itemtmp.getName() + " 獲得商城幣:" + adenaCount);
+                        topc.append("人物:").append(this._pc.getName()).append(" 賣出:").append(itemtmp.getName()).append(" 獲得商城幣:").append(adenaCount);
                         tgpc.sendPackets(new S_ServerMessage(166, topc.toString()));
                     }
                 }

@@ -56,9 +56,9 @@ public class VIP_Card_ extends ItemExecutor {
                 }
             }
             long time = System.currentTimeMillis();
-            long x1 = CardSet.USE_TIME * 60 * 60;
+            long x1 = (long) CardSet.USE_TIME * 60 * 60;
             if (item.getItem().getclassname().startsWith("shop.VIP_Card_ A")) {
-                x1 = CardSet.USE_TIME2 * 60 * 60;
+                x1 = (long) CardSet.USE_TIME2 * 60 * 60;
             }
             long x2 = x1 * 1000L;
             long upTime = x2 + time;

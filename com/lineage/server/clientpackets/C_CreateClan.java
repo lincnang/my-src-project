@@ -52,8 +52,7 @@ public class C_CreateClan extends ClientBasePacket {
             if (pc.isCrown()) { // 王族
                 if (pc.getClanid() == 0) {
                     final Collection<L1Clan> allClans = WorldClan.get().getAllClans();
-                    for (final Iterator<L1Clan> iter = allClans.iterator(); iter.hasNext(); ) {
-                        final L1Clan clan = iter.next();
+                    for (final L1Clan clan : allClans) {
                         if (clan.getClanName().equalsIgnoreCase(s)) {
                             // \f1那個血盟名稱已經存在。
                             pc.sendPackets(new S_ServerMessage(99));

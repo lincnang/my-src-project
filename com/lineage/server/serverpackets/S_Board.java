@@ -56,7 +56,7 @@ public class S_Board extends ServerBasePacket {
 
     private void buildPacket(final L1NpcInstance npc, final int number) {
         int count = 0;
-        final ArrayList<L1Board> showList = new ArrayList<L1Board>();
+        final ArrayList<L1Board> showList = new ArrayList<>();
         int maxid = BoardReading.get().getMaxId();
         while ((count < 8) && (maxid > 0)) {
             final L1Board boardInfo = BoardReading.get().getBoardTable(maxid--);
@@ -76,8 +76,7 @@ public class S_Board extends ServerBasePacket {
         this.writeC(0x7f); // ?
         this.writeH(showList.size());
         this.writeH(0x012c);// 300
-        for (int i = 0; i < showList.size(); i++) {
-            L1Board boardInfo = showList.get(i);
+        for (L1Board boardInfo : showList) {
             if (boardInfo != null) {
                 this.writeD(boardInfo.get_id());
                 this.writeS(boardInfo.get_name());

@@ -47,8 +47,7 @@ public class Skill_Awake_Timer extends TimerTask {
             if (allPc.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1PcInstance> iter = allPc.iterator(); iter.hasNext(); ) {
-                final L1PcInstance tgpc = iter.next();
+            for (final L1PcInstance tgpc : allPc) {
                 // 人物死亡
                 if (tgpc.isDead()) {
                     continue;

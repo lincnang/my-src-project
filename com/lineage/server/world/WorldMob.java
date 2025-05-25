@@ -25,7 +25,7 @@ public class WorldMob {
     private Collection<L1MonsterInstance> _allMobValues;
 
     private WorldMob() {
-        _isMob = new ConcurrentHashMap<Integer, L1MonsterInstance>();
+        _isMob = new ConcurrentHashMap<>();
     }
 
     public static WorldMob get() {
@@ -89,9 +89,8 @@ public class WorldMob {
     public ArrayList<L1MonsterInstance> getVisibleMob(final L1MonsterInstance src) {
         final L1Map map = src.getMap();
         final Point pt = src.getLocation();
-        final ArrayList<L1MonsterInstance> result = new ArrayList<L1MonsterInstance>();
-        for (final Iterator<L1MonsterInstance> iter = all().iterator(); iter.hasNext(); ) {
-            final L1MonsterInstance element = iter.next();
+        final ArrayList<L1MonsterInstance> result = new ArrayList<>();
+        for (final L1MonsterInstance element : all()) {
             // for (final L1MonsterInstance element : this._isMob.values()) {
             if (element.equals(src)) {
                 continue;
@@ -110,9 +109,8 @@ public class WorldMob {
     public ArrayList<L1MonsterInstance> getVisibleMob(L1Object src) {
         L1Map map = src.getMap();
         Point pt = src.getLocation();
-        ArrayList<L1MonsterInstance> result = new ArrayList<L1MonsterInstance>();
-        for (Iterator<?> iter = all().iterator(); iter.hasNext(); ) {
-            L1MonsterInstance element = (L1MonsterInstance) iter.next();
+        ArrayList<L1MonsterInstance> result = new ArrayList<>();
+        for (L1MonsterInstance element : all()) {
             if (!element.equals(src)) {
                 if (map == element.getMap()) {
                     if (src.get_showId() == element.get_showId()) {
@@ -135,8 +133,7 @@ public class WorldMob {
         final L1Map map = src.getMap();
         final Point pt = src.getLocation();
         int count = 0;
-        for (final Iterator<L1MonsterInstance> iter = all().iterator(); iter.hasNext(); ) {
-            final L1MonsterInstance element = iter.next();
+        for (final L1MonsterInstance element : all()) {
             // for (final L1MonsterInstance element : this._isMob.values()) {
             if (element.equals(src)) {
                 continue;

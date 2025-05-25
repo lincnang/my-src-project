@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class MobGroupTable {
     private static final Log _log = LogFactory.getLog(MobGroupTable.class);
-    private static final Map<Integer, L1MobGroup> _mobGroupIndex = new HashMap<Integer, L1MobGroup>();
+    private static final Map<Integer, L1MobGroup> _mobGroupIndex = new HashMap<>();
     private static MobGroupTable _instance;
 
     public static MobGroupTable get() {
@@ -49,7 +49,7 @@ public class MobGroupTable {
                     minions.add(new L1NpcCount(id, count));
                 }
                 L1MobGroup mobGroup = new L1MobGroup(mobGroupId, leaderId, minions, isRemoveGroup);
-                _mobGroupIndex.put(Integer.valueOf(mobGroupId), mobGroup);
+                _mobGroupIndex.put(mobGroupId, mobGroup);
             }
             _log.info("讀取->MOB隊伍資料數量: " + _mobGroupIndex.size() + "(" + timer.get() + "ms)");
         } catch (SQLException e) {
@@ -62,7 +62,7 @@ public class MobGroupTable {
     }
 
     public L1MobGroup getTemplate(int mobGroupId) {
-        return (L1MobGroup) _mobGroupIndex.get(Integer.valueOf(mobGroupId));
+        return (L1MobGroup) _mobGroupIndex.get(mobGroupId);
     }
 }
 /*

@@ -30,7 +30,7 @@ import static com.lineage.server.model.skill.L1SkillId.*;
 
 public class CharBuffTable implements CharBuffStorage {
     private static final Log _log = LogFactory.getLog(CharBuffTable.class);
-    private static final Map<Integer, ArrayList<L1BuffTmp>> _buffMap = new HashMap<Integer, ArrayList<L1BuffTmp>>();
+    private static final Map<Integer, ArrayList<L1BuffTmp>> _buffMap = new HashMap<>();
     /**
      * 需要保留的技能
      */
@@ -62,11 +62,11 @@ public class CharBuffTable implements CharBuffStorage {
      *
      */
     private static void delete(int objid) {
-        ArrayList<?> list = (ArrayList<?>) _buffMap.get(Integer.valueOf(objid));
+        ArrayList<?> list = (ArrayList<?>) _buffMap.get(objid);
         if (list != null) {
             list.clear();
         }
-        _buffMap.remove(Integer.valueOf(objid));
+        _buffMap.remove(objid);
         Connection cn = null;
         PreparedStatement ps = null;
         try {
@@ -111,11 +111,11 @@ public class CharBuffTable implements CharBuffStorage {
      *
      */
     private static void addMap(int objId, L1BuffTmp buffTmp) {
-        ArrayList<L1BuffTmp> list = (ArrayList<L1BuffTmp>) _buffMap.get(Integer.valueOf(objId));
+        ArrayList<L1BuffTmp> list = (ArrayList<L1BuffTmp>) _buffMap.get(objId);
         if (list == null) {
-            ArrayList<L1BuffTmp> newlist = new ArrayList<L1BuffTmp>();
+            ArrayList<L1BuffTmp> newlist = new ArrayList<>();
             newlist.add(buffTmp);
-            _buffMap.put(Integer.valueOf(objId), newlist);
+            _buffMap.put(objId, newlist);
         } else {
             list.add(buffTmp);
         }

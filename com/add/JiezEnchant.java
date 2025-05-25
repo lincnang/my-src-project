@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class JiezEnchant {
     private static final Log _log = LogFactory.getLog(JiezEnchant.class);
-    private static final Map<Integer, JiezEnchant> _enchantlist = new HashMap<Integer, JiezEnchant>();
+    private static final Map<Integer, JiezEnchant> _enchantlist = new HashMap<>();
     private static JiezEnchant _instance;
     private int _armorid;
     private int _enchant;

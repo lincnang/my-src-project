@@ -22,9 +22,9 @@ import java.util.TreeMap;
  */
 public class NpcScoreTable {
     private static final Log _log = LogFactory.getLog(NpcScoreTable.class);
-    private static final Map<Integer, Integer> _scoremaxList = new TreeMap<Integer, Integer>();
-    private static final Map<Integer, Integer> _scoreminList = new TreeMap<Integer, Integer>();
-    private static final ArrayList<Integer> _scorenpcList = new ArrayList<Integer>();
+    private static final Map<Integer, Integer> _scoremaxList = new TreeMap<>();
+    private static final Map<Integer, Integer> _scoreminList = new TreeMap<>();
+    private static final ArrayList<Integer> _scorenpcList = new ArrayList<>();
     private static NpcScoreTable _instance;
     private static Random _random = new Random();
 

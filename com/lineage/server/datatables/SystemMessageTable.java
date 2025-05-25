@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class SystemMessageTable {
     private static final Log _log = LogFactory.getLog(SystemMessageTable.class);
     private static SystemMessageTable _instance;
-    private final HashMap<Integer, L1SystemMessage> _itemIdIndex = new HashMap<Integer, L1SystemMessage>();
+    private final HashMap<Integer, L1SystemMessage> _itemIdIndex = new HashMap<>();
 
     private SystemMessageTable() {
         loadSystemMessage();
@@ -59,12 +59,12 @@ public class SystemMessageTable {
             int Id = rs.getInt("代碼");
             String Message = rs.getString("文字");
             L1SystemMessage System_Message = new L1SystemMessage(Id, Message);
-            this._itemIdIndex.put(Integer.valueOf(Id), System_Message);
+            this._itemIdIndex.put(Id, System_Message);
         }
         _log.info("讀取->[其他]_天賦顯示文字設置數量: " + this._itemIdIndex.size() + "(" + timer.get() + "ms)");
     }
 
     public L1SystemMessage getTemplate(int Id) {
-        return (L1SystemMessage) this._itemIdIndex.get(Integer.valueOf(Id));
+        return (L1SystemMessage) this._itemIdIndex.get(Id);
     }
 }

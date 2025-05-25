@@ -67,7 +67,7 @@ public class C_DropItem extends ClientBasePacket {
                         pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
                         return;
                     }
-                    if (ItemRestrictionsTable.RESTRICTIONS.contains(Integer.valueOf(item.getItemId()))) {
+                    if (ItemRestrictionsTable.RESTRICTIONS.contains(item.getItemId())) {
                         pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
                         return;
                     }

@@ -225,7 +225,7 @@ public class L1DoorInstance extends L1NpcInstance {
             }
             if (newHp > 0) {
                 this.setCurrentHp(newHp);
-                if ((this.getMaxHp() * 1 / 6) > this.getCurrentHp()) {
+                if ((this.getMaxHp() / 6) > this.getCurrentHp()) {
                     if (this._crackStatus != 5) {
                         this.broadcastPacketAll(new S_DoActionGFX(this.getId(), ActionCodes.ACTION_DoorAction5));
                         this.setStatus(ActionCodes.ACTION_DoorAction5);

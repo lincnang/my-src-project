@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DwarfTable implements DwarfStorage {
     private static final Log _log = LogFactory.getLog(DwarfTable.class);
-    private static final Map<String, CopyOnWriteArrayList<L1ItemInstance>> _itemList = new ConcurrentHashMap<String, CopyOnWriteArrayList<L1ItemInstance>>();
+    private static final Map<String, CopyOnWriteArrayList<L1ItemInstance>> _itemList = new ConcurrentHashMap<>();
 
     private static void errorItem(int objid) {
         Connection co = null;
@@ -45,7 +45,7 @@ public class DwarfTable implements DwarfStorage {
     private static void addItem(final String account_name, final L1ItemInstance item) {
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(account_name);
         if (list == null) {
-            list = new CopyOnWriteArrayList<L1ItemInstance>();
+            list = new CopyOnWriteArrayList<>();
             if (!list.contains(item)) {
                 list.add(item);
             }

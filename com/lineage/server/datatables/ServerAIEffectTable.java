@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class ServerAIEffectTable {
     private static final Log _log = LogFactory.getLog(ServerAIEffectTable.class);
-    private static final ArrayList<Integer> _effectlist = new ArrayList<Integer>();
+    private static final ArrayList<Integer> _effectlist = new ArrayList<>();
     private static ServerAIEffectTable _instance;
 
     private ServerAIEffectTable() {
@@ -42,7 +42,7 @@ public class ServerAIEffectTable {
             rs = pstm.executeQuery();
             while (rs.next()) {
                 int effect_id = rs.getInt("驗證特效編號");
-                _effectlist.add(Integer.valueOf(effect_id));
+                _effectlist.add(effect_id);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -63,7 +63,7 @@ public class ServerAIEffectTable {
             rs = pstm.executeQuery();
             while (rs.next()) {
                 int effect_id = rs.getInt("驗證特效編號");
-                _effectlist.add(Integer.valueOf(effect_id));
+                _effectlist.add(effect_id);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

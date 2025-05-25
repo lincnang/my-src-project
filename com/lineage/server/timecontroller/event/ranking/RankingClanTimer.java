@@ -44,8 +44,7 @@ public class RankingClanTimer extends TimerTask {
             _load = true;
             // 重置所有排行
             restart();
-            for (final Iterator<L1Clan> iter = allClan.iterator(); iter.hasNext(); ) {
-                final L1Clan clan = iter.next();
+            for (final L1Clan clan : allClan) {
                 final String clanName = clan.getClanName();
                 if (clanName.equalsIgnoreCase("管理團隊")) {// 略過GM血盟
                     continue;

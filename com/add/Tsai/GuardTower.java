@@ -36,7 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class GuardTower {
     private static final Log _log = LogFactory.getLog(GuardTower.class);
-    private static final Map<Integer, GuardTower> _guardtowerlist = new HashMap<Integer, GuardTower>();
+    private static final Map<Integer, GuardTower> _guardtowerlist = new HashMap<>();
     private static final int STATUS_NONE = 0;
     private static final int STATUS_READY = 1;
     private static final int STATUS_PLAYING = 2;
@@ -59,7 +59,7 @@ public class GuardTower {
     private static boolean MobAllDeath = false;
     private Timer _timeHandler = new Timer(true);
     private ScheduledFuture<?> _timer;
-    private ArrayList<Integer> _guardtime = new ArrayList<Integer>();
+    private ArrayList<Integer> _guardtime = new ArrayList<>();
     private int _id;
     private int _npcid;
     private int _count;

@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class WeaponPowerTable {
     private static final Log _log = LogFactory.getLog(WeaponPowerTable.class);
-    private static final Map<Integer, int[]> _weaponPower = new HashMap<Integer, int[]>();
+    private static final Map<Integer, int[]> _weaponPower = new HashMap<>();
     private static WeaponPowerTable _instance;
 
     public static WeaponPowerTable get() {
@@ -67,14 +67,14 @@ public class WeaponPowerTable {
     private void set_weapon_power() {
         try {
             for (Integer key : _weaponPower.keySet()) {
-                L1Item item = ItemTable.get().getTemplate(key.intValue());
+                L1Item item = ItemTable.get().getTemplate(key);
                 if ((item instanceof L1Weapon)) {
                     int[] power = (int[]) _weaponPower.get(key);
                     L1Weapon weapon = (L1Weapon) item;
                     weapon.set_add_dmg(power[0], power[1]);
                 } else {
                     _log.error("武器額外傷害資料錯誤: 這個編號不是武器:" + key);
-                    delete(key.intValue());
+                    delete(key);
                 }
             }
         } catch (Exception e) {
@@ -95,14 +95,14 @@ public class WeaponPowerTable {
                     _log.error("武器額外傷害資料錯誤: 傷害質設置異常:" + weapon_id);
                     delete(weapon_id);
                 } else {
-                    _weaponPower.put(Integer.valueOf(weapon_id), new int[]{add_dmg_min, add_dmg_max});
+                    _weaponPower.put(weapon_id, new int[]{add_dmg_min, add_dmg_max});
                 }
             }
         }
     }
 
     public int[] getTemplate(int weaponId) {
-        return (int[]) _weaponPower.get(Integer.valueOf(weaponId));
+        return (int[]) _weaponPower.get(weaponId);
     }
 }
 /*

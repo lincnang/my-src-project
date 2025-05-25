@@ -26,8 +26,7 @@ public class UnfreezingTimer extends TimerTask {
         if (all.isEmpty()) {
             return;
         }
-        for (Iterator<L1PcInstance> iter = all.iterator(); iter.hasNext(); ) {
-            L1PcInstance tgpc = (L1PcInstance) iter.next();
+        for (L1PcInstance tgpc : all) {
             if (ConfigOtherSet2.APPRENTICE_SWITCH) {
                 tgpc.checkEffect();
             }

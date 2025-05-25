@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class VIPTable implements VIPStorage {
     private static final Log _log = LogFactory.getLog(VIPTable.class);
-    private static final Map<Integer, Timestamp> _vipMap = new ConcurrentHashMap<Integer, Timestamp>();
+    private static final Map<Integer, Timestamp> _vipMap = new ConcurrentHashMap<>();
 
     /**
      * 刪除VIP系統紀錄資料
@@ -49,10 +49,7 @@ public class VIPTable implements VIPStorage {
      *
      */
     private static void addMap(final int objId, final Timestamp overtime) {
-        final Timestamp otherTmp = _vipMap.get(objId);
-        if (otherTmp == null) {
-            _vipMap.put(objId, overtime);
-        }
+        _vipMap.putIfAbsent(objId, overtime);
     }
 
     /**

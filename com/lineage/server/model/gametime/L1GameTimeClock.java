@@ -19,7 +19,7 @@ public class L1GameTimeClock {
     private static L1GameTimeClock _instance;
     private volatile L1GameTime _currentTime = L1GameTime.fromSystemCurrentTime();
     private L1GameTime _previousTime = null;
-    private List<L1GameTimeListener> _listeners = new CopyOnWriteArrayList<L1GameTimeListener>();
+    private List<L1GameTimeListener> _listeners = new CopyOnWriteArrayList<>();
 
     private L1GameTimeClock() {
         GeneralThreadPool.get().execute(new TimeUpdater());

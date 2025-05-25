@@ -11,7 +11,7 @@ import java.util.List;
  * @author daien
  */
 public class L1MobGroupInfo {
-    private final List<L1NpcInstance> _membersList = new ArrayList<L1NpcInstance>();// 隊員組
+    private final List<L1NpcInstance> _membersList = new ArrayList<>();// 隊員組
     private L1NpcInstance _leader;
     private L1Spawn _spawn;
     private boolean _isRemoveGroup;

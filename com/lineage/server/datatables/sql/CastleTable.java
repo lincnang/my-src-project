@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class CastleTable implements CastleStorage {
     private static final Log _log = LogFactory.getLog(CastleTable.class);
-    private static final Map<Integer, L1Castle> _castles = new HashMap<Integer, L1Castle>();
+    private static final Map<Integer, L1Castle> _castles = new HashMap<>();
 
     private Calendar timestampToCalendar(Timestamp ts) {
         Calendar cal = Calendar.getInstance();
@@ -43,7 +43,7 @@ public class CastleTable implements CastleStorage {
                 castle.setWarTime(war_time);
                 castle.setTaxRate(tax_rate);
                 castle.setPublicMoney(public_money);
-                _castles.put(Integer.valueOf(castle_id), castle);
+                _castles.put(castle_id, castle);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -60,11 +60,11 @@ public class CastleTable implements CastleStorage {
     }
 
     public L1Castle[] getCastleTableList() {
-        return (L1Castle[]) _castles.values().toArray(new L1Castle[_castles.size()]);
+        return (L1Castle[]) _castles.values().toArray(new L1Castle[0]);
     }
 
     public L1Castle getCastleTable(int id) {
-        return (L1Castle) _castles.get(Integer.valueOf(id));
+        return (L1Castle) _castles.get(id);
     }
 
     public void updateCastle(L1Castle castle) {
@@ -82,7 +82,7 @@ public class CastleTable implements CastleStorage {
             pstm.setLong(++i, castle.getPublicMoney());
             pstm.setInt(++i, castle.getId());
             pstm.execute();
-            _castles.put(Integer.valueOf(castle.getId()), castle);
+            _castles.put(castle.getId(), castle);
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

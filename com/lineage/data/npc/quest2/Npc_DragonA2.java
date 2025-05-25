@@ -32,8 +32,8 @@ import java.util.Map;
 public class Npc_DragonA2 extends NpcExecutor {
     private static final Log _log = LogFactory.getLog(Npc_DragonA2.class);
     // 龍門OBJID的參加者列表
-    private static final Map<Integer, ArrayList<Integer>> _DOORPLAYERMAP = new HashMap<Integer, ArrayList<Integer>>();
-    private ArrayList<Integer> key_runout_doorid = new ArrayList<Integer>();// 已售出鑰匙的龍門OBJID
+    private static final Map<Integer, ArrayList<Integer>> _DOORPLAYERMAP = new HashMap<>();
+    private ArrayList<Integer> key_runout_doorid = new ArrayList<>();// 已售出鑰匙的龍門OBJID
 
     public static NpcExecutor get() {
         return new Npc_DragonA2();
@@ -174,7 +174,7 @@ public class Npc_DragonA2 extends NpcExecutor {
             int questid = ADLv80_2.QUEST.get_id();
             ArrayList<Integer> playerlist = _DOORPLAYERMAP.get(npc.getId());// 此龍門的參加者列表
             if (playerlist == null) {
-                playerlist = new ArrayList<Integer>();
+                playerlist = new ArrayList<>();
             }
             /*逃離副本無法再進入*/
             if (playerlist.contains(pc.getId())) {
@@ -200,7 +200,7 @@ public class Npc_DragonA2 extends NpcExecutor {
             }
             Integer time = QuestMapTable.get().getTime(1011);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             L1SpawnUtil.spawnDoor(quest, 10008, 7858, 32741, 32712, (short) 1011, 0);
             L1SpawnUtil.spawnDoor(quest, 10009, 7859, 32779, 32681, (short) 1011, 1);

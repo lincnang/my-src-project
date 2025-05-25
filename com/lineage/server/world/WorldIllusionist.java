@@ -21,7 +21,7 @@ public class WorldIllusionist {
     private Collection<L1PcInstance> _allPlayer;
 
     private WorldIllusionist() {
-        _isIllusionist = new ConcurrentHashMap<Integer, L1PcInstance>();
+        _isIllusionist = new ConcurrentHashMap<>();
     }
 
     public static WorldIllusionist get() {

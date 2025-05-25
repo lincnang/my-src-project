@@ -32,8 +32,8 @@ public class C_ChatWhisper extends ClientBasePacket {
         if (allNpc.isEmpty()) {
             return null;
         }
-        for (Iterator<?> iter = allNpc.iterator(); iter.hasNext(); ) {
-            L1NpcInstance npc = (L1NpcInstance) iter.next();
+        for (Object o : allNpc) {
+            L1NpcInstance npc = (L1NpcInstance) o;
             if ((npc instanceof L1DeInstance)) {
                 L1DeInstance de = (L1DeInstance) npc;
                 if (de.getNameId().equalsIgnoreCase(s)) {

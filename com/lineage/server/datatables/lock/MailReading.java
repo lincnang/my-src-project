@@ -110,7 +110,7 @@ public class MailReading {
      *
      */
     public ArrayList<L1Mail> getMails(final String pcName, final int type) {
-        final ArrayList<L1Mail> mailList = new ArrayList<L1Mail>();
+        final ArrayList<L1Mail> mailList = new ArrayList<>();
         for (final L1Mail mail : getAllMail().values()) {
             if (mail.getType() == type) {
                 if (mail.getReceiverName().equalsIgnoreCase(pcName)) {

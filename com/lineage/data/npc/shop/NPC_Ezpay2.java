@@ -164,7 +164,7 @@ public class NPC_Ezpay2 extends NpcExecutor {
             for (L1PcInstance tgpc : allPc) {
                 if (tgpc.isGm()) {
                     final StringBuilder topc = new StringBuilder();
-                    topc.append("人物:" + pc.getName() + "領取" + s + ":" + adenaCount);
+                    topc.append("人物:").append(pc.getName()).append("領取").append(s).append(":").append(adenaCount);
                     tgpc.sendPackets(new S_ServerMessage(166, topc.toString()));
                 }
             }

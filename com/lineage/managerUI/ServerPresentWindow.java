@@ -88,136 +88,132 @@ public class ServerPresentWindow extends JInternalFrame {
             }
         });
         btn_Search = new JButton("搜索");
-        btn_Search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (Eva.isServerStarted) {
+        btn_Search.addActionListener(e -> {
+            if (Eva.isServerStarted) {
+                try {
+                    DefaultTableModel tModel = (DefaultTableModel) jJTable.getModel();
+                    for (int i = tModel.getRowCount() - 1; i >= 0; i--) {
+                        tModel.removeRow(i);
+                    }
+                    String[] item = new String[2];
+                    int itemId = 0;
                     try {
-                        DefaultTableModel tModel = (DefaultTableModel) jJTable.getModel();
-                        for (int i = tModel.getRowCount() - 1; i >= 0; i--) {
-                            tModel.removeRow(i);
+                        itemId = Integer.parseInt(txt_ItemNameSearch.getText());
+                        for (L1Weapon weapon : ItemTable.get()._weapons.values()) {
+                            if (String.valueOf(weapon.getItemId()).replace(" ", "").contains(txt_ItemNameSearch.getText())) {
+                                item[0] = String.valueOf(weapon.getItemId());
+                                item[1] = weapon.getName();
+                                tModel.addRow(item);
+                            }
                         }
-                        String[] item = new String[2];
-                        int itemId = 0;
-                        try {
-                            itemId = Integer.parseInt(txt_ItemNameSearch.getText());
-                            for (L1Weapon weapon : ItemTable.get()._weapons.values()) {
-                                if (String.valueOf(weapon.getItemId()).replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
-                                    item[0] = String.valueOf(weapon.getItemId());
-                                    item[1] = weapon.getName();
-                                    tModel.addRow(item);
-                                }
+                        for (L1Armor armor : ItemTable.get()._armors.values()) {
+                            if (String.valueOf(armor.getItemId()).replace(" ", "").contains(txt_ItemNameSearch.getText())) {
+                                item[0] = String.valueOf(armor.getItemId());
+                                item[1] = armor.getName();
+                                tModel.addRow(item);
                             }
-                            for (L1Armor armor : ItemTable.get()._armors.values()) {
-                                if (String.valueOf(armor.getItemId()).replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
-                                    item[0] = String.valueOf(armor.getItemId());
-                                    item[1] = armor.getName();
-                                    tModel.addRow(item);
-                                }
-                            }
-                            for (L1EtcItem etcitem : ItemTable.get()._etcitems.values()) {
-                                if (String.valueOf(etcitem.getItemId()).replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
-                                    item[0] = String.valueOf(etcitem.getItemId());
-                                    item[1] = etcitem.getName();
-                                    tModel.addRow(item);
-                                }
-                            }
-                        } catch (Exception ex) {
-                            for (L1Weapon weapon : ItemTable.get()._weapons.values()) {
-                                if (weapon.getName().replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
-                                    item[0] = String.valueOf(weapon.getItemId());
-                                    item[1] = weapon.getName();
-                                    tModel.addRow(item);
-                                }
-                            }
-                            for (L1Armor armor : ItemTable.get()._armors.values()) {
-                                if (armor.getName().replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
-                                    item[0] = String.valueOf(armor.getItemId());
-                                    item[1] = armor.getName();
-                                    tModel.addRow(item);
-                                }
-                            }
-                            for (L1EtcItem etcitem : ItemTable.get()._etcitems.values()) {
-                                if (etcitem.getName().replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
-                                    item[0] = String.valueOf(etcitem.getItemId());
-                                    item[1] = etcitem.getName();
-                                    tModel.addRow(item);
-                                }
+                        }
+                        for (L1EtcItem etcitem : ItemTable.get()._etcitems.values()) {
+                            if (String.valueOf(etcitem.getItemId()).replace(" ", "").contains(txt_ItemNameSearch.getText())) {
+                                item[0] = String.valueOf(etcitem.getItemId());
+                                item[1] = etcitem.getName();
+                                tModel.addRow(item);
                             }
                         }
                     } catch (Exception ex) {
+                        for (L1Weapon weapon : ItemTable.get()._weapons.values()) {
+                            if (weapon.getName().replace(" ", "").contains(txt_ItemNameSearch.getText())) {
+                                item[0] = String.valueOf(weapon.getItemId());
+                                item[1] = weapon.getName();
+                                tModel.addRow(item);
+                            }
+                        }
+                        for (L1Armor armor : ItemTable.get()._armors.values()) {
+                            if (armor.getName().replace(" ", "").contains(txt_ItemNameSearch.getText())) {
+                                item[0] = String.valueOf(armor.getItemId());
+                                item[1] = armor.getName();
+                                tModel.addRow(item);
+                            }
+                        }
+                        for (L1EtcItem etcitem : ItemTable.get()._etcitems.values()) {
+                            if (etcitem.getName().replace(" ", "").contains(txt_ItemNameSearch.getText())) {
+                                item[0] = String.valueOf(etcitem.getItemId());
+                                item[1] = etcitem.getName();
+                                tModel.addRow(item);
+                            }
+                        }
                     }
-                } else {
-                    Eva.errorMsg(Eva.NoServerStartMSG);
+                } catch (Exception ex) {
                 }
+            } else {
+                Eva.errorMsg(Eva.NoServerStartMSG);
             }
         });
         btn_Give = new JButton("發送");
-        btn_Give.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (Eva.isServerStarted) {
-                    try {
-                        if (txt_UserName.getText().equalsIgnoreCase("")) {
-                            Eva.errorMsg(Eva.blankSetUser);
-                            return;
+        btn_Give.addActionListener(e -> {
+            if (Eva.isServerStarted) {
+                try {
+                    if (txt_UserName.getText().equalsIgnoreCase("")) {
+                        Eva.errorMsg(Eva.blankSetUser);
+                        return;
+                    }
+                    int itemid = Integer.parseInt(txt_ItemId.getText());
+                    int enchant = Integer.parseInt(txt_Enchantlvl.getText());
+                    int count = Integer.parseInt(txt_Count.getText());
+                    L1Item temp = ItemTable.get().getTemplate(itemid);
+                    for (L1PcInstance pc : World.get().getAllPlayers()) {
+                        if (pc == null || pc.getNetConnection() == null || pc.isPrivateShop()) {
+                            continue;
                         }
-                        int itemid = Integer.parseInt(txt_ItemId.getText());
-                        int enchant = Integer.parseInt(txt_Enchantlvl.getText());
-                        int count = Integer.parseInt(txt_Count.getText());
-                        L1Item temp = ItemTable.get().getTemplate(itemid);
-                        for (L1PcInstance pc : World.get().getAllPlayers()) {
-                            if (pc == null || pc.getNetConnection() == null || pc.isPrivateShop()) {
-                                continue;
-                            }
-                            if (pc.getName().equalsIgnoreCase(txt_UserName.getText()) || txt_UserName.getText().equalsIgnoreCase("全體人員")) {
-                                if (temp != null) {
-                                    if (temp.isStackable()) {
-                                        // 可以堆疊的物品
-                                        final L1ItemInstance item = ItemTable.get().createItem(itemid);
-                                        item.setEnchantLevel(0);
-                                        item.setCount(count);
+                        if (pc.getName().equalsIgnoreCase(txt_UserName.getText()) || txt_UserName.getText().equalsIgnoreCase("全體人員")) {
+                            if (temp != null) {
+                                if (temp.isStackable()) {
+                                    // 可以堆疊的物品
+                                    final L1ItemInstance item = ItemTable.get().createItem(itemid);
+                                    item.setEnchantLevel(0);
+                                    item.setCount(count);
+                                    item.setIdentified(true);
+                                    if (pc.getInventory().checkAddItem(item, count) == L1Inventory.OK) {
+                                        pc.getInventory().storeItem(item);
+                                        // 403:獲得0%。
+                                        pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
+                                        pc.sendPackets(new S_ServerMessage(item.getLogName() + " 已在背包，由管理員贈送."));
+                                        Eva.LogServerAppend(txt_UserName.getText() + "[禮物 ] " + item.getItemNameEva(count) + "已發送.", "請確認.");
+                                    }
+                                } else {
+                                    // 不可以堆疊的物品
+                                    if (count > 10) {
+                                        Eva.LogServerAppend("送禮失敗] 不可疊加物品不可以超過10個.", "請確認");
+                                        return;
+                                    }
+                                    L1ItemInstance item = null;
+                                    int createCount;
+                                    for (createCount = 0; createCount < count; createCount++) {
+                                        item = ItemTable.get().createItem(itemid);
+                                        item.setEnchantLevel(enchant);
                                         item.setIdentified(true);
-                                        if (pc.getInventory().checkAddItem(item, count) == L1Inventory.OK) {
+                                        if (pc.getInventory().checkAddItem(item, 1) == L1Inventory.OK) {
                                             pc.getInventory().storeItem(item);
-                                            // 403:獲得0%。
-                                            pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                                            pc.sendPackets(new S_ServerMessage(item.getLogName() + " 已在背包，由管理員贈送."));
-                                            Eva.LogServerAppend(txt_UserName.getText() + "[禮物 ] " + item.getItemNameEva(count) + "已發送.", "請確認.");
-                                        }
-                                    } else {
-                                        // 不可以堆疊的物品
-                                        if (count > 10) {
-                                            Eva.LogServerAppend("送禮失敗] 不可疊加物品不可以超過10個.", "請確認");
-                                            return;
-                                        }
-                                        L1ItemInstance item = null;
-                                        int createCount;
-                                        for (createCount = 0; createCount < count; createCount++) {
-                                            item = ItemTable.get().createItem(itemid);
-                                            item.setEnchantLevel(enchant);
-                                            item.setIdentified(true);
-                                            if (pc.getInventory().checkAddItem(item, 1) == L1Inventory.OK) {
-                                                pc.getInventory().storeItem(item);
-                                            } else {
-                                                break;
-                                            }
-                                        }
-                                        if (createCount > 0) {
-                                            // 403:獲得0%。
-                                            pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                                            pc.sendPackets(new S_ServerMessage(item.getLogName() + " 已在背包，由管理員贈送."));
-                                            Eva.LogServerAppend(txt_UserName.getText() + "[禮物 ] " + item.getItemNameEva(count) + "已發送.", "請確認.");
+                                        } else {
+                                            break;
                                         }
                                     }
-                                } else if (temp == null) {
-                                    Eva.LogServerAppend("送禮失敗] 系統中不存在這個物品.", "請確認");
+                                    if (createCount > 0) {
+                                        // 403:獲得0%。
+                                        pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
+                                        pc.sendPackets(new S_ServerMessage(item.getLogName() + " 已在背包，由管理員贈送."));
+                                        Eva.LogServerAppend(txt_UserName.getText() + "[禮物 ] " + item.getItemNameEva(count) + "已發送.", "請確認.");
+                                    }
                                 }
+                            } else if (temp == null) {
+                                Eva.LogServerAppend("送禮失敗] 系統中不存在這個物品.", "請確認");
                             }
                         }
-                    } catch (Exception ex) {
                     }
-                } else {
-                    Eva.errorMsg(Eva.NoServerStartMSG);
+                } catch (Exception ex) {
                 }
+            } else {
+                Eva.errorMsg(Eva.NoServerStartMSG);
             }
         });
         String[] modelColName = {"編號", "名稱"};
@@ -277,21 +273,21 @@ public class ServerPresentWindow extends JInternalFrame {
                     try {
                         itemId = Integer.parseInt(txt_ItemNameSearch.getText());
                         for (L1Weapon weapon : ItemTable.get()._weapons.values()) {
-                            if (String.valueOf(weapon.getItemId()).replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
+                            if (String.valueOf(weapon.getItemId()).replace(" ", "").contains(txt_ItemNameSearch.getText())) {
                                 item[0] = String.valueOf(weapon.getItemId());
                                 item[1] = weapon.getName();
                                 tModel.addRow(item);
                             }
                         }
                         for (L1Armor armor : ItemTable.get()._armors.values()) {
-                            if (String.valueOf(armor.getItemId()).replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
+                            if (String.valueOf(armor.getItemId()).replace(" ", "").contains(txt_ItemNameSearch.getText())) {
                                 item[0] = String.valueOf(armor.getItemId());
                                 item[1] = armor.getName();
                                 tModel.addRow(item);
                             }
                         }
                         for (L1EtcItem etcitem : ItemTable.get()._etcitems.values()) {
-                            if (String.valueOf(etcitem.getItemId()).replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
+                            if (String.valueOf(etcitem.getItemId()).replace(" ", "").contains(txt_ItemNameSearch.getText())) {
                                 item[0] = String.valueOf(etcitem.getItemId());
                                 item[1] = etcitem.getName();
                                 tModel.addRow(item);
@@ -299,21 +295,21 @@ public class ServerPresentWindow extends JInternalFrame {
                         }
                     } catch (Exception e) {
                         for (L1Weapon weapon : ItemTable.get()._weapons.values()) {
-                            if (weapon.getName().replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
+                            if (weapon.getName().replace(" ", "").contains(txt_ItemNameSearch.getText())) {
                                 item[0] = String.valueOf(weapon.getItemId());
                                 item[1] = weapon.getName();
                                 tModel.addRow(item);
                             }
                         }
                         for (L1Armor armor : ItemTable.get()._armors.values()) {
-                            if (armor.getName().replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
+                            if (armor.getName().replace(" ", "").contains(txt_ItemNameSearch.getText())) {
                                 item[0] = String.valueOf(armor.getItemId());
                                 item[1] = armor.getName();
                                 tModel.addRow(item);
                             }
                         }
                         for (L1EtcItem etcitem : ItemTable.get()._etcitems.values()) {
-                            if (etcitem.getName().replace(" ", "").indexOf(txt_ItemNameSearch.getText()) > -1) {
+                            if (etcitem.getName().replace(" ", "").contains(txt_ItemNameSearch.getText())) {
                                 item[0] = String.valueOf(etcitem.getItemId());
                                 item[1] = etcitem.getName();
                                 tModel.addRow(item);

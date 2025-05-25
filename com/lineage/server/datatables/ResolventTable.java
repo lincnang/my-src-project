@@ -15,7 +15,7 @@ import java.util.Map;
 
 public final class ResolventTable {
     private static final Log _log = LogFactory.getLog(ResolventTable.class);
-    private static final Map<Integer, Integer> _resolvent = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _resolvent = new HashMap<>();
     private static ResolventTable _instance;
 
     public static ResolventTable get() {
@@ -36,7 +36,7 @@ public final class ResolventTable {
             for (rs = ps.executeQuery(); rs.next(); ) {
                 int itemId = rs.getInt("道具編號");
                 int crystalCount = rs.getInt("溶解數量");
-                _resolvent.put(new Integer(itemId), Integer.valueOf(crystalCount));
+                _resolvent.put(itemId, crystalCount);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -50,8 +50,8 @@ public final class ResolventTable {
 
     public int getCrystalCount(int itemId) {
         int crystalCount = 0;
-        if (_resolvent.containsKey(Integer.valueOf(itemId))) {
-            crystalCount = ((Integer) _resolvent.get(Integer.valueOf(itemId))).intValue();
+        if (_resolvent.containsKey(itemId)) {
+            crystalCount = (Integer) _resolvent.get(itemId);
         }
         return crystalCount;
     }

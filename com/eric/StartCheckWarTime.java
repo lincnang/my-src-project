@@ -59,7 +59,7 @@ public final class StartCheckWarTime {
                 int id = rs.getInt("castle_id");
                 rs.getString("name");
                 data._isActive = rs.getBoolean("isActive");
-                _check.put(new Integer(id), data);
+                _check.put(id, data);
             }
             _log.config("StartCheckWarTime " + _check.size());
         } catch (SQLException e) {

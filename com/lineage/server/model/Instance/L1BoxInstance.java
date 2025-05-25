@@ -143,7 +143,7 @@ public class L1BoxInstance extends L1NpcInstance {
         return this._openStatus;
     }
 
-    private final void setOpenStatus(final int i) {
+    private void setOpenStatus(final int i) {
         if (i == ActionCodes.ACTION_Open || i == ActionCodes.ACTION_Close) {
             this._openStatus = i;
         }

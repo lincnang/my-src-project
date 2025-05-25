@@ -498,7 +498,7 @@ public class FollowPc extends TimerTask {
         int[] locCopy;
         int[] dirFront = new int[5];
         boolean serchMap[][] = new boolean[locCenter * 2 + 1][locCenter * 2 + 1];
-        LinkedList<int[]> queueSerch = new LinkedList<int[]>();
+        LinkedList<int[]> queueSerch = new LinkedList<>();
         // 探索用設定
         for (int j = courceRange * 2 + 1; j > 0; j--) {
             for (i = courceRange - Math.abs(locCenter - j); i >= 0; i--) {

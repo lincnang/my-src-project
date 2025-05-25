@@ -74,7 +74,7 @@ public final class RandomMobTable {
                 data.cont = rs.getInt("cont");
                 data.timeSecondToDelete = rs.getInt("timeSecondToKill");
                 data.isActive = rs.getBoolean("isActive");
-                _mobs.put(new Integer(id), data);
+                _mobs.put(id, data);
             }
             _log.config("RandomMob " + _mobs.size());
         } catch (SQLException e) {

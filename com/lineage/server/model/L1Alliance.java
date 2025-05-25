@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * 同盟系統
@@ -24,10 +25,8 @@ public final class L1Alliance {
     public L1Alliance(final int orderId, final L1Clan... clanList) {
         _orderId = orderId;
         // 建立容量為四單位的ArrayList
-        totalList = new ArrayList<L1Clan>(MAX_SIZE);
-        for (final L1Clan alliance : clanList) {
-            totalList.add(alliance);
-        }
+        totalList = new ArrayList<>(MAX_SIZE);
+        Collections.addAll(totalList, clanList);
     }
 
     /**
@@ -38,7 +37,7 @@ public final class L1Alliance {
         return _orderId;
     }
 
-    public final ArrayList<L1Clan> getTotalList() {
+    public ArrayList<L1Clan> getTotalList() {
         return totalList;
     }
 
@@ -47,7 +46,7 @@ public final class L1Alliance {
      *
      * @return 如果可以締結:true, 反之:false
      */
-    public final boolean addAlliance(final L1Clan l1clan) {
+    public boolean addAlliance(final L1Clan l1clan) {
         if (checkSize()) {
             return totalList.add(l1clan);
         }
@@ -59,7 +58,7 @@ public final class L1Alliance {
      *
      * @return 如果可以締結:true, 反之:false
      */
-    public final boolean checkSize() {
+    public boolean checkSize() {
         return totalList.size() < MAX_SIZE;
     }
 

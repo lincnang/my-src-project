@@ -229,7 +229,7 @@ public class ServerQuestMobTable {  //src027
             }
         }
 
-    // 隊伍同步（同理防呆）
+        // 隊伍同步（同理防呆）
         if (pc.isInParty()) {
             Object[] pcs = pc.getParty().getMemberList().toArray();
             if (pcs.length <= 0) {

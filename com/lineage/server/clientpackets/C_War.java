@@ -69,8 +69,7 @@ public class C_War extends ClientBasePacket {
             L1Clan enemyClan = null;// 目標血盟
             String enemyClanName = null;// 目標血盟名稱
             final Collection<L1Clan> allClans = WorldClan.get().getAllClans();
-            for (final Iterator<L1Clan> iter = allClans.iterator(); iter.hasNext(); ) {
-                final L1Clan checkClan = iter.next();
+            for (final L1Clan checkClan : allClans) {
                 if (checkClan.getClanName().toLowerCase().equals(tgname.toLowerCase())) {
                     enemyClan = checkClan;
                     enemyClanName = checkClan.getClanName();
@@ -210,9 +209,9 @@ public class C_War extends ClientBasePacket {
                     if (ServerWarExecutor.get().isNowWar(id)) {
                         L1PcInstance[] clanMember = clan.getOnlineClanMember();
                         boolean haswar = false;
-                        for (int k = 0; k < clanMember.length; k++) {
-                            if (L1CastleLocation.checkInWarArea(id, clanMember[k])) {
-                                L1PcInstance clanPc = clanMember[k];
+                        for (L1PcInstance pcInstance : clanMember) {
+                            if (L1CastleLocation.checkInWarArea(id, pcInstance)) {
+                                L1PcInstance clanPc = pcInstance;
                                 if (clanPc != null) {
                                     haswar = true;
                                     player.sendPackets(new S_ServerMessage("血盟成員[" + clanPc.getName() + "]站在攻城旗幟內。"));
@@ -224,8 +223,8 @@ public class C_War extends ClientBasePacket {
                         if (haswar) {
                             player.sendPackets(new S_ServerMessage("系統已將旗幟內的玩家傳送回城。"));
                         }
-                        for (int k = 0; k < clanMember.length; k++) {
-                            clanMember[k].sendPackets(new S_War(1, clanName, "NPC"));
+                        for (L1PcInstance l1PcInstance : clanMember) {
+                            l1PcInstance.sendPackets(new S_War(1, clanName, "NPC"));
                         }
                         player.sendPackets(new S_CloseList(player.getId()));
                     } else {
@@ -246,9 +245,9 @@ public class C_War extends ClientBasePacket {
             if (ServerWarExecutor.get().isNowWar(castle_id)) {
                 L1PcInstance[] clanMember = clan.getOnlineClanMember();
                 boolean haswar = false;
-                for (int k = 0; k < clanMember.length; k++) {
-                    if (L1CastleLocation.checkInWarArea(castle_id, clanMember[k])) {
-                        L1PcInstance clanPc = clanMember[k];
+                for (L1PcInstance l1PcInstance : clanMember) {
+                    if (L1CastleLocation.checkInWarArea(castle_id, l1PcInstance)) {
+                        L1PcInstance clanPc = l1PcInstance;
                         if (clanPc != null) {
                             haswar = true;
                             player.sendPackets(new S_ServerMessage("血盟成員[" + clanPc.getName() + "]站在攻城旗幟內。"));

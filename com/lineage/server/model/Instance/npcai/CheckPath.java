@@ -23,9 +23,9 @@ public class CheckPath {
     private Square _start;
 
     public CheckPath(int tx, int ty, int hc, L1NpcInstance npc) {
-        _opened = new ArrayList<Square>();
-        _closed = new HashSet<Square>();
-        _bestList = new ArrayList<int[]>();
+        _opened = new ArrayList<>();
+        _closed = new HashSet<>();
+        _bestList = new ArrayList<>();
         int x = npc.getX();
         int y = npc.getY();
         int x1 = x - hc;
@@ -142,8 +142,7 @@ public class CheckPath {
     public ArrayList<int[]> findBestPath() {
         try {
             HashSet<Square> adjacencies = _start.getAdjacencies();
-            for (Iterator<Square> iter = adjacencies.iterator(); iter.hasNext(); ) {
-                Square adjacency = (Square) iter.next();
+            for (Square adjacency : adjacencies) {
                 adjacency.setParent(_start);
                 if (!adjacency.isStart()) {
                     _opened.add(adjacency);
@@ -209,8 +208,7 @@ public class CheckPath {
     private Square findBestPassThrough() {
         try {
             Square best = null;
-            for (Iterator<Square> iter = _opened.iterator(); iter.hasNext(); ) {
-                Square square = (Square) iter.next();
+            for (Square square : _opened) {
                 if ((best == null) || (square.is_open())) {
                     best = square;
                 }

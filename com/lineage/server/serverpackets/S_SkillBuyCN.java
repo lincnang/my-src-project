@@ -44,7 +44,7 @@ public class S_SkillBuyCN extends ServerBasePacket {
         } else if (pc.isWarrior()) {// 戰士
             skillList = PcLvSkillList.isWarrior(pc);
         }
-        final ArrayList<Integer> newSkillList = new ArrayList<Integer>();
+        final ArrayList<Integer> newSkillList = new ArrayList<>();
         // 排除不予學習的技能
         for (final Integer integer : skillList) {
             if (SkillTeacherSet.RESKILLLIST.get(integer) == null) {

@@ -13,12 +13,13 @@ import com.lineage.server.utils.MJBytesOutputStream;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class UserWeekQuest {
     private static final S_SystemMessage _updateMessage = new S_SystemMessage("每週任務都被更新了，重新登入並獲得獎勵。");
     private L1PcInstance _owner;
     private UserWeekQuestProgress[][] _wq;
-    private Object _lock;
+    private final Object _lock;
 
     public UserWeekQuest(L1PcInstance pc) {
         _owner = pc;
@@ -138,11 +139,9 @@ public class UserWeekQuest {
      * 返回所有主列表
      **/
     public ArrayList<UserWeekQuestProgress> getProgressList() {
-        ArrayList<UserWeekQuestProgress> list = new ArrayList<UserWeekQuestProgress>(9);
+        ArrayList<UserWeekQuestProgress> list = new ArrayList<>(9);
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                list.add(_wq[i][j]);
-            }
+            list.addAll(Arrays.asList(_wq[i]).subList(0, 3));
         }
         return list;
     }

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * @author Administrator
  */
 public class Drop_limit {
-    private static final Map<Integer, Drop_limit> _mons = new HashMap<Integer, Drop_limit>();
+    private static final Map<Integer, Drop_limit> _mons = new HashMap<>();
     public static HashMap<Integer, Drop_limit> _itemIdIndex;
     private static Logger _log;
     private static Log _log1;
@@ -35,7 +35,7 @@ public class Drop_limit {
     static {
         Drop_limit._log = Logger.getLogger(Drop_limit.class.getName());
         Drop_limit._log1 = LogFactory.getLog(Drop_limit.class);
-        Drop_limit._itemIdIndex = new HashMap<Integer, Drop_limit>();
+        Drop_limit._itemIdIndex = new HashMap<>();
     }
 
     private int _itemId;
@@ -135,7 +135,7 @@ public class Drop_limit {
     }
 
     public Drop_limit[] getDissolveList() {
-        return (Drop_limit[]) Drop_limit._itemIdIndex.values().toArray(new Drop_limit[Drop_limit._itemIdIndex.size()]);
+        return (Drop_limit[]) Drop_limit._itemIdIndex.values().toArray(new Drop_limit[0]);
     }
 
     public boolean checkItemIdCanDrop(final int itemId) {
@@ -162,13 +162,13 @@ public class Drop_limit {
             Calendar cals = null;
             if (limit.get_next_drop_time() != null) {
                 final int time = limit.get_drop_interval_min() + RandomArrayList.getInt(limit.get_drop_interval_max() - limit.get_drop_interval_min());
-                final long newTime = time * 60 * 1000;
+                final long newTime = (long) time * 60 * 1000;
                 cals = Calendar.getInstance();
                 cals.setTimeInMillis(System.currentTimeMillis() + newTime);
                 limit.get_next_drop_time().setTimeInMillis(cals.getTimeInMillis());
             } else if (limit.get_drop_interval_min() != 0) {
                 final int time = limit.get_drop_interval_min() + RandomArrayList.getInt(limit.get_drop_interval_max() - limit.get_drop_interval_min());
-                final long newTime = time * 60 * 1000;
+                final long newTime = (long) time * 60 * 1000;
                 cals = Calendar.getInstance();
                 cals.setTimeInMillis(System.currentTimeMillis() + newTime);
                 limit.get_next_drop_time().setTimeInMillis(cals.getTimeInMillis());

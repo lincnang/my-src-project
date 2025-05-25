@@ -53,8 +53,8 @@ public class L1NpcInstance extends L1Character {
     public static int[] haestPotions = {140018, 40018, 140013, 40013};
     protected final L1HateList _hateList = new L1HateList();
     protected final L1HateList _dropHateList = new L1HateList();
-    protected final List<L1ItemInstance> _targetItemList = new ArrayList<L1ItemInstance>();
-    private final HashMap<L1ItemInstance, DelItemTime> _del_map = new HashMap<L1ItemInstance, DelItemTime>();
+    protected final List<L1ItemInstance> _targetItemList = new ArrayList<>();
+    private final HashMap<L1ItemInstance, DelItemTime> _del_map = new HashMap<>();
     public L1Inventory _inventory = new L1Inventory();
     public L1MobSkillUse _mobSkill;
     public NpcExecutor TALK = null;
@@ -706,7 +706,7 @@ public class L1NpcInstance extends L1Character {
      * 撿取物品探索
      */
     public void searchTargetItem() {
-        final ArrayList<L1GroundInventory> gInventorys = new ArrayList<L1GroundInventory>();
+        final ArrayList<L1GroundInventory> gInventorys = new ArrayList<>();
         for (final L1Object obj : World.get().getVisibleObjects(this)) {
             if ((obj != null) && (obj instanceof L1GroundInventory)) {
                 gInventorys.add((L1GroundInventory) obj);
@@ -730,7 +730,7 @@ public class L1NpcInstance extends L1Character {
      * 飛在空中狀態 搜尋拾取藥水及食物
      */
     public void searchItemFromAir() {
-        final ArrayList<L1GroundInventory> gInventorys = new ArrayList<L1GroundInventory>();
+        final ArrayList<L1GroundInventory> gInventorys = new ArrayList<>();
         for (final L1Object obj : World.get().getVisibleObjects(this)) {
             if ((obj != null) && (obj instanceof L1GroundInventory)) {
                 gInventorys.add((L1GroundInventory) obj);

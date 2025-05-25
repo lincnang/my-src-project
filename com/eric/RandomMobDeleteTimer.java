@@ -51,7 +51,7 @@ public class RandomMobDeleteTimer extends TimerTask {
     public void begin() {
         Timer timer = new Timer();
         if (!(RandomMobTable.getInstance().getTimeSecondToDelete(_randomMobId) <= 0)) {
-            timer.schedule(this, RandomMobTable.getInstance().getTimeSecondToDelete(_randomMobId) * 1000);
+            timer.schedule(this, RandomMobTable.getInstance().getTimeSecondToDelete(_randomMobId) * 1000L);
         }
     }
 }

@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class WenYangJiLuTable {
     private static final Log _log = LogFactory.getLog(WenYangCmdTable.class);
     private static WenYangJiLuTable _instance;
-    private final HashMap<Integer, L1WenYangJiLu> _wenyangj = new HashMap<Integer, L1WenYangJiLu>();
+    private final HashMap<Integer, L1WenYangJiLu> _wenyangj = new HashMap<>();
 
     public static WenYangJiLuTable getInstance() {
         if (_instance == null) {

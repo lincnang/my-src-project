@@ -26,7 +26,7 @@ import java.util.*;
  * @author dexc
  */
 public class CastleWarGiftTable {
-    public static final Map<Integer, ArrayList<Gift>> _gifts = new HashMap<Integer, ArrayList<Gift>>();
+    public static final Map<Integer, ArrayList<Gift>> _gifts = new HashMap<>();
     private static final Log _log = LogFactory.getLog(CastleWarGiftTable.class);
     private static CastleWarGiftTable _instance;
 
@@ -98,7 +98,7 @@ public class CastleWarGiftTable {
                 e._time = rs.getInt("time");
                 ArrayList<Gift> list = _gifts.get(key);
                 if (list == null) {
-                    list = new ArrayList<Gift>();
+                    list = new ArrayList<>();
                 }
                 list.add(e);
                 _gifts.put(key, list);
@@ -148,8 +148,7 @@ public class CastleWarGiftTable {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
             if (castle_clan != null) {
-                for (final Iterator<Gift> iter = list.iterator(); iter.hasNext(); ) {
-                    final Gift gift = iter.next();
+                for (final Gift gift : list) {
                     if (gift._recover) { // 該物品設置回收
                         recover_item(gift);
                     }
@@ -201,8 +200,7 @@ public class CastleWarGiftTable {
         try {
             // 全部線上人物
             final Collection<L1PcInstance> allpc = World.get().getAllPlayers();
-            for (final Iterator<L1PcInstance> iter = allpc.iterator(); iter.hasNext(); ) {
-                final L1PcInstance tgpc = iter.next();
+            for (final L1PcInstance tgpc : allpc) {
                 final L1ItemInstance t1 = tgpc.getInventory().findItemId(gift._itemid);
                 if (t1 != null) {
                     if (t1.isEquipped()) {
@@ -225,7 +223,7 @@ public class CastleWarGiftTable {
         }
     }
 
-    private final void effectBuff(final L1PcInstance pc, final Gift value, final int negative) {
+    private void effectBuff(final L1PcInstance pc, final Gift value, final int negative) {
         pc.addAc(value._ac * negative);
         pc.addMaxHp(value._hp * negative);
         pc.addMaxMp(value._mp * negative);
@@ -283,8 +281,7 @@ public class CastleWarGiftTable {
                 if (list == null) {
                     return;
                 }
-                for (final Iterator<Gift> iter = list.iterator(); iter.hasNext(); ) {
-                    final Gift gift = iter.next();
+                for (final Gift gift : list) {
                     // 給予額外附加能力效果 by terry0412
                     if (!tgpc.isCastleAbility(gift.hashCode())) {
                         this.effectBuff(tgpc, gift, 1);

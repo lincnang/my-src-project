@@ -42,9 +42,9 @@ public class Scarecrow extends NpcExecutor {
         try {
             // 判斷攻擊者
             if (pc.getLevel() >= _minLevel && pc.getLevel() <= _maxLevel) {
-                final ArrayList<L1PcInstance> targetList = new ArrayList<L1PcInstance>();
+                final ArrayList<L1PcInstance> targetList = new ArrayList<>();
                 targetList.add(pc);
-                final ArrayList<Integer> hateList = new ArrayList<Integer>();
+                final ArrayList<Integer> hateList = new ArrayList<>();
                 hateList.add(1);
                 CalcExp.calcExp(pc, npc.getId(), targetList, hateList, npc.getExp());
             }

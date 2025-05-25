@@ -165,16 +165,16 @@ public class ScrollEnchantTrue extends ItemExecutor {
                 }
                 int armorId = item.getItem().getItemId();
                 int[] i1 = {20011, 20110, 21123, 21124, 21125, 21126, 120011};
-                for (int j = 0; j < i1.length; j++) {
-                    if (armorId == i1[j]) {
+                for (int value : i1) {
+                    if (armorId == value) {
                         pc.addMr(i);
                         pc.sendPackets(new S_SPMR(pc));
                         break;
                     }
                 }
                 int[] i2 = {20056, 120056, 220056};
-                for (int j = 0; j < i2.length; j++) {
-                    if (armorId == i2[j]) {
+                for (int k : i2) {
+                    if (armorId == k) {
                         pc.addMr(i * 2);
                         pc.sendPackets(new S_SPMR(pc));
                         break;

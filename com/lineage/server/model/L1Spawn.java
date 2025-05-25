@@ -364,7 +364,7 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
         _existTime = exist_time;
     }
 
-    private final int calcRespawnDelay() {
+    private int calcRespawnDelay() {
         int respawnDelay = _minRespawnDelay * 1000;
         if (_delayInterval > 0) {
             respawnDelay += _random.nextInt(_delayInterval) * 1000;

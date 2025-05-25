@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class SkillsItemTable {
     private static final Log _log = LogFactory.getLog(SkillsItemTable.class);
-    private static final Map<Integer, L1SkillItem> _skills = new HashMap<Integer, L1SkillItem>();
+    private static final Map<Integer, L1SkillItem> _skills = new HashMap<>();
     private static SkillsItemTable _instance;
 
     public static SkillsItemTable get() {
@@ -75,20 +75,20 @@ public class SkillsItemTable {
                 }
                 skillItem.set_counts(counts_x);
             }
-            _skills.put(new Integer(skill_id), skillItem);
+            _skills.put(skill_id, skillItem);
             if (skillItem.get_items() != null) {
                 if (skillItem.get_items().length != skillItem.get_counts().length) {
                     _log.error("購買技能 材料 設置資料異常 技能編號: " + skill_id);
-                    _skills.remove(new Integer(skill_id));
+                    _skills.remove(skill_id);
                 }
             } else {
-                _skills.remove(new Integer(skill_id));
+                _skills.remove(skill_id);
             }
         }
     }
 
     public L1SkillItem getTemplate(int i) {
-        return (L1SkillItem) _skills.get(new Integer(i));
+        return (L1SkillItem) _skills.get(i);
     }
 }
 /*

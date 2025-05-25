@@ -267,7 +267,7 @@ public class BigHotblingTime extends TimerTask {
         this.BigHotAN = "";
         while (this.BigHotAN.split(",").length < 6) {
             int sk = 1 + (int) (Math.random() * 46.0D);
-            if (this.BigHotAN.indexOf(sk + ",") < 0) {
+            if (!this.BigHotAN.contains(sk + ",")) {
                 this.BigHotAN = this.BigHotAN + String.valueOf(sk) + ",";
             }
             if (this.BigHotAN.split(",").length == 1) {

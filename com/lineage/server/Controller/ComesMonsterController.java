@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ComesMonsterController implements Runnable {
     public static final Log _log = LogFactory.getLog(ComesMonsterController.class);
-    private static final Map<Integer, Object[]> map = new ConcurrentHashMap<Integer, Object[]>();
-    private static final List<Integer> task = new ArrayList<Integer>();
+    private static final Map<Integer, Object[]> map = new ConcurrentHashMap<>();
+    private static final List<Integer> task = new ArrayList<>();
     private static ComesMonsterController ins;
 
     private ComesMonsterController() {
@@ -63,7 +63,7 @@ public class ComesMonsterController implements Runnable {
         return ins;
     }
 
-    public static final int[] getArray(String args) {
+    public static int[] getArray(String args) {
         final StringTokenizer st = new StringTokenizer(args, ",");
         final int[] sk = new int[st.countTokens()];
         for (int i = 0; i < sk.length; i++) {

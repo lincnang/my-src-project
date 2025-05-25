@@ -30,15 +30,15 @@ public class S_NewCharPacket extends ServerBasePacket {
         writeC(pc.getInt());
         writeC(0);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        int time = Integer.parseInt(sdf.format(Long.valueOf(System.currentTimeMillis())).replace("-", ""));
+        int time = Integer.parseInt(sdf.format(System.currentTimeMillis()).replace("-", ""));
         String times = Integer.toHexString(time);
         if (times.length() < 8) {
             times = "0" + times;
         }
-        writeC(Integer.decode("0x" + times.substring(6, 8)).intValue());
-        writeC(Integer.decode("0x" + times.substring(4, 6)).intValue());
-        writeC(Integer.decode("0x" + times.substring(2, 4)).intValue());
-        writeC(Integer.decode("0x" + times.substring(0, 2)).intValue());
+        writeC(Integer.decode("0x" + times.substring(6, 8)));
+        writeC(Integer.decode("0x" + times.substring(4, 6)));
+        writeC(Integer.decode("0x" + times.substring(2, 4)));
+        writeC(Integer.decode("0x" + times.substring(0, 2)));
         int checkcode = pc.getLevel() ^ pc.getStr() ^ pc.getDex() ^ pc.getCon() ^ pc.getWis() ^ pc.getCha() ^ pc.getInt();
         writeC(checkcode & 0xFF);
     }

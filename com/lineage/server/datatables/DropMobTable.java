@@ -57,7 +57,7 @@ public class DropMobTable {
     }
 
     private Map<Integer, L1DropMob> allMobDropList() {
-        final Map<Integer, L1DropMob> _droplistMob = new HashMap<Integer, L1DropMob>();
+        final Map<Integer, L1DropMob> _droplistMob = new HashMap<>();
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;

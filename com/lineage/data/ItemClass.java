@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class ItemClass {
     private static final Log _log = LogFactory.getLog(ItemClass.class);
-    private static final Map<Integer, ItemExecutor> _classList = new HashMap<Integer, ItemExecutor>();
+    private static final Map<Integer, ItemExecutor> _classList = new HashMap<>();
     private static ItemClass _instance;
 
     public static ItemClass get() {
@@ -30,7 +30,7 @@ public class ItemClass {
         try {
             String newclass = className;
             String[] set = (String[]) null;
-            if (className.indexOf(" ") != -1) {
+            if (className.contains(" ")) {
                 set = className.split(" ");
                 newclass = set[0];
             }
@@ -51,20 +51,13 @@ public class ItemClass {
             if (set != null) {
                 exe.set_set(set);
             }
-            _classList.put(new Integer(itemid), exe);
+            _classList.put(itemid, exe);
         } catch (ClassNotFoundException e) {
             String error = "發生[道具檔案]錯誤, 檢查檔案是否存在:" + className + " ItemId:" + itemid;
             _log.error(error);
             DataError.isError(_log, error, e);
-        } catch (IllegalArgumentException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (IllegalAccessException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (InvocationTargetException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (SecurityException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException |
+                 IllegalAccessException e) {
             _log.error(e.getLocalizedMessage(), e);
         }
     }
@@ -74,7 +67,7 @@ public class ItemClass {
             return null;
         }
         try {
-            ItemExecutor exe = (ItemExecutor) _classList.get(new Integer(item.getItemId()));
+            ItemExecutor exe = (ItemExecutor) _classList.get(item.getItemId());
             if (exe != null) {
                 return exe.itemStatus(item);
             }
@@ -92,7 +85,7 @@ public class ItemClass {
             return;
         }
         try {
-            ItemExecutor exe = (ItemExecutor) _classList.get(new Integer(item.getItemId()));
+            ItemExecutor exe = (ItemExecutor) _classList.get(item.getItemId());
             if (exe != null) {
                 exe.execute(data, pc, item);
             }
@@ -109,7 +102,7 @@ public class ItemClass {
             return;
         }
         try {
-            ItemExecutor exe = (ItemExecutor) _classList.get(new Integer(item.getItemId()));
+            ItemExecutor exe = (ItemExecutor) _classList.get(item.getItemId());
             if (exe != null) {
                 int[] data = new int[1];
                 data[0] = (equipped ? 1 : 0);
@@ -128,7 +121,7 @@ public class ItemClass {
             return;
         }
         try {
-            ItemExecutor exe = (ItemExecutor) _classList.get(new Integer(item.getItemId()));
+            ItemExecutor exe = (ItemExecutor) _classList.get(item.getItemId());
             if (exe != null) {
                 int[] data = new int[1];
                 data[0] = (equipped ? 1 : 0);

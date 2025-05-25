@@ -7,16 +7,16 @@ import java.util.Map;
 
 public class L1UbPattern {
     private boolean _isFrozen = false;
-    private Map<Integer, ArrayList<L1UbSpawn>> _groups = new HashMap<Integer, ArrayList<L1UbSpawn>>();
+    private Map<Integer, ArrayList<L1UbSpawn>> _groups = new HashMap<>();
 
     public void addSpawn(int groupNumber, L1UbSpawn spawn) {
         if (_isFrozen) {
             return;
         }
-        ArrayList<L1UbSpawn> spawnList = (ArrayList<L1UbSpawn>) _groups.get(Integer.valueOf(groupNumber));
+        ArrayList<L1UbSpawn> spawnList = (ArrayList<L1UbSpawn>) _groups.get(groupNumber);
         if (spawnList == null) {
-            spawnList = new ArrayList<L1UbSpawn>();
-            _groups.put(Integer.valueOf(groupNumber), spawnList);
+            spawnList = new ArrayList<>();
+            _groups.put(groupNumber, spawnList);
         }
         spawnList.add(spawn);
     }
@@ -40,7 +40,7 @@ public class L1UbPattern {
         if (!_isFrozen) {
             return null;
         }
-        return (ArrayList<L1UbSpawn>) _groups.get(Integer.valueOf(groupNumber));
+        return (ArrayList<L1UbSpawn>) _groups.get(groupNumber);
     }
 }
 /*

@@ -26,7 +26,7 @@ public class L1ToPC implements L1CommandExecutor {
         return new L1ToPC();
     }
 
-    public static final void checkTPhtml(L1PcInstance pc, int page) {
+    public static void checkTPhtml(L1PcInstance pc, int page) {
         List<L1PcInstance> players = _all_players;
         if (players == null) {
             pc.sendPackets(new S_NPCTalkReturn(pc, "topcscreen"));
@@ -55,8 +55,8 @@ public class L1ToPC implements L1CommandExecutor {
         pc.sendPackets(new S_NPCTalkReturn(pc, "topcscreen", html_data));
     }
 
-    public static final void checkTPhtmlPredicate(L1PcInstance pc, int page, boolean refreshAll) {
-        List<L1PcInstance> all_players = new ArrayList<L1PcInstance>();
+    public static void checkTPhtmlPredicate(L1PcInstance pc, int page, boolean refreshAll) {
+        List<L1PcInstance> all_players = new ArrayList<>();
         if (refreshAll) {
             for (L1PcInstance tgpc : World.get().getAllPlayers()) {
                 if ((tgpc.getMap().isUsableShop() == 0) && (tgpc.getMapId() != 5143) && (tgpc.getMapId() != 5301) && (tgpc.getMapId() != 5490)) {
@@ -99,7 +99,7 @@ public class L1ToPC implements L1CommandExecutor {
         pc.sendPackets(new S_NPCTalkReturn(pc, "topcscreen", html_data));
     }
 
-    public static final void teleport2Player(final L1PcInstance pc, int index) {
+    public static void teleport2Player(final L1PcInstance pc, int index) {
         if (_all_players == null) {
             pc.sendPackets(new S_SystemMessage("請點選(刷新)選項。"));
             return;
@@ -113,17 +113,15 @@ public class L1ToPC implements L1CommandExecutor {
         if (target != null) {
             final L1PcInstance player = World.get().getPlayer(target.getName());
             if (player != null) {
-                GeneralThreadPool.get().schedule(new Runnable() {
-                    public void run() {
-                        pc.set_showId(player.get_showId());
-                        pc.sendPacketsX8(new S_SkillSound(pc.getId(), 2236));
-                        pc.setTeleportX(player.getX());
-                        pc.setTeleportY(player.getY());
-                        pc.setTeleportMapId(player.getMapId());
-                        Teleportation.teleportation(pc);
-                        pc.sendPackets(new S_SystemMessage("移動至指定人物身邊: " + player.getName()));
-                        L1ToPC.checkTPhtml(pc, pc.get_other().get_page());
-                    }
+                GeneralThreadPool.get().schedule(() -> {
+                    pc.set_showId(player.get_showId());
+                    pc.sendPacketsX8(new S_SkillSound(pc.getId(), 2236));
+                    pc.setTeleportX(player.getX());
+                    pc.setTeleportY(player.getY());
+                    pc.setTeleportMapId(player.getMapId());
+                    Teleportation.teleportation(pc);
+                    pc.sendPackets(new S_SystemMessage("移動至指定人物身邊: " + player.getName()));
+                    L1ToPC.checkTPhtml(pc, pc.get_other().get_page());
                 }, 440);
                 return;
             }

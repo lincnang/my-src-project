@@ -147,8 +147,8 @@ public class S_PledgeUI extends ServerBasePacket {
         this.writeC(maxPagination);
         this.writeC(Pagination);
         this.writeC(list.size());// 輸出成員數量
-        for (final Iterator<L1PcInstance> iter = list.iterator(); iter.hasNext(); ) {
-            final L1PcInstance memberInfo = iter.next();// 返回迭代的下一個元素。
+        // 返回迭代的下一個元素。
+        for (final L1PcInstance memberInfo : list) {
             this.writeS(memberInfo.getName());// 成員名稱
             this.writeC(memberInfo.getClanRank());// 成員階級
             this.writeC(memberInfo.getLevel());// 成員等級

@@ -24,7 +24,7 @@ import java.util.Map;
 public final class MapsGroupTable {
     private static final Log _log = LogFactory.getLog(MapsGroupTable.class);
     // 全入場地圖設定 暫存組
-    private static final Map<Integer, L1MapsLimitTime> _mapsGroup = new HashMap<Integer, L1MapsLimitTime>();
+    private static final Map<Integer, L1MapsLimitTime> _mapsGroup = new HashMap<>();
     private static MapsGroupTable _instance;
 
     public static MapsGroupTable get() {
@@ -57,7 +57,7 @@ public final class MapsGroupTable {
                 final int outMapY = rs.getInt("out_y");
                 final short outMapId = rs.getShort("out_map");
                 // 建立入場地圖列表
-                final List<Integer> mapList = new ArrayList<Integer>();
+                final List<Integer> mapList = new ArrayList<>();
                 for (final String map_str : mapIds.split(",")) {
                     mapList.add(Integer.parseInt(map_str));
                 }
@@ -79,7 +79,7 @@ public final class MapsGroupTable {
      * 傳回全部入場地圖資料
      *
      */
-    public final Map<Integer, L1MapsLimitTime> getGroupMaps() {
+    public Map<Integer, L1MapsLimitTime> getGroupMaps() {
         return _mapsGroup;
     }
 
@@ -87,7 +87,7 @@ public final class MapsGroupTable {
      * 檢查人物所在地圖編號是否符合
      *
      */
-    public final L1MapsLimitTime findGroupMap(final int mapId) {
+    public L1MapsLimitTime findGroupMap(final int mapId) {
         for (final L1MapsLimitTime mapsLimitTime : _mapsGroup.values()) {
             if (mapsLimitTime.getMapList().contains(mapId)) {
                 return mapsLimitTime;

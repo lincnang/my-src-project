@@ -46,9 +46,9 @@ public class L1PcInventory extends L1Inventory {
     private static final long serialVersionUID = 1L;
     private static final int MAX_SIZE = 180;
     private final L1PcInstance _owner;
-    private final HashMap<Integer, L1ItemInstance> _RingList = new HashMap<Integer, L1ItemInstance>();
-    private final HashMap<Integer, L1ItemInstance> _EarringList = new HashMap<Integer, L1ItemInstance>();
-    private final HashMap<Integer, L1ItemInstance> _RuneList = new HashMap<Integer, L1ItemInstance>();
+    private final HashMap<Integer, L1ItemInstance> _RingList = new HashMap<>();
+    private final HashMap<Integer, L1ItemInstance> _EarringList = new HashMap<>();
+    private final HashMap<Integer, L1ItemInstance> _RuneList = new HashMap<>();
     private int _arrowId;
     private int _stingId;
 
@@ -250,7 +250,7 @@ public class L1PcInventory extends L1Inventory {
             final CopyOnWriteArrayList<L1ItemInstance> items = CharItemsReading.get().loadItems(this._owner.getId());
             if (items != null) {
                 _items = items;
-                List<L1ItemInstance> equipped = new CopyOnWriteArrayList<L1ItemInstance>();
+                List<L1ItemInstance> equipped = new CopyOnWriteArrayList<>();
                 for (final L1ItemInstance item : items) {
                     int itemId = item.getItemId();
 
@@ -803,8 +803,8 @@ public class L1PcInventory extends L1Inventory {
     {
         int[] tgItemId = armorSet.get_ids();
         int len = tgItemId.length;
-        for (int i = 0; i < len; i++) {
-            L1ItemInstance[] tgItems = findItemsId(tgItemId[i]);
+        for (int j : tgItemId) {
+            L1ItemInstance[] tgItems = findItemsId(j);
             for (L1ItemInstance tgItem : tgItems) {
                 tgItem.setIsMatch(isMode);
                 this._owner.sendPackets(new S_ItemStatus(tgItem));
@@ -1269,7 +1269,7 @@ public class L1PcInventory extends L1Inventory {
     }
 
     public void viewItem() {
-        final List<L1ItemInstance> itemlist = new CopyOnWriteArrayList<L1ItemInstance>();
+        final List<L1ItemInstance> itemlist = new CopyOnWriteArrayList<>();
         for (final L1ItemInstance item : _items) {
             if (item.isEquipped()) {
                 item.setEquipped(false);

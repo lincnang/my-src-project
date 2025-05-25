@@ -12,7 +12,7 @@ import static com.lineage.server.model.skill.L1SkillId.*;
 
 public class L1SkillMode {
     private static final Log _log = LogFactory.getLog(L1SkillMode.class);
-    private static final Map<Integer, SkillMode> _skillMode = new HashMap<Integer, SkillMode>();
+    private static final Map<Integer, SkillMode> _skillMode = new HashMap<>();
     private static L1SkillMode _instance;
 
     public static L1SkillMode get() {
@@ -45,7 +45,7 @@ public class L1SkillMode {
             _skillMode.put(9, new CURE_POISON()); //解毒術
             _skillMode.put(35, new REMOVE_CURSE()); //聖潔之光
             _skillMode.put(64, new SHAPE_CHANGE()); //變形術
-            _skillMode.put(61, new RESURRECTION()); //返生術
+//            _skillMode.put(61, new RESURRECTION()); //返生術
             _skillMode.put(75, new GREATER_RESURRECTION()); //終極返生術
             _skillMode.put(57, new ADVANCE_SPIRIT()); //靈魂昇華
             //			_skillMode.put(Integer.valueOf(33), new CURSE_PARALYZE());  //木乃伊

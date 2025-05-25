@@ -21,7 +21,7 @@ public class WorldDarkelf {
     private Collection<L1PcInstance> _allPlayer;
 
     private WorldDarkelf() {
-        _isDarkelf = new ConcurrentHashMap<Integer, L1PcInstance>();
+        _isDarkelf = new ConcurrentHashMap<>();
     }
 
     public static WorldDarkelf get() {

@@ -17,7 +17,7 @@ import java.util.HashMap;
 public abstract class ArmorSet {
     private static final Log _log = LogFactory.getLog(ArmorSet.class);
     // 全部套裝設置
-    private static final HashMap<Integer, ArmorSet> _allSet = new HashMap<Integer, ArmorSet>();
+    private static final HashMap<Integer, ArmorSet> _allSet = new HashMap<>();
 
     /**
      * 全部套裝設置

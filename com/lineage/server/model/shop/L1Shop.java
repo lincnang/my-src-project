@@ -126,7 +126,7 @@ public class L1Shop {
     }
 
     public List<L1AssessedItem> assessItems(L1PcInventory inv) {
-        final List<L1AssessedItem> result = new ArrayList<L1AssessedItem>();
+        final List<L1AssessedItem> result = new ArrayList<>();
         for (final L1ShopItem item : this._purchasingItems) {
             for (final L1ItemInstance targetItem : inv.findItemsId(item.getItemId())) {
                 if (!this.isPurchaseableItem(targetItem)) {

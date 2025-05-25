@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class GamblingTable implements GamblingStorage {
     private static final Log _log = LogFactory.getLog(GamblingTable.class);
-    private static final Map<String, L1Gambling> _gamblingList = new HashMap<String, L1Gambling>();
+    private static final Map<String, L1Gambling> _gamblingList = new HashMap<>();
 
     public void load() {
         PerformanceTimer timer = new PerformanceTimer();

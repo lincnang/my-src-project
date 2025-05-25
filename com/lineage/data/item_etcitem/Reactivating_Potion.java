@@ -60,7 +60,7 @@ public class Reactivating_Potion extends ItemExecutor {
             if (level <= 0) {
                 level = 0;
             }
-            pc.setTurnLifeSkillCount(pc.getTurnLifeSkillCount() + Integer.valueOf(mete[level]).intValue());
+            pc.setTurnLifeSkillCount(pc.getTurnLifeSkillCount() + Integer.parseInt(mete[level]));
         }
         pc.sendPackets(new S_OwnCharStatus(pc));
         pc.sendPackets(new S_SPMR(pc));

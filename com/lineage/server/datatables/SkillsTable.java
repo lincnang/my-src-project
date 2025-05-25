@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class SkillsTable {
     private static final Log _log = LogFactory.getLog(SkillsTable.class);
-    private static final Map<Integer, L1Skills> _skills = new HashMap<Integer, L1Skills>();
+    private static final Map<Integer, L1Skills> _skills = new HashMap<>();
     private static SkillsTable _instance;
 
     public static SkillsTable get() {

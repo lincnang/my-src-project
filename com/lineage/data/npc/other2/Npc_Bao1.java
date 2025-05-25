@@ -152,9 +152,9 @@ public class Npc_Bao1 extends NpcExecutor {
 
             boolean error = false;
             int size = questItems.length;
-            for (int i = 0; i < size; i++) {
-                int itemId = questItems[i][0];
-                int count = questItems[i][1];
+            for (int[] ints : questItems) {
+                int itemId = ints[0];
+                int count = ints[1];
 
                 if (!pc.getInventory().checkItem(itemId, count)) {
                     pc.sendPackets(new S_SystemMessage("尚未收集完任務道具，請繼續努力！"));
@@ -164,8 +164,8 @@ public class Npc_Bao1 extends NpcExecutor {
             }
 
             if (!error) {
-                for (int i = 0; i < size; i++) {
-                    pc.getInventory().consumeItem(questItems[i][0], questItems[i][1]);
+                for (int[] questItem : questItems) {
+                    pc.getInventory().consumeItem(questItem[0], questItem[1]);
                 }
                 pc.getQuest().set_end(questId);
                 try {

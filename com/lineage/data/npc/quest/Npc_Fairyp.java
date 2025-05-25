@@ -35,7 +35,7 @@ public class Npc_Fairyp extends NpcExecutor {
             }
             Integer time = QuestMapTable.get().getTime(mapid);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             L1Teleport.teleport(pc, 32744, 32794, (short) mapid, 5, true);
         } catch (Exception e) {

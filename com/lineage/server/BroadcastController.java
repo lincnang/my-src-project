@@ -44,7 +44,7 @@ public final class BroadcastController implements Runnable {
     // 廣播訊息最大可存在數量
     private static final int MAX_MSG_SIZE = 20;
     // 廣播訊息暫存佇列
-    private static final Queue<String> _msgQueue = new ConcurrentLinkedQueue<String>();
+    private static final Queue<String> _msgQueue = new ConcurrentLinkedQueue<>();
     private static BroadcastController _instance;
     // 廣播系統啟動開關 (預設為`關閉`)
     private static boolean _isStop;
@@ -91,7 +91,7 @@ public final class BroadcastController implements Runnable {
      * 取回目前廣播訊息等待數量
      *
      */
-    public final int getMsgSize() {
+    public int getMsgSize() {
         return _msgQueue.size();
     }
 
@@ -99,7 +99,7 @@ public final class BroadcastController implements Runnable {
      * 將元素放入佇列
      *
      */
-    public final boolean requestWork(final String data) {
+    public boolean requestWork(final String data) {
         // 超過允許存在數量
         if (_msgQueue.size() >= MAX_MSG_SIZE) {
             return false;
@@ -111,14 +111,14 @@ public final class BroadcastController implements Runnable {
      * 是否關閉中
      *
      */
-    public final boolean isStop() {
+    public boolean isStop() {
         return _isStop;
     }
 
     /**
      * 變更啟動開關 (不做同步化處理) (因為不需要很常變動此開關)
      */
-    public final void setStop(final boolean stop) {
+    public void setStop(final boolean stop) {
         _isStop = stop;
     }
 
@@ -145,8 +145,7 @@ public final class BroadcastController implements Runnable {
             // 建立訊息封包 (顯示於畫面上方)
             final ServerBasePacket packet2 = new S_PacketBoxGree(0x02, "\\f=" + message);
             // 執行全PC檢查程序
-            for (final Iterator<L1PcInstance> iter = all.iterator(); iter.hasNext(); ) {
-                final L1PcInstance pc = iter.next();
+            for (final L1PcInstance pc : all) {
                 if (check(pc)) {
                     // 發送封包
                     pc.sendPackets(packet1);
@@ -162,7 +161,7 @@ public final class BroadcastController implements Runnable {
         }
     }
 
-    public final void start() {
+    public void start() {
         // 啟動執行緒
         final int timeMillis = 3000; // 3秒
         _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);

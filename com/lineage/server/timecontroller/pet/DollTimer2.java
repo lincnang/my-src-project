@@ -55,8 +55,7 @@ public class DollTimer2 extends TimerTask {
             if (allDoll.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1DollInstance2> iter = allDoll.iterator(); iter.hasNext(); ) {
-                final L1DollInstance2 doll = iter.next();
+            for (final L1DollInstance2 doll : allDoll) {
                 final int time = doll.get_time() - 60;
                 // time -= 60;
                 if (time <= 0) {

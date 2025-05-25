@@ -123,8 +123,7 @@ public class L1TowerInstance extends L1NpcInstance {
             }
             boolean existDefenseClan = false;// 該城堡是否具有城盟
             final Collection<L1Clan> allClans = WorldClan.get().getAllClans();
-            for (final Iterator<L1Clan> iter = allClans.iterator(); iter.hasNext(); ) {
-                final L1Clan clan = iter.next();
+            for (final L1Clan clan : allClans) {
                 final int clanCastleId = clan.getCastleId();
                 if (clanCastleId == _castle_id) {
                     existDefenseClan = true;
@@ -155,7 +154,7 @@ public class L1TowerInstance extends L1NpcInstance {
                 }
                 if (newHp > 0) {
                     setCurrentHp(newHp);
-                    if ((getMaxHp() * 1 / 4) > getCurrentHp()) {
+                    if ((getMaxHp() / 4) > getCurrentHp()) {
                         if (_crackStatus != 4) {
                             broadcastPacketAll(new S_DoActionGFX(getId(), ActionCodes.ACTION_TowerCrack4));
                             setStatus(ActionCodes.ACTION_TowerCrack4);

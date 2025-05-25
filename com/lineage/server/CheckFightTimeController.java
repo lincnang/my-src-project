@@ -18,7 +18,7 @@ import java.util.concurrent.ScheduledFuture;
 public final class CheckFightTimeController implements Runnable { //src015
     private static final Log _log = LogFactory.getLog(CheckFightTimeController.class);
     private static final Random _random = new Random();
-    private static final LinkedList<Calendar> TIME_LIST_2 = new LinkedList<Calendar>();
+    private static final LinkedList<Calendar> TIME_LIST_2 = new LinkedList<>();
     private static volatile CheckFightTimeController _instance;
     private static boolean SWITCH_2;
     private static Calendar TIME_3;
@@ -103,7 +103,7 @@ public final class CheckFightTimeController implements Runnable { //src015
         sbr.append("請注意! 該地圖內不管善惡值均會噴裝!");
         return sbr;
     }*/
-    private final void setMapList2() {
+    private void setMapList2() {
         if (ConfigFreeKill.FREE_FIGHT_ALLMAP) {
             // 全部地圖掃街
             final Map<Integer, MapData> mapDatas = MapsTable.get().getMaps();
@@ -124,7 +124,7 @@ public final class CheckFightTimeController implements Runnable { //src015
         World.get().broadcastPacketToAll(new S_SystemMessage(getMapList2().toString()));
     }
 
-    public final StringBuilder getMapList2() {
+    public StringBuilder getMapList2() {
         if (MAP_LIST_2.isEmpty()) {
             return null;
         }
@@ -133,8 +133,8 @@ public final class CheckFightTimeController implements Runnable { //src015
             sbr.append(">>當前指定掃街地圖為:[全地圖]");
         } else {
             sbr.append(">>當前指定掃街地圖為:");
-            for (Iterator<Integer> localIterator = MAP_LIST_2.iterator(); localIterator.hasNext(); ) {
-                int mapId = ((Integer) localIterator.next()).intValue();
+            for (Integer integer : MAP_LIST_2) {
+                int mapId = integer;
                 sbr.append("[").append(MapsTable.get().locationname(mapId)).append("]");
             }
         }
@@ -142,11 +142,11 @@ public final class CheckFightTimeController implements Runnable { //src015
         return sbr;
     }
 
-    public final boolean isFightMap(final int mapId) {
+    public boolean isFightMap(final int mapId) {
         return MAP_LIST_2.contains(mapId);
     }
 
-    public final void start() {
+    public void start() {
         Calendar cal_now = Calendar.getInstance();
         boolean canStart = false;
         if (ConfigFreeKill.FREE_FIGHT_SWITCH) {
@@ -155,7 +155,7 @@ public final class CheckFightTimeController implements Runnable { //src015
             if (MAP_LIST_2 != null) {
                 MAP_LIST_2.clear();
             }
-            MAP_LIST_2 = new HashSet<Integer>();
+            MAP_LIST_2 = new HashSet<>();
             for (String hm : ConfigFreeKill.FREE_FIGHT_TIME_LIST) {
                 String[] hm_b = hm.split(":");
                 String hh_b = hm_b[0];

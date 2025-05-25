@@ -55,8 +55,8 @@ public class DollGetTimer extends TimerTask {
             if (all.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = all.iterator(); iter.hasNext(); ) {
-                L1PcInstance tgpc = (L1PcInstance) iter.next();
+            for (Object o : all) {
+                L1PcInstance tgpc = (L1PcInstance) o;
                 if (tgpc.get_doll_get_time_src() > 0) {
                     if (checkErr(tgpc)) {
                         int itemid = tgpc.get_doll_get()[0];

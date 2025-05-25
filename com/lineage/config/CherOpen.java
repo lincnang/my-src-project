@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -48,7 +49,7 @@ public final class CherOpen {
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            InputStream is = new FileInputStream(new File(THREAD_POOL_FILE));
+            InputStream is = Files.newInputStream(new File(THREAD_POOL_FILE).toPath());
             set.load(is);
             is.close();
             // 職業開關 1開0關 by Miranda

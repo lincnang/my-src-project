@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * 強化擴充能力
  */
 public class AbilityOrginal {
-    private static final HashMap<Integer, L1WilliamAbilityOrginal> _gfxIdIndex = new HashMap<Integer, L1WilliamAbilityOrginal>();
+    private static final HashMap<Integer, L1WilliamAbilityOrginal> _gfxIdIndex = new HashMap<>();
     private static Logger _log = Logger.getLogger(AbilityOrginal.class.getName());
     private static AbilityOrginal _instance;
 
@@ -119,6 +119,6 @@ public class AbilityOrginal {
     }
 
     public L1WilliamAbilityOrginal[] getGfxIdList() {
-        return _gfxIdIndex.values().toArray(new L1WilliamAbilityOrginal[_gfxIdIndex.size()]);
+        return _gfxIdIndex.values().toArray(new L1WilliamAbilityOrginal[0]);
     }
 }

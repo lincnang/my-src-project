@@ -68,7 +68,7 @@ public class DALTool {
     }
 
     public <T> List<T> selectQuery(Class<T> type, String query, List params) throws SQLException {
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
         //_log.debug("query:" + query);
         try (Connection conn = DatabaseFactory.get().getConnection()) {
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -143,8 +143,8 @@ public class DALTool {
     public <T> void Insert(T pojo, String tableName, boolean isAutoId) throws IllegalAccessException {
         Field[] fields = pojo.getClass().getDeclaredFields();
         AccessibleObject.setAccessible(fields, true);
-        String colNames = "";
-        String colValues = "";
+        StringBuilder colNames = new StringBuilder();
+        StringBuilder colValues = new StringBuilder();
         for (int i = 0; i < fields.length; i++) {
             try {
                 if (!fields[i].isAccessible()) {
@@ -157,24 +157,19 @@ public class DALTool {
                     colValue = value.toString();
                 }
                 //_log.debug("Value of Field "+name+" is "+colValue);
-                if (i != 0 && !colNames.isEmpty()) {
-                    colNames = colNames + ",";
-                    colValues = colValues + ",";
+                if (i != 0 && (colNames.length() > 0)) {
+                    colNames.append(",");
+                    colValues.append(",");
                 }
                 if (name == "id" && isAutoId) {
                     continue;
                 }
                 if (fields[i].get(pojo) instanceof String || fields[i].get(pojo) instanceof java.sql.Timestamp) {
-                    colValues = colValues + "'" + colValue + "'";
+                    colValues.append("'").append(colValue).append("'");
                 } else {
-                    colValues = colValues + colValue;
+                    colValues.append(colValue);
                 }
-                colNames = colNames + name;
-            } catch (IllegalAccessException e) {
-                _log.error("SQL Tool Error:" + e.getMessage());
-                _log.debug("colNames:" + colNames);
-                _log.debug("colValues:" + colValues);
-                throw e;
+                colNames.append(name);
             } catch (Exception e) {
                 _log.error("SQL Tool Error:" + e.getMessage());
                 _log.debug("colNames:" + colNames);

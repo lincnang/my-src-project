@@ -165,51 +165,59 @@ public class Npc_clan extends NpcExecutor {
                     pc.sendPackets(new S_NPCTalkReturn(npc.getId(), htmlid));
                     return;
                 }
-                if (cmd.equals("1")) {// 學習血盟技能
-                    if (pc.getClan().isClanskill()) {
-                        html = true;
-                        htmlid = "y_c3";
-                    } else {
-                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_c1g"));
-                    }
-                } else if (cmd.equals("2")) {// 創立血盟技能
-                    // 王族角色
-                    if (pc.isCrown()) {
-                        if (!pc.getClan().isClanskill()) {
-                            get_clanSkill(pc, npc);
+                switch (cmd) {
+                    case "1": // 學習血盟技能
+                        if (pc.getClan().isClanskill()) {
+                            html = true;
+                            htmlid = "y_c3";
+                        } else {
+                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_c1g"));
                         }
-                    } else {
-                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_c1f"));
-                    }
-                } else if (cmd.equals("3")) {// 解散血盟
-                    if (pc.isCrown()) {
-                        if (pc.getId() == pc.getClan().getLeaderId()) {
-                            delClan(pc);
-                            pc.sendPackets(new S_CloseList(pc.getId()));
+                        break;
+                    case "2": // 創立血盟技能
+                        // 王族角色
+                        if (pc.isCrown()) {
+                            if (!pc.getClan().isClanskill()) {
+                                get_clanSkill(pc, npc);
+                            }
                         } else {
                             pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_c1f"));
                         }
-                    }
-                } else if (cmd.equals("a")) {// 狂暴(增加物理攻擊力)
-                    if (pc.getClan().isClanskill()) {
-                        pc.get_other().set_clanskill(1);
-                        updatePc = true;
-                    }
-                } else if (cmd.equals("b")) {// 寂靜(增加物理傷害減免)
-                    if (pc.getClan().isClanskill()) {
-                        pc.get_other().set_clanskill(2);
-                        updatePc = true;
-                    }
-                } else if (cmd.equals("c")) {// 魔擊(增加魔法攻擊力)
-                    if (pc.getClan().isClanskill()) {
-                        pc.get_other().set_clanskill(4);
-                        updatePc = true;
-                    }
-                } else if (cmd.equals("d")) {// 消魔(增加魔法傷害減免)
-                    if (pc.getClan().isClanskill()) {
-                        pc.get_other().set_clanskill(8);
-                        updatePc = true;
-                    }
+                        break;
+                    case "3": // 解散血盟
+                        if (pc.isCrown()) {
+                            if (pc.getId() == pc.getClan().getLeaderId()) {
+                                delClan(pc);
+                                pc.sendPackets(new S_CloseList(pc.getId()));
+                            } else {
+                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_c1f"));
+                            }
+                        }
+                        break;
+                    case "a": // 狂暴(增加物理攻擊力)
+                        if (pc.getClan().isClanskill()) {
+                            pc.get_other().set_clanskill(1);
+                            updatePc = true;
+                        }
+                        break;
+                    case "b": // 寂靜(增加物理傷害減免)
+                        if (pc.getClan().isClanskill()) {
+                            pc.get_other().set_clanskill(2);
+                            updatePc = true;
+                        }
+                        break;
+                    case "c": // 魔擊(增加魔法攻擊力)
+                        if (pc.getClan().isClanskill()) {
+                            pc.get_other().set_clanskill(4);
+                            updatePc = true;
+                        }
+                        break;
+                    case "d": // 消魔(增加魔法傷害減免)
+                        if (pc.getClan().isClanskill()) {
+                            pc.get_other().set_clanskill(8);
+                            updatePc = true;
+                        }
+                        break;
                 }
                 if (updatePc) {
                     try {
@@ -265,149 +273,166 @@ public class Npc_clan extends NpcExecutor {
                     pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c1f"));
                     return;
                 }
-                if (cmd.equals("1")) {
-                    int clanSkillId = pc.getClan().getClanSkillId();
-                    int clanSkillLv = pc.getClan().getClanSkillLv();
-                    if ((clanSkillId != 0) && (clanSkillLv < 10)) {
-                        String MaterialName = RewardClanSkillsTable.get().getMaterialName(clanSkillId, clanSkillLv + 1);
-                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
-                    } else {
-                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c1g"));
-                    }
-                } else if (cmd.equals("2")) {
-                    int clanSkillId = pc.getClan().getClanSkillId();
-                    if (clanSkillId == 0) {
-                        if (pc.getAmount() == 0) {
-                            clanSkillId = 1;
+                switch (cmd) {
+                    case "1": {
+                        int clanSkillId = pc.getClan().getClanSkillId();
+                        int clanSkillLv = pc.getClan().getClanSkillLv();
+                        if ((clanSkillId != 0) && (clanSkillLv < 10)) {
+                            String MaterialName = RewardClanSkillsTable.get().getMaterialName(clanSkillId, clanSkillLv + 1);
+                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
                         } else {
-                            clanSkillId = pc.getAmount();
+                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c1g"));
                         }
+                        break;
                     }
-                    pc.setAmount(0);
-                    int clanSkillLv = pc.getClan().getClanSkillLv() + 1;
-                    if (clanSkillId <= 10) {
-                        Queue<String> itemListX = new ConcurrentLinkedQueue<String>();
-                        L1ClanSkills clanSkills = RewardClanSkillsTable.get().getClanSkillsList(clanSkillId, clanSkillLv);
-                        if (clanSkills != null) {
-                            int[] Material = clanSkills.getMaterial();
-                            int[] MaterialCount = clanSkills.getMaterialCount();
-                            int[] MaterialLevel = clanSkills.getMaterialLevel();
-                            if ((Material != null) && (MaterialCount != null) && (MaterialLevel != null)) {
-                                for (int i = 0; i < Material.length; i++) {
-                                    L1ItemInstance item = pc.getInventory().checkItemX_Lv(Material[i], MaterialLevel[i], MaterialCount[i]);
-                                    if (item == null) {
-                                        long countX = pc.getInventory().countItems(Material[i]);
-                                        L1Item itemX2 = ItemTable.get().getTemplate(Material[i]);
-                                        if (countX > 0L) {
-                                            if (MaterialLevel[i] != 0) {
-                                                itemListX.offer("+" + MaterialLevel[i] + " " + itemX2.getNameId() + " (" + (MaterialCount[i] - countX) + ")");
+                    case "2": {
+                        int clanSkillId = pc.getClan().getClanSkillId();
+                        if (clanSkillId == 0) {
+                            if (pc.getAmount() == 0) {
+                                clanSkillId = 1;
+                            } else {
+                                clanSkillId = pc.getAmount();
+                            }
+                        }
+                        pc.setAmount(0);
+                        int clanSkillLv = pc.getClan().getClanSkillLv() + 1;
+                        if (clanSkillId <= 10) {
+                            Queue<String> itemListX = new ConcurrentLinkedQueue<>();
+                            L1ClanSkills clanSkills = RewardClanSkillsTable.get().getClanSkillsList(clanSkillId, clanSkillLv);
+                            if (clanSkills != null) {
+                                int[] Material = clanSkills.getMaterial();
+                                int[] MaterialCount = clanSkills.getMaterialCount();
+                                int[] MaterialLevel = clanSkills.getMaterialLevel();
+                                if ((Material != null) && (MaterialCount != null) && (MaterialLevel != null)) {
+                                    for (int i = 0; i < Material.length; i++) {
+                                        L1ItemInstance item = pc.getInventory().checkItemX_Lv(Material[i], MaterialLevel[i], MaterialCount[i]);
+                                        if (item == null) {
+                                            long countX = pc.getInventory().countItems(Material[i]);
+                                            L1Item itemX2 = ItemTable.get().getTemplate(Material[i]);
+                                            if (countX > 0L) {
+                                                if (MaterialLevel[i] != 0) {
+                                                    itemListX.offer("+" + MaterialLevel[i] + " " + itemX2.getNameId() + " (" + (MaterialCount[i] - countX) + ")");
+                                                } else {
+                                                    itemListX.offer(itemX2.getNameId() + " (" + (MaterialCount[i] - countX) + ")");
+                                                }
+                                            } else if (MaterialLevel[i] != 0) {
+                                                itemListX.offer("+" + MaterialLevel[i] + " " + itemX2.getNameId() + " (" + MaterialCount[i] + ")");
                                             } else {
-                                                itemListX.offer(itemX2.getNameId() + " (" + (MaterialCount[i] - countX) + ")");
+                                                itemListX.offer(itemX2.getNameId() + " (" + MaterialCount[i] + ")");
                                             }
-                                        } else if (MaterialLevel[i] != 0) {
-                                            itemListX.offer("+" + MaterialLevel[i] + " " + itemX2.getNameId() + " (" + MaterialCount[i] + ")");
-                                        } else {
-                                            itemListX.offer(itemX2.getNameId() + " (" + MaterialCount[i] + ")");
                                         }
                                     }
-                                }
-                                if (itemListX.size() > 0) {
-                                    for (Iterator<String> iter = itemListX.iterator(); iter.hasNext(); ) {
-                                        String tgitem = (String) iter.next();
-                                        pc.sendPackets(new S_ServerMessage(337, tgitem));
+                                    if (itemListX.size() > 0) {
+                                        for (String tgitem : itemListX) {
+                                            pc.sendPackets(new S_ServerMessage(337, tgitem));
+                                        }
+                                        itemListX.clear();
+                                        pc.sendPackets(new S_CloseList(pc.getId()));
+                                        return;
                                     }
-                                    itemListX.clear();
-                                    pc.sendPackets(new S_CloseList(pc.getId()));
-                                    return;
-                                }
-                                for (int i = 0; i < Material.length; i++) {
-                                    L1ItemInstance item = pc.getInventory().checkItemX_Lv(Material[i], MaterialLevel[i], MaterialCount[i]);
-                                    if (item != null) {
-                                        if (MaterialLevel[i] != 0) {
-                                            pc.getInventory().consumeEnchantItem(Material[i], MaterialLevel[i], MaterialCount[i]);
-                                        } else {
-                                            pc.getInventory().consumeItem(Material[i], MaterialCount[i]);
+                                    for (int i = 0; i < Material.length; i++) {
+                                        L1ItemInstance item = pc.getInventory().checkItemX_Lv(Material[i], MaterialLevel[i], MaterialCount[i]);
+                                        if (item != null) {
+                                            if (MaterialLevel[i] != 0) {
+                                                pc.getInventory().consumeEnchantItem(Material[i], MaterialLevel[i], MaterialCount[i]);
+                                            } else {
+                                                pc.getInventory().consumeItem(Material[i], MaterialCount[i]);
+                                            }
                                         }
                                     }
                                 }
                             }
+                            pc.getClan().setClanSkillId(clanSkillId);
+                            pc.getClan().setClanSkillLv(clanSkillLv);
+                            ClanReading.get().updateClanSkill(pc.getClan());
+                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c2a"));
                         }
-                        pc.getClan().setClanSkillId(clanSkillId);
-                        pc.getClan().setClanSkillLv(clanSkillLv);
-                        ClanReading.get().updateClanSkill(pc.getClan());
-                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c2a"));
+                        break;
                     }
-                } else if (cmd.equals("3")) {
-                    if (pc.getId() == pc.getClan().getLeaderId()) {
-                        delClan(pc);
-                        pc.sendPackets(new S_CloseList(pc.getId()));
-                    } else {
-                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c1f"));
-                    }
-                } else if (cmd.equals("4")) {
-                    int clanSkillId = pc.getClan().getClanSkillId();
-                    int clanSkillLv = pc.getClan().getClanSkillLv();
-                    if ((clanSkillId != 0) && (clanSkillLv != 0)) {
-                        String NextSkillName = RewardClanSkillsTable.get().getSkillsName(clanSkillId, clanSkillLv);
-                        pc.getClan().setClanSkillId(0);
-                        pc.getClan().setClanSkillLv(0);
-                        ClanReading.get().updateClanSkill(pc.getClan());
-                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c2a"));
-                        pc.sendPackets(new S_ServerMessage(166, "成功遺忘掉血盟技能:" + NextSkillName));
-                        pc.sendPackets(new S_CloseList(pc.getId()));
-                    } else {
-                        pc.sendPackets(new S_ServerMessage(166, "您尚未學習血盟技能"));
-                    }
-                } else if (cmd.equals("s")) {
-                    int clanskillId = pc.getClan().getClanSkillId();
-                    if (clanskillId == 0) {
-                        int clanskillLv = pc.getClan().getClanSkillLv();
-                        if (clanskillLv == 0) {
-                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c2", ClanSkillDBSet._skillNameNote));
+                    case "3":
+                        if (pc.getId() == pc.getClan().getLeaderId()) {
+                            delClan(pc);
+                            pc.sendPackets(new S_CloseList(pc.getId()));
+                        } else {
+                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c1f"));
                         }
-                    }
-                } else if (cmd.equals("a")) {
-                    int clanskillId = pc.getClan().getClanSkillId();
-                    if (clanskillId == 0) {
-                        int clanskillLv = pc.getClan().getClanSkillLv();
-                        if (clanskillLv == 0) {
-                            String MaterialName = RewardClanSkillsTable.get().getMaterialName(1, 1);
-                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
-                            pc.setAmount(1);
+                        break;
+                    case "4": {
+                        int clanSkillId = pc.getClan().getClanSkillId();
+                        int clanSkillLv = pc.getClan().getClanSkillLv();
+                        if ((clanSkillId != 0) && (clanSkillLv != 0)) {
+                            String NextSkillName = RewardClanSkillsTable.get().getSkillsName(clanSkillId, clanSkillLv);
+                            pc.getClan().setClanSkillId(0);
+                            pc.getClan().setClanSkillLv(0);
+                            ClanReading.get().updateClanSkill(pc.getClan());
+                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c2a"));
+                            pc.sendPackets(new S_ServerMessage(166, "成功遺忘掉血盟技能:" + NextSkillName));
+                            pc.sendPackets(new S_CloseList(pc.getId()));
+                        } else {
+                            pc.sendPackets(new S_ServerMessage(166, "您尚未學習血盟技能"));
                         }
+                        break;
                     }
-                } else if (cmd.equals("b")) {
-                    int clanskillId = pc.getClan().getClanSkillId();
-                    if (clanskillId == 0) {
-                        int clanskillLv = pc.getClan().getClanSkillLv();
-                        if (clanskillLv == 0) {
-                            //String MaterialName = RewardClanSkillsTable.get().getMaterialName(2, 2);
-                            String MaterialName = RewardClanSkillsTable.get().getMaterialName(2, 1);
-                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
-                            pc.setAmount(2);
+                    case "s": {
+                        int clanskillId = pc.getClan().getClanSkillId();
+                        if (clanskillId == 0) {
+                            int clanskillLv = pc.getClan().getClanSkillLv();
+                            if (clanskillLv == 0) {
+                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c2", ClanSkillDBSet._skillNameNote));
+                            }
                         }
+                        break;
                     }
-                } else if (cmd.equals("c")) {
-                    int clanskillId = pc.getClan().getClanSkillId();
-                    if (clanskillId == 0) {
-                        int clanskillLv = pc.getClan().getClanSkillLv();
-                        if (clanskillLv == 0) {
-                            //String MaterialName = RewardClanSkillsTable.get().getMaterialName(3, 3);
-                            String MaterialName = RewardClanSkillsTable.get().getMaterialName(3, 1);
-                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
-                            pc.setAmount(3);
+                    case "a": {
+                        int clanskillId = pc.getClan().getClanSkillId();
+                        if (clanskillId == 0) {
+                            int clanskillLv = pc.getClan().getClanSkillLv();
+                            if (clanskillLv == 0) {
+                                String MaterialName = RewardClanSkillsTable.get().getMaterialName(1, 1);
+                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
+                                pc.setAmount(1);
+                            }
                         }
+                        break;
                     }
-                } else if (cmd.equals("d")) {
-                    int clanskillId = pc.getClan().getClanSkillId();
-                    if (clanskillId == 0) {
-                        int clanskillLv = pc.getClan().getClanSkillLv();
-                        if (clanskillLv == 0) {
-                            //String MaterialName = RewardClanSkillsTable.get().getMaterialName(4, 4);
-                            String MaterialName = RewardClanSkillsTable.get().getMaterialName(4, 1);
-                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
-                            pc.setAmount(4);
+                    case "b": {
+                        int clanskillId = pc.getClan().getClanSkillId();
+                        if (clanskillId == 0) {
+                            int clanskillLv = pc.getClan().getClanSkillLv();
+                            if (clanskillLv == 0) {
+                                //String MaterialName = RewardClanSkillsTable.get().getMaterialName(2, 2);
+                                String MaterialName = RewardClanSkillsTable.get().getMaterialName(2, 1);
+                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
+                                pc.setAmount(2);
+                            }
                         }
+                        break;
+                    }
+                    case "c": {
+                        int clanskillId = pc.getClan().getClanSkillId();
+                        if (clanskillId == 0) {
+                            int clanskillLv = pc.getClan().getClanSkillLv();
+                            if (clanskillLv == 0) {
+                                //String MaterialName = RewardClanSkillsTable.get().getMaterialName(3, 3);
+                                String MaterialName = RewardClanSkillsTable.get().getMaterialName(3, 1);
+                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
+                                pc.setAmount(3);
+                            }
+                        }
+                        break;
+                    }
+                    case "d": {
+                        int clanskillId = pc.getClan().getClanSkillId();
+                        if (clanskillId == 0) {
+                            int clanskillLv = pc.getClan().getClanSkillLv();
+                            if (clanskillLv == 0) {
+                                //String MaterialName = RewardClanSkillsTable.get().getMaterialName(4, 4);
+                                String MaterialName = RewardClanSkillsTable.get().getMaterialName(4, 1);
+                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "j_c3", new String[]{MaterialName}));
+                                pc.setAmount(4);
+                            }
+                        }
+                        break;
                     }
                 }
             }
@@ -422,7 +447,7 @@ public class Npc_clan extends NpcExecutor {
      */
     private void get_clanSkill(L1PcInstance pc, L1NpcInstance npc) {
         // 道具不足的顯示清單
-        Queue<String> itemListX = new ConcurrentLinkedQueue<String>();
+        Queue<String> itemListX = new ConcurrentLinkedQueue<>();
         if (!pc.isGm()) {
             // 檢查所需物品數量
             for (int itemid[] : _items) {
@@ -438,8 +463,8 @@ public class Npc_clan extends NpcExecutor {
                 }
             }
             if (itemListX.size() > 0) {
-                for (final Iterator<String> iter = itemListX.iterator(); iter.hasNext(); ) {
-                    final String tgitem = iter.next();// 返回迭代的下一個元素。
+                // 返回迭代的下一個元素。
+                for (final String tgitem : itemListX) {
                     // 337：\f1%0不足%s。 0_o"
                     pc.sendPackets(new S_ServerMessage(337, tgitem));
                 }
@@ -509,8 +534,8 @@ public class Npc_clan extends NpcExecutor {
                 }
             }
             try {
-                for (int i = 0; i < clan_member_name.length; i++) { // 血盟成員訊息發送
-                    final L1PcInstance online_pc = World.get().getPlayer(clan_member_name[i]);
+                for (String s : clan_member_name) { // 血盟成員訊息發送
+                    final L1PcInstance online_pc = World.get().getPlayer(s);
                     L1PcInstance tg_pc = null;
                     boolean isReTitle = false;
                     if (online_pc != null) { // 線上成員
@@ -520,7 +545,7 @@ public class Npc_clan extends NpcExecutor {
                         // %1血盟的盟主%0%s解散了血盟。
                         online_pc.sendPackets(new S_ServerMessage(269, player_name, clan_name));
                     } else { // 離線成員
-                        tg_pc = CharacterTable.get().restoreCharacter(clan_member_name[i]);
+                        tg_pc = CharacterTable.get().restoreCharacter(s);
                         isReTitle = true;
                     }
                     if (tg_pc != null) {

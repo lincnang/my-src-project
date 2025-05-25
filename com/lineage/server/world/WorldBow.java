@@ -17,7 +17,7 @@ public class WorldBow {
     private final HashMap<Integer, L1BowInstance> _isBow;
 
     private WorldBow() {
-        _isBow = new HashMap<Integer, L1BowInstance>();
+        _isBow = new HashMap<>();
     }
 
     public static WorldBow get() {

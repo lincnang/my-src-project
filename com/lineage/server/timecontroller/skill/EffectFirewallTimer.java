@@ -83,13 +83,13 @@ public class EffectFirewallTimer extends TimerTask {
         if ((!tgpc.getSkillisEmpty()) && (tgpc.getSkillEffect().size() > 0)) {
             try {
                 for (Integer skillid : L1AttackList.SKD3.keySet()) {
-                    if (tgpc.hasSkillEffect(skillid.intValue())) {
+                    if (tgpc.hasSkillEffect(skillid)) {
                         Integer integer = (Integer) L1AttackList.SKD3.get(skillid);
                         if (integer != null) {
                             if (integer.equals(skillid)) {
                                 dmgX2 = true;
                             } else {
-                                damage += integer.intValue();
+                                damage += integer;
                             }
                         }
                     }
@@ -156,8 +156,8 @@ public class EffectFirewallTimer extends TimerTask {
             if (allNpc.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = allNpc.iterator(); iter.hasNext(); ) {
-                L1EffectInstance effect = (L1EffectInstance) iter.next();
+            for (Object o : allNpc) {
+                L1EffectInstance effect = (L1EffectInstance) o;
                 if (effect.effectType() == L1EffectType.isFirewall) {
                     firewall(effect);
                     TimeUnit.MILLISECONDS.sleep(1L);

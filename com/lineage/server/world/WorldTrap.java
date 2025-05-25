@@ -19,7 +19,7 @@ public class WorldTrap {
     private final HashMap<Integer, L1TrapInstance> _isTrap;
 
     private WorldTrap() {
-        _isTrap = new HashMap<Integer, L1TrapInstance>();
+        _isTrap = new HashMap<>();
     }
 
     public static WorldTrap get() {

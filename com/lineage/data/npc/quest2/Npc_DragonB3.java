@@ -20,7 +20,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class Npc_DragonB3 extends NpcExecutor {
-    public static final Map<Integer, checkDragonTimer3> _timer = new HashMap<Integer, checkDragonTimer3>();
+    public static final Map<Integer, checkDragonTimer3> _timer = new HashMap<>();
     private static final Log _log = LogFactory.getLog(Npc_DragonB3.class);
 
     public static NpcExecutor get() {
@@ -35,7 +35,7 @@ public class Npc_DragonB3 extends NpcExecutor {
         try {
             L1QuestUser quest = WorldQuest.get().get(pc.get_showId());
             if (quest != null) {
-                if (_timer.get(Integer.valueOf(pc.get_showId())) == null) {
+                if (_timer.get(pc.get_showId()) == null) {
                     boolean isFound = false;
                     if (!quest.npcList().isEmpty()) {
                         for (L1NpcInstance find_npc : quest.npcList()) {
@@ -48,7 +48,7 @@ public class Npc_DragonB3 extends NpcExecutor {
                     if (!isFound) {
                         checkDragonTimer3 timer = new checkDragonTimer3(npc.getMapId(), quest);
                         timer.begin();
-                        _timer.put(Integer.valueOf(pc.get_showId()), timer);
+                        _timer.put(pc.get_showId(), timer);
                     }
                 }
                 L1Location loc = new L1Location(32844, 32887, npc.getMapId()).randomLocation(5, false);
@@ -85,11 +85,11 @@ public class Npc_DragonB3 extends NpcExecutor {
                 L1SpawnUtil.spawn(97204, loc, new Random().nextInt(8), quest.get_id());
             } catch (Exception localException) {
             } finally {
-                Npc_DragonB3._timer.remove(Integer.valueOf(quest.get_id()));
+                Npc_DragonB3._timer.remove(quest.get_id());
             }
         }
 
-        private final void sendServerMessage(int msgid) {
+        private void sendServerMessage(int msgid) {
             if (!quest.pcList().isEmpty()) {
                 for (L1PcInstance pc : quest.pcList()) {
                     pc.sendPackets(new S_ServerMessage(msgid));

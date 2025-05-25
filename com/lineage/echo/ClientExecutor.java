@@ -188,12 +188,12 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
             stringBuilder.append("\n--------------------------------------------------");
             stringBuilder.append("\n       客戶端 離線: (");
             if (account != null) {
-                stringBuilder.append(account + " ");
+                stringBuilder.append(account).append(" ");
             }
             if (mac != null) {
-                stringBuilder.append(" " + mac + " / ");
+                stringBuilder.append(" ").append(mac).append(" / ");
             }
-            stringBuilder.append(ipAddr + ") 完成連線中斷!!");
+            stringBuilder.append(ipAddr).append(") 完成連線中斷!!");
             stringBuilder.append("\n--------------------------------------------------");
             _log.info(stringBuilder.toString());
             SystemUtil.printMemoryUsage(_log);

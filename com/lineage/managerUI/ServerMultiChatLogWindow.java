@@ -317,110 +317,124 @@ public class ServerMultiChatLogWindow extends JInternalFrame {
 
     public void append(String paneName, String msg, String color) {
         StyledDocument doc = null;
-        if (paneName.equals("worldChatText")) {
-            doc = worldChatText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, worldChatText.getStyle(color));
-                worldChatText.setCaretPosition(worldChatText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("nomalChatText")) {
-            doc = nomalChatText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, nomalChatText.getStyle(color));
-                nomalChatText.setCaretPosition(nomalChatText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("whisperChatText")) {
-            doc = whisperChatText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, whisperChatText.getStyle(color));
-                whisperChatText.setCaretPosition(whisperChatText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("clanChatText")) {
-            doc = clanChatText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, clanChatText.getStyle(color));
-                clanChatText.setCaretPosition(clanChatText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("partyChatText")) {
-            doc = partyChatText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, partyChatText.getStyle(color));
-                partyChatText.setCaretPosition(partyChatText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("tradeChatText")) {
-            doc = tradeChatText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, tradeChatText.getStyle(color));
-                tradeChatText.setCaretPosition(tradeChatText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("wareHouseText")) {
-            doc = wareHouseText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, wareHouseText.getStyle(color));
-                wareHouseText.setCaretPosition(wareHouseText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("tradeText")) {
-            doc = tradeText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, tradeText.getStyle(color));
-                tradeText.setCaretPosition(tradeText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("enchantText")) {
-            doc = enchantText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, enchantText.getStyle(color));
-                enchantText.setCaretPosition(enchantText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("observeText")) {
-            doc = observeText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, observeText.getStyle(color));
-                observeText.setCaretPosition(observeText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("moveerrorText")) {
-            doc = moveerrorText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, moveerrorText.getStyle(color));
-                moveerrorText.setCaretPosition(moveerrorText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("bugText")) {
-            doc = bugText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, bugText.getStyle(color));
-                bugText.setCaretPosition(bugText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        } else if (paneName.equals("commandText")) {
-            doc = commandText.getStyledDocument();
-            try {
-                doc.insertString(doc.getLength(), msg, commandText.getStyle(color));
-                commandText.setCaretPosition(commandText.getDocument().getLength());
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
+        switch (paneName) {
+            case "worldChatText":
+                doc = worldChatText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, worldChatText.getStyle(color));
+                    worldChatText.setCaretPosition(worldChatText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "nomalChatText":
+                doc = nomalChatText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, nomalChatText.getStyle(color));
+                    nomalChatText.setCaretPosition(nomalChatText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "whisperChatText":
+                doc = whisperChatText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, whisperChatText.getStyle(color));
+                    whisperChatText.setCaretPosition(whisperChatText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "clanChatText":
+                doc = clanChatText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, clanChatText.getStyle(color));
+                    clanChatText.setCaretPosition(clanChatText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "partyChatText":
+                doc = partyChatText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, partyChatText.getStyle(color));
+                    partyChatText.setCaretPosition(partyChatText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "tradeChatText":
+                doc = tradeChatText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, tradeChatText.getStyle(color));
+                    tradeChatText.setCaretPosition(tradeChatText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "wareHouseText":
+                doc = wareHouseText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, wareHouseText.getStyle(color));
+                    wareHouseText.setCaretPosition(wareHouseText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "tradeText":
+                doc = tradeText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, tradeText.getStyle(color));
+                    tradeText.setCaretPosition(tradeText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "enchantText":
+                doc = enchantText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, enchantText.getStyle(color));
+                    enchantText.setCaretPosition(enchantText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "observeText":
+                doc = observeText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, observeText.getStyle(color));
+                    observeText.setCaretPosition(observeText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "moveerrorText":
+                doc = moveerrorText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, moveerrorText.getStyle(color));
+                    moveerrorText.setCaretPosition(moveerrorText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "bugText":
+                doc = bugText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, bugText.getStyle(color));
+                    bugText.setCaretPosition(bugText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "commandText":
+                doc = commandText.getStyledDocument();
+                try {
+                    doc.insertString(doc.getLength(), msg, commandText.getStyle(color));
+                    commandText.setCaretPosition(commandText.getDocument().getLength());
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 

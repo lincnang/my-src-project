@@ -43,7 +43,7 @@ public class NPC_Ezpay extends NpcExecutor {
      * 展示指定頁面
      *
      */
-    private static final void showPage(L1PcInstance pc, L1NpcInstance npc, int page) {
+    private static void showPage(L1PcInstance pc, L1NpcInstance npc, int page) {
         Map<Integer, int[]> list = pc.get_otherList().SHOPLIST;
         int allpage = list.size() / 10;
         if ((page > allpage) || (page < 0)) {
@@ -56,11 +56,11 @@ public class NPC_Ezpay extends NpcExecutor {
         int showId = page * 10;
         StringBuilder stringBuilder = new StringBuilder();
         for (int key = showId; key < showId + 10; key++) {
-            int[] info = (int[]) list.get(Integer.valueOf(key));
+            int[] info = (int[]) list.get(key);
             if (info != null) {
                 L1Item itemtmp = ItemTable.get().getTemplate(info[1]);
                 if (itemtmp != null) {
-                    stringBuilder.append(itemtmp.getName() + "(" + info[2] + "),");
+                    stringBuilder.append(itemtmp.getName()).append("(").append(info[2]).append("),");
                 }
             }
         }
@@ -76,7 +76,7 @@ public class NPC_Ezpay extends NpcExecutor {
         }
     }
 
-    private static final void createNewItem(L1PcInstance pc, L1NpcInstance npc, int item_id, long count, int trueMoney) {
+    private static void createNewItem(L1PcInstance pc, L1NpcInstance npc, int item_id, long count, int trueMoney) {
         try {
             if (pc == null) {
                 return;
@@ -94,7 +94,7 @@ public class NPC_Ezpay extends NpcExecutor {
                     AccountReading.get().updatefp(pc.getAccountName(), 1);
                 }
                 if (ConfigOtherSet2.Dividend && trueMoney >= ConfigOtherSet2.DividendQuantity) {
-                    CreateNewItem.createNewItem(pc, ConfigOtherSet2.DividendItem, (trueMoney / ConfigOtherSet2.DividendQuantity) * ConfigOtherSet2.DividendQuantityCount); // SRC0910
+                    CreateNewItem.createNewItem(pc, ConfigOtherSet2.DividendItem, (long) (trueMoney / ConfigOtherSet2.DividendQuantity) * ConfigOtherSet2.DividendQuantityCount); // SRC0910
                 }
                 pc.sendPackets(new S_ServerMessage("\\fW" + npc.getNameId() + "給你" + item.getLogName()));
                 pc.save();

@@ -95,7 +95,7 @@ public class MJBytesOutputStream extends OutputStream {
     public void writeBit(long value) throws Exception {
         if (value < 0L) {
             String str = Integer.toBinaryString((int) value);
-            value = Long.valueOf(str, 2).longValue();
+            value = Long.valueOf(str, 2);
         }
         int i = 0;
         while (value >> 7 * (i + 1) > 0L) {

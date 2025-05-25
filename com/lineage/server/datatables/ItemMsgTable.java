@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class ItemMsgTable {
     private static final Log _log = LogFactory.getLog(ItemMsgTable.class);
-    private static final ArrayList<Integer> _idList = new ArrayList<Integer>();
+    private static final ArrayList<Integer> _idList = new ArrayList<>();
     private static ItemMsgTable _instance;
 
     public static ItemMsgTable get() {
@@ -43,8 +43,8 @@ public class ItemMsgTable {
             rs = pstm.executeQuery();
             while (rs.next()) {
                 int item_id = rs.getInt("物品編號");
-                if (!_idList.contains(Integer.valueOf(item_id))) {
-                    _idList.add(Integer.valueOf(item_id));
+                if (!_idList.contains(item_id)) {
+                    _idList.add(item_id);
                 }
             }
         } catch (SQLException e) {
@@ -58,6 +58,6 @@ public class ItemMsgTable {
     }
 
     public boolean contains(int item_id) {
-        return _idList.contains(Integer.valueOf(item_id));
+        return _idList.contains(item_id);
     }
 }

@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class L1Buddy {
     private final int _charId;
-    private final LinkedHashMap<Integer, String> _buddys = new LinkedHashMap<Integer, String>();
+    private final LinkedHashMap<Integer, String> _buddys = new LinkedHashMap<>();
 
     public L1Buddy(int charId) {
         _charId = charId;
@@ -70,35 +70,33 @@ public class L1Buddy {
     }
 
     public String getOnlineBuddyListString() {
-        String result = new String("");
+        StringBuilder result = new StringBuilder(new String(""));
         //		for (L1PcInstance pc : L1World.getInstance().getAllPlayers()) {
         //		更換迭代方式
         Collection<?> al = World.get().getAllPlayers();
-        Iterator<?> it = al.iterator();
-        while (it.hasNext()) {//更換迭代方式
-            L1PcInstance pc = (L1PcInstance) it.next();//更換迭代方式
+        for (Object value : al) {//更換迭代方式
+            L1PcInstance pc = (L1PcInstance) value;//更換迭代方式
             if (_buddys.containsKey(pc.getId())) {
-                result += pc.getName() + " ";
+                result.append(pc.getName()).append(" ");
             }
         }
         // De虛擬假人部分
         Collection<?> allde = WorldDe.get().all();
-        Iterator<?> ittt = allde.iterator();
-        while (ittt.hasNext()) {//更換迭代方式
-            L1DeInstance fakepc = (L1DeInstance) ittt.next();//更換迭代方式
+        for (Object o : allde) {//更換迭代方式
+            L1DeInstance fakepc = (L1DeInstance) o;//更換迭代方式
             if (_buddys.containsKey(fakepc.getId())) {
-                result += fakepc.getNameId() + " ";
+                result.append(fakepc.getNameId()).append(" ");
             }
         }
-        return result;
+        return result.toString();
     }
 
     public String getBuddyListString() {
-        String result = new String("");
+        StringBuilder result = new StringBuilder(new String(""));
         for (String name : _buddys.values()) {
-            result += name + " ";
+            result.append(name).append(" ");
         }
-        return result;
+        return result.toString();
     }
 
     public boolean containsId(int objId) {

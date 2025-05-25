@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -57,7 +58,7 @@ public final class ThreadPoolSet {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(THREAD_POOL_FILE));
+            final InputStream is = Files.newInputStream(new File(THREAD_POOL_FILE).toPath());
             set.load(is);
             is.close();
             DE_POOL_SIZE = Integer.parseInt(set.getProperty("De_Pool", "150"));

@@ -10,7 +10,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.util.Iterator;
 
 /**
  * @author dexc
@@ -112,8 +111,7 @@ public abstract class ServerBasePacket extends OpcodesServer {
         try {
             if (text != null) {
                 String chtext = text;
-                for (final Iterator<String> iter = ConfigBad.BAD_TEXT_LIST.iterator(); iter.hasNext(); ) {
-                    final String bad = iter.next();
+                for (final String bad : ConfigBad.BAD_TEXT_LIST) {
                     final int index = chtext.indexOf(bad);
                     if (index != -1) {
                         chtext = text.substring(0, index);
@@ -501,7 +499,7 @@ public abstract class ServerBasePacket extends OpcodesServer {
     protected void writeBit(long value) {
         if (value < 0L) {
             String stringValue = Integer.toBinaryString((int) value);
-            value = Long.valueOf(stringValue, 2).longValue();
+            value = Long.valueOf(stringValue, 2);
         }
         int i = 0;
         while (value >> 7 * (i + 1) > 0L) {
@@ -543,7 +541,7 @@ public abstract class ServerBasePacket extends OpcodesServer {
                     _bao.write(name);
                 }
             } else {
-                _bao.write(0 & 0xff);
+                _bao.write(0);
             }
         } catch (Exception e) {
             // _log.log(Level.SEVERE, e.getLocalizedMessage(), e);

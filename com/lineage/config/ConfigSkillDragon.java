@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -74,7 +75,7 @@ public final class ConfigSkillDragon {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigSkillDragon));
+            final InputStream is = Files.newInputStream(new File(ConfigSkillDragon).toPath());
             set.load(is);
             is.close();
             FOE_SLAYER_RND = Integer.parseInt(set.getProperty("FOE_SLAYER_RND", "25"));

@@ -6,13 +6,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class ConfigDropBox {
     private static final Log _log = LogFactory.getLog(ConfigDropBox.class);
-    private static final Map<Integer, String> _box_msg_list = new HashMap<Integer, String>();
+    private static final Map<Integer, String> _box_msg_list = new HashMap<>();
     private static final Random _random = new Random();
     private static final String _drop_text = "./config/☆服務器設定表☆/掉寶公告設定表.txt";
     public static boolean ISMSG = false;
@@ -20,7 +21,7 @@ public class ConfigDropBox {
     public static void load() throws ConfigErrorException {
         try {
             // 取回檔案
-            final InputStream is = new FileInputStream(new File(_drop_text));
+            final InputStream is = Files.newInputStream(new File(_drop_text).toPath());
             // 指定檔案編碼
             final InputStreamReader isr = new InputStreamReader(is, "utf-8");
             final LineNumberReader lnr = new LineNumberReader(isr);
@@ -39,7 +40,7 @@ public class ConfigDropBox {
                     desc = desc.replaceAll(" ", "");// 取代空白
                     ISMSG = Boolean.parseBoolean(desc.substring(6));
                 } else {
-                    _box_msg_list.put(new Integer(i++), desc);
+                    _box_msg_list.put(i++, desc);
                 }
             }
             is.close();

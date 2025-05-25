@@ -637,9 +637,7 @@ public class L1MobSkillUse {
         if (polyId == 0) {
             return false;
         }
-        Iterator<L1PcInstance> localIterator = World.get().getVisiblePlayer(_attacker).iterator();
-        while (localIterator.hasNext()) {
-            L1PcInstance pc = (L1PcInstance) localIterator.next();
+        for (L1PcInstance pc : World.get().getVisiblePlayer(_attacker)) {
             if (!pc.isDead()) {
                 if (!pc.isGhost()) {
                     if (!pc.isGmInvis()) {
@@ -657,7 +655,7 @@ public class L1MobSkillUse {
             }
         }
         if (usePoly) {
-            localIterator = World.get().getVisiblePlayer(_attacker).iterator();
+            Iterator<L1PcInstance> localIterator = World.get().getVisiblePlayer(_attacker).iterator();
             if (localIterator.hasNext()) {
                 L1PcInstance pc = (L1PcInstance) localIterator.next();
                 pc.sendPacketsAll(new S_SkillSound(pc.getId(), 230));
@@ -702,7 +700,7 @@ public class L1MobSkillUse {
      * 物理攻擊
      */
     private boolean physicalAttack(final int idx) {
-        final Map<Integer, Integer> targetList = new HashMap<Integer, Integer>();
+        final Map<Integer, Integer> targetList = new HashMap<>();
         final int areaWidth = getMobSkillTemplate().getAreaWidth(idx);
         final int areaHeight = getMobSkillTemplate().getAreaHeight(idx);
         final int range = getMobSkillTemplate().getRange(idx);
@@ -757,9 +755,7 @@ public class L1MobSkillUse {
         if (targetList.size() == 0) {
             return false;
         }
-        final Iterator<Integer> ite = targetList.keySet().iterator();
-        while (ite.hasNext()) {
-            final int targetId = ite.next();
+        for (int targetId : targetList.keySet()) {
             L1Object object = World.get().findObject(targetId);
             final L1AttackMode attack = new L1AttackNpc(_attacker, (L1Character) object);
             if (attack.calcHit()) {
@@ -859,7 +855,7 @@ public class L1MobSkillUse {
             case L1MobSkill.CHANGE_TARGET_RANDOM:
                 // System.out.println("L1MobSkill.CHANGE_TARGET_RANDOM:");
                 // 候補選定
-                final List<L1Character> targetList = new ArrayList<L1Character>();
+                final List<L1Character> targetList = new ArrayList<>();
                 for (final L1Object obj : World.get().getVisibleObjects(_attacker)) {
                     if ((obj instanceof L1PcInstance || obj instanceof L1PetInstance || obj instanceof L1SummonInstance) || (_attacker.getMapId() == 93 && obj instanceof L1MonsterInstance)) {// 怪物對戰
                         final L1Character cha = (L1Character) obj;

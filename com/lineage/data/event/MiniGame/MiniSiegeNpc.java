@@ -42,11 +42,11 @@ public class MiniSiegeNpc extends TimerTask {
         if (_isOver) { // NPC召喚是否結束
             try {
                 clear(); // 清除召喚NPC
-                TimeUnit.MILLISECONDS.sleep((ConfigThebes.MiniSiege_PlayTime + 8) * 1000); // 遊戲時間 (秒)
+                TimeUnit.MILLISECONDS.sleep((ConfigThebes.MiniSiege_PlayTime + 8) * 1000L); // 遊戲時間 (秒)
                 if (MiniSiege.getInstance().running) { // 判斷遊戲時間到而且遊戲還在進行中未分出勝負強制結束
                     MiniSiege.getInstance().setStage(5); // 時間到結束
                 }
-                TimeUnit.MILLISECONDS.sleep((ConfigThebes.MiniSiege_NextTime * 60 * 1000) - (2 * 1000)); // 再次開啟間隔時間(分)
+                TimeUnit.MILLISECONDS.sleep(((long) ConfigThebes.MiniSiege_NextTime * 60 * 1000) - (2 * 1000)); // 再次開啟間隔時間(分)
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

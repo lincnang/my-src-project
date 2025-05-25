@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public final class ExtraCriticalHitStoneTable {
     private static final Log _log = LogFactory.getLog(ExtraCriticalHitStoneTable.class);
-    private static final Map<Integer, L1CriticalHitStone> _stoneList = new HashMap<Integer, L1CriticalHitStone>();
+    private static final Map<Integer, L1CriticalHitStone> _stoneList = new HashMap<>();
     private static ExtraCriticalHitStoneTable _instance;
 
     public static ExtraCriticalHitStoneTable getInstance() {
@@ -35,7 +35,7 @@ public final class ExtraCriticalHitStoneTable {
         return _instance;
     }
 
-    public final void load() {
+    public void load() {
         final PerformanceTimer timer = new PerformanceTimer();
         Connection con = null;
         PreparedStatement pstm = null;
@@ -67,7 +67,7 @@ public final class ExtraCriticalHitStoneTable {
         _log.info("讀取->[系統]_武器爆擊寶石鑲嵌系統資料數量: " + _stoneList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final L1CriticalHitStone get(final int itemId) {
+    public L1CriticalHitStone get(final int itemId) {
         return _stoneList.get(itemId);
     }
 }

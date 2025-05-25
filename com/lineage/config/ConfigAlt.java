@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -76,7 +77,7 @@ public final class ConfigAlt {
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            InputStream is = new FileInputStream(new File("./config/altsettings.properties"));
+            InputStream is = Files.newInputStream(new File("./config/altsettings.properties").toPath());
             InputStreamReader isr = new InputStreamReader(is, "utf-8");
             set.load(isr);
             is.close();
@@ -101,29 +102,29 @@ public final class ConfigAlt {
                 ALT_WHO_COUNT = 1.0D;
             }
             String strWar = set.getProperty("WarTime", "2h");
-            if (strWar.indexOf("d") >= 0) {
+            if (strWar.contains("d")) {
                 ALT_WAR_TIME_UNIT = Calendar.DATE;
                 strWar = strWar.replace("d", "");
-            } else if (strWar.indexOf("h") >= 0) {
+            } else if (strWar.contains("h")) {
                 ALT_WAR_TIME_UNIT = Calendar.HOUR_OF_DAY;
                 strWar = strWar.replace("h", "");
-            } else if (strWar.indexOf("m") >= 0) {
+            } else if (strWar.contains("m")) {
                 ALT_WAR_TIME_UNIT = Calendar.MINUTE;
                 strWar = strWar.replace("m", "");
             }
             ALT_WAR_TIME = Integer.parseInt(strWar);// 攻城戰持續時間
             strWar = set.getProperty("WarInterval", "4d");
-            if (strWar.indexOf("d") >= 0) {
+            if (strWar.contains("d")) {
                 ALT_WAR_INTERVAL_UNIT = Calendar.DATE;
                 strWar = strWar.replace("d", "");
-            } else if (strWar.indexOf("h") >= 0) {
+            } else if (strWar.contains("h")) {
                 ALT_WAR_INTERVAL_UNIT = Calendar.HOUR_OF_DAY;
                 strWar = strWar.replace("h", "");
-            } else if (strWar.indexOf("m") >= 0) {
+            } else if (strWar.contains("m")) {
                 ALT_WAR_INTERVAL_UNIT = Calendar.MINUTE;
                 strWar = strWar.replace("m", "");
             } else if (pName.equalsIgnoreCase("NPCid")) {//NPC編號
-                NPCid = Boolean.valueOf(pValue).booleanValue();
+                NPCid = Boolean.parseBoolean(pValue);
             }
             ALT_WAR_INTERVAL = Integer.parseInt(strWar);// 攻城戰間隔時間
             SPAWN_HOME_POINT = Boolean.parseBoolean(set.getProperty("SpawnHomePoint", "true"));

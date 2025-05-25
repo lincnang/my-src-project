@@ -49,7 +49,7 @@ public class L1Inventory extends L1Object {
     private static final long serialVersionUID = 1L;
     public int[] slot_ring = new int[4];
     public int[] slot_earring = new int[2];
-    protected List<L1ItemInstance> _items = new CopyOnWriteArrayList<L1ItemInstance>();
+    protected List<L1ItemInstance> _items = new CopyOnWriteArrayList<>();
 
     public L1Inventory() {
     }
@@ -1197,7 +1197,7 @@ public class L1Inventory extends L1Object {
      * @param itemId 物品編號
      */
     public L1ItemInstance[] findItemsId(final int itemId) {
-        final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
+        final ArrayList<L1ItemInstance> itemList = new ArrayList<>();
         for (final L1ItemInstance item : _items) {
             if (item.getItemId() == itemId) {// itemid相等
                 itemList.add(item);
@@ -1207,7 +1207,7 @@ public class L1Inventory extends L1Object {
     }
 
     public L1ItemInstance[] findItemsId(final int itemId, int objId) {
-        final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
+        final ArrayList<L1ItemInstance> itemList = new ArrayList<>();
         for (final L1ItemInstance item : _items) {
             if (item.getItemId() == itemId && item.getId() == objId) {// itemid相等
                 itemList.add(item);
@@ -1221,7 +1221,7 @@ public class L1Inventory extends L1Object {
      *
      */
     public L1ItemInstance[] findItemsIdNotEquipped(final int itemId) {
-        final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
+        final ArrayList<L1ItemInstance> itemList = new ArrayList<>();
         for (final L1ItemInstance item : _items) {
             if (item.getItemId() == itemId) {
                 if (!item.isEquipped()) {
@@ -1238,7 +1238,7 @@ public class L1Inventory extends L1Object {
      * @param enchant 檢查強化值
      */
     public L1ItemInstance[] findItemsIdNoEqWithEnchant(final int itemId, int enchant) {
-        final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
+        final ArrayList<L1ItemInstance> itemList = new ArrayList<>();
         for (final L1ItemInstance item : _items) {
             if (item.getItemId() == itemId && item.getEnchantLevel() == enchant) {
                 if (!item.isEquipped()) {
@@ -1254,7 +1254,7 @@ public class L1Inventory extends L1Object {
      *
      */
     public L1ItemInstance[] findItemsIdNotEquipped(final String nameid) {
-        final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
+        final ArrayList<L1ItemInstance> itemList = new ArrayList<>();
         for (final L1ItemInstance item : _items) {
             if (item.getName().equals(nameid)) {
                 if (!item.isEquipped()) {
@@ -1565,7 +1565,7 @@ public class L1Inventory extends L1Object {
         final L1ItemTime itemTime = ItemTimeTable.TIME.get(item.getItemId());
         if (itemTime != null) {
             if (itemTime != null && !itemTime.is_equipped()) {
-                final long upTime = System.currentTimeMillis() + itemTime.get_remain_time() * 60 * 1000;
+                final long upTime = System.currentTimeMillis() + (long) itemTime.get_remain_time() * 60 * 1000;
                 final Timestamp ts = new Timestamp(upTime);
                 item.set_time(ts);
                 CharItemsTimeReading.get().addTime(item.getId(), ts);
@@ -1584,7 +1584,7 @@ public class L1Inventory extends L1Object {
      * [原碼] 怪物對戰系統
      */
     public L1ItemInstance[] findMob() {
-        ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
+        ArrayList<L1ItemInstance> itemList = new ArrayList<>();
         for (L1ItemInstance item : this._items) {
             if (item.getItem().getItemId() == L1Config._2155) {
                 itemList.add(item);
@@ -1597,7 +1597,7 @@ public class L1Inventory extends L1Object {
      * [原碼] 大樂透系統
      */
     public L1ItemInstance[] findBigHot() {
-        ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
+        ArrayList<L1ItemInstance> itemList = new ArrayList<>();
         for (L1ItemInstance item : this._items) {
             if (item.getItem().getItemId() == L1Config._2170) {
                 itemList.add(item);

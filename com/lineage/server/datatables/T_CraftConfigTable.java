@@ -27,8 +27,8 @@ public class T_CraftConfigTable {
     private static final byte[] _key = {8, 2};
     private static T_CraftConfigTable _instance = null;
     private static int _actionId = 1;
-    private final HashMap<Integer, HashMap<Integer, T_CraftConfigTable.NewL1NpcMakeItemAction>> _action_list = new HashMap<Integer, HashMap<Integer, T_CraftConfigTable.NewL1NpcMakeItemAction>>();
-    private HashMap<Integer, T_CraftConfigTable.NewL1NpcMakeItemAction> _make_list = new HashMap<Integer, T_CraftConfigTable.NewL1NpcMakeItemAction>();
+    private final HashMap<Integer, HashMap<Integer, T_CraftConfigTable.NewL1NpcMakeItemAction>> _action_list = new HashMap<>();
+    private HashMap<Integer, T_CraftConfigTable.NewL1NpcMakeItemAction> _make_list = new HashMap<>();
     private String _security = null;
 
     private T_CraftConfigTable() {
@@ -60,17 +60,17 @@ public class T_CraftConfigTable {
     }
 
     public static String update(final byte[] b) {
-        String hs = "";
+        StringBuilder hs = new StringBuilder();
         String stmp = "";
-        for (int n = 0; n < b.length; n++) {
-            stmp = Integer.toHexString(b[n] & 0xFF);
+        for (byte value : b) {
+            stmp = Integer.toHexString(value & 0xFF);
             if (stmp.length() == 1) {
-                hs = hs + "0" + stmp;
+                hs.append("0").append(stmp);
             } else {
-                hs = hs + stmp;
+                hs.append(stmp);
             }
         }
-        return hs.toUpperCase();
+        return hs.toString().toUpperCase();
     }
 
     public void load() {
@@ -97,25 +97,25 @@ public class T_CraftConfigTable {
     }
 
     public void putmakelist(final NewL1NpcMakeItemAction npcMakeItemAction) {
-        _make_list.put(Integer.valueOf(npcMakeItemAction.getAmountActionID()), npcMakeItemAction);
+        _make_list.put(npcMakeItemAction.getAmountActionID(), npcMakeItemAction);
         final int[] npcIds = npcMakeItemAction.getAmountNpcList();
         HashMap<Integer, NewL1NpcMakeItemAction> makeItems = null;
-        for (int i = 0; i < npcIds.length; i++) {
-            makeItems = _action_list.get(Integer.valueOf(npcIds[i]));
+        for (int npcId : npcIds) {
+            makeItems = _action_list.get(npcId);
             if (makeItems == null) {
                 makeItems = new HashMap<Integer, NewL1NpcMakeItemAction>();
-                _action_list.put(Integer.valueOf(npcIds[i]), makeItems);
+                _action_list.put(npcId, makeItems);
             }
-            makeItems.put(Integer.valueOf(npcMakeItemAction.getAmountActionID()), npcMakeItemAction);
+            makeItems.put(npcMakeItemAction.getAmountActionID(), npcMakeItemAction);
         }
     }
 
     public NewL1NpcMakeItemAction getNpcMakeItem(final int actionId) {
-        return _make_list.get(Integer.valueOf(actionId));
+        return _make_list.get(actionId);
     }
 
     public HashMap<Integer, T_CraftConfigTable.NewL1NpcMakeItemAction> getNpcMakeItemActionList(final int npcId) {
-        return _action_list.get(Integer.valueOf(npcId));
+        return _action_list.get(npcId);
     }
 
     public HashMap<Integer, T_CraftConfigTable.NewL1NpcMakeItemAction> getNpcMakeItemList() {
@@ -153,12 +153,12 @@ public class T_CraftConfigTable {
     }
 
     public static class NewL1NpcMakeItemAction {
-        private final List<L1ObjectAmount<Integer>> _material_list = new ArrayList<L1ObjectAmount<Integer>>();
-        private final List<L1ObjectAmount<Integer>> _aid_material_list = new ArrayList<L1ObjectAmount<Integer>>();
-        private final List<L1ObjectAmount<Integer>> _item_list = new ArrayList<L1ObjectAmount<Integer>>();
-        private final List<L1ObjectAmount<Integer>> _random_item_list = new ArrayList<L1ObjectAmount<Integer>>();
-        private final List<L1ObjectAmount<Integer>> _fail_item_list = new ArrayList<L1ObjectAmount<Integer>>();
-        private final List<L1ObjectAmount<Integer>> _fail_random_item_list = new ArrayList<L1ObjectAmount<Integer>>();
+        private final List<L1ObjectAmount<Integer>> _material_list = new ArrayList<>();
+        private final List<L1ObjectAmount<Integer>> _aid_material_list = new ArrayList<>();
+        private final List<L1ObjectAmount<Integer>> _item_list = new ArrayList<>();
+        private final List<L1ObjectAmount<Integer>> _random_item_list = new ArrayList<>();
+        private final List<L1ObjectAmount<Integer>> _fail_item_list = new ArrayList<>();
+        private final List<L1ObjectAmount<Integer>> _fail_random_item_list = new ArrayList<>();
         private final int[] _npcId;
         private final int _actionId;
         @SuppressWarnings("unused")
@@ -217,72 +217,72 @@ public class T_CraftConfigTable {
             NodeList childList = null;
             for (final Element elem : new IterableElementList(list)) {
                 if (elem.getNodeName().equalsIgnoreCase("Material")) {
-                    int itemId = Integer.valueOf(elem.getAttribute("ItemId")).intValue();
-                    int amount = Integer.valueOf(elem.getAttribute("Amount")).intValue();
+                    int itemId = Integer.parseInt(elem.getAttribute("ItemId"));
+                    int amount = Integer.parseInt(elem.getAttribute("Amount"));
                     int enchantLevel = L1NpcXmlParser.getIntAttribute(elem, "enchantLevel", 0);
                     int bless = L1NpcXmlParser.getIntAttribute(elem, "bless", 3);
-                    objectAmount = new L1ObjectAmount<Integer>(itemId, amount, enchantLevel, bless);
+                    objectAmount = new L1ObjectAmount<>(itemId, amount, enchantLevel, bless);
                     childList = elem.getChildNodes();
                     if (childList.getLength() > 0) {
-                        final ArrayList<L1ObjectAmount<Integer>> substituteItems = new ArrayList<L1ObjectAmount<Integer>>();
+                        final ArrayList<L1ObjectAmount<Integer>> substituteItems = new ArrayList<>();
                         for (final Element elem_1 : new IterableElementList(childList)) {
                             if (elem_1.getNodeName().equalsIgnoreCase("Substitute")) {
-                                itemId = Integer.valueOf(elem_1.getAttribute("ItemId")).intValue();
-                                amount = Integer.valueOf(elem_1.getAttribute("Amount")).intValue();
+                                itemId = Integer.parseInt(elem_1.getAttribute("ItemId"));
+                                amount = Integer.parseInt(elem_1.getAttribute("Amount"));
                                 enchantLevel = L1NpcXmlParser.getIntAttribute(elem_1, "enchantLevel", 0);
                                 bless = L1NpcXmlParser.getIntAttribute(elem_1, "bless", 3);
-                                substituteItems.add(new L1ObjectAmount<Integer>(itemId, amount, enchantLevel, bless));
+                                substituteItems.add(new L1ObjectAmount<>(itemId, amount, enchantLevel, bless));
                             }
                         }
                         objectAmount.setAmountList(substituteItems);
                     }
                     _material_list.add(objectAmount);
                 } else if (elem.getNodeName().equalsIgnoreCase("AidMaterial")) {
-                    final int itemId = Integer.valueOf(elem.getAttribute("ItemId")).intValue();
-                    final int amount = Integer.valueOf(elem.getAttribute("Amount")).intValue();
+                    final int itemId = Integer.parseInt(elem.getAttribute("ItemId"));
+                    final int amount = Integer.parseInt(elem.getAttribute("Amount"));
                     final int enchantLevel = L1NpcXmlParser.getIntAttribute(elem, "enchantLevel", 0);
                     final int bless = L1NpcXmlParser.getIntAttribute(elem, "bless", 3);
-                    objectAmount = new L1ObjectAmount<Integer>(itemId, amount, enchantLevel, bless);
+                    objectAmount = new L1ObjectAmount<>(itemId, amount, enchantLevel, bless);
                     _aid_material_list.add(objectAmount);
                     _onecechangecount = 1;
                 } else if (elem.getNodeName().equalsIgnoreCase("Item")) {
-                    final int itemId = Integer.valueOf(elem.getAttribute("ItemId")).intValue();
-                    final int amount = Integer.valueOf(elem.getAttribute("Amount")).intValue();
+                    final int itemId = Integer.parseInt(elem.getAttribute("ItemId"));
+                    final int amount = Integer.parseInt(elem.getAttribute("Amount"));
                     final int enchantLevel = L1NpcXmlParser.getIntAttribute(elem, "enchantLevel", 0);
                     final int bless = L1NpcXmlParser.getIntAttribute(elem, "bless", 1);
-                    _item_list.add(new L1ObjectAmount<Integer>(itemId, amount, enchantLevel, bless));
+                    _item_list.add(new L1ObjectAmount<>(itemId, amount, enchantLevel, bless));
                 } else if (elem.getNodeName().equalsIgnoreCase("RandomItem")) {
                     childList = elem.getChildNodes();
                     if (childList.getLength() > 0) {
                         for (final Element elem_1 : new IterableElementList(childList)) {
                             if (elem_1.getNodeName().equalsIgnoreCase("Item")) {
-                                final int itemId = Integer.valueOf(elem_1.getAttribute("ItemId")).intValue();
-                                final int random = Integer.valueOf(elem_1.getAttribute("random")).intValue();
-                                final int amount = Integer.valueOf(elem_1.getAttribute("Amount")).intValue();
+                                final int itemId = Integer.parseInt(elem_1.getAttribute("ItemId"));
+                                final int random = Integer.parseInt(elem_1.getAttribute("random"));
+                                final int amount = Integer.parseInt(elem_1.getAttribute("Amount"));
                                 final int enchantLevel = L1NpcXmlParser.getIntAttribute(elem_1, "enchantLevel", 0);
                                 final int bless = L1NpcXmlParser.getIntAttribute(elem_1, "bless", 1);
-                                _random_item_list.add(new L1ObjectAmount<Integer>(itemId, amount, enchantLevel, bless, random));
+                                _random_item_list.add(new L1ObjectAmount<>(itemId, amount, enchantLevel, bless, random));
                                 _random_tmp += random;
                             }
                         }
                     }
                 } else if (elem.getNodeName().equalsIgnoreCase("FailItem")) {
-                    final int itemId = Integer.valueOf(elem.getAttribute("ItemId")).intValue();
-                    final int amount = Integer.valueOf(elem.getAttribute("Amount")).intValue();
+                    final int itemId = Integer.parseInt(elem.getAttribute("ItemId"));
+                    final int amount = Integer.parseInt(elem.getAttribute("Amount"));
                     final int enchantLevel = L1NpcXmlParser.getIntAttribute(elem, "enchantLevel", 0);
                     final int bless = L1NpcXmlParser.getIntAttribute(elem, "bless", 1);
-                    _fail_item_list.add(new L1ObjectAmount<Integer>(itemId, amount, enchantLevel, bless));
+                    _fail_item_list.add(new L1ObjectAmount<>(itemId, amount, enchantLevel, bless));
                 } else if (elem.getNodeName().equalsIgnoreCase("FailRandomItem")) {
                     childList = elem.getChildNodes();
                     if (childList.getLength() > 0) {
                         for (final Element elem_1 : new IterableElementList(childList)) {
                             if (elem_1.getNodeName().equalsIgnoreCase("Item")) {
-                                final int itemId = Integer.valueOf(elem_1.getAttribute("ItemId")).intValue();
-                                final int random = Integer.valueOf(elem_1.getAttribute("random")).intValue();
-                                final int amount = Integer.valueOf(elem_1.getAttribute("Amount")).intValue();
+                                final int itemId = Integer.parseInt(elem_1.getAttribute("ItemId"));
+                                final int random = Integer.parseInt(elem_1.getAttribute("random"));
+                                final int amount = Integer.parseInt(elem_1.getAttribute("Amount"));
                                 final int enchantLevel = L1NpcXmlParser.getIntAttribute(elem_1, "enchantLevel", 0);
                                 final int bless = L1NpcXmlParser.getIntAttribute(elem_1, "bless", 1);
-                                _fail_random_item_list.add(new L1ObjectAmount<Integer>(itemId, amount, enchantLevel, bless, random));
+                                _fail_random_item_list.add(new L1ObjectAmount<>(itemId, amount, enchantLevel, bless, random));
                                 _fail_random_tmp += random;
                             }
                         }

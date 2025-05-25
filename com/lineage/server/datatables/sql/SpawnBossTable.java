@@ -23,11 +23,11 @@ import java.util.*;
 public class SpawnBossTable implements SpawnBossStorage {
     private static final Log _log = LogFactory.getLog(SpawnBossTable.class);
     // 召喚表清單(召喚ID / 召喚執行項)
-    private static final Map<Integer, L1Spawn> _bossSpawnTable = new HashMap<Integer, L1Spawn>();
-    private static final Map<Integer, L1Spawn> _bossseach = new HashMap<Integer, L1Spawn>();
+    private static final Map<Integer, L1Spawn> _bossSpawnTable = new HashMap<>();
+    private static final Map<Integer, L1Spawn> _bossseach = new HashMap<>();
     private static SpawnBossTable _instance;
     // BOSS ID
-    private List<Integer> _bossId = new ArrayList<Integer>();
+    private List<Integer> _bossId = new ArrayList<>();
 
     public static SpawnBossTable get() {
         if (_instance == null) {
@@ -64,13 +64,13 @@ public class SpawnBossTable implements SpawnBossStorage {
                     _log.error("BOSS召喚MOB編號: " + npcTemplateId + " 不存在資料庫中!");
                 } else {
                     // 加入BOSS ID 清單
-                    _bossId.add(new Integer(npcTemplateId));
+                    _bossId.add(npcTemplateId);
                     temp1.set_boss(true);
                     // BOSS 具備變身
                     int tmp_id = temp1.getTransformId();
                     while (tmp_id > 0) {
                         // 加入BOSS ID 清單
-                        _bossId.add(new Integer(tmp_id));
+                        _bossId.add(tmp_id);
                         final L1Npc temp2 = NpcTable.get().getTemplate(tmp_id);
                         temp2.set_boss(true);
                         tmp_id = temp2.getTransformId();
@@ -156,7 +156,7 @@ public class SpawnBossTable implements SpawnBossStorage {
                         spawnDat.setLocY2(spawnDat.getLocY() + range);
                     }
                     spawnDat.init();
-                    _bossSpawnTable.put(new Integer(spawnDat.getId()), spawnDat);
+                    _bossSpawnTable.put(spawnDat.getId(), spawnDat);
                     _bossseach.put(i, spawnDat);
                     i++;
                 }
@@ -225,6 +225,6 @@ public class SpawnBossTable implements SpawnBossStorage {
     }
 
     public L1Spawn getBossSeach(final int id) {
-        return _bossseach.get(Integer.valueOf(id));
+        return _bossseach.get(id);
     }
 }

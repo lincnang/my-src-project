@@ -42,7 +42,7 @@ public class S_ShopBuyListBigHot extends ServerBasePacket {
                 int ch = 0;
                 for (int a = 0; a < A.split(",").length; a++) {
                     String[] pk = B.split(",");
-                    if (("," + A).indexOf("," + pk[a] + ",") >= 0) {
+                    if (("," + A).contains("," + pk[a] + ",")) {
                         ch++;
                     }
                 }

@@ -17,10 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class IdFactory {
     private static final Log _log = LogFactory.getLog(IdFactory.class);
     private static IdFactory _instance;
-    private final ArrayList<Integer> _MobblingList = new ArrayList<Integer>();
-    private final ArrayList<Integer> _BigHotblingList = new ArrayList<Integer>();
+    private final ArrayList<Integer> _MobblingList = new ArrayList<>();
+    private final ArrayList<Integer> _BigHotblingList = new ArrayList<>();
 
-    private Object _monitor;
+    private final Object _monitor;
     private AtomicInteger _nextId;
     /**
      * [原碼] 怪物對戰系統
@@ -101,12 +101,12 @@ public class IdFactory {
     }
 
     public void addMobId(int i) {
-        _MobblingList.add(Integer.valueOf(i));
+        _MobblingList.add(i);
     }
 
     public int nextMobId() {
         _MobId += 1;
-        while (_MobblingList.contains(Integer.valueOf(_MobId))) {
+        while (_MobblingList.contains(_MobId)) {
             _MobId += 1;
         }
         return _MobId;
@@ -116,12 +116,12 @@ public class IdFactory {
      * [原碼] 大樂透系統
      */
     public void addBigHotId(int i) {
-        _BigHotblingList.add(Integer.valueOf(i));
+        _BigHotblingList.add(i);
     }
 
     public int nextBigHotId() {
         _BigHotId += 1;
-        while (_BigHotblingList.contains(Integer.valueOf(_BigHotId))) {
+        while (_BigHotblingList.contains(_BigHotId)) {
             _BigHotId += 1;
         }
         return _BigHotId;

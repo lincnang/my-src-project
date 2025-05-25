@@ -25,8 +25,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class CharItemsBlessTable implements CharItemsBlessStorage {  //src039
     private static final Log _log = LogFactory.getLog(CharItemsBlessTable.class);
-    private static final Map<Integer, L1ItemPower_bless> _powerMap = new HashMap<Integer, L1ItemPower_bless>();
-    private static final CopyOnWriteArrayList<Integer> _objList = new CopyOnWriteArrayList<Integer>();
+    private static final Map<Integer, L1ItemPower_bless> _powerMap = new HashMap<>();
+    private static final CopyOnWriteArrayList<Integer> _objList = new CopyOnWriteArrayList<>();
 
     /**
      * 初始化建立資料
@@ -195,7 +195,7 @@ public class CharItemsBlessTable implements CharItemsBlessStorage {  //src039
 
     @Override
     public void delItem(int item_obj_id) {
-        if (_objList.contains(new Integer(item_obj_id))) {
+        if (_objList.contains(item_obj_id)) {
             _objList.remove(new Integer(item_obj_id));
         }
         Connection con = null;

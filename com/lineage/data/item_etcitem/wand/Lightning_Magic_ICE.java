@@ -57,8 +57,8 @@ public class Lightning_Magic_ICE extends ItemExecutor {
         // 送出動作封包
         pc.sendPacketsX10(new S_DoActionGFX(pc.getId(), ActionCodes.ACTION_Wand));
         boolean isChecked = false;
-        for (Iterator<?> localIterator1 = ConfigOtherSet2.iceKeyMapList.iterator(); localIterator1.hasNext(); ) {
-            int mapid = ((Integer) localIterator1.next()).intValue();
+        for (Integer integer : ConfigOtherSet2.iceKeyMapList) {
+            int mapid = integer;
             if (mapid == pc.getMapId()) {
                 isChecked = true;
                 break;

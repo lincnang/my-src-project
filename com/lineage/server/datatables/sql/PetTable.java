@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class PetTable implements PetStorage {
     private static final Log _log = LogFactory.getLog(PetTable.class);
-    private static final Map<Integer, L1Pet> _pets = new HashMap<Integer, L1Pet>();
+    private static final Map<Integer, L1Pet> _pets = new HashMap<>();
 
     /**
      * 道具遺失 刪除相關資訊
@@ -73,7 +73,7 @@ public class PetTable implements PetStorage {
                     pet.set_mp(rs.getInt("mp"));
                     pet.set_exp(rs.getInt("exp"));
                     pet.set_lawful(rs.getInt("lawful"));
-                    _pets.put(new Integer(item_obj_id), pet);
+                    _pets.put(item_obj_id, pet);
                 } else {
                     // 道具遺失 刪除相關資訊
                     delete(item_obj_id);
@@ -103,7 +103,7 @@ public class PetTable implements PetStorage {
         l1pet.set_mp(pet.getMaxMp());
         l1pet.set_exp((int) pet.getExp()); // Lv.5EXP
         l1pet.set_lawful(0);
-        _pets.put(new Integer(itemobjid), l1pet);
+        _pets.put(itemobjid, l1pet);
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -229,7 +229,7 @@ public class PetTable implements PetStorage {
         l1pet.set_mp(randommp);
         l1pet.set_exp((int) lvExp);
         l1pet.set_lawful(0);
-        _pets.put(new Integer(itemobjid), l1pet);
+        _pets.put(itemobjid, l1pet);
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -255,7 +255,7 @@ public class PetTable implements PetStorage {
 
     @Override
     public L1Pet getTemplate(final int itemobjid) {
-        return _pets.get(new Integer(itemobjid));
+        return _pets.get(itemobjid);
     }
 
     @Override
@@ -270,6 +270,6 @@ public class PetTable implements PetStorage {
 
     @Override
     public L1Pet[] getPetTableList() {
-        return _pets.values().toArray(new L1Pet[_pets.size()]);
+        return _pets.values().toArray(new L1Pet[0]);
     }
 }

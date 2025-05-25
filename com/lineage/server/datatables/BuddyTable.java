@@ -39,7 +39,7 @@ import java.util.logging.Logger;
 public class BuddyTable {
     private static Logger _log = Logger.getLogger(BuddyTable.class.getName());
     private static BuddyTable _instance;
-    private final Map<Integer, L1Buddy> _buddys = new HashMap<Integer, L1Buddy>();
+    private final Map<Integer, L1Buddy> _buddys = new HashMap<>();
 
     private BuddyTable() {
         Connection con = null;

@@ -50,8 +50,8 @@ public class S_DollCompoundRoll extends ServerBasePacket {
 
     private byte[] buildArray(int level, final int[] position) {
         S_DollCompoundRoll m = new S_DollCompoundRoll();
-        for (int i = 0; i < position.length; i++) {
-            m.writeInt32(1, position[i]);
+        for (int j : position) {
+            m.writeInt32(1, j);
         }
         m.writeInt32(2, level + 1);
         return m.getContent();

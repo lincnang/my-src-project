@@ -4,11 +4,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigKill {
-    public static final Map<Integer, String> KILL_TEXT_LIST = new HashMap<Integer, String>();
+    public static final Map<Integer, String> KILL_TEXT_LIST = new HashMap<>();
     private static final Log _log = LogFactory.getLog(ConfigKill.class);
     private static final String _kill_text = "./config/☆服務器設定表☆/殺人死亡公告設定表.txt";
     public static int KILLLEVEL = 90;// 公告等級設置
@@ -16,7 +17,7 @@ public class ConfigKill {
     public static void load() throws ConfigErrorException {
         try {
             // 取回檔案
-            final InputStream is = new FileInputStream(new File(_kill_text));
+            final InputStream is = Files.newInputStream(new File(_kill_text).toPath());
             // 指定檔案編碼
             final InputStreamReader isr = new InputStreamReader(is, "utf-8");
             final LineNumberReader lnr = new LineNumberReader(isr);
@@ -35,7 +36,7 @@ public class ConfigKill {
                     desc = desc.replaceAll(" ", "");// 取代空白
                     KILLLEVEL = Integer.parseInt(desc.substring(10));
                 } else {
-                    KILL_TEXT_LIST.put(new Integer(i++), desc);
+                    KILL_TEXT_LIST.put(i++, desc);
                 }
             }
             is.close();

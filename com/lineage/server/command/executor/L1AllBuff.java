@@ -80,10 +80,10 @@ public class L1AllBuff implements L1CommandExecutor {
                 L1PolyMorph.doPoly(target, polyid, 7200, L1PolyMorph.MORPH_BY_ITEMMAGIC);
             }
         }
-        for (int i = 0; i < allBuffSkill.length; i++) {
-            final L1Skills skill = SkillsTable.get().getTemplate(allBuffSkill[i]);
+        for (int j : allBuffSkill) {
+            final L1Skills skill = SkillsTable.get().getTemplate(j);
             final L1SkillUse skillUse = new L1SkillUse();
-            skillUse.handleCommands(target, allBuffSkill[i], target.getId(), target.getX(), target.getY(), skill.getBuffDuration(), L1SkillUse.TYPE_GMBUFF);// */
+            skillUse.handleCommands(target, j, target.getId(), target.getX(), target.getY(), skill.getBuffDuration(), L1SkillUse.TYPE_GMBUFF);// */
         }
     }
 
@@ -91,9 +91,9 @@ public class L1AllBuff implements L1CommandExecutor {
         L1BuffUtil.haste(target, 3600 * 1000);
         L1BuffUtil.brave(target, 3600 * 1000);
         L1PolyMorph.doPoly(target, 5641, 7200, L1PolyMorph.MORPH_BY_GM);
-        for (int i = 0; i < allBuffSkill.length; i++) {
-            final L1Skills skill = SkillsTable.get().getTemplate(allBuffSkill[i]);
-            new L1SkillUse().handleCommands(target, allBuffSkill[i], target.getId(), target.getX(), target.getY(), skill.getBuffDuration(), L1SkillUse.TYPE_GMBUFF);
+        for (int j : allBuffSkill) {
+            final L1Skills skill = SkillsTable.get().getTemplate(j);
+            new L1SkillUse().handleCommands(target, j, target.getId(), target.getX(), target.getY(), skill.getBuffDuration(), L1SkillUse.TYPE_GMBUFF);
         }
     }
 

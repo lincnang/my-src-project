@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class DeTitleTable {
     private static final Log _log = LogFactory.getLog(DeTitleTable.class);
-    private static final ArrayList<String> _detitleList = new ArrayList<String>();
+    private static final ArrayList<String> _detitleList = new ArrayList<>();
     private static final Random _random = new Random();
     private static final String[] _titleList = {"\\f2", "\\f3", "\\f4", "\\f5", "\\f6", "\\f7", "\\f8", "\\f9", "\\f0", "\\f:", "\\f<", "\\f>", "\\f?", "\\fA", "\\fB", "\\fC", "\\fD", "\\fE", "\\fF", "\\fG", "\\fH", "\\fI", "\\fJ", "\\fK", "\\fL", "\\fM", "\\fN", "\\fO", "\\fP", "\\fQ", "\\fR", "\\fS", "\\fT", "\\fU", "\\fV", "\\fW", "\\fX", "\\fY", "\\fZ", "\\f@"};
     private static DeTitleTable _instance;

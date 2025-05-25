@@ -28,7 +28,7 @@ public class L1Port implements L1CommandExecutor {
         try {
             final StringTokenizer st = new StringTokenizer(arg);
             final String cmd = st.nextToken();
-            final int key = Integer.valueOf(st.nextToken());
+            final int key = Integer.parseInt(st.nextToken());
             if (cmd.equalsIgnoreCase("stop")) {
                 _log.warn("系統命令執行: " + cmdName + " " + arg + " 關閉 指定監聽端口。");
                 EchoServerTimer.get().stopPort(key);

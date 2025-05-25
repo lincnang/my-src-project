@@ -75,8 +75,7 @@ public class Magic_Doll_Power extends ItemExecutor {//src016
                     }
                 } else {
                     final List<L1War> warList = WorldWar.get().getWarList(); // 全部戰爭清單
-                    for (final Iterator<L1War> iter = warList.iterator(); iter.hasNext(); ) {
-                        final L1War war = iter.next();
+                    for (final L1War war : warList) {
                         if (war.checkClanInWar(pc.getClan().getClanName())) { // 戰爭中
                             inWar = true;
                             break;

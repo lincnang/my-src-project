@@ -27,8 +27,8 @@ public class EffectCubeHarmonizeTimer extends TimerTask {
             if (allNpc.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = allNpc.iterator(); iter.hasNext(); ) {
-                L1EffectInstance effect = (L1EffectInstance) iter.next();
+            for (Object o : allNpc) {
+                L1EffectInstance effect = (L1EffectInstance) o;
                 if (effect.effectType() == L1EffectType.isCubeHarmonize) {
                     EffectCubeExecutor.get().cubeBurn(effect);
                     TimeUnit.MILLISECONDS.sleep(1L);

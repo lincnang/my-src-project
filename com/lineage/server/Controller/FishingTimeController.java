@@ -25,7 +25,7 @@ public class FishingTimeController implements Runnable {
     public static final Log _log = LogFactory.getLog(FishingTimeController.class);
     private static FishingTimeController _instance;
     private static Random _random = new Random(System.nanoTime());
-    private final List<L1PcInstance> _fishingList = new ArrayList<L1PcInstance>();
+    private final List<L1PcInstance> _fishingList = new ArrayList<>();
 
     public static FishingTimeController getInstance() {
         if (_instance == null) {
@@ -62,7 +62,7 @@ public class FishingTimeController implements Runnable {
         try {
             if (_fishingList.size() > 0) {
                 final long currentTime = System.currentTimeMillis();
-                L1PcInstance[] list = _fishingList.toArray(new L1PcInstance[_fishingList.size()]);
+                L1PcInstance[] list = _fishingList.toArray(new L1PcInstance[0]);
                 for (final L1PcInstance pc : list) {
                     if (pc == null) {
                         removeMember(pc);
@@ -137,7 +137,7 @@ public class FishingTimeController implements Runnable {
                                 if (temp != null) {
                                     itemFishTime = temp.getFishTime();
                                 }
-                                final long fishtime = System.currentTimeMillis() + (itemFishTime * 1000);
+                                final long fishtime = System.currentTimeMillis() + (itemFishTime * 1000L);
                                 boolean ck = false;
                                 if (pc.getFishingItem().getItemId() != 83001) { // 不是高彈力釣竿
                                     ck = true;

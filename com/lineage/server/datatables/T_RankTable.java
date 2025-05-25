@@ -29,16 +29,16 @@ public class T_RankTable {
     private static final Log _log = LogFactory.getLog(T_RankTable.class);
     public static int _basedTime;
     private static T_RankTable _instance;
-    private ArrayList<String> _levelName = new ArrayList<String>();
-    private ArrayList<T_LevelRankModel> _level = new ArrayList<T_LevelRankModel>();
-    private ArrayList<String> _clanName = new ArrayList<String>();
-    private ArrayList<T_ClanRankModel> _clan = new ArrayList<T_ClanRankModel>();
-    private ArrayList<String> _weaponName = new ArrayList<String>();
-    private ArrayList<T_WeaponRankModel> _weapon = new ArrayList<T_WeaponRankModel>();
-    private ArrayList<String> _wealthName = new ArrayList<String>();
-    private ArrayList<String> _consumeName = new ArrayList<String>();
-    private ArrayList<String> _killName = new ArrayList<String>();
-    private ArrayList<T_KillPlayCountRankModel> _kill = new ArrayList<T_KillPlayCountRankModel>();
+    private ArrayList<String> _levelName = new ArrayList<>();
+    private ArrayList<T_LevelRankModel> _level = new ArrayList<>();
+    private ArrayList<String> _clanName = new ArrayList<>();
+    private ArrayList<T_ClanRankModel> _clan = new ArrayList<>();
+    private ArrayList<String> _weaponName = new ArrayList<>();
+    private ArrayList<T_WeaponRankModel> _weapon = new ArrayList<>();
+    private ArrayList<String> _wealthName = new ArrayList<>();
+    private ArrayList<String> _consumeName = new ArrayList<>();
+    private ArrayList<String> _killName = new ArrayList<>();
+    private ArrayList<T_KillPlayCountRankModel> _kill = new ArrayList<>();
 
     private T_RankTable() {
         _basedTime = (int) (System.currentTimeMillis() / 1000L);

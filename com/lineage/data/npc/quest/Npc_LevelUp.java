@@ -628,16 +628,16 @@ public class Npc_LevelUp extends NpcExecutor {
                 pc.setOriginalWis(pc.get_otherList().get_newPcOriginal()[3]);
                 pc.setOriginalInt(pc.get_otherList().get_newPcOriginal()[4]);
                 pc.setOriginalCha(pc.get_otherList().get_newPcOriginal()[5]);
-                pc.addMr(0 - pc.getMr());
-                pc.addDmgup(0 - pc.getDmgup());
-                pc.addHitup(0 - pc.getHitup());
+                pc.addMr(-pc.getMr());
+                pc.addDmgup(-pc.getDmgup());
+                pc.addHitup(-pc.getHitup());
                 pc.addBaseMaxHp((short) (hp - pc.getBaseMaxHp()));
                 pc.addBaseMaxMp((short) (mp - pc.getBaseMaxMp()));
                 if (pc.getOriginalAc() > 0) {
                     pc.addAc(pc.getOriginalAc());
                 }
                 if (pc.getOriginalMr() > 0) {
-                    pc.addMr(0 - pc.getOriginalMr());
+                    pc.addMr(-pc.getOriginalMr());
                 }
                 // 全屬性重置
                 pc.refresh();

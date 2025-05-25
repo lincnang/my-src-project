@@ -77,12 +77,7 @@ public class SoulTowerTable {
             rank.date = sqlDate.getTime();
             // System.out.println("now=" + rank.date);
             list.add(rank);
-            Collections.sort(list, new Comparator<SoulTowerRank>() {
-                @Override
-                public int compare(final SoulTowerRank r1, final SoulTowerRank r2) {
-                    return r1.time - r2.time;
-                }
-            });
+            list.sort((r1, r2) -> r1.time - r2.time);
             Connection con = null;
             PreparedStatement pstm = null;
             try {

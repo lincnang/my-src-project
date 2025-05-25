@@ -21,13 +21,13 @@ public class PacketPrint {
      *
      */
     public String printData(final byte[] data, final int len) {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         int counter = 0;
         for (int i = 0; i < len; i++) {
             if (counter % 16 == 0) {
-                result.append(this.fillHex(i, 4) + ": ");
+                result.append(this.fillHex(i, 4)).append(": ");
             }
-            result.append(this.fillHex(data[i] & 0xff, 2) + " ");
+            result.append(this.fillHex(data[i] & 0xff, 2)).append(" ");
             counter++;
             if (counter == 16) {
                 result.append("   ");
@@ -68,10 +68,10 @@ public class PacketPrint {
      *
      */
     private String fillHex(final int data, final int digits) {
-        String number = Integer.toHexString(data);
+        StringBuilder number = new StringBuilder(Integer.toHexString(data));
         for (int i = number.length(); i < digits; i++) {
-            number = "0" + number;
+            number.insert(0, "0");
         }
-        return number;
+        return number.toString();
     }
 }

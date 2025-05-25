@@ -5,6 +5,7 @@ import com.lineage.commons.system.LanSecurityManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -59,7 +60,7 @@ public final class ConfigIpCheck {
         // _log.info("載入服務器限制設置!");
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(_ipcheck));
+            final InputStream is = Files.newInputStream(new File(_ipcheck).toPath());
             set.load(is);
             is.close();
             IPCHECKPACK = Boolean.parseBoolean(set.getProperty("IPCHECKPACK", "false"));

@@ -27,7 +27,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class CharItemsPowerTable implements CharItemsPowerStorage {
     private static final Log _log = LogFactory.getLog(CharItemsPowerTable.class);
-    private static final CopyOnWriteArrayList<Integer> _objList = new CopyOnWriteArrayList<Integer>();
+    private static final CopyOnWriteArrayList<Integer> _objList = new CopyOnWriteArrayList<>();
 
     /**
      * 初始化建立資料
@@ -38,7 +38,7 @@ public class CharItemsPowerTable implements CharItemsPowerStorage {
         boolean isError = true;
         if (item != null) {
             if (item.get_power_name() == null) {
-                _objList.add(new Integer(item_obj_id));
+                _objList.add(item_obj_id);
                 item.set_power_name(power);
             }
             isError = false;
@@ -141,10 +141,10 @@ public class CharItemsPowerTable implements CharItemsPowerStorage {
      */
     @Override
     public void storeItem(final int item_obj_id, final L1ItemPower_name power) throws Exception {
-        if (_objList.contains(new Integer(item_obj_id))) {
+        if (_objList.contains(item_obj_id)) {
             return;
         }
-        _objList.add(new Integer(item_obj_id));
+        _objList.add(item_obj_id);
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -178,7 +178,7 @@ public class CharItemsPowerTable implements CharItemsPowerStorage {
 
     @Override
     public void delItem(int item_obj_id) {
-        if (_objList.contains(new Integer(item_obj_id))) {
+        if (_objList.contains(item_obj_id)) {
             _objList.remove(new Integer(item_obj_id));
         }
         Connection con = null;

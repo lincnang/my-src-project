@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -338,7 +339,7 @@ public final class Config_Occupational_Damage {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(Config_Occupational_Damage));
+            final InputStream is = Files.newInputStream(new File(Config_Occupational_Damage).toPath());
             set.load(is);
             is.close();
             // 以下從設定檔中讀取「王族」對各職業造成的額外傷害加成倍率（用字串 key 對應數值）

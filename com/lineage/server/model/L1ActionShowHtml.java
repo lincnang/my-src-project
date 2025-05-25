@@ -33,9 +33,9 @@ public class L1ActionShowHtml {
             int showId = page * 10;
             StringBuilder stringBuilder = new StringBuilder();
             for (int key = showId; key < showId + 10; key++) {
-                L1Quest quest = (L1Quest) list.get(Integer.valueOf(key));
+                L1Quest quest = (L1Quest) list.get(key);
                 if (quest != null) {
-                    stringBuilder.append(quest.get_questname() + ",");
+                    stringBuilder.append(quest.get_questname()).append(",");
                 } else {
                     stringBuilder.append(" ,");
                 }

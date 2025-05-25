@@ -65,8 +65,7 @@ public class ServerHomeTownTime {
         _log.info("村莊系統：月處理啟動");
         World.get().setProcessingContributionTotal(true);
         final Collection<L1PcInstance> players = World.get().getAllPlayers();
-        for (final Iterator<L1PcInstance> iter = players.iterator(); iter.hasNext(); ) {
-            final L1PcInstance pc = iter.next();
+        for (final L1PcInstance pc : players) {
             try {
                 pc.save();
             } catch (final Exception e) {
@@ -77,8 +76,7 @@ public class ServerHomeTownTime {
             final String leaderName = TownReading.get().totalContribution(townId);
             if (leaderName != null) {
                 final S_PacketBox packet = new S_PacketBox(S_PacketBox.MSG_TOWN_LEADER, leaderName);
-                for (final Iterator<L1PcInstance> iter = players.iterator(); iter.hasNext(); ) {
-                    final L1PcInstance pc = iter.next();
+                for (final L1PcInstance pc : players) {
                     if (pc.getHomeTownId() == townId) {
                         pc.setContribution(0);
                         pc.sendPackets(packet);
@@ -87,8 +85,7 @@ public class ServerHomeTownTime {
             }
         }
         TownReading.get().load();
-        for (final Iterator<L1PcInstance> iter = players.iterator(); iter.hasNext(); ) {
-            final L1PcInstance pc = iter.next();
+        for (final L1PcInstance pc : players) {
             if (pc.getHomeTownId() == -1) {
                 pc.setHomeTownId(0);
             }

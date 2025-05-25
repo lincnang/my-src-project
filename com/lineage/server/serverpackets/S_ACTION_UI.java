@@ -82,7 +82,7 @@ public class S_ACTION_UI extends ServerBasePacket {
                 } catch (UnsupportedEncodingException e) {
                 }
                 write1(0x18);
-                int outtime1 = 60 * 60 * 1; // 1小時
+                int outtime1 = 60 * 60; // 1小時
                 write3(outtime1 - pc.getIvoryTowerTime());// 象牙塔：炎魔陣營
                 write1(0x20);
                 write3(outtime1);

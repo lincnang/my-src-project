@@ -26,13 +26,13 @@ import java.util.Map;
  */
 public class NpcTeleportTable {
     private static final Log _log = LogFactory.getLog(NpcTeleportTable.class);
-    private static final Map<String, HashMap<Integer, L1TeleportLoc>> _teleportLocList = new HashMap<String, HashMap<Integer, L1TeleportLoc>>();
+    private static final Map<String, HashMap<Integer, L1TeleportLoc>> _teleportLocList = new HashMap<>();
     // 時間地圖(地圖編號/時間)
-    private static final Map<Integer, Integer> _timeMap = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _timeMap = new HashMap<>();
     // 團隊地圖(地圖編號/人數)
-    private static final Map<Integer, Integer> _partyMap = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _partyMap = new HashMap<>();
     // 官方傳送點設置
-    private static final Map<Integer, HashMap<String, L1TeleportLoc>> _srcMap = new HashMap<Integer, HashMap<String, L1TeleportLoc>>();
+    private static final Map<Integer, HashMap<String, L1TeleportLoc>> _srcMap = new HashMap<>();
     private static NpcTeleportTable _instance;
 
     public static NpcTeleportTable get() {
@@ -104,7 +104,7 @@ public class NpcTeleportTable {
                         if (list != null) {
                             list.put(orderid, teleportLoc);
                         } else {
-                            list = new HashMap<String, L1TeleportLoc>();
+                            list = new HashMap<>();
                             list.put(orderid, teleportLoc);
                         }
                         _srcMap.put(npcid, list);
@@ -157,10 +157,10 @@ public class NpcTeleportTable {
         int id = 0;
         if (map != null) {
             id = map.size();
-            map.put(new Integer(id), teleportLoc);
+            map.put(id, teleportLoc);
         } else {
-            map = new HashMap<Integer, L1TeleportLoc>();
-            map.put(new Integer(id), teleportLoc);
+            map = new HashMap<>();
+            map.put(id, teleportLoc);
         }
         _teleportLocList.put(orderid, map);
     }
@@ -215,7 +215,7 @@ public class NpcTeleportTable {
     public L1TeleportLoc get_loc(final String orderid, final int id) {
         final HashMap<Integer, L1TeleportLoc> map = _teleportLocList.get(orderid);
         if (map != null) {
-            return map.get(new Integer(id));
+            return map.get(id);
         }
         return null;
     }

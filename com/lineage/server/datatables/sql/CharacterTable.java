@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class CharacterTable {
     private static final Log _log = LogFactory.getLog(CharacterTable.class);
-    private static final Map<String, L1CharName> _charNameList = new HashMap<String, L1CharName>();
+    private static final Map<String, L1CharName> _charNameList = new HashMap<>();
     private static CharacterTable _instance;
     private CharacterStorage _charStorage;
 
@@ -260,7 +260,7 @@ public class CharacterTable {
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
-        HashMap<Integer, String> maps = new HashMap<Integer, String>();
+        HashMap<Integer, String> maps = new HashMap<>();
         try {
             con = DatabaseFactory.get().getConnection();
             pstm = con.prepareStatement("SELECT `char_name` FROM `characters` WHERE `level`>=" + level + " ");
@@ -472,7 +472,7 @@ public class CharacterTable {
      *
      */
     public L1CharName[] getCharNameList() {
-        return (L1CharName[]) _charNameList.values().toArray(new L1CharName[_charNameList.size()]);
+        return (L1CharName[]) _charNameList.values().toArray(new L1CharName[0]);
     }
 
     /**

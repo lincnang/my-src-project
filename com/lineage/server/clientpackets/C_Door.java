@@ -214,8 +214,7 @@ public class C_Door extends ClientBasePacket {
         L1ItemInstance item = pc.getInventory().checkItemX(40600, 1L);
         if (item != null) {
             pc.getInventory().removeItem(item, 1L);
-            final HashMap<Integer, L1Object> mapList = new HashMap<Integer, L1Object>();
-            mapList.putAll(World.get().getVisibleObjects(DarkElfLv50_1.MAPID));
+            final HashMap<Integer, L1Object> mapList = new HashMap<>(World.get().getVisibleObjects(DarkElfLv50_1.MAPID));
             npc.setStatus(28);
             npc.broadcastPacketAll(new S_DoActionGFX(npc.getId(), 28));
             for (L1Object tgobj : mapList.values()) {

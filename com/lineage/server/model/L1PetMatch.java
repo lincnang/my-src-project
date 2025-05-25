@@ -196,7 +196,7 @@ public class L1PetMatch {
                 if ((object instanceof L1PetInstance)) {
                     pet = (L1PetInstance) object;
                     pet.dropItem();
-                    pc1.getPetList().remove(Integer.valueOf(pet.getId()));
+                    pc1.getPetList().remove(pet.getId());
                     pet.deleteMe();
                 }
             }
@@ -210,7 +210,7 @@ public class L1PetMatch {
                 if ((object instanceof L1PetInstance)) {
                     pet = (L1PetInstance) object;
                     pet.dropItem();
-                    pc2.getPetList().remove(Integer.valueOf(pet.getId()));
+                    pc2.getPetList().remove(pet.getId());
                     pet.deleteMe();
                 }
             }

@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class L1NpcMakeItemAction extends L1NpcXmlAction {
-    private final List<L1ObjectAmount<Integer>> _materials = new ArrayList<L1ObjectAmount<Integer>>();
-    private final List<L1ObjectAmount<Integer>> _items = new ArrayList<L1ObjectAmount<Integer>>();
+    private final List<L1ObjectAmount<Integer>> _materials = new ArrayList<>();
+    private final List<L1ObjectAmount<Integer>> _items = new ArrayList<>();
     private final boolean _isAmountInputable;
     private final L1NpcAction _actionOnSucceed;
     private final L1NpcAction _actionOnFail;
@@ -31,15 +31,15 @@ public class L1NpcMakeItemAction extends L1NpcXmlAction {
         final NodeList list = element.getChildNodes();
         for (final Element elem : new IterableElementList(list)) {
             if (elem.getNodeName().equalsIgnoreCase("Material")) {
-                final int id = Integer.valueOf(elem.getAttribute("ItemId"));
-                final long amount = Long.valueOf(elem.getAttribute("Amount"));
-                this._materials.add(new L1ObjectAmount<Integer>(id, amount));
+                final int id = Integer.parseInt(elem.getAttribute("ItemId"));
+                final long amount = Long.parseLong(elem.getAttribute("Amount"));
+                this._materials.add(new L1ObjectAmount<>(id, amount));
                 continue;
             }
             if (elem.getNodeName().equalsIgnoreCase("Item")) {
-                final int id = Integer.valueOf(elem.getAttribute("ItemId"));
-                final long amount = Long.valueOf(elem.getAttribute("Amount"));
-                this._items.add(new L1ObjectAmount<Integer>(id, amount));
+                final int id = Integer.parseInt(elem.getAttribute("ItemId"));
+                final long amount = Long.parseLong(elem.getAttribute("Amount"));
+                this._items.add(new L1ObjectAmount<>(id, amount));
                 continue;
             }
         }

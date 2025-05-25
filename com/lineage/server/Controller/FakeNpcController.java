@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class FakeNpcController implements Runnable {
     public static final Log _log = LogFactory.getLog(FakeNpcController.class);
-    private static final Map<Integer, Object[]> map = new ConcurrentHashMap<Integer, Object[]>();
-    private static final List<Integer> task = new ArrayList<Integer>();
+    private static final Map<Integer, Object[]> map = new ConcurrentHashMap<>();
+    private static final List<Integer> task = new ArrayList<>();
     private static int _time = 0;
     private static int _count = 0;
     private static FakeNpcController ins;

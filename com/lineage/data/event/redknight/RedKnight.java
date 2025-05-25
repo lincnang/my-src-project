@@ -38,7 +38,7 @@ public class RedKnight implements Runnable {
     short mapId;
     L1NpcInstance npc;
     L1PcInstance pc;
-    ArrayList<L1NpcInstance> list = new ArrayList<L1NpcInstance>();
+    ArrayList<L1NpcInstance> list = new ArrayList<>();
     //private int mapId = 0;
     private int step = 0;
     private int READY_TIME = 4;

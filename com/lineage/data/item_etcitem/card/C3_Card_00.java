@@ -113,7 +113,7 @@ public class C3_Card_00 extends ItemExecutor {
                     }
                     if (power == null) {
                         final int intx = ItemPowerTable.get().get_int();
-                        final ArrayList<L1ItemPower_name> list = new ArrayList<L1ItemPower_name>();
+                        final ArrayList<L1ItemPower_name> list = new ArrayList<>();
                         for (final L1ItemPower_name v : ItemPowerTable.POWER_NAME.values()) {
                             if (v.get_dice() >= intx) {
                                 list.add(v);

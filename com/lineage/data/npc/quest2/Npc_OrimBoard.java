@@ -35,7 +35,7 @@ public class Npc_OrimBoard extends NpcExecutor {
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
         if (cmd.equalsIgnoreCase("query")) {
             List<L1Rank> totalList = BoardOrimReading.get().getTotalList();
-            List<L1Rank> tempList = new CopyOnWriteArrayList<L1Rank>();
+            List<L1Rank> tempList = new CopyOnWriteArrayList<>();
             int totalSize = 0;
             int i = 0;
             int r = 5;

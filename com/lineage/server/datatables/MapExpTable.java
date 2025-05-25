@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class MapExpTable {
     private static final Log _log = LogFactory.getLog(MapExpTable.class);
-    private static final Map<Integer, Double> _exp = new HashMap<Integer, Double>();
-    private static final Map<Integer, int[]> _level = new HashMap<Integer, int[]>();
+    private static final Map<Integer, Double> _exp = new HashMap<>();
+    private static final Map<Integer, int[]> _level = new HashMap<>();
     private static MapExpTable _instance;
 
     public static MapExpTable get() {
@@ -38,13 +38,13 @@ public class MapExpTable {
             while (rs.next()) {
                 int mapid = rs.getInt("mapid");
                 double exp = rs.getInt("exp");
-                _exp.put(new Integer(mapid), new Double(exp));
+                _exp.put(mapid, exp);
                 int[] level = new int[2];
                 int min = rs.getInt("min");
                 int max = rs.getInt("max");
                 level[0] = min;
                 level[1] = max;
-                _level.put(new Integer(mapid), level);
+                _level.put(mapid, level);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -57,10 +57,10 @@ public class MapExpTable {
     }
 
     public boolean get_level(int mapid, int level) {
-        if (_exp.get(new Integer(mapid)) == null) {
+        if (_exp.get(mapid) == null) {
             return false;
         }
-        int[] levelX = (int[]) _level.get(new Integer(mapid));
+        int[] levelX = (int[]) _level.get(mapid);
         if ((level >= levelX[0]) && (level <= levelX[1])) {
             return true;
         }
@@ -68,7 +68,7 @@ public class MapExpTable {
     }
 
     public Double get_exp(int mapid) {
-        return (Double) _exp.get(new Integer(mapid));
+        return (Double) _exp.get(mapid);
     }
 }
 /*

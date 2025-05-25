@@ -4,18 +4,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigMobKill//src014
 {
-    public static final Map<Integer, String> MOBKILL_TEXT_LIST = new HashMap<Integer, String>();
+    public static final Map<Integer, String> MOBKILL_TEXT_LIST = new HashMap<>();
     private static final Log _log = LogFactory.getLog(ConfigMobKill.class);
     private static final String _mobkill_text = "./config/☆服務器設定表☆/怪物死亡公告設定表.txt";
 
     public static void load() throws ConfigErrorException {
         try {
-            InputStream is = new FileInputStream(new File(_mobkill_text));
+            InputStream is = Files.newInputStream(new File(_mobkill_text).toPath());
             InputStreamReader isr = new InputStreamReader(is, "utf-8");
             LineNumberReader lnr = new LineNumberReader(isr);
             int i = 0;
@@ -25,7 +26,7 @@ public class ConfigMobKill//src014
                 if (!isWhile) {
                     isWhile = true;
                 } else if ((!desc.trim().isEmpty()) && (!desc.startsWith("#"))) {
-                    MOBKILL_TEXT_LIST.put(new Integer(++i), desc);
+                    MOBKILL_TEXT_LIST.put(++i, desc);
                 }
             }
             is.close();

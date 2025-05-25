@@ -24,7 +24,7 @@ import java.util.Random;
  */
 public class FishingTable {
     public static final Log _log = LogFactory.getLog(FishingTable.class);
-    private static final Map<Integer, ArrayList<L1Fishing>> _fishingMap = new HashMap<Integer, ArrayList<L1Fishing>>();
+    private static final Map<Integer, ArrayList<L1Fishing>> _fishingMap = new HashMap<>();
     private static Random _random = new Random();
     private static FishingTable _instance;
 
@@ -88,7 +88,7 @@ public class FishingTable {
                     value.setShowWorld(showworld); // 是否公告
                     ArrayList<L1Fishing> itemlist = _fishingMap.get(fishitemid);
                     if (itemlist == null) {
-                        itemlist = new ArrayList<L1Fishing>();
+                        itemlist = new ArrayList<>();
                         itemlist.add(value);
                         _fishingMap.put(fishitemid, itemlist);
                     } else {

@@ -40,8 +40,8 @@ public class L1Post2 implements L1CommandExecutor {
             String acc = "";//CharacterTable.getAccountName(name);// 玩家帳號
             String[] nameList = input.split(",");
             String name = "";
-            for (int i = 0; i < nameList.length; i++) {
-                name = nameList[i];
+            for (String s : nameList) {
+                name = s;
                 tgid = CharObjidTable.get().charObjid(name);
                 pcname = CharacterTable.get().getCharName(tgid);
                 acc = CharacterTable.getAccountName(name);

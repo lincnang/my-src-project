@@ -17,7 +17,7 @@ import java.util.HashMap;
  * VIP能力資料
  */
 public class VipSetsTable {
-    public static final HashMap<Integer, L1Vip> _list_vip = new HashMap<Integer, L1Vip>();
+    public static final HashMap<Integer, L1Vip> _list_vip = new HashMap<>();
     private static final Log _log = LogFactory.getLog(VipSetsTable.class);
     private static VipSetsTable _instance;
 
@@ -54,8 +54,6 @@ public class VipSetsTable {
                     _list_vip.put(viplevel, vip);
                 }
             }
-        } catch (final SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

@@ -26,11 +26,11 @@ import java.util.Map;
 public class ShopTable {
     private static final Log _log = LogFactory.getLog(ShopTable.class);
     // 銷售清單
-    private static final Map<Integer, L1Shop> _allShops = new HashMap<Integer, L1Shop>();
+    private static final Map<Integer, L1Shop> _allShops = new HashMap<>();
     // 回收物品
-    private static final Map<Integer, Integer> _allShopItem = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _allShopItem = new HashMap<>();
     // 不回收的物品
-    private static final Map<Integer, Integer> _noBuyList = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _noBuyList = new HashMap<>();
     private static ShopTable _instance;
 
     public static ShopTable get() {
@@ -41,7 +41,7 @@ public class ShopTable {
     }
 
     private static ArrayList<Integer> enumNpcIds() {
-        final ArrayList<Integer> ids = new ArrayList<Integer>();
+        final ArrayList<Integer> ids = new ArrayList<>();
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
@@ -62,9 +62,9 @@ public class ShopTable {
 
     private static L1Shop loadShop(int npcId, ResultSet rs) throws SQLException {
         // 賣出清單
-        final List<L1ShopItem> sellingList = new ArrayList<L1ShopItem>();
+        final List<L1ShopItem> sellingList = new ArrayList<>();
         // 買入清單
-        final List<L1ShopItem> purchasingList = new ArrayList<L1ShopItem>();
+        final List<L1ShopItem> purchasingList = new ArrayList<>();
         // 使用的貨幣設定
         int currencyItemId = 40308;
         L1NpcTalkData action = NPCTalkDataTable.get().getTemplate(npcId);
@@ -182,7 +182,7 @@ public class ShopTable {
             return;
         }
         // 目前回收價格
-        final Integer price = _allShopItem.get(new Integer(itemId));
+        final Integer price = _allShopItem.get(itemId);
         double value3 = 0;// 回收單價
         // 回收價格不為0
         if (purchasingPrice > 0) {
@@ -205,10 +205,10 @@ public class ShopTable {
         }
         // 計算後回收單價小於1
         if (value3 < 1) {
-            _noBuyList.put(new Integer(itemId), new Integer((int) value3));
+            _noBuyList.put(itemId, (int) value3);
             if (price != null) {// 目前回收價格不為空
                 // 移出回收物品列
-                _allShopItem.remove(new Integer(itemId));
+                _allShopItem.remove(itemId);
             }
             return;
         }
@@ -217,12 +217,12 @@ public class ShopTable {
             // 計算後回收單價 小於 目前回收價格
             if (value3 < price) {
                 // 更新回收單價(降低回收單價)
-                _allShopItem.put(new Integer(itemId), new Integer((int) value3));
+                _allShopItem.put(itemId, (int) value3);
             }
             // 目前價格為空
         } else {
             // 更新回收單價
-            _allShopItem.put(new Integer(itemId), new Integer((int) value3));
+            _allShopItem.put(itemId, (int) value3);
         }
     }
 
@@ -262,7 +262,7 @@ public class ShopTable {
      */
     public int getPrice(final int itemid) {
         int tgprice = 0;// 預設價格
-        final Integer price = _allShopItem.get(new Integer(itemid));
+        final Integer price = _allShopItem.get(itemid);
         if (price != null) {// 已有回收價格
             tgprice = price;
         }

@@ -20,7 +20,7 @@ public class EzpayTable implements EzpayStorage {
         Connection co = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Map<Integer, int[]> list = new HashMap<Integer, int[]>();
+        Map<Integer, int[]> list = new HashMap<>();
         try {
             co = DatabaseFactory.get().getConnection();
             ps = co.prepareStatement("SELECT * FROM `shop_user` WHERE `account`=? ORDER BY `id`");
@@ -38,7 +38,7 @@ public class EzpayTable implements EzpayStorage {
                     value[1] = p_id;
                     value[2] = count;
                     value[3] = trueMoney;
-                    list.put(Integer.valueOf(key), value);
+                    list.put(key, value);
                 }
             }
         } catch (Exception e) {

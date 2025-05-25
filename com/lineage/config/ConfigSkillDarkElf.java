@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -46,7 +47,7 @@ public final class ConfigSkillDarkElf {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigSkillDarkElf));
+            final InputStream is = Files.newInputStream(new File(ConfigSkillDarkElf).toPath());
             set.load(is);
             is.close();
             Damage1 = Integer.parseInt(set.getProperty("Damage_1", "10"));

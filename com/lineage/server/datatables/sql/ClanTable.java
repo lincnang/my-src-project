@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class ClanTable implements ClanStorage {
     private static final Log _log = LogFactory.getLog(ClanTable.class);
-    private final Map<Integer, L1Clan> _clans = new HashMap<Integer, L1Clan>();
+    private final Map<Integer, L1Clan> _clans = new HashMap<>();
 
     /**
      * 預先加載血盟資料
@@ -131,8 +131,7 @@ public class ClanTable implements ClanStorage {
     @Override
     public L1Clan createClan(L1PcInstance player, String clan_name) {
         final Collection<L1Clan> allClans = WorldClan.get().getAllClans();
-        for (final Iterator<L1Clan> iter = allClans.iterator(); iter.hasNext(); ) {
-            final L1Clan oldClans = iter.next();
+        for (final L1Clan oldClans : allClans) {
             if (oldClans.getClanName().equalsIgnoreCase(clan_name)) {
                 return null;
             }
@@ -185,7 +184,7 @@ public class ClanTable implements ClanStorage {
             SQLUtil.close(con);
         }
         WorldClan.get().storeClan(clan);
-        _clans.put(Integer.valueOf(clan.getClanId()), clan);
+        _clans.put(clan.getClanId(), clan);
         player.setClanid(clan.getClanId());
         player.setClanname(clan.getClanName());
         player.setClanRank(L1Clan.CLAN_RANK_PRINCE);
@@ -275,7 +274,7 @@ public class ClanTable implements ClanStorage {
         clan.getDwarfForClanInventory().clearItems();
         clan.getDwarfForClanInventory().deleteAllItems();
         WorldClan.get().removeClan(clan);
-        _clans.remove(Integer.valueOf(clan.getClanId()));
+        _clans.remove(clan.getClanId());
     }
 
     public void updateClanSkill(L1Clan clan) {
@@ -297,7 +296,7 @@ public class ClanTable implements ClanStorage {
     }
 
     public L1Clan getTemplate(int clan_id) {
-        return (L1Clan) _clans.get(Integer.valueOf(clan_id));
+        return (L1Clan) _clans.get(clan_id);
     }
 
     public Map<Integer, L1Clan> get_clans() {

@@ -73,8 +73,7 @@ public class NpcHprTimer extends TimerTask {
                 _log.error("Npc HP自然回復時間軸異常重啟 allMob.isEmpty()");
                 return;
             }
-            for (final Iterator<L1MonsterInstance> iter = allMob.iterator(); iter.hasNext(); ) {
-                final L1MonsterInstance mob = iter.next();
+            for (final L1MonsterInstance mob : allMob) {
                 // HP是否具備回復條件
                 if (mob.isHpR()) {
                     hpUpdate(mob);

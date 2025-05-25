@@ -124,13 +124,7 @@ public class L1UbSpawn implements Comparable<L1UbSpawn> {
     }
 
     public int compareTo(L1UbSpawn rhs) {
-        if (getId() < rhs.getId()) {
-            return -1;
-        }
-        if (getId() > rhs.getId()) {
-            return 1;
-        }
-        return 0;
+        return Integer.compare(getId(), rhs.getId());
     }
 }
 /*

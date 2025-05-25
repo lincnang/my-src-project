@@ -783,8 +783,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
             // 如果 done為false 一律不執行
             // 使用中的魔法娃娃objid
             if (!pc.getDolls().isEmpty()) {
-                for (final Iterator<L1DollInstance> iter = pc.getDolls().values().iterator(); iter.hasNext(); ) {
-                    final L1DollInstance doll = iter.next();
+                for (final L1DollInstance doll : pc.getDolls().values()) {
                     pc.sendPackets(new S_DollCompoundUseingDoll(doll.getItemObjId()));
                 }
             } else {
@@ -801,9 +800,6 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     pc.sendPackets(new S_DollCompoundInit(3));
                 }
             }
-        } catch (final InvalidProtocolBufferException e) {
-            // 發生異常
-            _log.error(e.getLocalizedMessage(), e);
         } catch (final Exception e) {
             // 發生異常
             _log.error(e.getLocalizedMessage(), e);
@@ -989,9 +985,6 @@ public class C_ItemCraft1 extends ClientBasePacket {
             } else {
                 _log.warn("魔法娃娃合成系統發生異常 材料刪除失敗 合成系統使用者:" + pc.getName());
             }
-        } catch (final InvalidProtocolBufferException e) {
-            // 發生異常
-            _log.error(e.getLocalizedMessage(), e);
         } catch (final Exception e) {
             // 發生異常
             _log.error(e.getLocalizedMessage(), e);
@@ -1390,9 +1383,6 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     _log.info("請求更新能力資訊未處理type:" + type);
                     break;
             }
-        } catch (final InvalidProtocolBufferException e) {
-            // 發生異常
-            _log.error(e.getLocalizedMessage(), e);
         } catch (final Exception e) {
             // 發生異常
             _log.error(e.getLocalizedMessage(), e);
@@ -1556,7 +1546,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         _log.info(String.format("玩家 : %s 因輸入錯誤未通過外掛偵測，已強制切斷其連線", pc.getName()));
                     }
                     if (pc.getInputBanError() >= 5 && pc.hasSkillEffect(AI_2)) {// 輸入錯誤斷線5次
-                        long time = 60 * 60 * 1000 * 24 * 30;// 七日
+                        long time = 60L * 60 * 1000 * 24 * 30;// 七日
                         Timestamp UnbanTime = new Timestamp(System.currentTimeMillis() + time);
                         IpReading.get().setUnbanTime(UnbanTime);
                         IpReading.get().add(pc.getAccountName(), "定時外掛檢測 自動封鎖帳號七日 輸入錯誤斷線五次");

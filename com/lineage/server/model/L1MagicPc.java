@@ -127,19 +127,19 @@ public class L1MagicPc extends L1MagicMode {
                             break;
                     }
                     int npcId = _targetNpc.getNpcTemplate().get_npcId();
-                    Integer tgskill = L1AttackList.SKNPC.get(Integer.valueOf(npcId));
+                    Integer tgskill = L1AttackList.SKNPC.get(npcId);
                     if ((tgskill != null) && (!_pc.hasSkillEffect(tgskill))) {
                         return false;
                     }
-                    Integer tgpoly = L1AttackList.PLNPC.get(Integer.valueOf(npcId));
-                    if ((tgpoly != null) && (tgpoly.equals(Integer.valueOf(_pc.getTempCharGfx())))) {
+                    Integer tgpoly = L1AttackList.PLNPC.get(npcId);
+                    if ((tgpoly != null) && (tgpoly.equals(_pc.getTempCharGfx()))) {
                         return false;
                     }
-                    boolean dgskill = L1AttackList.DNNPC.containsKey(Integer.valueOf(npcId));
+                    boolean dgskill = L1AttackList.DNNPC.containsKey(npcId);
                     if (dgskill) {
-                        Integer[] dgskillids = L1AttackList.DNNPC.get(Integer.valueOf(npcId));
+                        Integer[] dgskillids = L1AttackList.DNNPC.get(npcId);
                         for (Integer dgskillid : dgskillids) {
-                            if (dgskillid.equals(Integer.valueOf(skillId))) {
+                            if (dgskillid.equals(skillId)) {
                                 return false;
                             }
                         }
@@ -202,19 +202,19 @@ public class L1MagicPc extends L1MagicMode {
                 if (_pc.isGm()) {
                     StringBuilder atkMsg = new StringBuilder();
                     atkMsg.append("對PC送出技能: ");
-                    atkMsg.append(_pc.getName() + ">");
-                    atkMsg.append(_targetPc.getName() + " ");
+                    atkMsg.append(_pc.getName()).append(">");
+                    atkMsg.append(_targetPc.getName()).append(" ");
                     atkMsg.append(isSuccess ? "成功" : "失敗");
-                    atkMsg.append(" 成功機率:" + probability + "%");
+                    atkMsg.append(" 成功機率:").append(probability).append("%");
                     _pc.sendPackets(new S_ServerMessage(166, atkMsg.toString()));
                 }
                 if (_targetPc.isGm()) {
                     StringBuilder atkMsg = new StringBuilder();
                     atkMsg.append("受到PC技能: ");
-                    atkMsg.append(_pc.getName() + ">");
-                    atkMsg.append(_targetPc.getName() + " ");
+                    atkMsg.append(_pc.getName()).append(">");
+                    atkMsg.append(_targetPc.getName()).append(" ");
                     atkMsg.append(isSuccess ? "成功" : "失敗");
-                    atkMsg.append(" 成功機率:" + probability + "%");
+                    atkMsg.append(" 成功機率:").append(probability).append("%");
                     _targetPc.sendPackets(new S_ServerMessage(166, atkMsg.toString()));
                 }
                 break;
@@ -222,10 +222,10 @@ public class L1MagicPc extends L1MagicMode {
                 if (_pc.isGm()) {
                     StringBuilder atkMsg = new StringBuilder();
                     atkMsg.append("對NPC送出技能: ");
-                    atkMsg.append(_pc.getName() + ">");
-                    atkMsg.append(_targetNpc.getName() + " ");
+                    atkMsg.append(_pc.getName()).append(">");
+                    atkMsg.append(_targetNpc.getName()).append(" ");
                     atkMsg.append(isSuccess ? "成功" : "失敗");
-                    atkMsg.append(" 成功機率:" + probability + "%");
+                    atkMsg.append(" 成功機率:").append(probability).append("%");
                     _pc.sendPackets(new S_ServerMessage(166, atkMsg.toString()));
                 }
                 break;
@@ -236,7 +236,7 @@ public class L1MagicPc extends L1MagicMode {
     private boolean checkZone(int skillId) {
         if ((_pc != null) && (_targetPc != null)) {
             if ((_pc.isSafetyZone()) || (_targetPc.isSafetyZone())) {
-                Boolean isBoolean = L1AttackList.NZONE.get(Integer.valueOf(skillId));
+                Boolean isBoolean = L1AttackList.NZONE.get(skillId);
                 if (isBoolean != null) {
                     _pc.sendPackets(new S_ServerMessage("在安全區域無法使用此技能。"));
                     return false;
@@ -249,7 +249,7 @@ public class L1MagicPc extends L1MagicMode {
     private boolean checkZoneDE(int skillId) {
         if ((_pc != null) && (_targetNpc != null)) {
             if ((_pc.isSafetyZone()) || (_targetNpc.isSafetyZone())) {
-                Boolean isBoolean = L1AttackList.NZONE.get(Integer.valueOf(skillId));
+                Boolean isBoolean = L1AttackList.NZONE.get(skillId);
                 if (isBoolean != null) {
                     _pc.sendPackets(new S_ServerMessage("在安全區域無法使用此技能。"));
                     return false;
@@ -506,7 +506,7 @@ public class L1MagicPc extends L1MagicMode {
 			}*/
                 if (skillId == TAMING_MONSTER) {
                     double probabilityRevision = 1;
-                    if ((_targetNpc.getMaxHp() * 1 / 4) > _targetNpc.getCurrentHp()) {
+                    if ((_targetNpc.getMaxHp() / 4) > _targetNpc.getCurrentHp()) {
                         probabilityRevision = 1.3;
                     } else if ((_targetNpc.getMaxHp() * 2 / 4) > _targetNpc.getCurrentHp()) {
                         probabilityRevision = 1.2;
@@ -831,12 +831,12 @@ public class L1MagicPc extends L1MagicMode {
          * if(!checkAttackError(_targetNpc,_pc)){ return 0; }
          */
         int npcId = _targetNpc.getNpcTemplate().get_npcId();
-        Integer tgskill = L1AttackList.SKNPC.get(Integer.valueOf(npcId));
+        Integer tgskill = L1AttackList.SKNPC.get(npcId);
         if ((tgskill != null) && (!_pc.hasSkillEffect(tgskill))) {
             return 0;
         }
-        Integer tgpoly = L1AttackList.PLNPC.get(Integer.valueOf(npcId));
-        if ((tgpoly != null) && (tgpoly.equals(Integer.valueOf(_pc.getTempCharGfx())))) {
+        Integer tgpoly = L1AttackList.PLNPC.get(npcId);
+        if ((tgpoly != null) && (tgpoly.equals(_pc.getTempCharGfx()))) {
             return 0;
         }
         int dmg = 0;
@@ -1207,19 +1207,19 @@ public class L1MagicPc extends L1MagicMode {
                 if (_pc.getAccessLevel() > 0) {
                     StringBuilder atkMsg = new StringBuilder();
                     atkMsg.append("對PC送出技能: ");
-                    atkMsg.append(_pc.getName() + ">");
-                    atkMsg.append(_targetPc.getName() + " ");
-                    atkMsg.append("傷害: " + damage);
-                    atkMsg.append(" 目標HP:" + _targetPc.getCurrentHp());
+                    atkMsg.append(_pc.getName()).append(">");
+                    atkMsg.append(_targetPc.getName()).append(" ");
+                    atkMsg.append("傷害: ").append(damage);
+                    atkMsg.append(" 目標HP:").append(_targetPc.getCurrentHp());
                     _pc.sendPackets(new S_ServerMessage(166, atkMsg.toString()));
                 }
                 if (_targetPc.getAccessLevel() > 0) {
                     StringBuilder atkMsg = new StringBuilder();
                     atkMsg.append("受到PC技能: ");
-                    atkMsg.append(_pc.getName() + ">");
-                    atkMsg.append(_targetPc.getName() + " ");
-                    atkMsg.append("傷害: " + damage);
-                    atkMsg.append(" 目標HP:" + _targetPc.getCurrentHp());
+                    atkMsg.append(_pc.getName()).append(">");
+                    atkMsg.append(_targetPc.getName()).append(" ");
+                    atkMsg.append("傷害: ").append(damage);
+                    atkMsg.append(" 目標HP:").append(_targetPc.getCurrentHp());
                     _targetPc.sendPackets(new S_ServerMessage(166, atkMsg.toString()));
                 }
                 break;
@@ -1227,10 +1227,10 @@ public class L1MagicPc extends L1MagicMode {
                 if (_pc.getAccessLevel() > 0) {
                     StringBuilder atkMsg = new StringBuilder();
                     atkMsg.append("對NPC送出技能: ");
-                    atkMsg.append(_pc.getName() + ">");
-                    atkMsg.append(_targetNpc.getNameId() + " ");
-                    atkMsg.append("傷害: " + damage);
-                    atkMsg.append(" 目標HP:" + _targetNpc.getCurrentHp());
+                    atkMsg.append(_pc.getName()).append(">");
+                    atkMsg.append(_targetNpc.getNameId()).append(" ");
+                    atkMsg.append("傷害: ").append(damage);
+                    atkMsg.append(" 目標HP:").append(_targetNpc.getCurrentHp());
                     _pc.sendPackets(new S_ServerMessage(166, atkMsg.toString()));
                 }
                 break;

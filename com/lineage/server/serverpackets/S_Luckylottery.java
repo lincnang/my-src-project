@@ -54,8 +54,7 @@
          this.writeIndexInt(1, 99);
          this.writeIndexInt(2, 0);
          if (itemList != null) {
-             for (int i = 0; i < itemList.size(); ++i) {
-                 final L1PandoraItem item = itemList.get(i);
+             for (final L1PandoraItem item : itemList) {
                  if (item.getType() == 1) {
                      final L1Item itemTemp = ItemTable.get().getTemplate(item.getItemId());
                      if (itemTemp != null) {

@@ -73,7 +73,7 @@ public class PcGhostTimer extends TimerTask {
                     if (tgpc.isGhost()) {
                         int time = tgpc.get_ghostTime();
                         time--;
-                        check(tgpc, Integer.valueOf(time));
+                        check(tgpc, time);
                         TimeUnit.MILLISECONDS.sleep(1L);
                     }
                 }

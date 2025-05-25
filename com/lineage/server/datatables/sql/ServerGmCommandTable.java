@@ -12,7 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class ServerGmCommandTable implements ServerGmCommandStorage {
-    public static final ArrayList<Integer> tradeControl = new ArrayList<Integer>();
+    public static final ArrayList<Integer> tradeControl = new ArrayList<>();
     private static final Log _log = LogFactory.getLog(ServerGmCommandTable.class);
     private static ServerGmCommandTable _instance;
 
@@ -64,7 +64,7 @@ public class ServerGmCommandTable implements ServerGmCommandStorage {
             ps.setInt(++i, objId);
             ps.setString(++i, pcName);
             ps.execute();
-            tradeControl.add(Integer.valueOf(objId));
+            tradeControl.add(objId);
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -84,7 +84,7 @@ public class ServerGmCommandTable implements ServerGmCommandStorage {
             rs = pstm.executeQuery();
             while (rs.next()) {
                 int objId = rs.getInt("objId");
-                tradeControl.add(Integer.valueOf(objId));
+                tradeControl.add(objId);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

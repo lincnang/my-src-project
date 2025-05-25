@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class CharOtherTable implements CharOtherStorage {
     private static final Log _log = LogFactory.getLog(CharOtherTable.class);
-    private static final Map<Integer, L1PcOther> _otherMap = new HashMap<Integer, L1PcOther>();
+    private static final Map<Integer, L1PcOther> _otherMap = new HashMap<>();
 
     /**
      * 刪除遺失額外紀錄資料
@@ -54,10 +54,7 @@ public class CharOtherTable implements CharOtherStorage {
      *
      */
     private static void addMap(final int objId, final L1PcOther other) {
-        final L1PcOther otherTmp = _otherMap.get(objId);
-        if (otherTmp == null) {
-            _otherMap.put(objId, other);
-        }
+        _otherMap.putIfAbsent(objId, other);
     }
 
     /**

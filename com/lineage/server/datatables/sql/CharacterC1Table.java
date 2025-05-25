@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class CharacterC1Table implements CharacterC1Storage {
     private static final Log _log = LogFactory.getLog(CharacterC1Table.class);
-    private static final Map<Integer, L1User_Power> _userPowers = new HashMap<Integer, L1User_Power>();
+    private static final Map<Integer, L1User_Power> _userPowers = new HashMap<>();
 
     private static void delete(int objid) {
         Connection cn = null;
@@ -56,7 +56,7 @@ public class CharacterC1Table implements CharacterC1Storage {
                     power.set_object_id(object_id);
                     power.set_c1_type(c1_type);
                     power.set_note(note);
-                    _userPowers.put(Integer.valueOf(object_id), power);
+                    _userPowers.put(object_id, power);
                 } else {
                     delete(object_id);
                 }
@@ -72,7 +72,7 @@ public class CharacterC1Table implements CharacterC1Storage {
     }
 
     public L1User_Power get(int objectId) {
-        return (L1User_Power) _userPowers.get(Integer.valueOf(objectId));
+        return (L1User_Power) _userPowers.get(objectId);
     }
 
     public void storeCharacterC1(L1PcInstance pc) {
@@ -81,7 +81,7 @@ public class CharacterC1Table implements CharacterC1Storage {
             return;
         }
         L1User_Power power = pc.get_c_power();
-        _userPowers.put(Integer.valueOf(pc.getId()), power);
+        _userPowers.put(pc.getId(), power);
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -101,7 +101,7 @@ public class CharacterC1Table implements CharacterC1Storage {
     }
 
     public void updateCharacterC1(int object_id, int c1_type, String note) {
-        L1User_Power power = (L1User_Power) _userPowers.get(Integer.valueOf(object_id));
+        L1User_Power power = (L1User_Power) _userPowers.get(object_id);
         power.set_c1_type(c1_type);
         power.set_note(note);
         Connection con = null;

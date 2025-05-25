@@ -42,8 +42,7 @@ public class CKEW50_Altar extends NpcExecutor {
             // 判斷主要攻擊者
             final L1PcInstance pc = CheckUtil.checkAtkPc(lastAttacker);
             if (pc != null) {
-                final HashMap<Integer, L1Object> mapList = new HashMap<Integer, L1Object>();
-                mapList.putAll(World.get().getVisibleObjects(CKEWLv50_1.MAPID));
+                final HashMap<Integer, L1Object> mapList = new HashMap<>(World.get().getVisibleObjects(CKEWLv50_1.MAPID));
                 for (L1Object tgobj : mapList.values()) {
                     if (tgobj instanceof L1PcInstance) {
                         final L1PcInstance tgpc = (L1PcInstance) tgobj;

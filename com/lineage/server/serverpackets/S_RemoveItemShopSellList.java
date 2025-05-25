@@ -24,7 +24,7 @@ public class S_RemoveItemShopSellList extends ServerBasePacket {
     public S_RemoveItemShopSellList(final L1PcInstance pc, final int objid) {
         writeC(S_SELL_LIST);
         writeD(objid);
-        final Map<Integer, Integer> assessedItems = new HashMap<Integer, Integer>();
+        final Map<Integer, Integer> assessedItems = new HashMap<>();
         for (final L1ItemInstance item : pc.getInventory().getItems()) {
             switch (item.getItem().getItemId()) {
                 case 40308: // 金幣

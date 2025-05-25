@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class SpawnTimeTable {
     private static final Log _log = LogFactory.getLog(SpawnTimeTable.class);
-    private static final Map<Integer, L1SpawnTime> _times = new HashMap<Integer, L1SpawnTime>();
+    private static final Map<Integer, L1SpawnTime> _times = new HashMap<>();
     private static SpawnTimeTable _instance;
 
     private SpawnTimeTable() {

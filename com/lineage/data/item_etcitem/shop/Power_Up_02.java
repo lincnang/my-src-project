@@ -184,7 +184,7 @@ public class Power_Up_02 extends ItemExecutor {
                         WriteLogTxt.Recording("道具升級紀錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【 " + pc.getName() + " 】的【" + tgItem.getRecordName(tgItem.getCount()) + "】升級失敗，沒任何事情發生。 (ObjectId: " + tgItem.getId() + ").");
                         break;
                     case 1:
-                        L1ItemPowerUpdate ole1 = (L1ItemPowerUpdate) tmplist.get(Integer.valueOf(order_id - 1));
+                        L1ItemPowerUpdate ole1 = (L1ItemPowerUpdate) tmplist.get(order_id - 1);
                         pc.sendPackets(new S_ServerMessage("\\fR" + tgItem.getName() + "升級失敗!"));
                         pc.getInventory().removeItem(tgItem, 1L);
                         // CreateNewItem.createNewItem(pc, ole1.get_itemid(), 1L);
@@ -268,7 +268,7 @@ public class Power_Up_02 extends ItemExecutor {
                         break;
                     case 3:
                         if (_random.nextBoolean()) {
-                            L1ItemPowerUpdate ole2 = (L1ItemPowerUpdate) tmplist.get(Integer.valueOf(order_id - 1));
+                            L1ItemPowerUpdate ole2 = (L1ItemPowerUpdate) tmplist.get(order_id - 1);
                             pc.getInventory().removeItem(tgItem, 1L);
                             L1ItemInstance tginfo_item3 = ItemTable.get().createItem(ole2.get_itemid());
                             if (tginfo_item3 != null) {
@@ -349,7 +349,7 @@ public class Power_Up_02 extends ItemExecutor {
                         break;
                     case 4:
                         if (_random.nextBoolean()) {
-                            L1ItemPowerUpdate ole2 = (L1ItemPowerUpdate) tmplist.get(Integer.valueOf(order_id - 1));
+                            L1ItemPowerUpdate ole2 = (L1ItemPowerUpdate) tmplist.get(order_id - 1);
                             pc.getInventory().removeItem(tgItem, 1L);
                             L1ItemInstance tginfo_item4 = ItemTable.get().createItem(ole2.get_itemid());
                             if (tginfo_item4 != null) {

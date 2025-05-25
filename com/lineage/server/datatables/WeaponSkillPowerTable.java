@@ -18,8 +18,8 @@ import java.util.Map;
 
 public class WeaponSkillPowerTable {
     private static final Log _log = LogFactory.getLog(WeaponSkillPowerTable.class);
-    private static final Map<Integer, L1WeaponSkillType> _weaponIdIndex = new HashMap<Integer, L1WeaponSkillType>();
-    private static final Map<Integer, ArrayList<L1WeaponSkillType>> _weaponSkill = new HashMap<Integer, ArrayList<L1WeaponSkillType>>();
+    private static final Map<Integer, L1WeaponSkillType> _weaponIdIndex = new HashMap<>();
+    private static final Map<Integer, ArrayList<L1WeaponSkillType>> _weaponSkill = new HashMap<>();
     private static WeaponSkillPowerTable _instance;
 
     public static WeaponSkillPowerTable get() {
@@ -91,7 +91,7 @@ public class WeaponSkillPowerTable {
                     class_name.set_gfxid_String(gfxidString);
                     class_name.set_gfx_Sec(gfxSec);
                 }
-                _weaponIdIndex.put(Integer.valueOf(id), class_name);
+                _weaponIdIndex.put(id, class_name);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -116,19 +116,19 @@ public class WeaponSkillPowerTable {
                     _log.error("技能武器設置資料錯誤: 沒有這個編號的武器:" + item_id);
                 } else {
                     String powers = rs.getString("powers").replaceAll(" ", "");
-                    ArrayList<L1WeaponSkillType> list = (ArrayList<L1WeaponSkillType>) _weaponSkill.get(Integer.valueOf(item_id));
+                    ArrayList<L1WeaponSkillType> list = (ArrayList<L1WeaponSkillType>) _weaponSkill.get(item_id);
                     if (list == null) {
-                        list = new ArrayList<L1WeaponSkillType>();
+                        list = new ArrayList<>();
                     }
                     if (!powers.equals("")) {
                         String[] set = powers.split(",");
-                        for (int i = 0; i < set.length; i++) {
-                            int itemid = Integer.parseInt(set[i]);
-                            L1WeaponSkillType class_name = (L1WeaponSkillType) _weaponIdIndex.get(Integer.valueOf(itemid));
+                        for (String s : set) {
+                            int itemid = Integer.parseInt(s);
+                            L1WeaponSkillType class_name = (L1WeaponSkillType) _weaponIdIndex.get(itemid);
                             list.add(class_name);
                         }
                     }
-                    _weaponSkill.put(Integer.valueOf(item_id), list);
+                    _weaponSkill.put(item_id, list);
                 }
             }
         } catch (SQLException e) {
@@ -153,22 +153,15 @@ public class WeaponSkillPowerTable {
         } catch (ClassNotFoundException e) {
             String error = "發生[技能武器檔案]錯誤, 檢查檔案是否存在:" + className + " 技能武器編號:" + id;
             _log.error(error);
-        } catch (IllegalArgumentException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (IllegalAccessException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (InvocationTargetException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (SecurityException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException |
+                 IllegalAccessException e) {
             _log.error(e.getLocalizedMessage(), e);
         }
         return null;
     }
 
     public ArrayList<L1WeaponSkillType> getTemplate(int itemid) {
-        return (ArrayList<L1WeaponSkillType>) _weaponSkill.get(Integer.valueOf(itemid));
+        return (ArrayList<L1WeaponSkillType>) _weaponSkill.get(itemid);
     }
 }
 /*

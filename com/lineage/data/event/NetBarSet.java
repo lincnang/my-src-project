@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NetBarSet extends EventExecutor {
-    public static final Map<String, Integer> EXIPLIST = new HashMap<String, Integer>();
+    public static final Map<String, Integer> EXIPLIST = new HashMap<>();
     private static final Log _log = LogFactory.getLog(NetBarSet.class);
 
     public static EventExecutor get() {

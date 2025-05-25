@@ -17,11 +17,11 @@ public class C_PetMenu extends ClientBasePacket {
                 return;
             }
             int petId = readD();
-            L1PetInstance pet = WorldPet.get().get(Integer.valueOf(petId));
+            L1PetInstance pet = WorldPet.get().get(petId);
             if (pet == null) {
                 return;
             }
-            if (pc.getPetList().get(Integer.valueOf(petId)) == null) {
+            if (pc.getPetList().get(petId) == null) {
                 return;
             }
             pc.sendPackets(new S_PetInventory(pet));

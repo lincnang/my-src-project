@@ -106,7 +106,7 @@ public class Npc_Action2 extends NpcExecutor {
             for (L1PcInstance tgpc : allPc) {
                 if (tgpc.isGm()) {
                     final StringBuilder topc = new StringBuilder();
-                    topc.append("人物:" + pc.getName() + " 兌換道具:" + element.getLogName());
+                    topc.append("人物:").append(pc.getName()).append(" 兌換道具:").append(element.getLogName());
                     tgpc.sendPackets(new S_ServerMessage(166, topc.toString()));
                 }
             }

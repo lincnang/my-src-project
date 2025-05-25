@@ -12,6 +12,8 @@ import org.apache.log4j.PropertyConfigurator;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -138,7 +140,7 @@ public class Server {
         }
         boolean error = false;
         try {
-            final InputStream is = new BufferedInputStream(new FileInputStream(LOG_PROP));
+            final InputStream is = new BufferedInputStream(Files.newInputStream(Paths.get(LOG_PROP)));
             LogManager.getLogManager().readConfiguration(is);
             is.close();
         } catch (final IOException e) {
@@ -204,7 +206,7 @@ public class Server {
         }
         System.out.println(_licence + "\n");
         final Log log = LogFactory.getLog(Server.class);
-        log.info(" 《現在時間" + new SimpleDateFormat("yyyy年MM月dd日HH點mm分").format(new Date()) + " 星期" + (date.get(7) - 1) + "》");
+        log.info(" 《現在時間" + new SimpleDateFormat("yyyy年MM月dd日HH點mm分").format(new Date()) + " 星期" + (date.get(Calendar.DAY_OF_WEEK) - 1) + "》");
         final String infoX = "\n\r#####################################################" + "\n\r       服務器 [核心版本:" + "伊薇8.15" + "/" + "天堂8.15C" + "]" + "\n\r#####################################################";
         log.info(infoX);
         final File file = new File("./lib");

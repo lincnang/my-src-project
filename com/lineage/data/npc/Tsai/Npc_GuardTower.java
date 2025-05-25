@@ -32,15 +32,15 @@ public class Npc_GuardTower extends NpcExecutor {
     @Override
     public void talk(final L1PcInstance pc, final L1NpcInstance npc) {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ConfigGuardTower.LEVEL + ",");
+        stringBuilder.append(ConfigGuardTower.LEVEL).append(",");
         L1Item item = ItemTable.get().getTemplate(ConfigGuardTower.NEEDITEM);
-        stringBuilder.append(item.getName() + ",");
-        stringBuilder.append(ConfigGuardTower.NEEDITEMCOUNT + ",");
+        stringBuilder.append(item.getName()).append(",");
+        stringBuilder.append(ConfigGuardTower.NEEDITEMCOUNT).append(",");
         L1Item winitem = ItemTable.get().getTemplate(ConfigGuardTower.GIFT);
-        stringBuilder.append(winitem.getName() + ",");
+        stringBuilder.append(winitem.getName()).append(",");
         L1Item lostitem = ItemTable.get().getTemplate(ConfigGuardTower.COMFORTGIFT);
-        stringBuilder.append(lostitem.getName() + ",");
-        stringBuilder.append(ConfigGuardTower.MAXPC + ",");
+        stringBuilder.append(lostitem.getName()).append(",");
+        stringBuilder.append(ConfigGuardTower.MAXPC).append(",");
         final String[] clientStrAry = stringBuilder.toString().split(",");
         pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_guard_0", clientStrAry));
     }

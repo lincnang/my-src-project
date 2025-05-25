@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 public class BadNamesList {
     private static final Log _log = LogFactory.getLog(BadNamesList.class);
     private static BadNamesList _instance;
-    private ArrayList<String> _nameList = new ArrayList<String>();
+    private ArrayList<String> _nameList = new ArrayList<>();
 
     public static BadNamesList get() {
         if (_instance == null) {
@@ -47,8 +47,6 @@ public class BadNamesList {
                 this._nameList.add(ban);
             }
             _log.info("讀取->禁止名稱數量: " + this._nameList.size());
-        } catch (final FileNotFoundException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -59,7 +57,7 @@ public class BadNamesList {
     public boolean isBadName(final String name) {
         final String checkName = name.toLowerCase();
         for (final String badName : this._nameList) {
-            if (checkName.indexOf(badName.toLowerCase()) != -1) {
+            if (checkName.contains(badName.toLowerCase())) {
                 _log.info("新建人物名稱包含禁用字元: " + this._nameList.size());
                 return true;
             }
@@ -68,6 +66,6 @@ public class BadNamesList {
     }
 
     public String[] getAllBadNames() {
-        return this._nameList.toArray(new String[this._nameList.size()]);
+        return this._nameList.toArray(new String[0]);
     }
 }

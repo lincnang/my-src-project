@@ -21,42 +21,52 @@ public class Transmission_Reel extends ItemExecutor {
         int locy = 0;
         short mapid = 0;
         String nameId = item.getName();
-        if (nameId.equals("$2400")) {
-            locx = 32631;
-            locy = 32935;
-            mapid = 111;
-        } else if (nameId.equals("$2678")) {
-            locx = 32669;
-            locy = 32814;
-            mapid = 151;
-        } else if (nameId.equals("$2401")) {
-            locx = 32631;
-            locy = 32935;
-            mapid = 121;
-        } else if (nameId.equals("$2679")) {
-            locx = 32669;
-            locy = 32814;
-            mapid = 161;
-        } else if (nameId.equals("$2402")) {
-            locx = 32631;
-            locy = 32935;
-            mapid = 131;
-        } else if (nameId.equals("$2680")) {
-            locx = 32669;
-            locy = 32814;
-            mapid = 171;
-        } else if (nameId.equals("$2403")) {
-            locx = 32631;
-            locy = 32935;
-            mapid = 141;
-        } else if (nameId.equals("$2681")) {
-            locx = 32669;
-            locy = 32814;
-            mapid = 181;
-        } else if (nameId.equals("$2682")) {
-            locx = 32669;
-            locy = 32814;
-            mapid = 191;
+        switch (nameId) {
+            case "$2400":
+                locx = 32631;
+                locy = 32935;
+                mapid = 111;
+                break;
+            case "$2678":
+                locx = 32669;
+                locy = 32814;
+                mapid = 151;
+                break;
+            case "$2401":
+                locx = 32631;
+                locy = 32935;
+                mapid = 121;
+                break;
+            case "$2679":
+                locx = 32669;
+                locy = 32814;
+                mapid = 161;
+                break;
+            case "$2402":
+                locx = 32631;
+                locy = 32935;
+                mapid = 131;
+                break;
+            case "$2680":
+                locx = 32669;
+                locy = 32814;
+                mapid = 171;
+                break;
+            case "$2403":
+                locx = 32631;
+                locy = 32935;
+                mapid = 141;
+                break;
+            case "$2681":
+                locx = 32669;
+                locy = 32814;
+                mapid = 181;
+                break;
+            case "$2682":
+                locx = 32669;
+                locy = 32814;
+                mapid = 191;
+                break;
         }
         if (pc.getMap().isEscapable()) {
             // pc.getInventory().removeItem(item, 1L);

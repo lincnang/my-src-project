@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -27,7 +28,7 @@ public final class ConfigSQL {
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            InputStream is = new FileInputStream(new File(SQL_CONFIG));
+            InputStream is = Files.newInputStream(new File(SQL_CONFIG).toPath());
             set.load(is);
             is.close();
             DB_DRIVER = set.getProperty("Driver", "com.mysql.jdbc.Driver");

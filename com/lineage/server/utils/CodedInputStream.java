@@ -88,7 +88,7 @@
      }
 
      private static String bytesToHex(byte[] byteArray) {
-         StringBuffer sb = new StringBuffer();
+         StringBuilder sb = new StringBuilder();
          String stmp = "";
          for (int n = 0; n < byteArray.length; n += WIRETYPE_FIXED64) {
              stmp = Integer.toHexString(byteArray[n] & 255);
@@ -296,7 +296,7 @@
                          } else {
                              pos2 = pos + WIRETYPE_FIXED64;
                              int y = buffer[pos];
-                             x = (int) (((long) (x ^ (y << 28))) ^ 266354560);
+                             x = (int) (((long) (x ^ ((long) y << 28))) ^ 266354560);
                              if (y < 0) {
                                  pos = pos2 + WIRETYPE_FIXED64;
                                  if (buffer[pos2] < (byte) 0) {
@@ -597,7 +597,7 @@
              this.bufferPos = 0;
              this.bufferSize = 0;
              int sizeLeft = size - (originalBufferSize - originalBufferPos);
-             List<byte[]> chunks = new ArrayList<byte[]>();
+             List<byte[]> chunks = new ArrayList<>();
              while (sizeLeft > 0) {
                  chunk = new byte[Math.min(sizeLeft, BUFFER_SIZE)];
                  if (chunk.length > 0) {

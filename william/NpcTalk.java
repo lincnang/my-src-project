@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 public class NpcTalk extends TimerTask {
     private static final Logger log = Logger.getLogger(NpcTalk.class.getName());
-    private static final ConcurrentHashMap<Integer, ArrayList<Chat>> _chatList = new ConcurrentHashMap<Integer, ArrayList<Chat>>();
+    private static final ConcurrentHashMap<Integer, ArrayList<Chat>> _chatList = new ConcurrentHashMap<>();
     private static int index;
 
     public static void load() {
@@ -37,12 +37,12 @@ public class NpcTalk extends TimerTask {
                 chat.chatType = rs.getByte("shout");
                 chat.chatContent = rs.getString("talk");
                 chat.chatTime = (rs.getInt("sec") * 1000);
-                if (_chatList.containsKey(Integer.valueOf(npcid))) {
-                    ((ArrayList<Chat>) _chatList.get(Integer.valueOf(npcid))).add(chat);
+                if (_chatList.containsKey(npcid)) {
+                    ((ArrayList<Chat>) _chatList.get(npcid)).add(chat);
                 } else {
-                    ArrayList<Chat> fastTable = new ArrayList<Chat>();
+                    ArrayList<Chat> fastTable = new ArrayList<>();
                     fastTable.add(chat);
-                    _chatList.put(Integer.valueOf(npcid), fastTable);
+                    _chatList.put(npcid, fastTable);
                 }
             }
         } catch (SQLException e) {
@@ -53,12 +53,12 @@ public class NpcTalk extends TimerTask {
         GeneralThreadPool.get().scheduleAtFixedRate(new NpcTalk(), 0L, 1000L);
     }
 
-    public static final void nextIndex() {
+    public static void nextIndex() {
         index += 1;
     }
 
-    public static final void startDummyChat(L1NpcInstance npc) {
-        ArrayList<?> chatTable = (ArrayList<?>) _chatList.get(Integer.valueOf(npc.getNpcId()));
+    public static void startDummyChat(L1NpcInstance npc) {
+        ArrayList<?> chatTable = (ArrayList<?>) _chatList.get(npc.getNpcId());
         if (chatTable == null) {
             return;
         }

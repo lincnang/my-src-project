@@ -30,7 +30,7 @@ public class L1Describe implements L1CommandExecutor {
             if (pc == null) {
                 _log.warn("系統命令執行: " + cmdName + " " + arg + " 顯示人物附加屬性。");
             }
-            final ArrayList<String> msg = new ArrayList<String>();
+            final ArrayList<String> msg = new ArrayList<>();
             L1PcInstance target = World.get().getPlayer(arg);
             if (pc == null) {
                 if (target == null) {
@@ -53,11 +53,11 @@ public class L1Describe implements L1CommandExecutor {
             msg.add("有好度: " + target.getKarma());
             msg.add("背包物品數量: " + target.getInventory().getSize());
             if (pc == null) {
-                String items = "";
+                StringBuilder items = new StringBuilder();
                 for (final L1ItemInstance item : target.getInventory().getItems()) {
-                    items += "[" + item.getNumberedName(item.getCount(), false) + "]";
+                    items.append("[").append(item.getNumberedName(item.getCount(), false)).append("]");
                 }
-                msg.add(items);
+                msg.add(items.toString());
             }
             for (final String info : msg) {
                 if (pc == null) {

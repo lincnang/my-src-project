@@ -20,7 +20,7 @@ public class WorldDoll2 {
     private Collection<L1DollInstance2> _allDollValues;
 
     private WorldDoll2() {
-        _isDoll = new ConcurrentHashMap<Integer, L1DollInstance2>();
+        _isDoll = new ConcurrentHashMap<>();
     }
 
     public static WorldDoll2 get() {

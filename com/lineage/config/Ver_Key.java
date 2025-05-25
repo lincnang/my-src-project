@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -17,7 +18,7 @@ public final class Ver_Key {
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(RATES_CONFIG_FILE));
+            final InputStream is = Files.newInputStream(new File(RATES_CONFIG_FILE).toPath());
             //InputStream is = new FileInputStream(new File("LineageKey.ini"));
             set.load(is);
             is.close();

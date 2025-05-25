@@ -59,8 +59,8 @@ public class L1QuestUser {
         _id = id;
         _mapid = (short) mapid;
         _questid = questid;
-        _userList = new ArrayList<L1PcInstance>();
-        _npcList = new ArrayList<L1NpcInstance>();
+        _userList = new ArrayList<>();
+        _npcList = new ArrayList<>();
     }
 
     /**
@@ -187,7 +187,7 @@ public class L1QuestUser {
      *
      */
     public ArrayList<L1NpcInstance> npcList(int npcid) {
-        final ArrayList<L1NpcInstance> npcList = new ArrayList<L1NpcInstance>();
+        final ArrayList<L1NpcInstance> npcList = new ArrayList<>();
         for (L1NpcInstance npc : _npcList) {
             // ID相等 並且未死亡
             if (npc.getNpcId() == npcid && !npc.isDead()) {
@@ -427,8 +427,7 @@ public class L1QuestUser {
      */
     public void removeMob() {
         try {
-            ArrayList<L1NpcInstance> allList = new ArrayList<L1NpcInstance>();
-            allList.addAll(_npcList);
+            ArrayList<L1NpcInstance> allList = new ArrayList<>(_npcList);
             // 移除NPC
             for (L1NpcInstance npc : allList) {
                 npc.deleteMe();

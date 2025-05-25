@@ -20,7 +20,7 @@ public class Square {
         _x = x;
         _y = y;
         _maze = maze;
-        _adjacencies = new HashSet<Square>();
+        _adjacencies = new HashSet<>();
     }
 
     public int getX() {

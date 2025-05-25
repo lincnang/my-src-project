@@ -53,7 +53,7 @@ public class C_SkillBuyOK extends ClientBasePacket {
             }
             for (int i = 0; i < count; i++) {
                 int skillId = readD() + 1;
-                if ((!CharSkillReading.get().spellCheck(pc.getId(), skillId)) && (skillList.contains(new Integer(skillId - 1)))) {
+                if ((!CharSkillReading.get().spellCheck(pc.getId(), skillId)) && (skillList.contains(skillId - 1))) {
                     L1Skills l1skills = SkillsTable.get().getTemplate(skillId);
                     int skillLvPrice = PRICE[(l1skills.getSkillLevel() - 1)];
                     int price = (shopSkill ? com.lineage.server.serverpackets.S_SkillBuyCN.PCTYPE[pc.getType()] : 6000) * skillLvPrice;

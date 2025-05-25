@@ -20,7 +20,7 @@ public class L1PcOther {
     public static final int CLEVLE9 = 512;
     public static final int CLEVLE10 = 1024;
     public static final String[] ADDNAME = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
-    private static final Map<Integer, StringBuilder> _titleList = new HashMap<Integer, StringBuilder>();
+    private static final Map<Integer, StringBuilder> _titleList = new HashMap<>();
     private static boolean _isStart = false;
     private L1ItemInstance _item = null;
     private boolean _shopSkill = false;
@@ -53,17 +53,17 @@ public class L1PcOther {
 
     public static void load() {
         if (!_isStart) {
-            _titleList.put(Integer.valueOf(1), new StringBuilder(""));
-            _titleList.put(Integer.valueOf(2), new StringBuilder("\\fD"));
-            _titleList.put(Integer.valueOf(4), new StringBuilder("\\f="));
-            _titleList.put(Integer.valueOf(8), new StringBuilder("\\fH"));
-            _titleList.put(Integer.valueOf(16), new StringBuilder("\\f_"));
-            _titleList.put(Integer.valueOf(32), new StringBuilder("\\f2"));
-            _titleList.put(Integer.valueOf(64), new StringBuilder("\\fF"));
-            _titleList.put(Integer.valueOf(128), new StringBuilder("\\fT"));
-            _titleList.put(Integer.valueOf(256), new StringBuilder("\\fE"));
-            _titleList.put(Integer.valueOf(512), new StringBuilder("\\f0"));
-            _titleList.put(Integer.valueOf(1024), new StringBuilder("\\f?"));
+            _titleList.put(1, new StringBuilder(""));
+            _titleList.put(2, new StringBuilder("\\fD"));
+            _titleList.put(4, new StringBuilder("\\f="));
+            _titleList.put(8, new StringBuilder("\\fH"));
+            _titleList.put(16, new StringBuilder("\\f_"));
+            _titleList.put(32, new StringBuilder("\\f2"));
+            _titleList.put(64, new StringBuilder("\\fF"));
+            _titleList.put(128, new StringBuilder("\\fT"));
+            _titleList.put(256, new StringBuilder("\\fE"));
+            _titleList.put(512, new StringBuilder("\\f0"));
+            _titleList.put(1024, new StringBuilder("\\f?"));
             _isStart = true;
         }
     }
@@ -186,7 +186,7 @@ public class L1PcOther {
     }
 
     public String color() {
-        StringBuilder stringBuilder = (StringBuilder) _titleList.get(Integer.valueOf(_color));
+        StringBuilder stringBuilder = (StringBuilder) _titleList.get(_color);
         if (stringBuilder != null) {
             return stringBuilder.toString();
         }

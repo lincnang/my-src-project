@@ -51,9 +51,9 @@ import java.util.concurrent.TimeUnit;
 public class OnlineGiftSet extends EventExecutor {
     private static final Log _log = LogFactory.getLog(OnlineGiftSet.class);
     // 狀態/物品表
-    private static final Map<Integer, ArrayList<GetItemData>> _giftList = new HashMap<Integer, ArrayList<GetItemData>>();
+    private static final Map<Integer, ArrayList<GetItemData>> _giftList = new HashMap<>();
     // 線上人物/連線時間(分鐘)
-    private static final Map<L1PcInstance, Integer> _getMap = new ConcurrentHashMap<L1PcInstance, Integer>();
+    private static final Map<L1PcInstance, Integer> _getMap = new ConcurrentHashMap<>();
     // 時間
     private static int _time = 0;
 
@@ -76,9 +76,7 @@ public class OnlineGiftSet extends EventExecutor {
         if (_time == 0) {
             return;
         }
-        if (_getMap.get(tgpc) == null) {
-            _getMap.put(tgpc, _time);
-        }
+        _getMap.computeIfAbsent(tgpc, k -> _time);
     }
 
     /**
@@ -101,14 +99,14 @@ public class OnlineGiftSet extends EventExecutor {
             if (check(tgpc)) {
                 ArrayList<GetItemData> value = null;
                 if (tgpc.isPrivateShop()) {// 商店狀態
-                    value = _giftList.get(new Integer(1));
+                    value = _giftList.get(1);
                 } else if (tgpc.isFishing()) {// 釣魚狀態
-                    value = _giftList.get(new Integer(2));
+                    value = _giftList.get(2);
                 } else {
-                    value = _giftList.get(new Integer(3));
+                    value = _giftList.get(3);
                 }
                 if (value == null) {
-                    value = _giftList.get(new Integer(3));
+                    value = _giftList.get(3);
                 }
                 if (value == null) {
                     return;
@@ -208,12 +206,12 @@ public class OnlineGiftSet extends EventExecutor {
                         _log.error("設定給予獎勵物品異常 - 將不啟用本項設置 - 數量小於等於0:" + itemData._getItemId + " 預設將只給1個");
                         itemData._getAmount = 1;
                     }
-                    if (_giftList.get(new Integer(type)) == null) {
-                        final ArrayList<GetItemData> value = new ArrayList<GetItemData>();
+                    if (_giftList.get(type) == null) {
+                        final ArrayList<GetItemData> value = new ArrayList<>();
                         value.add(itemData);
-                        _giftList.put(new Integer(type), value);
+                        _giftList.put(type, value);
                     } else {
-                        _giftList.get(new Integer(type)).add(itemData);
+                        _giftList.get(type).add(itemData);
                     }
                 }
             } catch (Exception e) {

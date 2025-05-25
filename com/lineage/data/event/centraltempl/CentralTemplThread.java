@@ -52,7 +52,7 @@ public class CentralTemplThread extends Thread {
             L1Teleport.teleport(this.pc, 32795, 32867, this.mapId, 1, true);
             this.npc = ((L1NpcInstance) spawn(new L1Location(32801, 32862, this.mapId), 190114, 1, 4).get(0));
             L1FieldObjectInstance object = spwanField(7572, 32801, 32862, this.mapId);
-            ArrayList<L1NpcInstance> npclist = new ArrayList<L1NpcInstance>();
+            ArrayList<L1NpcInstance> npclist = new ArrayList<>();
             npclist.addAll(spawn(new L1Location(32798, 32862, this.mapId), 190110, 1, 2));
             npclist.addAll(spawn(new L1Location(32801, 32865, this.mapId), 190110, 1, 0));
             npclist.addAll(spawn(new L1Location(32804, 32859, this.mapId), 190110, 1, 5));
@@ -66,14 +66,13 @@ public class CentralTemplThread extends Thread {
             object.deleteMe();
             this.pc.sendPackets(new S_PacketBox(S_PacketBox.ROUND_NUMBER, 1, 3));//第一回合
             sendMsg("$17947");
-            npclist = new ArrayList<L1NpcInstance>();
-            npclist.addAll(spawn());
+            npclist = new ArrayList<>(spawn());
             TimeUnit.MILLISECONDS.sleep(5000L);
             sendMsg("$17701");
             isKillNpc(npclist);
             TimeUnit.MILLISECONDS.sleep(1000L);
             this.pc.sendPackets(new S_PacketBox(S_PacketBox.ROUND_NUMBER, 2, 3));//第二回合
-            npclist = new ArrayList<L1NpcInstance>();
+            npclist = new ArrayList<>();
             sendMsg("$17969");
             this.type = 0;
             int small_boss = 190106 + Random.nextInt(4);
@@ -105,7 +104,7 @@ public class CentralTemplThread extends Thread {
             TimeUnit.MILLISECONDS.sleep(1000L);
             this.pc.sendPackets(new S_PacketBox(S_PacketBox.ROUND_NUMBER, 3, 3));//第三回合
             this.type = 0;
-            npclist = new ArrayList<L1NpcInstance>();
+            npclist = new ArrayList<>();
             small_boss = 190106 + Random.nextInt(4);
             switch (small_boss) {
                 case 190106:
@@ -134,7 +133,7 @@ public class CentralTemplThread extends Thread {
             sendMsg("$17703");
             isKillNpc(npclist);
             TimeUnit.MILLISECONDS.sleep(1000L);
-            npclist = new ArrayList<L1NpcInstance>();
+            npclist = new ArrayList<>();
             small_boss = Random.nextInt(4);
             switch (small_boss) {
                 case 0:
@@ -263,12 +262,12 @@ public class CentralTemplThread extends Thread {
     private void quitCentralTempl() {
         if (this.pc != null) {
             L1ItemInstance[] itemlist = this.pc.getInventory().findItemsId(640354);
-            for (int i = 0; i < itemlist.length; i++) {
-                this.pc.getInventory().removeItem(itemlist[i]);
+            for (L1ItemInstance itemInstance : itemlist) {
+                this.pc.getInventory().removeItem(itemInstance);
             }
             itemlist = this.pc.getInventory().findItemsId(640355);
-            for (int i = 0; i < itemlist.length; i++) {
-                this.pc.getInventory().removeItem(itemlist[i]);
+            for (L1ItemInstance l1ItemInstance : itemlist) {
+                this.pc.getInventory().removeItem(l1ItemInstance);
             }
             if (this.pc.getMapId() == this.mapId) {
                 try {
@@ -298,7 +297,7 @@ public class CentralTemplThread extends Thread {
     }
 
     private ArrayList<L1NpcInstance> spawn(L1Location loc, int npcid, int count, int heading) throws InterruptedException {
-        ArrayList<L1NpcInstance> list = new ArrayList<L1NpcInstance>();
+        ArrayList<L1NpcInstance> list = new ArrayList<>();
         if (count > 1) {
             for (int i = 0; i < count; i++) {
                 list.add(spawnNpc(loc, npcid, 0, heading));
@@ -354,7 +353,7 @@ public class CentralTemplThread extends Thread {
     }
 
     private ArrayList<L1NpcInstance> spawn() {
-        ArrayList<L1NpcInstance> npclist = new ArrayList<L1NpcInstance>();
+        ArrayList<L1NpcInstance> npclist = new ArrayList<>();
         try {
             npclist.addAll(spawn(new L1Location(32800, 32845, this.mapId), 190098, 5, 4));
             npclist.addAll(spawn(new L1Location(32800, 32845, this.mapId), 190099, 5, 4));

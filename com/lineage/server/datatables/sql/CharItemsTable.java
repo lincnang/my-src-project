@@ -17,14 +17,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.sql.*;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CharItemsTable implements CharItemsStorage {
     private static final Log _log = LogFactory.getLog(CharItemsTable.class);
-    private static final Map<Integer, CopyOnWriteArrayList<L1ItemInstance>> _itemList = new ConcurrentHashMap<Integer, CopyOnWriteArrayList<L1ItemInstance>>();
+    private static final Map<Integer, CopyOnWriteArrayList<L1ItemInstance>> _itemList = new ConcurrentHashMap<>();
 
     /**
      * 刪除錯誤的物品資料
@@ -53,7 +52,7 @@ public class CharItemsTable implements CharItemsStorage {
     private static void addItem(final Integer objid, final L1ItemInstance item) {
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(objid);
         if (list == null) {// 該人物尚無背包數據
-            list = new CopyOnWriteArrayList<L1ItemInstance>();
+            list = new CopyOnWriteArrayList<>();
             if (!list.contains(item)) {// 清單中不包含該物品
                 list.add(item);
             }
@@ -206,11 +205,11 @@ public class CharItemsTable implements CharItemsStorage {
                         // if (item.getItem().getItemId() == 82504) {// 龍門憑證
                         // InnKeyTable.checkey(item);
                         // }
-                        addItem(Integer.valueOf(char_id), item);
+                        addItem(char_id, item);
                         i++;
                     }
                 } else {
-                    deleteItem(Integer.valueOf(char_id));
+                    deleteItem(char_id);
                 }
             }
         } catch (SQLException e) {
@@ -286,7 +285,7 @@ public class CharItemsTable implements CharItemsStorage {
     @Override
     public Map<Integer, L1ItemInstance> getUserItems(final int itemid) {
         // 人物OBJID / 物品
-        final Map<Integer, L1ItemInstance> outList = new ConcurrentHashMap<Integer, L1ItemInstance>();
+        final Map<Integer, L1ItemInstance> outList = new ConcurrentHashMap<>();
         try {
             for (Integer key : _itemList.keySet()) {
                 CopyOnWriteArrayList<L1ItemInstance> value = _itemList.get(key);
@@ -329,7 +328,7 @@ public class CharItemsTable implements CharItemsStorage {
      */
     @Override
     public void storeItem(int objId, L1ItemInstance item) throws Exception {
-        addItem(Integer.valueOf(objId), item);
+        addItem(objId, item);
         item.getLastStatus().updateAll();
         Connection con = null;
         PreparedStatement pstm = null;
@@ -675,10 +674,10 @@ public class CharItemsTable implements CharItemsStorage {
 
     public int checkItemId(int itemId) {
         int counter = 0;
-        for (Iterator<CopyOnWriteArrayList<L1ItemInstance>> iterator = _itemList.values().iterator(); iterator.hasNext(); ) {
-            CopyOnWriteArrayList<?> list = (CopyOnWriteArrayList<?>) iterator.next();
-            for (Iterator<?> iterator1 = list.iterator(); iterator1.hasNext(); ) {
-                L1ItemInstance item = (L1ItemInstance) iterator1.next();
+        for (CopyOnWriteArrayList<L1ItemInstance> l1ItemInstances : _itemList.values()) {
+            CopyOnWriteArrayList<?> list = (CopyOnWriteArrayList<?>) l1ItemInstances;
+            for (Object o : list) {
+                L1ItemInstance item = (L1ItemInstance) o;
                 if (item.getItemId() == itemId) {
                     counter++;
                 }

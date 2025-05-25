@@ -31,7 +31,7 @@ public class SoulTowerThread extends Thread {
     short mapId;
     L1PcInstance pc;
     L1DoorInstance door0;
-    ArrayList<L1NpcInstance> list = new ArrayList<L1NpcInstance>();
+    ArrayList<L1NpcInstance> list = new ArrayList<>();
 
     public SoulTowerThread(final int mapId, final L1PcInstance pc) {
         this.mapId = (short) mapId;
@@ -184,7 +184,7 @@ public class SoulTowerThread extends Thread {
             }
             door6.open();
             pc.sendPackets(new S_PacketBox(S_PacketBox.MSG_COLOR_MESSAGE, 2, "\\f=$18340"));
-            ArrayList<L1DoorInstance> doorlist = new ArrayList<L1DoorInstance>();
+            ArrayList<L1DoorInstance> doorlist = new ArrayList<>();
             for (int i = 32769; i <= 32777; i++) {
                 final L1DoorInstance door7 = spawnDoor(0, 12754, i, 32829, mapId, 0, 1, false, i, i, 0);
                 door7.close();
@@ -208,7 +208,7 @@ public class SoulTowerThread extends Thread {
             for (final L1DoorInstance door8 : doorlist) {
                 door8.open();
             }
-            doorlist = new ArrayList<L1DoorInstance>();
+            doorlist = new ArrayList<>();
             for (int i = 32763; i <= 32776; i++) {
                 final L1DoorInstance door7 = spawnDoor(0, 12754, i, 32843, mapId, 0, 1, false, i, i, 0);
                 door7.close();
@@ -232,7 +232,7 @@ public class SoulTowerThread extends Thread {
                 door8.open();
             }
             pc.sendPackets(new S_PacketBox(S_PacketBox.MSG_COLOR_MESSAGE, 2, "\\f=$18333"));
-            doorlist = new ArrayList<L1DoorInstance>();
+            doorlist = new ArrayList<>();
             for (int i = 32749; i < 32751; i++) {
                 // 火堆
                 final L1DoorInstance door7 = spawnDoor(0, 12754, i, 32881, mapId, 0, 1, false, i, i, 0);
@@ -330,7 +330,7 @@ public class SoulTowerThread extends Thread {
      *
      */
     private ArrayList<L1NpcInstance> spawn(final L1Location loc, final int npcid, final int count) {
-        final ArrayList<L1NpcInstance> list = new ArrayList<L1NpcInstance>();
+        final ArrayList<L1NpcInstance> list = new ArrayList<>();
         if (count > 1) {
             for (int i = 0; i < count; i++) {
                 list.add(spawnNpc(loc, npcid, 10));

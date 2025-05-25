@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class SceneryTable {
     private static final Log _log = LogFactory.getLog(SceneryTable.class);
-    private static final Map<Integer, L1Scenery> _sceneryList = new HashMap<Integer, L1Scenery>();
-    private static final Map<Integer, L1Scenery> _fieldList = new HashMap<Integer, L1Scenery>();
+    private static final Map<Integer, L1Scenery> _sceneryList = new HashMap<>();
+    private static final Map<Integer, L1Scenery> _fieldList = new HashMap<>();
     private static SceneryTable _instance;
 
     public static SceneryTable get() {
@@ -54,7 +54,7 @@ public class SceneryTable {
                 scenery.set_heading(heading);
                 scenery.set_mapid(mapid);
                 scenery.set_html(html);
-                _sceneryList.put(new Integer(id), scenery);
+                _sceneryList.put(id, scenery);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -82,13 +82,13 @@ public class SceneryTable {
                 field.setHeading(scenery.get_heading());
                 World.get().storeObject(field);
                 World.get().addVisibleObject(field);
-                _fieldList.put(new Integer(field.getId()), scenery);
+                _fieldList.put(field.getId(), scenery);
             }
         }
     }
 
     public String get_sceneryHtml(int objid) {
-        L1Scenery scenery = (L1Scenery) _fieldList.get(new Integer(objid));
+        L1Scenery scenery = (L1Scenery) _fieldList.get(objid);
         if ((scenery != null) && (!scenery.get_html().equals("0"))) {
             return scenery.get_html();
         }

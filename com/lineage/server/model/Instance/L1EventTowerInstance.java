@@ -133,7 +133,7 @@ public class L1EventTowerInstance extends L1NpcInstance {
                 deleteMe();
             } else {
                 setCurrentHp(newhp);
-                if ((getMaxHp() * 1 / 4) > getCurrentHp()) {
+                if ((getMaxHp() / 4) > getCurrentHp()) {
                     if (_crackStatus != 3) {
                         broadcastPacketAll(new S_DoActionGFX(getId(), ActionCodes.ACTION_TowerCrack3));
                         setStatus(ActionCodes.ACTION_TowerCrack3);

@@ -35,9 +35,9 @@ public class CardBookCmd {
                 //獲取列表id
                 if (card1 != null) {//列表ID空白不啟動
                     if (CardQuestTable.get().IsQuest(pc, card1.getQuestId())) {//檢查任務
-                        stringBuilder.append(String.valueOf(card1.getAddcgfxid()) + ",");//添加到字符串
+                        stringBuilder.append(String.valueOf(card1.getAddcgfxid())).append(",");//添加到字符串
                     } else {
-                        stringBuilder.append(String.valueOf(card1.getAddhgfxid()) + ",");//添加到字符串
+                        stringBuilder.append(String.valueOf(card1.getAddhgfxid())).append(",");//添加到字符串
                     }
                 }
             }
@@ -209,30 +209,30 @@ public class CardBookCmd {
                 }
             }
             final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("力量 +" + str + ",");
-            stringBuilder.append("敏捷 +" + dex + ",");
-            stringBuilder.append("體質 +" + con + ",");
-            stringBuilder.append("智力 +" + Int + ",");
-            stringBuilder.append("精神 +" + wis + ",");
-            stringBuilder.append("魅力 +" + cha + ",");
-            stringBuilder.append("防禦提升 +" + ac + ",");
-            stringBuilder.append("HP +" + hp + ",");
-            stringBuilder.append("MP +" + mp + ",");
-            stringBuilder.append("血量回復 +" + hpr + ",");
-            stringBuilder.append("魔力回復 +" + mpr + ",");
-            stringBuilder.append("近距離傷害 +" + dmg + ",");
-            stringBuilder.append("遠距離傷害 +" + bdmg + ",");
-            stringBuilder.append("近距離命中 +" + hit + ",");
-            stringBuilder.append("遠距離命中 +" + bhit + ",");
-            stringBuilder.append("物理傷害減免 +" + dr + ",");
-            stringBuilder.append("魔法傷害減免 +" + mdr + ",");
-            stringBuilder.append("魔攻 +" + sp + ",");
-            stringBuilder.append("魔法命中 +" + mhit + ",");
-            stringBuilder.append("魔法防禦 +" + mr + ",");
-            stringBuilder.append("火屬性防禦 +" + f + ",");
-            stringBuilder.append("風屬性防禦 +" + wind + ",");
-            stringBuilder.append("地屬性防禦 +" + e + ",");
-            stringBuilder.append("水屬性防禦 +" + w + ",");
+            stringBuilder.append("力量 +").append(str).append(",");
+            stringBuilder.append("敏捷 +").append(dex).append(",");
+            stringBuilder.append("體質 +").append(con).append(",");
+            stringBuilder.append("智力 +").append(Int).append(",");
+            stringBuilder.append("精神 +").append(wis).append(",");
+            stringBuilder.append("魅力 +").append(cha).append(",");
+            stringBuilder.append("防禦提升 +").append(ac).append(",");
+            stringBuilder.append("HP +").append(hp).append(",");
+            stringBuilder.append("MP +").append(mp).append(",");
+            stringBuilder.append("血量回復 +").append(hpr).append(",");
+            stringBuilder.append("魔力回復 +").append(mpr).append(",");
+            stringBuilder.append("近距離傷害 +").append(dmg).append(",");
+            stringBuilder.append("遠距離傷害 +").append(bdmg).append(",");
+            stringBuilder.append("近距離命中 +").append(hit).append(",");
+            stringBuilder.append("遠距離命中 +").append(bhit).append(",");
+            stringBuilder.append("物理傷害減免 +").append(dr).append(",");
+            stringBuilder.append("魔法傷害減免 +").append(mdr).append(",");
+            stringBuilder.append("魔攻 +").append(sp).append(",");
+            stringBuilder.append("魔法命中 +").append(mhit).append(",");
+            stringBuilder.append("魔法防禦 +").append(mr).append(",");
+            stringBuilder.append("火屬性防禦 +").append(f).append(",");
+            stringBuilder.append("風屬性防禦 +").append(wind).append(",");
+            stringBuilder.append("地屬性防禦 +").append(e).append(",");
+            stringBuilder.append("水屬性防禦 +").append(w).append(",");
             final String[] clientStrAry = stringBuilder.toString().split(",");
             pc.sendPackets(new S_NPCTalkReturn(pc, "card_11", clientStrAry));
         } catch (final Exception e) {
@@ -330,12 +330,12 @@ public class CardBookCmd {
                         pc.setCarId(i);
 
                         if (CardQuestTable.get().IsQuest(pc, card.getQuestId())) {
-                            stringBuilder.append(card.getAddcgfxid() + ",");    // 0
+                            stringBuilder.append(card.getAddcgfxid()).append(",");    // 0
                         } else {
-                            stringBuilder.append(card.getAddhgfxid() + ",");    // 0
+                            stringBuilder.append(card.getAddhgfxid()).append(",");    // 0
                         }
-                        stringBuilder.append(card.getMsg2() + ",");//1
-                        stringBuilder.append(card.getMsg1() + ",");//2
+                        stringBuilder.append(card.getMsg2()).append(",");//1
+                        stringBuilder.append(card.getMsg1()).append(",");//2
 
 
                         final String[] clientStrAry = stringBuilder.toString().split(",");//從0開始分裂以逗號為單位

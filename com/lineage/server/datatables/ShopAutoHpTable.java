@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class ShopAutoHpTable {
     private static final Log _log = LogFactory.getLog(ShopAutoHpTable.class);
-    private static final Map<Integer, ArrayList<L1ShopAutoHp>> _shopList = new HashMap<Integer, ArrayList<L1ShopAutoHp>>();
+    private static final Map<Integer, ArrayList<L1ShopAutoHp>> _shopList = new HashMap<>();
     private static ShopAutoHpTable _instance;
 
     public static ShopAutoHpTable get() {
@@ -126,9 +126,9 @@ public class ShopAutoHpTable {
      *
      */
     private void addShopItem(final int Type, final L1ShopAutoHp item) {
-        ArrayList<L1ShopAutoHp> list = _shopList.get(new Integer(Type));
+        ArrayList<L1ShopAutoHp> list = _shopList.get(Type);
         if (list == null) {
-            list = new ArrayList<L1ShopAutoHp>();
+            list = new ArrayList<>();
             list.add(item);
             _shopList.put(Type, list);
         } else {
@@ -141,7 +141,7 @@ public class ShopAutoHpTable {
      *
      */
     public ArrayList<L1ShopAutoHp> get(final int Type) {
-        final ArrayList<L1ShopAutoHp> list = _shopList.get(new Integer(Type));
+        final ArrayList<L1ShopAutoHp> list = _shopList.get(Type);
         if (list != null) {
             return list;
         }
@@ -153,7 +153,7 @@ public class ShopAutoHpTable {
      *
      */
     public L1ShopAutoHp getTemp(final int Type, final int id) {
-        final ArrayList<L1ShopAutoHp> list = _shopList.get(new Integer(Type));
+        final ArrayList<L1ShopAutoHp> list = _shopList.get(Type);
         if (list != null) {
             for (final L1ShopAutoHp shopItem : list) {
                 if (shopItem.get_id() == id) {

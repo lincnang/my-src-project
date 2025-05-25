@@ -75,9 +75,9 @@ public class Holys extends ItemExecutor {
             //獲取列表id
             if (holy != null) {//列表ID空白不啟動
                 if (dollQuestTable.get().IsQuest(pc, holy.getQuestId())) {
-                    stringBuilder.append(String.valueOf(holy.getAddcgfxid()) + ",");
+                    stringBuilder.append(String.valueOf(holy.getAddcgfxid())).append(",");
                 } else {
-                    stringBuilder.append(String.valueOf(holy.getAddhgfxid()) + ",");
+                    stringBuilder.append(String.valueOf(holy.getAddhgfxid())).append(",");
                 }
             }
         }

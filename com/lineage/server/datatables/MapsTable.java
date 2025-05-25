@@ -16,8 +16,8 @@ import java.util.Map;
 
 public final class MapsTable {
     private static final Log _log = LogFactory.getLog(MapsTable.class);
-    private static final Map<Integer, MapData> _maps = new HashMap<Integer, MapData>();
-    private static final Map<Object, Object> _mapName = new HashMap<Object, Object>();
+    private static final Map<Integer, MapData> _maps = new HashMap<>();
+    private static final Map<Object, Object> _mapName = new HashMap<>();
     private static MapsTable _instance;
 
     public static MapsTable get() {
@@ -63,7 +63,7 @@ public final class MapsTable {
                 data.isAutoBot = rs.getBoolean("是否掛機");// 此地圖是否允許掛機
                 data.CopyMapId = rs.getInt("CopyMapId");
                 data.chuanyunjian = rs.getBoolean("是否穿雲");
-                _maps.put(new Integer(mapId), data);
+                _maps.put(mapId, data);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -116,39 +116,39 @@ public final class MapsTable {
     }
 
     public int getStartX(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return 0;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).startX;
+        return ((MapData) _maps.get(mapId)).startX;
     }
 
     public int getEndX(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return 0;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).endX;
+        return ((MapData) _maps.get(mapId)).endX;
     }
 
     public int getStartY(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return 0;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).startY;
+        return ((MapData) _maps.get(mapId)).startY;
     }
 
     public int getEndY(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return 0;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).endY;
+        return ((MapData) _maps.get(mapId)).endY;
     }
 
     public double getMonsterAmount(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return 0.0D;
         }
@@ -156,7 +156,7 @@ public final class MapsTable {
     }
 
     public double getDropRate(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return 0.0D;
         }
@@ -164,87 +164,87 @@ public final class MapsTable {
     }
 
     public boolean isUnderwater(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).isUnderwater;
+        return ((MapData) _maps.get(mapId)).isUnderwater;
     }
 
     public boolean isMarkable(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).markable;
+        return ((MapData) _maps.get(mapId)).markable;
     }
 
     public boolean isTeleportable(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).teleportable;
+        return ((MapData) _maps.get(mapId)).teleportable;
     }
 
     public boolean isEscapable(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).escapable;
+        return ((MapData) _maps.get(mapId)).escapable;
     }
 
     public boolean isUseResurrection(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).isUseResurrection;
+        return ((MapData) _maps.get(mapId)).isUseResurrection;
     }
 
     public boolean isUsePainwand(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).isUsePainwand;
+        return ((MapData) _maps.get(mapId)).isUsePainwand;
     }
 
     public boolean isEnabledDeathPenalty(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).isEnabledDeathPenalty;
+        return ((MapData) _maps.get(mapId)).isEnabledDeathPenalty;
     }
 
     public boolean isTakePets(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).isTakePets;
+        return ((MapData) _maps.get(mapId)).isTakePets;
     }
 
     public boolean isRecallPets(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).isRecallPets;
+        return ((MapData) _maps.get(mapId)).isRecallPets;
     }
 
     public boolean isUsableItem(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
-        return ((MapData) _maps.get(Integer.valueOf(mapId))).isUsableItem;
+        return ((MapData) _maps.get(mapId)).isUsableItem;
     }
 
     public boolean isUsableSkill(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
@@ -268,7 +268,7 @@ public final class MapsTable {
      *
      */
     public boolean isAutoBot(int mapId) {
-        MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
+        MapData map = (MapData) _maps.get(mapId);
         if (map == null) {
             return false;
         }
@@ -302,8 +302,8 @@ public final class MapsTable {
      * @return スキルを使用できるならばtrue
      */
     public String getMapName(int mapId) {
-        if (_mapName.containsKey(Integer.valueOf(mapId))) {
-            return (String) _mapName.get(Integer.valueOf(mapId));
+        if (_mapName.containsKey(mapId)) {
+            return (String) _mapName.get(mapId);
         } else {
             return null;
         }

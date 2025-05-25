@@ -69,9 +69,9 @@ public class EnchantArmor extends EnchantExecutor {
             s.append(item.getName());
         } else {
             if (item.getEnchantLevel() > 0) {
-                s.append("+" + item.getEnchantLevel() + " " + item.getName());
+                s.append("+").append(item.getEnchantLevel()).append(" ").append(item.getName());
             } else if (item.getEnchantLevel() < 0) {
-                s.append(item.getEnchantLevel() + " " + item.getName());
+                s.append(item.getEnchantLevel()).append(" ").append(item.getName());
             } else {
                 s.append(item.getName());
             }

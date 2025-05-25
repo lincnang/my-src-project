@@ -306,7 +306,7 @@ public class L1ItemStatus {
         }
 
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -615,7 +615,7 @@ public class L1ItemStatus {
             _os.writeS("防噴積分");
         }
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -713,7 +713,7 @@ public class L1ItemStatus {
 			}
 		}*/
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -924,7 +924,7 @@ public class L1ItemStatus {
             }
         }
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -1140,7 +1140,7 @@ public class L1ItemStatus {
             _os.writeS("\\aE重登狀態消失");
         }
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -1323,7 +1323,7 @@ public class L1ItemStatus {
 			}
 		}*/
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -1363,7 +1363,7 @@ public class L1ItemStatus {
 			}
 		}*/
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -1478,7 +1478,7 @@ public class L1ItemStatus {
             _os.writeS("\\f3效果時間： 1800秒 ");
         }
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -1604,8 +1604,8 @@ public class L1ItemStatus {
 		}*/
         int RatePlus2 = 0;
         String[] ratebyarmor2 = this._item.getclassname().split(" ");
-        if ((ratebyarmor2[0].equals("RatePlus")) && (Integer.valueOf(ratebyarmor2[2]).intValue() > 0)) {
-            RatePlus2 += Integer.valueOf(ratebyarmor2[2]).intValue();
+        if ((ratebyarmor2[0].equals("RatePlus")) && (Integer.parseInt(ratebyarmor2[2]) > 0)) {
+            RatePlus2 += Integer.parseInt(ratebyarmor2[2]);
         }
         if (RatePlus2 != 0) {
             this._os.writeC(39);
@@ -1914,9 +1914,9 @@ public class L1ItemStatus {
         StringBuilder name = new StringBuilder();
         int adduhp = uhp /* + greater()[2] */;
         if (adduhp != 0) {// 增加藥水回復量%
-            name.append("藥水回復量 +" + adduhp + "%");
+            name.append("藥水回復量 +").append(adduhp).append("%");
             if (uhp_num != 0) {// 增加藥水回復指定量
-                name.append("+" + uhp_num);
+                name.append("+").append(uhp_num);
             }
             _os.writeC(39);
             _os.writeS(name.toString());
@@ -2010,34 +2010,34 @@ public class L1ItemStatus {
             }
             if ((bless.get_hole_str() != 0) || (bless.get_hole_dex() != 0) || (bless.get_hole_int() != 0) || (bless.get_hole_dmg() != 0) || (bless.get_hole_bowdmg() != 0) || (bless.get_hole_mcdmg() != 0)) {
                 if (bless.get_hole_str() >= 0) {
-                    stringBuilder.append("力+" + bless.get_hole_str() + " ");
+                    stringBuilder.append("力+").append(bless.get_hole_str()).append(" ");
                 } else {
-                    stringBuilder.append("力" + bless.get_hole_str() + " ");
+                    stringBuilder.append("力").append(bless.get_hole_str()).append(" ");
                 }
                 if (bless.get_hole_dex() >= 0) {
-                    stringBuilder.append("敏+" + bless.get_hole_dex() + " ");
+                    stringBuilder.append("敏+").append(bless.get_hole_dex()).append(" ");
                 } else {
-                    stringBuilder.append("敏" + bless.get_hole_dex() + " ");
+                    stringBuilder.append("敏").append(bless.get_hole_dex()).append(" ");
                 }
                 if (bless.get_hole_int() >= 0) {
-                    stringBuilder.append("智+" + bless.get_hole_int() + " ");
+                    stringBuilder.append("智+").append(bless.get_hole_int()).append(" ");
                 } else {
-                    stringBuilder.append("智" + bless.get_hole_int() + " ");
+                    stringBuilder.append("智").append(bless.get_hole_int()).append(" ");
                 }
                 if (bless.get_hole_dmg() >= 0) {
-                    stringBuilder1.append("近戰+" + bless.get_hole_dmg() + " ");
+                    stringBuilder1.append("近戰+").append(bless.get_hole_dmg()).append(" ");
                 } else {
-                    stringBuilder1.append("近戰" + bless.get_hole_dmg() + " ");
+                    stringBuilder1.append("近戰").append(bless.get_hole_dmg()).append(" ");
                 }
                 if (bless.get_hole_bowdmg() >= 0) {
-                    stringBuilder1.append("遠弓+" + bless.get_hole_bowdmg() + " ");
+                    stringBuilder1.append("遠弓+").append(bless.get_hole_bowdmg()).append(" ");
                 } else {
-                    stringBuilder1.append("遠弓" + bless.get_hole_bowdmg() + " ");
+                    stringBuilder1.append("遠弓").append(bless.get_hole_bowdmg()).append(" ");
                 }
                 if (bless.get_hole_mcdmg() >= 0) {
-                    stringBuilder1.append("魔法+" + bless.get_hole_mcdmg() + " ");
+                    stringBuilder1.append("魔法+").append(bless.get_hole_mcdmg()).append(" ");
                 } else {
-                    stringBuilder1.append("魔法" + bless.get_hole_mcdmg() + " ");
+                    stringBuilder1.append("魔法").append(bless.get_hole_mcdmg()).append(" ");
                 }
                 // this._os.writeC(39);
                 // this._os.writeS("祝福強化:");
@@ -2769,7 +2769,7 @@ public class L1ItemStatus {
             }    //
         }
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -2788,7 +2788,7 @@ public class L1ItemStatus {
             }
             if (bonus2 >= 0) {
                 this._os.writeC(39);
-                this._os.writeS("目前+" + this._itemInstance.getEnchantLevel() + " " + (bonus2 + Integer.valueOf(byarmor[1]).intValue()) + "%機率 發動" + byarmor[4]);
+                this._os.writeS("目前+" + this._itemInstance.getEnchantLevel() + " " + (bonus2 + Integer.parseInt(byarmor[1])) + "%機率 發動" + byarmor[4]);
                 this._os.writeC(39);
                 this._os.writeS("傷害 " + Integer.valueOf(byarmor[3]));
             }
@@ -3225,14 +3225,14 @@ public class L1ItemStatus {
         StringBuilder name = new StringBuilder();
         int adduhp = uhp + greater()[2];
         if (adduhp != 0) {// 增加藥水回復量%
-            name.append("藥水回復量 +" + adduhp + "%");
+            name.append("藥水回復量 +").append(adduhp).append("%");
             if (uhp_num != 0) {// 增加藥水回復指定量
-                name.append("+" + uhp_num);
+                name.append("+").append(uhp_num);
             }
             _os.writeC(39);
             _os.writeS(name.toString());
         }
-        int pvpDmg = +greater()[7];
+        int pvpDmg = greater()[7];
         int addpvpdmg = _item.getPvpDmg() + pvpDmg; // 增加PVP傷害
         if (addpvpdmg != 0) {
             _os.writeC(59);
@@ -3779,7 +3779,7 @@ public class L1ItemStatus {
             }
         }
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -3798,7 +3798,7 @@ public class L1ItemStatus {
             }
             if (bonus2 >= 0) {
                 this._os.writeC(39);
-                this._os.writeS("目前+" + this._itemInstance.getEnchantLevel() + " " + (bonus2 + Integer.valueOf(byarmor[1]).intValue()) + "%機率 發動" + byarmor[4]);
+                this._os.writeS("目前+" + this._itemInstance.getEnchantLevel() + " " + (bonus2 + Integer.parseInt(byarmor[1])) + "%機率 發動" + byarmor[4]);
                 this._os.writeC(39);
                 this._os.writeS("傷害 " + Integer.valueOf(byarmor[3]));
             }
@@ -4037,9 +4037,9 @@ public class L1ItemStatus {
         StringBuilder name = new StringBuilder();
         int adduhp = uhp + greater()[2];
         if (adduhp != 0) {// 增加藥水回復量%
-            name.append("藥水回復量 +" + adduhp + "%");
+            name.append("藥水回復量 +").append(adduhp).append("%");
             if (uhp_num != 0) {// 增加藥水回復指定量
-                name.append("+" + uhp_num);
+                name.append("+").append(uhp_num);
             }
             _os.writeC(39);
             _os.writeS(name.toString());
@@ -4424,16 +4424,16 @@ public class L1ItemStatus {
                         this._os.writeC(0x27);
                         switch (i) {
                             case 0:
-                                powername1.append("欄位1:" + set_rune_name(power.get_super_rune_1()));
+                                powername1.append("欄位1:").append(set_rune_name(power.get_super_rune_1()));
                                 break;
                             case 1:
-                                powername1.append("欄位2:" + set_rune_name(power.get_super_rune_2()));
+                                powername1.append("欄位2:").append(set_rune_name(power.get_super_rune_2()));
                                 break;
                             case 2:
-                                powername1.append("欄位3:" + set_rune_name(power.get_super_rune_3()));
+                                powername1.append("欄位3:").append(set_rune_name(power.get_super_rune_3()));
                                 break;
                             case 3:
-                                powername1.append("欄位4:" + set_rune_name2(power.get_super_rune_4()));
+                                powername1.append("欄位4:").append(set_rune_name2(power.get_super_rune_4()));
                                 break;
                         }
                         this._os.writeS(powername1.toString());
@@ -4450,16 +4450,16 @@ public class L1ItemStatus {
                         this._os.writeC(0x27);
                         switch (i) {
                             case 0:
-                                powername2.append("欄位1:" + set_rune_name(0));
+                                powername2.append("欄位1:").append(set_rune_name(0));
                                 break;
                             case 1:
-                                powername2.append("欄位2:" + set_rune_name(0));
+                                powername2.append("欄位2:").append(set_rune_name(0));
                                 break;
                             case 2:
-                                powername2.append("欄位3:" + set_rune_name(0));
+                                powername2.append("欄位3:").append(set_rune_name(0));
                                 break;
                             case 3:
-                                powername2.append("欄位4:" + set_rune_name2(0));
+                                powername2.append("欄位4:").append(set_rune_name2(0));
                                 break;
                         }
                         this._os.writeS(powername2.toString());
@@ -4470,7 +4470,7 @@ public class L1ItemStatus {
             }
         }
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -4489,7 +4489,7 @@ public class L1ItemStatus {
             }
             if (bonus2 >= 0) {
                 this._os.writeC(39);
-                this._os.writeS("目前+" + this._itemInstance.getEnchantLevel() + " " + (bonus2 + Integer.valueOf(byarmor[1]).intValue()) + "%機率 發動" + byarmor[4]);
+                this._os.writeS("目前+" + this._itemInstance.getEnchantLevel() + " " + (bonus2 + Integer.parseInt(byarmor[1])) + "%機率 發動" + byarmor[4]);
                 this._os.writeC(39);
                 this._os.writeS("傷害 " + Integer.valueOf(byarmor[3]));
             }
@@ -4795,34 +4795,34 @@ public class L1ItemStatus {
             }
             if ((bless.get_hole_str() != 0) || (bless.get_hole_dex() != 0) || (bless.get_hole_int() != 0) || (bless.get_hole_dmg() != 0) || (bless.get_hole_bowdmg() != 0) || (bless.get_hole_mcdmg() != 0)) {
                 if (bless.get_hole_str() >= 0) {
-                    stringBuilder.append("力+" + bless.get_hole_str() + " ");
+                    stringBuilder.append("力+").append(bless.get_hole_str()).append(" ");
                 } else {
-                    stringBuilder.append("力" + bless.get_hole_str() + " ");
+                    stringBuilder.append("力").append(bless.get_hole_str()).append(" ");
                 }
                 if (bless.get_hole_dex() >= 0) {
-                    stringBuilder.append("敏+" + bless.get_hole_dex() + " ");
+                    stringBuilder.append("敏+").append(bless.get_hole_dex()).append(" ");
                 } else {
-                    stringBuilder.append("敏" + bless.get_hole_dex() + " ");
+                    stringBuilder.append("敏").append(bless.get_hole_dex()).append(" ");
                 }
                 if (bless.get_hole_int() >= 0) {
-                    stringBuilder.append("智+" + bless.get_hole_int() + " ");
+                    stringBuilder.append("智+").append(bless.get_hole_int()).append(" ");
                 } else {
-                    stringBuilder.append("智" + bless.get_hole_int() + " ");
+                    stringBuilder.append("智").append(bless.get_hole_int()).append(" ");
                 }
                 if (bless.get_hole_dmg() >= 0) {
-                    stringBuilder1.append("近戰+" + bless.get_hole_dmg() + " ");
+                    stringBuilder1.append("近戰+").append(bless.get_hole_dmg()).append(" ");
                 } else {
-                    stringBuilder1.append("近戰" + bless.get_hole_dmg() + " ");
+                    stringBuilder1.append("近戰").append(bless.get_hole_dmg()).append(" ");
                 }
                 if (bless.get_hole_bowdmg() >= 0) {
-                    stringBuilder1.append("遠弓+" + bless.get_hole_bowdmg() + " ");
+                    stringBuilder1.append("遠弓+").append(bless.get_hole_bowdmg()).append(" ");
                 } else {
-                    stringBuilder1.append("遠弓" + bless.get_hole_bowdmg() + " ");
+                    stringBuilder1.append("遠弓").append(bless.get_hole_bowdmg()).append(" ");
                 }
                 if (bless.get_hole_mcdmg() >= 0) {
-                    stringBuilder1.append("魔法+" + bless.get_hole_mcdmg() + " ");
+                    stringBuilder1.append("魔法+").append(bless.get_hole_mcdmg()).append(" ");
                 } else {
-                    stringBuilder1.append("魔法" + bless.get_hole_mcdmg() + " ");
+                    stringBuilder1.append("魔法").append(bless.get_hole_mcdmg()).append(" ");
                 }
                 // this._os.writeC(39);
                 // this._os.writeS("祝福強化:");
@@ -5346,7 +5346,7 @@ public class L1ItemStatus {
             }
         }
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -5486,7 +5486,7 @@ public class L1ItemStatus {
 			}
 		}*/
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -5580,7 +5580,7 @@ public class L1ItemStatus {
 			}
 		}*/
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -5669,7 +5669,7 @@ public class L1ItemStatus {
 			}
 		}*/
         // 2017/04/21
-        ArrayList<String> as = new ArrayList<String>();
+        ArrayList<String> as = new ArrayList<>();
         try {
             for (String s : WilliamItemMessage.getItemInfo(_itemInstance)) {
                 if (s != null && !s.isEmpty()) {
@@ -5852,7 +5852,7 @@ public class L1ItemStatus {
         final L1StonePower l1StonePower = StonePowerTable.getInstance().get(hole);
         final StringBuilder stringBuilder = new StringBuilder();
         if (l1StonePower != null) {
-            stringBuilder.append(l1StonePower.get_Note() + " ");
+            stringBuilder.append(l1StonePower.get_Note()).append(" ");
         } else {
             stringBuilder.append("○");
         }

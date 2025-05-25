@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.Properties;
 
 public final class ConfigSay {
@@ -25,7 +26,7 @@ public final class ConfigSay {
         Properties set = new Properties();
         try {
             //InputStream is = new FileInputStream(new File("./config/superdiy-A+/顯示公告設置.properties"));
-            final InputStream is = new FileInputStream(new File(Say));
+            final InputStream is = Files.newInputStream(new File(Say).toPath());
             InputStreamReader isr = new InputStreamReader(is, "utf-8");
             set.load(isr);
             is.close();

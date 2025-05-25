@@ -190,7 +190,7 @@ public class S_NewCreateItem extends ServerBasePacket {
             nameId = craftAction.getCraftNameID();
         } else {
             try {
-                nameId = Integer.valueOf(template.getNameId().substring(1)); // 去除$
+                nameId = Integer.parseInt(template.getNameId().substring(1)); // 去除$
             } catch (final Exception e) {
             }
         }

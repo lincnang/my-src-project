@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 public final class ConfigOther {
@@ -58,7 +59,7 @@ public final class ConfigOther {
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            InputStream is = new FileInputStream(new File("./config/other.properties"));
+            InputStream is = Files.newInputStream(new File("./config/other.properties").toPath());
             set.load(is);
             is.close();
             SPEED = Boolean.parseBoolean(set.getProperty("speed", "false"));

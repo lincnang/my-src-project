@@ -1212,7 +1212,7 @@ public class L1MonsterInstance extends L1NpcInstance {
         getInventory().shuffle();
     }
 
-    private final void sendServerMessage(int msgid) {
+    private void sendServerMessage(int msgid) {
         L1QuestUser quest = WorldQuest.get().get(get_showId());
         if (quest != null && !quest.pcList().isEmpty()) {
             for (L1PcInstance pc : quest.pcList()) {

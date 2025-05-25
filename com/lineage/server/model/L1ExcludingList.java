@@ -10,10 +10,10 @@ import java.util.Map;
  * @author daien
  */
 public class L1ExcludingList {
-    public final HashMap<Integer, String> _excludes = new HashMap<Integer, String>();
+    public final HashMap<Integer, String> _excludes = new HashMap<>();
     private final int _charId;
-    private ArrayList<String> _nameList_Chat = new ArrayList<String>();
-    private ArrayList<String> _nameList_Letter = new ArrayList<String>();
+    private ArrayList<String> _nameList_Chat = new ArrayList<>();
+    private ArrayList<String> _nameList_Letter = new ArrayList<>();
 
     public L1ExcludingList(int charId) {
         _charId = charId;
@@ -22,9 +22,9 @@ public class L1ExcludingList {
     public String[] getExcludeList(int type) {
         switch (type) {
             case 0:
-                return _nameList_Chat.toArray(new String[_nameList_Chat.size()]);
+                return _nameList_Chat.toArray(new String[0]);
             case 1:
-                return _nameList_Letter.toArray(new String[_nameList_Letter.size()]);
+                return _nameList_Letter.toArray(new String[0]);
         }
         return null;
     }

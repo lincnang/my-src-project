@@ -64,8 +64,8 @@ public class PcWeaponTimer extends TimerTask {
             if (all.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1PcInstance> iter = all.iterator(); iter.hasNext(); ) {
-                final L1PcInstance tgpc = iter.next();
+            /** 使用`S_EffectLocation`避免人物異常斷線 */
+            for (final L1PcInstance tgpc : all) {
                 // PC 執行 判斷
                 if (check(tgpc)) {
                     final L1ItemInstance weapon = tgpc.getWeapon();

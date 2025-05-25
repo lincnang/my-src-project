@@ -169,26 +169,26 @@ public class S_Party extends ServerBasePacket {
             writeC(0);
             writeC(0);
             writeC(1);
-            for (int i = 0, a = member.length; i < a; i++) {
-                if (member[i].getId() == leader.getId() || member[i] == null) {
+            for (L1PcInstance l1PcInstance : member) {
+                if (l1PcInstance.getId() == leader.getId() || l1PcInstance == null) {
                     continue;
                 }
                 //nowhp = member[i].getCurrentHp();
                 //maxhp = member[i].getMaxHp();
                 //writeD(i);//
-                writeD(member[i].getId());
-                writeS(member[i].getName());
-                writeC(member[i].getType());
+                writeD(l1PcInstance.getId());
+                writeS(l1PcInstance.getName());
+                writeC(l1PcInstance.getType());
                 writeC(0x00);// unknow
                 writeC(0x00);// unknow
                 //writeC((int) (nowhp / maxhp) * 100);
-                writeC((member[i].getCurrentHp() * 100) / member[i].getMaxHp());
-                writeC((member[i].getCurrentMp() * 100) / member[i].getMaxMp());
+                writeC((l1PcInstance.getCurrentHp() * 100) / l1PcInstance.getMaxHp());
+                writeC((l1PcInstance.getCurrentMp() * 100) / l1PcInstance.getMaxMp());
                 //writeC(64);
                 //writeC(64);
-                writeD(member[i].getMapId());
-                writeH(member[i].getX());
-                writeH(member[i].getY());
+                writeD(l1PcInstance.getMapId());
+                writeH(l1PcInstance.getX());
+                writeH(l1PcInstance.getY());
                 //writeD(0);
                 writeC(0);
                 writeC(0);
@@ -245,11 +245,11 @@ public class S_Party extends ServerBasePacket {
             writeC(S_EVENT);
             writeC(S_PacketBox.PARTY_REFRESH);
             writeC(member.length);
-            for (int i = 0, a = member.length; i < a; i++) {
-                writeD(member[i].getId());
-                writeD(member[i].getMapId());
-                writeH(member[i].getX());
-                writeH(member[i].getY());
+            for (L1PcInstance l1PcInstance : member) {
+                writeD(l1PcInstance.getId());
+                writeD(l1PcInstance.getMapId());
+                writeH(l1PcInstance.getX());
+                writeH(l1PcInstance.getY());
             }
             //writeC(0x00);
         }

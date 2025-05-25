@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class TownTable implements TownStorage {
     private static final Log _log = LogFactory.getLog(TownTable.class);
-    private static final Map<Integer, L1Town> _towns = new HashMap<Integer, L1Town>();
+    private static final Map<Integer, L1Town> _towns = new HashMap<>();
     private static TownTable _instance;
 
     public static TownTable getInstance() {
@@ -51,7 +51,7 @@ public class TownTable implements TownStorage {
                 town.set_sales_money_yesterday(rs.getInt("sales_money_yesterday"));
                 town.set_town_tax(rs.getInt("town_tax"));
                 town.set_town_fix_tax(rs.getInt("town_fix_tax"));
-                _towns.put(new Integer(townid), town);
+                _towns.put(townid, town);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -64,11 +64,11 @@ public class TownTable implements TownStorage {
     }
 
     public L1Town[] getTownTableList() {
-        return (L1Town[]) _towns.values().toArray(new L1Town[_towns.size()]);
+        return (L1Town[]) _towns.values().toArray(new L1Town[0]);
     }
 
     public L1Town getTownTable(int id) {
-        return (L1Town) _towns.get(Integer.valueOf(id));
+        return (L1Town) _towns.get(id);
     }
 
     public boolean isLeader(L1PcInstance pc, int town_id) {

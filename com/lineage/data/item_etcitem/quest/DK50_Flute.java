@@ -43,8 +43,7 @@ public class DK50_Flute extends ItemExecutor {
             pc.sendPackets(new S_ServerMessage(79));
             return;
         }
-        final HashMap<Integer, L1Object> mapList = new HashMap<Integer, L1Object>();
-        mapList.putAll(World.get().getVisibleObjects(pc.getMapId()));
+        final HashMap<Integer, L1Object> mapList = new HashMap<>(World.get().getVisibleObjects(pc.getMapId()));
         int i = 0;
         for (L1Object tgobj : mapList.values()) {
             if (tgobj instanceof L1MonsterInstance) {

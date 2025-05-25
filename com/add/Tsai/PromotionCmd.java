@@ -75,7 +75,7 @@ public class PromotionCmd {
                 // 找回物品
                 final L1Item itemtmp = ItemTable.get().getTemplate(info[1]);
                 if (itemtmp != null) {
-                    stringBuilder.append(itemtmp.getName() + "(" + info[2] + "),");
+                    stringBuilder.append(itemtmp.getName()).append("(").append(info[2]).append("),");
                 }
             }
         }

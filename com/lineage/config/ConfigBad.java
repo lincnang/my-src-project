@@ -4,16 +4,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class ConfigBad {
-    public static final ArrayList<String> BAD_TEXT_LIST = new ArrayList<String>();
+    public static final ArrayList<String> BAD_TEXT_LIST = new ArrayList<>();
     private static final Log _log = LogFactory.getLog(ConfigBad.class);
     private static final String _bad_text = "./data/badtext.txt";
 
     public static void load() throws ConfigErrorException {
         try {
-            InputStream is = new FileInputStream(new File(_bad_text));
+            InputStream is = Files.newInputStream(new File(_bad_text).toPath());
             // 指定檔案編碼
             InputStreamReader isr = new InputStreamReader(is, "utf-8");
             LineNumberReader lnr = new LineNumberReader(isr);

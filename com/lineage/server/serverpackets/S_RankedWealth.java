@@ -14,8 +14,8 @@ public class S_RankedWealth extends ServerBasePacket {
         writeC(4);
         writeD(T_RankTable._basedTime);
         writeD(wealthGoldRanked.size());
-        for (int i = 0; i < wealthGoldRanked.size(); i++) {
-            writeS(wealthGoldRanked.get(i));
+        for (String s : wealthGoldRanked) {
+            writeS(s);
         }
     }
 

@@ -27,8 +27,7 @@ public class DollAidTimer extends TimerTask {
             if (allDoll.isEmpty()) {
                 return;
             }
-            for (Iterator<L1DollInstance> iter = allDoll.iterator(); iter.hasNext(); ) {
-                L1DollInstance doll = (L1DollInstance) iter.next();
+            for (L1DollInstance doll : allDoll) {
                 if (doll.is_power_doll()) {
                     doll.startDollSkill();// 娃娃輔助技能處理
                 }

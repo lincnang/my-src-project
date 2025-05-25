@@ -56,18 +56,18 @@ public class NpcDeleteTimer extends TimerTask {
             }
             if (tgnpc.getNpcId() == 70932) {// 綠色 龍之門扉-安塔瑞斯
                 tgnpc.broadcastPacketAll(new S_DoActionGFX(tgnpc.getId(), 8));
-                if (Npc_DragonB1._timer.containsKey(Integer.valueOf(tgnpc.get_quest_id()))) {
-                    Npc_DragonB1._timer.remove(Integer.valueOf(tgnpc.get_quest_id()));
+                if (Npc_DragonB1._timer.containsKey(tgnpc.get_quest_id())) {
+                    Npc_DragonB1._timer.remove(tgnpc.get_quest_id());
                 }
             } else if (tgnpc.getNpcId() == 70937) {// 藍色 龍之門扉-法利昂
                 tgnpc.broadcastPacketAll(new S_DoActionGFX(tgnpc.getId(), 8));
-                if (Npc_DragonB2._timer.containsKey(Integer.valueOf(tgnpc.get_quest_id()))) {
-                    Npc_DragonB2._timer.remove(Integer.valueOf(tgnpc.get_quest_id()));
+                if (Npc_DragonB2._timer.containsKey(tgnpc.get_quest_id())) {
+                    Npc_DragonB2._timer.remove(tgnpc.get_quest_id());
                 }
             } else if (tgnpc.getNpcId() == 70934) {// 灰色 龍之門扉-林德拜爾
                 tgnpc.broadcastPacketAll(new S_DoActionGFX(tgnpc.getId(), 8));
-                if (Npc_DragonB3._timer.containsKey(Integer.valueOf(tgnpc.get_quest_id()))) {
-                    Npc_DragonB3._timer.remove(Integer.valueOf(tgnpc.get_quest_id()));
+                if (Npc_DragonB3._timer.containsKey(tgnpc.get_quest_id())) {
+                    Npc_DragonB3._timer.remove(tgnpc.get_quest_id());
                 }
             } else if (tgnpc.getNpcId() == 70933) {// 紅色 龍之門扉-巴拉卡斯
                 tgnpc.broadcastPacketAll(new S_DoActionGFX(tgnpc.getId(), 8));
@@ -91,8 +91,7 @@ public class NpcDeleteTimer extends TimerTask {
             if (allNpc.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1NpcInstance> iter = allNpc.iterator(); iter.hasNext(); ) {
-                final L1NpcInstance npc = iter.next();
+            for (final L1NpcInstance npc : allNpc) {
                 // 不具有存在時間
                 if (!npc.is_spawnTime()) {
                     continue;

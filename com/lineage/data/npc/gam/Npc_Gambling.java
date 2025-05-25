@@ -36,18 +36,18 @@ public class Npc_Gambling extends NpcExecutor {
             L1Teleport.teleport(pc, 33529, 32856, (short) 4, 5, true);
             return;
         }
-        String no = String.valueOf(GamblingTime.get_gamblingNo()) + "~" + RangeLong.scount(gambling.get_allRate()) + "~";
+        StringBuilder no = new StringBuilder(String.valueOf(GamblingTime.get_gamblingNo()) + "~" + RangeLong.scount(gambling.get_allRate()) + "~");
         for (Integer key : GamblingTime.get_gambling().get_allNpc().keySet()) {
             GamblingNpc o = (GamblingNpc) GamblingTime.get_gambling().get_allNpc().get(key);
             String name = o.get_npc().getNameId();
             long adena = o.get_adena();
-            no = no + name + " [" + RangeLong.scount(adena) + "]~";
+            no.append(name).append(" [").append(RangeLong.scount(adena)).append("]~");
         }
         if (GamblingTime.isStart()) {
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_g_E", no.split("~")));
+            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_g_E", no.toString().split("~")));
             return;
         }
-        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_g_01", no.split("~")));
+        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_g_01", no.toString().split("~")));
     }
 
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
@@ -55,12 +55,16 @@ public class Npc_Gambling extends NpcExecutor {
             pc.sendPackets(new S_CloseList(pc.getId()));
             return;
         }
-        if (cmd.equals("a")) {
-            sell(pc, npc);
-        } else if (cmd.equals("b")) {
-            pc.sendPackets(new S_ShopSellListGam(pc, npc));
-        } else if (cmd.equals("c")) {
-            reading(pc, npc);
+        switch (cmd) {
+            case "a":
+                sell(pc, npc);
+                break;
+            case "b":
+                pc.sendPackets(new S_ShopSellListGam(pc, npc));
+                break;
+            case "c":
+                reading(pc, npc);
+                break;
         }
     }
 
@@ -69,7 +73,7 @@ public class Npc_Gambling extends NpcExecutor {
         Gambling gambling = GamblingTime.get_gambling();
         Map<Integer, GamblingNpc> npclist = gambling.get_allNpc();
         for (GamblingNpc gamblingNpc : npclist.values()) {
-            stringBuilder.append(gamblingNpc.get_npc().getNameId() + "~");
+            stringBuilder.append(gamblingNpc.get_npc().getNameId()).append("~");
             int npcid = gamblingNpc.get_npc().getNpcId();
             int[] x = GamblingReading.get().winCount(npcid);
             int all = x[0];
@@ -81,16 +85,16 @@ public class Npc_Gambling extends NpcExecutor {
                 win = all;
             }
             double rate = all / win;
-            stringBuilder.append(rate + "~");
+            stringBuilder.append(rate).append("~");
             StringBuilder adena = RangeLong.scount(gamblingNpc.get_adena());
-            stringBuilder.append(adena + "~");
+            stringBuilder.append(adena).append("~");
         }
         String[] clientStrAry = stringBuilder.toString().split("~");
         pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "y_g_02", clientStrAry));
     }
 
     private void sell(L1PcInstance pc, L1NpcInstance npc) {
-        Map<Integer, L1Gambling> sellList = new HashMap<Integer, L1Gambling>();
+        Map<Integer, L1Gambling> sellList = new HashMap<>();
         L1ItemInstance[] items = pc.getInventory().findItemsId(40309);
         if (items.length <= 0) {
             pc.sendPackets(new S_NoSell(npc));
@@ -101,7 +105,7 @@ public class Npc_Gambling extends NpcExecutor {
             L1Gambling gam = GamblingReading.get().getGambling(item.getraceGamNo());
             if (gam != null) {
                 int objid = item.getId();
-                sellList.put(new Integer(objid), gam);
+                sellList.put(objid, gam);
             }
         }
         if (sellList.size() > 0) {

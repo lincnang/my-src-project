@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class DeShopChatTable {
     private static final Log _log = LogFactory.getLog(DeShopChatTable.class);
-    private static final ArrayList<String> _chatList = new ArrayList<String>();
+    private static final ArrayList<String> _chatList = new ArrayList<>();
     private static final Random _random = new Random();
     private static DeShopChatTable _instance;
 

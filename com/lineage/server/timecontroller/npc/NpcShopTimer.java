@@ -27,8 +27,7 @@ public class NpcShopTimer extends TimerTask {
             if (allDe.isEmpty()) {
                 return;
             }
-            for (Iterator<L1DeInstance> iter = allDe.iterator(); iter.hasNext(); ) {
-                L1DeInstance de = (L1DeInstance) iter.next();
+            for (L1DeInstance de : allDe) {
                 if ((!de.destroyed()) || (!de.isDead())) {
                     if (de.getCurrentHp() > 0) {
                         if (de.isShop()) {

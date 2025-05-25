@@ -39,8 +39,7 @@ public class W30_Timer extends TimerTask {
     @Override
     public void run() {
         try {
-            final HashMap<Integer, L1Object> mapList = new HashMap<Integer, L1Object>();
-            mapList.putAll(World.get().getVisibleObjects(WizardLv30_1.MAPID));
+            final HashMap<Integer, L1Object> mapList = new HashMap<>(World.get().getVisibleObjects(WizardLv30_1.MAPID));
             // 任務地圖內物件
             // 執行中任務副本
             final ArrayList<L1QuestUser> questList = WorldQuest.get().getQuests(_qid);

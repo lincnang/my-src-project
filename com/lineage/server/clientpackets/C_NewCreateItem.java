@@ -157,7 +157,7 @@ public class C_NewCreateItem extends ClientBasePacket {
                     /** 加成道具使用數量 */
                     int sumAidCount = 0;
                     /** 刪除材料表 */
-                    ArrayList<int[]> delItemList = new ArrayList<int[]>();
+                    ArrayList<int[]> delItemList = new ArrayList<>();
                     L1PcInventory inventory = pc.getInventory();
                     if (inventory == null) {
                         _log.info("玩家背包有問題：" + pc.getName());
@@ -238,8 +238,7 @@ public class C_NewCreateItem extends ClientBasePacket {
                             }
                         }
                     }
-                    for (int i = 0; i < delItemList.size(); i++) {
-                        int[] temp = delItemList.get(i);
+                    for (int[] temp : delItemList) {
                         L1ItemInstance item = inventory.findItemId(temp[0]);
                         if (item.isStackable()) {
                             pc.getInventory().removeItem(item, temp[1]);
@@ -271,7 +270,7 @@ public class C_NewCreateItem extends ClientBasePacket {
                             //pc.sendPackets(new S_ServerMessage(403, item.getName()));
                             pc.sendPackets(new S_ServerMessage(3556)); // 3556道具製作成功。
                             pc.sendPackets(new S_SystemMessage("恭喜獲得 " + item.getName() + "(" + (int) successItems.get(index).getCount() + ")。"));
-                            _log.info((new StringBuilder()).append("玩家 " + pc.getName() + " 成功製作 " + item.getName() + " 數量(" + (int) successItems.get(index).getCount() + ")。").toString());
+                            _log.info((new StringBuilder()).append("玩家 ").append(pc.getName()).append(" 成功製作 ").append(item.getName()).append(" 數量(").append((int) successItems.get(index).getCount()).append(")。").toString());
                             if (npcMakeItemAction.getShowWorld() != 0) {
                                 // 2綠色 3紅色  13黃色 14白色 22淺綠 44淺藍 45淺紅
                                 World.get().broadcastPacketToAll(new S_AllChannelsChat("恭喜玩家 " + pc.getName() + " 成功製作 " + item.getName() + "(" + (int) successItems.get(index).getCount() + ")。", 2));
@@ -285,7 +284,7 @@ public class C_NewCreateItem extends ClientBasePacket {
                                 pc.sendPackets(new S_ServerMessage(3556)); // 3556道具製作成功。
                                 pc.sendPackets(new S_ServerMessage("\\aE恭喜獲得大成功道具 " + item.getName() + "(" + (int) bigsuccessItems.get(0).getCount() + ")。"));
                                 pc.sendPackets(new S_SkillSound(pc.getId(), 2029)); // 煙花特效
-                                _log.info((new StringBuilder()).append("玩家 " + pc.getName() + " 成功製作大成功道具 " + item.getName() + " 數量(" + (int) bigsuccessItems.get(0).getCount() + ")。").toString());
+                                _log.info((new StringBuilder()).append("玩家 ").append(pc.getName()).append(" 成功製作大成功道具 ").append(item.getName()).append(" 數量(").append((int) bigsuccessItems.get(0).getCount()).append(")。").toString());
                                 if (npcMakeItemAction.getShowWorld() != 0) {
                                     // 2綠色 3紅色  13黃色 14白色 22淺綠 44淺藍 45淺紅
                                     World.get().broadcastPacketToAll(new S_AllChannelsChat("恭喜玩家 " + pc.getName() + " 成功製作大成功道具 " + item.getName() + "(" + (int) bigsuccessItems.get(0).getCount() + ")。", 2));
@@ -296,7 +295,7 @@ public class C_NewCreateItem extends ClientBasePacket {
                                 //pc.sendPackets(new S_ServerMessage(403, item.getName()));
                                 pc.sendPackets(new S_ServerMessage(3556)); // 3556道具製作成功。
                                 pc.sendPackets(new S_SystemMessage("恭喜獲得 " + item.getName() + "(" + (int) successItems.get(0).getCount() + ")。"));
-                                _log.info((new StringBuilder()).append("玩家 " + pc.getName() + " 成功製作 " + item.getName() + " 數量(" + (int) successItems.get(0).getCount() + ")。").toString());
+                                _log.info((new StringBuilder()).append("玩家 ").append(pc.getName()).append(" 成功製作 ").append(item.getName()).append(" 數量(").append((int) successItems.get(0).getCount()).append(")。").toString());
                                 if (npcMakeItemAction.getShowWorld() != 0) {
                                     // 2綠色 3紅色  13黃色 14白色 22淺綠 44淺藍 45淺紅
                                     World.get().broadcastPacketToAll(new S_AllChannelsChat("恭喜玩家 " + pc.getName() + " 成功製作 " + item.getName() + "(" + (int) successItems.get(0).getCount() + ")。", 2));
@@ -313,14 +312,14 @@ public class C_NewCreateItem extends ClientBasePacket {
                             item = pc.getInventory().storeItem(failItems.get(index).getItemId(), (int) failItems.get(index).getCount(), failItems.get(index).getEnchantLevel());
                             pc.getInventory().saveItem(item, L1PcInventory.COL_BLESS);
                             pc.sendPackets(new S_SystemMessage("獲得補償道具 " + item.getName() + "(" + (int) failItems.get(index).getCount() + ")。"));
-                            _log.info((new StringBuilder()).append("玩家 " + pc.getName() + " 製作失敗，獲得 " + item.getName() + " 數量(" + (int) failItems.get(index).getCount() + ")。").toString());
+                            _log.info((new StringBuilder()).append("玩家 ").append(pc.getName()).append(" 製作失敗，獲得 ").append(item.getName()).append(" 數量(").append((int) failItems.get(index).getCount()).append(")。").toString());
                         } else {// 單一道具
                             L1ItemInstance item = null;
                             if (failItems.size() > 0) {
                                 item = pc.getInventory().storeItem(failItems.get(0).getItemId(), (int) failItems.get(0).getCount(), failItems.get(0).getEnchantLevel());
                                 pc.getInventory().saveItem(item, L1PcInventory.COL_BLESS);
                                 pc.sendPackets(new S_SystemMessage("獲得補償道具 " + item.getName() + "(" + (int) failItems.get(0).getCount() + ")。"));
-                                _log.info((new StringBuilder()).append("玩家 " + pc.getName() + " 製作失敗，獲得 " + item.getName() + " 數量(" + (int) failItems.get(0).getCount() + ")。").toString());
+                                _log.info((new StringBuilder()).append("玩家 ").append(pc.getName()).append(" 製作失敗，獲得 ").append(item.getName()).append(" 數量(").append((int) failItems.get(0).getCount()).append(")。").toString());
                             }
                         }
                     }

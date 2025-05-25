@@ -21,7 +21,7 @@ import java.util.HashMap;
 public final class BlendTable {
     private static final Log _log = LogFactory.getLog(BlendTable.class);
     private static BlendTable _instance;
-    private final HashMap<Integer, L1Blend> _itemIdIndex = new HashMap<Integer, L1Blend>();
+    private final HashMap<Integer, L1Blend> _itemIdIndex = new HashMap<>();
 
     public static BlendTable getInstance() {
         if (_instance == null) {
@@ -30,7 +30,7 @@ public final class BlendTable {
         return _instance;
     }
 
-    public final void load() {
+    public void load() {
         final PerformanceTimer timer = new PerformanceTimer();
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -83,7 +83,7 @@ public final class BlendTable {
         _log.info("讀取->[系統]_道具合成系統設置數量: " + _itemIdIndex.size() + "(" + timer.get() + "ms)");
     }
 
-    public final L1Blend getTemplate(int itemId) {
+    public L1Blend getTemplate(int itemId) {
         return _itemIdIndex.get(itemId);
     }
 }

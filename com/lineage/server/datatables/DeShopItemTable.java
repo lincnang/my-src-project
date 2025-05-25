@@ -27,7 +27,7 @@ import java.util.Random;
  */
 public class DeShopItemTable {
     private static final Log _log = LogFactory.getLog(DeShopItemTable.class);
-    private static final ArrayList<DeShopItem> _itemList = new ArrayList<DeShopItem>();
+    private static final ArrayList<DeShopItem> _itemList = new ArrayList<>();
     private final static Random _random = new Random();
     private static DeShopItemTable _instance;
 
@@ -126,8 +126,8 @@ public class DeShopItemTable {
 
         @Override
         public void run() {
-            final Map<L1ItemInstance, Integer> sellList = new HashMap<L1ItemInstance, Integer>();
-            final Map<Integer, int[]> buyList = new HashMap<Integer, int[]>();
+            final Map<L1ItemInstance, Integer> sellList = new HashMap<>();
+            final Map<Integer, int[]> buyList = new HashMap<>();
             try {
                 final int count = _random.nextInt(7) + 1;// 賣出物品數量
                 // 加入賣出物品
@@ -147,6 +147,7 @@ public class DeShopItemTable {
                         for (final L1ItemInstance srcItem : sellList.keySet()) {
                             if (iter.get_item_id() == srcItem.getItemId()) {
                                 isError = true;// 這東西已經在賣了
+                                break;
                             }
                         }
                         if (!isError) {

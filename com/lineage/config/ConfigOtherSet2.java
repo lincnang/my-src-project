@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -49,9 +50,9 @@ public final class ConfigOtherSet2 {
      */
     public static int MAX_DOLL_COUNT2;
     public static String MAX_DOLL_METE;//轉生娃娃攜帶量
-    public static List<Integer> DRAGON_KEY_MAP_LIST = new ArrayList<Integer>();
-    public static List<Integer> GIVE_ITEM_LIST = new ArrayList<Integer>();
-    public static List<Integer> NO_AI_MAP_LIST = new ArrayList<Integer>();
+    public static List<Integer> DRAGON_KEY_MAP_LIST = new ArrayList<>();
+    public static List<Integer> GIVE_ITEM_LIST = new ArrayList<>();
+    public static List<Integer> NO_AI_MAP_LIST = new ArrayList<>();
     public static String Protector_Name;//***守護者***
     /**
      * 連線獎勵等級限制
@@ -112,7 +113,7 @@ public final class ConfigOtherSet2 {
     /**
      * 冰女副本限制可開啟地圖清單
      */
-    public static List<Integer> iceKeyMapList = new ArrayList<Integer>();
+    public static List<Integer> iceKeyMapList = new ArrayList<>();
     public static int CHANGE_COUNT;
     public static int R_83055;
     public static int R_80033;
@@ -227,7 +228,7 @@ public final class ConfigOtherSet2 {
         final Properties set = new Properties();
         try {
             //final InputStream is = new FileInputStream(new File(ConfigOtherSet2));
-            InputStream is = new FileInputStream(new File("./config/☆老爹專屬製作☆遊戲設定☆/額外系統設置.properties"));
+            InputStream is = Files.newInputStream(new File("./config/☆老爹專屬製作☆遊戲設定☆/額外系統設置.properties").toPath());
             // 指定檔案編碼
             final InputStreamReader isr = new InputStreamReader(is, "utf-8");
             set.load(isr);
@@ -361,22 +362,22 @@ public final class ConfigOtherSet2 {
             STATUE_MAGIC_MAXHP = Boolean.parseBoolean(set.getProperty("Statue_Magic_Maxhp", "false"));
             if (set.getProperty("GiveItemList") != null) {
                 for (String str : set.getProperty("GiveItemList").split(",")) {
-                    GIVE_ITEM_LIST.add(Integer.valueOf(Integer.parseInt(str)));
+                    GIVE_ITEM_LIST.add(Integer.parseInt(str));
                 }
             }
             if (set.getProperty("NoAIMapList") != null) {
                 for (String str : set.getProperty("NoAIMapList").split(",")) {
-                    NO_AI_MAP_LIST.add(Integer.valueOf(Integer.parseInt(str)));
+                    NO_AI_MAP_LIST.add(Integer.parseInt(str));
                 }
             }
             if (set.getProperty("DragonKeyMapList") != null) {
                 for (String str : set.getProperty("DragonKeyMapList").split(",")) {
-                    DRAGON_KEY_MAP_LIST.add(Integer.valueOf(Integer.parseInt(str)));
+                    DRAGON_KEY_MAP_LIST.add(Integer.parseInt(str));
                 }
             }
             if (set.getProperty("iceKeyMapList") != null) {
                 for (String str : set.getProperty("iceKeyMapList").split(",")) {
-                    iceKeyMapList.add(Integer.valueOf(Integer.parseInt(str)));
+                    iceKeyMapList.add(Integer.parseInt(str));
                 }
             }
             //角色出生座標 (格式: locx, locy, mapid) (設置 null 則啟動內建出生座標) by terry0412

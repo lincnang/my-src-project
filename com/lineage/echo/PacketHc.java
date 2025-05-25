@@ -22,13 +22,13 @@ public class PacketHc implements Runnable {
 
     public PacketHc(final ClientExecutor executor) {
         _executor = executor;
-        _queue = new ConcurrentLinkedQueue<byte[]>();
+        _queue = new ConcurrentLinkedQueue<>();
         _handler = new PacketHandler(_executor);
     }
 
     public PacketHc(final ClientExecutor executor, final int capacity) {
         _executor = executor;
-        _queue = new LinkedBlockingQueue<byte[]>(capacity);
+        _queue = new LinkedBlockingQueue<>(capacity);
         _handler = new PacketHandler(_executor);
     }
 

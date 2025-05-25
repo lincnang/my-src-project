@@ -76,8 +76,7 @@ public class ServerHouseTaxTimer extends TimerTask {
             HouseReading.get().updateHouse(house); // DB書迂
             // 以前所有者消
             final Collection<L1Clan> allClans = WorldClan.get().getAllClans();
-            for (final Iterator<L1Clan> iter = allClans.iterator(); iter.hasNext(); ) {
-                final L1Clan clan = iter.next();
+            for (final L1Clan clan : allClans) {
                 if (clan.getHouseId() == houseId) {
                     clan.setHouseId(0);
                     ClanReading.get().updateClan(clan);

@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class CommandsTable {
     private static final Log _log = LogFactory.getLog(CommandsTable.class);
-    private static final Map<String, L1Command> _commandList = new HashMap<String, L1Command>();
+    private static final Map<String, L1Command> _commandList = new HashMap<>();
     private static CommandsTable _instance;
 
     public static CommandsTable get() {

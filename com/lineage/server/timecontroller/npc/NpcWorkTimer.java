@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class NpcWorkTimer extends TimerTask {
     private static final Log _log = LogFactory.getLog(NpcWorkTimer.class);
-    private static final Map<L1NpcInstance, Integer> _map = new HashMap<L1NpcInstance, Integer>();
+    private static final Map<L1NpcInstance, Integer> _map = new HashMap<>();
     private ScheduledFuture<?> _timer;
 
     public static void put(L1NpcInstance npc, Integer time) {

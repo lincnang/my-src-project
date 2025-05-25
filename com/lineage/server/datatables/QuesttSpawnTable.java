@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class QuesttSpawnTable {
     private static final Log _log = LogFactory.getLog(QuesttSpawnTable.class);
-    private static final Map<Integer, L1Spawn> _spawntable = new HashMap<Integer, L1Spawn>();
-    private static final Map<Integer, L1QuestMobSpawn> _spawntable_X1 = new HashMap<Integer, L1QuestMobSpawn>();
+    private static final Map<Integer, L1Spawn> _spawntable = new HashMap<>();
+    private static final Map<Integer, L1QuestMobSpawn> _spawntable_X1 = new HashMap<>();
     private static QuesttSpawnTable _instance;
 
     public static QuesttSpawnTable get() {
@@ -86,7 +86,7 @@ public class QuesttSpawnTable {
                     mobSpawn.set_heading(heading);
                     mobSpawn.set_mapid(mapid);
                     mobSpawn.set_round(rs.getInt("round"));
-                    _spawntable_X1.put(Integer.valueOf(id), mobSpawn);
+                    _spawntable_X1.put(id, mobSpawn);
                 } else if (QuestTable.get().getTemplate(questid) != null) {
                     int count = rs.getInt("count");
                     if (count != 0) {
@@ -143,7 +143,7 @@ public class QuesttSpawnTable {
                                 spawnDat.setName(template1.get_name());
                                 spawnDat.init();
                                 spawnCount += spawnDat.getAmount();
-                                _spawntable.put(new Integer(spawnDat.getId()), spawnDat);
+                                _spawntable.put(spawnDat.getId(), spawnDat);
                             }
                         }
                     }
@@ -160,11 +160,11 @@ public class QuesttSpawnTable {
     }
 
     public L1Spawn getTemplate(int id) {
-        return (L1Spawn) _spawntable.get(new Integer(id));
+        return (L1Spawn) _spawntable.get(id);
     }
 
     public ArrayList<L1QuestMobSpawn> getMobSpawn(int questid) {
-        ArrayList<L1QuestMobSpawn> spawnList = new ArrayList<L1QuestMobSpawn>();
+        ArrayList<L1QuestMobSpawn> spawnList = new ArrayList<>();
         for (L1QuestMobSpawn mobSpawn : _spawntable_X1.values()) {
             if (mobSpawn.get_questid() == questid) {
                 spawnList.add(mobSpawn);

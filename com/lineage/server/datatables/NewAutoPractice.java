@@ -235,7 +235,7 @@ public class NewAutoPractice {
                     String name = (rs.getString("殺人玩家名字"));
                     String time = (rs.getString("日期"));
                     if (objid == pc.getId()) {
-                        stringBuilder.append(name + " [" + time + "],");
+                        stringBuilder.append(name).append(" [").append(time).append("],");
                         i++;
                     }
                 }

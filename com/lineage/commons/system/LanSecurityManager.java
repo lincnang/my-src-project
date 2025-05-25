@@ -22,23 +22,23 @@ public class LanSecurityManager extends SecurityManager {
     /**
      * IP封包驗證策略
      */
-    public static final Map<String, Integer> BANIPPACK = new ConcurrentHashMap<String, Integer>();
+    public static final Map<String, Integer> BANIPPACK = new ConcurrentHashMap<>();
     /**
      * 禁止連線IP位置
      */
-    public static final Map<String, Integer> BANIPMAP = new HashMap<String, Integer>();
+    public static final Map<String, Integer> BANIPMAP = new HashMap<>();
     /**
      * 禁止連線NAME位置
      */
-    public static final Map<String, Integer> BANNAMEMAP = new HashMap<String, Integer>();
+    public static final Map<String, Integer> BANNAMEMAP = new HashMap<>();
     /**
      * 1個IP僅允許一個連線
      */
-    public static final Map<String, Integer> ONEIPMAP = new ConcurrentHashMap<String, Integer>();
+    public static final Map<String, Integer> ONEIPMAP = new ConcurrentHashMap<>();
     /**
      * 1個IP只定時間內僅允許連限一個(毫秒) 0:不啟用
      */
-    public static final Map<String, Long> ONETIMEMILLISMAP = new ConcurrentHashMap<String, Long>();
+    public static final Map<String, Long> ONETIMEMILLISMAP = new ConcurrentHashMap<>();
     private static final Log _log = LogFactory.getLog(LanSecurityManager.class);
 
     /**

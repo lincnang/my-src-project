@@ -22,7 +22,7 @@ import java.util.Map;
 public class NpcTeleportOutTable {
     private static final Log _log = LogFactory.getLog(NpcTeleportOutTable.class);
     private static NpcTeleportOutTable _notice;
-    private Map<Integer, L1NpcTeleportOut> list = new HashMap<Integer, L1NpcTeleportOut>();
+    private Map<Integer, L1NpcTeleportOut> list = new HashMap<>();
 
     public static NpcTeleportOutTable get() {
         if (_notice == null) {

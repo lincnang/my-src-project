@@ -30,29 +30,29 @@ public final class L1ItemBox {
         _mobtime = mobtime;
     }
 
-    public final int[] getChance() {
+    public int[] getChance() {
         return _chance;
     }
 
-    public final int[] getItemId() {
+    public int[] getItemId() {
         return _itemId;
     }
 
-    public final int[] getItemCount() {
+    public int[] getItemCount() {
         return _itemCount;
     }
 
     /**
      * 召喚怪物機率
      */
-    public final int getMobChance() {
+    public int getMobChance() {
         return _mobchance;
     }
 
     /**
      * 召喚怪物存在時間
      */
-    public final int getMobTime() {
+    public int getMobTime() {
         return _mobtime;
     }
 }

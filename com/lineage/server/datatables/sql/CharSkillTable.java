@@ -58,11 +58,7 @@ public class CharSkillTable implements CharSkillStorage {
      * 加入Map
      */
     private static void addMap(final int objId, final L1UserSkillTmp skillTmp) {
-        ArrayList<L1UserSkillTmp> list = _skillMap.get(objId);
-        if (list == null) {
-            list = new ArrayList<>();
-            _skillMap.put(objId, list);
-        }
+        ArrayList<L1UserSkillTmp> list = _skillMap.computeIfAbsent(objId, k -> new ArrayList<>());
         list.add(skillTmp);
     }
 

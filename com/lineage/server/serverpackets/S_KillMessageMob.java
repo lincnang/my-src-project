@@ -14,7 +14,7 @@ public final class S_KillMessageMob//src014
         //	writeC(0);
         //	writeD(0);
         writeC(9);
-        String x1 = (String) ConfigMobKill.MOBKILL_TEXT_LIST.get(Integer.valueOf(_random.nextInt(ConfigMobKill.MOBKILL_TEXT_LIST.size()) + 1));
+        String x1 = (String) ConfigMobKill.MOBKILL_TEXT_LIST.get(_random.nextInt(ConfigMobKill.MOBKILL_TEXT_LIST.size()) + 1);
         writeS(String.format(x1, new Object[]{winName, deathName}));
     }
 

@@ -22,7 +22,7 @@ public class WenYangTable {
     private static final Log _log = LogFactory.getLog(WenYangTable.class);
     private static final HashMap<Integer, Integer> _checkMaxEnchantLevelmaps = new HashMap<>();
     private static WenYangTable _instance;
-    private final Map<String, L1WenYang> _itemIdIndex = new HashMap<String, L1WenYang>();
+    private final Map<String, L1WenYang> _itemIdIndex = new HashMap<>();
 
     private WenYangTable() {
         loadMagicCrystalItem();

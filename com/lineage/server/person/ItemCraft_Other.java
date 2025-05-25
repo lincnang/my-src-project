@@ -46,11 +46,9 @@ public final class ItemCraft_Other {
 
     static {
         String[] descriptorData = {"\n\fPerson.proto\022\021l1j.server.server\"￠\001\n\021sendEquipmentInfo\022\f\n\004type\030\001 \002(\005\022<\n\004item\030\002 \003(\0132..l1j.server.server.sendEquipmentInfo.Equipment\022\n\n\002un\030\003 \002(\005\022\013\n\003un1\030\004 \002(\005\032(\n\tEquipment\022\f\n\004eqid\030\001 \002(\005\022\r\n\005objid\030\002 \003(\005\"?\002\n\023sendSoulTowerRanked\022K\n\007newRank\030\001 \003(\0132:.l1j.server.server.sendSoulTowerRanked.soulTowerRankedInfo\022K\n\007oldRank\030\002 \003(\0132:.l1j.server.server.sendSoulTowerRanked.soulTowerRankedInfo\032n\n\023soulTowerRankedInfo\022", "\f\n\004name\030\001 \002(\f\022\020\n\busertype\030\002 \002(\005\022\017\n\007maptime\030\003 \002(\005\022\016\n\006gotime\030\004 \002(\005\022\026\n\016soulTowerClass\030\005 \002(\005\"3\002\n\fsendTaskInfo\022\f\n\004type\030\001 \002(\005\022\r\n\005type1\030\002 \002(\005\0226\n\004info\030\003 \003(\0132(.l1j.server.server.sendTaskInfo.TaskInfo\032í\001\n\bTaskInfo\022\016\n\006taskid\030\001 \002(\005\022\013\n\003url\030\003 \002(\f\022\r\n\005title\030\004 \001(\f\022\021\n\tstarttime\030\005 \001(\005\022\017\n\007endtime\030\006 \001(\005\022?\n\004boss\030\007 \001(\01321.l1j.server.server.sendTaskInfo.TaskInfo.bossInfo\0320\n\bbossInfo\022\020\n\bstringid\030\001 \002(\f\022\022\n\nteleportId\030\002 \002(\005\"í", "\001\n\022sendClanMemberInfo\022\f\n\004type\030\001 \002(\005\022D\n\nmemberInfo\030\002 \003(\01320.l1j.server.server.sendClanMemberInfo.MemberInfo\032?\001\n\nMemberInfo\022\r\n\005objid\030\001 \002(\005\022\020\n\bclanName\030\002 \002(\f\022\020\n\bobjectId\030\003 \002(\005\022\020\n\bcharName\030\004 \002(\f\022\f\n\004note\030\005 \002(\f\022\020\n\bisonline\030\006 \002(\005\022\017\n\007jobtype\030\007 \002(\005\"?\001\n\023sendMonsterKillInfo\022\f\n\004type\030\001 \002(\005\022\017\n\007unknow2\030\002 \002(\005\022=\n\004info\030\003 \003(\0132/.l1j.server.server.sendMonsterKillInfo.KillInfo\032&\n\bKillInfo\022\013\n\003num\030\001 \002(\005\022\r\n\005count\030\002 \002(\005\"?\001\n", "\017sendMonsterList\022\017\n\007unknow1\030\001 \002(\005\022\017\n\007unknow2\030\002 \002(\005\022<\n\004info\030\003 \003(\0132..l1j.server.server.sendMonsterList.MonsterInfo\032C\n\013MonsterInfo\022\020\n\bquestNum\030\001 \002(\005\022\023\n\013monsterTime\030\002 \002(\005\022\r\n\005value\030\003 \002(\005\"2\n\fsendClanInfo\022\020\n\bclanName\030\001 \002(\f\022\020\n\bclanRank\030\002 \002(\005\"¨\002\n\023sendTelePortMapInfo\022\020\n\bnpcObjId\030\001 \002(\005\022D\n\004info\030\002 \003(\01326.l1j.server.server.sendTelePortMapInfo.TelePortMapInfo\032?\001\n\017TelePortMapInfo\022\024\n\ftelePortName\030\001 \002(\f\022O\n\007mapInfo\030\002", " \001(\0132>.l1j.server.server.sendTelePortMapInfo.TelePortMapInfo.MapInfo\032>\n\007MapInfo\022\017\n\007mapType\030\001 \002(\005\022\021\n\tteleMoney\030\002 \002(\005\022\017\n\007unknown\030\003 \002(\005\"?\001\n\rsendBuddyList\022\f\n\004type\030\001 \002(\005\022=\n\tbuddyList\030\002 \003(\0132*.l1j.server.server.sendBuddyList.buddyInfo\032<\n\tbuddyInfo\022\f\n\004name\030\001 \002(\f\022\020\n\bisOnline\030\002 \002(\005\022\017\n\007unknown\030\003 \002(\f\";\n\fsendFishTime\022\f\n\004type\030\001 \002(\005\022\f\n\004time\030\002 \001(\005\022\017\n\007isQuick\030\003 \001(\005\"?\002\n\013sendTAMPage\0226\n\004user\030\001 \003(\0132(.l1j.server.server", ".sendTAMPage.UserModel\022\020\n\bunknown1\030\002 \002(\005\022\020\n\bunknown2\030\003 \002(\005\022\020\n\bunknown3\030\004 \002(\005\032?\001\n\tUserModel\022\020\n\bserverNo\030\001 \002(\005\022\r\n\005objid\030\002 \002(\005\022\f\n\004time\030\003 \002(\005\022\017\n\007tamwait\030\004 \002(\005\022\f\n\004name\030\005 \002(\f\022\r\n\005level\030\006 \002(\005\022\021\n\ttypeClass\030\007 \002(\005\022\013\n\003sex\030\b \002(\005\"?\007\n\016sendAttrReward\0227\n\003str\030\001 \002(\0132*.l1j.server.server.sendAttrReward.strModel\0229\n\005intel\030\002 \002(\0132*.l1j.server.server.sendAttrReward.intModel\0227\n\003wis\030\003 \002(\0132*.l1j.server.server.sendAttrReward.w", "isModel\0227\n\003dex\030\004 \002(\0132*.l1j.server.server.sendAttrReward.dexModel\0227\n\003con\030\005 \002(\0132*.l1j.server.server.sendAttrReward.conModel\0227\n\003cha\030\006 \002(\0132*.l1j.server.server.sendAttrReward.chaModel\032R\n\bstrModel\022\020\n\battValue\030\001 \001(\005\022\013\n\003dmg\030\002 \001(\005\022\013\n\003hit\030\003 \001(\005\022\032\n\022criticalStrikeRate\030\004 \001(\005\032a\n\bintModel\022\020\n\battValue\030\001 \001(\005\022\020\n\bmagicDmg\030\002 \001(\005\022\020\n\bmagicHit\030\003 \001(\005\022\037\n\027magicCriticalStrikeRate\030\004 \001(\005\032?\001\n\bwisModel\022\020\n\battValue\030\001 \001(\005\022\013\n\003mpr\030", "\002 \001(\005\022\023\n\013MPCureBonus\030\003 \001(\005\022\n\n\002mr\030\004 \001(\005\022\024\n\flvUpAddMinMp\030\005 \001(\005\022\024\n\flvUpAddMaxMp\030\006 \001(\005\022\r\n\005mpMax\030\007 \001(\005\032[\n\bdexModel\022\020\n\battValue\030\001 \001(\005\022\016\n\006bowDmg\030\002 \001(\005\022\016\n\006bowHit\030\003 \001(\005\022\035\n\025bowcriticalStrikeRate\030\004 \001(\005\032s\n\bconModel\022\020\n\battValue\030\001 \001(\005\022\013\n\003hpr\030\002 \001(\005\022\023\n\013HPCureBonus\030\003 \001(\005\022\016\n\006weight\030\004 \001(\005\022\024\n\flvUpAddMaxHp\030\005 \001(\005\022\r\n\005hpMax\030\006 \001(\005\032\034\n\bchaModel\022\020\n\battValue\030\001 \001(\005\"b\n\020sendUserBaseAttr\022\013\n\003str\030\001 \002(\005\022\r\n\005intel\030\002 \002(\005\022\013\n\003wis\030\003 \002(\005\022\013", "\n\003dex\030\004 \002(\005\022\013\n\003con\030\005 \002(\005\022\013\n\003cha\030\006 \002(\005\"A\n\013readBanInfo\022\023\n\013excludeType\030\001 \002(\005\022\017\n\007subType\030\002 \002(\005\022\f\n\004name\030\003 \003(\f\"\026\n\007readSha\022\013\n\003sha\030\001 \002(\f\"D\n\020readCustomPacket\022\016\n\006custom\030\001 \001(\005\022\017\n\007custom1\030\002 \001(\005\022\017\n\007custom2\030\003 \001(\005\"Y\n\021readCustomPacket1\022\016\n\006custom\030\001 \001(\005\0224\n\007custom1\030\002 \001(\0132#.l1j.server.server.readCustomPacket\"c\n\020sendCustomPacket\022\f\n\004type\030\001 \001(\005\022\016\n\006custom\030\002 \001(\005\022\017\n\007custom1\030\003 \001(\005\022\017\n\007custom2\030\004 \001(\005\022\017\n\007custom3\030\005 \001(\005\"H\n\021sendCu", "stomPacket1\0223\n\006custom\030\001 \001(\0132#.l1j.server.server.sendCustomPacket\"Z\n\016sendClanConfig\022\f\n\004type\030\001 \002(\005\022\025\n\rjoinOpenState\030\002 \002(\005\022\021\n\tjoinState\030\003 \002(\005\022\020\n\bpassword\030\004 \002(\t\"è\001\n\017sendCustomSkill\022\021\n\tskillType\030\001 \002(\005\022\017\n\007skillId\030\002 \002(\005\022\f\n\004time\030\003 \002(\005\022\020\n\btimetype\030\004 \002(\005\022\f\n\004icon\030\005 \002(\005\022\020\n\bunknown1\030\006 \002(\005\022\013\n\003seq\030\007 \002(\005\022\020\n\bskillMsg\030\b \002(\005\022\020\n\bstartMsg\030\t \002(\005\022\016\n\006endMsg\030\n \002(\005\022\020\n\bunknown2\030\013 \002(\005\"B\n\021sendCastleWarTime\022\r\n\005isatt\030\001 \002(\005\022\f\n\004t", "ime\030\002 \002(\005\022\020\n\bclanName\030\003 \001(\f\"?\001\n\021sendCastleTaxRate\022\020\n\bcastleId\030\001 \002(\005\022\020\n\bclanName\030\002 \002(\f\022\022\n\nleaderName\030\003 \002(\f\022\020\n\bunknown1\030\004 \002(\005\022\020\n\bunknown2\030\005 \002(\005\022\020\n\bunknown3\030\006 \002(\005\022\023\n\013publicMoney\030\007 \002(\005\"?\001\n\025sendCraftNpcCraftList\022\020\n\bunknown1\030\001 \002(\005\022;\n\004list\030\002 \003(\0132-.l1j.server.server.sendCraftNpcCraftList.List\022\020\n\bunknown2\030\003 \002(\005\032<\n\004List\022\020\n\bactionId\030\001 \002(\005\022\020\n\bunknown1\030\002 \002(\005\022\020\n\bunknown2\030\003 \002(\005\"\037\n\016readCraftNpcId\022\r\n\005npcid\030\001 \002(\005\"0", "\n\rSendCraftType\022\f\n\004type\030\001 \002(\005\022\021\n\ttimeIndex\030\002 \002(\005\"Y\n\fReadUserChat\022\021\n\tchatIndex\030\001 \002(\005\022\020\n\bchatType\030\002 \002(\005\022\020\n\bchatText\030\003 \002(\f\022\022\n\ntargetName\030\005 \001(\f\"-\001\n\007MapInfo\022\r\n\005mapid\030\001 \002(\005\022\020\n\bserverId\030\002 \002(\005\022\024\n\fisUnderwater\030\003 \002(\005\022\020\n\bunknown1\030\004 \002(\005\022\020\n\bunknown2\030\005 \002(\005\022\020\n\bunknown3\030\006 \002(\005\0225\n\bunknown4\030\007 \001(\0132#.l1j.server.server.sendCustomPacket\"?\b\n\027CharAbilityDetailedInfo\022\f\n\004type\030\001 \002(\005\022G\n\tstrPacket\030\002 \001(\01324.l1j.server.server.Cha", "rAbilityDetailedInfo.StrPacket\022G\n\tintPacket\030\003 \001(\01324.l1j.server.server.CharAbilityDetailedInfo.IntPacket\022G\n\twisPacket\030\004 \001(\01324.l1j.server.server.CharAbilityDetailedInfo.WisPacket\022G\n\tdexPacket\030\005 \001(\01324.l1j.server.server.CharAbilityDetailedInfo.DexPacket\022G\n\tconPacket\030\006 \001(\01324.l1j.server.server.CharAbilityDetailedInfo.ConPacket\022G\n\tchaPacket\030\007 \001(\01324.l1j.server.server.CharAbilityDetailedInfo.ChaPacket\032Q\n\tS", "trPacket\022\013\n\003dmg\030\001 \002(\005\022\013\n\003hit\030\002 \002(\005\022\032\n\022criticalStrikeRate\030\003 \002(\005\022\016\n\006weight\030\004 \002(\005\032b\n\tDexPacket\022\016\n\006bowDmg\030\001 \002(\005\022\016\n\006bowHit\030\002 \002(\005\022\035\n\025bowcriticalStrikeRate\030\003 \002(\005\022\n\n\002ac\030\004 \002(\005\022\n\n\002er\030\005 \002(\005\032}\n\tIntPacket\022\020\n\bmagicDmg\030\001 \002(\005\022\020\n\bmagicHit\030\002 \002(\005\022\037\n\027magicCriticalStrikeRate\030\003 \002(\005\022\022\n\nmagicBonus\030\004 \002(\005\022\027\n\017MPConsumeReduce\030\005 \002(\005\032i\n\tConPacket\022\013\n\003hpr\030\001 \002(\005\022\023\n\013HPCureBonus\030\002 \002(\005\022\016\n\006weight\030\003 \002(\005\022\024\n\flvUpAddMinHp\030\004 \002(\005\022\024\n\flvUpAd", "dMaxHp\030\005 \002(\005\032e\n\tWisPacket\022\013\n\003mpr\030\001 \002(\005\022\023\n\013MPCureBonus\030\002 \002(\005\022\n\n\002mr\030\003 \002(\005\022\024\n\flvUpAddMinMp\030\004 \002(\005\022\024\n\flvUpAddMaxMp\030\005 \002(\005\032\034\n\tChaPacket\022\017\n\007unknown\030\001 \002(\005\"μ\001\n\023ReadAddCharAbillity\022\r\n\005level\030\001 \002(\005\022\021\n\tclassType\030\002 \002(\005\022\f\n\004type\030\003 \002(\005\022\f\n\004mode\030\004 \001(\005\022\020\n\bstrOrCon\030\005 \001(\005\022\013\n\003str\030\006 \001(\005\022\r\n\005intel\030\007 \001(\005\022\013\n\003wis\030\b \001(\005\022\013\n\003dex\030\t \001(\005\022\013\n\003con\030\n \001(\005\022\013\n\003cha\030\013 \001(\005\"3\n\017DollComposeItem\022\021\n\titemObjId\030\001 \002(\005\022\r\n\005gfxid\030\002 \002(\005\"ü\001\n\020LotteryInvent", "ory\022\f\n\004type\030\001 \002(\005\022\r\n\005type1\030\002 \002(\005\022F\n\004item\030\003 \003(\01328.l1j.server.server.LotteryInventory.LotteryInventoryItem\032c\n\024LotteryInventoryItem\022\016\n\006descid\030\001 \002(\005\022\r\n\005count\030\002 \002(\005\022\r\n\005gfxid\030\003 \002(\005\022\017\n\007indexId\030\004 \002(\005\022\f\n\004name\030\005 \002(\f\"3\n\024readLotteryInventory\022\f\n\004type\030\001 \002(\005\022\r\n\005index\030\002 \003(\005\"ì\001\n\rItemCraftRead\022\020\n\bnpcObjId\030\001 \002(\005\022\020\n\bactionId\030\002 \002(\005\022\r\n\005count\030\003 \002(\005\022<\n\bitemlist\030\004 \003(\0132*.l1j.server.server.ItemCraftRead.CraftItem\022\021\n\tcrefCou", "nt\030\005 \001(\005\032W\n\tCraftItem\022\r\n\005index\030\001 \002(\005\022\016\n\006descid\030\002 \002(\005\022\021\n\titemcount\030\003 \001(\005\022\030\n\020itemEnchantLevel\030\004 \001(\005\"D\004\n\fPCAndNpcPack\022\013\n\003loc\030\001 \002(\004\022\n\n\002id\030\002 \002(\005\022\r\n\005gfxId\030\003 \002(\005\022\016\n\006status\030\004 \002(\005\022\017\n\007heading\030\005 \002(\005\022\024\n\fownLightSize\030\006 \002(\005\022\021\n\tlightSize\030\007 \002(\005\022\016\n\006lawful\030\b \002(\005\022\f\n\004name\030\t \002(\f\022\r\n\005title\030\n \002(\f\022\021\n\tmoveSpeed\030\013 \002(\005\022\022\n\nbraveSpeed\030\f \002(\005\022\024\n\fisThreeSpeed\030\r \002(\005\022\017\n\007isGhost\030\016 \002(\005\022\023\n\013isParalyzed\030\017 \002(\005\022\020\n\bviewName\030\020 \002(\005\022\017\n\007isInvi", "s\030\021 \002(\005\022\016\n\006posion\030\022 \002(\005\022\016\n\006clanId\030\023 \002(\005\022\020\n\bclanName\030\024 \002(\f\022\016\n\006master\030\025 \002(\f\022\r\n\005state\030\026 \002(\005\022\017\n\007HPMeter\030\027 \002(\005\022\r\n\005level\030\030 \002(\005\022\030\n\020privateShopTitle\030\031 \001(\f\022\020\n\bunknown7\030\032 \002(\005\022\020\n\bunknown8\030\033 \002(\005\022\020\n\bunknown9\030\034 \002(\005\022\021\n\tunknown10\030\035 \001(\005\022\017\n\007MPMeter\030\036 \002(\005\022\021\n\tunknown11\030\037 \001(\005\022\020\n\bServerNo\030  \001(\005\022\021\n\tunknown14\030\" \001(\005\"Y\n\rSendItemCraft\022\024\n\fisSendPacket\030\001 \002(\005\0222\n\004list\030\002 \003(\0132$.l1j.server.server.SendItemCraftList\"?\024\n\021SendItemCraf", "tList\022\020\n\bactionid\030\001 \002(\005\022J\n\tcondition\030\002 \002(\01327.l1j.server.server.SendItemCraftList.CraftItemCondition\022\020\n\bunknown1\030\003 \002(\005\022;\n\005quest\030\004 \002(\0132,.l1j.server.server.SendItemCraftList.unQuest\022<\n\004poly\030\005 \002(\0132..l1j.server.server.SendItemCraftList.PolyModel\022D\n\bunknown2\030\006 \002(\01322.l1j.server.server.SendItemCraftList.unknownModel2\022?\n\bmaterial\030\007 \002(\0132-.l1j.server.server.SendItemCraftList.Material\022B\n\007results\030\b \002(\01321.l1j.s", "erver.server.SendItemCraftList.CraftResults\022\026\n\016craftDelayTime\030\t \002(\005\032ì\001\n\022CraftItemCondition\022\016\n\006nameId\030\001 \002(\005\022\020\n\bminLevel\030\002 \002(\005\022\020\n\bmaxLevel\030\003 \002(\005\022\020\n\bunknown1\030\004 \002(\005\022\021\n\tminLawful\030\005 \002(\005\022\021\n\tMaxLawful\030\006 \002(\005\022\020\n\bminKarma\030\007 \002(\005\022\020\n\bmaxKarma\030\b \002(\005\022\020\n\bmaxCount\030\t \002(\005\022\024\n\fisShowChance\030\n \001(\005\0322\n\nQuestModel\022\017\n\007questId\030\001 \002(\005\022\023\n\013questStepId\030\002 \002(\005\032m\n\007unQuest\022\020\n\bunknown1\030\001 \002(\005\022\020\n\bunknown2\030\002 \002(\005\022>\n\005quest\030\003 \002(\0132/.l1j.serve", "r.server.SendItemCraftList.QuestModel\0320\n\tPolyModel\022\023\n\013pcountcount\030\001 \002(\005\022\016\n\006polyId\030\002 \003(\005\0321\n\runknownModel1\022\017\n\007unknow1\030\001 \002(\003\022\017\n\007unknow2\030\002 \002(\003\032è\002\n\bMaterial\022M\n\bmaterial\030\001 \003(\0132;.l1j.server.server.SendItemCraftList.Material.MaterialModel\022P\n\013addMaterial\030\002 \003(\0132;.l1j.server.server.SendItemCraftList.Material.MaterialModel\032o\001\n\rMaterialModel\022\022\n\nitemDescId\030\001 \002(\005\022\r\n\005count\030\002 \002(\005\022\021\n\twindowNum\030\003 \002(\005\022\024\n\fenchantLevel", "\030\004 \002(\005\022\r\n\005bless\030\005 \002(\005\022\f\n\004name\030\006 \002(\f\022\r\n\005gfxId\030\007 \002(\005\022\017\n\007unknow1\030\b \002(\005\022\017\n\007unknow2\030\t \002(\005\022\017\n\007unknow3\030\n \002(\005\032?\007\n\013CraftResult\022D\n\bunknown1\030\001 \001(\01322.l1j.server.server.SendItemCraftList.unknownModel1\022D\n\bunknown2\030\002 \001(\01322.l1j.server.server.SendItemCraftList.unknownModel1\022\020\n\bitemSize\030\003 \001(\005\022\020\n\bitemtype\030\004 \001(\005\022Z\n\017singleCraftItem\030\006 \003(\0132A.l1j.server.server.SendItemCraftList.CraftResult.CraftResultModel\022Z\n\017randomCraft", "Item\030\005 \003(\0132A.l1j.server.server.SendItemCraftList.CraftResult.CraftResultModel\022M\n\tgreatItem\030\007 \001(\0132:.l1j.server.server.SendItemCraftList.CraftResult.GreatItem\032o\002\n\020CraftResultModel\022\022\n\nitemDescId\030\001 \002(\005\022\r\n\005count\030\002 \002(\005\022\020\n\bunknown1\030\003 \002(\003\022\024\n\fenchantLevel\030\004 \002(\005\022\r\n\005bless\030\005 \002(\005\022\020\n\bunknown2\030\006 \002(\005\022\020\n\bunknown3\030\007 \002(\005\022\f\n\004name\030\b \002(\f\022\020\n\bunknown4\030\t \002(\005\022\020\n\bunknown5\030\n \002(\005\022\r\n\005gfxId\030\013 \002(\005\022\025\n\rsuccedMessage\030\f \002(\f\022\027\n\017itemS", "tatusBytes\030\r \002(\f\022\020\n\bunknown6\030\016 \001(\005\022\020\n\bunknown7\030\017 \001(\005\022\023\n\013isGreatItem\030\020 \001(\005\032?\001\n\tGreatItem\022\n\n\002un\030\001 \002(\005\022\013\n\003un1\030\002 \002(\005\022\013\n\003un2\030\003 \002(\005\022O\n\004Item\030\004 \002(\0132A.l1j.server.server.SendItemCraftList.CraftResult.CraftResultModel\032ˉ\001\n\fCraftResults\022E\n\013succeedList\030\001 \002(\01320.l1j.server.server.SendItemCraftList.CraftResult\022B\n\bfailList\030\002 \002(\01320.l1j.server.server.SendItemCraftList.CraftResult\022\024\n\fsuccessRatio\030\003 \002(\005\032?\001\n\runknownMode", "l2\022\f\n\004type\030\001 \002(\005\022\r\n\005count\030\002 \002(\005\022G\n\002un\030\003 \003(\0132;.l1j.server.server.SendItemCraftList.unknownModel2.ItemInfo\0325\n\bItemInfo\022\016\n\006descid\030\001 \002(\005\022\r\n\005count\030\002 \002(\005\022\n\n\002un\030\003 \002(\005\"ò\005\n\rsendDollCraft\022\024\n\fisSendPacket\030\001 \002(\005\022;\n\bmaterial\030\002 \003(\0132).l1j.server.server.sendDollCraft.ItemList\0229\n\006result\030\003 \003(\0132).l1j.server.server.sendDollCraft.ItemList\0228\n\006config\030\004 \003(\0132(.l1j.server.server.sendDollCraft.Configs\032?\001\n\bItemList\022\016\n\006statge", "\030\001 \002(\005\022@\n\004item\030\002 \003(\01322.l1j.server.server.sendDollCraft.ItemList.ItemInfo\0321\n\bItemInfo\022\022\n\nitemDescId\030\001 \002(\005\022\021\n\titemGfxId\030\002 \001(\005\032?\003\n\007Configs\022\r\n\005stage\030\001 \002(\005\022E\n\006config\030\002 \003(\01325.l1j.server.server.sendDollCraft.Configs.ColumnConfig\022A\n\007config1\030\003 \003(\01320.l1j.server.server.sendDollCraft.Configs.Config1\032B\n\fColumnConfig\022\021\n\tcolumnNum\030\001 \002(\005\022\020\n\bunknown1\030\002 \002(\005\022\r\n\005stage\030\003 \002(\005\032?\001\n\007Config1\022\r\n\005stage\030\001 \003(\005\022\f\n\004type\030\002 \002(\005\022I\n", "\007unknow1\030\003 \001(\01328.l1j.server.server.sendDollCraft.Configs.Config1.Config2\032*\n\007Config2\022\017\n\007unknow1\030\001 \001(\005\022\016\n\006stage1\030\002 \001(\005\"?\001\n\021sendDollCraftType\022\f\n\004type\030\001 \002(\005\022?\n\bdollItem\030\002 \002(\0132-.l1j.server.server.sendDollCraftType.DollItem\032(\n\bDollItem\022\r\n\005objid\030\001 \002(\005\022\r\n\005gfxId\030\002 \002(\005\"?\001\n\rreadDollCraft\022\r\n\005stage\030\001 \002(\005\0227\n\004item\030\002 \003(\0132).l1j.server.server.readDollCraft.ItemInfo\032<\n\bItemInfo\022\r\n\005index\030\001 \002(\005\022\016\n\006descId\030\002 \002(\005\022\021\n\titem", "ObjId\030\003 \002(\005"};
-        Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-            public ExtensionRegistry assignDescriptors(Descriptors.FileDescriptor root) {
-                ItemCraft_Other.descriptor = root;
-                return null;
-            }
+        Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = root -> {
+            ItemCraft_Other.descriptor = root;
+            return null;
         };
         Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new Descriptors.FileDescriptor[0], assigner);
     }
@@ -180,7 +178,7 @@ public final class ItemCraft_Other {
                             break;
                         case 18:
                             if ((mutable_bitField0_ & 0x2) != 2) {
-                                this.list_ = new ArrayList<SendItemCraftList>();
+                                this.list_ = new ArrayList<>();
                                 mutable_bitField0_ |= 2;
                             }
                             this.list_.add((ItemCraft_Other.SendItemCraftList) input.readMessage(ItemCraft_Other.SendItemCraftList.PARSER, extensionRegistry));
@@ -200,7 +198,7 @@ public final class ItemCraft_Other {
             }
         }
 
-        public static final Descriptors.Descriptor getDescriptor() {
+        public static Descriptors.Descriptor getDescriptor() {
             return ItemCraft_Other.SendItemCraft_descriptor;
         }
 
@@ -260,7 +258,7 @@ public final class ItemCraft_Other {
             return PARSER;
         }
 
-        public final UnknownFieldSet getUnknownFields() {
+        public UnknownFieldSet getUnknownFields() {
             return this.unknownFields;
         }
 
@@ -296,7 +294,7 @@ public final class ItemCraft_Other {
             return (ItemCraft_Other.SendItemCraftListOrBuilder) this.list_.get(index);
         }
 
-        public final boolean isInitialized() {
+        public boolean isInitialized() {
             byte isInitialized = this.memoizedIsInitialized;
             if (isInitialized == 1) {
                 return true;
@@ -322,8 +320,8 @@ public final class ItemCraft_Other {
             if ((this.bitField0_ & 0x1) == 1) {
                 output.writeInt32(1, this.isSendPacket_);
             }
-            for (int i = 0; i < this.list_.size(); i++) {
-                output.writeMessage(2, (MessageLite) this.list_.get(i));
+            for (SendItemCraftList sendItemCraftList : this.list_) {
+                output.writeMessage(2, (MessageLite) sendItemCraftList);
             }
             this.unknownFields.writeTo(output);
         }
@@ -337,8 +335,8 @@ public final class ItemCraft_Other {
             if ((this.bitField0_ & 0x1) == 1) {
                 size = size + CodedOutputStream.computeInt32Size(1, this.isSendPacket_);
             }
-            for (int i = 0; i < this.list_.size(); i++) {
-                size = size + CodedOutputStream.computeMessageSize(2, (MessageLite) this.list_.get(i));
+            for (SendItemCraftList sendItemCraftList : this.list_) {
+                size = size + CodedOutputStream.computeMessageSize(2, (MessageLite) sendItemCraftList);
             }
             size += this.unknownFields.getSerializedSize();
             this.memoizedSize = size;
@@ -419,7 +417,7 @@ public final class ItemCraft_Other {
                 maybeForceBuilderInitialization();
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraft_descriptor;
             }
 
@@ -550,7 +548,7 @@ public final class ItemCraft_Other {
                 return this;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 if (!hasIsSendPacket()) {
                     return false;
                 }
@@ -601,7 +599,7 @@ public final class ItemCraft_Other {
 
             private void ensureListIsMutable() {
                 if ((this.bitField0_ & 0x2) != 2) {
-                    this.list_ = new ArrayList<SendItemCraftList>(this.list_);
+                    this.list_ = new ArrayList<>(this.list_);
                     this.bitField0_ |= 2;
                 }
             }
@@ -767,17 +765,17 @@ public final class ItemCraft_Other {
 
             private RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList, ItemCraft_Other.SendItemCraftList.Builder, ItemCraft_Other.SendItemCraftListOrBuilder> getListFieldBuilder() {
                 if (this.listBuilder_ == null) {
-                    this.listBuilder_ = new RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList, ItemCraft_Other.SendItemCraftList.Builder, ItemCraft_Other.SendItemCraftListOrBuilder>(this.list_, (this.bitField0_ & 0x2) == 2, getParentForChildren(), isClean());
+                    this.listBuilder_ = new RepeatedFieldBuilderV3<>(this.list_, (this.bitField0_ & 0x2) == 2, getParentForChildren(), isClean());
                     this.list_ = null;
                 }
                 return this.listBuilder_;
             }
 
-            public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+            public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                 return (Builder) super.setUnknownFields(unknownFields);
             }
 
-            public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+            public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                 return (Builder) super.mergeUnknownFields(unknownFields);
             }
         }
@@ -936,7 +934,7 @@ public final class ItemCraft_Other {
             }
         }
 
-        public static final Descriptors.Descriptor getDescriptor() {
+        public static Descriptors.Descriptor getDescriptor() {
             return ItemCraft_Other.SendItemCraftList_descriptor;
         }
 
@@ -996,7 +994,7 @@ public final class ItemCraft_Other {
             return PARSER;
         }
 
-        public final UnknownFieldSet getUnknownFields() {
+        public UnknownFieldSet getUnknownFields() {
             return this.unknownFields;
         }
 
@@ -1100,7 +1098,7 @@ public final class ItemCraft_Other {
             return this.craftDelayTime_;
         }
 
-        public final boolean isInitialized() {
+        public boolean isInitialized() {
             byte isInitialized = this.memoizedIsInitialized;
             if (isInitialized == 1) {
                 return true;
@@ -1584,7 +1582,7 @@ public final class ItemCraft_Other {
                 maybeForceBuilderInitialization();
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_descriptor;
             }
 
@@ -1803,7 +1801,7 @@ public final class ItemCraft_Other {
                 return this;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 if (!hasActionid()) {
                     return false;
                 }
@@ -1966,7 +1964,7 @@ public final class ItemCraft_Other {
 
             private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftItemCondition, ItemCraft_Other.SendItemCraftList.CraftItemCondition.Builder, ItemCraft_Other.SendItemCraftList.CraftItemConditionOrBuilder> getConditionFieldBuilder() {
                 if (this.conditionBuilder_ == null) {
-                    this.conditionBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftItemCondition, ItemCraft_Other.SendItemCraftList.CraftItemCondition.Builder, ItemCraft_Other.SendItemCraftList.CraftItemConditionOrBuilder>(getCondition(), getParentForChildren(), isClean());
+                    this.conditionBuilder_ = new SingleFieldBuilderV3<>(getCondition(), getParentForChildren(), isClean());
                     this.condition_ = null;
                 }
                 return this.conditionBuilder_;
@@ -2071,7 +2069,7 @@ public final class ItemCraft_Other {
 
             private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unQuest, ItemCraft_Other.SendItemCraftList.unQuest.Builder, ItemCraft_Other.SendItemCraftList.unQuestOrBuilder> getQuestFieldBuilder() {
                 if (this.questBuilder_ == null) {
-                    this.questBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unQuest, ItemCraft_Other.SendItemCraftList.unQuest.Builder, ItemCraft_Other.SendItemCraftList.unQuestOrBuilder>(getQuest(), getParentForChildren(), isClean());
+                    this.questBuilder_ = new SingleFieldBuilderV3<>(getQuest(), getParentForChildren(), isClean());
                     this.quest_ = null;
                 }
                 return this.questBuilder_;
@@ -2154,7 +2152,7 @@ public final class ItemCraft_Other {
 
             private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.PolyModel, ItemCraft_Other.SendItemCraftList.PolyModel.Builder, ItemCraft_Other.SendItemCraftList.PolyModelOrBuilder> getPolyFieldBuilder() {
                 if (this.polyBuilder_ == null) {
-                    this.polyBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.PolyModel, ItemCraft_Other.SendItemCraftList.PolyModel.Builder, ItemCraft_Other.SendItemCraftList.PolyModelOrBuilder>(getPoly(), getParentForChildren(), isClean());
+                    this.polyBuilder_ = new SingleFieldBuilderV3<>(getPoly(), getParentForChildren(), isClean());
                     this.poly_ = null;
                 }
                 return this.polyBuilder_;
@@ -2237,7 +2235,7 @@ public final class ItemCraft_Other {
 
             private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unknownModel2, ItemCraft_Other.SendItemCraftList.unknownModel2.Builder, ItemCraft_Other.SendItemCraftList.unknownModel2OrBuilder> getUnknown2FieldBuilder() {
                 if (this.unknown2Builder_ == null) {
-                    this.unknown2Builder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unknownModel2, ItemCraft_Other.SendItemCraftList.unknownModel2.Builder, ItemCraft_Other.SendItemCraftList.unknownModel2OrBuilder>(getUnknown2(), getParentForChildren(), isClean());
+                    this.unknown2Builder_ = new SingleFieldBuilderV3<>(getUnknown2(), getParentForChildren(), isClean());
                     this.unknown2_ = null;
                 }
                 return this.unknown2Builder_;
@@ -2320,7 +2318,7 @@ public final class ItemCraft_Other {
 
             private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.Material, ItemCraft_Other.SendItemCraftList.Material.Builder, ItemCraft_Other.SendItemCraftList.MaterialOrBuilder> getMaterialFieldBuilder() {
                 if (this.materialBuilder_ == null) {
-                    this.materialBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.Material, ItemCraft_Other.SendItemCraftList.Material.Builder, ItemCraft_Other.SendItemCraftList.MaterialOrBuilder>(getMaterial(), getParentForChildren(), isClean());
+                    this.materialBuilder_ = new SingleFieldBuilderV3<>(getMaterial(), getParentForChildren(), isClean());
                     this.material_ = null;
                 }
                 return this.materialBuilder_;
@@ -2403,7 +2401,7 @@ public final class ItemCraft_Other {
 
             private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResults, ItemCraft_Other.SendItemCraftList.CraftResults.Builder, ItemCraft_Other.SendItemCraftList.CraftResultsOrBuilder> getResultsFieldBuilder() {
                 if (this.resultsBuilder_ == null) {
-                    this.resultsBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResults, ItemCraft_Other.SendItemCraftList.CraftResults.Builder, ItemCraft_Other.SendItemCraftList.CraftResultsOrBuilder>(getResults(), getParentForChildren(), isClean());
+                    this.resultsBuilder_ = new SingleFieldBuilderV3<>(getResults(), getParentForChildren(), isClean());
                     this.results_ = null;
                 }
                 return this.resultsBuilder_;
@@ -2431,11 +2429,11 @@ public final class ItemCraft_Other {
                 return this;
             }
 
-            public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+            public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                 return (Builder) super.setUnknownFields(unknownFields);
             }
 
-            public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+            public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                 return (Builder) super.mergeUnknownFields(unknownFields);
             }
         }
@@ -2558,7 +2556,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_CraftItemCondition_descriptor;
             }
 
@@ -2618,7 +2616,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -2706,7 +2704,7 @@ public final class ItemCraft_Other {
                 return this.isShowChance_;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -2977,7 +2975,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_CraftItemCondition_descriptor;
                 }
 
@@ -3149,7 +3147,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     if (!hasNameId()) {
                         return false;
                     }
@@ -3415,11 +3413,11 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -3513,14 +3511,14 @@ public final class ItemCraft_Other {
                                 break;
                             case 42:
                                 if ((mutable_bitField0_ & 0x20) != 32) {
-                                    this.randomCraftItem_ = new ArrayList<CraftResultModel>();
+                                    this.randomCraftItem_ = new ArrayList<>();
                                     mutable_bitField0_ |= 32;
                                 }
                                 this.randomCraftItem_.add((CraftResultModel) input.readMessage(CraftResultModel.PARSER, extensionRegistry));
                                 break;
                             case 50:
                                 if ((mutable_bitField0_ & 0x10) != 16) {
-                                    this.singleCraftItem_ = new ArrayList<CraftResultModel>();
+                                    this.singleCraftItem_ = new ArrayList<>();
                                     mutable_bitField0_ |= 16;
                                 }
                                 this.singleCraftItem_.add((CraftResultModel) input.readMessage(CraftResultModel.PARSER, extensionRegistry));
@@ -3555,7 +3553,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_CraftResult_descriptor;
             }
 
@@ -3615,7 +3613,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -3715,7 +3713,7 @@ public final class ItemCraft_Other {
                 return this.greatItem_ == null ? GreatItem.getDefaultInstance() : this.greatItem_;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -3764,11 +3762,11 @@ public final class ItemCraft_Other {
                 if ((this.bitField0_ & 0x8) == 8) {
                     output.writeInt32(4, this.itemtype_);
                 }
-                for (int i = 0; i < this.randomCraftItem_.size(); i++) {
-                    output.writeMessage(5, (MessageLite) this.randomCraftItem_.get(i));
+                for (CraftResultModel resultModel : this.randomCraftItem_) {
+                    output.writeMessage(5, (MessageLite) resultModel);
                 }
-                for (int i = 0; i < this.singleCraftItem_.size(); i++) {
-                    output.writeMessage(6, (MessageLite) this.singleCraftItem_.get(i));
+                for (CraftResultModel craftResultModel : this.singleCraftItem_) {
+                    output.writeMessage(6, (MessageLite) craftResultModel);
                 }
                 if ((this.bitField0_ & 0x10) == 16) {
                     output.writeMessage(7, getGreatItem());
@@ -3794,11 +3792,11 @@ public final class ItemCraft_Other {
                 if ((this.bitField0_ & 0x8) == 8) {
                     size = size + CodedOutputStream.computeInt32Size(4, this.itemtype_);
                 }
-                for (int i = 0; i < this.randomCraftItem_.size(); i++) {
-                    size = size + CodedOutputStream.computeMessageSize(5, (MessageLite) this.randomCraftItem_.get(i));
+                for (CraftResultModel resultModel : this.randomCraftItem_) {
+                    size = size + CodedOutputStream.computeMessageSize(5, (MessageLite) resultModel);
                 }
-                for (int i = 0; i < this.singleCraftItem_.size(); i++) {
-                    size = size + CodedOutputStream.computeMessageSize(6, (MessageLite) this.singleCraftItem_.get(i));
+                for (CraftResultModel craftResultModel : this.singleCraftItem_) {
+                    size = size + CodedOutputStream.computeMessageSize(6, (MessageLite) craftResultModel);
                 }
                 if ((this.bitField0_ & 0x10) == 16) {
                     size = size + CodedOutputStream.computeMessageSize(7, getGreatItem());
@@ -4014,7 +4012,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_CraftResult_descriptor;
                 }
 
@@ -4246,7 +4244,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     if ((hasUnknown1()) && (!getUnknown1().isInitialized())) {
                         return false;
                     }
@@ -4361,7 +4359,7 @@ public final class ItemCraft_Other {
 
                 private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unknownModel1, ItemCraft_Other.SendItemCraftList.unknownModel1.Builder, ItemCraft_Other.SendItemCraftList.unknownModel1OrBuilder> getUnknown1FieldBuilder() {
                     if (this.unknown1Builder_ == null) {
-                        this.unknown1Builder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unknownModel1, ItemCraft_Other.SendItemCraftList.unknownModel1.Builder, ItemCraft_Other.SendItemCraftList.unknownModel1OrBuilder>(getUnknown1(), getParentForChildren(), isClean());
+                        this.unknown1Builder_ = new SingleFieldBuilderV3<>(getUnknown1(), getParentForChildren(), isClean());
                         this.unknown1_ = null;
                     }
                     return this.unknown1Builder_;
@@ -4444,7 +4442,7 @@ public final class ItemCraft_Other {
 
                 private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unknownModel1, ItemCraft_Other.SendItemCraftList.unknownModel1.Builder, ItemCraft_Other.SendItemCraftList.unknownModel1OrBuilder> getUnknown2FieldBuilder() {
                     if (this.unknown2Builder_ == null) {
-                        this.unknown2Builder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unknownModel1, ItemCraft_Other.SendItemCraftList.unknownModel1.Builder, ItemCraft_Other.SendItemCraftList.unknownModel1OrBuilder>(getUnknown2(), getParentForChildren(), isClean());
+                        this.unknown2Builder_ = new SingleFieldBuilderV3<>(getUnknown2(), getParentForChildren(), isClean());
                         this.unknown2_ = null;
                     }
                     return this.unknown2Builder_;
@@ -4496,7 +4494,7 @@ public final class ItemCraft_Other {
 
                 private void ensureSingleCraftItemIsMutable() {
                     if ((this.bitField0_ & 0x10) != 16) {
-                        this.singleCraftItem_ = new ArrayList<CraftResultModel>(this.singleCraftItem_);
+                        this.singleCraftItem_ = new ArrayList<>(this.singleCraftItem_);
                         this.bitField0_ |= 16;
                     }
                 }
@@ -4662,7 +4660,7 @@ public final class ItemCraft_Other {
 
                 private RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel.Builder, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModelOrBuilder> getSingleCraftItemFieldBuilder() {
                     if (this.singleCraftItemBuilder_ == null) {
-                        this.singleCraftItemBuilder_ = new RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel.Builder, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModelOrBuilder>(this.singleCraftItem_, (this.bitField0_ & 0x10) == 16, getParentForChildren(), isClean());
+                        this.singleCraftItemBuilder_ = new RepeatedFieldBuilderV3<>(this.singleCraftItem_, (this.bitField0_ & 0x10) == 16, getParentForChildren(), isClean());
                         this.singleCraftItem_ = null;
                     }
                     return this.singleCraftItemBuilder_;
@@ -4670,7 +4668,7 @@ public final class ItemCraft_Other {
 
                 private void ensureRandomCraftItemIsMutable() {
                     if ((this.bitField0_ & 0x20) != 32) {
-                        this.randomCraftItem_ = new ArrayList<CraftResultModel>(this.randomCraftItem_);
+                        this.randomCraftItem_ = new ArrayList<>(this.randomCraftItem_);
                         this.bitField0_ |= 32;
                     }
                 }
@@ -4836,7 +4834,7 @@ public final class ItemCraft_Other {
 
                 private RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel.Builder, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModelOrBuilder> getRandomCraftItemFieldBuilder() {
                     if (this.randomCraftItemBuilder_ == null) {
-                        this.randomCraftItemBuilder_ = new RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel.Builder, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModelOrBuilder>(this.randomCraftItem_, (this.bitField0_ & 0x20) == 32, getParentForChildren(), isClean());
+                        this.randomCraftItemBuilder_ = new RepeatedFieldBuilderV3<>(this.randomCraftItem_, (this.bitField0_ & 0x20) == 32, getParentForChildren(), isClean());
                         this.randomCraftItem_ = null;
                     }
                     return this.randomCraftItemBuilder_;
@@ -4919,17 +4917,17 @@ public final class ItemCraft_Other {
 
                 private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult.GreatItem, ItemCraft_Other.SendItemCraftList.CraftResult.GreatItem.Builder, ItemCraft_Other.SendItemCraftList.CraftResult.GreatItemOrBuilder> getGreatItemFieldBuilder() {
                     if (this.greatItemBuilder_ == null) {
-                        this.greatItemBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult.GreatItem, ItemCraft_Other.SendItemCraftList.CraftResult.GreatItem.Builder, ItemCraft_Other.SendItemCraftList.CraftResult.GreatItemOrBuilder>(getGreatItem(), getParentForChildren(), isClean());
+                        this.greatItemBuilder_ = new SingleFieldBuilderV3<>(getGreatItem(), getParentForChildren(), isClean());
                         this.greatItem_ = null;
                     }
                     return this.greatItemBuilder_;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -5094,7 +5092,7 @@ public final class ItemCraft_Other {
                     }
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_CraftResult_CraftResultModel_descriptor;
                 }
 
@@ -5154,7 +5152,7 @@ public final class ItemCraft_Other {
                     return PARSER;
                 }
 
-                public final UnknownFieldSet getUnknownFields() {
+                public UnknownFieldSet getUnknownFields() {
                     return this.unknownFields;
                 }
 
@@ -5290,7 +5288,7 @@ public final class ItemCraft_Other {
                     return this.isGreatItem_;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     byte isInitialized = this.memoizedIsInitialized;
                     if (isInitialized == 1) {
                         return true;
@@ -5667,7 +5665,7 @@ public final class ItemCraft_Other {
                         maybeForceBuilderInitialization();
                     }
 
-                    public static final Descriptors.Descriptor getDescriptor() {
+                    public static Descriptors.Descriptor getDescriptor() {
                         return ItemCraft_Other.SendItemCraftList_CraftResult_CraftResultModel_descriptor;
                     }
 
@@ -5893,7 +5891,7 @@ public final class ItemCraft_Other {
                         return this;
                     }
 
-                    public final boolean isInitialized() {
+                    public boolean isInitialized() {
                         if (!hasItemDescId()) {
                             return false;
                         }
@@ -6312,11 +6310,11 @@ public final class ItemCraft_Other {
                         return this;
                     }
 
-                    public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                    public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                         return (Builder) super.setUnknownFields(unknownFields);
                     }
 
-                    public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                    public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                         return (Builder) super.mergeUnknownFields(unknownFields);
                     }
                 }
@@ -6405,7 +6403,7 @@ public final class ItemCraft_Other {
                     }
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_CraftResult_GreatItem_descriptor;
                 }
 
@@ -6465,7 +6463,7 @@ public final class ItemCraft_Other {
                     return PARSER;
                 }
 
-                public final UnknownFieldSet getUnknownFields() {
+                public UnknownFieldSet getUnknownFields() {
                     return this.unknownFields;
                 }
 
@@ -6509,7 +6507,7 @@ public final class ItemCraft_Other {
                     return this.item_ == null ? ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel.getDefaultInstance() : this.item_;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     byte isInitialized = this.memoizedIsInitialized;
                     if (isInitialized == 1) {
                         return true;
@@ -6675,7 +6673,7 @@ public final class ItemCraft_Other {
                         maybeForceBuilderInitialization();
                     }
 
-                    public static final Descriptors.Descriptor getDescriptor() {
+                    public static Descriptors.Descriptor getDescriptor() {
                         return ItemCraft_Other.SendItemCraftList_CraftResult_GreatItem_descriptor;
                     }
 
@@ -6804,7 +6802,7 @@ public final class ItemCraft_Other {
                         return this;
                     }
 
-                    public final boolean isInitialized() {
+                    public boolean isInitialized() {
                         if (!hasUn()) {
                             return false;
                         }
@@ -6981,17 +6979,17 @@ public final class ItemCraft_Other {
 
                     private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel.Builder, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModelOrBuilder> getItemFieldBuilder() {
                         if (this.itemBuilder_ == null) {
-                            this.itemBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModel.Builder, ItemCraft_Other.SendItemCraftList.CraftResult.CraftResultModelOrBuilder>(getItem(), getParentForChildren(), isClean());
+                            this.itemBuilder_ = new SingleFieldBuilderV3<>(getItem(), getParentForChildren(), isClean());
                             this.item_ = null;
                         }
                         return this.itemBuilder_;
                     }
 
-                    public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                    public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                         return (Builder) super.setUnknownFields(unknownFields);
                     }
 
-                    public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                    public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                         return (Builder) super.mergeUnknownFields(unknownFields);
                     }
                 }
@@ -7081,7 +7079,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_CraftResults_descriptor;
             }
 
@@ -7141,7 +7139,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -7181,7 +7179,7 @@ public final class ItemCraft_Other {
                 return this.successRatio_;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -7333,7 +7331,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_CraftResults_descriptor;
                 }
 
@@ -7462,7 +7460,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     if (!hasSucceedList()) {
                         return false;
                     }
@@ -7573,7 +7571,7 @@ public final class ItemCraft_Other {
 
                 private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult, ItemCraft_Other.SendItemCraftList.CraftResult.Builder, ItemCraft_Other.SendItemCraftList.CraftResultOrBuilder> getSucceedListFieldBuilder() {
                     if (this.succeedListBuilder_ == null) {
-                        this.succeedListBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult, ItemCraft_Other.SendItemCraftList.CraftResult.Builder, ItemCraft_Other.SendItemCraftList.CraftResultOrBuilder>(getSucceedList(), getParentForChildren(), isClean());
+                        this.succeedListBuilder_ = new SingleFieldBuilderV3<>(getSucceedList(), getParentForChildren(), isClean());
                         this.succeedList_ = null;
                     }
                     return this.succeedListBuilder_;
@@ -7656,7 +7654,7 @@ public final class ItemCraft_Other {
 
                 private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult, ItemCraft_Other.SendItemCraftList.CraftResult.Builder, ItemCraft_Other.SendItemCraftList.CraftResultOrBuilder> getFailListFieldBuilder() {
                     if (this.failListBuilder_ == null) {
-                        this.failListBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.CraftResult, ItemCraft_Other.SendItemCraftList.CraftResult.Builder, ItemCraft_Other.SendItemCraftList.CraftResultOrBuilder>(getFailList(), getParentForChildren(), isClean());
+                        this.failListBuilder_ = new SingleFieldBuilderV3<>(getFailList(), getParentForChildren(), isClean());
                         this.failList_ = null;
                     }
                     return this.failListBuilder_;
@@ -7684,11 +7682,11 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -7737,14 +7735,14 @@ public final class ItemCraft_Other {
                                 break;
                             case 10:
                                 if ((mutable_bitField0_ & 0x1) != 1) {
-                                    this.material_ = new ArrayList<MaterialModel>();
+                                    this.material_ = new ArrayList<>();
                                     mutable_bitField0_ |= 1;
                                 }
                                 this.material_.add((MaterialModel) input.readMessage(MaterialModel.PARSER, extensionRegistry));
                                 break;
                             case 18:
                                 if ((mutable_bitField0_ & 0x2) != 2) {
-                                    this.addMaterial_ = new ArrayList<MaterialModel>();
+                                    this.addMaterial_ = new ArrayList<>();
                                     mutable_bitField0_ |= 2;
                                 }
                                 this.addMaterial_.add((MaterialModel) input.readMessage(MaterialModel.PARSER, extensionRegistry));
@@ -7767,7 +7765,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_Material_descriptor;
             }
 
@@ -7827,7 +7825,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -7875,7 +7873,7 @@ public final class ItemCraft_Other {
                 return (MaterialModelOrBuilder) this.addMaterial_.get(index);
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -7900,11 +7898,11 @@ public final class ItemCraft_Other {
             }
 
             public void writeTo(CodedOutputStream output) throws IOException {
-                for (int i = 0; i < this.material_.size(); i++) {
-                    output.writeMessage(1, (MessageLite) this.material_.get(i));
+                for (MaterialModel model : this.material_) {
+                    output.writeMessage(1, (MessageLite) model);
                 }
-                for (int i = 0; i < this.addMaterial_.size(); i++) {
-                    output.writeMessage(2, (MessageLite) this.addMaterial_.get(i));
+                for (MaterialModel materialModel : this.addMaterial_) {
+                    output.writeMessage(2, (MessageLite) materialModel);
                 }
                 this.unknownFields.writeTo(output);
             }
@@ -7915,11 +7913,11 @@ public final class ItemCraft_Other {
                     return size;
                 }
                 size = 0;
-                for (int i = 0; i < this.material_.size(); i++) {
-                    size = size + CodedOutputStream.computeMessageSize(1, (MessageLite) this.material_.get(i));
+                for (MaterialModel model : this.material_) {
+                    size = size + CodedOutputStream.computeMessageSize(1, (MessageLite) model);
                 }
-                for (int i = 0; i < this.addMaterial_.size(); i++) {
-                    size = size + CodedOutputStream.computeMessageSize(2, (MessageLite) this.addMaterial_.get(i));
+                for (MaterialModel materialModel : this.addMaterial_) {
+                    size = size + CodedOutputStream.computeMessageSize(2, (MessageLite) materialModel);
                 }
                 size += this.unknownFields.getSerializedSize();
                 this.memoizedSize = size;
@@ -8040,7 +8038,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_Material_descriptor;
                 }
 
@@ -8198,7 +8196,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     for (int i = 0; i < getMaterialCount(); i++) {
                         if (!getMaterial(i).isInitialized()) {
                             return false;
@@ -8229,7 +8227,7 @@ public final class ItemCraft_Other {
 
                 private void ensureMaterialIsMutable() {
                     if ((this.bitField0_ & 0x1) != 1) {
-                        this.material_ = new ArrayList<MaterialModel>(this.material_);
+                        this.material_ = new ArrayList<>(this.material_);
                         this.bitField0_ |= 1;
                     }
                 }
@@ -8395,7 +8393,7 @@ public final class ItemCraft_Other {
 
                 private RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.Material.MaterialModel, ItemCraft_Other.SendItemCraftList.Material.MaterialModel.Builder, ItemCraft_Other.SendItemCraftList.Material.MaterialModelOrBuilder> getMaterialFieldBuilder() {
                     if (this.materialBuilder_ == null) {
-                        this.materialBuilder_ = new RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.Material.MaterialModel, ItemCraft_Other.SendItemCraftList.Material.MaterialModel.Builder, ItemCraft_Other.SendItemCraftList.Material.MaterialModelOrBuilder>(this.material_, (this.bitField0_ & 0x1) == 1, getParentForChildren(), isClean());
+                        this.materialBuilder_ = new RepeatedFieldBuilderV3<>(this.material_, (this.bitField0_ & 0x1) == 1, getParentForChildren(), isClean());
                         this.material_ = null;
                     }
                     return this.materialBuilder_;
@@ -8403,7 +8401,7 @@ public final class ItemCraft_Other {
 
                 private void ensureAddMaterialIsMutable() {
                     if ((this.bitField0_ & 0x2) != 2) {
-                        this.addMaterial_ = new ArrayList<MaterialModel>(this.addMaterial_);
+                        this.addMaterial_ = new ArrayList<>(this.addMaterial_);
                         this.bitField0_ |= 2;
                     }
                 }
@@ -8569,17 +8567,17 @@ public final class ItemCraft_Other {
 
                 private RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.Material.MaterialModel, ItemCraft_Other.SendItemCraftList.Material.MaterialModel.Builder, ItemCraft_Other.SendItemCraftList.Material.MaterialModelOrBuilder> getAddMaterialFieldBuilder() {
                     if (this.addMaterialBuilder_ == null) {
-                        this.addMaterialBuilder_ = new RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.Material.MaterialModel, ItemCraft_Other.SendItemCraftList.Material.MaterialModel.Builder, ItemCraft_Other.SendItemCraftList.Material.MaterialModelOrBuilder>(this.addMaterial_, (this.bitField0_ & 0x2) == 2, getParentForChildren(), isClean());
+                        this.addMaterialBuilder_ = new RepeatedFieldBuilderV3<>(this.addMaterial_, (this.bitField0_ & 0x2) == 2, getParentForChildren(), isClean());
                         this.addMaterial_ = null;
                     }
                     return this.addMaterialBuilder_;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -8702,7 +8700,7 @@ public final class ItemCraft_Other {
                     }
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_Material_MaterialModel_descriptor;
                 }
 
@@ -8762,7 +8760,7 @@ public final class ItemCraft_Other {
                     return PARSER;
                 }
 
-                public final UnknownFieldSet getUnknownFields() {
+                public UnknownFieldSet getUnknownFields() {
                     return this.unknownFields;
                 }
 
@@ -8850,7 +8848,7 @@ public final class ItemCraft_Other {
                     return this.unknow3_;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     byte isInitialized = this.memoizedIsInitialized;
                     if (isInitialized == 1) {
                         return true;
@@ -9125,7 +9123,7 @@ public final class ItemCraft_Other {
                         maybeForceBuilderInitialization();
                     }
 
-                    public static final Descriptors.Descriptor getDescriptor() {
+                    public static Descriptors.Descriptor getDescriptor() {
                         return ItemCraft_Other.SendItemCraftList_Material_MaterialModel_descriptor;
                     }
 
@@ -9297,7 +9295,7 @@ public final class ItemCraft_Other {
                         return this;
                     }
 
-                    public final boolean isInitialized() {
+                    public boolean isInitialized() {
                         if (!hasItemDescId()) {
                             return false;
                         }
@@ -9569,11 +9567,11 @@ public final class ItemCraft_Other {
                         return this;
                     }
 
-                    public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                    public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                         return (Builder) super.setUnknownFields(unknownFields);
                     }
 
-                    public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                    public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                         return (Builder) super.mergeUnknownFields(unknownFields);
                     }
                 }
@@ -9628,20 +9626,20 @@ public final class ItemCraft_Other {
                                 break;
                             case 16:
                                 if ((mutable_bitField0_ & 0x2) != 2) {
-                                    this.polyId_ = new ArrayList<Integer>();
+                                    this.polyId_ = new ArrayList<>();
                                     mutable_bitField0_ |= 2;
                                 }
-                                this.polyId_.add(Integer.valueOf(input.readInt32()));
+                                this.polyId_.add(input.readInt32());
                                 break;
                             case 18:
                                 int length = input.readRawVarint32();
                                 int limit = input.pushLimit(length);
                                 if (((mutable_bitField0_ & 0x2) != 2) && (input.getBytesUntilLimit() > 0)) {
-                                    this.polyId_ = new ArrayList<Integer>();
+                                    this.polyId_ = new ArrayList<>();
                                     mutable_bitField0_ |= 2;
                                 }
                                 while (input.getBytesUntilLimit() > 0) {
-                                    this.polyId_.add(Integer.valueOf(input.readInt32()));
+                                    this.polyId_.add(input.readInt32());
                                 }
                                 input.popLimit(limit);
                                 break;
@@ -9660,7 +9658,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_PolyModel_descriptor;
             }
 
@@ -9720,7 +9718,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -9745,10 +9743,10 @@ public final class ItemCraft_Other {
             }
 
             public int getPolyId(int index) {
-                return ((Integer) this.polyId_.get(index)).intValue();
+                return (Integer) this.polyId_.get(index);
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -9768,8 +9766,8 @@ public final class ItemCraft_Other {
                 if ((this.bitField0_ & 0x1) == 1) {
                     output.writeInt32(1, this.pcountcount_);
                 }
-                for (int i = 0; i < this.polyId_.size(); i++) {
-                    output.writeInt32(2, ((Integer) this.polyId_.get(i)).intValue());
+                for (Integer integer : this.polyId_) {
+                    output.writeInt32(2, (Integer) integer);
                 }
                 this.unknownFields.writeTo(output);
             }
@@ -9784,11 +9782,11 @@ public final class ItemCraft_Other {
                     size = size + CodedOutputStream.computeInt32Size(1, this.pcountcount_);
                 }
                 int dataSize = 0;
-                for (int i = 0; i < this.polyId_.size(); i++) {
-                    dataSize = dataSize + CodedOutputStream.computeInt32SizeNoTag(((Integer) this.polyId_.get(i)).intValue());
+                for (Integer integer : this.polyId_) {
+                    dataSize = dataSize + CodedOutputStream.computeInt32SizeNoTag((Integer) integer);
                 }
                 size += dataSize;
-                size += 1 * getPolyIdList().size();
+                size += getPolyIdList().size();
                 size += this.unknownFields.getSerializedSize();
                 this.memoizedSize = size;
                 return size;
@@ -9867,7 +9865,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_PolyModel_descriptor;
                 }
 
@@ -9975,7 +9973,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     if (!hasPcountcount()) {
                         return false;
                     }
@@ -10021,7 +10019,7 @@ public final class ItemCraft_Other {
 
                 private void ensurePolyIdIsMutable() {
                     if ((this.bitField0_ & 0x2) != 2) {
-                        this.polyId_ = new ArrayList<Integer>(this.polyId_);
+                        this.polyId_ = new ArrayList<>(this.polyId_);
                         this.bitField0_ |= 2;
                     }
                 }
@@ -10035,19 +10033,19 @@ public final class ItemCraft_Other {
                 }
 
                 public int getPolyId(int index) {
-                    return ((Integer) this.polyId_.get(index)).intValue();
+                    return (Integer) this.polyId_.get(index);
                 }
 
                 public Builder setPolyId(int index, int value) {
                     ensurePolyIdIsMutable();
-                    this.polyId_.set(index, Integer.valueOf(value));
+                    this.polyId_.set(index, value);
                     onChanged();
                     return this;
                 }
 
                 public Builder addPolyId(int value) {
                     ensurePolyIdIsMutable();
-                    this.polyId_.add(Integer.valueOf(value));
+                    this.polyId_.add(value);
                     onChanged();
                     return this;
                 }
@@ -10066,11 +10064,11 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -10138,7 +10136,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_QuestModel_descriptor;
             }
 
@@ -10198,7 +10196,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -10222,7 +10220,7 @@ public final class ItemCraft_Other {
                 return this.questStepId_;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -10345,7 +10343,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_QuestModel_descriptor;
                 }
 
@@ -10445,7 +10443,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     if (!hasQuestId()) {
                         return false;
                     }
@@ -10514,11 +10512,11 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -10600,7 +10598,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_unQuest_descriptor;
             }
 
@@ -10660,7 +10658,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -10696,7 +10694,7 @@ public final class ItemCraft_Other {
                 return this.quest_ == null ? ItemCraft_Other.SendItemCraftList.QuestModel.getDefaultInstance() : this.quest_;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -10843,7 +10841,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_unQuest_descriptor;
                 }
 
@@ -10963,7 +10961,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     if (!hasUnknown1()) {
                         return false;
                     }
@@ -11115,17 +11113,17 @@ public final class ItemCraft_Other {
 
                 private SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.QuestModel, ItemCraft_Other.SendItemCraftList.QuestModel.Builder, ItemCraft_Other.SendItemCraftList.QuestModelOrBuilder> getQuestFieldBuilder() {
                     if (this.questBuilder_ == null) {
-                        this.questBuilder_ = new SingleFieldBuilderV3<ItemCraft_Other.SendItemCraftList.QuestModel, ItemCraft_Other.SendItemCraftList.QuestModel.Builder, ItemCraft_Other.SendItemCraftList.QuestModelOrBuilder>(getQuest(), getParentForChildren(), isClean());
+                        this.questBuilder_ = new SingleFieldBuilderV3<>(getQuest(), getParentForChildren(), isClean());
                         this.quest_ = null;
                     }
                     return this.questBuilder_;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -11193,7 +11191,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_unknownModel1_descriptor;
             }
 
@@ -11253,7 +11251,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -11277,7 +11275,7 @@ public final class ItemCraft_Other {
                 return this.unknow2_;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -11400,7 +11398,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_unknownModel1_descriptor;
                 }
 
@@ -11500,7 +11498,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     if (!hasUnknow1()) {
                         return false;
                     }
@@ -11569,11 +11567,11 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -11634,7 +11632,7 @@ public final class ItemCraft_Other {
                                 break;
                             case 26:
                                 if ((mutable_bitField0_ & 0x4) != 4) {
-                                    this.un_ = new ArrayList<ItemInfo>();
+                                    this.un_ = new ArrayList<>();
                                     mutable_bitField0_ |= 4;
                                 }
                                 this.un_.add((ItemInfo) input.readMessage(ItemInfo.PARSER, extensionRegistry));
@@ -11654,7 +11652,7 @@ public final class ItemCraft_Other {
                 }
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return ItemCraft_Other.SendItemCraftList_unknownModel2_descriptor;
             }
 
@@ -11714,7 +11712,7 @@ public final class ItemCraft_Other {
                 return PARSER;
             }
 
-            public final UnknownFieldSet getUnknownFields() {
+            public UnknownFieldSet getUnknownFields() {
                 return this.unknownFields;
             }
 
@@ -11758,7 +11756,7 @@ public final class ItemCraft_Other {
                 return (ItemInfoOrBuilder) this.un_.get(index);
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 byte isInitialized = this.memoizedIsInitialized;
                 if (isInitialized == 1) {
                     return true;
@@ -11791,8 +11789,8 @@ public final class ItemCraft_Other {
                 if ((this.bitField0_ & 0x2) == 2) {
                     output.writeInt32(2, this.count_);
                 }
-                for (int i = 0; i < this.un_.size(); i++) {
-                    output.writeMessage(3, (MessageLite) this.un_.get(i));
+                for (ItemInfo itemInfo : this.un_) {
+                    output.writeMessage(3, (MessageLite) itemInfo);
                 }
                 this.unknownFields.writeTo(output);
             }
@@ -11809,8 +11807,8 @@ public final class ItemCraft_Other {
                 if ((this.bitField0_ & 0x2) == 2) {
                     size = size + CodedOutputStream.computeInt32Size(2, this.count_);
                 }
-                for (int i = 0; i < this.un_.size(); i++) {
-                    size = size + CodedOutputStream.computeMessageSize(3, (MessageLite) this.un_.get(i));
+                for (ItemInfo itemInfo : this.un_) {
+                    size = size + CodedOutputStream.computeMessageSize(3, (MessageLite) itemInfo);
                 }
                 size += this.unknownFields.getSerializedSize();
                 this.memoizedSize = size;
@@ -11914,7 +11912,7 @@ public final class ItemCraft_Other {
                     maybeForceBuilderInitialization();
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_unknownModel2_descriptor;
                 }
 
@@ -12054,7 +12052,7 @@ public final class ItemCraft_Other {
                     return this;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     if (!hasType()) {
                         return false;
                     }
@@ -12130,7 +12128,7 @@ public final class ItemCraft_Other {
 
                 private void ensureUnIsMutable() {
                     if ((this.bitField0_ & 0x4) != 4) {
-                        this.un_ = new ArrayList<ItemInfo>(this.un_);
+                        this.un_ = new ArrayList<>(this.un_);
                         this.bitField0_ |= 4;
                     }
                 }
@@ -12296,17 +12294,17 @@ public final class ItemCraft_Other {
 
                 private RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unknownModel2.ItemInfo, ItemCraft_Other.SendItemCraftList.unknownModel2.ItemInfo.Builder, ItemCraft_Other.SendItemCraftList.unknownModel2.ItemInfoOrBuilder> getUnFieldBuilder() {
                     if (this.unBuilder_ == null) {
-                        this.unBuilder_ = new RepeatedFieldBuilderV3<ItemCraft_Other.SendItemCraftList.unknownModel2.ItemInfo, ItemCraft_Other.SendItemCraftList.unknownModel2.ItemInfo.Builder, ItemCraft_Other.SendItemCraftList.unknownModel2.ItemInfoOrBuilder>(this.un_, (this.bitField0_ & 0x4) == 4, getParentForChildren(), isClean());
+                        this.unBuilder_ = new RepeatedFieldBuilderV3<>(this.un_, (this.bitField0_ & 0x4) == 4, getParentForChildren(), isClean());
                         this.un_ = null;
                     }
                     return this.unBuilder_;
                 }
 
-                public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.setUnknownFields(unknownFields);
                 }
 
-                public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                     return (Builder) super.mergeUnknownFields(unknownFields);
                 }
             }
@@ -12380,7 +12378,7 @@ public final class ItemCraft_Other {
                     }
                 }
 
-                public static final Descriptors.Descriptor getDescriptor() {
+                public static Descriptors.Descriptor getDescriptor() {
                     return ItemCraft_Other.SendItemCraftList_unknownModel2_ItemInfo_descriptor;
                 }
 
@@ -12440,7 +12438,7 @@ public final class ItemCraft_Other {
                     return PARSER;
                 }
 
-                public final UnknownFieldSet getUnknownFields() {
+                public UnknownFieldSet getUnknownFields() {
                     return this.unknownFields;
                 }
 
@@ -12472,7 +12470,7 @@ public final class ItemCraft_Other {
                     return this.un_;
                 }
 
-                public final boolean isInitialized() {
+                public boolean isInitialized() {
                     byte isInitialized = this.memoizedIsInitialized;
                     if (isInitialized == 1) {
                         return true;
@@ -12614,7 +12612,7 @@ public final class ItemCraft_Other {
                         maybeForceBuilderInitialization();
                     }
 
-                    public static final Descriptors.Descriptor getDescriptor() {
+                    public static Descriptors.Descriptor getDescriptor() {
                         return ItemCraft_Other.SendItemCraftList_unknownModel2_ItemInfo_descriptor;
                     }
 
@@ -12723,7 +12721,7 @@ public final class ItemCraft_Other {
                         return this;
                     }
 
-                    public final boolean isInitialized() {
+                    public boolean isInitialized() {
                         if (!hasDescid()) {
                             return false;
                         }
@@ -12817,11 +12815,11 @@ public final class ItemCraft_Other {
                         return this;
                     }
 
-                    public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+                    public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                         return (Builder) super.setUnknownFields(unknownFields);
                     }
 
-                    public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+                    public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                         return (Builder) super.mergeUnknownFields(unknownFields);
                     }
                 }

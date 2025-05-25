@@ -52,7 +52,6 @@ public class TRIPLE_ARROW extends SkillMode {
             if (randomBonus > 0) {
                 bonusDamage += _random.nextInt(randomBonus + 1);
             }
-        } else {
         }
         return bonusDamage;
     }

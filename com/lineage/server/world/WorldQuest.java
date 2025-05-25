@@ -32,7 +32,7 @@ public class WorldQuest {
 
     private WorldQuest() {
         _lock = new ReentrantLock(true);
-        _isQuest = new ConcurrentHashMap<Integer, L1QuestUser>();
+        _isQuest = new ConcurrentHashMap<>();
         _nextId = new AtomicInteger(100);
     }
 
@@ -100,10 +100,9 @@ public class WorldQuest {
      */
     public ArrayList<L1QuestUser> getQuests(final int questId) {
         try {
-            final ArrayList<L1QuestUser> questList = new ArrayList<L1QuestUser>();
+            final ArrayList<L1QuestUser> questList = new ArrayList<>();
             if (_isQuest.size() > 0) {
-                for (final Iterator<L1QuestUser> iter = all().iterator(); iter.hasNext(); ) {
-                    final L1QuestUser quest = iter.next();
+                for (final L1QuestUser quest : all()) {
                     // for (L1QuestUser quest : _isQuest.values()) {
                     if (quest.get_questid() == questId) {
                         questList.add(quest);
@@ -124,7 +123,7 @@ public class WorldQuest {
      */
     public L1QuestUser get(final int key) {
         try {
-            return _isQuest.get(new Integer(key));
+            return _isQuest.get(key);
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
@@ -152,7 +151,7 @@ public class WorldQuest {
                 _log.error("副本地圖編號錯誤: 原因-找不到這個副本任務的設置 questid:" + questid);
                 return null;
             }
-            L1QuestUser value = _isQuest.get(new Integer(key));
+            L1QuestUser value = _isQuest.get(key);
             if (value != null) {
                 pc.set_showId(key);
                 value.add(pc);
@@ -164,7 +163,7 @@ public class WorldQuest {
                 // 召喚副本怪物
                 value.spawnQuestMob();
             }
-            _isQuest.put(new Integer(key), value);
+            _isQuest.put(key, value);
             return value;
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -180,7 +179,7 @@ public class WorldQuest {
      */
     public void remove(final int key, final L1NpcInstance npc) {
         try {
-            final L1QuestUser value = _isQuest.get(new Integer(key));
+            final L1QuestUser value = _isQuest.get(key);
             if (value != null) {
                 value.removeMob(npc);
             }
@@ -198,7 +197,7 @@ public class WorldQuest {
      */
     public void remove(final int key, final L1PcInstance pc) {
         try {
-            final L1QuestUser value = _isQuest.get(new Integer(key));
+            final L1QuestUser value = _isQuest.get(key);
             if (value != null) {
                 pc.set_showId(-1);
                 value.remove(pc);
@@ -211,7 +210,7 @@ public class WorldQuest {
                 }
                 if (isRemove) {
                     // 人數為0移除副本
-                    _isQuest.remove(new Integer(key));
+                    _isQuest.remove(key);
                     // 任務失敗
                     value.endQuest();
                     // 移除副本中怪物
@@ -233,7 +232,7 @@ public class WorldQuest {
      */
     public boolean isQuest(final int key) {
         try {
-            final L1QuestUser value = _isQuest.get(new Integer(key));
+            final L1QuestUser value = _isQuest.get(key);
             if (value != null) {
                 return true;
             }

@@ -27,16 +27,16 @@ import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DollPowerTable {
-    public static final CopyOnWriteArrayList<ServerBasePacket> DOLL_PACKET_CACHE = new CopyOnWriteArrayList<ServerBasePacket>();// 魔法娃娃合成數據封包緩存
+    public static final CopyOnWriteArrayList<ServerBasePacket> DOLL_PACKET_CACHE = new CopyOnWriteArrayList<>();// 魔法娃娃合成數據封包緩存
     private static final Log _log = LogFactory.getLog(DollPowerTable.class);
-    private static final HashMap<Integer, L1Doll> _powerMap = new HashMap<Integer, L1Doll>();
-    private static final HashMap<Integer, L1DollExecutor> _classList = new HashMap<Integer, L1DollExecutor>();
-    private static final ArrayList<String> _checkList = new ArrayList<String>();
+    private static final HashMap<Integer, L1Doll> _powerMap = new HashMap<>();
+    private static final HashMap<Integer, L1DollExecutor> _classList = new HashMap<>();
+    private static final ArrayList<String> _checkList = new ArrayList<>();
     private static DollPowerTable _instance;
     private static MessageDigest _alg;// sha-1校驗實例
     private static byte[] _digest;// sha-1校驗碼
     private static boolean _begin;// 輸出緩存是否起始輸出
-    private final TreeMap<Integer, ArrayList<L1Item>> _levelList = new TreeMap<Integer, ArrayList<L1Item>>();
+    private final TreeMap<Integer, ArrayList<L1Item>> _levelList = new TreeMap<>();
 
     public static DollPowerTable get() {
         if (_instance == null) {
@@ -121,8 +121,6 @@ public class DollPowerTable {
                     _log.error("娃娃能力設置重複:id=" + id + " type1=" + type1 + " type2=" + type2 + " type3=" + type3);
                 }
             }
-        } catch (SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -154,11 +152,11 @@ public class DollPowerTable {
                 String nameid = rs.getString("nameid");
                 final int level = rs.getInt("level"); // XXX 7.6 魔法娃娃合成等級
                 boolean iserr = false;
-                ArrayList<L1DollExecutor> powerList = new ArrayList<L1DollExecutor>();
+                ArrayList<L1DollExecutor> powerList = new ArrayList<>();
                 if ((powers != null) && (!powers.equals(""))) {
                     String[] set1 = powers.split(",");
                     for (String string : set1) {
-                        L1DollExecutor e = (L1DollExecutor) _classList.get(Integer.valueOf(Integer.parseInt(string)));
+                        L1DollExecutor e = (L1DollExecutor) _classList.get(Integer.parseInt(string));
                         if (e != null) {
                             powerList.add(e);
                         } else {
@@ -208,11 +206,9 @@ public class DollPowerTable {
                     if (doll_power.get_level() >= 1 && doll_power.get_level() <= 5) {
                         this.addLevelMap(doll_power.get_level(), ItemTable.get().getTemplate(itemid));
                     }
-                    _powerMap.put(Integer.valueOf(itemid), doll_power);
+                    _powerMap.put(itemid, doll_power);
                 }
             }
-        } catch (SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -234,7 +230,7 @@ public class DollPowerTable {
     private void addLevelMap(final int level, final L1Item tmp) {
         ArrayList<L1Item> levelList = _levelList.get(level);
         if (levelList == null) {
-            levelList = new ArrayList<L1Item>();
+            levelList = new ArrayList<>();
             levelList.add(tmp);
             _levelList.put(level, levelList);
         } else {
@@ -396,25 +392,18 @@ public class DollPowerTable {
             exe.setDollFoeSlayer(doll_foeslayer);
             exe.setDollTiTanHp(doll_titanhp);
             // 新增娃娃能力描述↑↑↑
-            _classList.put(new Integer(powerid), exe);
+            _classList.put(powerid, exe);
         } catch (ClassNotFoundException e) {
             String error = "發生[娃娃能力檔案]錯誤, 檢查檔案是否存在:" + className + " 娃娃能力編號:" + powerid;
             _log.error(error);
-        } catch (IllegalArgumentException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (IllegalAccessException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (InvocationTargetException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (SecurityException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException |
+                 IllegalAccessException e) {
             _log.error(e.getLocalizedMessage(), e);
         }
     }
 
     public L1Doll get_type(int key) {
-        return (L1Doll) _powerMap.get(Integer.valueOf(key));
+        return (L1Doll) _powerMap.get(key);
     }
 
     public HashMap<Integer, L1Doll> map() {

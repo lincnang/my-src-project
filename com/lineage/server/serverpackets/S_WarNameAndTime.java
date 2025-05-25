@@ -11,7 +11,7 @@ public class S_WarNameAndTime extends ServerBasePacket {
         writeH(76);
         writeCC(1, isAtt ? 2 : 1);
         if (time > 0) {
-            writeCC(2, time * 2);
+            writeCC(2, time * 2L);
             writeCS(3, name);
             writeH(0);
         } else {

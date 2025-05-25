@@ -74,7 +74,7 @@ public class MagicWeapon extends ItemExecutor {
             power.set_magic_weapon(magicWeapon);
             // 附魔使用期限 (單位:秒)
             if (magicWeapon.getMaxUseTime() > 0) {
-                final Timestamp ts = new Timestamp(System.currentTimeMillis() + magicWeapon.getMaxUseTime() * 1000);
+                final Timestamp ts = new Timestamp(System.currentTimeMillis() + magicWeapon.getMaxUseTime() * 1000L);
                 power.set_date_time(ts);
             } else {
                 power.set_date_time(null);
@@ -86,7 +86,7 @@ public class MagicWeapon extends ItemExecutor {
             power.set_magic_weapon(magicWeapon);
             // 附魔使用期限 (單位:秒)
             if (magicWeapon.getMaxUseTime() > 0) {
-                final Timestamp ts = new Timestamp(System.currentTimeMillis() + magicWeapon.getMaxUseTime() * 1000);
+                final Timestamp ts = new Timestamp(System.currentTimeMillis() + magicWeapon.getMaxUseTime() * 1000L);
                 power.set_date_time(ts);
             } else {
                 power.set_date_time(null);

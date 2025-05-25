@@ -360,10 +360,8 @@ public class L1BossWeapon {
             }
             if (bossWeapon.gettype_remove_armor() > 0 && targetPc != null) {
                 int counter = _random.nextInt(bossWeapon.gettype_remove_armor()) + 1;
-                StringBuffer sbr = new StringBuffer();
-                Iterator<L1ItemInstance> iterator2 = targetPc.getInventory().getItems().iterator();
-                while (iterator2.hasNext()) {
-                    L1ItemInstance item = (L1ItemInstance) iterator2.next();
+                StringBuilder sbr = new StringBuilder();
+                for (L1ItemInstance item : targetPc.getInventory().getItems()) {
                     if (item.getItem().getType2() != 2 || !item.isEquipped()) {
                         continue;
                     }

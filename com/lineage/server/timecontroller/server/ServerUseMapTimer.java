@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * @author dexc
  */
 public class ServerUseMapTimer extends TimerTask {
-    public static final Map<L1PcInstance, Integer> MAP = new ConcurrentHashMap<L1PcInstance, Integer>();
+    public static final Map<L1PcInstance, Integer> MAP = new ConcurrentHashMap<>();
     private static final Log _log = LogFactory.getLog(ServerUseMapTimer.class);
     private ScheduledFuture<?> _timer;
 
@@ -39,7 +39,7 @@ public class ServerUseMapTimer extends TimerTask {
         pc.sendPackets(new S_PackBoxMaptime((time)));
         //}
         pc.get_other().set_usemapTime(time);
-        MAP.put(pc, new Integer(time));
+        MAP.put(pc, time);
     }
 
     /**
@@ -96,8 +96,7 @@ public class ServerUseMapTimer extends TimerTask {
         try {
             // 包含元素
             if (!MAP.isEmpty()) {
-                for (final Iterator<Entry<L1PcInstance, Integer>> iter = MAP.entrySet().iterator(); iter.hasNext(); ) {
-                    final Entry<L1PcInstance, Integer> info = iter.next();
+                for (final Entry<L1PcInstance, Integer> info : MAP.entrySet()) {
                     final L1PcInstance key = info.getKey();
                     if (check(key)) {
                         // 取回剩餘時間

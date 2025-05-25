@@ -3097,7 +3097,7 @@ public class L1PcInstance extends L1Character { // src015
         } else {
             Double tmpnewdmg = _magicDamagerList.get(interval);
             if (tmpnewdmg != null) {
-                newdmg = damage * tmpnewdmg.doubleValue() / 100.0D;
+                newdmg = damage * tmpnewdmg / 100.0D;
             } else {
                 newdmg = damage;
             }
@@ -3537,9 +3537,9 @@ public class L1PcInstance extends L1Character { // src015
             int index = _random.nextInt(_skillList.size());
             Integer skillid = _skillList.get(index);
             if (_skillList.remove(skillid)) {
-                sendPackets(new S_DelSkill(this, skillid.intValue()));
-                CharSkillReading.get().spellLost(getId(), skillid.intValue());
-                L1Skills _skill = SkillsTable.get().getTemplate(skillid.intValue());
+                sendPackets(new S_DelSkill(this, skillid));
+                CharSkillReading.get().spellLost(getId(), skillid);
+                L1Skills _skill = SkillsTable.get().getTemplate(skillid);
                 // 死亡掉落技能
                 WriteLogTxt.Recording("死亡掉落技能", "IP(" + getNetConnection().getIp() + ")玩家【" + getName() + "】的技能【" + _skill.getName() + "】死亡後掉落.");
             }

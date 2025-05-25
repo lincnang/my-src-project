@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class NPCTalkDataTable {
     private static final Log _log = LogFactory.getLog(NPCTalkDataTable.class);
-    private static final Map<Integer, L1NpcTalkData> _datatable = new HashMap<Integer, L1NpcTalkData>();
+    private static final Map<Integer, L1NpcTalkData> _datatable = new HashMap<>();
     private static NPCTalkDataTable _instance;
 
     public static NPCTalkDataTable get() {
@@ -66,7 +66,7 @@ public class NPCTalkDataTable {
                     action.setTeleportURL(rs.getString("teleport_url"));
                     action.setTeleportURLA(rs.getString("teleport_urla"));
                     action.setCurrencyItemId(rs.getInt("currency_itemid"));
-                    _datatable.put(new Integer(action.getNpcID()), action);
+                    _datatable.put(action.getNpcID(), action);
                 }
             }
         } catch (SQLException e) {
@@ -80,7 +80,7 @@ public class NPCTalkDataTable {
     }
 
     public L1NpcTalkData getTemplate(int i) {
-        return (L1NpcTalkData) _datatable.get(new Integer(i));
+        return (L1NpcTalkData) _datatable.get(i);
     }
 }
 /*

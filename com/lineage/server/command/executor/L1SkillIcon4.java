@@ -21,22 +21,22 @@ public class L1SkillIcon4 implements L1CommandExecutor {
             switch (type) {
                 case 1:
                     for (int i = 0; i < 1000; i++) {
-                        pc.sendPackets(new S_PacketBoxIcon2(0 + i, 0, 0, 0));
+                        pc.sendPackets(new S_PacketBoxIcon2(i, 0, 0, 0));
                     }
                     break;
                 case 2:
                     for (int i = 0; i < 1000; i++) {
-                        pc.sendPackets(new S_PacketBoxIcon2(0, 0 + i, 0, 0));
+                        pc.sendPackets(new S_PacketBoxIcon2(0, i, 0, 0));
                     }
                     break;
                 case 3:
                     for (int i = 0; i < 1000; i++) {
-                        pc.sendPackets(new S_PacketBoxIcon2(0, 0, 0 + i, 0));
+                        pc.sendPackets(new S_PacketBoxIcon2(0, 0, i, 0));
                     }
                     break;
                 case 4:
                     for (int i = 0; i < 1000; i++) {
-                        pc.sendPackets(new S_PacketBoxIcon2(0, 0, 0, 0 + i));
+                        pc.sendPackets(new S_PacketBoxIcon2(0, 0, 0, i));
                     }
                     break;
             }

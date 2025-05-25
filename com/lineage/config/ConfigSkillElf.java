@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -33,7 +34,7 @@ public final class ConfigSkillElf {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigSkillElf));
+            final InputStream is = Files.newInputStream(new File(ConfigSkillElf).toPath());
             set.load(is);
             is.close();
             //敏捷大於多少三重矢強化

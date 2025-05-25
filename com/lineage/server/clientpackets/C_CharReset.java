@@ -230,7 +230,7 @@ public class C_CharReset extends ClientBasePacket {
             pc.addAc(pc.getOriginalAc());
         }
         if (pc.getOriginalMr() > 0) {
-            pc.addMr(0 - pc.getOriginalMr());
+            pc.addMr(-pc.getOriginalMr());
         }
         pc.refresh();
         pc.setCurrentHp(pc.getMaxHp());

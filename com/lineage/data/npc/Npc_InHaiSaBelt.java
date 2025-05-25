@@ -27,9 +27,9 @@ public class Npc_InHaiSaBelt extends NpcExecutor {
         boolean success = false;
         if (cmd.equalsIgnoreCase("b")) {
             newbelt = 401008;// 光之殷海薩智力腰帶
-            for (int i = 0; i < oldbelts.length; i++) {
-                if ((pc.getInventory().checkItemNotEquipped(oldbelts[i], 1L)) && (pc.getInventory().checkItem(80329, 1L))) {// 光之加護
-                    pc.getInventory().consumeItem(oldbelts[i], 1L);
+            for (int oldbelt : oldbelts) {
+                if ((pc.getInventory().checkItemNotEquipped(oldbelt, 1L)) && (pc.getInventory().checkItem(80329, 1L))) {// 光之加護
+                    pc.getInventory().consumeItem(oldbelt, 1L);
                     pc.getInventory().consumeItem(80329, 1L);
                     final L1ItemInstance item = ItemTable.get().createItem(newbelt);
                     item.setIdentified(true);
@@ -41,9 +41,9 @@ public class Npc_InHaiSaBelt extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("c")) {
             newbelt = 401009;// 光之殷海薩力量腰帶
-            for (int i = 0; i < oldbelts.length; i++) {
-                if ((pc.getInventory().checkItemNotEquipped(oldbelts[i], 1L)) && (pc.getInventory().checkItem(80329, 1L))) {// 光之加護
-                    pc.getInventory().consumeItem(oldbelts[i], 1L);
+            for (int oldbelt : oldbelts) {
+                if ((pc.getInventory().checkItemNotEquipped(oldbelt, 1L)) && (pc.getInventory().checkItem(80329, 1L))) {// 光之加護
+                    pc.getInventory().consumeItem(oldbelt, 1L);
                     pc.getInventory().consumeItem(80329, 1L);
                     final L1ItemInstance item = ItemTable.get().createItem(newbelt);
                     item.setIdentified(true);
@@ -55,9 +55,9 @@ public class Npc_InHaiSaBelt extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("d")) {
             newbelt = 401010;// 光之殷海薩敏捷腰帶
-            for (int i = 0; i < oldbelts.length; i++) {
-                if ((pc.getInventory().checkItemNotEquipped(oldbelts[i], 1L)) && (pc.getInventory().checkItem(80329, 1L))) {// 光之加護
-                    pc.getInventory().consumeItem(oldbelts[i], 1L);
+            for (int oldbelt : oldbelts) {
+                if ((pc.getInventory().checkItemNotEquipped(oldbelt, 1L)) && (pc.getInventory().checkItem(80329, 1L))) {// 光之加護
+                    pc.getInventory().consumeItem(oldbelt, 1L);
                     pc.getInventory().consumeItem(80329, 1L);
                     final L1ItemInstance item = ItemTable.get().createItem(newbelt);
                     item.setIdentified(true);
@@ -69,9 +69,9 @@ public class Npc_InHaiSaBelt extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("e")) {
             newbelt = 401011;// 光之殷海薩魅力腰帶
-            for (int i = 0; i < oldbelts.length; i++) {
-                if ((pc.getInventory().checkItemNotEquipped(oldbelts[i], 1L)) && (pc.getInventory().checkItem(80329, 1L))) {// 光之加護
-                    pc.getInventory().consumeItem(oldbelts[i], 1L);
+            for (int oldbelt : oldbelts) {
+                if ((pc.getInventory().checkItemNotEquipped(oldbelt, 1L)) && (pc.getInventory().checkItem(80329, 1L))) {// 光之加護
+                    pc.getInventory().consumeItem(oldbelt, 1L);
                     pc.getInventory().consumeItem(80329, 1L);
                     final L1ItemInstance item = ItemTable.get().createItem(newbelt);
                     item.setIdentified(true);

@@ -95,7 +95,7 @@ public final class CheckTimeController implements Runnable {
      * [地監可停留時間剩餘 %0秒了] 1528<BR>
      *
      */
-    private final void checkTime(final L1PcInstance pc, final int usedTime, final int limitTime) {
+    private void checkTime(final L1PcInstance pc, final int usedTime, final int limitTime) {
         // 已超過可停留時間
         if (usedTime >= limitTime) {
             if (limitTime < 3600) {
@@ -132,7 +132,7 @@ public final class CheckTimeController implements Runnable {
         }
     }
 
-    public final void start() {
+    public void start() {
         // 啟動執行緒
         final int timeMillis = 1000; // 1秒
         _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);

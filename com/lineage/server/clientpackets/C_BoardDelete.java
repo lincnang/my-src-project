@@ -11,7 +11,7 @@ public class C_BoardDelete extends ClientBasePacket {
             read(decrypt);
             int objId = readD();
             int topicId = readD();
-            L1NpcInstance npc = (L1NpcInstance) WorldNpc.get().map().get(Integer.valueOf(objId));
+            L1NpcInstance npc = (L1NpcInstance) WorldNpc.get().map().get(objId);
             if (npc == null) {
                 return;
             }

@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class FurnitureSpawnTable implements FurnitureSpawnStorage {
     private static final Log _log = LogFactory.getLog(FurnitureSpawnTable.class);
-    private static final Map<Integer, L1Furniture> _furnitureList = new HashMap<Integer, L1Furniture>();
+    private static final Map<Integer, L1Furniture> _furnitureList = new HashMap<>();
 
     private static void spawnFurniture() {
         for (Integer key : _furnitureList.keySet()) {
@@ -71,7 +71,7 @@ public class FurnitureSpawnTable implements FurnitureSpawnStorage {
                         value.set_locx(locx);
                         value.set_locy(locy);
                         value.set_mapid(mapid);
-                        _furnitureList.put(Integer.valueOf(item_obj_id), value);
+                        _furnitureList.put(item_obj_id, value);
                     } else {
                         delFurniture(item_obj_id);
                     }
@@ -90,7 +90,7 @@ public class FurnitureSpawnTable implements FurnitureSpawnStorage {
 
     public void deleteFurniture(L1FurnitureInstance furniture) {
         int key = furniture.getItemObjId();
-        if (_furnitureList.remove(Integer.valueOf(key)) != null) {
+        if (_furnitureList.remove(key) != null) {
             delFurniture(key);
         }
     }
@@ -110,7 +110,7 @@ public class FurnitureSpawnTable implements FurnitureSpawnStorage {
             value.set_locx(locx);
             value.set_locy(locy);
             value.set_mapid(mapid);
-            _furnitureList.put(Integer.valueOf(item_obj_id), value);
+            _furnitureList.put(item_obj_id, value);
             cn = DatabaseFactory.get().getConnection();
             ps = cn.prepareStatement("INSERT INTO `spawnlist_furniture` SET `item_obj_id`=?,`npcid`=?,`locx`=?,`locy`=?,`mapid`=?");
             ps.setInt(1, item_obj_id);

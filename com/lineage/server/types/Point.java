@@ -178,7 +178,7 @@ public class Point {
     }
 
     public String toString() {
-        return String.format("(%d, %d)", new Object[]{Integer.valueOf(_x), Integer.valueOf(_y)});
+        return String.format("(%d, %d)", new Object[]{_x, _y});
     }
 }
 /*

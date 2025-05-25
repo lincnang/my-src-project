@@ -84,8 +84,8 @@ public class S_ServerMessage extends ServerBasePacket {
             writeC(0);
         } else {
             writeC(info.length);
-            for (int i = 0; i < info.length; i++) {
-                writeS(info[i]);
+            for (String s : info) {
+                writeS(s);
             }
         }
     }

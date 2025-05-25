@@ -14,13 +14,13 @@ import org.apache.commons.logging.LogFactory;
 
 import java.sql.*;
 import java.util.Calendar;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BoardOrimTable implements BoardOrimStorage {
     private static final Log _log = LogFactory.getLog(BoardOrimTable.class);
-    private static final List<L1Rank> _totalList = new CopyOnWriteArrayList<L1Rank>();
+    private static final List<L1Rank> _totalList = new CopyOnWriteArrayList<>();
     private static int _maxid = 0;
 
     @SuppressWarnings("resource")
@@ -34,9 +34,9 @@ public class BoardOrimTable implements BoardOrimStorage {
         int n;
         int itemCount;
         int j;
-        if (calendar.get(5) == 28) {
+        if (calendar.get(Calendar.DATE) == 28) {
             Timestamp timestamp = new Timestamp(calendar.getTimeInMillis());
-            List<L1Rank> _checkList = new CopyOnWriteArrayList<L1Rank>();
+            List<L1Rank> _checkList = new CopyOnWriteArrayList<>();
             try {
                 co = DatabaseFactory.get().getConnection();
                 ps = co.prepareStatement("SELECT * FROM `server_board_orim_公佈欄` WHERE `time_order`<=? ORDER BY `score` DESC");
@@ -44,16 +44,14 @@ public class BoardOrimTable implements BoardOrimStorage {
                 rs = ps.executeQuery();
                 while (rs.next()) {
                     String[] partyMember = rs.getString("partyMember").split(",");
-                    List<String> checkList = new CopyOnWriteArrayList<String>();
-                    for (String str : partyMember) {
-                        checkList.add(str);
-                    }
+                    List<String> checkList = new CopyOnWriteArrayList<>();
+                    Collections.addAll(checkList, partyMember);
                     String leader = rs.getString("leader");
                     int score = rs.getInt("score");
                     L1Rank rank = new L1Rank(leader, checkList, score);
                     _checkList.add(rank);
                 }
-                List<String> _overList = new CopyOnWriteArrayList<String>();
+                List<String> _overList = new CopyOnWriteArrayList<>();
                 int i = 0;
                 r = 5;
                 for (n = _checkList.size(); (i < r) && (i < n); i++) {
@@ -112,21 +110,17 @@ public class BoardOrimTable implements BoardOrimStorage {
                     _maxid = id;
                 }
                 String[] partyMember = rs.getString("partyMember").split(",");
-                List<String> checkList = new CopyOnWriteArrayList<String>();
-                for (String str : partyMember) {
-                    checkList.add(str);
-                }
+                List<String> checkList = new CopyOnWriteArrayList<>();
+                Collections.addAll(checkList, partyMember);
                 String leader = rs.getString("leader");
                 int score = rs.getInt("score");
-                for (Iterator<L1Rank> iterator = _totalList.iterator(); iterator.hasNext(); ) {
-                    L1Rank rank = (L1Rank) iterator.next();
+                for (L1Rank rank : _totalList) {
                     if (leader.equals(rank.getPartyLeader()) || rank.getPartyMember().contains(leader)) {
                         leader = null;
                         break;
                     }
                 }
-                for (Iterator<String> iterator1 = checkList.iterator(); iterator1.hasNext(); ) {
-                    String check_member = (String) iterator1.next();
+                for (String check_member : checkList) {
                     for (L1Rank rank : _totalList) {
                         if ((check_member.equals(rank.getPartyLeader())) || (rank.getPartyMember().contains(check_member))) {
                             checkList.remove(check_member);
@@ -251,7 +245,7 @@ public class BoardOrimTable implements BoardOrimStorage {
         }
     }
 
-    private final void updateLeaderName(String oriName, String newName) {
+    private void updateLeaderName(String oriName, String newName) {
         Connection co = null;
         PreparedStatement ps = null;
         try {
@@ -268,7 +262,7 @@ public class BoardOrimTable implements BoardOrimStorage {
         }
     }
 
-    private final void updateMemberName(String oriName, String newName) {
+    private void updateMemberName(String oriName, String newName) {
         Connection co = null;
         PreparedStatement ps = null;
         try {

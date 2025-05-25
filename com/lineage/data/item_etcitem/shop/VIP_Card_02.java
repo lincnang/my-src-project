@@ -73,7 +73,7 @@ public class VIP_Card_02 extends ItemExecutor {
                 }
             }
             final long time = System.currentTimeMillis();// 目前時間豪秒
-            final long x1 = CardSet.USE_TIME * 60 * 60;// 指定耗用秒數
+            final long x1 = (long) CardSet.USE_TIME * 60 * 60;// 指定耗用秒數
             final long x2 = x1 * 1000;// 轉為豪秒
             final long upTime = x2 + time;// 目前時間 加上指定耗用秒數
             // 時間數據

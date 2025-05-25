@@ -439,9 +439,7 @@ public class GameServer {
             String ver = "\n\r--------------------------------------------------" + "\n\r       主機位置: " + Config.GAME_SERVER_HOST_NAME + "\n\r       監聽端口: " + Config.GAME_SERVER_PORT + "\n\r       伺服器作業系統: " + osname + "\n\r       伺服器使用者: " + username + "\n\r       使用者名稱資料庫: " + ConfigSQL.DB_URL2_LOGIN + "\n\r       伺服器檔案資料庫: " + ConfigSQL.DB_URL2 + "\n\r       綁定登入器設置: " + Config.LOGINS_TO_AUTOENTICATION + "\n\r--------------------------------------------------" + "\n\r       請勿作為其他商業性用途如發生問題自行請負責" + "\n\r       此研究用模擬器使用上如有問題請洽" + "\n\r       只有此唯一聯絡帳號!!!!!" + "\n\r       『" + Config.SERVERNAME + "』 ：專屬版本" + "\n\r--------------------------------------------------";
             _log.info(ver);
             // 加載管理器
-            EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                }
+            EventQueue.invokeLater(() -> {
             });
             CmdEcho cmdEcho = new CmdEcho(timer.get());
             cmdEcho.runCmd();

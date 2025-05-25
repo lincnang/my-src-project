@@ -18,9 +18,9 @@ import java.util.StringTokenizer;
 
 public class ArmorSetTable {
     private static final Log _log = LogFactory.getLog(ArmorSetTable.class);
-    private static final ArrayList<L1ArmorSets> _armorSetList = new ArrayList<L1ArmorSets>();
+    private static final ArrayList<L1ArmorSets> _armorSetList = new ArrayList<>();
     private static ArmorSetTable _instance;
-    private static HashMap<Integer, Integer> _armor_id_list = new HashMap<Integer, Integer>();
+    private static HashMap<Integer, Integer> _armor_id_list = new HashMap<>();
 
     public static ArmorSetTable get() {
         if (_instance == null) {
@@ -81,7 +81,7 @@ public class ArmorSetTable {
             String sets = rs.getString("sets");
             as.setSets(rs.getString("sets"));
             for (int key : getArray(sets)) {
-                _armor_id_list.put(Integer.valueOf(key), Integer.valueOf(rs.getInt("id")));
+                _armor_id_list.put(key, rs.getInt("id"));
             }
             as.setPolyId(rs.getInt("polyid"));
             as.setPolyDesc(rs.getInt("poly_desc")); // 變身名字編號
@@ -142,18 +142,18 @@ public class ArmorSetTable {
     }
 
     public L1ArmorSets[] getAllList() {
-        return (L1ArmorSets[]) _armorSetList.toArray(new L1ArmorSets[_armorSetList.size()]);
+        return (L1ArmorSets[]) _armorSetList.toArray(new L1ArmorSets[0]);
     }
 
     public boolean checkArmorSet(int item_id) {
-        return _armor_id_list.containsKey(Integer.valueOf(item_id));
+        return _armor_id_list.containsKey(item_id);
     }
 
     public String getQuality1(int item_id) {//src008
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality1();
                 }
             }
@@ -164,8 +164,8 @@ public class ArmorSetTable {
     public String getQuality2(int item_id) {
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality2();
                 }
             }
@@ -176,8 +176,8 @@ public class ArmorSetTable {
     public String getQuality3(int item_id) {
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality3();
                 }
             }
@@ -188,8 +188,8 @@ public class ArmorSetTable {
     public String getQuality4(int item_id) {
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality4();
                 }
             }
@@ -200,8 +200,8 @@ public class ArmorSetTable {
     public String getQuality5(int item_id) {
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality5();
                 }
             }
@@ -212,8 +212,8 @@ public class ArmorSetTable {
     public String getQuality6(int item_id) {
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality6();
                 }
             }
@@ -224,8 +224,8 @@ public class ArmorSetTable {
     public String getQuality7(int item_id) {
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality7();
                 }
             }
@@ -236,8 +236,8 @@ public class ArmorSetTable {
     public String getQuality8(int item_id) {
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality8();
                 }
             }
@@ -248,8 +248,8 @@ public class ArmorSetTable {
     public String getQuality9(int item_id) {
         for (L1ArmorSets armorSets : get().getAllList()) {
             int[] tgItemId = getArray(armorSets.getSets(), ",");
-            for (int i = 0; i < tgItemId.length; i++) {
-                if (tgItemId[i] == item_id) {
+            for (int j : tgItemId) {
+                if (j == item_id) {
                     return armorSets.getQuality9();
                 }
             }

@@ -11,13 +11,13 @@ import java.util.Map;
  * 樂天堂火神製作(DB化)
  */
 public class CraftItemForNpc {
-    private Map<Integer, L1CraftItem> materialList = new HashMap<Integer, L1CraftItem>();
-    private Map<Integer, L1CraftItem> aidMaterialList = new HashMap<Integer, L1CraftItem>();
-    private Map<Integer, L1CraftItem> itemList = new HashMap<Integer, L1CraftItem>();
-    private Map<Integer, L1CraftItem> bigsuccesitemList = new HashMap<Integer, L1CraftItem>(); // 大成功道具
-    private Map<Integer, L1CraftItem> failItem = new HashMap<Integer, L1CraftItem>();
-    private List<Integer> polyList = new ArrayList<Integer>();
-    private List<Integer> bless = new ArrayList<Integer>();
+    private Map<Integer, L1CraftItem> materialList = new HashMap<>();
+    private Map<Integer, L1CraftItem> aidMaterialList = new HashMap<>();
+    private Map<Integer, L1CraftItem> itemList = new HashMap<>();
+    private Map<Integer, L1CraftItem> bigsuccesitemList = new HashMap<>(); // 大成功道具
+    private Map<Integer, L1CraftItem> failItem = new HashMap<>();
+    private List<Integer> polyList = new ArrayList<>();
+    private List<Integer> bless = new ArrayList<>();
     private int actionid;
     private int maxLevel;
     private int minLevel;

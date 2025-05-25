@@ -27,10 +27,10 @@ public class Npc_CastleBuffSet extends NpcExecutor {
     public void talk(L1PcInstance pc, L1NpcInstance npc) {
         try {
             if (pc.getInventory().consumeItem(40308, 1000)) {
-                for (int i = 0; i < allBuffSkill.length; i++) {
-                    final L1Skills skill = SkillsTable.get().getTemplate(allBuffSkill[i]);
+                for (int j : allBuffSkill) {
+                    final L1Skills skill = SkillsTable.get().getTemplate(j);
                     final L1SkillUse skillUse = new L1SkillUse();
-                    skillUse.handleCommands(pc, allBuffSkill[i], pc.getId(), pc.getX(), pc.getY(), skill.getBuffDuration(), L1SkillUse.TYPE_GMBUFF);// */
+                    skillUse.handleCommands(pc, j, pc.getId(), pc.getX(), pc.getY(), skill.getBuffDuration(), L1SkillUse.TYPE_GMBUFF);// */
                 }
                 pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "bs_done"));
             } else {

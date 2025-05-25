@@ -12,12 +12,12 @@ import java.util.ArrayList;
  * 道具自訂義訊息
  */
 public class WilliamItemMessage {
-    private static ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+    private static ArrayList<ArrayList<Object>> list = new ArrayList<>();
 
     public static ArrayList<String> getItemInfo(final L1ItemInstance item) {
-        final ArrayList<String> a = new ArrayList<String>();
+        final ArrayList<String> a = new ArrayList<>();
         for (final ArrayList<?> objects : list) {
-            final int itemid = ((Integer) objects.get(0)).intValue();
+            final int itemid = (Integer) objects.get(0);
             if (itemid == -1 || itemid == item.getItemId()) {
                 a.add((String) objects.get(1));
                 a.add((String) objects.get(2));
@@ -44,8 +44,8 @@ public class WilliamItemMessage {
             ArrayList<Object> aReturn = null;
             if (rset != null) {
                 while (rset.next()) {
-                    aReturn = new ArrayList<Object>();
-                    aReturn.add(0, new Integer(rset.getInt("道具編號")));
+                    aReturn = new ArrayList<>();
+                    aReturn.add(0, rset.getInt("道具編號"));
                     aReturn.add(1, rset.getString("顯示文字_1"));
                     aReturn.add(2, rset.getString("顯示文字_2"));
                     aReturn.add(3, rset.getString("顯示文字_3"));

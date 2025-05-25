@@ -28,11 +28,11 @@ public class MonsterBookCompensateLoader {
     private Map<Integer, WeekQuestCompensator> _week_compensators;
 
     private MonsterBookCompensateLoader() {
-        _normal_compensators = new HashMap<Integer, ArrayList<NormalQuestCompensator>>(3);
+        _normal_compensators = new HashMap<>(3);
         for (int i = 1; i <= 3; i++) {
-            _normal_compensators.put(i, new ArrayList<NormalQuestCompensator>(2));
+            _normal_compensators.put(i, new ArrayList<>(2));
         }
-        _week_compensators = new HashMap<Integer, WeekQuestCompensator>(3);
+        _week_compensators = new HashMap<>(3);
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
@@ -107,7 +107,7 @@ public class MonsterBookCompensateLoader {
     }
 
     public ArrayList<WeekQuestCompensator> getWeekCompensators() {
-        ArrayList<WeekQuestCompensator> list = new ArrayList<WeekQuestCompensator>(_week_compensators.size());
+        ArrayList<WeekQuestCompensator> list = new ArrayList<>(_week_compensators.size());
         list.addAll(_week_compensators.values());
         return list;
     }

@@ -37,13 +37,13 @@ import java.util.HashMap;
 public final class ClanAllianceTable implements ClanAllianceStorage {
     private static final Log _log = LogFactory.getLog(ClanAllianceTable.class);
     // 全部同盟資料
-    private final HashMap<Integer, L1Alliance> _allianceList = new HashMap<Integer, L1Alliance>();
+    private final HashMap<Integer, L1Alliance> _allianceList = new HashMap<>();
 
     /**
      * 初始化載入
      */
     @Override
-    public final void load() {
+    public void load() {
         final PerformanceTimer timer = new PerformanceTimer();
         Connection con = null;
         PreparedStatement pstm = null;
@@ -59,7 +59,7 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
                 final int alliance_id3 = rs.getInt("alliance_id3");
                 final int alliance_id4 = rs.getInt("alliance_id4");
                 // 搜索同盟資料 (資料只儲存四個)
-                final ArrayList<L1Clan> totalList = new ArrayList<L1Clan>(4);
+                final ArrayList<L1Clan> totalList = new ArrayList<>(4);
                 // 搜尋迴圈
                 for (final L1Clan clan : WorldClan.get().getAllClans()) {
                     if ((clan.getClanId() == alliance_id1) || (clan.getClanId() == alliance_id2) || (clan.getClanId() == alliance_id3) || (clan.getClanId() == alliance_id4)) {
@@ -71,7 +71,7 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
                     deleteAlliance(order_id);
                     continue;
                 }
-                final L1Alliance l1alliance = new L1Alliance(order_id, totalList.toArray(new L1Clan[totalList.size()]));
+                final L1Alliance l1alliance = new L1Alliance(order_id, totalList.toArray(new L1Clan[0]));
                 _allianceList.put(order_id, l1alliance);
             }
         } catch (final Exception e) {
@@ -89,7 +89,7 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
      *
      */
     @Override
-    public final void insertAlliance(final L1Alliance alliance) {
+    public void insertAlliance(final L1Alliance alliance) {
         // 同盟締結數量小於最低數量2
         if (alliance.getTotalList().size() < 2) {
             return;
@@ -118,7 +118,7 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
      *
      */
     @Override
-    public final void updateAlliance(final int order_id, final ArrayList<L1Clan> totalList) {
+    public void updateAlliance(final int order_id, final ArrayList<L1Clan> totalList) {
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -143,7 +143,7 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
      *
      */
     @Override
-    public final void deleteAlliance(final int order_id) {
+    public void deleteAlliance(final int order_id) {
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -166,7 +166,7 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
      *
      */
     @Override
-    public final L1Alliance getAlliance(final int clan_id) {
+    public L1Alliance getAlliance(final int clan_id) {
         // 巢狀迴圈...
         for (final L1Alliance alliance : _allianceList.values()) {
             for (final L1Clan clan : alliance.getTotalList()) {

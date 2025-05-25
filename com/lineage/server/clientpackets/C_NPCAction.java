@@ -909,7 +909,7 @@ public class C_NPCAction extends ClientBasePacket {
                     htmlid = enterHauntedHouse(pc);
                 } else if (npcId == 80088) {
                     String s2 = readS();
-                    htmlid = enterPetMatch(pc, Integer.valueOf(s2).intValue());
+                    htmlid = enterPetMatch(pc, Integer.parseInt(s2));
                 } else if ((npcId == 50038) || (npcId == 50042) || (npcId == 50029) || (npcId == 50019) || (npcId == 50062)) {
                     htmlid = watchUb(pc, npcId);
                 } else if (npcId == 80086) { // 庫山

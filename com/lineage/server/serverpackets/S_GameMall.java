@@ -28,7 +28,7 @@ public class S_GameMall extends ServerBasePacket {
         for (final Integer id : keys) {
             gameMallModel = BuyList.get(id);
             item = gameMallModel.getMallItem();
-            writeD(id.intValue());
+            writeD(id);
             writeH(item.getItem().getGfxId());
             writeH(gameMallModel.getShopItemDesc());
             writeC(0);
@@ -57,7 +57,7 @@ public class S_GameMall extends ServerBasePacket {
                 int ac = item.getItem().get_ac();
                 if (ac != 0) {
                     if (ac < 0) {
-                        ac = ac - ac - ac;
+                        ac = -ac;
                     }
                     writeC(ac);
                     writeC(item.getItem().getMaterial());

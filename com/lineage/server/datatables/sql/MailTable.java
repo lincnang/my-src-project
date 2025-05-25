@@ -22,7 +22,7 @@ import java.util.TreeMap;
 public class MailTable implements MailStorage {
     private static final Log _log = LogFactory.getLog(MailTable.class);
     // 加入TreeMap#id 排序 by terry0412
-    private static final Map<Integer, L1Mail> _allMail = new TreeMap<Integer, L1Mail>();
+    private static final Map<Integer, L1Mail> _allMail = new TreeMap<>();
 
     @Override
     public void load() {

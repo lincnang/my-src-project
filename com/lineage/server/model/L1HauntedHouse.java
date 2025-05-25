@@ -119,7 +119,7 @@ public class L1HauntedHouse {
     }
 
     public L1PcInstance[] getMembersArray() {
-        return (L1PcInstance[]) _members.toArray(new L1PcInstance[_members.size()]);
+        return (L1PcInstance[]) _members.toArray(new L1PcInstance[0]);
     }
 
     public int getMembersCount() {

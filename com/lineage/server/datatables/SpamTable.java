@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class SpamTable {
     private final static Logger _log = Logger.getLogger(SpamTable.class.getName());
     private static SpamTable _instance;
-    private final Map<Integer, L1ExcludingList> _excludes = new HashMap<Integer, L1ExcludingList>();
+    private final Map<Integer, L1ExcludingList> _excludes = new HashMap<>();
 
     private SpamTable() {
         Connection con = null;

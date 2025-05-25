@@ -39,7 +39,7 @@ public class L1PowerKick implements L1CommandExecutor {
                 gmName = pc.getName() + "命令";
             }
             // XXX 解除
-            if (arg.indexOf("remove") != -1) {
+            if (arg.contains("remove")) {
                 final StringTokenizer st = new StringTokenizer(arg);
                 st.nextToken();
                 final String ipaddr = st.nextToken();

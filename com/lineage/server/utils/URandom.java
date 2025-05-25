@@ -63,7 +63,7 @@ public class URandom {
      *
      */
     public static long nextLong() {
-        long value = nextInt(Integer.MAX_VALUE) << 32 + nextInt(Integer.MAX_VALUE);
+        long value = (long) nextInt(Integer.MAX_VALUE) << 32 + nextInt(Integer.MAX_VALUE);
         return value;
     }
 

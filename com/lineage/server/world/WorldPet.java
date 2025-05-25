@@ -20,7 +20,7 @@ public class WorldPet {
     private Collection<L1PetInstance> _allPetValues;
 
     private WorldPet() {
-        _isPet = new ConcurrentHashMap<Integer, L1PetInstance>();
+        _isPet = new ConcurrentHashMap<>();
     }
 
     public static WorldPet get() {

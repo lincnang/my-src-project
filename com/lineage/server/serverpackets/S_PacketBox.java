@@ -880,7 +880,7 @@ public class S_PacketBox extends ServerBasePacket {
         writeC(subCode);
         switch (subCode) {
             case PLEDGE_UNION:
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 for (int i : pc.getClan().Alliance()) {
                     if (i == 0) {
                         continue;
@@ -889,7 +889,7 @@ public class S_PacketBox extends ServerBasePacket {
                     if (c == null) {
                         continue;
                     }
-                    sb.append(c.getClanName() + " ");
+                    sb.append(c.getClanName()).append(" ");
                 }
                 writeS(sb.toString());
                 break;

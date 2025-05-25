@@ -15,8 +15,7 @@ public class S_RankedClan extends ServerBasePacket {
         writeC(2);
         writeD(T_RankTable._basedTime);
         writeD(models.size());
-        for (int i = 0; i < models.size(); i++) {
-            final T_ClanRankModel model = models.get(i);
+        for (final T_ClanRankModel model : models) {
             writeS(model.getClanName());
             writeS(model.getLeaderName());
             writeH(model.getMemberCount());

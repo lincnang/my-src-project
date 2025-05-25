@@ -80,7 +80,7 @@ public class Npc_test extends NpcExecutor {
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
-        HashMap<Integer, String[]> map = new HashMap<Integer, String[]>();
+        HashMap<Integer, String[]> map = new HashMap<>();
         try {
             con = DatabaseFactory.get().getConnection();
             pstm = con.prepareStatement("SELECT item_id,name,name_id FROM " + tableName + " LIMIT " + index + "," + count);

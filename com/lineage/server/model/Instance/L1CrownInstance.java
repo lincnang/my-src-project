@@ -96,7 +96,7 @@ public class L1CrownInstance extends L1NpcInstance {
             final int castle_id = L1CastleLocation.getCastleId(this.getX(), this.getY(), this.getMapId());
             // 布告しているかチェック。但し、城主が居ない場合は布告不要
             boolean existDefenseClan = false;
-            final L1Clan defence_clan = L1CastleLocation.mapCastle().get(new Integer(castle_id));
+            final L1Clan defence_clan = L1CastleLocation.mapCastle().get(castle_id);
             if (defence_clan != null) {
                 existDefenseClan = true;
             }
@@ -126,15 +126,15 @@ public class L1CrownInstance extends L1NpcInstance {
                 defence_clan.setCastleId(0);
                 ClanReading.get().updateClan(defence_clan);
                 // 原城主王冠消除
-                if (L1CastleLocation.mapCastle().get(new Integer(castle_id)) != null) {
-                    L1CastleLocation.removeCastle(new Integer(castle_id));
+                if (L1CastleLocation.mapCastle().get(castle_id) != null) {
+                    L1CastleLocation.removeCastle(castle_id);
                 }
                 World.get().broadcastPacketToAll(new S_CastleMaster(0, defence_clan.getLeaderId()));
             }
             clan.setCastleId(castle_id);
             ClanReading.get().updateClan(clan);
             // 新城主王冠顯示
-            if (L1CastleLocation.mapCastle().get(new Integer(castle_id)) == null) {
+            if (L1CastleLocation.mapCastle().get(castle_id) == null) {
                 L1CastleLocation.putCastle(castle_id, clan);
             }
             if (castle_id == 2) {// 妖魔城主 暫時使用8顯示王冠

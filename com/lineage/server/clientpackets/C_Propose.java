@@ -102,8 +102,8 @@ public class C_Propose extends ClientBasePacket {
     public boolean checkPcItem(L1PcInstance pc) {
         boolean PcRing = false;
         int[] Ties = {40901, 40902, 40903, 40904, 40905, 40906, 40907, 40908};
-        for (int i = 0; i < Ties.length; i++) {
-            if (pc.getInventory().checkItem(Ties[i])) {
+        for (int tie : Ties) {
+            if (pc.getInventory().checkItem(tie)) {
                 PcRing = true;
             }
         }
@@ -113,8 +113,8 @@ public class C_Propose extends ClientBasePacket {
     public boolean checkTargetItem(L1PcInstance target) {
         boolean TargetRing = false;
         int[] Ties = {40901, 40902, 40903, 40904, 40905, 40906, 40907, 40908};
-        for (int i = 0; i < Ties.length; i++) {
-            if (target.getInventory().checkItem(Ties[i])) {
+        for (int tie : Ties) {
+            if (target.getInventory().checkItem(tie)) {
                 TargetRing = true;
             }
         }

@@ -100,7 +100,7 @@ public class L1MagicWeapon {
      * 附魔武器傷害判定
      *
      */
-    public static final double getWeaponSkillDamage(final L1PcInstance pc, final L1Character cha, final double damage, final L1MagicWeapon magicWeapon, final boolean isLongRange) {
+    public static double getWeaponSkillDamage(final L1PcInstance pc, final L1Character cha, final double damage, final L1MagicWeapon magicWeapon, final boolean isLongRange) {
         if (pc == null || cha == null || magicWeapon == null) {
             return 0;
         }
@@ -465,7 +465,7 @@ public class L1MagicWeapon {
      * 發送特效到指定座標
      *
      */
-    private static final void sendGfxids(final L1PcInstance pc, final L1MagicWeapon magicWeapon, final int locX, final int locY, final int targetId, final int gfxId, final boolean isNowWar) {
+    private static void sendGfxids(final L1PcInstance pc, final L1MagicWeapon magicWeapon, final int locX, final int locY, final int targetId, final int gfxId, final boolean isNowWar) {
         // 10格內畫面可見人物
         final ArrayList<L1PcInstance> pc_list = World.get().getVisiblePlayer(pc, 10);
         // 飛行效果

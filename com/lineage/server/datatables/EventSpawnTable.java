@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class EventSpawnTable {
     private static final Log _log = LogFactory.getLog(EventSpawnTable.class);
-    private static final Map<Integer, L1Spawn> _spawntable = new HashMap<Integer, L1Spawn>();
+    private static final Map<Integer, L1Spawn> _spawntable = new HashMap<>();
     private static EventSpawnTable _instance;
 
     public static EventSpawnTable get() {
@@ -117,7 +117,7 @@ public class EventSpawnTable {
                                 spawnDat.setName(template1.get_name());
                                 spawnDat.init();
                                 spawnCount += spawnDat.getAmount();
-                                _spawntable.put(new Integer(spawnDat.getId()), spawnDat);
+                                _spawntable.put(spawnDat.getId(), spawnDat);
                             }
                         }
                     }
@@ -134,7 +134,7 @@ public class EventSpawnTable {
     }
 
     public L1Spawn getTemplate(int Id) {
-        return (L1Spawn) _spawntable.get(new Integer(Id));
+        return (L1Spawn) _spawntable.get(Id);
     }
 }
 /*

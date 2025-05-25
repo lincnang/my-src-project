@@ -17,13 +17,13 @@ public class L1NpcShowHtmlAction extends L1NpcXmlAction {
         super(element);
         this._htmlId = element.getAttribute("HtmlId");
         final NodeList list = element.getChildNodes();
-        final ArrayList<String> dataList = new ArrayList<String>();
+        final ArrayList<String> dataList = new ArrayList<>();
         for (final Element elem : new IterableElementList(list)) {
             if (elem.getNodeName().equalsIgnoreCase("Data")) {
                 dataList.add(elem.getAttribute("Value"));
             }
         }
-        this._args = dataList.toArray(new String[dataList.size()]);
+        this._args = dataList.toArray(new String[0]);
     }
 
     @Override

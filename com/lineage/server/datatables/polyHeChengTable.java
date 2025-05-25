@@ -40,7 +40,7 @@ import java.util.HashMap;
 public class polyHeChengTable {
     private static final Log _log = LogFactory.getLog(polyHeChengTable.class);
     private static polyHeChengTable _instance;
-    private final HashMap<Integer, L1polyHeCheng> _itemidIndex = new HashMap<Integer, L1polyHeCheng>();
+    private final HashMap<Integer, L1polyHeCheng> _itemidIndex = new HashMap<>();
 
     public static polyHeChengTable getInstance() {
         if (_instance == null) {
@@ -89,6 +89,6 @@ public class polyHeChengTable {
     }
 
     public L1polyHeCheng[] getItemIdList() {
-        return _itemidIndex.values().toArray(new L1polyHeCheng[_itemidIndex.size()]);
+        return _itemidIndex.values().toArray(new L1polyHeCheng[0]);
     }
 }

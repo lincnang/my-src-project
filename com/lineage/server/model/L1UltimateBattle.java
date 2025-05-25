@@ -71,8 +71,8 @@ public class L1UltimateBattle {
     private int _hpr;
     private int _mpr;
     private String _ubName; // TODO [非仿原碼] 無限大賽廣播
-    private Set<Integer> _managers = new HashSet<Integer>();
-    private SortedSet<Integer> _ubTimes = new TreeSet<Integer>();
+    private Set<Integer> _managers = new HashSet<>();
+    private SortedSet<Integer> _ubTimes = new TreeSet<>();
     private String[] _ubInfo;
     /**
      * 等補給出現。
@@ -255,7 +255,7 @@ public class L1UltimateBattle {
      * @return 參加配列
      */
     public L1PcInstance[] getMembersArray() {
-        return _members.toArray(new L1PcInstance[_members.size()]);
+        return _members.toArray(new L1PcInstance[0]);
     }
 
     /**
@@ -461,7 +461,7 @@ public class L1UltimateBattle {
 
     private int nextUbTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
-        int nowTime = Integer.valueOf(sdf.format(getRealTime().getTime()));
+        int nowTime = Integer.parseInt(sdf.format(getRealTime().getTime()));
         SortedSet<Integer> tailSet = _ubTimes.tailSet(nowTime);
         if (tailSet.isEmpty()) {
             tailSet = _ubTimes;
@@ -473,7 +473,7 @@ public class L1UltimateBattle {
         SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
         Calendar realTime = getRealTime();
         realTime.add(Calendar.MINUTE, BEFORE_MINUTE);
-        int nowTime = Integer.valueOf(sdf.format(realTime.getTime()));
+        int nowTime = Integer.parseInt(sdf.format(realTime.getTime()));
         return _ubTimes.contains(nowTime);
     }
 
@@ -623,7 +623,7 @@ public class L1UltimateBattle {
                         if (getMembersCount() > 0) {
                             spawn.spawnAll();
                         }
-                        TimeUnit.MILLISECONDS.sleep(spawn.getSpawnDelay() * 1000);
+                        TimeUnit.MILLISECONDS.sleep(spawn.getSpawnDelay() * 1000L);
                         // removeRetiredMembers();
                     }
                     if (getMembersCount() > 0) {

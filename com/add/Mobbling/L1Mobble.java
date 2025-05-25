@@ -27,7 +27,7 @@ public class L1Mobble {
     }
 
     private static ArrayList<L1ItemInstance> sellList(L1PcInstance pc) {
-        ArrayList<L1ItemInstance> Mobs = new ArrayList<L1ItemInstance>();
+        ArrayList<L1ItemInstance> Mobs = new ArrayList<>();
         L1ItemInstance[] MobItems = pc.getInventory().findMob();
         if (MobItems.length <= 0) {
             return Mobs;
@@ -201,7 +201,7 @@ public class L1Mobble {
                 pc.sendPackets(new S_NPCTalkReturn(npc.getId(), this._htmlid));
             } else if ((npcMob1 != null) && (npcMob2 != null) && (npcMob3 != null) && (npcMob4 != null) && (npcMob5 != null) && (npcMob6 != null) && (npcMob7 != null) && (npcMob8 != null) && (npcMob9 != null) && (npcMob10 != null)) {
                 int MobId = _Mob.get_MobId();
-                ArrayList<int[]> Mobs = new ArrayList<int[]>();
+                ArrayList<int[]> Mobs = new ArrayList<>();
                 int[] Mob1 = {npcMob1.getNpcId(), MobId};
                 Mobs.add(Mob1);
                 int[] Mob2 = {npcMob2.getNpcId(), MobId};

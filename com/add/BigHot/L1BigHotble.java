@@ -22,7 +22,7 @@ public class L1BigHotble {
     }
 
     private static ArrayList<L1ItemInstance> sellList(L1PcInstance pc) {
-        ArrayList<L1ItemInstance> BigHots = new ArrayList<L1ItemInstance>();
+        ArrayList<L1ItemInstance> BigHots = new ArrayList<>();
         L1ItemInstance[] BigHotItems = pc.getInventory().findBigHot();
         if (BigHotItems.length <= 0) {
             return BigHots;
@@ -36,7 +36,7 @@ public class L1BigHotble {
                 int ch = 0;
                 for (int a = 0; a < A.split(",").length; a++) {
                     String[] pk = B.split(",");
-                    if (("," + A).indexOf("," + pk[a] + ",") >= 0) {
+                    if (("," + A).contains("," + pk[a] + ",")) {
                         ch++;
                     }
                 }

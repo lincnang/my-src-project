@@ -37,7 +37,7 @@ class L1ShopBuyOrder {
  */
 public class L1ShopBuyOrderList {
     private final L1Shop _shop;
-    private final List<L1ShopBuyOrder> _list = new ArrayList<L1ShopBuyOrder>();
+    private final List<L1ShopBuyOrder> _list = new ArrayList<>();
     private final L1TaxCalculator _taxCalc;
     private int _totalWeight = 0;
     private int _totalPrice = 0;

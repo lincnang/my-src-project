@@ -10,59 +10,59 @@ public class L1AttackList {
     /**
      * 傷害降低
      */
-    public static final HashMap<Integer, Integer> SKD3 = new HashMap<Integer, Integer>();
+    public static final HashMap<Integer, Integer> SKD3 = new HashMap<>();
     /**
      * 受到下列法術效果 傷害為0
      */
-    public static final HashMap<Integer, Integer> SKM0 = new HashMap<Integer, Integer>();
+    public static final HashMap<Integer, Integer> SKM0 = new HashMap<>();
     /**
      * 料理命中降低或追加(_weaponType != 20) && (_weaponType != 62)近距離武器
      */
-    protected static final HashMap<Integer, Integer> SKU1 = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> SKU1 = new HashMap<>();
     /**
      * 料理命中降低或追加(_weaponType == 20) && (_weaponType == 62)遠距離武器
      */
-    protected static final HashMap<Integer, Integer> SKU2 = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> SKU2 = new HashMap<>();
     /**
      * NPC需附加技能才可攻擊
      */
-    protected static final HashMap<Integer, Integer> SKNPC = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> SKNPC = new HashMap<>();
     /**
      * NPC指定外型不可攻擊
      */
-    protected static final HashMap<Integer, Integer> PLNPC = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> PLNPC = new HashMap<>();
     /**
      * 料理追加傷害(_weaponType != 20) && (_weaponType != 62)近距離武器
      */
-    protected static final HashMap<Integer, Integer> SKD1 = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> SKD1 = new HashMap<>();
     /**
      * 料理追加傷害(_weaponType == 20) && (_weaponType == 62)遠距離武器
      */
-    protected static final HashMap<Integer, Integer> SKD2 = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> SKD2 = new HashMap<>();
     /**
      * 力量增加命中
      */
-    protected static final HashMap<Integer, Integer> STRH = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> STRH = new HashMap<>();
     /**
      * 敏捷增加命中
      */
-    protected static final HashMap<Integer, Integer> DEXH = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> DEXH = new HashMap<>();
     /**
      * 力量增加傷害
      */
-    protected static final HashMap<Integer, Integer> STRD = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> STRD = new HashMap<>();
     /**
      * 敏捷增加傷害
      */
-    protected static final HashMap<Integer, Integer> DEXD = new HashMap<Integer, Integer>();
+    protected static final HashMap<Integer, Integer> DEXD = new HashMap<>();
     /**
      * NPC抵抗技能(NPCID / 技能編號) 列表中該技能對該NPC施展失敗
      */
-    protected static final HashMap<Integer, Integer[]> DNNPC = new HashMap<Integer, Integer[]>();
+    protected static final HashMap<Integer, Integer[]> DNNPC = new HashMap<>();
     /**
      * 安全區域不可使用的技能
      */
-    protected static final HashMap<Integer, Boolean> NZONE = new HashMap<Integer, Boolean>();
+    protected static final HashMap<Integer, Boolean> NZONE = new HashMap<>();
 
     public static void load() { // BOSS抵抗技能
         for (Integer bossid : SpawnBossReading.get().bossIds()) {
@@ -212,7 +212,6 @@ public class L1AttackList {
         PLNPC.put(46097, 6034);
         PLNPC.put(46098, 6034);
         PLNPC.put(46099, 6034);
-        PLNPC.put(46100, 6034);
         PLNPC.put(46100, 6034);
         PLNPC.put(46101, 6034);
         PLNPC.put(46102, 6034);

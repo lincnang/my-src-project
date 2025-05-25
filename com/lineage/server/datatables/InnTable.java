@@ -40,11 +40,11 @@ public class InnTable {
             rs = pstm.executeQuery();
             while (rs.next()) {
                 int key = rs.getInt("npcid");
-                if (!_dataMap.containsKey(Integer.valueOf(key))) {
+                if (!_dataMap.containsKey(key)) {
                     inn = new Inn();
-                    _dataMap.put(Integer.valueOf(key), inn);
+                    _dataMap.put(key, inn);
                 } else {
-                    inn = (Inn) _dataMap.get(Integer.valueOf(key));
+                    inn = (Inn) _dataMap.get(key);
                 }
                 L1Inn l1inn = new L1Inn();
                 l1inn.setInnNpcId(rs.getInt("npcid"));
@@ -54,7 +54,7 @@ public class InnTable {
                 l1inn.setLodgerId(rs.getInt("lodger_id"));
                 l1inn.setHall(rs.getBoolean("hall"));
                 l1inn.setDueTime(rs.getTimestamp("due_time"));
-                inn._inn.put(Integer.valueOf(roomNumber), l1inn);
+                inn._inn.put(roomNumber, l1inn);
             }
         } catch (SQLException e) {
             _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -91,8 +91,8 @@ public class InnTable {
     }
 
     public L1Inn getTemplate(int npcid, int roomNumber) {
-        if (_dataMap.containsKey(Integer.valueOf(npcid))) {
-            return (L1Inn) ((Inn) _dataMap.get(Integer.valueOf(npcid)))._inn.get(Integer.valueOf(roomNumber));
+        if (_dataMap.containsKey(npcid)) {
+            return (L1Inn) ((Inn) _dataMap.get(npcid))._inn.get(roomNumber);
         }
         return null;
     }

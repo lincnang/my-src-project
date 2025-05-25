@@ -8,7 +8,7 @@ public class S_HouseMap extends ServerBasePacket {
     }
 
     private void buildPacket(int objectId, String house_number) {
-        int number = Integer.valueOf(house_number).intValue();
+        int number = Integer.parseInt(house_number);
         writeC(S_AGIT_MAP);
         writeD(objectId);
         writeD(number);

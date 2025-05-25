@@ -26,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class CharRemoveItemTable implements CharRemoveItemStorage {
     private static final Log _log = LogFactory.getLog(CharRemoveItemTable.class);
     // 輔助(自動刪物)倉庫物件清單 (角色ObjId) (物品清單)
-    private static final Map<Integer, CopyOnWriteArrayList<L1ItemInstance>> _itemList = new ConcurrentHashMap<Integer, CopyOnWriteArrayList<L1ItemInstance>>();
+    private static final Map<Integer, CopyOnWriteArrayList<L1ItemInstance>> _itemList = new ConcurrentHashMap<>();
 
     /**
      * 刪除錯誤物品資料
@@ -55,7 +55,7 @@ public class CharRemoveItemTable implements CharRemoveItemStorage {
     private static void addItem(final int char_id, final L1ItemInstance item) {
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(char_id);
         if (list == null) {
-            list = new CopyOnWriteArrayList<L1ItemInstance>();
+            list = new CopyOnWriteArrayList<>();
             if (!list.contains(item)) {
                 list.add(item);
             }

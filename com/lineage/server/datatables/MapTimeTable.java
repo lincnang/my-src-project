@@ -25,8 +25,8 @@ public class MapTimeTable {
     private static final Log _log = LogFactory.getLog(MapTimeTable.class);
     static MapTimeTable timemap;
     final int INTERVAL = 1000;
-    ArrayList<TimeMap> _map = new ArrayList<TimeMap>();
-    ConcurrentHashMap<Integer, TimeMap> timermap = new ConcurrentHashMap<Integer, TimeMap>();
+    ArrayList<TimeMap> _map = new ArrayList<>();
+    ConcurrentHashMap<Integer, TimeMap> timermap = new ConcurrentHashMap<>();
     Timer _regenTimer5;
 
     private MapTimeTable() {

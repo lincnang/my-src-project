@@ -18,8 +18,7 @@ public class S_RetrieveChaList extends ServerBasePacket {
                 writeD(objid);
                 writeH(size);
                 writeC(18);
-                for (Iterator<?> localIterator = pc.getDwarfForChaInventory().getItems().iterator(); localIterator.hasNext(); ) {
-                    Object itemObject = localIterator.next();
+                for (Object itemObject : pc.getDwarfForChaInventory().getItems()) {
                     L1ItemInstance item = (L1ItemInstance) itemObject;
                     writeD(item.getId());
                     int i = item.getItem().getUseType();

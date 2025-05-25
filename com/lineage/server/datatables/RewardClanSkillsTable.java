@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 
 public class RewardClanSkillsTable {
     private static final Log _log = LogFactory.getLog(RewardClanSkillsTable.class);
-    private static final Map<Integer, HashMap<Integer, L1ClanSkills>> _list = new HashMap<Integer, HashMap<Integer, L1ClanSkills>>();
+    private static final Map<Integer, HashMap<Integer, L1ClanSkills>> _list = new HashMap<>();
     public static boolean START = false;
     private static RewardClanSkillsTable _instance;
 
@@ -125,13 +125,13 @@ public class RewardClanSkillsTable {
                 skill.setAddEarth(AddEarth);
                 skill.set_buff_iconid(buff_iconid);
                 skill.set_buff_stringid(buff_stringid);
-                HashMap<Integer, L1ClanSkills> _map = (HashMap<Integer, L1ClanSkills>) _list.get(Integer.valueOf(ClanSkillId));
+                HashMap<Integer, L1ClanSkills> _map = (HashMap<Integer, L1ClanSkills>) _list.get(ClanSkillId);
                 if (_map == null) {
-                    _map = new HashMap<Integer, L1ClanSkills>();
-                    _map.put(Integer.valueOf(ClanSkillLv), skill);
-                    _list.put(Integer.valueOf(ClanSkillId), _map);
+                    _map = new HashMap<>();
+                    _map.put(ClanSkillLv, skill);
+                    _list.put(ClanSkillId, _map);
                 } else {
-                    _map.put(Integer.valueOf(ClanSkillLv), skill);
+                    _map.put(ClanSkillLv, skill);
                 }
             }
         } catch (SQLException e) {
@@ -145,10 +145,10 @@ public class RewardClanSkillsTable {
     }
 
     public String getSkillsName(int skillId, int skillLv) {
-        if ((!_list.isEmpty()) && (_list.containsKey(Integer.valueOf(skillId)))) {
-            HashMap<Integer, L1ClanSkills> list = (HashMap<Integer, L1ClanSkills>) _list.get(Integer.valueOf(skillId));
-            if (list.containsKey(Integer.valueOf(skillLv))) {
-                return ((L1ClanSkills) list.get(Integer.valueOf(skillLv))).getClanSkillName();
+        if ((!_list.isEmpty()) && (_list.containsKey(skillId))) {
+            HashMap<Integer, L1ClanSkills> list = (HashMap<Integer, L1ClanSkills>) _list.get(skillId);
+            if (list.containsKey(skillLv)) {
+                return ((L1ClanSkills) list.get(skillLv)).getClanSkillName();
             }
         }
         return null;
@@ -163,7 +163,7 @@ public class RewardClanSkillsTable {
             for (Integer clanSkillsId : _list.keySet()) {
                 HashMap<Integer, L1ClanSkills> list = (HashMap<Integer, L1ClanSkills>) _list.get(clanSkillsId);
                 for (Integer clanSkillsLv : list.keySet()) {
-                    if (clanSkillsLv.intValue() == 1) {
+                    if (clanSkillsLv == 1) {
                         name[i] = ((L1ClanSkills) list.get(clanSkillsLv)).getClanSkillName();
                         i++;
                         name[i] = ((L1ClanSkills) list.get(clanSkillsLv)).getNote();
@@ -178,10 +178,10 @@ public class RewardClanSkillsTable {
 
     public String getMaterialName(int skillId, int skillLv) {
         StringBuilder note = null;
-        if ((!_list.isEmpty()) && (_list.containsKey(Integer.valueOf(skillId)))) {
-            HashMap<Integer, L1ClanSkills> list = (HashMap<Integer, L1ClanSkills>) _list.get(Integer.valueOf(skillId));
-            if (list.containsKey(Integer.valueOf(skillLv))) {
-                L1ClanSkills clanSkills = (L1ClanSkills) list.get(Integer.valueOf(skillLv));
+        if ((!_list.isEmpty()) && (_list.containsKey(skillId))) {
+            HashMap<Integer, L1ClanSkills> list = (HashMap<Integer, L1ClanSkills>) _list.get(skillId);
+            if (list.containsKey(skillLv)) {
+                L1ClanSkills clanSkills = (L1ClanSkills) list.get(skillLv);
                 int[] Material = clanSkills.getMaterial();
                 int[] MaterialCount = clanSkills.getMaterialCount();
                 int[] MaterialLevel = clanSkills.getMaterialLevel();
@@ -218,10 +218,10 @@ public class RewardClanSkillsTable {
     }
 
     public L1ClanSkills getClanSkillsList(int skillId, int skillLv) {
-        if ((!_list.isEmpty()) && (_list.containsKey(Integer.valueOf(skillId)))) {
-            HashMap<Integer, L1ClanSkills> list = (HashMap<Integer, L1ClanSkills>) _list.get(Integer.valueOf(skillId));
-            if (list.containsKey(Integer.valueOf(skillLv))) {
-                return (L1ClanSkills) list.get(Integer.valueOf(skillLv));
+        if ((!_list.isEmpty()) && (_list.containsKey(skillId))) {
+            HashMap<Integer, L1ClanSkills> list = (HashMap<Integer, L1ClanSkills>) _list.get(skillId);
+            if (list.containsKey(skillLv)) {
+                return (L1ClanSkills) list.get(skillLv);
             }
         }
         return null;

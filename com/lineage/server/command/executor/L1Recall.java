@@ -34,7 +34,7 @@ public class L1Recall implements L1CommandExecutor {
             if (arg.equalsIgnoreCase("all")) {
                 targets = World.get().getAllPlayers();
             } else {
-                targets = new ArrayList<L1PcInstance>();
+                targets = new ArrayList<>();
                 final L1PcInstance tg = World.get().getPlayer(arg);
                 if (tg == null) {
                     final int mode = 2;

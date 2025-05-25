@@ -96,7 +96,7 @@ public class Npc_CorruptSoul extends NpcExecutor {
             quest.set_info(false);
             Integer time = QuestMapTable.get().getTime(306);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             L1Teleport.teleport(pc, 32748, 32799, (short) 306, 5, true);
         } catch (Exception e) {

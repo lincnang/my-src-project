@@ -21,9 +21,9 @@ import java.util.HashMap;
  */
 public class ItemPowerTable {
     // 全部文字組合能力設置
-    public static final HashMap<Integer, L1ItemPower_text> POWER_TEXT = new HashMap<Integer, L1ItemPower_text>();
+    public static final HashMap<Integer, L1ItemPower_text> POWER_TEXT = new HashMap<>();
     // 能力名稱清單
-    public static final HashMap<Integer, L1ItemPower_name> POWER_NAME = new HashMap<Integer, L1ItemPower_name>();
+    public static final HashMap<Integer, L1ItemPower_name> POWER_NAME = new HashMap<>();
     private static final Log _log = LogFactory.getLog(ItemPowerTable.class);
     private static ItemPowerTable _instance;
     private static int _max = 0;
@@ -68,8 +68,6 @@ public class ItemPowerTable {
                     POWER_NAME.put(power_id, name);
                 }
             }
-        } catch (final SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -188,8 +186,6 @@ public class ItemPowerTable {
                 text.setMsg(msg);
                 POWER_TEXT.put(key, text);
             }
-        } catch (final SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

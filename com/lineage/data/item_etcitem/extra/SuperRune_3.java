@@ -42,8 +42,7 @@ public class SuperRune_3 extends ItemExecutor {
             System.out.println("超能資料載入錯誤。");
             return;
         }
-        final List<Integer> idList = new ArrayList<Integer>();
-        idList.addAll(idListSrc);
+        final List<Integer> idList = new ArrayList<>(idListSrc);
         if (power != null) {
             final Integer rune1 = power.get_super_rune_1();
             final Integer rune2 = power.get_super_rune_2();

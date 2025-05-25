@@ -25,7 +25,7 @@ public class S_SkillBuyItem extends ServerBasePacket {
     public S_SkillBuyItem(final L1PcInstance pc, final L1NpcInstance npc) {
         // 0000: 01 01 00 17 00 00 00 ee ........
         final ArrayList<Integer> skillList = PcLvSkillList.scount(pc);
-        final ArrayList<Integer> newSkillList = new ArrayList<Integer>();
+        final ArrayList<Integer> newSkillList = new ArrayList<>();
         for (final Integer integer : skillList) {
             // 檢查是否已學習該法術
             if (!CharSkillReading.get().spellCheck(pc.getId(), (integer + 1))) {

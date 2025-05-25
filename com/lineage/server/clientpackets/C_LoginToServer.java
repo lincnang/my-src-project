@@ -1509,9 +1509,9 @@ public class C_LoginToServer extends ClientBasePacket {
                 pc.sendPackets(new S_MatizCloudia(1, 0));
             }
             if (pc.getMapId() == 7783) {
-//                pc.sendPackets(new S_TestPacket(S_TestPacket.a, 7072, 3810, "00 ff ff"));// 屏幕顯示歡迎來到天堂世界
+              pc.sendPackets(new S_TestPacket(S_TestPacket.a, 7072, 3810, "00 ff ff"));// 屏幕顯示歡迎來到天堂世界
             }
-//            pc.sendPackets(new S_SystemMessage("歡迎來到【" + Config.SERVERNAME + "】遊戲世界", 19));
+            pc.sendPackets(new S_SystemMessage("歡迎來到【" + Config.SERVERNAME + "】遊戲世界", 19));
 
             _log.info("登入遊戲: " + charName + "(" + pc.getLevel() + ") 帳號(" + loginName + ", " + client.getIp() + ")");
 

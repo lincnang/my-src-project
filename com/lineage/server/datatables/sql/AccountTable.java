@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class AccountTable implements AccountStorage {
     private static final Log _log = LogFactory.getLog(AccountTable.class);
-    private final Map<String, String> _loginNameList = new HashMap<String, String>();
+    private final Map<String, String> _loginNameList = new HashMap<>();
 
     private static int getPlayers(String loginName) {
         Connection co = null;
@@ -373,7 +373,7 @@ public class AccountTable implements AccountStorage {
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
-        final ArrayList<String> list = new ArrayList<String>();
+        final ArrayList<String> list = new ArrayList<>();
         try {
             con = DatabaseFactory.get().getConnection();
             String sqlstr = "SELECT item_name,count,enchantlvl FROM character_items WHERE char_id=?";

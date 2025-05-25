@@ -21,7 +21,7 @@ import java.util.concurrent.ScheduledFuture;
  * @author Psnnwe
  */
 public final class MapTimerThread extends TimerTask {
-    public static final Map<L1PcInstance, Integer> TIMINGMAP = new ConcurrentHashMap<L1PcInstance, Integer>();
+    public static final Map<L1PcInstance, Integer> TIMINGMAP = new ConcurrentHashMap<>();
     /**
      * 提示信息.
      */
@@ -53,7 +53,7 @@ public final class MapTimerThread extends TimerTask {
      */
     public static void put(final L1PcInstance pc, final int time) {
         pc.sendPackets(new S_MapTimer(time));
-        TIMINGMAP.put(pc, new Integer(time));
+        TIMINGMAP.put(pc, time);
     }
 
     public void start() {

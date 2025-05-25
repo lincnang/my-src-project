@@ -75,16 +75,16 @@ public class L1AIstart implements L1CommandExecutor {
                 gmName = pc.getName() + "命令";
             }
             // XXX 解除
-            if (arg.indexOf("1") != -1) {
+            if (arg.contains("1")) {
                 EffectAISet.AI_ERROR_TYPE = 1;
                 pc.sendPackets(new S_SystemMessage("\\aH變更驗證懲罰(1-傳送指定座標)"));
-            } else if (arg.indexOf("2") != -1) {
+            } else if (arg.contains("2")) {
                 EffectAISet.AI_ERROR_TYPE = 2;
                 pc.sendPackets(new S_SystemMessage("\\aH變更驗證懲罰(2-封鎖IP剔除下線)"));
-            } else if (arg.indexOf("3") != -1) {
+            } else if (arg.contains("3")) {
                 EffectAISet.AI_ERROR_TYPE = 3;
                 pc.sendPackets(new S_SystemMessage("\\aH變更驗證懲罰(3-封鎖帳號剔除下線)"));
-            } else if (arg.indexOf("4") != -1) {
+            } else if (arg.contains("4")) {
                 broadcastPacketWorld();
                 pc.sendPackets(new S_SystemMessage("\\aH立即啟動驗證！(4-所有玩家)"));
             }

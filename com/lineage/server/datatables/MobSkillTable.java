@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class MobSkillTable {
     private static final Log _log = LogFactory.getLog(MobSkillTable.class);
-    private static final Map<Integer, L1MobSkill> _mobskills = new HashMap<Integer, L1MobSkill>();
+    private static final Map<Integer, L1MobSkill> _mobskills = new HashMap<>();
     private static MobSkillTable _instance;
     private final boolean _initialized;
 
@@ -81,7 +81,7 @@ public class MobSkillTable {
                         mobskill.setPolyId(actNo, rs2.getInt("PolyId"));
                         mobskill.setReuseDelay(actNo, rs2.getInt("reuseDelay"));
                     }
-                    _mobskills.put(new Integer(mobid), mobskill);
+                    _mobskills.put(mobid, mobskill);
                 } catch (SQLException e1) {
                     _log.error(e1.getLocalizedMessage(), e1);
                 } finally {
@@ -100,7 +100,7 @@ public class MobSkillTable {
     }
 
     public L1MobSkill getTemplate(int id) {
-        return (L1MobSkill) _mobskills.get(Integer.valueOf(id));
+        return (L1MobSkill) _mobskills.get(id);
     }
 }
 /*

@@ -21,7 +21,7 @@ import static com.lineage.server.datatables.ItemTable.WeaponTypes;
  */
 public class NewEnchantSystem {
     private static final Log _log = LogFactory.getLog(NewEnchantSystem.class);
-    private static final Map<Integer, NewEnchantSystem> _enchantlist = new HashMap<Integer, NewEnchantSystem>();
+    private static final Map<Integer, NewEnchantSystem> _enchantlist = new HashMap<>();
     private static NewEnchantSystem _instance;
     private int _hit;
     private int _magicdmg;
@@ -82,7 +82,7 @@ public class NewEnchantSystem {
                 final int id = (rs.getInt("序號"));
                 NewEnchantSystem en = new NewEnchantSystem();
                 en.setWeaponId(rs.getInt("武器編號"));
-                en.setType(((Integer) WeaponTypes().get(rs.getString("type"))).intValue());
+                en.setType((Integer) WeaponTypes().get(rs.getString("type")));
                 en.setEnchant(rs.getInt("Level"));
                 en.setRan(rs.getInt("機率"));
                 en.setHit(rs.getInt("物理命中提升"));

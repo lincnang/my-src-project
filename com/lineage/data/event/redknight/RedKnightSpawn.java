@@ -41,7 +41,7 @@ public class RedKnightSpawn {
         ResultSet rs = null;
         L1Npc l1npc = null;
         L1NpcInstance field = null;
-        FastTable<L1NpcInstance> list = new FastTable<L1NpcInstance>();
+        FastTable<L1NpcInstance> list = new FastTable<>();
         try {
             con = DatabaseFactory.get().getConnection();
             pstm = con.prepareStatement("SELECT * FROM spawnlist_redknight");

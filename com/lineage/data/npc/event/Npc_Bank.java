@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Npc_Bank extends NpcExecutor {
     private static final Log _log = LogFactory.getLog(Npc_Bank.class);
-    private static final Map<String, BankType> _bankTypeMap = new ConcurrentHashMap<String, BankType>();
+    private static final Map<String, BankType> _bankTypeMap = new ConcurrentHashMap<>();
 
     public static NpcExecutor get() {
         return new Npc_Bank();
@@ -148,13 +148,13 @@ public class Npc_Bank extends NpcExecutor {
             }
             if (bankType._isNew) {
                 if (!pass.equals("n")) {
-                    String out = "";
+                    StringBuilder out = new StringBuilder();
                     if (bankType._pass_x1.length() == 6) {
                         switch (bankType._pass.length()) {
                             case 0:
                                 bankType._pass = pass;
-                                out = "*";
-                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_5", new String[]{out}));
+                                out = new StringBuilder("*");
+                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_5", new String[]{out.toString()}));
                                 break;
                             case 1:
                             case 2:
@@ -163,7 +163,7 @@ public class Npc_Bank extends NpcExecutor {
                             case 5:
                                 bankType._pass += pass;
                                 for (int i = 0; i < bankType._pass.length(); i++) {
-                                    out = out + "*";
+                                    out.append("*");
                                 }
                                 if (bankType._pass.length() == 6) {
                                     if (bankType._pass_x1.equals(bankType._pass)) {
@@ -184,7 +184,7 @@ public class Npc_Bank extends NpcExecutor {
                                         pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_7"));
                                     }
                                 } else {
-                                    pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_5", new String[]{out}));
+                                    pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_5", new String[]{out.toString()}));
                                 }
                                 break;
                             default:
@@ -194,8 +194,8 @@ public class Npc_Bank extends NpcExecutor {
                         switch (bankType._pass_x1.length()) {
                             case 0:
                                 bankType._pass_x1 = pass;
-                                out = "*";
-                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_4", new String[]{out}));
+                                out = new StringBuilder("*");
+                                pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_4", new String[]{out.toString()}));
                                 break;
                             case 1:
                             case 2:
@@ -204,12 +204,12 @@ public class Npc_Bank extends NpcExecutor {
                             case 5:
                                 bankType._pass_x1 += pass;
                                 for (int i = 0; i < bankType._pass_x1.length(); i++) {
-                                    out = out + "*";
+                                    out.append("*");
                                 }
                                 if (bankType._pass_x1.length() == 6) {
                                     pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_5", new String[]{""}));
                                 } else {
-                                    pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_4", new String[]{out}));
+                                    pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_4", new String[]{out.toString()}));
                                 }
                                 break;
                             default:
@@ -218,12 +218,12 @@ public class Npc_Bank extends NpcExecutor {
                     }
                 }
             } else if ((!pass.equals("n")) && ((bankType._type) || (bankType._repass))) {
-                String out = "";
+                StringBuilder out = new StringBuilder();
                 switch (bankType._pass.length()) {
                     case 0:
                         bankType._pass = pass;
-                        out = "*";
-                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_8", new String[]{out}));
+                        out = new StringBuilder("*");
+                        pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_8", new String[]{out.toString()}));
                         break;
                     case 1:
                     case 2:
@@ -232,7 +232,7 @@ public class Npc_Bank extends NpcExecutor {
                     case 5:
                         bankType._pass += pass;
                         for (int i = 0; i < bankType._pass.length(); i++) {
-                            out = out + "*";
+                            out.append("*");
                         }
                         if (bankType._pass.length() == 6) {
                             if (bankType._pass.equals(bank.get_pass())) {
@@ -249,7 +249,7 @@ public class Npc_Bank extends NpcExecutor {
                                 pc.sendPackets(new S_ServerMessage(835));
                             }
                         } else {
-                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_8", new String[]{out}));
+                            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "1y_bank_8", new String[]{out.toString()}));
                         }
                         break;
                 }

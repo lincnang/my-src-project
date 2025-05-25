@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GM_Blink extends ItemExecutor {
     private static final Log _log = LogFactory.getLog(GM_Blink.class);
-    private static final Map<Integer, L1DeInstance> _list = new HashMap<Integer, L1DeInstance>();
+    private static final Map<Integer, L1DeInstance> _list = new HashMap<>();
 
     public static ItemExecutor get() {
         return new GM_Blink();
@@ -41,7 +41,7 @@ public class GM_Blink extends ItemExecutor {
                         pc.sendPackets(new S_ServerMessage(166, de.getNameId() + "正在釣魚模式"));
                         return;
                     }
-                    if (_list.get(Integer.valueOf(de.getId())) != null) {
+                    if (_list.get(de.getId()) != null) {
                         pc.sendPackets(new S_ServerMessage("該NPC還未完成上一次移動命令"));
                         return;
                     }
@@ -82,7 +82,7 @@ public class GM_Blink extends ItemExecutor {
         private final int _spellsc_y;
 
         private MoveTimer(L1DeInstance de, int spellsc_x, int spellsc_y) {
-            GM_Blink._list.put(Integer.valueOf(de.getId()), de);
+            GM_Blink._list.put(de.getId(), de);
             _de = de;
             _spellsc_x = spellsc_x;
             _spellsc_y = spellsc_y;
@@ -97,7 +97,7 @@ public class GM_Blink extends ItemExecutor {
                 int i = 10;
                 do {
                     if (_de == null) {
-                        GM_Blink._list.remove(Integer.valueOf(_de.getId()));
+                        GM_Blink._list.remove(_de.getId());
                         break;
                     }
                     int moveDirection = _de.getMove().moveDirection(_spellsc_x, _spellsc_y);
@@ -109,7 +109,7 @@ public class GM_Blink extends ItemExecutor {
                     TimeUnit.MILLISECONDS.sleep(_de.calcSleepTime(_de.getPassispeed(), 0));
                     i--;
                     if (i <= 0) {
-                        GM_Blink._list.remove(Integer.valueOf(_de.getId()));
+                        GM_Blink._list.remove(_de.getId());
                         break;
                     }
                     if (_de.getX() == _spellsc_x) {
@@ -119,7 +119,7 @@ public class GM_Blink extends ItemExecutor {
             } catch (Exception e) {
                 GM_Blink._log.error(e.getLocalizedMessage(), e);
             } finally {
-                GM_Blink._list.remove(Integer.valueOf(_de.getId()));
+                GM_Blink._list.remove(_de.getId());
             }
         }
     }

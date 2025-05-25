@@ -34,9 +34,9 @@ import java.util.concurrent.TimeUnit;
 public class ItemBoxTable {
     private static final Log _log = LogFactory.getLog(ItemBoxTable.class);
     private static final Random _random = new Random();
-    private static final Map<Integer, ArrayList<L1Box>> _box = new HashMap<Integer, ArrayList<L1Box>>();
-    private static final Map<Integer, ArrayList<L1Box>> _boxs = new HashMap<Integer, ArrayList<L1Box>>();
-    private static final Map<Integer, HashMap<Integer, ArrayList<L1Box>>> _boxkey = new HashMap<Integer, HashMap<Integer, ArrayList<L1Box>>>();
+    private static final Map<Integer, ArrayList<L1Box>> _box = new HashMap<>();
+    private static final Map<Integer, ArrayList<L1Box>> _boxs = new HashMap<>();
+    private static final Map<Integer, HashMap<Integer, ArrayList<L1Box>>> _boxkey = new HashMap<>();
     private static ItemBoxTable _instance;
 
     public static ItemBoxTable get() {
@@ -256,7 +256,7 @@ public class ItemBoxTable {
                 box.set_out(rs.getBoolean("out"));
                 ArrayList<L1Box> list = _box.get(key);
                 if (list == null) {
-                    list = new ArrayList<L1Box>();
+                    list = new ArrayList<>();
                 }
                 list.add(box);
                 _box.put(key, list);
@@ -353,7 +353,7 @@ public class ItemBoxTable {
                 box.set_out(rs.getBoolean("out"));
                 ArrayList<L1Box> list = _boxs.get(key);
                 if (list == null) {
-                    list = new ArrayList<L1Box>();
+                    list = new ArrayList<>();
                 }
                 list.add(box);
                 _boxs.put(key, list);
@@ -450,11 +450,11 @@ public class ItemBoxTable {
                 box.set_use_type(127);
                 HashMap<Integer, ArrayList<L1Box>> map = _boxkey.get(key);
                 if (map == null) {
-                    map = new HashMap<Integer, ArrayList<L1Box>>();
+                    map = new HashMap<>();
                 }
                 ArrayList<L1Box> keylist = map.get(keyId);
                 if (keylist == null) {
-                    keylist = new ArrayList<L1Box>();
+                    keylist = new ArrayList<>();
                 }
                 keylist.add(box);
                 map.put(keyId, keylist);
@@ -676,7 +676,7 @@ public class ItemBoxTable {
 
     private static class BoxRandom implements Runnable {
         private final L1PcInstance _pc;
-        private final ArrayList<L1Box> _list_tmp = new ArrayList<L1Box>();
+        private final ArrayList<L1Box> _list_tmp = new ArrayList<>();
         private final L1ItemInstance _tgitem;
 
         public BoxRandom(final L1PcInstance pc, final L1ItemInstance tgitem, final ArrayList<L1Box> list) {
@@ -703,7 +703,7 @@ public class ItemBoxTable {
                     return;
                 }
                 // 次數紀錄(獲取物品ID/次數)
-                final Map<Integer, Integer> tempList = new HashMap<Integer, Integer>();
+                final Map<Integer, Integer> tempList = new HashMap<>();
                 L1Box box = null;
                 int i = 0;
                 while (box == null) {

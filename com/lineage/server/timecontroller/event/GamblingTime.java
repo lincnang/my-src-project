@@ -119,8 +119,7 @@ public class GamblingTime extends TimerTask {
              * if (previous <= 0) { previous = 1000000;// 上次獎金資料為0 預設 100萬 }
              */
             // 產生訊息封包 (3033 奇巖競技場比賽即將開始，本場基本將金達: %0 元。)
-            for (final Iterator<L1PcInstance> iter = World.get().getAllPlayers().iterator(); iter.hasNext(); ) {
-                final L1PcInstance listner = iter.next();
+            for (final L1PcInstance listner : World.get().getAllPlayers()) {
                 // 拒絕接收廣播頻道
                 if (!listner.isShowWorldChat()) {
                     continue;

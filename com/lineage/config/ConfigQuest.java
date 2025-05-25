@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -68,7 +69,7 @@ public final class ConfigQuest {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(QUEST));
+            final InputStream is = Files.newInputStream(new File(QUEST).toPath());
             set.load(is);
             is.close();
             // 每日獎勵等級限制
@@ -87,8 +88,8 @@ public final class ConfigQuest {
                 Day_Reward_Item = new int[size][2];
                 for (int i = 0; i < size; i++) {
                     final String[] temp2 = temp1[i].split(":");
-                    Day_Reward_Item[i][0] = Integer.valueOf(temp2[0]);
-                    Day_Reward_Item[i][1] = Integer.valueOf(temp2[1]);
+                    Day_Reward_Item[i][0] = Integer.parseInt(temp2[0]);
+                    Day_Reward_Item[i][1] = Integer.parseInt(temp2[1]);
                 }
             }
             // 每日獎勵任務編號重置時間
@@ -115,8 +116,8 @@ public final class ConfigQuest {
                 BAO1_QUEST_ITEM = new int[size][2];
                 for (int i = 0; i < size; i++) {
                     final String[] temp2 = temp1[i].split(":");
-                    BAO1_QUEST_ITEM[i][0] = Integer.valueOf(temp2[0]);
-                    BAO1_QUEST_ITEM[i][1] = Integer.valueOf(temp2[1]);
+                    BAO1_QUEST_ITEM[i][0] = Integer.parseInt(temp2[0]);
+                    BAO1_QUEST_ITEM[i][1] = Integer.parseInt(temp2[1]);
                 }
             }
             Bao2_Quest_Lv = Integer.parseInt(set.getProperty("Bao2_Quest_Lv", "85"));
@@ -129,8 +130,8 @@ public final class ConfigQuest {
                 BAO2_QUEST_ITEM = new int[size][2];
                 for (int i = 0; i < size; i++) {
                     final String[] temp2 = temp1[i].split(":");
-                    BAO2_QUEST_ITEM[i][0] = Integer.valueOf(temp2[0]);
-                    BAO2_QUEST_ITEM[i][1] = Integer.valueOf(temp2[1]);
+                    BAO2_QUEST_ITEM[i][0] = Integer.parseInt(temp2[0]);
+                    BAO2_QUEST_ITEM[i][1] = Integer.parseInt(temp2[1]);
                 }
             }
             Bao3_Quest_Lv = Integer.parseInt(set.getProperty("Bao3_Quest_Lv", "95"));
@@ -143,8 +144,8 @@ public final class ConfigQuest {
                 BAO3_QUEST_ITEM = new int[size][2];
                 for (int i = 0; i < size; i++) {
                     final String[] temp2 = temp1[i].split(":");
-                    BAO3_QUEST_ITEM[i][0] = Integer.valueOf(temp2[0]);
-                    BAO3_QUEST_ITEM[i][1] = Integer.valueOf(temp2[1]);
+                    BAO3_QUEST_ITEM[i][0] = Integer.parseInt(temp2[0]);
+                    BAO3_QUEST_ITEM[i][1] = Integer.parseInt(temp2[1]);
                 }
             }
             Bao4_Quest_Lv = Integer.parseInt(set.getProperty("Bao4_Quest_Lv", "95"));
@@ -157,8 +158,8 @@ public final class ConfigQuest {
                 BAO4_QUEST_ITEM = new int[size][2];
                 for (int i = 0; i < size; i++) {
                     final String[] temp2 = temp1[i].split(":");
-                    BAO4_QUEST_ITEM[i][0] = Integer.valueOf(temp2[0]);
-                    BAO4_QUEST_ITEM[i][1] = Integer.valueOf(temp2[1]);
+                    BAO4_QUEST_ITEM[i][0] = Integer.parseInt(temp2[0]);
+                    BAO4_QUEST_ITEM[i][1] = Integer.parseInt(temp2[1]);
                 }
             }
             Bao5_Quest_Lv = Integer.parseInt(set.getProperty("Bao5_Quest_Lv", "95"));
@@ -171,8 +172,8 @@ public final class ConfigQuest {
                 BAO5_QUEST_ITEM = new int[size][2];
                 for (int i = 0; i < size; i++) {
                     final String[] temp2 = temp1[i].split(":");
-                    BAO5_QUEST_ITEM[i][0] = Integer.valueOf(temp2[0]);
-                    BAO5_QUEST_ITEM[i][1] = Integer.valueOf(temp2[1]);
+                    BAO5_QUEST_ITEM[i][0] = Integer.parseInt(temp2[0]);
+                    BAO5_QUEST_ITEM[i][1] = Integer.parseInt(temp2[1]);
                 }
             }
             final String tempReward = set.getProperty("Bao1_Reward_Item", "");
@@ -182,8 +183,8 @@ public final class ConfigQuest {
                 BAO1_REWARD_ITEM = new int[size][2];
                 for (int i = 0; i < size; i++) {
                     final String[] temp2 = temp1[i].split(":");
-                    BAO1_REWARD_ITEM[i][0] = Integer.valueOf(temp2[0]); // itemId
-                    BAO1_REWARD_ITEM[i][1] = Integer.valueOf(temp2[1]); // count
+                    BAO1_REWARD_ITEM[i][0] = Integer.parseInt(temp2[0]); // itemId
+                    BAO1_REWARD_ITEM[i][1] = Integer.parseInt(temp2[1]); // count
                 }
             }
             // BAO2_REWARD_ITEM

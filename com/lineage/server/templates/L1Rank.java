@@ -13,23 +13,23 @@ public final class L1Rank {
         _score = score;
     }
 
-    public final String getPartyLeader() {
+    public String getPartyLeader() {
         return _partyLeader;
     }
 
-    public final void setPartyLeader(String partyLeader) {
+    public void setPartyLeader(String partyLeader) {
         _partyLeader = partyLeader;
     }
 
-    public final List<String> getPartyMember() {
+    public List<String> getPartyMember() {
         return _partyMember;
     }
 
-    public final int getScore() {
+    public int getScore() {
         return _score;
     }
 
-    public final int getMemberSize() {
+    public int getMemberSize() {
         return _partyMember.size() + 1;
     }
 }

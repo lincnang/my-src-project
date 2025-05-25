@@ -127,7 +127,7 @@ public class Teleportation {
             pc.sendPackets(new S_CharVisualUpdate(pc));
             pc.killSkillEffectTimer(32);// 冥想術
             pc.setCallClanId(0);
-            final HashSet<L1PcInstance> subjects = new HashSet<L1PcInstance>();
+            final HashSet<L1PcInstance> subjects = new HashSet<>();
             subjects.add(pc);
             if (!pc.isGhost()) {
                 // 可以攜帶寵物
@@ -160,8 +160,6 @@ public class Teleportation {
                             }
                         }
                     }
-                } else {
-                    //
                 }
                 // 娃娃的跟隨移動
                 if (!pc.getDolls().isEmpty()) {

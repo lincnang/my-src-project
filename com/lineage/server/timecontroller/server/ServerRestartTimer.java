@@ -29,7 +29,7 @@ import java.util.concurrent.ScheduledFuture;
  */
 public class ServerRestartTimer extends TimerTask {
     private static final Log _log = LogFactory.getLog(ServerRestartTimer.class);
-    private static final ArrayList<Calendar> _restartList = new ArrayList<Calendar>();
+    private static final ArrayList<Calendar> _restartList = new ArrayList<>();
     private static Calendar _restart = null;
     private static String _string = "yyyy/MM/dd HH:mm:ss";
     private static String _startTime = null;
@@ -138,9 +138,9 @@ public class ServerRestartTimer extends TimerTask {
             // 每日任務
             if (ConfigOtherSet2.QUEST_SET_RESET_TIME != null && ConfigOtherSet2.QUEST_SET_RESET_TIME.before(cals)) {
                 final int questId[] = {L1PcQuest.BAO_QUEST_1, L1PcQuest.BAO_QUEST_2, L1PcQuest.BAO_QUEST_3, L1PcQuest.BAO_QUEST_4, L1PcQuest.BAO_QUEST_5};
-                for (int i = 0; i < questId.length; i++) {
-                    CharacterQuestReading.get().delQuest2(questId[i]);
-                    _log.info("------- 刪除每日任務編號:" + questId[i] + " -------");
+                for (int j : questId) {
+                    CharacterQuestReading.get().delQuest2(j);
+                    _log.info("------- 刪除每日任務編號:" + j + " -------");
                 }
                 if (QuestMobSet.START) {
                     if (ServerQuestMobTable.get().getQuestMobListId() != null) {

@@ -74,9 +74,9 @@ public class Cards5 extends ItemExecutor {
             //獲取列表id
             if (card1 != null) {//列表ID空白不啟動
                 if (pc.getQuest().get_step(card1.getQuestId()) != 0) {
-                    stringBuilder.append(String.valueOf(card1.getAddcgfxid()) + ",");
+                    stringBuilder.append(String.valueOf(card1.getAddcgfxid())).append(",");
                 } else {
-                    stringBuilder.append(String.valueOf(card1.getAddhgfxid()) + ",");
+                    stringBuilder.append(String.valueOf(card1.getAddhgfxid())).append(",");
                 }
             }
         }

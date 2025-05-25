@@ -25,9 +25,9 @@ public class Npc_Gawain extends NpcExecutor {
         int newweapon = 410174;
         boolean success = false;
         if (cmd.equalsIgnoreCase("A")) {
-            for (int i = 0; i < oldweapon.length; i++) {
-                if (pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L) && (pc.getInventory().checkItem(40308, 5000000L))) {
-                    pc.getInventory().consumeItem(oldweapon[i], 1L);
+            for (int j : oldweapon) {
+                if (pc.getInventory().checkEnchantItem(j, 8, 1L) && (pc.getInventory().checkItem(40308, 5000000L))) {
+                    pc.getInventory().consumeItem(j, 1L);
                     pc.getInventory().consumeItem(40308, 5000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newweapon);
                     item.setEnchantLevel(7);
@@ -39,9 +39,9 @@ public class Npc_Gawain extends NpcExecutor {
                 }
             }
         } else if (cmd.equalsIgnoreCase("B")) {
-            for (int i = 0; i < oldweapon.length; i++) {
-                if (pc.getInventory().checkEnchantItem(oldweapon[i], 9, 1L) && (pc.getInventory().checkItem(40308, 10000000L))) {
-                    pc.getInventory().consumeItem(oldweapon[i], 1L);
+            for (int j : oldweapon) {
+                if (pc.getInventory().checkEnchantItem(j, 9, 1L) && (pc.getInventory().checkItem(40308, 10000000L))) {
+                    pc.getInventory().consumeItem(j, 1L);
                     pc.getInventory().consumeItem(40308, 10000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newweapon);
                     item.setEnchantLevel(8);

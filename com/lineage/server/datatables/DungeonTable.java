@@ -27,7 +27,7 @@ import static com.lineage.server.model.skill.L1SkillId.ABSOLUTE_BARRIER;
 public class DungeonTable {
     private static final Log _log = LogFactory.getLog(DungeonTable.class);
     private static DungeonTable _instance = null;
-    private static Map<String, NewDungeon> _dungeonMap = new HashMap<String, NewDungeon>();
+    private static Map<String, NewDungeon> _dungeonMap = new HashMap<>();
     private static AtomicInteger _nextId = new AtomicInteger(50000);
     ;
 

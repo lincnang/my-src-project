@@ -22,8 +22,8 @@ import java.util.Map;
  * 道具狀態系統
  */
 public class ItemBuffTable {
-    public static final Map<Integer, L1ItemBuff> _list = new HashMap<Integer, L1ItemBuff>();
-    public static final Map<Integer, ArrayList<Integer>> _type = new HashMap<Integer, ArrayList<Integer>>();
+    public static final Map<Integer, L1ItemBuff> _list = new HashMap<>();
+    public static final Map<Integer, ArrayList<Integer>> _type = new HashMap<>();
     private static final Log _log = LogFactory.getLog(ItemBuffTable.class);
     private static ItemBuffTable _instance;
 
@@ -151,7 +151,7 @@ public class ItemBuffTable {
                 _list.put(item_id, vip);
                 ArrayList<Integer> map = _type.get(type);
                 if (map == null) {
-                    map = new ArrayList<Integer>();
+                    map = new ArrayList<>();
                     map.add(item_id);
                     _type.put(type, map);
                 } else {
@@ -180,8 +180,8 @@ public class ItemBuffTable {
         if (_list.isEmpty()) {
             return null;
         }
-        if (_list.containsKey(Integer.valueOf(item_id))) {
-            return (L1ItemBuff) _list.get(Integer.valueOf(item_id));
+        if (_list.containsKey(item_id)) {
+            return (L1ItemBuff) _list.get(item_id);
         } else {
             return null;
         }
@@ -190,10 +190,10 @@ public class ItemBuffTable {
     public void checkBuffSave(final L1PcInstance pc) {
         for (final Integer skillId : _list.keySet()) {
             if (_list.get(skillId).is_buff_save()) {
-                final int timeSec = pc.getSkillEffectTimeSec(skillId.intValue());
+                final int timeSec = pc.getSkillEffectTimeSec(skillId);
                 if (timeSec > 0) {
                     final int poly_id = _list.get(skillId).get_poly();
-                    CharBuffTable.storeBuff(pc.getId(), skillId.intValue(), timeSec, poly_id);
+                    CharBuffTable.storeBuff(pc.getId(), skillId, timeSec, poly_id);
                 }
             }
         }
@@ -227,12 +227,12 @@ public class ItemBuffTable {
         }
         if (value.get_type() != 0) { // 0不判斷類別，0以上才判斷
             for (final Integer buff_id : _type.get(value.get_type())) {
-                if (pc.hasSkillEffect(buff_id.intValue())) {
+                if (pc.hasSkillEffect(buff_id)) {
                     if (value.get_type_mod() == 0) { // 設0提示剩餘時間  其它為覆蓋效果
-                        pc.sendPackets(new S_ServerMessage("\\aD同類道具狀態剩餘時間(秒): \\aE" + pc.getSkillEffectTimeSec(buff_id.intValue())));
+                        pc.sendPackets(new S_ServerMessage("\\aD同類道具狀態剩餘時間(秒): \\aE" + pc.getSkillEffectTimeSec(buff_id)));
                         return false;
                     }
-                    pc.removeSkillEffect(buff_id.intValue());
+                    pc.removeSkillEffect(buff_id);
                 }
             }
         }

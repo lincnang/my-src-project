@@ -75,9 +75,9 @@ public class Dolls extends ItemExecutor {
             //獲取列表id
             if (doll != null) {//列表ID空白不啟動
                 if (dollQuestTable.get().IsQuest(pc, doll.getQuestId())) {
-                    stringBuilder.append(String.valueOf(doll.getAddcgfxid()) + ",");
+                    stringBuilder.append(String.valueOf(doll.getAddcgfxid())).append(",");
                 } else {
-                    stringBuilder.append(String.valueOf(doll.getAddhgfxid()) + ",");
+                    stringBuilder.append(String.valueOf(doll.getAddhgfxid())).append(",");
                 }
             }
         }

@@ -450,7 +450,7 @@ public class C_Result extends ClientBasePacket {
      */
     private void mode_shopS(L1PcInstance pc, int size) {
         try {
-            final Map<Integer, Integer> sellScoreMapMap = new HashMap<Integer, Integer>();
+            final Map<Integer, Integer> sellScoreMapMap = new HashMap<>();
             for (int i = 0; i < size; i++) {
                 final int orderId = this.readD();
                 final int count = Math.max(0, this.readD());// 數量
@@ -458,7 +458,7 @@ public class C_Result extends ClientBasePacket {
                     _log.error("要求列表物品取得傳回數量小於等於0: " + pc.getName() + ":" + (pc.getNetConnection().kick()));
                     continue;
                 }
-                sellScoreMapMap.put(new Integer(orderId), new Integer(count));
+                sellScoreMapMap.put(orderId, count);
             }
             pc.get_otherList().get_buyCnS(sellScoreMapMap);
         } catch (Exception e) {
@@ -572,7 +572,7 @@ public class C_Result extends ClientBasePacket {
      */
     private void mode_sellall(final L1PcInstance pc, final int size) {
         try {
-            final Map<Integer, Integer> sellallMap = new HashMap<Integer, Integer>();
+            final Map<Integer, Integer> sellallMap = new HashMap<>();
             for (int i = 0; i < size; i++) {
                 final int objid = this.readD();
                 final int count = Math.max(0, this.readD());// 數量
@@ -580,7 +580,7 @@ public class C_Result extends ClientBasePacket {
                     _log.error("要求列表物品取得傳回數量小於等於0: " + pc.getName() + ":" + (pc.getNetConnection().kick()));
                     continue;
                 }
-                sellallMap.put(new Integer(objid), new Integer(count));
+                sellallMap.put(objid, count);
             }
             pc.get_otherList().sellall(sellallMap);
         } catch (Exception e) {
@@ -594,7 +594,7 @@ public class C_Result extends ClientBasePacket {
      */
     private void mode_cn_buy(final L1PcInstance pc, final int size) {
         try {
-            final Map<Integer, Integer> cnMap = new HashMap<Integer, Integer>();
+            final Map<Integer, Integer> cnMap = new HashMap<>();
             for (int i = 0; i < size; i++) {
                 final int orderId = this.readD();
                 final int count = Math.max(0, this.readD());// 數量
@@ -602,7 +602,7 @@ public class C_Result extends ClientBasePacket {
                     _log.error("要求列表物品取得傳回數量小於等於0: " + pc.getName() + ":" + (pc.getNetConnection().kick()));
                     continue;
                 }
-                cnMap.put(new Integer(orderId), new Integer(count));
+                cnMap.put(orderId, count);
             }
             pc.get_otherList().get_buyCn(cnMap);
         } catch (Exception e) {
@@ -617,11 +617,11 @@ public class C_Result extends ClientBasePacket {
     private void mode_auto_hp(final L1PcInstance pc, final int size, final boolean isShop) {
         try {
             if (isShop) { // 買入
-                final Map<Integer, Integer> vitMap = new HashMap<Integer, Integer>();
+                final Map<Integer, Integer> vitMap = new HashMap<>();
                 for (int i = 0; i < size; i++) {
                     final int orderId = this.readD();
                     final int count = this.readD();
-                    vitMap.put(new Integer(orderId), new Integer(count));
+                    vitMap.put(orderId, count);
                 }
                 pc.get_otherList().get_buyAutoHpList(vitMap);
             }
@@ -636,7 +636,7 @@ public class C_Result extends ClientBasePacket {
      */
     private void mode_removeItem_sell(final L1PcInstance pc, final int size) {
         try {
-            final Map<Integer, L1ItemInstance> cnsellMap = new HashMap<Integer, L1ItemInstance>();
+            final Map<Integer, L1ItemInstance> cnsellMap = new HashMap<>();
             for (int i = 0; i < size; i++) {
                 final int objid = this.readD();
                 final int count = Math.max(0, this.readD());// 數量
@@ -644,7 +644,7 @@ public class C_Result extends ClientBasePacket {
                     _log.error("要求列表物品取得傳回數量小於等於0: " + pc.getName() + ":" + (pc.getNetConnection().kick()));
                     continue;
                 }
-                cnsellMap.put(new Integer(objid), new L1ItemInstance());
+                cnsellMap.put(objid, new L1ItemInstance());
             }
             pc.get_otherList().get_buyRemoveItemSellList(cnsellMap);
         } catch (Exception e) {
@@ -659,11 +659,11 @@ public class C_Result extends ClientBasePacket {
     private void mode_remove_item(final L1PcInstance pc, final int size, final boolean isShop) {
         try {
             if (isShop) { // 買入
-                final Map<Integer, Integer> vitMap = new HashMap<Integer, Integer>();
+                final Map<Integer, Integer> vitMap = new HashMap<>();
                 for (int i = 0; i < size; i++) {
                     final int orderId = this.readD();
                     final int count = this.readD();
-                    vitMap.put(new Integer(orderId), new Integer(count));
+                    vitMap.put(orderId, count);
                 }
                 pc.get_otherList().get_buyRemoveItemBuyList(vitMap);
             }
@@ -678,7 +678,7 @@ public class C_Result extends ClientBasePacket {
      */
     private void mode_cn_sell(final L1PcInstance pc, final int size) {
         try {
-            final Map<Integer, Integer> cnsellMap = new HashMap<Integer, Integer>();
+            final Map<Integer, Integer> cnsellMap = new HashMap<>();
             for (int i = 0; i < size; i++) {
                 final int objid = this.readD();
                 final int count = Math.max(0, this.readD());// 數量
@@ -686,7 +686,7 @@ public class C_Result extends ClientBasePacket {
                     _log.error("要求列表物品取得傳回數量小於等於0: " + pc.getName() + ":" + (pc.getNetConnection().kick()));
                     continue;
                 }
-                cnsellMap.put(new Integer(objid), new Integer(count));
+                cnsellMap.put(objid, count);
             }
             pc.get_otherList().sellcnitem(cnsellMap);
         } catch (Exception e) {
@@ -700,7 +700,7 @@ public class C_Result extends ClientBasePacket {
      */
     private void mode_firecrystal(final L1PcInstance pc, final int size) {
         try {
-            final Map<Integer, Integer> FCMap = new HashMap<Integer, Integer>();
+            final Map<Integer, Integer> FCMap = new HashMap<>();
             for (int i = 0; i < size; i++) {
                 final int objid = this.readD();
                 final int count = Math.max(0, this.readD());// 數量
@@ -708,7 +708,7 @@ public class C_Result extends ClientBasePacket {
                     _log.error("要求列表物品取得傳回數量小於等於0: " + pc.getName() + ":" + (pc.getNetConnection().kick()));
                     continue;
                 }
-                FCMap.put(new Integer(objid), new Integer(count));
+                FCMap.put(objid, count);
             }
             pc.get_otherList().sellforfirecrystal(FCMap);
         } catch (Exception e) {
@@ -728,7 +728,7 @@ public class C_Result extends ClientBasePacket {
                 pc.sendPackets(new S_CloseList(pc.getId()));
                 return;
             }
-            final Map<Integer, Integer> gamMap = new HashMap<Integer, Integer>();
+            final Map<Integer, Integer> gamMap = new HashMap<>();
             for (int i = 0; i < size; i++) {
                 final int orderId = this.readD();
                 final int count = Math.max(0, this.readD());// 數量
@@ -736,7 +736,7 @@ public class C_Result extends ClientBasePacket {
                     _log.error("要求列表物品取得傳回數量小於等於0: " + pc.getName() + ":" + (pc.getNetConnection().kick()));
                     continue;
                 }
-                gamMap.put(new Integer(orderId), new Integer(count));
+                gamMap.put(orderId, count);
             }
             pc.get_otherList().get_buyGam(gamMap);
         } else {// 賣出
@@ -1656,7 +1656,7 @@ public class C_Result extends ClientBasePacket {
      */
     private void mode_buyde(L1PcInstance pc, L1DeInstance de, int size) {
         Map<L1ItemInstance, Integer> sellList = de.get_sellList();
-        Queue<L1ItemInstance> removeList = new ConcurrentLinkedQueue<L1ItemInstance>();
+        Queue<L1ItemInstance> removeList = new ConcurrentLinkedQueue<>();
         //該地圖是否可擺設商店
         final int adenaItemId = de.getMap().isUsableShop(); // 取回地圖商店貨幣
         if (adenaItemId <= 0 || ItemTable.get().getTemplate(adenaItemId) == null) {
@@ -1682,7 +1682,7 @@ public class C_Result extends ClientBasePacket {
                     }
                     if (pc.getInventory().checkAddItem(item, count) == L1Inventory.OK) {
                         // 取回售價
-                        long price = count * sellList.get(item);// 所需花費
+                        long price = (long) count * sellList.get(item);// 所需花費
                         if (pc.getInventory().consumeItem(adenaItemId, price)) {
                             // 買入物品
                             if (item.isStackable()) { // 可以堆疊

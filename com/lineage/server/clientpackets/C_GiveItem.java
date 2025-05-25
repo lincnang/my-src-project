@@ -95,7 +95,7 @@ public class C_GiveItem extends ClientBasePacket {
                 pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
                 return;
             }
-            if (!pc.isGm() && ItemRestrictionsTable.RESTRICTIONS.contains(Integer.valueOf(item.getItemId()))) {
+            if (!pc.isGm() && ItemRestrictionsTable.RESTRICTIONS.contains(item.getItemId())) {
                 pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
                 return;
             }
@@ -103,7 +103,7 @@ public class C_GiveItem extends ClientBasePacket {
                 pc.sendPackets(new S_ServerMessage("獎勵物品無法轉移"));
                 return;
             }
-            if ((!pc.isGm()) && (!ConfigOtherSet2.GIVE_ITEM_LIST.contains(Integer.valueOf(item.getItemId())))) {
+            if ((!pc.isGm()) && (!ConfigOtherSet2.GIVE_ITEM_LIST.contains(item.getItemId()))) {
                 pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
                 return;
             }

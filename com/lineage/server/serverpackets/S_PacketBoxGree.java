@@ -50,8 +50,8 @@ public class S_PacketBoxGree extends ServerBasePacket {
         writeC(112);
         writeD(0);
         writeD(totalSize);
-        for (Iterator<?> iterator = totalList.iterator(); iterator.hasNext(); ) {
-            L1Rank rank = (L1Rank) iterator.next();
+        for (Object o : totalList) {
+            L1Rank rank = (L1Rank) o;
             writeC(rank.getMemberSize());
             writeD(rank.getScore());
             writeS(rank.getPartyLeader());

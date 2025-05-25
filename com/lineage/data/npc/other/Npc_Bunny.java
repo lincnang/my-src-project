@@ -28,9 +28,9 @@ public class Npc_Bunny extends NpcExecutor {
         boolean success = false;
         if (cmd.equalsIgnoreCase("a")) {
             newWeapon = 410176;
-            for (int i = 0; i < olditem.length; i++) {
-                if (pc.getInventory().checkItem(olditem[i], 1000L)) {
-                    pc.getInventory().consumeItem(olditem[i], 1000L);
+            for (int j : olditem) {
+                if (pc.getInventory().checkItem(j, 1000L)) {
+                    pc.getInventory().consumeItem(j, 1000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
@@ -41,9 +41,9 @@ public class Npc_Bunny extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("b")) {
             newWeapon = 410177;
-            for (int i = 0; i < olditem.length; i++) {
-                if (pc.getInventory().checkItem(olditem[i], 1000L)) {
-                    pc.getInventory().consumeItem(olditem[i], 1000L);
+            for (int j : olditem) {
+                if (pc.getInventory().checkItem(j, 1000L)) {
+                    pc.getInventory().consumeItem(j, 1000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
@@ -54,9 +54,9 @@ public class Npc_Bunny extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("c")) {
             newWeapon = 410175;
-            for (int i = 0; i < olditem.length; i++) {
-                if (pc.getInventory().checkItem(olditem[i], 1000L)) {
-                    pc.getInventory().consumeItem(olditem[i], 1000L);
+            for (int j : olditem) {
+                if (pc.getInventory().checkItem(j, 1000L)) {
+                    pc.getInventory().consumeItem(j, 1000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
@@ -67,9 +67,9 @@ public class Npc_Bunny extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("d")) {
             newWeapon = 410178;
-            for (int i = 0; i < olditem.length; i++) {
-                if (pc.getInventory().checkItem(olditem[i], 1000L)) {
-                    pc.getInventory().consumeItem(olditem[i], 1000L);
+            for (int j : olditem) {
+                if (pc.getInventory().checkItem(j, 1000L)) {
+                    pc.getInventory().consumeItem(j, 1000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
@@ -80,9 +80,9 @@ public class Npc_Bunny extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("e")) {
             newWeapon = 410179;
-            for (int i = 0; i < olditem.length; i++) {
-                if (pc.getInventory().checkItem(olditem[i], 1000L)) {
-                    pc.getInventory().consumeItem(olditem[i], 1000L);
+            for (int j : olditem) {
+                if (pc.getInventory().checkItem(j, 1000L)) {
+                    pc.getInventory().consumeItem(j, 1000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
@@ -93,9 +93,9 @@ public class Npc_Bunny extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("f")) {
             newWeapon = 410180;
-            for (int i = 0; i < olditem.length; i++) {
-                if (pc.getInventory().checkItem(olditem[i], 1000L)) {
-                    pc.getInventory().consumeItem(olditem[i], 1000L);
+            for (int j : olditem) {
+                if (pc.getInventory().checkItem(j, 1000L)) {
+                    pc.getInventory().consumeItem(j, 1000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);

@@ -195,9 +195,9 @@ public class C_CreateParty extends ClientBasePacket {
                                 }
                                 // 指定座標19格範圍內
                                 if (pc.getLocation().isInScreen(tgpc.getLocation())) {
-                                    final HashMap<Integer, L1PcInstance> map = new HashMap<Integer, L1PcInstance>();
+                                    final HashMap<Integer, L1PcInstance> map = new HashMap<>();
                                     // 建立新的成員名單
-                                    final ArrayList<L1PcInstance> newList = new ArrayList<L1PcInstance>();
+                                    final ArrayList<L1PcInstance> newList = new ArrayList<>();
                                     for (L1PcInstance newpc : map.values()) {
                                         // 不是新隊長 加入新成員名單
                                         if (!newpc.equals(tgpc)) {

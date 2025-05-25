@@ -15,11 +15,9 @@ public final class Fish_Time {
 
     static {
         String[] descriptorData = {"\n\022PBMessageALL.proto\022\031com.lineage.server.person\"\002\n\005type1\022\017\n\007value_1\030\001 \001(\005\022\017\n\007value_2\030\002 \001(\005\022\017\n\007value_3\030\003 \001(\005\022\017\n\007value_4\030\004 \001(\005\022\017\n\007value_5\030\005 \001(\005\022\017\n\007value_6\030\006 \001(\005\022\017\n\007value_7\030\007 \001(\005\022\017\n\007value_8\030\b \001(\005\022\017\n\007value_9\030\t \001(\005\022\020\n\bvalue_10\030\n \001(\005\022\020\n\bvalue_11\030\013 \001(\005\022\020\n\bvalue_12\030\f \001(\005\022\020\n\bvalue_13\030\r \001(\005\022\020\n\bvalue_14\030\016 \001(\005\022\020\n\bvalue_15\030\017 \001(\005\"\002\n\005type2\022\017\n\007value_1\030\001 \001(\005\022\017\n\007value_2\030\002 \001(\005\022\017\n\007array_3\030\003 \003(\f\022\017\n\007value_4\030\004 \001(\005\022\017\n\007", "value_5\030\005 \001(\005\022\017\n\007value_6\030\006 \001(\005\022\017\n\007value_7\030\007 \001(\005\022\017\n\007value_8\030\b \001(\005\022\017\n\007value_9\030\t \001(\005\022\020\n\bvalue_10\030\n \001(\005\022\020\n\bvalue_11\030\013 \001(\005\022\020\n\bvalue_12\030\f \001(\005\022\020\n\bvalue_13\030\r \001(\005\022\020\n\bvalue_14\030\016 \001(\005\022\020\n\bvalue_15\030\017 \001(\005\"\002\n\005type3\022\017\n\007value_1\030\001 \001(\005\022\017\n\007value_2\030\002 \001(\005\022\017\n\007value_3\030\003 \001(\005\022\017\n\007value_4\030\004 \001(\005\022\017\n\007value_5\030\005 \001(\005\022\017\n\007value_6\030\006 \001(\005\022\017\n\007value_7\030\007 \001(\005\022\017\n\007array_8\030\b \001(\f\022\017\n\007value_9\030\t \001(\005\022\020\n\bvalue_10\030\n \001(\005\022\020\n\bvalue_11\030\013 \001(\005\022\020\n\barray_12", "\030\f \001(\f\022\020\n\barray_13\030\r \001(\f\022\020\n\bvalue_14\030\016 \001(\005\022\020\n\bvalue_15\030\017 \001(\005\022\020\n\bvalue_16\030\020 \001(\005\"\002\n\005type4\022\017\n\007array_1\030\001 \001(\f\022\017\n\007array_2\030\002 \001(\f\022\017\n\007value_3\030\003 \001(\005\022\017\n\007value_4\030\004 \001(\005\022\017\n\007array_5\030\005 \001(\f\022\017\n\007array_6\030\006 \001(\f\022\017\n\007array_7\030\007 \001(\f\022\017\n\007value_8\030\b \001(\005\022\017\n\007value_9\030\t \001(\005\022\020\n\bvalue_10\030\n \001(\005\022\020\n\bvalue_11\030\013 \001(\005\022\020\n\bvalue_12\030\f \001(\005\022\020\n\bvalue_13\030\r \001(\005\022\020\n\bvalue_14\030\016 \001(\005\022\020\n\bvalue_15\030\017 \001(\005\"\002\n\005type5\022\017\n\007array_1\030\001 \001(\f\022\017\n\007array_2\030\002 \001(\f\022\017\n\007val", "ue_3\030\003 \001(\005\022\017\n\007value_4\030\004 \001(\005\022\017\n\007value_5\030\005 \001(\005\022\017\n\007value_6\030\006 \001(\005\022\017\n\007value_7\030\007 \001(\005\022\017\n\007value_8\030\b \001(\005\022\017\n\007value_9\030\t \001(\005\022\020\n\bvalue_10\030\n \001(\005\022\020\n\bvalue_11\030\013 \001(\005\022\020\n\bvalue_12\030\f \001(\005\022\020\n\bvalue_13\030\r \001(\005\022\020\n\bvalue_14\030\016 \001(\005\022\020\n\bvalue_15\030\017 \001(\005B)\n\031com.lineage.server.person.Fish_Time"};
-        Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-            public ExtensionRegistry assignDescriptors(Descriptors.FileDescriptor root) {
-                Fish_Time.descriptor = root;
-                return null;
-            }
+        Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = root -> {
+            Fish_Time.descriptor = root;
+            return null;
         };
         Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new Descriptors.FileDescriptor[0], assigner);
     }
@@ -122,7 +120,7 @@ public final class Fish_Time {
             }
         }
 
-        public static final Descriptors.Descriptor getDescriptor() {
+        public static Descriptors.Descriptor getDescriptor() {
             return Fish_Time.sendFishTime_descriptor;
         }
 
@@ -182,7 +180,7 @@ public final class Fish_Time {
             return PARSER;
         }
 
-        public final UnknownFieldSet getUnknownFields() {
+        public UnknownFieldSet getUnknownFields() {
             return this.unknownFields;
         }
 
@@ -214,7 +212,7 @@ public final class Fish_Time {
             return this.isQuick_;
         }
 
-        public final boolean isInitialized() {
+        public boolean isInitialized() {
             byte isInitialized = this.memoizedIsInitialized;
             if (isInitialized == 1) {
                 return true;
@@ -348,7 +346,7 @@ public final class Fish_Time {
                 maybeForceBuilderInitialization();
             }
 
-            public static final Descriptors.Descriptor getDescriptor() {
+            public static Descriptors.Descriptor getDescriptor() {
                 return Fish_Time.sendFishTime_descriptor;
             }
 
@@ -457,7 +455,7 @@ public final class Fish_Time {
                 return this;
             }
 
-            public final boolean isInitialized() {
+            public boolean isInitialized() {
                 if (!hasType()) {
                     return false;
                 }
@@ -545,11 +543,11 @@ public final class Fish_Time {
                 return this;
             }
 
-            public final Builder setUnknownFields(UnknownFieldSet unknownFields) {
+            public Builder setUnknownFields(UnknownFieldSet unknownFields) {
                 return (Builder) super.setUnknownFields(unknownFields);
             }
 
-            public final Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
+            public Builder mergeUnknownFields(UnknownFieldSet unknownFields) {
                 return (Builder) super.mergeUnknownFields(unknownFields);
             }
         }

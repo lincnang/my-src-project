@@ -169,61 +169,61 @@ public class L1ItemUpgrade { // src016
     }
 
     public List<Integer> getNeedItemIdList() {
-        this.needItemIdList = new ArrayList<Integer>();
+        this.needItemIdList = new ArrayList<>();
         if ((this.needItemId == null) || (this.needItemId.isEmpty())) {
             return this.needItemIdList;
         }
         String[] needItemIdArray = this.needItemId.split(",");
         for (String itemId : needItemIdArray) {
-            this.needItemIdList.add(Integer.valueOf(Integer.parseInt(itemId)));
+            this.needItemIdList.add(Integer.parseInt(itemId));
         }
         return this.needItemIdList;
     }
 
     public List<Integer> getNeedCountsList() {
-        this.needCountsList = new ArrayList<Integer>();
+        this.needCountsList = new ArrayList<>();
         if ((this.needCounts == null) || (this.needCounts.isEmpty())) {
             return this.needCountsList;
         }
         String[] needCountsArray = this.needCounts.split(",");
         for (String itemId : needCountsArray) {
-            this.needCountsList.add(Integer.valueOf(Integer.parseInt(itemId)));
+            this.needCountsList.add(Integer.parseInt(itemId));
         }
         return this.needCountsList;
     }
 
     public List<Integer> getPlusItemIdList() {
-        this.plusItemIdList = new ArrayList<Integer>();
+        this.plusItemIdList = new ArrayList<>();
         if ((this.plusItemId == null) || (this.plusItemId.isEmpty())) {
             return this.plusItemIdList;
         }
         String[] plusItemIdArray = this.plusItemId.split(",");
         for (String itemId : plusItemIdArray) {
-            this.plusItemIdList.add(Integer.valueOf(Integer.parseInt(itemId)));
+            this.plusItemIdList.add(Integer.parseInt(itemId));
         }
         return this.plusItemIdList;
     }
 
     public List<Integer> getPlusCountsList() {
-        this.plusCountsList = new ArrayList<Integer>();
+        this.plusCountsList = new ArrayList<>();
         if ((this.plusCounts == null) || (this.plusCounts.isEmpty())) {
             return this.plusCountsList;
         }
         String[] plusCountsArray = this.plusCounts.split(",");
         for (String itemId : plusCountsArray) {
-            this.plusCountsList.add(Integer.valueOf(Integer.parseInt(itemId)));
+            this.plusCountsList.add(Integer.parseInt(itemId));
         }
         return this.plusCountsList;
     }
 
     public List<Integer> getPlusAddChanceList() {
-        this.plusAddChanceList = new ArrayList<Integer>();
+        this.plusAddChanceList = new ArrayList<>();
         if ((this.plusAddChance == null) || (this.plusAddChance.isEmpty())) {
             return this.plusAddChanceList;
         }
         String[] plusAddChanceArray = this.plusAddChance.split(",");
         for (String itemId : plusAddChanceArray) {
-            this.plusAddChanceList.add(Integer.valueOf(Integer.parseInt(itemId)));
+            this.plusAddChanceList.add(Integer.parseInt(itemId));
         }
         return this.plusAddChanceList;
     }

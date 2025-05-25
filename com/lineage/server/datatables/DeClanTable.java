@@ -24,8 +24,8 @@ import java.util.*;
  */
 public class DeClanTable {
     private static final Log _log = LogFactory.getLog(DeClanTable.class);
-    private static final Map<String, DeClan> _cdeclanList = new HashMap<String, DeClan>();
-    private static final ArrayList<byte[]> _emblemiconList = new ArrayList<byte[]>();
+    private static final Map<String, DeClan> _cdeclanList = new HashMap<>();
+    private static final ArrayList<byte[]> _emblemiconList = new ArrayList<>();
     private final static Random _random = new Random();
     private static DeClanTable _instance;
     // 重建分配盟輝

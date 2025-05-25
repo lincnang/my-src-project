@@ -67,10 +67,10 @@ public class S_CharPacks extends ServerBasePacket {
         if (times.length() < 8) {
             times = "0" + times;
         }
-        writeC(Integer.decode("0x" + times.substring(6, 8)).intValue());
-        writeC(Integer.decode("0x" + times.substring(4, 6)).intValue());
-        writeC(Integer.decode("0x" + times.substring(2, 4)).intValue());
-        writeC(Integer.decode("0x" + times.substring(0, 2)).intValue());
+        writeC(Integer.decode("0x" + times.substring(6, 8)));
+        writeC(Integer.decode("0x" + times.substring(4, 6)));
+        writeC(Integer.decode("0x" + times.substring(2, 4)));
+        writeC(Integer.decode("0x" + times.substring(0, 2)));
         if (lv > 200) {  //src039
             lv = 200;
         }

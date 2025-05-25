@@ -22,7 +22,7 @@ import java.util.Map;
 public final class ExtraPolyPowerTable//src014
 {
     private static final Log _log = LogFactory.getLog(ExtraPolyPowerTable.class);
-    private static final Map<Integer, L1PolyPower> _polyList = new LinkedHashMap<Integer, L1PolyPower>();
+    private static final Map<Integer, L1PolyPower> _polyList = new LinkedHashMap<>();
     private static ExtraPolyPowerTable _instance;
 
     public static ExtraPolyPowerTable getInstance() {
@@ -278,7 +278,7 @@ public final class ExtraPolyPowerTable//src014
                 int CloseCritical = rs.getInt("近距離爆擊");
                 int BowCritical = rs.getInt("遠距離爆擊");
                 L1PolyPower polyPower = new L1PolyPower(polyId, ac, hp, mp, hpr, mpr, str, con, dex, wis, cha, intel, sp, mr, hit_modifier, dmg_modifier, bow_hit_modifier, bow_dmg_modifier, magic_dmg_modifier, magic_dmg_reduction, reduction_dmg, defense_water, defense_wind, defense_fire, defense_earth, regist_stun, regist_stone, regist_sleep, regist_freeze, regist_sustain, regist_blind, EXP, potion, PVP, PVP_R, magic_hit, StunLv, CloseCritical, BowCritical);
-                _polyList.put(Integer.valueOf(polyId), polyPower);
+                _polyList.put(polyId, polyPower);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -290,11 +290,11 @@ public final class ExtraPolyPowerTable//src014
         _log.info("讀取->變身附加能力資料數量: " + _polyList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final L1PolyPower get(int polyId) {
-        L1PolyPower temp = (L1PolyPower) _polyList.get(Integer.valueOf(polyId));
+    public L1PolyPower get(int polyId) {
+        L1PolyPower temp = (L1PolyPower) _polyList.get(polyId);
         if (temp != null) {
             return temp;
         }
-        return (L1PolyPower) _polyList.get(Integer.valueOf(polyId));
+        return (L1PolyPower) _polyList.get(polyId);
     }
 }

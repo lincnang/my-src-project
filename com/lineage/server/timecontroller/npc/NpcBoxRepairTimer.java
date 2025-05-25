@@ -38,8 +38,7 @@ public class NpcBoxRepairTimer extends TimerTask {
             if (allNpc.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1NpcInstance> iter = allNpc.iterator(); iter.hasNext(); ) {
-                final L1NpcInstance npc = iter.next();
+            for (final L1NpcInstance npc : allNpc) {
                 if (!(npc instanceof L1BoxInstance)) {
                     continue;
                 }

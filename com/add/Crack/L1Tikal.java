@@ -326,7 +326,7 @@ public class L1Tikal {
 
         public void begin() {
             Timer timer = new Timer();
-            timer.schedule(this, L1Config._2212 * 60 * 1000); // 重置時間(分)
+            timer.schedule(this, (long) L1Config._2212 * 60 * 1000); // 重置時間(分)
         }
     }
 
@@ -345,7 +345,7 @@ public class L1Tikal {
 
         public void begin() {
             Timer timer = new Timer();
-            timer.schedule(this, L1Config._2218 * 60 * 1000); // 時空裂痕減弱維持時間(分)
+            timer.schedule(this, (long) L1Config._2218 * 60 * 1000); // 時空裂痕減弱維持時間(分)
         }
     }
 

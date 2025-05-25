@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NewMapUtil {
-    private static ConcurrentHashMap<Integer, ArrayList<L1NewMap>> M = new ConcurrentHashMap<Integer, ArrayList<L1NewMap>>();
+    private static ConcurrentHashMap<Integer, ArrayList<L1NewMap>> M = new ConcurrentHashMap<>();
 
     @SuppressWarnings("resource")
     public static void load(String path) throws IOException {
@@ -21,24 +21,16 @@ public class NewMapUtil {
             throw new NullPointerException("錯誤的地圖路徑或地圖不存在！");
         }
         FileChannel fc = null;
-        for (File map : f.listFiles(new FileFilter() {
-            public final boolean accept(File pathname) {
-                return pathname.isDirectory();
-            }
-        })) {
+        for (File map : f.listFiles(pathname -> pathname.isDirectory())) {
             int mapId = 0;
             try {
                 mapId = Integer.parseInt(map.getName());
             } catch (NumberFormatException e) {
                 continue;
             }
-            ArrayList<L1NewMap> maps = new ArrayList<L1NewMap>();
-            M.put(Integer.valueOf(mapId), maps);
-            for (File fileMap : map.listFiles(new FileFilter() {
-                public final boolean accept(File pathname) {
-                    return (pathname.isFile()) && (pathname.getName().toLowerCase().endsWith(".bin"));
-                }
-            })) {
+            ArrayList<L1NewMap> maps = new ArrayList<>();
+            M.put(mapId, maps);
+            for (File fileMap : map.listFiles(pathname -> (pathname.isFile()) && (pathname.getName().toLowerCase().endsWith(".bin")))) {
                 ByteBuffer buf = ByteBuffer.allocate(4096);
                 fc = new FileInputStream(fileMap).getChannel();
                 fc.read(buf);
@@ -52,8 +44,8 @@ public class NewMapUtil {
     }
 
     public static ArrayList<L1NewMap> getBlock(int mapId) {
-        if (M.containsKey(Integer.valueOf(mapId))) {
-            return (ArrayList<L1NewMap>) M.get(Integer.valueOf(mapId));
+        if (M.containsKey(mapId)) {
+            return (ArrayList<L1NewMap>) M.get(mapId);
         }
         return null;
     }

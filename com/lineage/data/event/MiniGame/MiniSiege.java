@@ -29,7 +29,7 @@ import static com.lineage.server.model.skill.L1SkillId.*;
  * 底比斯大戰遊戲
  */
 public class MiniSiege extends Thread {
-    private final static ArrayList<L1PcInstance> _teammembers = new ArrayList<L1PcInstance>();
+    private final static ArrayList<L1PcInstance> _teammembers = new ArrayList<>();
     private static final int playtime = ConfigThebes.MiniSiege_PlayTime; // 遊戲時間 (秒)
     private static final int[] BossId = ConfigThebes.MiniSiege_BossId; // 召喚BOSS編號
     private static final int BossStartTime = 20; // 有獲勝陣營,遊戲結束,BOSS召喚等待時間 (秒)
@@ -41,7 +41,7 @@ public class MiniSiege extends Thread {
     L1Party party2 = new L1Party();
     L1Party party3 = new L1Party();
     Random rnd = new Random();
-    private HashMap<Integer, ArrayList<L1PcInstance>> teamcount = new HashMap<Integer, ArrayList<L1PcInstance>>();
+    private HashMap<Integer, ArrayList<L1PcInstance>> teamcount = new HashMap<>();
     private int stage = 0; // 0 : 準備階段、1：遊戲開始、2：遊戲進行中、3：有獲勝陣營,遊戲結束、4：人數不足結束、5：時間到結束
     private boolean destroyed[] = {false, false, false, false, false, false, false, false, false};
     private String msg[] = {"說明：還在召集參賽者、請稍後！", "說明：按照敵方守護塔、中塔、司令塔順序擊破！", "說明：如果破壞了敵方的塔、會得到額外的獎勵！"};
@@ -231,8 +231,7 @@ public class MiniSiege extends Thread {
                 // 檢查地圖裡是不是上一輪的BOSS還沒清除
                 if (obj instanceof L1MonsterInstance) {
                     final L1MonsterInstance mon = (L1MonsterInstance) obj;
-                    for (int i = 0; i < BossId.length; i++) {
-                        final int bossid = BossId[i];
+                    for (final int bossid : BossId) {
                         final L1Npc boss = NpcTable.get().getTemplate(bossid);
                         if (boss != null) {
                             if (mon.getNpcId() == boss.get_npcId()) {
@@ -250,7 +249,7 @@ public class MiniSiege extends Thread {
                 }
             }
             for (int i = 0; i < 3; i++) {
-                teamcount.put(i, new ArrayList<L1PcInstance>());
+                teamcount.put(i, new ArrayList<>());
             }
             //A陣形守護塔
             spawn(4201, 32771, 32871, 10502);
@@ -435,8 +434,7 @@ public class MiniSiege extends Thread {
                             }
                             running = false;
                             L1Location loc = new L1Location(32771, 32895, 10502);
-                            for (int i = 0; i < BossId.length; i++) {
-                                final int bossid = BossId[i];
+                            for (final int bossid : BossId) {
                                 L1SpawnUtil.spawnR(loc, bossid, -1, 1);
                             }
                             break;

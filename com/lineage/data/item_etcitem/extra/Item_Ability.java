@@ -47,8 +47,8 @@ public class Item_Ability extends ItemExecutor {
             int[] m = abilityOrginal.get_itemid();
             boolean itemok = false;
             final StringBuilder name = new StringBuilder();
-            for (int i = 0; i < m.length; i++) {
-                L1Item abilityitemid = ItemTable.get().getTemplate(m[i]);
+            for (int j : m) {
+                L1Item abilityitemid = ItemTable.get().getTemplate(j);
                 if (abilityitemid != null) {
                     if (abilityitemid.getItemId() == tgItem.getItemId()) {
                         itemok = true;

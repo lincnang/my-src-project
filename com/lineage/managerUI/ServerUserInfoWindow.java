@@ -104,42 +104,40 @@ public class ServerUserInfoWindow extends JInternalFrame {
                 }
             });
             btn_Search = new JButton("搜索");
-            btn_Search.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (Eva.isServerStarted) {
-                        try {
-                            /*
-                             * if (txt_UserName.getText().equalsIgnoreCase(""))
-                             * { eva.errorMsg(eva.blankSetUser); return; } for
-                             * (int i = 0; i < listModel.size(); i ++) { if
-                             * (((String
-                             * )listModel.get(i)).indexOf(txt_UserName.getText
-                             * ()) > -1) { jJList.setSelectedIndex(i);
-                             * jJList.ensureIndexIsVisible(i); break; } }
-                             */
-                            if (txt_UserName.getText().equalsIgnoreCase("")) {
-                                Eva.errorMsg(Eva.blankSetUser);
-                                return;
-                            }
-                            /*
-                             * for (int i = 0; i <
-                             * jJTable0.getModel().getRowCount(); i++) { if
-                             * (((String)jJTable0.getModel().getValueAt(i,
-                             * 0)).indexOf(txt_UserName.getText()) > -1) {
-                             * CharacterInfoSearch(i, 0); return; } }
-                             */
-                            L1PcInstance player = World.get().getPlayer(txt_UserName.getText());
-                            if (player != null) {
-                                txt_UserName.setText(player.getName());
-                                CharacterInfoSearch();
-                            } else {
-                                JOptionPane.showMessageDialog(null, txt_UserName.getText() + "當前遊戲中不在線的.", "Server Message", JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        } catch (Exception ex) {
+            btn_Search.addActionListener(e -> {
+                if (Eva.isServerStarted) {
+                    try {
+                        /*
+                         * if (txt_UserName.getText().equalsIgnoreCase(""))
+                         * { eva.errorMsg(eva.blankSetUser); return; } for
+                         * (int i = 0; i < listModel.size(); i ++) { if
+                         * (((String
+                         * )listModel.get(i)).indexOf(txt_UserName.getText
+                         * ()) > -1) { jJList.setSelectedIndex(i);
+                         * jJList.ensureIndexIsVisible(i); break; } }
+                         */
+                        if (txt_UserName.getText().equalsIgnoreCase("")) {
+                            Eva.errorMsg(Eva.blankSetUser);
+                            return;
                         }
-                    } else {
-                        Eva.errorMsg(Eva.NoServerStartMSG);
+                        /*
+                         * for (int i = 0; i <
+                         * jJTable0.getModel().getRowCount(); i++) { if
+                         * (((String)jJTable0.getModel().getValueAt(i,
+                         * 0)).indexOf(txt_UserName.getText()) > -1) {
+                         * CharacterInfoSearch(i, 0); return; } }
+                         */
+                        L1PcInstance player = World.get().getPlayer(txt_UserName.getText());
+                        if (player != null) {
+                            txt_UserName.setText(player.getName());
+                            CharacterInfoSearch();
+                        } else {
+                            JOptionPane.showMessageDialog(null, txt_UserName.getText() + "當前遊戲中不在線的.", "Server Message", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } catch (Exception ex) {
                     }
+                } else {
+                    Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
             // btn_Refresh = new JButton("Refresh");
@@ -167,153 +165,139 @@ public class ServerUserInfoWindow extends JInternalFrame {
             // });
             btn_Ban = new JButton("踢人");
             btn_Ban.setToolTipText("將選擇的用戶踢出遊戲.");
-            btn_Ban.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (Eva.isServerStarted) {
-                        if (!txt_UserName.getText().equalsIgnoreCase("")) {
-                            L1PcInstance pc = World.get().getPlayer(txt_UserName.getText());
-                            // IpTable iptable = IpTable.get();
-                            if (pc != null) {
-                                /*
-                                 * Account.ban(pc.getAccountName());
-                                 * iptable.banIp(pc.getNetConnection().getIp());
-                                 * // BAN IP.
-                                 */
-                                // 自改
-                                final ClientExecutor targetClient = pc.getNetConnection();
-                                targetClient.kick();
-                                // end
-                                pc.sendPackets(new S_Disconnect());
-                                Eva.LogCommandAppend("[***]", "強制驅逐", pc.getName());
-                                txt_UserName.setText("");
-                            } else {
-                                Eva.errorMsg(txt_UserName.getText() + Eva.NoConnectUser);
-                            }
+            btn_Ban.addActionListener(e -> {
+                if (Eva.isServerStarted) {
+                    if (!txt_UserName.getText().equalsIgnoreCase("")) {
+                        L1PcInstance pc = World.get().getPlayer(txt_UserName.getText());
+                        // IpTable iptable = IpTable.get();
+                        if (pc != null) {
+                            /*
+                             * Account.ban(pc.getAccountName());
+                             * iptable.banIp(pc.getNetConnection().getIp());
+                             * // BAN IP.
+                             */
+                            // 自改
+                            final ClientExecutor targetClient = pc.getNetConnection();
+                            targetClient.kick();
+                            // end
+                            pc.sendPackets(new S_Disconnect());
+                            Eva.LogCommandAppend("[***]", "強制驅逐", pc.getName());
+                            txt_UserName.setText("");
                         } else {
-                            Eva.errorMsg(Eva.blankSetUser);
+                            Eva.errorMsg(txt_UserName.getText() + Eva.NoConnectUser);
                         }
                     } else {
-                        Eva.errorMsg(Eva.NoServerStartMSG);
+                        Eva.errorMsg(Eva.blankSetUser);
                     }
+                } else {
+                    Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
             btn_NoChat = new JButton("禁言");
             btn_NoChat.setToolTipText("將選擇的用戶禁言10分鐘.");
-            btn_NoChat.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (Eva.isServerStarted) {
-                        if (!txt_UserName.getText().equalsIgnoreCase("")) {
-                            L1PcInstance pc = World.get().getPlayer(txt_UserName.getText());
-                            if (pc != null) {
-                                pc.setSkillEffect(L1SkillId.STATUS_CHAT_PROHIBITED, 10 * 60 * 1000);
-                                pc.sendPackets(new S_PacketBox(S_PacketBox.ICON_CHATBAN, 10 * 60));
-                                pc.sendPackets(new S_ServerMessage(286, String.valueOf(10))); // \f3因你不正當的行為而
-                                // %0分鐘之內無法交談.
-                                Eva.LogCommandAppend("[***]", "禁言", "10");
-                                txt_UserName.setText("");
-                            } else {
-                                Eva.errorMsg(txt_UserName.getText() + Eva.NoConnectUser);
-                            }
+            btn_NoChat.addActionListener(e -> {
+                if (Eva.isServerStarted) {
+                    if (!txt_UserName.getText().equalsIgnoreCase("")) {
+                        L1PcInstance pc = World.get().getPlayer(txt_UserName.getText());
+                        if (pc != null) {
+                            pc.setSkillEffect(L1SkillId.STATUS_CHAT_PROHIBITED, 10 * 60 * 1000);
+                            pc.sendPackets(new S_PacketBox(S_PacketBox.ICON_CHATBAN, 10 * 60));
+                            pc.sendPackets(new S_ServerMessage(286, String.valueOf(10))); // \f3因你不正當的行為而
+                            // %0分鐘之內無法交談.
+                            Eva.LogCommandAppend("[***]", "禁言", "10");
+                            txt_UserName.setText("");
                         } else {
-                            Eva.errorMsg(Eva.blankSetUser);
+                            Eva.errorMsg(txt_UserName.getText() + Eva.NoConnectUser);
                         }
                     } else {
-                        Eva.errorMsg(Eva.NoServerStartMSG);
+                        Eva.errorMsg(Eva.blankSetUser);
                     }
+                } else {
+                    Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
             btn_Present = new JButton("贈送");
             btn_Present.setToolTipText("贈送禮物給選定的用戶.");
-            btn_Present.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (Eva.isServerStarted) {
-                        if (!txt_UserName.getText().equalsIgnoreCase("")) {
-                            jServerPresentWindow = new ServerPresentWindow("贈送", 0, 0, 400, 400, false, true);
-                            Eva.jJDesktopPane.add(jServerPresentWindow, 0);
-                            jServerPresentWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPresentWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPresentWindow.getContentPane().getSize().height / 2));
-                            jServerPresentWindow.txt_UserName.setText(txt_UserName.getText());
-                        } else {
-                            Eva.errorMsg(Eva.blankSetUser);
-                        }
+            btn_Present.addActionListener(e -> {
+                if (Eva.isServerStarted) {
+                    if (!txt_UserName.getText().equalsIgnoreCase("")) {
+                        jServerPresentWindow = new ServerPresentWindow("贈送", 0, 0, 400, 400, false, true);
+                        Eva.jJDesktopPane.add(jServerPresentWindow, 0);
+                        jServerPresentWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPresentWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPresentWindow.getContentPane().getSize().height / 2));
+                        jServerPresentWindow.txt_UserName.setText(txt_UserName.getText());
                     } else {
-                        Eva.errorMsg(Eva.NoServerStartMSG);
+                        Eva.errorMsg(Eva.blankSetUser);
                     }
+                } else {
+                    Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
             btn_Poly = new JButton("變身");
             btn_Poly.setToolTipText("將選定的用戶變成指定的怪物樣子.");
-            btn_Poly.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (Eva.isServerStarted) {
+            btn_Poly.addActionListener(e -> {
+                if (Eva.isServerStarted) {
+                    if (!txt_UserName.getText().equalsIgnoreCase("")) {
                         if (!txt_UserName.getText().equalsIgnoreCase("")) {
-                            if (!txt_UserName.getText().equalsIgnoreCase("")) {
-                                jServerPolyWindow = new ServerPolyWindow("變身", 0, 0, 400, 400, false, true);
-                                Eva.jJDesktopPane.add(jServerPolyWindow, 0);
-                                jServerPolyWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPolyWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPolyWindow.getContentPane().getSize().height / 2));
-                                jServerPolyWindow.txt_UserName.setText(txt_UserName.getText());
-                            } else {
-                                Eva.errorMsg(Eva.blankSetUser);
-                            }
+                            jServerPolyWindow = new ServerPolyWindow("變身", 0, 0, 400, 400, false, true);
+                            Eva.jJDesktopPane.add(jServerPolyWindow, 0);
+                            jServerPolyWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPolyWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPolyWindow.getContentPane().getSize().height / 2));
+                            jServerPolyWindow.txt_UserName.setText(txt_UserName.getText());
                         } else {
                             Eva.errorMsg(Eva.blankSetUser);
                         }
                     } else {
-                        Eva.errorMsg(Eva.NoServerStartMSG);
+                        Eva.errorMsg(Eva.blankSetUser);
                     }
+                } else {
+                    Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
             btn_AllPresent = new JButton("全體贈送");
             btn_AllPresent.setToolTipText("贈送禮物給所有用戶.");
-            btn_AllPresent.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (Eva.isServerStarted) {
-                        jServerPresentWindow = new ServerPresentWindow("全體贈送", 0, 0, 400, 400, false, true);
-                        Eva.jJDesktopPane.add(jServerPresentWindow, 0);
-                        jServerPresentWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPresentWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPresentWindow.getContentPane().getSize().height / 2));
-                        jServerPresentWindow.txt_UserName.setText("全體用戶");
-                    } else {
-                        Eva.errorMsg(Eva.NoServerStartMSG);
-                    }
+            btn_AllPresent.addActionListener(e -> {
+                if (Eva.isServerStarted) {
+                    jServerPresentWindow = new ServerPresentWindow("全體贈送", 0, 0, 400, 400, false, true);
+                    Eva.jJDesktopPane.add(jServerPresentWindow, 0);
+                    jServerPresentWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPresentWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPresentWindow.getContentPane().getSize().height / 2));
+                    jServerPresentWindow.txt_UserName.setText("全體用戶");
+                } else {
+                    Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
             btn_AllPoly = new JButton("全體變身");
             btn_AllPoly.setToolTipText("遊戲在線的所有角色變身成指定的怪物樣子.");
-            btn_AllPoly.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (Eva.isServerStarted) {
-                        if (!txt_UserName.getText().equalsIgnoreCase("")) {
-                            jServerPolyWindow = new ServerPolyWindow("全體變身", 0, 0, 400, 400, false, true);
-                            Eva.jJDesktopPane.add(jServerPolyWindow, 0);
-                            jServerPolyWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPolyWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPolyWindow.getContentPane().getSize().height / 2));
-                            jServerPolyWindow.txt_UserName.setText("全體用戶");
-                        } else {
-                            Eva.errorMsg(Eva.blankSetUser);
-                        }
+            btn_AllPoly.addActionListener(e -> {
+                if (Eva.isServerStarted) {
+                    if (!txt_UserName.getText().equalsIgnoreCase("")) {
+                        jServerPolyWindow = new ServerPolyWindow("全體變身", 0, 0, 400, 400, false, true);
+                        Eva.jJDesktopPane.add(jServerPolyWindow, 0);
+                        jServerPolyWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPolyWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPolyWindow.getContentPane().getSize().height / 2));
+                        jServerPolyWindow.txt_UserName.setText("全體用戶");
                     } else {
-                        Eva.errorMsg(Eva.NoServerStartMSG);
+                        Eva.errorMsg(Eva.blankSetUser);
                     }
+                } else {
+                    Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
             btn_Chat = new JButton("解除禁言");
             btn_Chat.setToolTipText("將選擇的用戶解除禁言.");
-            btn_Chat.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (Eva.isServerStarted) {
-                        if (!txt_UserName.getText().equalsIgnoreCase("")) {
-                            L1PcInstance pc = World.get().getPlayer(txt_UserName.getText());
-                            if (pc != null) {
-                                pc.removeSkillEffect(L1SkillId.STATUS_CHAT_PROHIBITED);
-                                Eva.LogCommandAppend("[***]", "已解除禁言", "!");
-                                txt_UserName.setText("");
-                            } else {
-                                Eva.errorMsg(txt_UserName.getText() + Eva.NoConnectUser);
-                            }
+            btn_Chat.addActionListener(e -> {
+                if (Eva.isServerStarted) {
+                    if (!txt_UserName.getText().equalsIgnoreCase("")) {
+                        L1PcInstance pc = World.get().getPlayer(txt_UserName.getText());
+                        if (pc != null) {
+                            pc.removeSkillEffect(L1SkillId.STATUS_CHAT_PROHIBITED);
+                            Eva.LogCommandAppend("[***]", "已解除禁言", "!");
+                            txt_UserName.setText("");
                         } else {
-                            Eva.errorMsg(Eva.blankSetUser);
+                            Eva.errorMsg(txt_UserName.getText() + Eva.NoConnectUser);
                         }
                     } else {
-                        Eva.errorMsg(Eva.NoServerStartMSG);
+                        Eva.errorMsg(Eva.blankSetUser);
                     }
+                } else {
+                    Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
             chk_Infomation = new JCheckBox("信息");

@@ -361,9 +361,7 @@ public class Chapter02R extends TimerTask {
                                 for (int k = 60; j < k; j++) {
                                     TimeUnit.MILLISECONDS.sleep(1000L);
                                     boolean isRemainMob = false;
-                                    Iterator<L1MonsterInstance> localIterator2 = WorldMob.get().getVisibleMob(party.getLeader()).iterator();
-                                    while (localIterator2.hasNext()) {
-                                        L1MonsterInstance mob = (L1MonsterInstance) localIterator2.next();
+                                    for (L1MonsterInstance mob : WorldMob.get().getVisibleMob(party.getLeader())) {
                                         if (!mob.isDead()) {
                                             isRemainMob = true;
                                             break;
@@ -590,9 +588,7 @@ public class Chapter02R extends TimerTask {
             count_down -= 1;
             if (count_down == 0) {
                 boolean isRemainMob = false;
-                Iterator<L1MonsterInstance> localIterator2 = WorldMob.get().getVisibleMob(party.getLeader()).iterator();
-                while (localIterator2.hasNext()) {
-                    L1MonsterInstance mob = (L1MonsterInstance) localIterator2.next();
+                for (L1MonsterInstance mob : WorldMob.get().getVisibleMob(party.getLeader())) {
                     if (!mob.isDead()) {
                         isRemainMob = true;
                         break;
@@ -613,7 +609,7 @@ public class Chapter02R extends TimerTask {
         }
     }
 
-    private final int randomHintSeaMonster() {
+    private int randomHintSeaMonster() {
         if (squid_version) {
             squid_version = false;
             return 4;
@@ -631,7 +627,7 @@ public class Chapter02R extends TimerTask {
         return 4;
     }
 
-    private final void spawnSeaMonster(int npcId) {
+    private void spawnSeaMonster(int npcId) {
         L1NpcInstance monster_0 = L1SpawnUtil.spawn(npcId, new L1Location(32778, 32800, quest.get_mapid()), 0, quest.get_id());
         monster_0.set_quest_id(0);
         monster_0.WORK.work(monster_0);
@@ -649,7 +645,7 @@ public class Chapter02R extends TimerTask {
         }
     }
 
-    private final void randomMagicCircle() {
+    private void randomMagicCircle() {
         defense_okay = false;
         L1Location new_loc = loc.randomLocation(7, true);
         L1NpcInstance npc = L1SpawnUtil.spawnT(97109, new_loc.getX(), new_loc.getY(), (short) new_loc.getMapId(), 0, 12);
@@ -720,19 +716,16 @@ public class Chapter02R extends TimerTask {
         if (round <= 0) {
             return;
         }
-        List<L1NpcInstance> checkList = new ArrayList<L1NpcInstance>();
-        for (Iterator<L1NpcInstance> iterator = quest.npcList().iterator(); iterator.hasNext(); ) {
-            L1NpcInstance npc = (L1NpcInstance) iterator.next();
+        List<L1NpcInstance> checkList = new ArrayList<>();
+        for (L1NpcInstance npc : quest.npcList()) {
             if (npc.getGfxId() == 8323) {
                 checkList.add(npc);
             }
         }
         if (!checkList.isEmpty()) {
             int checkCount = 0;
-            for (Iterator<L1NpcInstance> iterator1 = checkList.iterator(); iterator1.hasNext(); ) {
-                L1NpcInstance npc = (L1NpcInstance) iterator1.next();
-                for (Iterator<L1PcInstance> iterator4 = quest.pcList().iterator(); iterator4.hasNext(); ) {
-                    L1PcInstance pc = (L1PcInstance) iterator4.next();
+            for (L1NpcInstance npc : checkList) {
+                for (L1PcInstance pc : quest.pcList()) {
                     if (pc.getLocation().isSamePoint(npc.getLocation())) {
                         checkCount++;
                     }
@@ -757,7 +750,7 @@ public class Chapter02R extends TimerTask {
         counter_alt2++;
     }
 
-    private final void defenseFailed() {
+    private void defenseFailed() {
         if (!defense_okay) {
             defense_okay = true;
             sendPacketsToAll(new S_EffectLocation(next_fire_loc.getX(), next_fire_loc.getY(), 762));
@@ -829,7 +822,7 @@ public class Chapter02R extends TimerTask {
         }
     }
 
-    private final void spawnEnemyShip() {
+    private void spawnEnemyShip() {
         L1NpcInstance spawn_ship = null;
         int locx = fire_order ? 32796 : 32802;
         int locy = 32824;
@@ -865,7 +858,7 @@ public class Chapter02R extends TimerTask {
         ship_step = step;
     }
 
-    private final void sendPacketsToAll(ServerBasePacket packet) {
+    private void sendPacketsToAll(ServerBasePacket packet) {
         if (quest.size() > 0) {
             for (L1PcInstance pc : quest.pcList()) {
                 pc.sendPackets(packet);
@@ -873,10 +866,8 @@ public class Chapter02R extends TimerTask {
         }
     }
 
-    private final void clearAllObject() {
-        Iterator<L1Object> localIterator = World.get().getVisibleObjects(quest.get_mapid()).values().iterator();
-        while (localIterator.hasNext()) {
-            L1Object obj = (L1Object) localIterator.next();
+    private void clearAllObject() {
+        for (L1Object obj : World.get().getVisibleObjects(quest.get_mapid()).values()) {
             if (obj.get_showId() == quest.get_id()) {
                 if ((obj instanceof L1EffectInstance)) {
                     L1EffectInstance mob = (L1EffectInstance) obj;

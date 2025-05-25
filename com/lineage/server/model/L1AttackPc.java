@@ -2515,8 +2515,8 @@ public class L1AttackPc extends L1AttackMode {
         int damage = 0;
         L1Inventory pc_inv = _pc.getInventory();
         int[] amulets = new int[]{402000, 402001, 402002, 402003, 402004, 402005, 402006, 402007};
-        for (int i = 0; i < amulets.length; i++) {
-            L1ItemInstance amulet = pc_inv.findItemId(amulets[i]);
+        for (int j : amulets) {
+            L1ItemInstance amulet = pc_inv.findItemId(j);
             if (amulet != null && amulet.isEquipped()) {
                 damage += 5;
                 break;
@@ -3009,10 +3009,8 @@ public class L1AttackPc extends L1AttackMode {
                 case PC_PC:
                     if (_pc.lift() != 0) {// 附魔系統 機率卸除對方裝備
                         int counter = _random.nextInt(_pc.lift()) + 1;
-                        StringBuffer sbr = new StringBuffer();
-                        Iterator<L1ItemInstance> iterator2 = _targetPc.getInventory().getItems().iterator();
-                        while (iterator2.hasNext()) {
-                            L1ItemInstance item = iterator2.next();
+                        StringBuilder sbr = new StringBuilder();
+                        for (L1ItemInstance item : _targetPc.getInventory().getItems()) {
                             if (item.getItem().getType2() != 2 || !item.isEquipped()) {
                                 continue;
                             }
@@ -3247,7 +3245,7 @@ public class L1AttackPc extends L1AttackMode {
         }
     }
 
-    private final int getCriticalHitDamage(final L1CriticalHitStone stone, final int damage) {
+    private int getCriticalHitDamage(final L1CriticalHitStone stone, final int damage) {
         final int gfxId = stone.getGfxId();
         if (gfxId != 0) {
             if (stone.isGfxIdTarget() && stone.isArrowType()) {

@@ -14,8 +14,8 @@ public class S_ReincarnationHtml extends ServerBasePacket {
     public S_ReincarnationHtml(L1PcInstance pc) {
         int rei_pt = 0;
         int[] is = pc.getReincarnationSkill();
-        for (int i = 0; i < is.length; i++) {
-            rei_pt += is[i];
+        for (int j : is) {
+            rei_pt += j;
         }
         rei_pt = pc.getTurnLifeSkillCount() - rei_pt;
         writeC(S_HYPERTEXT);

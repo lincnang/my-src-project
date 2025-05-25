@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public abstract class L1NpcXmlAction implements L1NpcAction {
-    private final static Map<Character, Integer> _charTypes = new HashMap<Character, Integer>();
+    private final static Map<Character, Integer> _charTypes = new HashMap<>();
 
     static {
         _charTypes.put('P', 0);

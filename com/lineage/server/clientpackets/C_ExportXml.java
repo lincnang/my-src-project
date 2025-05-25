@@ -22,7 +22,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class C_ExportXml {
-    private final Map<Integer, Map<String, String>> allData = new HashMap<Integer, Map<String, String>>();
+    private final Map<Integer, Map<String, String>> allData = new HashMap<>();
 
     public C_ExportXml() {
     }
@@ -113,8 +113,8 @@ public class C_ExportXml {
             out = new BufferedWriter(new FileWriter("./物品操作記錄/log/itemArmorTest.txt", true));
             out.newLine();// 換行
             if (str.size() > 0) {
-                for (final Iterator<String> iter = str.iterator(); iter.hasNext(); ) {
-                    final String item = iter.next();// 返回迭代的下一個元素。
+                // 返回迭代的下一個元素。
+                for (final String item : str) {
                     out.write(item);
                     out.newLine();// 換行
                 }
@@ -240,7 +240,7 @@ public class C_ExportXml {
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
-        HashMap<Integer, String[]> map = new HashMap<Integer, String[]>();
+        HashMap<Integer, String[]> map = new HashMap<>();
         String[] tmp = new String[3];
         try {
             con = DatabaseFactory.get().getConnection();
@@ -269,7 +269,7 @@ public class C_ExportXml {
 
     public void test() {
         Map<Integer, String[]> map = getNameAll("armor");
-        Queue<String> itemListX = new ConcurrentLinkedQueue<String>();
+        Queue<String> itemListX = new ConcurrentLinkedQueue<>();
         for (int i = 0; i < map.size(); i++) {
             String[] value = (String[]) map.get(i);
             String itemId = value[2];

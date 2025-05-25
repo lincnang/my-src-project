@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public final class DropItemTable {
     private static final Log _log = LogFactory.getLog(DropItemTable.class);
-    private static final Map<Integer, DropItemData> _dropItem = new HashMap<Integer, DropItemData>();
+    private static final Map<Integer, DropItemData> _dropItem = new HashMap<>();
     private static DropItemTable _instance;
 
     public static DropItemTable get() {
@@ -68,7 +68,7 @@ public final class DropItemTable {
                 final DropItemData data = new DropItemData();
                 data.dropRate = rs.getDouble("drop_rate");
                 data.dropAmount = rs.getDouble("drop_amount");
-                _dropItem.put(new Integer(itemid), data);
+                _dropItem.put(itemid, data);
             }
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

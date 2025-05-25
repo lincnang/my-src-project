@@ -29,8 +29,8 @@ public class PetMprTimer extends TimerTask {
             if (allPet.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = allPet.iterator(); iter.hasNext(); ) {
-                L1PetInstance pet = (L1PetInstance) iter.next();
+            for (Object o : allPet) {
+                L1PetInstance pet = (L1PetInstance) o;
                 if (MprPet.mpUpdate(pet, _time)) {
                     TimeUnit.MILLISECONDS.sleep(5L);
                 }

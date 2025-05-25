@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
 import java.util.*;
 
 public class L1NpcXmlParser {
-    private final static Map<String, Integer> _questIds = new HashMap<String, Integer>();
+    private final static Map<String, Integer> _questIds = new HashMap<>();
 
     static {
         /*
@@ -50,7 +50,7 @@ public class L1NpcXmlParser {
     }
 
     public static List<L1NpcAction> listActions(final Element element) {
-        final List<L1NpcAction> result = new ArrayList<L1NpcAction>();
+        final List<L1NpcAction> result = new ArrayList<>();
         final NodeList list = element.getChildNodes();
         for (final Element elem : new IterableElementList(list)) {
             final L1NpcAction action = L1NpcActionFactory.newAction(elem);
@@ -72,7 +72,7 @@ public class L1NpcXmlParser {
     public static int getIntAttribute(final Element element, final String name, final int defaultValue) {
         int result = defaultValue;
         try {
-            result = Integer.valueOf(element.getAttribute(name));
+            result = Integer.parseInt(element.getAttribute(name));
         } catch (final NumberFormatException e) {
         }
         return result;
@@ -82,7 +82,7 @@ public class L1NpcXmlParser {
         boolean result = defaultValue;
         final String value = element.getAttribute(name);
         if (!value.equals("")) {
-            result = Boolean.valueOf(value);
+            result = Boolean.parseBoolean(value);
         }
         return result;
     }
@@ -113,10 +113,10 @@ public class L1NpcXmlParser {
         final int length = tok.countTokens();
         ArrayList<Integer> intArray = null;
         if (length > 0) {
-            intArray = new ArrayList<Integer>();
+            intArray = new ArrayList<>();
         }
         for (int i = 0; i < length; i++) {
-            intArray.add(Integer.valueOf(Integer.parseInt(tok.nextToken())));
+            intArray.add(Integer.parseInt(tok.nextToken()));
         }
         return intArray;
     }

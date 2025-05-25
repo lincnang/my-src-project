@@ -320,12 +320,8 @@ public class L1AttackPower {//src016
 
         int effectId = skill.getCastGfx();// 出現在目標身上的特效編號
         if (effectId > 0) {
-            Optional.ofNullable(_targetNpc).ifPresent(npc -> {
-                _targetNpc.broadcastPacketAll(new S_EffectLocation(_targetNpc.getLocation(), effectId));
-            });
-            Optional.ofNullable(_targetPc).ifPresent(pc -> {
-                _targetPc.sendPacketsAll(new S_EffectLocation(_targetPc.getLocation(), effectId));
-            });
+            Optional.ofNullable(_targetNpc).ifPresent(npc -> _targetNpc.broadcastPacketAll(new S_EffectLocation(_targetNpc.getLocation(), effectId)));
+            Optional.ofNullable(_targetPc).ifPresent(pc -> _targetPc.sendPacketsAll(new S_EffectLocation(_targetPc.getLocation(), effectId)));
         }
 
         String skillName = skill.getName();// 技能名稱

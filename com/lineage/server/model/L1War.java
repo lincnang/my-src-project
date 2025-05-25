@@ -26,7 +26,7 @@ public class L1War {
     private boolean _isWarTimerDelete = false;
 
     public L1War() {
-        _attackList = new ConcurrentHashMap<String, L1Clan>();
+        _attackList = new ConcurrentHashMap<>();
     }
 
     public int get_castleId() {
@@ -147,14 +147,14 @@ public class L1War {
             Set<?> clanList = getAttackClanList();
             if (!clanList.isEmpty()) {
                 World.get().broadcastPacketToAll(new S_War(4, clan_name, _defenceClanName));
-                for (Iterator<?> iter = clanList.iterator(); iter.hasNext(); ) {
-                    String enemy_clan_name = (String) iter.next();
+                for (Object value : clanList) {
+                    String enemy_clan_name = (String) value;
                     if (!clan_name.equalsIgnoreCase(enemy_clan_name)) {
                         World.get().broadcastPacketToAll(new S_War(4, _defenceClanName, enemy_clan_name));
                     }
                 }
-                for (Iterator<?> iter = clanList.iterator(); iter.hasNext(); ) {
-                    String enemy_clan_name = (String) iter.next();
+                for (Object o : clanList) {
+                    String enemy_clan_name = (String) o;
                     World.get().broadcastPacketToAll(new S_War(3, _defenceClanName, enemy_clan_name));
                     _attackList.remove(enemy_clan_name);
                 }
@@ -172,12 +172,12 @@ public class L1War {
             _isWarTimerDelete = true;
             Set<?> clanList = getAttackClanList();
             if (!clanList.isEmpty()) {
-                for (Iterator<?> iter = clanList.iterator(); iter.hasNext(); ) {
-                    String enemy_clan_name = (String) iter.next();
+                for (Object value : clanList) {
+                    String enemy_clan_name = (String) value;
                     World.get().broadcastPacketToAll(new S_War(4, _defenceClanName, enemy_clan_name));
                 }
-                for (Iterator<?> iter = clanList.iterator(); iter.hasNext(); ) {
-                    String enemy_clan_name = (String) iter.next();
+                for (Object o : clanList) {
+                    String enemy_clan_name = (String) o;
                     World.get().broadcastPacketToAll(new S_War(3, _defenceClanName, enemy_clan_name));
                     _attackList.remove(enemy_clan_name);
                 }

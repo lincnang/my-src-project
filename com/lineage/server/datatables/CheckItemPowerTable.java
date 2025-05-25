@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class CheckItemPowerTable {
     private static final Log _log = LogFactory.getLog(CheckItemPowerTable.class);
-    private static final Map<Integer, L1CheckItemPower> _list = new HashMap<Integer, L1CheckItemPower>();
+    private static final Map<Integer, L1CheckItemPower> _list = new HashMap<>();
     private static CheckItemPowerTable _instance;
 
     private CheckItemPowerTable() {
@@ -141,11 +141,7 @@ public class CheckItemPowerTable {
         if (_list.isEmpty()) {
             return null;
         }
-        if (_list.containsKey(item_id)) {
-            return _list.get(item_id);
-        } else {
-            return null;
-        }
+        return _list.getOrDefault(item_id, null);
     }
 
     public boolean checkItem(final int item_id) {

@@ -16,8 +16,8 @@ import java.util.ArrayList;
  */
 public class ServerAIMapIdTable {
     private static final Log _log = LogFactory.getLog(ServerAIMapIdTable.class);
-    private static final ArrayList<Integer> _can_ai = new ArrayList<Integer>();
-    private static final ArrayList<Integer> _cant_ai = new ArrayList<Integer>();
+    private static final ArrayList<Integer> _can_ai = new ArrayList<>();
+    private static final ArrayList<Integer> _cant_ai = new ArrayList<>();
     private static ServerAIMapIdTable _instance;
 
     private ServerAIMapIdTable() {
@@ -46,9 +46,9 @@ public class ServerAIMapIdTable {
                 boolean can_ai = rs.getBoolean("安全區域是否驗證");
                 boolean cant_ai = rs.getBoolean("驗證開關");
                 if (can_ai) {
-                    _can_ai.add(Integer.valueOf(map_id));
+                    _can_ai.add(map_id);
                 } else if (cant_ai) {
-                    _cant_ai.add(Integer.valueOf(map_id));
+                    _cant_ai.add(map_id);
                 }
             }
         } catch (SQLException e) {
@@ -74,9 +74,9 @@ public class ServerAIMapIdTable {
                 boolean can_ai = rs.getBoolean("安全區域是否驗證");
                 boolean cant_ai = rs.getBoolean("驗證開關");
                 if (can_ai) {
-                    _can_ai.add(Integer.valueOf(map_id));
+                    _can_ai.add(map_id);
                 } else if (cant_ai) {
-                    _cant_ai.add(Integer.valueOf(map_id));
+                    _cant_ai.add(map_id);
                 }
             }
         } catch (SQLException e) {
@@ -90,10 +90,10 @@ public class ServerAIMapIdTable {
     }
 
     public boolean checkCanAI(int map_id) {
-        return _can_ai.contains(Integer.valueOf(map_id));
+        return _can_ai.contains(map_id);
     }
 
     public boolean checkCantAI(int map_id) {
-        return _cant_ai.contains(Integer.valueOf(map_id));
+        return _cant_ai.contains(map_id);
     }
 }

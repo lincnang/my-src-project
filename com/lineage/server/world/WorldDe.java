@@ -15,7 +15,7 @@ public class WorldDe {
     private Collection<L1DeInstance> _allDe;
 
     private WorldDe() {
-        _isDe = new ConcurrentHashMap<String, L1DeInstance>();
+        _isDe = new ConcurrentHashMap<>();
     }
 
     public static WorldDe get() {

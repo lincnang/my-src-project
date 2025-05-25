@@ -22,6 +22,8 @@ import com.lineage.server.utils.StreamUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.IOException;
+
 @SuppressWarnings("unused")
 public class Base64 {
     /* ******** P U B L I C F I E L D S ******** */
@@ -315,9 +317,7 @@ public class Base64 {
         byte[] outBuff1 = new byte[3];
         int count = decode4to3(fourBytes, 0, outBuff1, 0);
         byte[] outBuff2 = new byte[count];
-        for (int i = 0; i < count; i++) {
-            outBuff2[i] = outBuff1[i];
-        }
+        System.arraycopy(outBuff1, 0, outBuff2, 0, count);
         return outBuff2;
     }
 
@@ -507,14 +507,11 @@ public class Base64 {
             ois = new java.io.ObjectInputStream(bais);
             obj = ois.readObject();
         } // end try
-        catch (java.io.IOException e) {
+        catch (IOException | ClassNotFoundException e) {
             _log.error(e.getLocalizedMessage(), e);
             ;
         } // end catch
-        catch (java.lang.ClassNotFoundException e) {
-            _log.error(e.getLocalizedMessage(), e);
-            ;
-        } // end catch
+        // end catch
         finally {
             StreamUtil.close(bais, ois);
         } // end finally

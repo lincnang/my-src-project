@@ -96,8 +96,8 @@ public class ClanShowTimer extends TimerTask {
             if (all.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = all.iterator(); iter.hasNext(); ) {
-                L1PcInstance tgpc = (L1PcInstance) iter.next();
+            for (Object o : all) {
+                L1PcInstance tgpc = (L1PcInstance) o;
                 if (check(tgpc)) {
                     if ((ServerWarExecutor.get().checkCastleWar() <= 0) && (checkC(tgpc))) {
                         showClan(tgpc);

@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -24,7 +25,7 @@ public final class ConfigSkillCrown {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigSkillCrown));
+            final InputStream is = Files.newInputStream(new File(ConfigSkillCrown).toPath());
             set.load(is);
             is.close();
             Crown_TRUE_TARGET_Turn2 = Double.parseDouble(set.getProperty("Crown_TRUE_TARGET_Turn2", "1.0"));

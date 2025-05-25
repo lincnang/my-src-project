@@ -17,8 +17,8 @@ public class S_Emblem extends ServerBasePacket {
             writeC(S_EMBLEM);
             writeD(clanid);
             final byte[] icon = emblemIcon.get_clanIcon();
-            for (int i = 0; i < icon.length; i++) {
-                writeP(icon[i]);
+            for (byte b : icon) {
+                writeP(b);
             }
         }
     }

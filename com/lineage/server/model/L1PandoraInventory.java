@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class L1PandoraInventory {
     public static final Log _log = LogFactory.getLog(L1PandoraInventory.class);
     private static AtomicInteger _id;
-    private static Object _lock = new Object();
+    private static final Object _lock = new Object();
 
     static {
         Connection con = null;
@@ -57,7 +57,7 @@ public class L1PandoraInventory {
     }
 
     private final L1PcInstance _owner;
-    private List<L1PandoraItem> _items = new CopyOnWriteArrayList<L1PandoraItem>();
+    private List<L1PandoraItem> _items = new CopyOnWriteArrayList<>();
 
     public L1PandoraInventory(final L1PcInstance owner) {
         this._owner = owner;

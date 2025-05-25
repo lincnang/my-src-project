@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class PetItemTable {
     private static final Log _log = LogFactory.getLog(PetItemTable.class);
-    private static final Map<Integer, L1PetItem> _petItemIdIndex = new HashMap<Integer, L1PetItem>();
+    private static final Map<Integer, L1PetItem> _petItemIdIndex = new HashMap<>();
     private static PetItemTable _instance;
 
     public static PetItemTable get() {
@@ -65,12 +65,12 @@ public class PetItemTable {
             petItem.setAddMr(rs.getInt("m_def"));
             petItem.setWeapom(rs.getBoolean("isweapon"));
             petItem.setHigher(rs.getBoolean("ishigher"));
-            _petItemIdIndex.put(Integer.valueOf(petItem.getItemId()), petItem);
+            _petItemIdIndex.put(petItem.getItemId(), petItem);
         }
     }
 
     public L1PetItem getTemplate(int itemId) {
-        return (L1PetItem) _petItemIdIndex.get(Integer.valueOf(itemId));
+        return (L1PetItem) _petItemIdIndex.get(itemId);
     }
 }
 /*

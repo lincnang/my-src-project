@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class Npc_Mary extends NpcExecutor {
     private static final Log _log = LogFactory.getLog(Npc_Mary.class);
     private static final Random _random = new Random();
-    private static final Map<Integer, MaryTemp> _maryUsers = new HashMap<Integer, MaryTemp>();
+    private static final Map<Integer, MaryTemp> _maryUsers = new HashMap<>();
     private static final int[] _min = {2, 4, 6, 7, 10, 12, 14, 15};
     private static int _itemid = 40308;
     private static int _count;
@@ -153,10 +153,10 @@ public class Npc_Mary extends NpcExecutor {
     public void talk(L1PcInstance pc, L1NpcInstance npc) {
         // _log.warn("小瑪莉管理員 紀錄 輸出百分比:" + _out_prize + "% 累積賭注:" + _all_stake +
         // " 累積中獎金額:" + _all_user_prize);
-        MaryTemp tmp = (MaryTemp) _maryUsers.get(Integer.valueOf(pc.getId()));
+        MaryTemp tmp = (MaryTemp) _maryUsers.get(pc.getId());
         if (tmp == null) {
             tmp = new MaryTemp();
-            _maryUsers.put(Integer.valueOf(pc.getId()), tmp);
+            _maryUsers.put(pc.getId(), tmp);
         }
         tmp._x_a = 0;
         tmp._x_b = 0;
@@ -179,7 +179,7 @@ public class Npc_Mary extends NpcExecutor {
     }
 
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
-        MaryTemp tmp = (MaryTemp) _maryUsers.get(Integer.valueOf(pc.getId()));
+        MaryTemp tmp = (MaryTemp) _maryUsers.get(pc.getId());
         if (tmp == null) {
             tmp = new MaryTemp();
         }
@@ -246,19 +246,19 @@ public class Npc_Mary extends NpcExecutor {
                 return;
             }
             if (cmd.equalsIgnoreCase("a")) {
-                tmp._x_a += 1 * tmp._x10;
+                tmp._x_a += tmp._x10;
             } else if (cmd.equalsIgnoreCase("b")) {
-                tmp._x_b += 1 * tmp._x10;
+                tmp._x_b += tmp._x10;
             } else if (cmd.equalsIgnoreCase("c")) {
-                tmp._x_c += 1 * tmp._x10;
+                tmp._x_c += tmp._x10;
             } else if (cmd.equalsIgnoreCase("d")) {
-                tmp._x_d += 1 * tmp._x10;
+                tmp._x_d += tmp._x10;
             } else if (cmd.equalsIgnoreCase("e")) {
-                tmp._x_e += 1 * tmp._x10;
+                tmp._x_e += tmp._x10;
             } else if (cmd.equalsIgnoreCase("f")) {
-                tmp._x_f += 1 * tmp._x10;
+                tmp._x_f += tmp._x10;
             } else if (cmd.equalsIgnoreCase("g")) {
-                tmp._x_g += 1 * tmp._x10;
+                tmp._x_g += tmp._x10;
             } else if (cmd.equalsIgnoreCase("XL99")) {
                 tmp._x_a += 99;
                 tmp._x_b += 99;
@@ -411,7 +411,7 @@ public class Npc_Mary extends NpcExecutor {
             _pc = pc;
             _npc = npc;
             _mode = mode;
-            _tmp = ((Npc_Mary.MaryTemp) Npc_Mary._maryUsers.get(Integer.valueOf(pc.getId())));
+            _tmp = ((Npc_Mary.MaryTemp) Npc_Mary._maryUsers.get(pc.getId()));
             _tmp._stop = true;
             _html_id = src_html;
         }
@@ -477,7 +477,7 @@ public class Npc_Mary extends NpcExecutor {
                         }
                         int html_id = -1;
                         for (int i = 0; i < count1; i++) {
-                            TimeUnit.MILLISECONDS.sleep(i * 3);
+                            TimeUnit.MILLISECONDS.sleep(i * 3L);
                             html_id = index;
                             _pc.sendPackets(new S_NPCTalkReturn(_npc.getId(), "bar_" + (html_id < 10 ? "0" + html_id : Integer.valueOf(html_id)), info1));
                             index++;
@@ -732,7 +732,7 @@ public class Npc_Mary extends NpcExecutor {
                     html_id = Npc_Mary._random.nextInt(16) + 1;
                     switch (html_id) {
                         case 1:
-                            if (_tmp._x_b * Npc_Mary._x_b1 < out_prize2) {
+                            if ((long) _tmp._x_b * Npc_Mary._x_b1 < out_prize2) {
                                 is_out = true;
                             } else if (Npc_Mary._random.nextInt(100) <= 2) {
                                 is_out = true;
@@ -742,7 +742,7 @@ public class Npc_Mary extends NpcExecutor {
                             is_out = true;
                             break;
                         case 3:
-                            if (_tmp._x_a * Npc_Mary._x_a1 < out_prize2) {
+                            if ((long) _tmp._x_a * Npc_Mary._x_a1 < out_prize2) {
                                 if (_tmp._x_a == 99) {
                                     if (Npc_Mary._random.nextInt(100) <= 5) {
                                         is_out = true;
@@ -756,7 +756,7 @@ public class Npc_Mary extends NpcExecutor {
                             is_out = true;
                             break;
                         case 5:
-                            if (_tmp._x_d * Npc_Mary._x_d1 < out_prize2) {
+                            if ((long) _tmp._x_d * Npc_Mary._x_d1 < out_prize2) {
                                 is_out = true;
                             } else if (Npc_Mary._random.nextInt(100) <= 6) {
                                 is_out = true;
@@ -769,14 +769,14 @@ public class Npc_Mary extends NpcExecutor {
                             is_out = true;
                             break;
                         case 8:
-                            if (_tmp._x_f * Npc_Mary._x_f1 < out_prize2) {
+                            if ((long) _tmp._x_f * Npc_Mary._x_f1 < out_prize2) {
                                 is_out = true;
                             } else if (Npc_Mary._random.nextInt(100) <= 10) {
                                 is_out = true;
                             }
                             break;
                         case 9:
-                            if (_tmp._x_g * Npc_Mary._x_g1 < out_prize2) {
+                            if ((long) _tmp._x_g * Npc_Mary._x_g1 < out_prize2) {
                                 is_out = true;
                             } else if (Npc_Mary._random.nextInt(100) <= 15) {
                                 is_out = true;
@@ -786,7 +786,7 @@ public class Npc_Mary extends NpcExecutor {
                             is_out = true;
                             break;
                         case 11:
-                            if (_tmp._x_a * Npc_Mary._x_a2 < out_prize2) {
+                            if ((long) _tmp._x_a * Npc_Mary._x_a2 < out_prize2) {
                                 is_out = true;
                             }
                             break;
@@ -794,7 +794,7 @@ public class Npc_Mary extends NpcExecutor {
                             is_out = true;
                             break;
                         case 13:
-                            if (_tmp._x_c * Npc_Mary._x_c1 < out_prize2) {
+                            if ((long) _tmp._x_c * Npc_Mary._x_c1 < out_prize2) {
                                 is_out = true;
                             } else if (Npc_Mary._random.nextInt(100) <= 4) {
                                 is_out = true;
@@ -807,7 +807,7 @@ public class Npc_Mary extends NpcExecutor {
                             is_out = true;
                             break;
                         case 16:
-                            if (_tmp._x_e * Npc_Mary._x_e1 < out_prize2) {
+                            if ((long) _tmp._x_e * Npc_Mary._x_e1 < out_prize2) {
                                 is_out = true;
                             } else if (Npc_Mary._random.nextInt(100) <= 8) {
                                 is_out = true;

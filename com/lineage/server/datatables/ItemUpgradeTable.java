@@ -39,7 +39,7 @@ public class ItemUpgradeTable {// src016
     }
 
     private ArrayList<L1ItemUpgrade> allRefineList() {
-        ArrayList<L1ItemUpgrade> itemUpgradeList = new ArrayList<L1ItemUpgrade>();
+        ArrayList<L1ItemUpgrade> itemUpgradeList = new ArrayList<>();
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;

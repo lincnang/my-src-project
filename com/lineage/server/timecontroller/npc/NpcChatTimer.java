@@ -42,8 +42,7 @@ public class NpcChatTimer extends TimerTask {
             if (allChat.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1NpcChat> iter = allChat.iterator(); iter.hasNext(); ) {
-                final L1NpcChat npcChat = iter.next();
+            for (final L1NpcChat npcChat : allChat) {
                 // 檢查是否對話
                 if (this.isChatTime(npcChat.getGameTime())) {
                     final int npcId = npcChat.getNpcId();
@@ -66,7 +65,7 @@ public class NpcChatTimer extends TimerTask {
     private boolean isChatTime(final int chatTime) {
         final SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
         final Calendar realTime = getRealTime();
-        final int nowTime = Integer.valueOf(sdf.format(realTime.getTime()));
+        final int nowTime = Integer.parseInt(sdf.format(realTime.getTime()));
         return (nowTime == chatTime);
     }
 }

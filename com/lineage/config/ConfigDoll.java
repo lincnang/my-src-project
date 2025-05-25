@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -46,16 +47,16 @@ public final class ConfigDoll {
     public static int ZUIXIAOJILV5;//合成五階段最小几率
     public static int ZENGJIAJILV5;//合成五階段增加幾率數量
     public static int SHULIANG5;//合成五階段需要的娃娃數量
-    public static List<Integer> DOLL1 = new ArrayList<Integer>();//倉庫封包判定1階段
-    public static List<Integer> DOLL2 = new ArrayList<Integer>();//倉庫封包判定2階段
-    public static List<Integer> DOLL3 = new ArrayList<Integer>();//倉庫封包判定3階段
-    public static List<Integer> DOLL4 = new ArrayList<Integer>();//倉庫封包判定4階段
+    public static List<Integer> DOLL1 = new ArrayList<>();//倉庫封包判定1階段
+    public static List<Integer> DOLL2 = new ArrayList<>();//倉庫封包判定2階段
+    public static List<Integer> DOLL3 = new ArrayList<>();//倉庫封包判定3階段
+    public static List<Integer> DOLL4 = new ArrayList<>();//倉庫封包判定4階段
 
     public static void load() throws ConfigErrorException {
         final PerformanceTimer timer = new PerformanceTimer();
         final Properties set = new Properties();
         try {
-            InputStream is = new FileInputStream(new File(ALT_SETTINGS_FILE));
+            InputStream is = Files.newInputStream(new File(ALT_SETTINGS_FILE).toPath());
             InputStreamReader isr = new InputStreamReader(is, "utf-8");
             set.load(isr);
             is.close();

@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public final class ExtraAttrWeaponTable {
     private static final Log _log = LogFactory.getLog(ExtraAttrWeaponTable.class);
-    private static final Map<Integer, L1AttrWeapon> _attrList = new LinkedHashMap<Integer, L1AttrWeapon>();
+    private static final Map<Integer, L1AttrWeapon> _attrList = new LinkedHashMap<>();
     private static ExtraAttrWeaponTable _instance;
 
     public static ExtraAttrWeaponTable getInstance() {
@@ -35,7 +35,7 @@ public final class ExtraAttrWeaponTable {
         return _instance;
     }
 
-    public final void load() {
+    public void load() {
         PerformanceTimer timer = new PerformanceTimer();
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -73,7 +73,7 @@ public final class ExtraAttrWeaponTable {
                 int extrabowdmg = rs.getInt("額外遠距離傷害");
                 L1AttrWeapon attrWeapon = new L1AttrWeapon(name, stage, chance, probability, type_bind, type_drain_hp, type_drain_mp, type_dmgup, type_range, type_range_dmg, type_light_dmg, type_skill_1, type_skill_2, type_skill_3, type_skill_time, type_poly_list, type_remove_weapon, type_remove_doll, type_remove_armor, extradmg, extrabowdmg);
                 int index = id * 100 + stage;
-                _attrList.put(Integer.valueOf(index), attrWeapon);
+                _attrList.put(index, attrWeapon);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -85,9 +85,9 @@ public final class ExtraAttrWeaponTable {
         _log.info("讀取->特殊屬性武器[DB化]系統數量: " + _attrList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final L1AttrWeapon get(int id, int stage) {
+    public L1AttrWeapon get(int id, int stage) {
         int index = id * 100 + stage;
-        return (L1AttrWeapon) _attrList.get(Integer.valueOf(index));
+        return (L1AttrWeapon) _attrList.get(index);
     }
 }
 /*

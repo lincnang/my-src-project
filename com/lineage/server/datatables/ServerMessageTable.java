@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class ServerMessageTable {
     private static final Log _log = LogFactory.getLog(ServerMessageTable.class);
     private static ServerMessageTable _instance;
-    private final HashMap<Integer, L1ServerMessage> _msgList = new HashMap<Integer, L1ServerMessage>();
+    private final HashMap<Integer, L1ServerMessage> _msgList = new HashMap<>();
 
     private ServerMessageTable() {
         load();
@@ -49,7 +49,7 @@ public class ServerMessageTable {
                 msg._show = show;
                 msg._message = message;
 
-                this._msgList.put(Integer.valueOf(id), msg);
+                this._msgList.put(id, msg);
             }
         } catch (SQLException e) {
             _log.error("error while creating server_message table", e);
@@ -62,31 +62,31 @@ public class ServerMessageTable {
     }
 
     public boolean checkMsg(int id) {
-        if (!this._msgList.containsKey(Integer.valueOf(id))) {
+        if (!this._msgList.containsKey(id)) {
             return false;
         }
-        if (!((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._show) {
+        if (!((L1ServerMessage) this._msgList.get(id))._show) {
             return false;
         }
 
-        return !((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message.isEmpty();
+        return !((L1ServerMessage) this._msgList.get(id))._message.isEmpty();
     }
 
     public String getMsg(int id) {
-        return ((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message;
+        return ((L1ServerMessage) this._msgList.get(id))._message;
     }
 
     public void showServerMsg(int id, L1PcInstance pc) {
         if (checkMsg(id))
             if (pc == null)
-                World.get().broadcastPacketToAll(new S_ServerMessage(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message));
+                World.get().broadcastPacketToAll(new S_ServerMessage(((L1ServerMessage) this._msgList.get(id))._message));
             else
-                pc.sendPackets(new S_ServerMessage(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message));
+                pc.sendPackets(new S_ServerMessage(((L1ServerMessage) this._msgList.get(id))._message));
     }
 
     public void showServerMsg(int id, String s1, L1PcInstance pc) {
         if (checkMsg(id)) {
-            String out = String.format(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message, new Object[]{s1});
+            String out = String.format(((L1ServerMessage) this._msgList.get(id))._message, new Object[]{s1});
             if (pc == null)
                 World.get().broadcastPacketToAll(new S_ServerMessage(out));
             else
@@ -96,7 +96,7 @@ public class ServerMessageTable {
 
     public void showServerMsg1(int id, String s1, L1PcInstance pc) {
         if (checkMsg(id)) {
-            String out = String.format(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message, new Object[]{s1});
+            String out = String.format(((L1ServerMessage) this._msgList.get(id))._message, new Object[]{s1});
             if (pc == null)
                 World.get().broadcastPacketToAll(new S_PacketBoxGree(out));
             else
@@ -106,7 +106,7 @@ public class ServerMessageTable {
 
     public void showServerMsg(int id, String s1, String s2, L1PcInstance pc) {
         if (checkMsg(id)) {
-            String out = String.format(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message, new Object[]{s1, s2});
+            String out = String.format(((L1ServerMessage) this._msgList.get(id))._message, new Object[]{s1, s2});
             if (pc == null)
                 World.get().broadcastPacketToAll(new S_ServerMessage(out));
             else
@@ -116,7 +116,7 @@ public class ServerMessageTable {
 
     public void showServerMsg(int id, String s1, String s2, String s3, L1PcInstance pc) {
         if (checkMsg(id)) {
-            String out = String.format(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message, new Object[]{s1, s2, s3});
+            String out = String.format(((L1ServerMessage) this._msgList.get(id))._message, new Object[]{s1, s2, s3});
             if (pc == null)
                 World.get().broadcastPacketToAll(new S_ServerMessage(out));
             else
@@ -126,7 +126,7 @@ public class ServerMessageTable {
 
     public void showServerMsg(int id, int s1, L1PcInstance pc) {
         if (checkMsg(id)) {
-            String out = String.format(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message, new Object[]{String.valueOf(s1)});
+            String out = String.format(((L1ServerMessage) this._msgList.get(id))._message, new Object[]{String.valueOf(s1)});
             if (pc == null)
                 World.get().broadcastPacketToAll(new S_ServerMessage(out));
             else
@@ -136,7 +136,7 @@ public class ServerMessageTable {
 
     public void showServerMsg(int id, int s1, int s2, L1PcInstance pc) {
         if (checkMsg(id)) {
-            String out = String.format(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message, new Object[]{String.valueOf(s1), String.valueOf(s2)});
+            String out = String.format(((L1ServerMessage) this._msgList.get(id))._message, new Object[]{String.valueOf(s1), String.valueOf(s2)});
             if (pc == null)
                 World.get().broadcastPacketToAll(new S_ServerMessage(out));
             else
@@ -146,7 +146,7 @@ public class ServerMessageTable {
 
     public void showServerMsg(int id, String s1, int s2, L1PcInstance pc) {
         if (checkMsg(id)) {
-            String out = String.format(((L1ServerMessage) this._msgList.get(Integer.valueOf(id)))._message, new Object[]{s1, String.valueOf(s2)});
+            String out = String.format(((L1ServerMessage) this._msgList.get(id))._message, new Object[]{s1, String.valueOf(s2)});
             if (pc == null)
                 World.get().broadcastPacketToAll(new S_ServerMessage(out));
             else

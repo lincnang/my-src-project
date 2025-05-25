@@ -74,7 +74,7 @@ public class S_CraftContent extends ServerBasePacket {
             final int length = makeItemAction.getCraftPolyList().size();
             bao.a(8, (length));
             for (final Integer polyId : polyIds) {
-                bao.a(16, (polyId.intValue()));
+                bao.a(16, (polyId));
             }
         } else {
             bao.a(8, 0L);
@@ -99,8 +99,8 @@ public class S_CraftContent extends ServerBasePacket {
             bao.a(10, a(index, objectAmount));
             substituteMaterials = objectAmount.getAmountList();
             if (substituteMaterials != null) {
-                for (final Iterator<L1ObjectAmount<Integer>> localIterator2 = substituteMaterials.iterator(); localIterator2.hasNext(); ) {
-                    substituteObjectAmount = localIterator2.next();
+                for (L1ObjectAmount<Integer> substituteMaterial : substituteMaterials) {
+                    substituteObjectAmount = substituteMaterial;
                     bao.a(10, a(index, substituteObjectAmount));
                 }
             }
@@ -122,7 +122,7 @@ public class S_CraftContent extends ServerBasePacket {
 
     public byte[] a(final int index, final L1ObjectAmount<Integer> objectAmount) throws IOException {
         final S_CraftContent bao = new S_CraftContent();
-        final int itemId = objectAmount.getObject().intValue();
+        final int itemId = objectAmount.getObject();
         final L1ItemInstance item = ItemTable.get().createItem(itemId, false);
         if (item != null) {
             bao.a(8, (item.getItem().getItemDescId()));
@@ -170,7 +170,7 @@ public class S_CraftContent extends ServerBasePacket {
 
     public byte[] a(final L1ObjectAmount<Integer> objectAmount) throws IOException {
         final S_CraftContent bao = new S_CraftContent();
-        final int itemId = objectAmount.getObject().intValue();
+        final int itemId = objectAmount.getObject();
         final L1ItemInstance item = ItemTable.get().createItem(itemId, false);
         if (item != null) {
             bao.a(8, (item.getItem().getItemDescId()));

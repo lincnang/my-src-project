@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -36,7 +37,7 @@ public final class ConfigCharSetting {
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            InputStream is = new FileInputStream(new File(CHAR_SETTINGS_CONFIG_FILE));
+            InputStream is = Files.newInputStream(new File(CHAR_SETTINGS_CONFIG_FILE).toPath());
             set.load(is);
             is.close();
             PRINCE_MAX_HP = Integer.parseInt(set.getProperty("Prince_Max_HP", "1000"));

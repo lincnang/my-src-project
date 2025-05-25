@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SkillTeacherSet extends EventExecutor {
-    public static final Map<Integer, Integer> RESKILLLIST = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> RESKILLLIST = new HashMap<>();
 
     public static EventExecutor get() {
         return new SkillTeacherSet();
@@ -16,7 +16,7 @@ public class SkillTeacherSet extends EventExecutor {
     public void execute(L1Event event) {
         String[] set = event.get_eventother().split(",");
         for (String string : set) {
-            RESKILLLIST.put(Integer.valueOf(Integer.parseInt(string) - 1), Integer.valueOf(Integer.parseInt(string)));
+            RESKILLLIST.put(Integer.parseInt(string) - 1, Integer.parseInt(string));
         }
     }
 }

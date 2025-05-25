@@ -73,9 +73,7 @@ public class W_SK0020 extends L1WeaponSkillType {
 
     private void scheduleBuffRemoval(L1PcInstance target) {
         // 若目標已死亡或其他情況需要取消定時任務，需適當改進此部分
-        ScheduledFuture<?> future = scheduler.schedule(() -> {
-            removeHitBuff(target);
-        }, DEBUFF_DURATION, TimeUnit.MILLISECONDS);
+        ScheduledFuture<?> future = scheduler.schedule(() -> removeHitBuff(target), DEBUFF_DURATION, TimeUnit.MILLISECONDS);
 
         effectTasks.put(target.getId(), future);
     }

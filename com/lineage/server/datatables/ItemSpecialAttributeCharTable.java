@@ -24,7 +24,7 @@ import java.util.HashMap;
  */
 public class ItemSpecialAttributeCharTable {
     private static final Log _log = LogFactory.getLog(ItemSpecialAttributeCharTable.class);
-    private static final HashMap<Integer, L1ItemSpecialAttributeChar> _AtrrCharList = new HashMap<Integer, L1ItemSpecialAttributeChar>();
+    private static final HashMap<Integer, L1ItemSpecialAttributeChar> _AtrrCharList = new HashMap<>();
     private static ItemSpecialAttributeCharTable _instance;
 
     public static ItemSpecialAttributeCharTable get() {
@@ -77,7 +77,7 @@ public class ItemSpecialAttributeCharTable {
                 attr_char.set_Acquisition_mode(Acquisition_mode);
                 addValue(itemobjid, attr_char);
                 i++;
-                _AtrrCharList.put(Integer.valueOf(itemobjid), attr_char);
+                _AtrrCharList.put(itemobjid, attr_char);
             }
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

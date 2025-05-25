@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public final class ExtraMagicWeaponTable {
     private static final Log _log = LogFactory.getLog(ExtraMagicWeaponTable.class);
-    private static final Map<Integer, L1MagicWeapon> _magicList = new HashMap<Integer, L1MagicWeapon>();
+    private static final Map<Integer, L1MagicWeapon> _magicList = new HashMap<>();
     private static ExtraMagicWeaponTable _instance;
 
     public static ExtraMagicWeaponTable getInstance() {
@@ -37,7 +37,7 @@ public final class ExtraMagicWeaponTable {
         return _instance;
     }
 
-    public final void load() {
+    public void load() {
         final PerformanceTimer timer = new PerformanceTimer();
         Connection con = null;
         PreparedStatement pstm = null;
@@ -63,7 +63,7 @@ public final class ExtraMagicWeaponTable {
                 String gfxIdOtherLocStr = rs.getString("額外發動特效座標");
                 List<int[]> gfxIdOtherLoc = null;
                 if (gfxIdOtherLocStr != null && !gfxIdOtherLocStr.isEmpty()) {
-                    gfxIdOtherLoc = new ArrayList<int[]>();
+                    gfxIdOtherLoc = new ArrayList<>();
                     gfxIdOtherLocStr = gfxIdOtherLocStr.replace(" ", "");
                     for (final String value : gfxIdOtherLocStr.split(",")) {
                         final String[] value2 = value.split("/");
@@ -92,7 +92,7 @@ public final class ExtraMagicWeaponTable {
         _log.info("讀取->[系統]_武器附魔資料數量: " + _magicList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final L1MagicWeapon get(final int id) {
+    public L1MagicWeapon get(final int id) {
         return _magicList.get(id);
     }
 }

@@ -23,7 +23,7 @@ public class RewardAcTable {
     // 獎勵系統是否啓動的標誌
     public static boolean START = false;
     // 用於儲存從資料庫讀取的防禦等級獎勵訊息的列表，每個元素是一個包含獎勵訊息的ArrayList
-    private static ArrayList<ArrayList<Object>> _array = new ArrayList<ArrayList<Object>>();
+    private static ArrayList<ArrayList<Object>> _array = new ArrayList<>();
     // 單例模式的實例變數
     private static RewardAcTable _instance;
 
@@ -67,73 +67,73 @@ public class RewardAcTable {
         int min = 0;
         for (int max = 0; i < _array.size(); i++) { // 遍歷所有獎勵資料
             aTempData = _array.get(i);
-            min = ((Integer) aTempData.get(0)).intValue(); // 取得最小防禦等級
-            max = ((Integer) aTempData.get(1)).intValue(); // 取得最大防禦等級
+            min = (Integer) aTempData.get(0); // 取得最小防禦等級
+            max = (Integer) aTempData.get(1); // 取得最大防禦等級
 
             // 根據玩家職業和防禦等級判斷是否符合條件併發放獎勵
             // 王族
-            if ((pc.isCrown()) && (ac <= min) && (ac >= max) && (((Integer) aTempData.get(2)).intValue() != 0)) {
-                if (((Integer) aTempData.get(10)).intValue() != 0) {
-                    data[0] += ((Integer) aTempData.get(10)).intValue();
+            if ((pc.isCrown()) && (ac <= min) && (ac >= max) && ((Integer) aTempData.get(2) != 0)) {
+                if ((Integer) aTempData.get(10) != 0) {
+                    data[0] += (Integer) aTempData.get(10);
                 }
-                if (((Integer) aTempData.get(11)).intValue() != 0) {
-                    data[1] += ((Integer) aTempData.get(11)).intValue();
+                if ((Integer) aTempData.get(11) != 0) {
+                    data[1] += (Integer) aTempData.get(11);
                 }
                 // 騎士
-            } else if ((pc.isKnight()) && (ac <= min) && (ac >= max) && (((Integer) aTempData.get(3)).intValue() != 0)) {
-                if (((Integer) aTempData.get(10)).intValue() != 0) {
-                    data[0] += ((Integer) aTempData.get(10)).intValue();
+            } else if ((pc.isKnight()) && (ac <= min) && (ac >= max) && ((Integer) aTempData.get(3) != 0)) {
+                if ((Integer) aTempData.get(10) != 0) {
+                    data[0] += (Integer) aTempData.get(10);
                 }
-                if (((Integer) aTempData.get(11)).intValue() != 0) {
-                    data[1] += ((Integer) aTempData.get(11)).intValue();
+                if ((Integer) aTempData.get(11) != 0) {
+                    data[1] += (Integer) aTempData.get(11);
                 }
                 // 法師
-            } else if ((pc.isWizard()) && (ac <= min) && (ac >= max) && (((Integer) aTempData.get(4)).intValue() != 0)) {
-                if (((Integer) aTempData.get(10)).intValue() != 0) {
-                    data[0] += ((Integer) aTempData.get(10)).intValue();
+            } else if ((pc.isWizard()) && (ac <= min) && (ac >= max) && ((Integer) aTempData.get(4) != 0)) {
+                if ((Integer) aTempData.get(10) != 0) {
+                    data[0] += (Integer) aTempData.get(10);
                 }
-                if (((Integer) aTempData.get(11)).intValue() != 0) {
-                    data[1] += ((Integer) aTempData.get(11)).intValue();
+                if ((Integer) aTempData.get(11) != 0) {
+                    data[1] += (Integer) aTempData.get(11);
                 }
                 // 精靈
-            } else if ((pc.isElf()) && (ac <= min) && (ac >= max) && (((Integer) aTempData.get(5)).intValue() != 0)) {
-                if (((Integer) aTempData.get(10)).intValue() != 0) {
-                    data[0] += ((Integer) aTempData.get(10)).intValue();
+            } else if ((pc.isElf()) && (ac <= min) && (ac >= max) && ((Integer) aTempData.get(5) != 0)) {
+                if ((Integer) aTempData.get(10) != 0) {
+                    data[0] += (Integer) aTempData.get(10);
                 }
-                if (((Integer) aTempData.get(11)).intValue() != 0) {
-                    data[1] += ((Integer) aTempData.get(11)).intValue();
+                if ((Integer) aTempData.get(11) != 0) {
+                    data[1] += (Integer) aTempData.get(11);
                 }
                 // 黑暗妖精
-            } else if ((pc.isDarkelf()) && (ac <= min) && (ac >= max) && (((Integer) aTempData.get(6)).intValue() != 0)) {
-                if (((Integer) aTempData.get(10)).intValue() != 0) {
-                    data[0] += ((Integer) aTempData.get(10)).intValue();
+            } else if ((pc.isDarkelf()) && (ac <= min) && (ac >= max) && ((Integer) aTempData.get(6) != 0)) {
+                if ((Integer) aTempData.get(10) != 0) {
+                    data[0] += (Integer) aTempData.get(10);
                 }
-                if (((Integer) aTempData.get(11)).intValue() != 0) {
-                    data[1] += ((Integer) aTempData.get(11)).intValue();
+                if ((Integer) aTempData.get(11) != 0) {
+                    data[1] += (Integer) aTempData.get(11);
                 }
                 // 龍騎士
-            } else if ((pc.isDragonKnight()) && (ac <= min) && (ac >= max) && (((Integer) aTempData.get(7)).intValue() != 0)) {
-                if (((Integer) aTempData.get(10)).intValue() != 0) {
-                    data[0] += ((Integer) aTempData.get(10)).intValue();
+            } else if ((pc.isDragonKnight()) && (ac <= min) && (ac >= max) && ((Integer) aTempData.get(7) != 0)) {
+                if ((Integer) aTempData.get(10) != 0) {
+                    data[0] += (Integer) aTempData.get(10);
                 }
-                if (((Integer) aTempData.get(11)).intValue() != 0) {
-                    data[1] += ((Integer) aTempData.get(11)).intValue();
+                if ((Integer) aTempData.get(11) != 0) {
+                    data[1] += (Integer) aTempData.get(11);
                 }
                 // 幻術士
-            } else if ((pc.isIllusionist()) && (ac <= min) && (ac >= max) && (((Integer) aTempData.get(8)).intValue() != 0)) {
-                if (((Integer) aTempData.get(10)).intValue() != 0) {
-                    data[0] += ((Integer) aTempData.get(10)).intValue();
+            } else if ((pc.isIllusionist()) && (ac <= min) && (ac >= max) && ((Integer) aTempData.get(8) != 0)) {
+                if ((Integer) aTempData.get(10) != 0) {
+                    data[0] += (Integer) aTempData.get(10);
                 }
-                if (((Integer) aTempData.get(11)).intValue() != 0) {
-                    data[1] += ((Integer) aTempData.get(11)).intValue();
+                if ((Integer) aTempData.get(11) != 0) {
+                    data[1] += (Integer) aTempData.get(11);
                 }
                 // 戰士
-            } else if ((pc.isWarrior()) && (ac <= min) && (ac >= max) && (((Integer) aTempData.get(9)).intValue() != 0)) {
-                if (((Integer) aTempData.get(10)).intValue() != 0) {
-                    data[0] += ((Integer) aTempData.get(10)).intValue();
+            } else if ((pc.isWarrior()) && (ac <= min) && (ac >= max) && ((Integer) aTempData.get(9) != 0)) {
+                if ((Integer) aTempData.get(10) != 0) {
+                    data[0] += (Integer) aTempData.get(10);
                 }
-                if (((Integer) aTempData.get(11)).intValue() != 0) {
-                    data[1] += ((Integer) aTempData.get(11)).intValue();
+                if ((Integer) aTempData.get(11) != 0) {
+                    data[1] += (Integer) aTempData.get(11);
                 }
             }
         }
@@ -204,21 +204,21 @@ public class RewardAcTable {
             rset = ps.executeQuery("SELECT * FROM 系統_強化自身防禦加乘"); // 執行查詢語句
 
             while (rset.next()) { // 遍歷結果集
-                final ArrayList<Object> aReturn = new ArrayList<Object>(); // 建立一個新的ArrayList用於儲存每條記錄的資料
+                final ArrayList<Object> aReturn = new ArrayList<>(); // 建立一個新的ArrayList用於儲存每條記錄的資料
 
                 // 將查詢結果存入ArrayList
-                aReturn.add(0, new Integer(rset.getInt("MinAc"))); // 最小AC值
-                aReturn.add(1, new Integer(rset.getInt("MaxAc"))); // 最大AC值
-                aReturn.add(2, new Integer(rset.getInt("Give_Royal"))); // 王族獎勵
-                aReturn.add(3, new Integer(rset.getInt("Give_Knight"))); // 騎士獎勵
-                aReturn.add(4, new Integer(rset.getInt("Give_Mage"))); // 法師獎勵
-                aReturn.add(5, new Integer(rset.getInt("Give_Elf"))); // 精靈獎勵
-                aReturn.add(6, new Integer(rset.getInt("Give_Darkelf"))); // 黑暗妖精獎勵
-                aReturn.add(7, new Integer(rset.getInt("Give_DragonKnight"))); // 龍騎士獎勵
-                aReturn.add(8, new Integer(rset.getInt("Give_Illusionist"))); // 幻術士獎勵
-                aReturn.add(9, new Integer(rset.getInt("Give_Warrior"))); // 戰士獎勵
-                aReturn.add(10, new Integer(rset.getInt("ReductionDmg"))); // 物理傷害減免
-                aReturn.add(11, new Integer(rset.getInt("MagicReductionDmg"))); // 魔法傷害減免
+                aReturn.add(0, rset.getInt("MinAc")); // 最小AC值
+                aReturn.add(1, rset.getInt("MaxAc")); // 最大AC值
+                aReturn.add(2, rset.getInt("Give_Royal")); // 王族獎勵
+                aReturn.add(3, rset.getInt("Give_Knight")); // 騎士獎勵
+                aReturn.add(4, rset.getInt("Give_Mage")); // 法師獎勵
+                aReturn.add(5, rset.getInt("Give_Elf")); // 精靈獎勵
+                aReturn.add(6, rset.getInt("Give_Darkelf")); // 黑暗妖精獎勵
+                aReturn.add(7, rset.getInt("Give_DragonKnight")); // 龍騎士獎勵
+                aReturn.add(8, rset.getInt("Give_Illusionist")); // 幻術士獎勵
+                aReturn.add(9, rset.getInt("Give_Warrior")); // 戰士獎勵
+                aReturn.add(10, rset.getInt("ReductionDmg")); // 物理傷害減免
+                aReturn.add(11, rset.getInt("MagicReductionDmg")); // 魔法傷害減免
                 _array.add(aReturn); // 將每條記錄的ArrayList添加到主列表中
             }
 

@@ -61,7 +61,7 @@ public class C_ClientReady extends ClientBasePacket {
      *
      * @return 傳出標準時間格式 yyyy/MM/dd HH:mm:ss
      */
-    private final String getNow_YMDHMS() {
+    private String getNow_YMDHMS() {
         final String nowDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
         return nowDate;
     }

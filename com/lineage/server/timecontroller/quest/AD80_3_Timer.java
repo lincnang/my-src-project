@@ -49,8 +49,8 @@ public final class AD80_3_Timer extends TimerTask {
                             if (++_counter >= 45) {
                                 _counter = 0;
                                 boolean check_spawn = false;
-                                for (Iterator<?> localIterator2 = quest.npcList().iterator(); localIterator2.hasNext(); ) {
-                                    check_npc = (L1NpcInstance) localIterator2.next();
+                                for (L1NpcInstance l1NpcInstance : quest.npcList()) {
+                                    check_npc = l1NpcInstance;
                                     if (check_npc.getNpcId() == 97210) {// 烏雲大精靈
                                         check_spawn = true;
                                         break;

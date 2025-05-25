@@ -50,14 +50,14 @@ public class L1TownLocation {
     private static final Point[] GETBACK_LOC_PIRATE_ISLAND = {new Point(32431, 33058), new Point(32407, 33054),};
     private static final Point[] GETBACK_LOC_RECLUSE_VILLAGE = {new Point(32599, 32916), new Point(32599, 32923), new Point(32603, 32908), new Point(32595, 32908), new Point(32591, 32918),};
 
-    public static final boolean isGambling(L1PcInstance pc) {
+    public static boolean isGambling(L1PcInstance pc) {
         int x = pc.getX();
         int y = pc.getY();
         short m = pc.getMapId();
         return isGambling(x, y, m);
     }
 
-    public static final boolean isGambling(int x, int y, short map) {
+    public static boolean isGambling(int x, int y, short map) {
         if (map == 4) {
             if ((x > 33469) && (x < 33528) && (y > 32837) && (y < 32848)) {
                 return true;

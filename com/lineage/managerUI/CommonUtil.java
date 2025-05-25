@@ -64,7 +64,7 @@ public class CommonUtil {
      */
     public static void SetTodayDeleteTime(L1ItemInstance item, int minute) {
         Timestamp deleteTime = null;
-        deleteTime = new Timestamp(System.currentTimeMillis() + (60000 * minute));
+        deleteTime = new Timestamp(System.currentTimeMillis() + (60000L * minute));
         item.set_time(deleteTime);
     }
 
@@ -82,7 +82,7 @@ public class CommonUtil {
             time = (23 - hour) * 60 + (60 - minute) - 60 + (24 * 60);
         }
         Timestamp deleteTime = null;
-        deleteTime = new Timestamp(System.currentTimeMillis() + (60000 * time));
+        deleteTime = new Timestamp(System.currentTimeMillis() + (60000L * time));
         item.set_time(deleteTime);
     }
 

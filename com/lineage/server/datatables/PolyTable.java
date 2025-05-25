@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class PolyTable {
     private static final Log _log = LogFactory.getLog(PolyTable.class);
-    private static final Map<String, L1PolyMorph> _polymorphs = new HashMap<String, L1PolyMorph>();
-    private static final Map<Integer, L1PolyMorph> _polyIdIndex = new HashMap<Integer, L1PolyMorph>();
+    private static final Map<String, L1PolyMorph> _polymorphs = new HashMap<>();
+    private static final Map<Integer, L1PolyMorph> _polyIdIndex = new HashMap<>();
     private static PolyTable _instance;
 
     public static PolyTable get() {
@@ -60,7 +60,7 @@ public class PolyTable {
             int questid = rs.getInt("開通任務編號");
             L1PolyMorph poly = new L1PolyMorph(id, name, polyId, minLevel, weaponEquipFlg, armorEquipFlg, canUseSkill, causeFlg, questid);
             _polymorphs.put(name, poly);
-            _polyIdIndex.put(Integer.valueOf(polyId), poly);
+            _polyIdIndex.put(polyId, poly);
         }
     }
 
@@ -69,7 +69,7 @@ public class PolyTable {
     }
 
     public L1PolyMorph getTemplate(int polyId) {
-        return (L1PolyMorph) _polyIdIndex.get(Integer.valueOf(polyId));
+        return (L1PolyMorph) _polyIdIndex.get(polyId);
     }
 }
 /*

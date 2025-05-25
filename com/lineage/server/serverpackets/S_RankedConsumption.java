@@ -14,8 +14,8 @@ public class S_RankedConsumption extends ServerBasePacket {
         writeC(5);
         writeD(T_RankTable._basedTime);
         writeD(wealthConsumptionRanked.size());
-        for (int i = 0; i < wealthConsumptionRanked.size(); i++) {
-            writeS(wealthConsumptionRanked.get(i));
+        for (String s : wealthConsumptionRanked) {
+            writeS(s);
         }
     }
 

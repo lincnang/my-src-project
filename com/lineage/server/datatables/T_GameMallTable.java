@@ -20,8 +20,8 @@ public class T_GameMallTable {
     public static final int _unit = 44070;
     private static final Log _log = LogFactory.getLog(T_GameMallTable.class);
     private static T_GameMallTable _instance;
-    private final HashMap<Integer, T_GameMallModel> _mallList = new HashMap<Integer, T_GameMallModel>();
-    private final ArrayList<ServerBasePacket> _paketList = new ArrayList<ServerBasePacket>();
+    private final HashMap<Integer, T_GameMallModel> _mallList = new HashMap<>();
+    private final ArrayList<ServerBasePacket> _paketList = new ArrayList<>();
 
     private T_GameMallTable() {
         final PerformanceTimer timer = new PerformanceTimer();
@@ -54,7 +54,7 @@ public class T_GameMallTable {
                         item.setEnchantLevel(enchantLevel);
                         item.setBless(bless);
                         model = new T_GameMallModel(id, item, shopItemDesc, itemPrice, itemSort, newItem, vipLevel, hotItem);
-                        _mallList.put(Integer.valueOf(id), model);
+                        _mallList.put(id, model);
                     }
                 }
             }
@@ -131,7 +131,7 @@ public class T_GameMallTable {
                         item.setEnchantLevel(enchantLevel);
                         item.setBless(bless);
                         model = new T_GameMallModel(id, item, shopItemDesc, itemPrice, itemSort, newItem, vipLevel, hotItem);
-                        _mallList.put(Integer.valueOf(id), model);
+                        _mallList.put(id, model);
                     }
                 }
             }
@@ -190,7 +190,7 @@ public class T_GameMallTable {
             int page = 0;
             final int modelSize = _mallList.size();
             final int sumPage = (modelSize % 127) == 0 ? modelSize / 127 : (modelSize / 127) + 1;
-            final HashMap<Integer, T_GameMallModel> pageBuff = new HashMap<Integer, T_GameMallModel>();
+            final HashMap<Integer, T_GameMallModel> pageBuff = new HashMap<>();
             for (final T_GameMallModel gameMallModel : allValues) {
                 pageBuff.put(gameMallModel.getMallId(), gameMallModel);
                 index++;

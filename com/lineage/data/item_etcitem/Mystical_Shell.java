@@ -18,8 +18,7 @@ public class Mystical_Shell extends ItemExecutor {
     public void execute(int[] data, L1PcInstance pc, L1ItemInstance item) {
         if ((pc.isElf()) && (pc.getX() >= 33971) && (pc.getX() <= 33975) && (pc.getY() >= 32324) && (pc.getY() <= 32328) && (pc.getMapId() == 4)) {
             boolean found = false;
-            for (Iterator<L1MonsterInstance> iter = WorldMob.get().all().iterator(); iter.hasNext(); ) {
-                L1MonsterInstance mob = (L1MonsterInstance) iter.next();
+            for (L1MonsterInstance mob : WorldMob.get().all()) {
                 if ((mob != null) && (mob.getNpcTemplate().get_npcId() == 45300)) {
                     found = true;
                     break;

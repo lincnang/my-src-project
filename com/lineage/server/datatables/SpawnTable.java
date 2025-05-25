@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class SpawnTable {
     private static final Log _log = LogFactory.getLog(SpawnTable.class);
-    private static final Map<Integer, L1Spawn> _spawntable = new HashMap<Integer, L1Spawn>();
+    private static final Map<Integer, L1Spawn> _spawntable = new HashMap<>();
     private static SpawnTable _instance;
 
     public static SpawnTable get() {

@@ -58,7 +58,7 @@ public class Npc_Dilong extends NpcExecutor {
             // 取回進入時間限制
             final Integer time = QuestMapTable.get().getTime(mapid);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             final ArrayList<L1NpcInstance> npcs = quest.npcList(81109);// 骷髏
             if (npcs != null) {

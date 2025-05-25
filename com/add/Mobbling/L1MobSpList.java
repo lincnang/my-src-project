@@ -12,8 +12,8 @@ import java.util.ArrayList;
 public class L1MobSpList {
     private static MobblingTimeList _Mob = MobblingTimeList.Mob();
     private final L1PcInstance _pc;
-    private final ArrayList<int[]> _MobList = new ArrayList<int[]>();
-    private final ArrayList<L1ItemInstance> _MobSellList = new ArrayList<L1ItemInstance>();
+    private final ArrayList<int[]> _MobList = new ArrayList<>();
+    private final ArrayList<L1ItemInstance> _MobSellList = new ArrayList<>();
 
     public L1MobSpList(L1PcInstance pc) {
         this._pc = pc;
@@ -129,6 +129,7 @@ public class L1MobSpList {
         for (L1ItemInstance chItem : this._MobSellList) {
             if (chItem == MobItem) {
                 isOk = true;
+                break;
             }
         }
         if (!(isOk)) {

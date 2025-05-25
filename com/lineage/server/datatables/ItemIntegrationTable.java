@@ -28,7 +28,7 @@ public class ItemIntegrationTable {
     private static final Log _log = LogFactory.getLog(ItemIntegrationTable.class);
     private final static Random random = new Random();
     // private static final String TOKEN = ",";
-    private static HashMap<Integer, ItemIntegration> _array = new HashMap<Integer, ItemIntegration>();
+    private static HashMap<Integer, ItemIntegration> _array = new HashMap<>();
     private static ItemIntegrationTable _instance;
 
     private ItemIntegrationTable() {

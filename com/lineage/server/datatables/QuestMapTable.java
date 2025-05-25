@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class QuestMapTable {
     private static final Log _log = LogFactory.getLog(QuestMapTable.class);
-    private static final Map<Integer, Integer> _mapList = new HashMap<Integer, Integer>();
-    private static final Map<Integer, Integer> _timeList = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _mapList = new HashMap<>();
+    private static final Map<Integer, Integer> _timeList = new HashMap<>();
     private static QuestMapTable _instance;
 
     public static QuestMapTable get() {
@@ -39,9 +39,9 @@ public class QuestMapTable {
                 int mapid = rs.getInt("mapid");
                 int time = rs.getInt("time");
                 int users = rs.getInt("users");
-                _mapList.put(new Integer(mapid), new Integer(users));
+                _mapList.put(mapid, users);
                 if (time > 0) {
-                    _timeList.put(new Integer(mapid), new Integer(time));
+                    _timeList.put(mapid, time);
                 }
             }
             _log.info("讀取->Quest(副本)地圖設置資料數量: " + _mapList.size() + "(" + timer.get() + "ms)");
@@ -55,18 +55,18 @@ public class QuestMapTable {
     }
 
     public boolean isQuestMap(int mapid) {
-        return _mapList.get(new Integer(mapid)) != null;
+        return _mapList.get(mapid) != null;
     }
 
     public int getTemplate(int mapid) {
-        if (_mapList.get(new Integer(mapid)) != null) {
-            return ((Integer) _mapList.get(new Integer(mapid))).intValue();
+        if (_mapList.get(mapid) != null) {
+            return (Integer) _mapList.get(mapid);
         }
         return -1;
     }
 
     public Integer getTime(int mapid) {
-        return (Integer) _timeList.get(new Integer(mapid));
+        return (Integer) _timeList.get(mapid);
     }
 
     public Map<Integer, Integer> getList() {

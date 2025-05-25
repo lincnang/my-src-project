@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class NpcBoxTable {
     private static final Log _log = LogFactory.getLog(NpcBoxTable.class);
-    private static final Map<Integer, L1NpcBox> _datatable = new HashMap<Integer, L1NpcBox>();
+    private static final Map<Integer, L1NpcBox> _datatable = new HashMap<>();
     private static NpcBoxTable _instance;
 
     public static NpcBoxTable get() {
@@ -61,7 +61,7 @@ public class NpcBoxTable {
                     /**開出怪物的NpcId列表 (可用逗號區隔)*/
                     final String npc_list = rs.getString("開出怪物編號");
                     if (npc_list != null && !npc_list.isEmpty()) {
-                        mobNpcIdList = new ArrayList<Integer>();
+                        mobNpcIdList = new ArrayList<>();
                         for (final String each : npc_list.split(",")) {
                             mobNpcIdList.add(Integer.parseInt(each));
                         }
@@ -72,7 +72,7 @@ public class NpcBoxTable {
                     final int mobchance = rs.getInt("開出怪物機率");
                     final int mobtime = rs.getInt("存在時間");
                     if (chance.length == itemid.length && itemid.length == count.length) {
-                        createItemBoxes = new ArrayList<L1ItemBox>();
+                        createItemBoxes = new ArrayList<>();
                         createItemBoxes.add(new L1ItemBox(chance, itemid, count, mobchance, mobtime));
                     } else {
                         _log.info("NPC寶箱資料設置異常(道具數據長度不符): " + npcId);

@@ -20,7 +20,7 @@ import java.util.concurrent.ScheduledFuture;
  */
 public class ServerDeleteItemTimer extends TimerTask {
     private static final Log _log = LogFactory.getLog(ServerDeleteItemTimer.class);
-    private static final ArrayList<L1ItemInstance> _itemList = new ArrayList<L1ItemInstance>();
+    private static final ArrayList<L1ItemInstance> _itemList = new ArrayList<>();
     private ScheduledFuture<?> _timer;
 
     public static void add(final L1ItemInstance item) {

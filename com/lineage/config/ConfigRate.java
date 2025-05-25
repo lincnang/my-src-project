@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -42,7 +43,7 @@ public final class ConfigRate {
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            InputStream is = new FileInputStream(new File(RATES_CONFIG_FILE));
+            InputStream is = Files.newInputStream(new File(RATES_CONFIG_FILE).toPath());
             set.load(is);
             is.close();
             RATE_XP = Double.parseDouble(set.getProperty("RateXp", "1.0"));

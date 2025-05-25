@@ -20,7 +20,7 @@ public class WorldSummons {
     private Collection<L1SummonInstance> _allSummonValues;
 
     private WorldSummons() {
-        _isSummons = new ConcurrentHashMap<Integer, L1SummonInstance>();
+        _isSummons = new ConcurrentHashMap<>();
     }
 
     public static WorldSummons get() {

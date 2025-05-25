@@ -86,11 +86,7 @@ public class IceQueenSpawn {
                     // }
                 }
             }
-        } catch (SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (SecurityException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (IllegalArgumentException e) {
+        } catch (SQLException | IllegalArgumentException | SecurityException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
             SQLUtil.close(rs, pstm, con);

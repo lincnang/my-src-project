@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class BeginnerTable {
     public static final Log _log = LogFactory.getLog(BeginnerTable.class);
-    private static final Map<String, ArrayList<L1Beginner>> _beginnerList = new HashMap<String, ArrayList<L1Beginner>>();
+    private static final Map<String, ArrayList<L1Beginner>> _beginnerList = new HashMap<>();
     private static BeginnerTable _instance;
 
     private BeginnerTable() {
@@ -81,7 +81,7 @@ public class BeginnerTable {
         final String key = beginner.get_activate();
         ArrayList<L1Beginner> list = _beginnerList.get(key);
         if (list == null) {
-            list = new ArrayList<L1Beginner>();
+            list = new ArrayList<>();
             list.add(beginner);
         } else {
             list.add(beginner);
@@ -143,7 +143,7 @@ public class BeginnerTable {
                 CharItemsReading.get().storeItem(objid, item);
                 if (beginner.get_time() > 0) {
                     long time = System.currentTimeMillis();// 目前時間豪秒
-                    long x1 = beginner.get_time() * 60 * 60;// 指定小時耗用秒數
+                    long x1 = (long) beginner.get_time() * 60 * 60;// 指定小時耗用秒數
                     long x2 = x1 * 1000;// 轉為豪秒
                     long upTime = x2 + time;// 目前時間 加上指定天數耗用秒數
                     // 時間數據

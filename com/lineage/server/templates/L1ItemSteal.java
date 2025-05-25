@@ -44,39 +44,39 @@ public final class L1ItemSteal {
         _anti_steal_item_id = anti_steal_item_id;
     }
 
-    public final int getItemId() {
+    public int getItemId() {
         return _item_id;
     }
 
-    public final int getLevel() {
+    public int getLevel() {
         return _level;
     }
 
-    public final int getMeteLevel() {
+    public int getMeteLevel() {
         return _mete_level;
     }
 
-    public final int getStealChance() {
+    public int getStealChance() {
         return _steal_chance;
     }
 
-    public final int getMinStealCount() {
+    public int getMinStealCount() {
         return _min_steal_count;
     }
 
-    public final int getMaxStealCount() {
+    public int getMaxStealCount() {
         return _max_steal_count;
     }
 
-    public final boolean isBroadcast() {
+    public boolean isBroadcast() {
         return _is_broadcast;
     }
 
-    public final boolean isDropOnFloor() {
+    public boolean isDropOnFloor() {
         return _drop_on_floor;
     }
 
-    public final int getAntiStealItemId() {
+    public int getAntiStealItemId() {
         return _anti_steal_item_id;
     }
 }

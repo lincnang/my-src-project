@@ -15,14 +15,14 @@ public class OutErrorMsg {
     public static void put(String className, String string, Throwable t) {
         _log.error(string);
         final StringBuilder putInfo = new StringBuilder();
-        putInfo.append(string + "###");
+        putInfo.append(string).append("###");
         StackTraceElement locations[] = t.getStackTrace();
         for (StackTraceElement stackTraceElement : locations) {
 			/*System.out.println("ClassName :"+xxx.getClassName());
 			System.out.println("FileName  :"+xxx.getFileName());
 			System.out.println("LineNumber:"+xxx.getLineNumber());
 			System.out.println("MethodName:"+xxx.getMethodName());*/
-            putInfo.append("   " + stackTraceElement.toString() + "###");
+            putInfo.append("   ").append(stackTraceElement.toString()).append("###");
         }
         overOut(className, putInfo);
     }
@@ -31,7 +31,7 @@ public class OutErrorMsg {
         _log.error(string);
         final StringBuilder putInfo = new StringBuilder();
         final String nowDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
-        putInfo.append(string + "/" + nowDate);
+        putInfo.append(string).append("/").append(nowDate);
         overOut(String.valueOf(oid), putInfo);
     }
 

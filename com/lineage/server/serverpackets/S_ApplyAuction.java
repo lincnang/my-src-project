@@ -20,7 +20,7 @@ public class S_ApplyAuction extends ServerBasePacket {
     }
 
     private void buildPacket(final int objectId, final String houseNumber) {
-        final int number = Integer.valueOf(houseNumber);
+        final int number = Integer.parseInt(houseNumber);
         final L1AuctionBoardTmp board = AuctionBoardReading.get().getAuctionBoardTable(number);
         this.writeC(S_HYPERTEXT_INPUT);
         this.writeD(objectId);

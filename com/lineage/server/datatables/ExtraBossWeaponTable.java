@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public final class ExtraBossWeaponTable {
     private static final Log _log = LogFactory.getLog(ExtraBossWeaponTable.class);
-    private static final Map<Integer, L1BossWeapon> _BossList = new LinkedHashMap<Integer, L1BossWeapon>();
+    private static final Map<Integer, L1BossWeapon> _BossList = new LinkedHashMap<>();
     private static ExtraBossWeaponTable _instance;
 
     public static ExtraBossWeaponTable getInstance() {
@@ -35,7 +35,7 @@ public final class ExtraBossWeaponTable {
         return _instance;
     }
 
-    public final void load() {
+    public void load() {
         PerformanceTimer timer = new PerformanceTimer();
         Connection con = null;
         PreparedStatement pstm = null;
@@ -71,7 +71,7 @@ public final class ExtraBossWeaponTable {
                 int type_remove_armor = rs.getInt("type_remove_armor");
                 L1BossWeapon bossStone = new L1BossWeapon(item_id, boss_lv, boss_name, success_random, max_use_time, success_msg, failure_msg, probability, isLongRange, fixDamage, randomDamage, doubleDmgValue, gfxId, gfxIdTarget, arrowType, effectId, effectTime, negativeId, negativeTime, attr, hpAbsorb, mpAbsorb, type_remove_weapon, type_remove_armor);
                 int index = item_id * 100 + boss_lv;
-                _BossList.put(Integer.valueOf(index), bossStone);
+                _BossList.put(index, bossStone);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -83,12 +83,12 @@ public final class ExtraBossWeaponTable {
         _log.info("讀取->[系統]_武器Boss靈魂水晶系統資料數量: " + _BossList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final L1BossWeapon get(int id, int boss_lv) {
+    public L1BossWeapon get(int id, int boss_lv) {
         int index = id * 100 + boss_lv;
-        return (L1BossWeapon) _BossList.get(Integer.valueOf(index));
+        return (L1BossWeapon) _BossList.get(index);
     }
 
-    public final int BossWeaponMax() {
+    public int BossWeaponMax() {
         int max = 0;
         for (Integer key : _BossList.keySet()) {
             L1BossWeapon bossWeapon = (L1BossWeapon) _BossList.get(key);

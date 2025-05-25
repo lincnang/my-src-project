@@ -169,24 +169,24 @@ public class TimeInform {
     public String getNow_YMDHMS(int i) {
         Calendar c = Calendar.getInstance();
         String[] nowDate = new String[6];
-        nowDate[0] = String.valueOf(c.get(1));
-        nowDate[1] = String.valueOf(c.get(2) + 1);
+        nowDate[0] = String.valueOf(c.get(Calendar.YEAR));
+        nowDate[1] = String.valueOf(c.get(Calendar.MONTH) + 1);
         if (nowDate[1].length() == 1) {
             nowDate[1] = "0" + nowDate[1];
         }
-        nowDate[2] = String.valueOf(c.get(5));
+        nowDate[2] = String.valueOf(c.get(Calendar.DATE));
         if (nowDate[2].length() == 1) {
             nowDate[2] = "0" + nowDate[2];
         }
-        nowDate[3] = String.valueOf(c.get(11));
+        nowDate[3] = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
         if (nowDate[3].length() == 1) {
             nowDate[3] = "0" + nowDate[3];
         }
-        nowDate[4] = String.valueOf(c.get(12));
+        nowDate[4] = String.valueOf(c.get(Calendar.MINUTE));
         if (nowDate[4].length() == 1) {
             nowDate[4] = "0" + nowDate[4];
         }
-        nowDate[5] = String.valueOf(c.get(13));
+        nowDate[5] = String.valueOf(c.get(Calendar.SECOND));
         if (nowDate[5].length() == 1) {
             nowDate[5] = "0" + nowDate[5];
         }

@@ -63,7 +63,7 @@ public class DropTable {
 
     private Map<Integer, ArrayList<L1Drop>> allDropList() {
         final PerformanceTimer timer = new PerformanceTimer();
-        final Map<Integer, ArrayList<L1Drop>> droplistMap = new HashMap<Integer, ArrayList<L1Drop>>();
+        final Map<Integer, ArrayList<L1Drop>> droplistMap = new HashMap<>();
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
@@ -82,8 +82,8 @@ public class DropTable {
                     final L1Drop drop = new L1Drop(mobId, itemId, min, max, chance);
                     ArrayList<L1Drop> dropList = droplistMap.get(drop.getMobid());
                     if (dropList == null) {
-                        dropList = new ArrayList<L1Drop>();
-                        droplistMap.put(new Integer(drop.getMobid()), dropList);
+                        dropList = new ArrayList<>();
+                        droplistMap.put(drop.getMobid(), dropList);
                     }
                     dropList.add(drop);
                 }

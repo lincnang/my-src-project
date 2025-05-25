@@ -25,8 +25,8 @@ public final class InvSwapTable {
     private static Map<Integer, Integer> code_list; // 當前設定位置。
 
     private InvSwapTable() {
-        list = new HashMap<Integer, Map<Integer, List<Integer>>>();
-        code_list = new HashMap<Integer, Integer>();
+        list = new HashMap<>();
+        code_list = new HashMap<>();
         Connection con = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -39,9 +39,9 @@ public final class InvSwapTable {
                 //
                 Map<Integer, List<Integer>> db = list.get(key);
                 if (db == null) {
-                    db = new HashMap<Integer, List<Integer>>();
-                    db.put(0, new ArrayList<Integer>());
-                    db.put(1, new ArrayList<Integer>());
+                    db = new HashMap<>();
+                    db.put(0, new ArrayList<>());
+                    db.put(1, new ArrayList<>());
                     list.put(key, db);
                 }
                 //
@@ -92,8 +92,8 @@ public final class InvSwapTable {
                     st.close();
                     //
                     Map<Integer, List<Integer>> db = list.get(key);
-                    StringBuffer set1 = new StringBuffer();
-                    StringBuffer set2 = new StringBuffer();
+                    StringBuilder set1 = new StringBuilder();
+                    StringBuilder set2 = new StringBuilder();
                     for (int value : db.get(0)) {
                         set1.append(value).append(",");
                     }
@@ -126,9 +126,9 @@ public final class InvSwapTable {
         }
         // System.out.println(set);
         if (set == null) {
-            set = new HashMap<Integer, List<Integer>>();
-            set.put(0, new ArrayList<Integer>());
-            set.put(1, new ArrayList<Integer>());
+            set = new HashMap<>();
+            set.put(0, new ArrayList<>());
+            set.put(1, new ArrayList<>());
             synchronized (list) {
                 list.put(pc.getId(), set);
             }

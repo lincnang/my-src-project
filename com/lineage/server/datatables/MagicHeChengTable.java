@@ -40,7 +40,7 @@ import java.util.HashMap;
 public class MagicHeChengTable {
     private static final Log _log = LogFactory.getLog(MagicHeChengTable.class);
     private static MagicHeChengTable _instance;
-    private final HashMap<Integer, L1MagicHeCheng> _itemidIndex = new HashMap<Integer, L1MagicHeCheng>();
+    private final HashMap<Integer, L1MagicHeCheng> _itemidIndex = new HashMap<>();
 
     public static MagicHeChengTable getInstance() {
         if (_instance == null) {
@@ -89,6 +89,6 @@ public class MagicHeChengTable {
     }
 
     public L1MagicHeCheng[] getItemIdList() {
-        return _itemidIndex.values().toArray(new L1MagicHeCheng[_itemidIndex.size()]);
+        return _itemidIndex.values().toArray(new L1MagicHeCheng[0]);
     }
 }

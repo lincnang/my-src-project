@@ -20,7 +20,7 @@ public class S_PetList extends ServerBasePacket {
     }
 
     private void buildPacket(final int npcObjId, final L1PcInstance pc) {
-        final List<L1ItemInstance> amuletList = new ArrayList<L1ItemInstance>();
+        final List<L1ItemInstance> amuletList = new ArrayList<>();
         for (final Object itemObject : pc.getInventory().getItems()) {
             final L1ItemInstance item = (L1ItemInstance) itemObject;
             switch (item.getItem().getItemId()) {

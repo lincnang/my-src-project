@@ -24,7 +24,7 @@ public class WorldNpc {
     private Collection<L1NpcInstance> _allNpcValues;
 
     private WorldNpc() {
-        _isNpc = new ConcurrentHashMap<Integer, L1NpcInstance>();
+        _isNpc = new ConcurrentHashMap<>();
     }
 
     public static WorldNpc get() {
@@ -106,9 +106,8 @@ public class WorldNpc {
     public ArrayList<L1NpcInstance> getVisibleMob(final L1NpcInstance src) {
         final L1Map map = src.getMap();
         final Point pt = src.getLocation();
-        final ArrayList<L1NpcInstance> result = new ArrayList<L1NpcInstance>();
-        for (final Iterator<L1NpcInstance> iter = all().iterator(); iter.hasNext(); ) {
-            final L1NpcInstance element = iter.next();
+        final ArrayList<L1NpcInstance> result = new ArrayList<>();
+        for (final L1NpcInstance element : all()) {
             // for (final L1NpcInstance element : this._isMob.values()) {
             if (element.equals(src)) {
                 continue;
@@ -133,8 +132,7 @@ public class WorldNpc {
         final L1Map map = src.getMap();
         final Point pt = src.getLocation();
         int count = 0;
-        for (final Iterator<L1NpcInstance> iter = all().iterator(); iter.hasNext(); ) {
-            final L1NpcInstance element = iter.next();
+        for (final L1NpcInstance element : all()) {
             // for (final L1NpcInstance element : this._isMob.values()) {
             if (element.equals(src)) {
                 continue;

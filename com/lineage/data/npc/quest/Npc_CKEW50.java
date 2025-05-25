@@ -160,7 +160,7 @@ public class Npc_CKEW50 extends NpcExecutor {
             quest.set_outStop(true);
             Integer time = QuestMapTable.get().getTime(2000);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             if (pc.isCrown()) {
                 L1Teleport.teleport(pc, 32720, 32900, (short) 2000, 2, true);

@@ -43,18 +43,18 @@ public class L1Acc implements L1CommandExecutor {
                     mac = acc.get_mac();
                 }
                 final StringBuilder info = new StringBuilder();
-                info.append("IP位置:" + ip);
-                info.append(" MAC位置:" + mac);
-                info.append(" 最後登入時間:" + acc.get_lastactive().toString());
+                info.append("IP位置:").append(ip);
+                info.append(" MAC位置:").append(mac);
+                info.append(" 最後登入時間:").append(acc.get_lastactive().toString());
                 if (pc == null) {
                     _log.warn(info.toString());
                 } else {
                     pc.sendPackets(new S_ServerMessage(166, info.toString()));
                 }
                 final StringBuilder info2 = new StringBuilder();
-                info2.append("密碼:" + acc.get_password());
-                info2.append(" 超級密碼:" + acc.get_spw());
-                info2.append(" 倉庫密碼:" + acc.get_warehouse());
+                info2.append("密碼:").append(acc.get_password());
+                info2.append(" 超級密碼:").append(acc.get_spw());
+                info2.append(" 倉庫密碼:").append(acc.get_warehouse());
                 if (pc == null) {
                     _log.warn(info2.toString());
                 } else {

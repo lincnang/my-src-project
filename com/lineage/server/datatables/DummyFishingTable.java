@@ -20,8 +20,8 @@ public class DummyFishingTable {
     private static final Random R = new Random();
     private static final int[][] CLASS_LIST = {{0, 61, 138, 734, 2786, 6658, 6671}, {1, 48, 37, 1186, 2796, 6661, 6650}};
     private static DummyFishingTable I;
-    private ArrayList<L1FishingPc> list = new ArrayList<L1FishingPc>();
-    private ArrayList<Integer> delays = new ArrayList<Integer>();
+    private ArrayList<L1FishingPc> list = new ArrayList<>();
+    private ArrayList<Integer> delays = new ArrayList<>();
 
     private DummyFishingTable() {
         Connection con = null;
@@ -47,23 +47,21 @@ public class DummyFishingTable {
                 int max_interval = rs.getInt("max_interval");
                 int t = (R.nextInt(1 + max_interval - min_interval) + min_interval) * 1000;
                 list.add(pc);
-                delays.add(Integer.valueOf(t));
+                delays.add(t);
             }
         } catch (SQLException e) {
             System.out.println(e.getLocalizedMessage());
         } finally {
             SQLUtil.close(rs, pstm, con);
         }
-        GeneralThreadPool.get().execute(new Runnable() {
-            public void run() {
-                for (int i = 0; i < list.size(); i++) {
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(((Integer) delays.get(i)).intValue());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    ((L1FishingPc) list.get(i)).join();
+        GeneralThreadPool.get().execute(() -> {
+            for (int i = 0; i < list.size(); i++) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep((Integer) delays.get(i));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                ((L1FishingPc) list.get(i)).join();
             }
         });
     }

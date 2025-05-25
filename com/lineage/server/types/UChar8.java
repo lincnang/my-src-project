@@ -4,7 +4,7 @@ public class UChar8 {
     public static char[] fromArray(long[] buff) {
         char[] charBuff = new char[buff.length * 4];
         for (int i = 0; i < buff.length; i++) {
-            charBuff[(i * 4 + 0)] = ((char) (int) (buff[i] & 0xFF));
+            charBuff[(i * 4)] = ((char) (int) (buff[i] & 0xFF));
             charBuff[(i * 4 + 1)] = ((char) (int) (buff[i] >> 8 & 0xFF));
             charBuff[(i * 4 + 2)] = ((char) (int) (buff[i] >> 16 & 0xFF));
             charBuff[(i * 4 + 3)] = ((char) (int) (buff[i] >> 24 & 0xFF));

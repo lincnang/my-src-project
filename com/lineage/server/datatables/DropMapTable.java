@@ -87,7 +87,7 @@ public class DropMapTable {
 
     private Map<Integer, ArrayList<L1DropMap>> allDropList() {
         final PerformanceTimer timer = new PerformanceTimer();
-        final Map<Integer, ArrayList<L1DropMap>> droplistMap = new HashMap<Integer, ArrayList<L1DropMap>>();
+        final Map<Integer, ArrayList<L1DropMap>> droplistMap = new HashMap<>();
         Connection con = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
@@ -110,8 +110,8 @@ public class DropMapTable {
                     // dorplist 物品列表
                     ArrayList<L1DropMap> dropList = droplistMap.get(drop.get_mapid());
                     if (dropList == null) {
-                        dropList = new ArrayList<L1DropMap>();
-                        droplistMap.put(new Integer(drop.get_mapid()), dropList);
+                        dropList = new ArrayList<>();
+                        droplistMap.put(drop.get_mapid(), dropList);
                     }
                     dropList.add(drop);
                 }

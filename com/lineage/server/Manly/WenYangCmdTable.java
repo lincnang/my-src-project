@@ -22,7 +22,7 @@ import java.util.Map;
 public class WenYangCmdTable {
     private static final Log _log = LogFactory.getLog(WenYangCmdTable.class);
     private static WenYangCmdTable _instance;
-    private final Map<String, L1WenYangCmd> _wenyangcmd = new HashMap<String, L1WenYangCmd>();
+    private final Map<String, L1WenYangCmd> _wenyangcmd = new HashMap<>();
 
     public static WenYangCmdTable getInstance() {
         if (_instance == null) {

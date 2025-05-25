@@ -191,7 +191,7 @@ public class C_CreateChar extends ClientBasePacket {
         // int numOfNameBytes = 0;
         try {
             for (String ban : BANLIST) {
-                if (name.indexOf(ban) != -1) {
+                if (name.contains(ban)) {
                     return false;
                 }
             }

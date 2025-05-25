@@ -29,7 +29,7 @@ import java.util.Map;
 public class L1FireSmithCrystalTable {
     private static final Log _log = LogFactory.getLog(L1FireSmithCrystalTable.class);
     private static L1FireSmithCrystalTable _instance;
-    private final Map<Integer, L1FireCrystal> _FireCrystalIndex = new HashMap<Integer, L1FireCrystal>();
+    private final Map<Integer, L1FireCrystal> _FireCrystalIndex = new HashMap<>();
 
     public static L1FireSmithCrystalTable get() {
         if (_instance == null) {

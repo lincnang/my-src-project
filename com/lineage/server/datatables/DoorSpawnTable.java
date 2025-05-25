@@ -19,7 +19,7 @@ import java.util.List;
 
 public class DoorSpawnTable {
     private static final Log _log = LogFactory.getLog(DoorSpawnTable.class);
-    private static final ArrayList<L1DoorInstance> _doorList = new ArrayList<L1DoorInstance>();
+    private static final ArrayList<L1DoorInstance> _doorList = new ArrayList<>();
     private static DoorSpawnTable _instance;
 
     public static DoorSpawnTable get() {
@@ -69,11 +69,7 @@ public class DoorSpawnTable {
                     }
                 }
             }
-        } catch (SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (SecurityException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (IllegalArgumentException e) {
+        } catch (SQLException | IllegalArgumentException | SecurityException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
             SQLUtil.close(rs);
@@ -87,14 +83,14 @@ public class DoorSpawnTable {
     }
 
     public L1DoorInstance[] getDoorList() {
-        return (L1DoorInstance[]) _doorList.toArray(new L1DoorInstance[_doorList.size()]);
+        return (L1DoorInstance[]) _doorList.toArray(new L1DoorInstance[0]);
     }
 
     /**
      * 返回此地圖的所有門
      */
     public List<L1DoorInstance> getDoorByMap(int mapId) {
-        List<L1DoorInstance> doors = new ArrayList<L1DoorInstance>();
+        List<L1DoorInstance> doors = new ArrayList<>();
         for (L1DoorInstance door : _doorList) {
             if (door.getMapId() == mapId) {
                 doors.add(door);

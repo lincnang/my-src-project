@@ -32,8 +32,8 @@ public class BreakdownTimer extends TimerTask {
             if (all.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = all.iterator(); iter.hasNext(); ) {
-                L1PcInstance tgpc = (L1PcInstance) iter.next();
+            for (Object o : all) {
+                L1PcInstance tgpc = (L1PcInstance) o;
                 if (_random != null) {
                     int gfxid = _random.nextInt(3);
                     tgpc.sendPackets(new S_Poison(tgpc.getId(), gfxid));

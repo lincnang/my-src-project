@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class L1NpcActionFactory {
     private static final Log _log = LogFactory.getLog(L1NpcActionFactory.class);
-    private static Map<String, Constructor<?>> _actions = new HashMap<String, Constructor<?>>();
+    private static Map<String, Constructor<?>> _actions = new HashMap<>();
 
     static {
         try {

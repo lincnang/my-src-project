@@ -33,10 +33,10 @@ public class Npc_Combind {
             NO_GET_DATA = true;
             getData();
         }
-        for (int i = 0; i < aData.size(); i++) {
-            aTempData = (ArrayList) aData.get(i);
+        for (Object aDatum : aData) {
+            aTempData = (ArrayList) aDatum;
             Random _random = new Random();
-            if (aTempData.get(0) == null || ((Integer) aTempData.get(0)).intValue() != npcid || !((String) aTempData.get(1)).equals(s))
+            if (aTempData.get(0) == null || (Integer) aTempData.get(0) != npcid || !((String) aTempData.get(1)).equals(s))
                 continue;
             ArrayList cousumedolls = new ArrayList();
             boolean enough = false;
@@ -47,7 +47,7 @@ public class Npc_Combind {
             int rndItem = RandomArrayList.getInt(giveItem.length);
             int giveItemGet = giveItem[rndItem];
             // 取得需要的物品數量
-            int needcount = ((Integer) aTempData.get(3)).intValue();
+            int needcount = (Integer) aTempData.get(3);
             int q = 0;
             do {
                 if (q >= olddolls.length)
@@ -55,9 +55,9 @@ public class Npc_Combind {
                 // 搜尋玩家揹包中指定ID的物品
                 L1ItemInstance dolls[] = pc.getInventory().findItemsId(olddolls[q]);
                 if (dolls != null) {
-                    for (int c = 0; c < dolls.length; c++) {
-                        int itemid = dolls[c].getItemId();
-                        cousumedolls.add(Integer.valueOf(itemid));
+                    for (L1ItemInstance l1ItemInstance : dolls) {
+                        int itemid = l1ItemInstance.getItemId();
+                        cousumedolls.add(itemid);
                         // 如果已經達到需要的數量，則停止
                         if (cousumedolls.size() == needcount)
                             break;
@@ -90,7 +90,7 @@ public class Npc_Combind {
                 // 嘗試消耗玩家揹包中的物品
                 if (pc.getInventory().consumeItemsIdArray(cousumedolls))
                     // 根據機率決定是否給予物品
-                    if (_random.nextInt(100) + 1 < ((Integer) aTempData.get(4)).intValue()) {
+                    if (_random.nextInt(100) + 1 < (Integer) aTempData.get(4)) {
                         // 如果有訊息，則發送給玩家
                         if ((String) aTempData.get(8) != null)
                             pc.sendPackets(new S_SystemMessage((new StringBuilder()).append("\\fT").append((String) aTempData.get(8)).toString()));
@@ -108,193 +108,193 @@ public class Npc_Combind {
                                     pc.getName(), item.getLogName()
                             })));
                         // 設置玩家任務的步驟為 aTempData 的第 11 個元素的值，步驟數量為 0
-                        pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 0);
+                        pc.getQuest().set_step((Integer) aTempData.get(11), 0);
                     } else {
                         // 如果 aTempData 的第 11 個元素不為 0
-                        if (((Integer) aTempData.get(11)).intValue() != 0) {
-                            if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 0)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 1);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 1)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 2);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 2)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 3);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 3)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 4);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 4)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 5);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 5)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 6);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 6)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 7);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 7)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 8);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 8)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 9);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 9)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 10);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 10)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 11);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 11)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 12);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 12)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 13);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 13)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 14);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 14)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 15);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 15)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 16);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 16)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 17);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 17)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 18);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 18)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 19);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 19)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 20);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 20)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 21);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 21)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 22);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 22)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 23);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 23)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 24);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 24)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 25);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 25)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 26);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 26)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 27);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 27)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 28);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 28)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 29);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 29)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 30);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 30)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 31);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 31)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 32);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 32)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 33);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 33)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 34);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 34)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 35);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 35)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 36);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 36)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 37);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 37)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 38);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 38)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 39);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 39)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 40);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 40)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 41);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 41)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 42);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 42)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 43);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 43)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 44);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 44)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 45);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 45)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 46);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 46)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 47);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 47)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 48);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 48)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 49);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 49)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 50);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 50)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 51);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 51)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 52);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 52)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 53);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 53)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 54);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 54)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 55);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 55)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 56);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 56)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 57);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 57)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 58);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 58)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 59);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 59)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 60);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 60)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 61);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 61)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 62);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 62)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 63);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 63)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 64);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 64)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 65);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 65)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 66);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 66)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 67);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 67)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 68);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 68)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 69);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 69)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 70);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 70)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 71);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 71)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 72);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 72)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 73);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 73)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 74);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 74)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 75);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 75)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 76);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 76)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 77);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 77)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 78);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 78)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 79);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 79)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 80);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 80)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 81);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 81)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 82);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 82)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 83);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 83)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 84);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 84)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 85);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 85)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 86);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 86)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 87);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 87)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 88);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 88)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 89);
-                            else if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == 89)
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 90);
+                        if ((Integer) aTempData.get(11) != 0) {
+                            if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 0)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 1);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 1)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 2);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 2)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 3);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 3)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 4);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 4)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 5);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 5)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 6);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 6)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 7);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 7)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 8);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 8)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 9);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 9)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 10);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 10)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 11);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 11)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 12);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 12)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 13);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 13)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 14);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 14)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 15);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 15)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 16);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 16)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 17);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 17)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 18);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 18)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 19);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 19)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 20);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 20)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 21);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 21)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 22);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 22)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 23);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 23)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 24);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 24)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 25);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 25)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 26);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 26)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 27);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 27)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 28);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 28)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 29);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 29)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 30);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 30)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 31);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 31)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 32);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 32)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 33);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 33)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 34);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 34)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 35);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 35)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 36);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 36)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 37);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 37)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 38);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 38)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 39);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 39)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 40);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 40)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 41);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 41)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 42);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 42)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 43);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 43)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 44);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 44)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 45);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 45)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 46);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 46)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 47);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 47)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 48);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 48)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 49);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 49)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 50);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 50)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 51);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 51)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 52);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 52)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 53);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 53)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 54);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 54)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 55);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 55)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 56);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 56)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 57);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 57)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 58);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 58)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 59);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 59)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 60);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 60)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 61);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 61)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 62);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 62)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 63);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 63)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 64);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 64)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 65);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 65)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 66);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 66)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 67);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 67)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 68);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 68)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 69);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 69)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 70);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 70)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 71);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 71)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 72);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 72)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 73);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 73)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 74);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 74)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 75);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 75)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 76);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 76)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 77);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 77)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 78);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 78)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 79);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 79)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 80);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 80)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 81);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 81)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 82);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 82)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 83);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 83)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 84);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 84)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 85);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 85)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 86);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 86)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 87);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 87)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 88);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 88)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 89);
+                            else if (pc.getQuest().get_step((Integer) aTempData.get(11)) == 89)
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 90);
                             // 檢查當前任務步驟是否等於 aTempData 的第 12 個元素的值
                             // 檢查玩家當前的任務步驟是否等於 aTempData 的第 12 個元素的值
-                            if (pc.getQuest().get_step(((Integer) aTempData.get(11)).intValue()) == ((Integer) aTempData.get(12)).intValue()) {
+                            if (pc.getQuest().get_step((Integer) aTempData.get(11)) == (Integer) aTempData.get(12)) {
                                 // 如果 aTempData 的第 8 個元素不為 null，則向玩家發送系統訊息
                                 if ((String) aTempData.get(8) != null)
                                     pc.sendPackets(new S_SystemMessage((new StringBuilder()).append("\\fT").append((String) aTempData.get(8)).toString()));
@@ -316,7 +316,7 @@ public class Npc_Combind {
                                     })));
 
                                 // 將玩家的任務步驟設置回 0，表示任務完成或重置
-                                pc.getQuest().set_step(((Integer) aTempData.get(11)).intValue(), 0);
+                                pc.getQuest().set_step((Integer) aTempData.get(11), 0);
 
                                 // 返回 false，結束方法
                                 return false;
@@ -327,9 +327,9 @@ public class Npc_Combind {
                             pc.sendPackets(new S_SystemMessage((new StringBuilder()).append("\\fY").append((String) aTempData.get(7)).toString()));
 
                         // 檢查 aTempData 的第 10 個元素是否為 1，表示是否需要退還物品
-                        if (((Integer) aTempData.get(10)).intValue() == 1) {
+                        if ((Integer) aTempData.get(10) == 1) {
                             // 隨機選擇一個已消耗的物品，創建其實例並設置為已識別
-                            L1ItemInstance item2 = ItemTable.get().createItem(((Integer) cousumedolls.get(_random.nextInt(cousumedolls.size()))).intValue());
+                            L1ItemInstance item2 = ItemTable.get().createItem((Integer) cousumedolls.get(_random.nextInt(cousumedolls.size())));
                             item2.setIdentified(true);
 
                             // 將退還的物品存入玩家的揹包
@@ -364,20 +364,20 @@ public class Npc_Combind {
             if (rset != null)
                 for (; rset.next(); aData.add(aReturn)) {
                     aReturn = new ArrayList();
-                    aReturn.add(0, new Integer(rset.getInt("npcid")));
+                    aReturn.add(0, rset.getInt("npcid"));
                     sTemp = rset.getString("action");
                     aReturn.add(1, sTemp);
                     aReturn.add(2, getArray(rset.getString("合成需求編號"), ",", 1));
-                    aReturn.add(3, Integer.valueOf(rset.getInt("物品合成數量")));
-                    aReturn.add(4, Integer.valueOf(rset.getInt("機率")));
+                    aReturn.add(3, rset.getInt("物品合成數量"));
+                    aReturn.add(4, rset.getInt("機率"));
                     aReturn.add(5, getArray(rset.getString("獲取合成編號"), ",", 1));
                     aReturn.add(6, rset.getString("物品不足Msg"));
                     aReturn.add(7, rset.getString("失敗Msg"));
                     aReturn.add(8, rset.getString("成功Msg"));
                     aReturn.add(9, rset.getString("世界廣播"));
-                    aReturn.add(10, Integer.valueOf(rset.getInt("失敗是否退還")));
-                    aReturn.add(11, Integer.valueOf(rset.getInt("保底紀錄編號")));
-                    aReturn.add(12, Integer.valueOf(rset.getInt("保底次數")));
+                    aReturn.add(10, rset.getInt("失敗是否退還"));
+                    aReturn.add(11, rset.getInt("保底紀錄編號"));
+                    aReturn.add(12, rset.getInt("保底次數"));
                 }
 
             if (con != null && !con.isClosed())

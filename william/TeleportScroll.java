@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class TeleportScroll {
     private static Logger _log = Logger.getLogger(TeleportScroll.class.getName());
     private static TeleportScroll _instance;
-    private final HashMap<Integer, L1WilliamTeleportScroll> _itemIdIndex = new HashMap<Integer, L1WilliamTeleportScroll>();
+    private final HashMap<Integer, L1WilliamTeleportScroll> _itemIdIndex = new HashMap<>();
 
     private TeleportScroll() {
         loadTeleportScroll();
@@ -58,12 +58,12 @@ public class TeleportScroll {
             short check_MapId = rs.getShort("check_MapId");
             int removeItem = rs.getInt("removeItem");
             L1WilliamTeleportScroll teleport_scroll = new L1WilliamTeleportScroll(itemId, tpLocX, tpLocY, tpMapId, check_minLocX, check_minLocY, check_maxLocX, check_maxLocY, check_MapId, removeItem);
-            _itemIdIndex.put(Integer.valueOf(itemId), teleport_scroll);
+            _itemIdIndex.put(itemId, teleport_scroll);
         }
     }
 
     public L1WilliamTeleportScroll getTemplate(int itemId) {
-        return (L1WilliamTeleportScroll) _itemIdIndex.get(Integer.valueOf(itemId));
+        return (L1WilliamTeleportScroll) _itemIdIndex.get(itemId);
     }
 }
 /*

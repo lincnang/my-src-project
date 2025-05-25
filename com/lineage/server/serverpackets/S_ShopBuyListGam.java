@@ -23,7 +23,7 @@ public class S_ShopBuyListGam extends ServerBasePacket {
         }
         writeH(sellList.size());
         for (Integer itemobjid : sellList.keySet()) {
-            writeD(itemobjid.intValue());
+            writeD(itemobjid);
             L1Gambling gam = (L1Gambling) sellList.get(itemobjid);
             int adena = (int) (GamblingSet.GAMADENA * gam.get_rate());
             writeD(adena);

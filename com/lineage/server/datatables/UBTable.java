@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class UBTable {
     private static final Log _log = LogFactory.getLog(UBTable.class);
-    private static final Map<Integer, L1UltimateBattle> _ub = new HashMap<Integer, L1UltimateBattle>();
+    private static final Map<Integer, L1UltimateBattle> _ub = new HashMap<>();
     private static UBTable _instance;
 
     public static UBTable getInstance() {
@@ -64,7 +64,7 @@ public class UBTable {
                 ub.setHpr(rs.getInt("hpr_bonus"));
                 ub.setMpr(rs.getInt("mpr_bonus"));
                 ub.resetLoc();
-                _ub.put(Integer.valueOf(ub.getUbId()), ub);
+                _ub.put(ub.getUbId(), ub);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -105,7 +105,7 @@ public class UBTable {
     }
 
     public L1UltimateBattle getUb(int ubId) {
-        return (L1UltimateBattle) _ub.get(Integer.valueOf(ubId));
+        return (L1UltimateBattle) _ub.get(ubId);
     }
 
     public Collection<L1UltimateBattle> getAllUb() {

@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public final class CharApprenticeTable {
     private static final Logger _log = Logger.getLogger(CharApprenticeTable.class.getName());
     private static CharApprenticeTable _instance;
-    private final HashMap<Integer, L1Apprentice> _masterList = new HashMap<Integer, L1Apprentice>();
+    private final HashMap<Integer, L1Apprentice> _masterList = new HashMap<>();
 
     public static CharApprenticeTable getInstance() {
         if (_instance == null) {
@@ -30,7 +30,7 @@ public final class CharApprenticeTable {
         return _instance;
     }
 
-    public final void load() {
+    public void load() {
         PerformanceTimer timer = new PerformanceTimer();
         Connection con = null;
         PreparedStatement pstm = null;
@@ -47,7 +47,7 @@ public final class CharApprenticeTable {
                 int apprentice_id4 = rs.getInt("apprentice_id4");
                 L1PcInstance master = null;
                 L1PcInstance apprentice = null;
-                ArrayList<L1PcInstance> totalList = new ArrayList<L1PcInstance>(4);
+                ArrayList<L1PcInstance> totalList = new ArrayList<>(4);
                 for (L1CharName l1char : CharacterTable.get().getCharNameList()) {
                     if ((master == null) && (l1char.getId() == master_id)) {
                         master = CharacterTable.get().restoreCharacter(l1char.getName());
@@ -58,8 +58,8 @@ public final class CharApprenticeTable {
                         }
                     }
                 }
-                L1Apprentice l1apprentice = new L1Apprentice(master, (L1PcInstance[]) totalList.toArray(new L1PcInstance[totalList.size()]));
-                _masterList.put(Integer.valueOf(master_id), l1apprentice);
+                L1Apprentice l1apprentice = new L1Apprentice(master, (L1PcInstance[]) totalList.toArray(new L1PcInstance[0]));
+                _masterList.put(master_id, l1apprentice);
             }
         } catch (SQLException e) {
             _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -73,7 +73,7 @@ public final class CharApprenticeTable {
         _log.info("讀取->師徒系統資料數量: " + _masterList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final void insertApprentice(L1Apprentice apprentice) {
+    public void insertApprentice(L1Apprentice apprentice) {
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -82,7 +82,7 @@ public final class CharApprenticeTable {
             pstm.setInt(1, apprentice.getMaster().getId());
             pstm.setInt(2, ((L1PcInstance) apprentice.getTotalList().get(0)).getId());
             pstm.execute();
-            _masterList.put(Integer.valueOf(apprentice.getMaster().getId()), apprentice);
+            _masterList.put(apprentice.getMaster().getId(), apprentice);
         } catch (SQLException e) {
             _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
         } finally {
@@ -91,7 +91,7 @@ public final class CharApprenticeTable {
         }
     }
 
-    public final void updateApprentice(int master_id, ArrayList<L1PcInstance> totalList) {
+    public void updateApprentice(int master_id, ArrayList<L1PcInstance> totalList) {
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -111,7 +111,7 @@ public final class CharApprenticeTable {
         }
     }
 
-    public final void deleteApprentice(int master_id) {
+    public void deleteApprentice(int master_id) {
         Connection con = null;
         PreparedStatement pstm = null;
         try {
@@ -119,7 +119,7 @@ public final class CharApprenticeTable {
             pstm = con.prepareStatement("DELETE FROM character_apprentice WHERE master_id=?");
             pstm.setInt(1, master_id);
             pstm.execute();
-            _masterList.remove(Integer.valueOf(master_id));
+            _masterList.remove(master_id);
         } catch (SQLException e) {
             _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
         } finally {
@@ -128,10 +128,10 @@ public final class CharApprenticeTable {
         }
     }
 
-    public final L1Apprentice getApprentice(L1PcInstance pc) {
+    public L1Apprentice getApprentice(L1PcInstance pc) {
         // 傳入角色objId 查看masterList(師父清單)是否有此角色及徒弟
         int objid = pc.getId();
-        L1Apprentice charApprentice = (L1Apprentice) _masterList.get(Integer.valueOf(objid));
+        L1Apprentice charApprentice = (L1Apprentice) _masterList.get(objid);
         if (charApprentice != null) {
             if (charApprentice.getMaster() != pc) {
                 charApprentice.setMaster(pc);

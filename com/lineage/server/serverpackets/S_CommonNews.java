@@ -12,7 +12,7 @@ public class S_CommonNews extends ServerBasePacket {
         writeC(S_NEWS);
         StringBuilder messagePack = new StringBuilder();
         for (String message : info) {
-            messagePack.append(message + "\n");
+            messagePack.append(message).append("\n");
         }
         writeS(messagePack.toString());
     }

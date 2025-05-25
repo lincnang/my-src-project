@@ -109,20 +109,20 @@ public class S_ShopSellList extends ServerBasePacket {
         writeC(S_BUY_LIST);
         writeD(pc.getId());
         ArrayList<Integer> skills = new ArrayList<>();
-        for (int i = 0; i < autoSkillTable.length; i++) {
-            if (CharSkillReading.get().spellCheck(pc.getId(), autoSkillTable[i])) {
-                skills.add(autoSkillTable[i]);
+        for (Integer value : autoSkillTable) {
+            if (CharSkillReading.get().spellCheck(pc.getId(), value)) {
+                skills.add(value);
             }
         }
         writeH(skills.size());
-        for (int i = 0; i < skills.size(); i++) {
-            L1Skills skill = SkillsTable.get().getTemplate(skills.get(i));
+        for (Integer integer : skills) {
+            L1Skills skill = SkillsTable.get().getTemplate(integer);
             if (skill == null) {
                 continue;
             }
             // 取得 autoSkillTable 中的技能ID
             for (int j = 0; j < autoSkillTable.length; j++) {
-                if (autoSkillTable[j] == skills.get(i)) {
+                if (autoSkillTable[j] == integer) {
                     writeD(autoSkillTable[j]);
                     writeH(autoSkillIconTable[j]);            // Gfx
                     break;

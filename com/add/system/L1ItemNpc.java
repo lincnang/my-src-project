@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 public class L1ItemNpc {
     private static Logger _log = Logger.getLogger(L1ItemNpc.class.getName());
     private static boolean NO_MORE_GET_DATA5 = false;
-    private static ArrayList<int[]> aData5 = new ArrayList<int[]>();
+    private static ArrayList<int[]> aData5 = new ArrayList<>();
 
     public static void forRequestItemUSe(ClientExecutor client, L1ItemInstance itemInstance) {
         L1PcInstance user = client.getActiveChar();
@@ -62,8 +62,8 @@ public class L1ItemNpc {
             NO_MORE_GET_DATA5 = true;
             getData5();
         }
-        for (int i = 0; i < aData5.size(); i++) {
-            aTempData = aData5.get(i);
+        for (int[] ints : aData5) {
+            aTempData = ints;
             iX1 = aTempData[5];
             iY1 = aTempData[6];
             iX2 = aTempData[7];

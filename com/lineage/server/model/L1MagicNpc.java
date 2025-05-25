@@ -319,7 +319,7 @@ public class L1MagicNpc extends L1MagicMode {
                         if (integer.equals(key)) {
                             dmgX2 = true;
                         } else {
-                            dmg += integer.intValue();
+                            dmg += integer;
                         }
                     }
                 }
@@ -502,9 +502,9 @@ public class L1MagicNpc extends L1MagicMode {
         }
         StringBuilder atkMsg = new StringBuilder();
         atkMsg.append("受到NPC技能: ");
-        atkMsg.append(_npc.getNameId() + ">");
-        atkMsg.append(_targetPc.getName() + " ");
-        atkMsg.append("傷害: " + damage);
+        atkMsg.append(_npc.getNameId()).append(">");
+        atkMsg.append(_targetPc.getName()).append(" ");
+        atkMsg.append("傷害: ").append(damage);
         _targetPc.sendPackets(new S_ServerMessage(166, atkMsg.toString()));
     }
 

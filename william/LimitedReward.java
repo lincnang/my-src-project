@@ -24,8 +24,8 @@ import java.util.logging.Logger;
  * @version<br>
  */
 public class LimitedReward {
-    public static final HashMap<Integer, L1WilliamLimitedReward> _itemIdIndex = new HashMap<Integer, L1WilliamLimitedReward>();
-    public static final HashMap<Integer, L1WilliamLimitedReward> _itemIdIndex1 = new HashMap<Integer, L1WilliamLimitedReward>();
+    public static final HashMap<Integer, L1WilliamLimitedReward> _itemIdIndex = new HashMap<>();
+    public static final HashMap<Integer, L1WilliamLimitedReward> _itemIdIndex1 = new HashMap<>();
     private static final Log _logx = LogFactory.getLog(LimitedReward.class.getName());
     private static Logger _log = Logger.getLogger(LimitedReward.class.getName());
     private static LimitedReward _instance;
@@ -86,8 +86,8 @@ public class LimitedReward {
             String message = rs.getString("message");
             String message_end = rs.getString("message_end");
             L1WilliamLimitedReward armor_upgrade = new L1WilliamLimitedReward(id, activity, check_classId, check_level, check_item, check_itemCount, surplus_msg, surplus_msg_color, itemId, count, enchantlvl, totalCount, appearCount, quest_id, quest_step, message, message_end);
-            _itemIdIndex.put(Integer.valueOf(id), armor_upgrade);
-            _itemIdIndex1.put(Integer.valueOf(check_item), armor_upgrade);
+            _itemIdIndex.put(id, armor_upgrade);
+            _itemIdIndex1.put(check_item, armor_upgrade);
         }
         _logx.info("讀取->[系統]_等級到達獎勵系統資料數量: " + _itemIdIndex.size() + "(" + timer.get() + "ms)");
     }
@@ -127,7 +127,7 @@ public class LimitedReward {
     }
 
     public L1WilliamLimitedReward[] getLimitedRewardList() {
-        return _itemIdIndex.values().toArray(new L1WilliamLimitedReward[_itemIdIndex.size()]);
+        return _itemIdIndex.values().toArray(new L1WilliamLimitedReward[0]);
     }
 
     public L1WilliamLimitedReward getTemplate(final int id) {

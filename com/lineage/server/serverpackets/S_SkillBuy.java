@@ -20,7 +20,7 @@ public class S_SkillBuy extends ServerBasePacket {
                 writeD(6000);
                 writeH(newSkillList.size());
                 for (Integer integer : newSkillList) {
-                    writeD(integer.intValue());
+                    writeD(integer);
                 }
             }
         } catch (Exception e) {

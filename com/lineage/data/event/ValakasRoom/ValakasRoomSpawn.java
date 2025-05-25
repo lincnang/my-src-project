@@ -51,7 +51,7 @@ public class ValakasRoomSpawn {  //src022
         L1NpcInstance field = null;
         CopyOnWriteArrayList<L1NpcInstance> list = null;
         if (RT) {
-            list = new CopyOnWriteArrayList<L1NpcInstance>();
+            list = new CopyOnWriteArrayList<>();
         }
         try {
             con = DatabaseFactory.get().getConnection();
@@ -151,15 +151,9 @@ public class ValakasRoomSpawn {  //src022
                     l1npc = null;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IllegalArgumentException | SecurityException e) {
             // _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
             _log.error(e);
-        } catch (SecurityException e) {
-            _log.error(e);
-            // _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-        } catch (IllegalArgumentException e) {
-            _log.error(e);
-            // _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
         } finally {
             SQLUtil.close(rs);
             SQLUtil.close(pstm);

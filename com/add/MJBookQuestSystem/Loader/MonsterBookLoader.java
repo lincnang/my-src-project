@@ -35,10 +35,10 @@ public class MonsterBookLoader {
         ResultSet rs = null;
         MonsterBook book = null;
         String record = null;
-        _books = new HashMap<Integer, MonsterBook>();
-        _weekCategory = new HashMap<Integer, ArrayList<MonsterBook>>(3);
+        _books = new HashMap<>();
+        _weekCategory = new HashMap<>(3);
         for (int i = 0; i < 3; i++) {
-            _weekCategory.put(i, new ArrayList<MonsterBook>(10));
+            _weekCategory.put(i, new ArrayList<>(10));
         }
         try {
             con = DatabaseFactory.get().getConnection();

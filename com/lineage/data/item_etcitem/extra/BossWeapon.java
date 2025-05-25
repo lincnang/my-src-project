@@ -57,7 +57,7 @@ public class BossWeapon extends ItemExecutor {
             tgItem.set_power_name(power);
             power.set_boss_weapon(bossWeapon);
             if (bossWeapon.getMaxUseTime() > 0) {
-                final Timestamp ts = new Timestamp(System.currentTimeMillis() + bossWeapon.getMaxUseTime() * 1000);
+                final Timestamp ts = new Timestamp(System.currentTimeMillis() + bossWeapon.getMaxUseTime() * 1000L);
                 power.set_boss_date_time(ts);
             } else {
                 power.set_boss_date_time(null);
@@ -111,7 +111,7 @@ public class BossWeapon extends ItemExecutor {
                 power.set_boss_lv(power.get_boss_lv() + 1);
                 power.set_boss_weapon(nextBossWeaopn);
                 if (nextBossWeaopn.getMaxUseTime() > 0) {
-                    final Timestamp ts = new Timestamp(System.currentTimeMillis() + nextBossWeaopn.getMaxUseTime() * 1000);
+                    final Timestamp ts = new Timestamp(System.currentTimeMillis() + nextBossWeaopn.getMaxUseTime() * 1000L);
                     power.set_boss_date_time(ts);
                 } else {
                     power.set_boss_date_time(null);
@@ -133,7 +133,7 @@ public class BossWeapon extends ItemExecutor {
                     power.set_boss_lv(1);
                     power.set_boss_weapon(newBossWeapon);
                     if (newBossWeapon.getMaxUseTime() > 0) {
-                        final Timestamp ts = new Timestamp(System.currentTimeMillis() + newBossWeapon.getMaxUseTime() * 1000);
+                        final Timestamp ts = new Timestamp(System.currentTimeMillis() + newBossWeapon.getMaxUseTime() * 1000L);
                         power.set_boss_date_time(ts);
                     } else {
                         power.set_boss_date_time(null);
@@ -159,7 +159,7 @@ public class BossWeapon extends ItemExecutor {
                         power.set_boss_lv(1);
                         power.set_boss_weapon(newBossWeapon);
                         if (newBossWeapon.getMaxUseTime() > 0) {
-                            final Timestamp ts = new Timestamp(System.currentTimeMillis() + newBossWeapon.getMaxUseTime() * 1000);
+                            final Timestamp ts = new Timestamp(System.currentTimeMillis() + newBossWeapon.getMaxUseTime() * 1000L);
                             power.set_boss_date_time(ts);
                         } else {
                             power.set_boss_date_time(null);

@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
  */
 public class L1Favorite implements L1CommandExecutor {
     private static final Log _log = LogFactory.getLog(L1Favorite.class);
-    private static final Map<Integer, String> _faviCom = new HashMap<Integer, String>();
+    private static final Map<Integer, String> _faviCom = new HashMap<>();
 
     private L1Favorite() {
     }
@@ -48,9 +48,9 @@ public class L1Favorite implements L1CommandExecutor {
                     pc.sendPackets(new S_SystemMessage(cmdName + " 紀錄質異常。"));
                     return;
                 }
-                cmd.append(temp + " ");
+                cmd.append(temp).append(" ");
                 while (st.hasMoreTokens()) {
-                    cmd.append(st.nextToken() + " ");
+                    cmd.append(st.nextToken()).append(" ");
                 }
                 faviCom = cmd.toString().trim();
                 _faviCom.put(pc.getId(), faviCom);
@@ -66,13 +66,13 @@ public class L1Favorite implements L1CommandExecutor {
                 while (st2.hasMoreTokens()) {
                     final String temp = st2.nextToken();
                     if (temp.startsWith("%")) {
-                        cmd.append(st.nextToken() + " ");
+                        cmd.append(st.nextToken()).append(" ");
                     } else {
-                        cmd.append(temp + " ");
+                        cmd.append(temp).append(" ");
                     }
                 }
                 while (st.hasMoreTokens()) {
-                    cmd.append(st.nextToken() + " ");
+                    cmd.append(st.nextToken()).append(" ");
                 }
                 pc.sendPackets(new S_SystemMessage(cmd + " 指令執行。"));
                 GMCommands.getInstance().handleCommands(pc, cmd.toString());

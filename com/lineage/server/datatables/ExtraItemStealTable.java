@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public final class ExtraItemStealTable {
     private static final Log _log = LogFactory.getLog(ExtraItemStealTable.class);
-    private static final ArrayList<L1ItemSteal> _stealList = new ArrayList<L1ItemSteal>();
+    private static final ArrayList<L1ItemSteal> _stealList = new ArrayList<>();
     private static ExtraItemStealTable _instance;
 
     public static ExtraItemStealTable getInstance() {
@@ -33,7 +33,7 @@ public final class ExtraItemStealTable {
         return _instance;
     }
 
-    public final void load() {
+    public void load() {
         final PerformanceTimer timer = new PerformanceTimer();
         Connection con = null;
         PreparedStatement pstm = null;
@@ -67,7 +67,7 @@ public final class ExtraItemStealTable {
         _log.info("讀取->[系統]_死亡奪取系統資料數量: " + _stealList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final ArrayList<L1ItemSteal> getList() {
+    public ArrayList<L1ItemSteal> getList() {
         return _stealList;
     }
 }

@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class ItemHtmlTable {
     public static final Log _log = LogFactory.getLog(ItemHtmlTable.class);
-    private static final Map<Integer, L1ItemHtml> _htmlMap = new HashMap<Integer, L1ItemHtml>();
+    private static final Map<Integer, L1ItemHtml> _htmlMap = new HashMap<>();
     private static ItemHtmlTable _instance;
 
     private ItemHtmlTable() {
@@ -55,7 +55,7 @@ public class ItemHtmlTable {
                     value.setQuestId(quest_id);
                     value.setQuestStep(quest_step);
                     value.setHtml(html);
-                    _htmlMap.put(Integer.valueOf(itemid), value);
+                    _htmlMap.put(itemid, value);
                 }
             }
         } catch (SQLException e) {
@@ -70,8 +70,8 @@ public class ItemHtmlTable {
 
     public L1ItemHtml getHtml(int itemid) {
         try {
-            if (_htmlMap.containsKey(Integer.valueOf(itemid))) {
-                return (L1ItemHtml) _htmlMap.get(Integer.valueOf(itemid));
+            if (_htmlMap.containsKey(itemid)) {
+                return (L1ItemHtml) _htmlMap.get(itemid);
             }
         } catch (Exception localException) {
         }

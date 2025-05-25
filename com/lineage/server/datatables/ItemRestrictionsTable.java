@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * @author dexc
  */
 public class ItemRestrictionsTable {
-    public static final ArrayList<Integer> RESTRICTIONS = new ArrayList<Integer>();
+    public static final ArrayList<Integer> RESTRICTIONS = new ArrayList<>();
     private static final Log _log = LogFactory.getLog(ItemRestrictionsTable.class);
     private static ItemRestrictionsTable _instance;
 
@@ -40,7 +40,7 @@ public class ItemRestrictionsTable {
             rs = pstm.executeQuery();
             while (rs.next()) {
                 int itemid = rs.getInt("限制交易編號");
-                RESTRICTIONS.add(Integer.valueOf(itemid));
+                RESTRICTIONS.add(itemid);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

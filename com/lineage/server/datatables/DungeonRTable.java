@@ -22,8 +22,8 @@ import static com.lineage.server.model.skill.L1SkillId.ABSOLUTE_BARRIER;
 public class DungeonRTable {
     private static final Log _log = LogFactory.getLog(DungeonRTable.class);
     private static DungeonRTable _instance = null;
-    private static Map<String, ArrayList<int[]>> _dungeonMap = new HashMap<String, ArrayList<int[]>>();
-    private static Map<String, Integer> _dungeonMapID = new HashMap<String, Integer>();
+    private static Map<String, ArrayList<int[]>> _dungeonMap = new HashMap<>();
+    private static Map<String, Integer> _dungeonMapID = new HashMap<>();
     private static Random _random = new Random();
 
     public static DungeonRTable get() {
@@ -52,7 +52,7 @@ public class DungeonRTable {
                     _log.error("相同SRC(多點)傳送座標(" + key + ")");
                 } else {
                     final int heading = rs.getInt("new_heading");
-                    ArrayList<int[]> value = new ArrayList<int[]>();
+                    ArrayList<int[]> value = new ArrayList<>();
                     if (rs.getInt("new_x1") != 0) {
                         int newLoc[] = new int[4];
                         newLoc[0] = rs.getInt("new_x1");

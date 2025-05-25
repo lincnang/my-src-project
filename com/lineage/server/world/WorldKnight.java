@@ -21,7 +21,7 @@ public class WorldKnight {
     private Collection<L1PcInstance> _allPlayer;
 
     private WorldKnight() {
-        _isKnight = new ConcurrentHashMap<Integer, L1PcInstance>();
+        _isKnight = new ConcurrentHashMap<>();
     }
 
     public static WorldKnight get() {

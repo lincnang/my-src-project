@@ -402,7 +402,7 @@ public class L1PetInstance extends L1NpcInstance {
         monster.setCurrentHpDirect(getCurrentHp());
         monster.setMaxMp(getMaxMp());
         monster.setCurrentMpDirect(getCurrentMp());
-        _petMaster.getPetList().remove(Integer.valueOf(getId()));
+        _petMaster.getPetList().remove(getId());
         deleteMe();
         _petMaster.getInventory().removeItem(_itemObjId, 1L);
         PetReading.get().deletePet(_itemObjId);

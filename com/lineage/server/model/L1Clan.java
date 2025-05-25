@@ -56,7 +56,7 @@ public class L1Clan {
     private static final Log _log = LogFactory.getLog(L1Clan.class);
     private final Lock _lock = new ReentrantLock(true);
     private final L1DwarfForClanInventory _dwarfForClan = new L1DwarfForClanInventory(this);
-    private final ArrayList<String> _membersNameList = new ArrayList<String>();
+    private final ArrayList<String> _membersNameList = new ArrayList<>();
     String[] _rank = {"", "", "[聯盟一般]", "[聯盟副君主]", "[聯盟君主]", "[聯盟修習騎士]", "[聯盟守護騎士]", "[一般]", "[修習騎士]", "[守護騎士]", "[君主]"};
     private int _clanId;
     private String _clanName;
@@ -76,7 +76,7 @@ public class L1Clan {
     private Timestamp _skilltime = null;
     private int _maxuser;
     private short _loginLevel;
-    private ArrayList<Integer> allianceList = new ArrayList<Integer>();
+    private ArrayList<Integer> allianceList = new ArrayList<>();
     // 7.6
     private String _clanshowNote;
     private String _clanNote;
@@ -321,11 +321,10 @@ public class L1Clan {
      */
     public L1PcInstance[] getOnlineClanMember() {
         // 清單緩存
-        final ArrayList<String> temp = new ArrayList<String>();
         // 輸出清單
-        final ArrayList<L1PcInstance> onlineMembers = new ArrayList<L1PcInstance>();
+        final ArrayList<L1PcInstance> onlineMembers = new ArrayList<>();
         try {
-            temp.addAll(this._membersNameList);
+            final ArrayList<String> temp = new ArrayList<>(this._membersNameList);
             for (final String name : temp) {
                 final L1PcInstance pc = World.get().getPlayer(name);
                 if ((pc != null) && !onlineMembers.contains(pc)) {
@@ -335,7 +334,7 @@ public class L1Clan {
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
-        return onlineMembers.toArray(new L1PcInstance[onlineMembers.size()]);
+        return onlineMembers.toArray(new L1PcInstance[0]);
     }
 
     /**
@@ -344,15 +343,14 @@ public class L1Clan {
      */
     public StringBuilder getOnlineMembersFP() {
         // 清單緩存
-        final ArrayList<String> temp = new ArrayList<String>();
         // 輸出名單
         final StringBuilder result = new StringBuilder();
         try {
-            temp.addAll(this._membersNameList);
+            final ArrayList<String> temp = new ArrayList<>(this._membersNameList);
             for (final String name : temp) {
                 final L1PcInstance pc = World.get().getPlayer(name);
                 if (pc != null) {
-                    result.append(name + " ");
+                    result.append(name).append(" ");
                 }
             }
         } catch (final Exception e) {
@@ -367,13 +365,12 @@ public class L1Clan {
      */
     public StringBuilder getAllMembersFP() {
         // 清單緩存
-        final ArrayList<String> temp = new ArrayList<String>();
         // 輸出名單
         final StringBuilder result = new StringBuilder();
         try {
-            temp.addAll(this._membersNameList);
+            final ArrayList<String> temp = new ArrayList<>(this._membersNameList);
             for (final String name : temp) {
-                result.append(name + " ");
+                result.append(name).append(" ");
             }
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -394,7 +391,7 @@ public class L1Clan {
      *
      */
     public String[] getAllMembers() {
-        return (String[]) _membersNameList.toArray(new String[_membersNameList.size()]);
+        return (String[]) _membersNameList.toArray(new String[0]);
     }
 
     /**
@@ -502,7 +499,7 @@ public class L1Clan {
     }
 
     public Integer[] Alliance() {
-        Integer[] i = (Integer[]) allianceList.toArray(new Integer[allianceList.size()]);
+        Integer[] i = (Integer[]) allianceList.toArray(new Integer[0]);
         return i;
     }
 
@@ -554,11 +551,10 @@ public class L1Clan {
      */
     public ArrayList<L1PcInstance> getAllMembersRank() {
         // 清單緩存
-        final ArrayList<String> temp = new ArrayList<String>();
         // 輸出名單
-        final ArrayList<L1PcInstance> result = new ArrayList<L1PcInstance>();
+        final ArrayList<L1PcInstance> result = new ArrayList<>();
         try {
-            temp.addAll(_membersNameList);
+            final ArrayList<String> temp = new ArrayList<>(_membersNameList);
             for (final String name : temp) {
                 L1PcInstance pc = World.get().getPlayer(name);
                 if (pc == null) {

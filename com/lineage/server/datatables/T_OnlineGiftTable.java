@@ -29,7 +29,7 @@ import static com.lineage.server.model.skill.L1SkillId.ONLINE_GIFT;
 public class T_OnlineGiftTable {
     private static final Log _log = LogFactory.getLog(ArmorSetTable.class);
     private static T_OnlineGiftTable _instance;
-    private final ArrayList<T_OnlineGiftModel> _list = new ArrayList<T_OnlineGiftModel>();
+    private final ArrayList<T_OnlineGiftModel> _list = new ArrayList<>();
 
     private T_OnlineGiftTable() {
         final PerformanceTimer timer = new PerformanceTimer();

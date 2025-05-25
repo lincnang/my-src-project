@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class SoulTowerSpawnTable {
     private static Logger _log = Logger.getLogger(SoulTowerSpawnTable.class.getName());
     private static SoulTowerSpawnTable _instance;
-    private final HashMap<Integer, ArrayList<SoulTowerNpcModel>> npcList = new HashMap<Integer, ArrayList<SoulTowerNpcModel>>();
+    private final HashMap<Integer, ArrayList<SoulTowerNpcModel>> npcList = new HashMap<>();
 
     public static SoulTowerSpawnTable get() {
         if (_instance == null) {
@@ -48,7 +48,7 @@ public class SoulTowerSpawnTable {
                 model.setLocy(rs.getInt("locy"));
                 model.setHeading(rs.getInt("heading"));
                 if (npcList.get(model.getType()) == null) {
-                    final ArrayList<SoulTowerNpcModel> test = new ArrayList<SoulTowerNpcModel>();
+                    final ArrayList<SoulTowerNpcModel> test = new ArrayList<>();
                     test.add(model);
                     npcList.put(model.getType(), test);
                 } else {

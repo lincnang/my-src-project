@@ -544,9 +544,9 @@ public class L1ItemInstance extends L1Object {
                 }
                 // 追加值
                 if (getEnchantLevel() >= 0) {
-                    name.append("+" + getEnchantLevel() + " ");
+                    name.append("+").append(getEnchantLevel()).append(" ");
                 } else if (getEnchantLevel() < 0) {
-                    name.append(String.valueOf(getEnchantLevel()) + " ");
+                    name.append(String.valueOf(getEnchantLevel())).append(" ");
                 }
                 break;
             case 2: // 盔甲
@@ -562,24 +562,24 @@ public class L1ItemInstance extends L1Object {
             case 40:// 耳環
                 // 追加值
                 if (getEnchantLevel() >= 0) {
-                    name.append("+" + getEnchantLevel() + " ");
+                    name.append("+").append(getEnchantLevel()).append(" ");
                 } else if (getEnchantLevel() < 0) {
-                    name.append(String.valueOf(getEnchantLevel()) + " ");
+                    name.append(String.valueOf(getEnchantLevel())).append(" ");
                 }
                 break;
         }
         name.append(_item.getName());
         if (_item.getUseType() == -5) { // 食人妖精競賽票
-            name.append("\\f_[" + getGamNo() + "]");
+            name.append("\\f_[").append(getGamNo()).append("]");
         }
         if (this.isIdentified()) {
             // 資料庫原始最大可用次數大於0
             if (getItem().getMaxChargeCount() > 0) {
-                name.append(" (" + getChargeCount() + ")");
+                name.append(" (").append(getChargeCount()).append(")");
             } else {
                 switch (_item.getItemId()) {
                     case 20383: // 軍馬頭盔
-                        name.append(" (" + getChargeCount() + ")");
+                        name.append(" (").append(getChargeCount()).append(")");
                         break;
                     default:
                         break;
@@ -588,15 +588,15 @@ public class L1ItemInstance extends L1Object {
             if (_time == null) {
                 // 武器/防具 具有使用時間
                 if ((getItem().getMaxUseTime() > 0) && (getItem().getType2() != 0)) {
-                    name.append(" (" + getRemainingTime() + ")");
+                    name.append(" (").append(getRemainingTime()).append(")");
                 }
             }
         }
         if (count > 1) {
             if (count < 1000000000) {
-                name.append(" (" + count + ")");
+                name.append(" (").append(count).append(")");
             } else {
-                name.append(" (" + RangeLong.scount(count) + ")");
+                name.append(" (").append(RangeLong.scount(count)).append(")");
             }
         }
         return name.toString();
@@ -613,15 +613,15 @@ public class L1ItemInstance extends L1Object {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             switch (_card_use) {
                 case 0:
-                    name.append("[" + sdf.format(_time) + "]"); // 使用期限
+                    name.append("[").append(sdf.format(_time)).append("]"); // 使用期限
                     break;
                 case 1:
                     //name.append("\\f<[月卡已開啟:" + sdf.format(_time) + " 到期]"); // 使用期限
-                    name.append("[" + sdf.format(_time) + "]"); // 使用期限
+                    name.append("[").append(sdf.format(_time)).append("]"); // 使用期限
                     break;
                 case 2:
                     //name.append("\\f3[月卡已經在:" + sdf.format(_time) + " 到期]"); // 使用期限
-                    name.append("[" + sdf.format(_time) + "]"); // 使用期限
+                    name.append("[").append(sdf.format(_time)).append("]"); // 使用期限
                     break;
             }
         }
@@ -658,7 +658,7 @@ public class L1ItemInstance extends L1Object {
                 L1Pet pet = PetReading.get().getTemplate(getId());
                 if (pet != null) {
                     L1Npc npc = NpcTable.get().getTemplate(pet.get_npcid());
-                    name.append("[Lv." + pet.get_level() + "]" + pet.get_name() + " HP" + pet.get_hp() + " " + npc.get_nameid());
+                    name.append("[Lv.").append(pet.get_level()).append("]").append(pet.get_name()).append(" HP").append(pet.get_hp()).append(" ").append(npc.get_nameid());
                 }
                 break;
             case 1:
@@ -926,24 +926,24 @@ public class L1ItemInstance extends L1Object {
                         default:
                             break;
                     }
-                    name.append(attrStr + " ");
+                    name.append(attrStr).append(" ");
                 }
             }
             if (getItem().getType2() == 1 || getItem().getType2() == 2) { // 武器?防具
                 if (getEnchantLevel() >= 0) {
-                    name.append("+" + getEnchantLevel() + " ");
+                    name.append("+").append(getEnchantLevel()).append(" ");
                 } else if (getEnchantLevel() < 0) {
-                    name.append(String.valueOf(getEnchantLevel()) + " ");
+                    name.append(String.valueOf(getEnchantLevel())).append(" ");
                 }
             }
         }
         name.append(_item.getName());
         if (isIdentified()) {
             if (getItem().getMaxChargeCount() > 0) {
-                name.append(" (" + getChargeCount() + ")");
+                name.append(" (").append(getChargeCount()).append(")");
             }
             if (getItem().getItemId() == 20383) { // 騎馬用
-                name.append(" (" + getChargeCount() + ")");
+                name.append(" (").append(getChargeCount()).append(")");
             }
         }
         return name.toString();
@@ -953,21 +953,21 @@ public class L1ItemInstance extends L1Object {
         StringBuilder name = new StringBuilder();
         name.append(" #");
         String chatText = String.valueOf(getKeyId());
-        String s1 = "";
+        StringBuilder s1 = new StringBuilder();
         String s2 = "";
         for (int i = 0; i < chatText.length(); i++) {
             if (i >= 5) {
                 break;
             }
-            s1 = s1 + String.valueOf(chatText.charAt(i));
+            s1.append(String.valueOf(chatText.charAt(i)));
         }
         name.append(s1);
         for (int i = 0; i < chatText.length(); i++) {
             if (i % 2 == 0) {
-                s1 = String.valueOf(chatText.charAt(i));
+                s1 = new StringBuilder(String.valueOf(chatText.charAt(i)));
             } else {
                 s2 = s1 + String.valueOf(chatText.charAt(i));
-                name.append(Integer.toHexString(Integer.valueOf(s2).intValue()).toLowerCase());
+                name.append(Integer.toHexString(Integer.parseInt(s2)).toLowerCase());
             }
         }
         return name.toString();
@@ -1342,9 +1342,9 @@ public class L1ItemInstance extends L1Object {
         StringBuilder name = new StringBuilder();
         // 追加值
         if (getEnchantLevel() >= 0) {
-            name.append("+" + getEnchantLevel() + " ");
+            name.append("+").append(getEnchantLevel()).append(" ");
         } else if (getEnchantLevel() < 0) {
-            name.append(String.valueOf(getEnchantLevel()) + " ");
+            name.append(String.valueOf(getEnchantLevel())).append(" ");
         }
         switch (_item.getUseType()) {
             case 1:// 武器
@@ -1352,7 +1352,7 @@ public class L1ItemInstance extends L1Object {
                 if (attrEnchantLevel > 0) {
                     L1AttrWeapon attrWeapon = ExtraAttrWeaponTable.getInstance().get(getAttrEnchantKind(), attrEnchantLevel);
                     if (attrWeapon != null) {
-                        name.append(attrWeapon.getName() + " ");
+                        name.append(attrWeapon.getName()).append(" ");
                     }
                 }
                 break;
@@ -1377,19 +1377,19 @@ public class L1ItemInstance extends L1Object {
         }
         name.append(_item.getName());
         if (getItem().getMaxChargeCount() > 0) {
-            name.append(" (" + getChargeCount() + ")");
+            name.append(" (").append(getChargeCount()).append(")");
         } else {
             switch (_item.getItemId()) {
                 case 20383:
-                    name.append(" (" + getChargeCount() + ")");
+                    name.append(" (").append(getChargeCount()).append(")");
             }
         }
         long count = getCount();
         if (count > 1L) {
             if (count < 1000000000L) {
-                name.append(" (" + count + ")");
+                name.append(" (").append(count).append(")");
             } else {
-                name.append(" (" + RangeLong.scount(count) + ")");
+                name.append(" (").append(RangeLong.scount(count)).append(")");
             }
         }
         return name.toString();
@@ -1497,7 +1497,7 @@ public class L1ItemInstance extends L1Object {
         if (getItem().get_safeenchant() < 0) {
             statusX |= 8; // 無法強化
         }
-        if (ItemRestrictionsTable.RESTRICTIONS.contains(Integer.valueOf(getItemId()))) {
+        if (ItemRestrictionsTable.RESTRICTIONS.contains(getItemId())) {
             statusX |= 16; // 倉庫保管功能
         }
         final int bless = getBless();
@@ -1570,10 +1570,10 @@ public class L1ItemInstance extends L1Object {
         }
         if (this._time != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            name.append("[" + sdf.format(this._time) + "]");
+            name.append("[").append(sdf.format(this._time)).append("]");
         }
         if (this._power_name != null) {
-            name.append("(鍛造:" + this._power_name.get_power_name() + ")");
+            name.append("(鍛造:").append(this._power_name.get_power_name()).append(")");
         }
         if (this._power_name != null) {
             L1MagicWeapon magic_weapon = this._power_name.get_magic_weapon();

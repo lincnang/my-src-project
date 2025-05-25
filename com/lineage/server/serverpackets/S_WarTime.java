@@ -11,7 +11,7 @@ public class S_WarTime extends ServerBasePacket {
 
     public S_WarTime(Calendar cal) {
         Calendar base_cal = Calendar.getInstance();
-        base_cal.set(1997, 0, 1, 17, 0);
+        base_cal.set(1997, Calendar.JANUARY, 1, 17, 0);
         long base_millis = base_cal.getTimeInMillis();
         long millis = cal.getTimeInMillis();
         long diff = millis - base_millis;
@@ -42,7 +42,7 @@ public class S_WarTime extends ServerBasePacket {
         L1Castle l1castle = CastleReading.get().getCastleTable(5);
         Calendar cal = l1castle.getWarTime();
         Calendar base_cal = Calendar.getInstance();
-        base_cal.set(1997, 0, 1, 17, 0);
+        base_cal.set(1997, Calendar.JANUARY, 1, 17, 0);
         long base_millis = base_cal.getTimeInMillis();
         long millis = cal.getTimeInMillis();
         long diff = millis - base_millis;

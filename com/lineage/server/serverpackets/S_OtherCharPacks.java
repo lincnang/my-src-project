@@ -96,7 +96,7 @@ public class S_OtherCharPacks extends ServerBasePacket {
                 stringBuilder.append(pc.getHonorViewName());//人物顯示名稱
 
                 if (pc.isLawfulName() && pc.getLawful() >= 32767) {
-                    stringBuilder.append("\\f=" + pc.getName());
+                    stringBuilder.append("\\f=").append(pc.getName());
                 }
                 if (pc.get_c_power() != null && pc.get_c_power().get_c1_type() != 0) { // src038
                     final String type = pc.get_c_power().get_power().get_c1_name_type();

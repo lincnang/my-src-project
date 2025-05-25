@@ -37,60 +37,61 @@ public class Npc_HeroRanking extends NpcExecutor {//src013
     @Override
     public void action(final L1PcInstance pc, final L1NpcInstance npc, final String cmd, final long amount) {
         final String[] userName = new String[11];
-        if (cmd.equals("c")) {// 王族風雲榜
-            String[] names = RankingHeroTimer.userNameC();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+        switch (cmd) {
+            case "c": {// 王族風雲榜
+                String[] names = RankingHeroTimer.userNameC();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "王族";
+                break;
             }
-            userName[10] = "王族";
-        } else if (cmd.equals("k")) {// 騎士風雲榜
-            final String[] names = RankingHeroTimer.userNameK();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+            case "k": {// 騎士風雲榜
+                final String[] names = RankingHeroTimer.userNameK();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "騎士";
+                break;
             }
-            userName[10] = "騎士";
-        } else if (cmd.equals("e")) {// 精靈風雲榜
-            final String[] names = RankingHeroTimer.userNameE();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+            case "e": {// 精靈風雲榜
+                final String[] names = RankingHeroTimer.userNameE();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "精靈";
+                break;
             }
-            userName[10] = "精靈";
-        } else if (cmd.equals("w")) {// 法師風雲榜
-            final String[] names = RankingHeroTimer.userNameW();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+            case "w": {// 法師風雲榜
+                final String[] names = RankingHeroTimer.userNameW();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "法師";
+                break;
             }
-            userName[10] = "法師";
-        } else if (cmd.equals("d")) {// 黑妖風雲榜
-            final String[] names = RankingHeroTimer.userNameD();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+            case "d": {// 黑妖風雲榜
+                final String[] names = RankingHeroTimer.userNameD();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "黑暗精靈";
+                break;
             }
-            userName[10] = "黑暗精靈";
-        } else if (cmd.equals("g")) {// 龍騎風雲榜
-            final String[] names = RankingHeroTimer.userNameG();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+            case "g": {// 龍騎風雲榜
+                final String[] names = RankingHeroTimer.userNameG();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "龍騎士";
+                break;
             }
-            userName[10] = "龍騎士";
-        } else if (cmd.equals("i")) {// 幻術風雲榜
-            final String[] names = RankingHeroTimer.userNameI();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+            case "i": {// 幻術風雲榜
+                final String[] names = RankingHeroTimer.userNameI();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "幻術師";
+                break;
             }
-            userName[10] = "幻術師";
-        } else if (cmd.equals("warrior")) {// 幻術風雲榜
-            final String[] names = RankingHeroTimer.userNameWarrior();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+            case "warrior": {// 幻術風雲榜
+                final String[] names = RankingHeroTimer.userNameWarrior();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "戰士";
+                break;
             }
-            userName[10] = "戰士";
-        } else if (cmd.equals("a")) {// 全職業風雲榜
-            final String[] names = RankingHeroTimer.userNameAll();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
+            case "a": {// 全職業風雲榜
+                final String[] names = RankingHeroTimer.userNameAll();
+                System.arraycopy(names, 0, userName, 0, names.length);
+                userName[10] = "全職業";
+                break;
             }
-            userName[10] = "全職業";
         }
         if (userName != null) {
             final String htmlid = "y_h_2";

@@ -56,13 +56,13 @@ public class RandomGiftSet extends EventExecutor {  //src016
             // 下一個判斷時間 by terry0412
             final long now_time = System.currentTimeMillis();
             if (event.get_next_time() == null) {
-                event.set_next_time(new Timestamp(now_time + TIME_DELAY * 3600000));
+                event.set_next_time(new Timestamp(now_time + TIME_DELAY * 3600000L));
                 // 更新`下一次判斷時間`
                 EventClass.get().updateEventNextTime(event.get_eventid(), event.get_next_time());
             } else {
                 // 持續判斷
                 while (event.get_next_time().getTime() < now_time) {
-                    event.set_next_time(new Timestamp(event.get_next_time().getTime() + TIME_DELAY * 3600000));
+                    event.set_next_time(new Timestamp(event.get_next_time().getTime() + TIME_DELAY * 3600000L));
                 }
                 // 更新`下一次判斷時間`
                 EventClass.get().updateEventNextTime(event.get_eventid(), event.get_next_time());
@@ -120,7 +120,7 @@ public class RandomGiftSet extends EventExecutor {  //src016
                     if (_allPc == null || _allPc.size() < TOTAL_COUNT) {
                         return;
                     }
-                    _event.set_next_time(new Timestamp(_event.get_next_time().getTime() + TIME_DELAY * 3600000));
+                    _event.set_next_time(new Timestamp(_event.get_next_time().getTime() + TIME_DELAY * 3600000L));
                     // 更新`下一次判斷時間`
                     EventClass.get().updateEventNextTime(_event.get_eventid(), _event.get_next_time());
                     // 全玩家廣播

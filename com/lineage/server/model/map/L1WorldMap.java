@@ -63,14 +63,14 @@ public class L1WorldMap {
     public void cloneMap(int targetId, int newId) {
         L1Map copymap = null;
         //System.out.println("mapid:"+targetId+"test1:"+((L1Map) this._maps.get(Integer.valueOf(targetId))).isUsableItem());
-        copymap = ((L1Map) this._maps.get(Integer.valueOf(targetId))).copyMap(newId);
-        this._maps.put(Integer.valueOf(newId), copymap);
+        copymap = ((L1Map) this._maps.get(targetId)).copyMap(newId);
+        this._maps.put(newId, copymap);
         //System.out.println("mapid:"+newId+"test2:"+((L1Map) this._maps.get(Integer.valueOf(newId))).isUsableItem());
     }
 
     /* 新手任務 */
     public L1Map getMap(int mapId) {
-        L1Map map = this._maps.get(Integer.valueOf(mapId));
+        L1Map map = this._maps.get(mapId);
         if (map != null) {
             return map;
         }

@@ -31,10 +31,10 @@ public class CraftConfigTable {
     private static final Log _log = LogFactory.getLog(CraftConfigTable.class);
     private static CraftConfigTable _instance;
     private byte[] sha1 = null;
-    private Map<Integer, CraftItemForNpc> _craftList = new HashMap<Integer, CraftItemForNpc>();
-    private ArrayList<CraftItemForNpc> _npcCraftList1 = new ArrayList<CraftItemForNpc>();
-    private Map<Integer, Map<Integer, CraftItemForNpc>> _npcCraftList = new HashMap<Integer, Map<Integer, CraftItemForNpc>>();
-    private Map<Integer, List<int[]>> substituteList = new HashMap<Integer, List<int[]>>();
+    private Map<Integer, CraftItemForNpc> _craftList = new HashMap<>();
+    private ArrayList<CraftItemForNpc> _npcCraftList1 = new ArrayList<>();
+    private Map<Integer, Map<Integer, CraftItemForNpc>> _npcCraftList = new HashMap<>();
+    private Map<Integer, List<int[]>> substituteList = new HashMap<>();
 
     private CraftConfigTable() {
         this.loadExchangeItem();
@@ -76,13 +76,11 @@ public class CraftConfigTable {
                 if (substituteList != null && substituteList.get(craft_id) != null) {
                     substituteList.get(craft_id).add(subMaterial);
                 } else {
-                    final List<int[]> sub = new ArrayList<int[]>();
+                    final List<int[]> sub = new ArrayList<>();
                     sub.add(subMaterial);
                     substituteList.put(craft_id, sub);
                 }
             }
-        } catch (SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -208,7 +206,7 @@ public class CraftConfigTable {
                 final int showworld = rs.getInt("showworld");
                 final String poly = rs.getString("poly");
                 final String[] poly_list = poly.split(",");
-                final List<Integer> polyList = new ArrayList<Integer>();
+                final List<Integer> polyList = new ArrayList<>();
                 for (final String test : poly_list) {
                     if ((test != null) && (!"".equals(test)) && (!"0".equals(test))) {
                         polyList.add(Integer.parseInt(test));
@@ -218,11 +216,11 @@ public class CraftConfigTable {
                 if (craftDelayTime <= 0) {
                     craftDelayTime = 1;
                 }
-                final Map<Integer, L1CraftItem> itemList = new HashMap<Integer, L1CraftItem>();
-                final Map<Integer, L1CraftItem> bigsuccesitemList = new HashMap<Integer, L1CraftItem>();
-                final Map<Integer, L1CraftItem> failItem = new HashMap<Integer, L1CraftItem>();
-                final Map<Integer, L1CraftItem> materialList = new HashMap<Integer, L1CraftItem>();
-                final Map<Integer, L1CraftItem> aidMaterialList = new HashMap<Integer, L1CraftItem>();
+                final Map<Integer, L1CraftItem> itemList = new HashMap<>();
+                final Map<Integer, L1CraftItem> bigsuccesitemList = new HashMap<>();
+                final Map<Integer, L1CraftItem> failItem = new HashMap<>();
+                final Map<Integer, L1CraftItem> materialList = new HashMap<>();
+                final Map<Integer, L1CraftItem> aidMaterialList = new HashMap<>();
                 if (craft_itemid_list != null && craft_itemid_list.length > 0) {
                     for (int i = 0; i < craft_itemid_list.length; i++) {
                         final L1Item item = ItemTable.get().getTemplate(Integer.parseInt(craft_itemid_list[i]));
@@ -274,7 +272,7 @@ public class CraftConfigTable {
                         }
                         final L1CraftItem materialItem = new L1CraftItem(Integer.parseInt(material_list[i]), Integer.parseInt(material_count_list[i]), Integer.parseInt(material_enchant_list[i]), 1, i + 1);
                         if (substituteList.get(actionid) != null) {
-                            final ArrayList<L1CraftItem> list = new ArrayList<L1CraftItem>();
+                            final ArrayList<L1CraftItem> list = new ArrayList<>();
                             for (final int[] test2 : substituteList.get(actionid)) {
                                 if (test2[0] == materialItem.getItemId()) {
                                     item = ItemTable.get().getTemplate(test2[1]);
@@ -302,7 +300,7 @@ public class CraftConfigTable {
                         }
                         final L1CraftItem aidMaterialItem = new L1CraftItem(Integer.parseInt(aidMaterial_list[i]), Integer.parseInt(aidMaterial_count_list[i]), Integer.parseInt(aidMaterial_enchant_list[i]), 1, i + 1);
                         if (substituteList.get(actionid) != null) {
-                            final ArrayList<L1CraftItem> list = new ArrayList<L1CraftItem>();
+                            final ArrayList<L1CraftItem> list = new ArrayList<>();
                             for (final int[] test : substituteList.get(actionid)) {
                                 if (test[0] == aidMaterialItem.getItemId()) {
                                     item = ItemTable.get().getTemplate(test[1]);
@@ -345,7 +343,7 @@ public class CraftConfigTable {
                 if (issave) {
                     this._craftList.put(npc.getActionid(), npc);
                     if (this._npcCraftList.get(npc.getNpcId()) == null) {
-                        final Map<Integer, CraftItemForNpc> test = new HashMap<Integer, CraftItemForNpc>();
+                        final Map<Integer, CraftItemForNpc> test = new HashMap<>();
                         test.put(npc.getActionid(), npc);
                         this._npcCraftList.put(npc.getNpcId(), test);
                     } else {
@@ -353,8 +351,6 @@ public class CraftConfigTable {
                     }
                 }
             }
-        } catch (SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

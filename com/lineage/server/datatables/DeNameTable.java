@@ -24,8 +24,8 @@ import java.util.Random;
  */
 public class DeNameTable {
     private static final Log _log = LogFactory.getLog(DeNameTable.class);
-    private static final Map<String, DeName> _denameList = new HashMap<String, DeName>();
-    private static final Map<Integer, DeName> _denames = new HashMap<Integer, DeName>();
+    private static final Map<String, DeName> _denameList = new HashMap<>();
+    private static final Map<Integer, DeName> _denames = new HashMap<>();
     private final static Random _random = new Random();
     private static DeNameTable _instance;
     // 重建人物血盟資料
@@ -192,6 +192,6 @@ public class DeNameTable {
      *
      */
     public DeName[] getDeNameList() {
-        return _denameList.values().toArray(new DeName[_denameList.size()]);
+        return _denameList.values().toArray(new DeName[0]);
     }
 }

@@ -60,7 +60,7 @@ public class Voucher {
     private void GetCodeData(String code) {
         String sql = "SELECT * FROM 其他_兌換碼_代碼 where 代碼=?;";
         try {
-            List list = new ArrayList<>();
+            List<Object> list = new ArrayList<>();
             list.add(code);
             this._codeList = tool.selectQuery(DTO_1.class, sql, list);
         } catch (Exception e) {
@@ -71,7 +71,7 @@ public class Voucher {
     private void GetReceiveData(long codeId, String account) {
         String sql = "SELECT * FROM character_兌換 where `兌換碼Id`=? and `帳號`=?;";
         try {
-            List list = new ArrayList<>();
+            List<Object> list = new ArrayList<>();
             list.add(codeId);
             list.add(account);
             this._receiveList = tool.selectQuery(DTO_3.class, sql, list);
@@ -93,7 +93,7 @@ public class Voucher {
     private void GetConfigData(long configId) {
         String sql = "SELECT * FROM 其他_兌換碼_物品設定 where id=?";
         try {
-            List list = new ArrayList<>();
+            List<Object> list = new ArrayList<>();
             list.add(configId);
             this._configList = tool.selectQuery(DTO_2.class, sql, list);
         } catch (Exception e) {

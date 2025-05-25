@@ -194,7 +194,7 @@ public class C_PledgeContent extends ClientBasePacket {
                     final L1DwarfForGameMallInventry dwarfForGameMallInventory = pc.getDwarfForGameMall();
                     synchronized (dwarfForGameMallInventory._key) {
                         final List<T_ShopWarehouseModel> items = dwarfForGameMallInventory.getWareHouseList();
-                        final List<T_ShopWarehouseModel> giveItems = new ArrayList<T_ShopWarehouseModel>(size);
+                        final List<T_ShopWarehouseModel> giveItems = new ArrayList<>(size);
                         final int[] allIndex = new int[size];
                         int index = -1;
                         for (int i = 0; i < size; i++) {
@@ -271,13 +271,13 @@ public class C_PledgeContent extends ClientBasePacket {
                             List<?> neededItemIdList = itemUpgrade.getNeedItemIdList();
                             List<?> neededCountsList = itemUpgrade.getNeedCountsList();
                             for (int i = 0; i < neededItemIdList.size(); i++) {
-                                if (!pc.getInventory().checkItem(((Integer) neededItemIdList.get(i)).intValue(), ((Integer) neededCountsList.get(i)).intValue())) {
+                                if (!pc.getInventory().checkItem((Integer) neededItemIdList.get(i), (Integer) neededCountsList.get(i))) {
                                     pc.sendPackets(new S_SystemMessage("裝備製作材料不足。"));
                                     return;
                                 }
                             }
                             for (int i = 0; i < neededItemIdList.size(); i++) {
-                                if (!pc.getInventory().consumeItem(((Integer) neededItemIdList.get(i)).intValue(), ((Integer) neededCountsList.get(i)).intValue())) {
+                                if (!pc.getInventory().consumeItem((Integer) neededItemIdList.get(i), (Integer) neededCountsList.get(i))) {
                                     pc.sendPackets(new S_SystemMessage("裝備製作失敗。"));
                                     return;
                                 }

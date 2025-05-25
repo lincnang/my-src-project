@@ -74,7 +74,7 @@ public class FishingPole extends ItemExecutor {
                     if (temp != null) {
                         itemFishTime = temp.getFishTime();
                     }
-                    final long fishtime = System.currentTimeMillis() + (itemFishTime * 1000);
+                    final long fishtime = System.currentTimeMillis() + (itemFishTime * 1000L);
                     boolean ck = false;
                     if (item.getItemId() != 83001) { // 不是高弹力钓竿
                         ck = true;

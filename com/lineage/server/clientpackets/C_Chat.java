@@ -34,7 +34,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.sql.Timestamp;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.lineage.server.model.skill.L1SkillId.*;
@@ -168,7 +167,7 @@ public class C_Chat extends ClientBasePacket {
                         _log.info(String.format("玩家 : %s 因輸入錯誤未通過外掛偵測，已強制切斷其連線", pc.getName()));
                     }
                     if (pc.getInputBanError() >= 5 && pc.hasSkillEffect(AI_2)) {// 輸入錯誤斷線5次
-                        long time = 60 * 60 * 1000 * 24 * 30;// 七日
+                        long time = 60L * 60 * 1000 * 24 * 30;// 七日
                         Timestamp UnbanTime = new Timestamp(System.currentTimeMillis() + time);
                         IpReading.get().setUnbanTime(UnbanTime);
                         IpReading.get().add(pc.getAccountName(), "定時外掛檢測 自動封鎖帳號七日 輸入錯誤斷線五次");
@@ -205,7 +204,7 @@ public class C_Chat extends ClientBasePacket {
                                 }
                                 if (isOk4) {
                                     int count = Integer.parseInt(chatText);
-                                    if (!(pc.getInventory().checkItem(L1Config._2167, L1Config._2163 * count))) {
+                                    if (!(pc.getInventory().checkItem(L1Config._2167, (long) (long) L1Config._2163 * count))) {
                                         pc.sendPackets(new S_SystemMessage("幣值不足，無法購買。"));
                                         return;
                                     }
@@ -213,7 +212,7 @@ public class C_Chat extends ClientBasePacket {
                                         pc.sendPackets(new S_SystemMessage("身上道具欄位不足，無法購買。"));
                                         return;
                                     }
-                                    pc.getInventory().consumeItem(L1Config._2167, L1Config._2163 * count);
+                                    pc.getInventory().consumeItem(L1Config._2167, (long) (long) L1Config._2163 * count);
                                     int BigHotId = _BigHot.get_BigHotId();
                                     L1PcInventory inv = pc.getInventory();
                                     for (int i = 0; i < count; ++i) {
@@ -412,7 +411,7 @@ public class C_Chat extends ClientBasePacket {
                                 }
                                 if (isOk6) {
                                     int count6 = Integer.parseInt(chatText);
-                                    if (!(pc.getInventory().checkItem(L1Config._2167, L1Config._2163 * count6))) {
+                                    if (!(pc.getInventory().checkItem(L1Config._2167, (long) (long) L1Config._2163 * count6))) {
                                         pc.sendPackets(new S_SystemMessage("幣值不足，無法購買。"));
                                         return;
                                     }
@@ -420,7 +419,7 @@ public class C_Chat extends ClientBasePacket {
                                         pc.sendPackets(new S_SystemMessage("身上道具欄位不足，無法購買。"));
                                         return;
                                     }
-                                    pc.getInventory().consumeItem(L1Config._2167, L1Config._2163 * count6);
+                                    pc.getInventory().consumeItem(L1Config._2167, (long) (long) L1Config._2163 * count6);
                                     int BigHotId = _BigHot.get_BigHotId();
                                     L1PcInventory inv = pc.getInventory();
                                     this.BigHotAN = pc.getBighot1() + pc.getBighot2() + pc.getBighot3() + pc.getBighot4() + pc.getBighot5() + pc.getBighot6();
@@ -434,7 +433,7 @@ public class C_Chat extends ClientBasePacket {
                                     int ch = 0;
                                     for (int a = 0; a < BigHotId1.split(",").length; ++a) {
                                         String[] pk = this.BigHotAN.split(",");
-                                        if (("," + BigHotId1).indexOf("," + pk[a] + ",") >= 0) {
+                                        if (("," + BigHotId1).contains("," + pk[a] + ",")) {
                                             ++ch;
                                         }
                                     }
@@ -548,8 +547,8 @@ public class C_Chat extends ClientBasePacket {
                                         listner.sendPackets(s_chatpacket);
                                     }
                                 }
-                                for (int j = 0; j < allianceids.length; j++) {
-                                    TargegClan = clan.getAlliance(allianceids[j]);
+                                for (Integer allianceid : allianceids) {
+                                    TargegClan = clan.getAlliance(allianceid);
                                     if (TargegClan != null) {
                                         TargetClanName = TargegClan.getClanName();
                                         if (TargetClanName != null) {
@@ -785,8 +784,7 @@ public class C_Chat extends ClientBasePacket {
              * (!listner.getExcludingList().contains(pc.getName())) {
              * listner.sendPackets(chatpacket); } }
              */
-            for (final Iterator<L1PcInstance> iter = pcs.iterator(); iter.hasNext(); ) {
-                final L1PcInstance listner = iter.next();
+            for (final L1PcInstance listner : pcs) {
                 L1ExcludingList spamList11 = SpamTable.getInstance().getExcludeTable(listner.getId());
                 if (!spamList11.contains(0, pc.getName())) {
                     listner.sendPackets(chatpacket);
@@ -991,7 +989,7 @@ public class C_Chat extends ClientBasePacket {
         this.BigHotAN = "";
         while (this.BigHotAN.split(",").length < 6) {
             int sk = 1 + (int) (Math.random() * 46.0D);
-            if (this.BigHotAN.indexOf(sk + ",") < 0) {
+            if (!this.BigHotAN.contains(sk + ",")) {
                 C_Chat tmp51_50 = this;
                 tmp51_50.BigHotAN = tmp51_50.BigHotAN + String.valueOf(sk) + ",";
             }

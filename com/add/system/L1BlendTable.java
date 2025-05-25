@@ -29,8 +29,8 @@ import java.util.Map;
 public class L1BlendTable {
     private static final Log _log = LogFactory.getLog(L1BlendTable.class);
     private static L1BlendTable _instance;
-    private final Map<String, L1Blend> _CraftIndex = new HashMap<String, L1Blend>();
-    private final Map<String, String> _CraftList = new HashMap<String, String>();
+    private final Map<String, L1Blend> _CraftIndex = new HashMap<>();
+    private final Map<String, String> _CraftList = new HashMap<>();
 
     public static L1BlendTable getInstance() {
         if (_instance == null) {

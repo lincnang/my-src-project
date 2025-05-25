@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class AccountBankTable implements AccountBankStorage {
     private static final Log _log = LogFactory.getLog(AccountBankTable.class);
-    private final Map<String, L1Bank> _bankNameList = new HashMap<String, L1Bank>();
+    private final Map<String, L1Bank> _bankNameList = new HashMap<>();
 
     public void load() {
         PerformanceTimer timer = new PerformanceTimer();

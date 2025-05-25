@@ -59,8 +59,7 @@ public class DollMprTimer extends TimerTask {
             if (all.isEmpty()) {
                 return;
             }
-            for (Iterator<L1PcInstance> iter = all.iterator(); iter.hasNext(); ) {
-                L1PcInstance tgpc = (L1PcInstance) iter.next();
+            for (L1PcInstance tgpc : all) {
                 if (tgpc.get_doll_mpr_time_src() > 0) {
                     if (checkErr(tgpc)) {
                         int newMp = tgpc.getCurrentMp() + tgpc.get_doll_mpr();

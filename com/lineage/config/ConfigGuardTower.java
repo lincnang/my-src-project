@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -28,23 +29,23 @@ public final class ConfigGuardTower {
     public static int ComfortGift_COUNT;
     public static int GIFT;
     public static int COMFORTGIFT;
-    public static List<Integer> X = new ArrayList<Integer>();
-    public static List<Integer> Y = new ArrayList<Integer>();
+    public static List<Integer> X = new ArrayList<>();
+    public static List<Integer> Y = new ArrayList<>();
 
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(GUARD_SETTINGS_FILE));
+            final InputStream is = Files.newInputStream(new File(GUARD_SETTINGS_FILE).toPath());
             set.load(is);
             is.close();
             if (set.getProperty("MobX") != null) {
                 for (String str : set.getProperty("MobX").split(",")) {
-                    X.add(Integer.valueOf(Integer.parseInt(str)));
+                    X.add(Integer.parseInt(str));
                 }
             }
             if (set.getProperty("MobY") != null) {
                 for (String str : set.getProperty("MobY").split(",")) {
-                    Y.add(Integer.valueOf(Integer.parseInt(str)));
+                    Y.add(Integer.parseInt(str));
                 }
             }
             ISOPEN = Boolean.parseBoolean(set.getProperty("IsOpen", "false"));

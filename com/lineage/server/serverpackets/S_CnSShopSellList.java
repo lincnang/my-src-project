@@ -25,7 +25,7 @@ public class S_CnSShopSellList extends ServerBasePacket {
     }
 
     private void buildPacket(final L1PcInstance pc, final int tgObjid) {
-        final Map<L1ShopS, L1ItemInstance> shopItems = new HashMap<L1ShopS, L1ItemInstance>();
+        final Map<L1ShopS, L1ItemInstance> shopItems = new HashMap<>();
         final Map<Integer, L1ItemInstance> srcMap = DwarfShopReading.get().allItems();
         for (final Integer key : srcMap.keySet()) {
             L1ShopS info = DwarfShopReading.get().getShopS(key);

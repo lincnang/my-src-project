@@ -291,8 +291,7 @@ public class Game_Fight {
 
     @SuppressWarnings("rawtypes")
     private void clearColosseum() {
-        for (Iterator localIterator = World.get().getVisibleObjects(4941).values().iterator(); localIterator.hasNext(); ) {
-            Object obj = localIterator.next();
+        for (Object obj : World.get().getVisibleObjects(4941).values()) {
             if ((obj instanceof L1Inventory)) {
                 L1Inventory inventory = (L1Inventory) obj;
                 inventory.clearItems();

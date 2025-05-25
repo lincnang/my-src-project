@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class WorldChatTimer extends TimerTask {
     private static final Log _log = LogFactory.getLog(WorldChatTimer.class);
-    private static final LinkedBlockingQueue<String> _queue = new LinkedBlockingQueue<String>();
+    private static final LinkedBlockingQueue<String> _queue = new LinkedBlockingQueue<>();
     private ScheduledFuture<?> _timer;
 
     public static void addchat(String chat) throws InterruptedException {

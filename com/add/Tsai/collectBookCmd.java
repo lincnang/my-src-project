@@ -32,9 +32,9 @@ public class collectBookCmd {
                 //獲取列表id
                 if (collect != null) {//列表ID空白不啟動
                     if (pc.getQuest().get_step(collect.getQuestId()) != 0) {
-                        stringBuilder.append(String.valueOf(collect.getAddcgfxid()) + ",");
+                        stringBuilder.append(String.valueOf(collect.getAddcgfxid())).append(",");
                     } else {
-                        stringBuilder.append(String.valueOf(collect.getAddhgfxid()) + ",");
+                        stringBuilder.append(String.valueOf(collect.getAddhgfxid())).append(",");
                     }
                 }
             }
@@ -215,30 +215,30 @@ public class collectBookCmd {
                 }
             }
             final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("力量 +" + str + ",");
-            stringBuilder.append("敏捷 +" + dex + ",");
-            stringBuilder.append("體質 +" + con + ",");
-            stringBuilder.append("智力 +" + Int + ",");
-            stringBuilder.append("精神 +" + wis + ",");
-            stringBuilder.append("魅力 +" + cha + ",");
-            stringBuilder.append("防禦提升 +" + ac + ",");
-            stringBuilder.append("HP +" + hp + ",");
-            stringBuilder.append("MP +" + mp + ",");
-            stringBuilder.append("血量回復 +" + hpr + ",");
-            stringBuilder.append("魔力回復 +" + mpr + ",");
-            stringBuilder.append("近距離傷害 +" + dmg + ",");
-            stringBuilder.append("遠距離傷害 +" + bdmg + ",");
-            stringBuilder.append("近距離命中 +" + hit + ",");
-            stringBuilder.append("遠距離命中 +" + bhit + ",");
-            stringBuilder.append("物理傷害減免 +" + dr + ",");
-            stringBuilder.append("魔法傷害減免 +" + mdr + ",");
-            stringBuilder.append("魔攻 +" + sp + ",");
-            stringBuilder.append("魔法命中 +" + mhit + ",");
-            stringBuilder.append("魔法防禦 +" + mr + ",");
-            stringBuilder.append("火屬性防禦 +" + f + ",");
-            stringBuilder.append("風屬性防禦 +" + wind + ",");
-            stringBuilder.append("地屬性防禦 +" + e + ",");
-            stringBuilder.append("水屬性防禦 +" + w + ",");
+            stringBuilder.append("力量 +").append(str).append(",");
+            stringBuilder.append("敏捷 +").append(dex).append(",");
+            stringBuilder.append("體質 +").append(con).append(",");
+            stringBuilder.append("智力 +").append(Int).append(",");
+            stringBuilder.append("精神 +").append(wis).append(",");
+            stringBuilder.append("魅力 +").append(cha).append(",");
+            stringBuilder.append("防禦提升 +").append(ac).append(",");
+            stringBuilder.append("HP +").append(hp).append(",");
+            stringBuilder.append("MP +").append(mp).append(",");
+            stringBuilder.append("血量回復 +").append(hpr).append(",");
+            stringBuilder.append("魔力回復 +").append(mpr).append(",");
+            stringBuilder.append("近距離傷害 +").append(dmg).append(",");
+            stringBuilder.append("遠距離傷害 +").append(bdmg).append(",");
+            stringBuilder.append("近距離命中 +").append(hit).append(",");
+            stringBuilder.append("遠距離命中 +").append(bhit).append(",");
+            stringBuilder.append("物理傷害減免 +").append(dr).append(",");
+            stringBuilder.append("魔法傷害減免 +").append(mdr).append(",");
+            stringBuilder.append("魔攻 +").append(sp).append(",");
+            stringBuilder.append("魔法命中 +").append(mhit).append(",");
+            stringBuilder.append("魔法防禦 +").append(mr).append(",");
+            stringBuilder.append("火屬性防禦 +").append(f).append(",");
+            stringBuilder.append("風屬性防禦 +").append(wind).append(",");
+            stringBuilder.append("地屬性防禦 +").append(e).append(",");
+            stringBuilder.append("水屬性防禦 +").append(w).append(",");
             final String[] clientStrAry = stringBuilder.toString().split(",");
             pc.sendPackets(new S_NPCTalkReturn(pc, "collect_11", clientStrAry));
         } catch (final Exception e) {
@@ -254,88 +254,88 @@ public class collectBookCmd {
                 if (collects != null) {
                     boolean IsIndex = true;
                     if (IsIndex) {
-                        stringBuilder.append(collects.getMsg1() + ",");
+                        stringBuilder.append(collects.getMsg1()).append(",");
                         int k = 0;
                         for (int j = 0; j < collects.getNeedQuest().length; j++) {
                             if (pc.getQuest().get_step(collects.getNeedQuest()[j]) != 0) {
-                                stringBuilder.append(collects.getNeedName()[j] + "(開啟),");
+                                stringBuilder.append(collects.getNeedName()[j]).append("(開啟),");
                                 k++;
                             } else {
-                                stringBuilder.append(collects.getNeedName()[j] + "(未開啟),");
+                                stringBuilder.append(collects.getNeedName()[j]).append("(未開啟),");
                             }
                         }
                         if (k == collects.getNeedQuest().length) {
                             if (collects.getAddStr() != 0) {
-                                stringBuilder.append("力量 +" + collects.getAddStr() + ",");
+                                stringBuilder.append("力量 +").append(collects.getAddStr()).append(",");
                             }
                             if (collects.getAddDex() != 0) {
-                                stringBuilder.append("敏捷 +" + collects.getAddDex() + ",");
+                                stringBuilder.append("敏捷 +").append(collects.getAddDex()).append(",");
                             }
                             if (collects.getAddCon() != 0) {
-                                stringBuilder.append("體質 +" + collects.getAddCon() + ",");
+                                stringBuilder.append("體質 +").append(collects.getAddCon()).append(",");
                             }
                             if (collects.getAddInt() != 0) {
-                                stringBuilder.append("智力 +" + collects.getAddInt() + ",");
+                                stringBuilder.append("智力 +").append(collects.getAddInt()).append(",");
                             }
                             if (collects.getAddWis() != 0) {
-                                stringBuilder.append("精神 +" + collects.getAddWis() + ",");
+                                stringBuilder.append("精神 +").append(collects.getAddWis()).append(",");
                             }
                             if (collects.getAddCha() != 0) {
-                                stringBuilder.append("魅力 +" + collects.getAddCha() + ",");
+                                stringBuilder.append("魅力 +").append(collects.getAddCha()).append(",");
                             }
                             if (collects.getAddAc() != 0) {
-                                stringBuilder.append("防禦提升 +" + collects.getAddAc() + ",");
+                                stringBuilder.append("防禦提升 +").append(collects.getAddAc()).append(",");
                             }
                             if (collects.getAddHp() != 0) {
-                                stringBuilder.append("HP +" + collects.getAddHp() + ",");
+                                stringBuilder.append("HP +").append(collects.getAddHp()).append(",");
                             }
                             if (collects.getAddMp() != 0) {
-                                stringBuilder.append("MP +" + collects.getAddMp() + ",");
+                                stringBuilder.append("MP +").append(collects.getAddMp()).append(",");
                             }
                             if (collects.getAddHpr() != 0) {
-                                stringBuilder.append("血量回復 +" + collects.getAddHpr() + ",");
+                                stringBuilder.append("血量回復 +").append(collects.getAddHpr()).append(",");
                             }
                             if (collects.getAddMpr() != 0) {
-                                stringBuilder.append("魔力回復 +" + collects.getAddMpr() + ",");
+                                stringBuilder.append("魔力回復 +").append(collects.getAddMpr()).append(",");
                             }
                             if (collects.getAddDmg() != 0) {
-                                stringBuilder.append("近距離傷害 +" + collects.getAddDmg() + ",");
+                                stringBuilder.append("近距離傷害 +").append(collects.getAddDmg()).append(",");
                             }
                             if (collects.getAddBowDmg() != 0) {
-                                stringBuilder.append("遠距離傷害 +" + collects.getAddBowDmg() + ",");
+                                stringBuilder.append("遠距離傷害 +").append(collects.getAddBowDmg()).append(",");
                             }
                             if (collects.getAddHit() != 0) {
-                                stringBuilder.append("近距離命中 +" + collects.getAddHit() + ",");
+                                stringBuilder.append("近距離命中 +").append(collects.getAddHit()).append(",");
                             }
                             if (collects.getAddBowHit() != 0) {
-                                stringBuilder.append("遠距離命中 +" + collects.getAddBowHit() + ",");
+                                stringBuilder.append("遠距離命中 +").append(collects.getAddBowHit()).append(",");
                             }
                             if (collects.getAddDmgR() != 0) {
-                                stringBuilder.append("物理傷害減免 +" + collects.getAddDmgR() + ",");
+                                stringBuilder.append("物理傷害減免 +").append(collects.getAddDmgR()).append(",");
                             }
                             if (collects.getAddMagicDmgR() != 0) {
-                                stringBuilder.append("魔法傷害減免 +" + collects.getAddMagicDmgR() + ",");
+                                stringBuilder.append("魔法傷害減免 +").append(collects.getAddMagicDmgR()).append(",");
                             }
                             if (collects.getAddSp() != 0) {
-                                stringBuilder.append("魔攻 +" + collects.getAddSp() + ",");
+                                stringBuilder.append("魔攻 +").append(collects.getAddSp()).append(",");
                             }
                             if (collects.getAddMagicHit() != 0) {
-                                stringBuilder.append("魔法命中 +" + collects.getAddMagicHit() + ",");
+                                stringBuilder.append("魔法命中 +").append(collects.getAddMagicHit()).append(",");
                             }
                             if (collects.getAddMr() != 0) {
-                                stringBuilder.append("魔法防禦 +" + collects.getAddMr() + ",");
+                                stringBuilder.append("魔法防禦 +").append(collects.getAddMr()).append(",");
                             }
                             if (collects.getAddFire() != 0) {
-                                stringBuilder.append("火屬性防禦 +" + collects.getAddFire() + ",");
+                                stringBuilder.append("火屬性防禦 +").append(collects.getAddFire()).append(",");
                             }
                             if (collects.getAddWind() != 0) {
-                                stringBuilder.append("風屬性防禦 +" + collects.getAddWind() + ",");
+                                stringBuilder.append("風屬性防禦 +").append(collects.getAddWind()).append(",");
                             }
                             if (collects.getAddEarth() != 0) {
-                                stringBuilder.append("地屬性防禦 +" + collects.getAddEarth() + ",");
+                                stringBuilder.append("地屬性防禦 +").append(collects.getAddEarth()).append(",");
                             }
                             if (collects.getAddWater() != 0) {
-                                stringBuilder.append("水屬性防禦 +" + collects.getAddWater() + ",");
+                                stringBuilder.append("水屬性防禦 +").append(collects.getAddWater()).append(",");
                             }
                             stringBuilder.append("<以上為此套卡能力加成>,");
                         }
@@ -358,47 +358,47 @@ public class collectBookCmd {
                 if (collect != null) {
                     if (cmd.equals(collect.getCmd())) {
                         pc.setCarId(i);
-                        stringBuilder.append(collect.getMsg2() + ",");
-                        stringBuilder.append(collect.getAddStr() + ",");
-                        stringBuilder.append(collect.getAddDex() + ",");
-                        stringBuilder.append(collect.getAddCon() + ",");
-                        stringBuilder.append(collect.getAddInt() + ",");
-                        stringBuilder.append(collect.getAddWis() + ",");
-                        stringBuilder.append(collect.getAddCha() + ",");
-                        stringBuilder.append(collect.getAddAc() + ",");
-                        stringBuilder.append(collect.getAddHp() + ",");
-                        stringBuilder.append(collect.getAddMp() + ",");
-                        stringBuilder.append(collect.getAddHpr() + ",");
-                        stringBuilder.append(collect.getAddMpr() + ",");
-                        stringBuilder.append(collect.getAddDmg() + ",");
-                        stringBuilder.append(collect.getAddBowDmg() + ",");
-                        stringBuilder.append(collect.getAddHit() + ",");
-                        stringBuilder.append(collect.getAddBowHit() + ",");
-                        stringBuilder.append(collect.getAddDmgR() + ",");
-                        stringBuilder.append(collect.getAddMagicDmgR() + ",");
-                        stringBuilder.append(collect.getAddSp() + ",");
-                        stringBuilder.append(collect.getAddMagicHit() + ",");
-                        stringBuilder.append(collect.getAddMr() + ",");
-                        stringBuilder.append(collect.getAddFire() + ",");
-                        stringBuilder.append(collect.getAddWind() + ",");
-                        stringBuilder.append(collect.getAddEarth() + ",");
-                        stringBuilder.append(collect.getAddWater() + ",");
+                        stringBuilder.append(collect.getMsg2()).append(",");
+                        stringBuilder.append(collect.getAddStr()).append(",");
+                        stringBuilder.append(collect.getAddDex()).append(",");
+                        stringBuilder.append(collect.getAddCon()).append(",");
+                        stringBuilder.append(collect.getAddInt()).append(",");
+                        stringBuilder.append(collect.getAddWis()).append(",");
+                        stringBuilder.append(collect.getAddCha()).append(",");
+                        stringBuilder.append(collect.getAddAc()).append(",");
+                        stringBuilder.append(collect.getAddHp()).append(",");
+                        stringBuilder.append(collect.getAddMp()).append(",");
+                        stringBuilder.append(collect.getAddHpr()).append(",");
+                        stringBuilder.append(collect.getAddMpr()).append(",");
+                        stringBuilder.append(collect.getAddDmg()).append(",");
+                        stringBuilder.append(collect.getAddBowDmg()).append(",");
+                        stringBuilder.append(collect.getAddHit()).append(",");
+                        stringBuilder.append(collect.getAddBowHit()).append(",");
+                        stringBuilder.append(collect.getAddDmgR()).append(",");
+                        stringBuilder.append(collect.getAddMagicDmgR()).append(",");
+                        stringBuilder.append(collect.getAddSp()).append(",");
+                        stringBuilder.append(collect.getAddMagicHit()).append(",");
+                        stringBuilder.append(collect.getAddMr()).append(",");
+                        stringBuilder.append(collect.getAddFire()).append(",");
+                        stringBuilder.append(collect.getAddWind()).append(",");
+                        stringBuilder.append(collect.getAddEarth()).append(",");
+                        stringBuilder.append(collect.getAddWater()).append(",");
                         if (pc.getQuest().get_step(collect.getQuestId()) != 0) {
                             stringBuilder.append("開啟,");
                         } else {
                             stringBuilder.append("未開啟,");
                         }
-                        stringBuilder.append(collect.getShanbi() + ",");
-                        stringBuilder.append(collect.getHuibi() + ",");
-                        stringBuilder.append(collect.getYaoshui() + ",");
-                        stringBuilder.append(collect.getFuzhong() + ",");
-                        stringBuilder.append(collect.getExp() + ",");
-                        stringBuilder.append(collect.getHunmi() + ",");
-                        stringBuilder.append(collect.getZhicheng() + ",");
-                        stringBuilder.append(collect.getShihua() + ",");
-                        stringBuilder.append(collect.getHanbing() + ",");
-                        stringBuilder.append(collect.getAnhei() + ",");
-                        stringBuilder.append(collect.getShuimian() + ",");
+                        stringBuilder.append(collect.getShanbi()).append(",");
+                        stringBuilder.append(collect.getHuibi()).append(",");
+                        stringBuilder.append(collect.getYaoshui()).append(",");
+                        stringBuilder.append(collect.getFuzhong()).append(",");
+                        stringBuilder.append(collect.getExp()).append(",");
+                        stringBuilder.append(collect.getHunmi()).append(",");
+                        stringBuilder.append(collect.getZhicheng()).append(",");
+                        stringBuilder.append(collect.getShihua()).append(",");
+                        stringBuilder.append(collect.getHanbing()).append(",");
+                        stringBuilder.append(collect.getAnhei()).append(",");
+                        stringBuilder.append(collect.getShuimian()).append(",");
                         final String[] clientStrAry = stringBuilder.toString().split(",");
                         pc.sendPackets(new S_NPCTalkReturn(pc, "collect_0", clientStrAry));
                         ok = true;

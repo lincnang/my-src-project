@@ -112,7 +112,7 @@ public class CheckUtil {
                     return;
                 }
                 int partyCount = pc.getParty().partyUserInMap(mapid);
-                if (partyCount < userCount.intValue()) {
+                if (partyCount < userCount) {
                     L1Teleport.teleport(pc, 33080, 33392, (short) 4, 5, true);
                 }
             }
@@ -292,8 +292,7 @@ public class CheckUtil {
         }
         // 1格範圍內物件
         final Collection<L1Object> allObj = World.get().getVisibleObjects(pc, 1);
-        for (final Iterator<L1Object> iter = allObj.iterator(); iter.hasNext(); ) {
-            final L1Object obj = iter.next();
+        for (final L1Object obj : allObj) {
             // 道具
             if (obj instanceof L1ItemInstance) {
                 continue;

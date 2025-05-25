@@ -1,16 +1,17 @@
 package com.lineage.config;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigDescs {
-    private static final Map<Integer, String> _show_desc = new HashMap<Integer, String>();
+    private static final Map<Integer, String> _show_desc = new HashMap<>();
     private static final String _show_desc_file = "./config/☆服務器設定表☆/定時公告循環設定表.txt";
 
     public static void load() throws ConfigErrorException {
         try {
-            InputStream is = new FileInputStream(new File(_show_desc_file));
+            InputStream is = Files.newInputStream(new File(_show_desc_file).toPath());
             // 指定檔案編碼
             InputStreamReader isr = new InputStreamReader(is, "utf-8");
             LineNumberReader lnr = new LineNumberReader(isr);
@@ -25,7 +26,7 @@ public class ConfigDescs {
                         desc = desc.replaceAll(" ", ""); // 取代空白
                         Config.SERVERNAME = desc.substring(12);
                     } else {
-                        _show_desc.put(new Integer(i++), desc);
+                        _show_desc.put(i++, desc);
                     }
                 }
             }
@@ -43,7 +44,7 @@ public class ConfigDescs {
      */
     public static String getShow(int nameid) {
         try {
-            return (String) _show_desc.get(new Integer(nameid));
+            return (String) _show_desc.get(nameid);
         } catch (Exception e) {
             e.printStackTrace();
         }

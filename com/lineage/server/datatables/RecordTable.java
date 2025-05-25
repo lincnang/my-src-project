@@ -19,26 +19,26 @@ public class RecordTable {
     public void recordtakeitem(String pcName, String itemName, int itemCount, int itemObjid, String ip) {
         String sql = "INSERT INTO 日誌_角色_撿物 (玩家,撿取物品,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, SYSDATE())";
         L1QueryUtil.execute("INSERT INTO 日誌_角色_撿物 (玩家,撿取物品,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, itemName,
-                Integer.valueOf(itemCount), Integer.valueOf(itemObjid), ip});
+                itemCount, itemObjid, ip});
     }
 
 
     public void recordeDeadItem(String pcName, String itemName, int itemCount, int itemObjid, String ip) {
         String sql = "INSERT INTO 日誌_角色_噴裝 (玩家,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, SYSDATE())";
         L1QueryUtil.execute("INSERT INTO 日誌_角色_噴裝 (玩家,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, itemName,
-                Integer.valueOf(itemCount), Integer.valueOf(itemObjid), ip});
+                itemCount, itemObjid, ip});
     }
 
 
     public void recordPcChangeName(int pcid, String accName, String pcName, String changName, String ip) {
         String sql = "INSERT INTO 日誌_角色_更名 (編號, 帳號, 玩家, 改名, IP, 時間) VALUE (?, ?, ?, ?, ?, SYSDATE())";
-        L1QueryUtil.execute("INSERT INTO 日誌_角色_更名 (編號, 帳號, 玩家, 改名, IP, 時間) VALUE (?, ?, ?, ?, ?, SYSDATE())", new Object[]{Integer.valueOf(pcid), accName, pcName, changName, ip});
+        L1QueryUtil.execute("INSERT INTO 日誌_角色_更名 (編號, 帳號, 玩家, 改名, IP, 時間) VALUE (?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcid, accName, pcName, changName, ip});
     }
 
     public void recordCastleReward(String castle, String pcName, String itemName, int count, int item_obj, String ip) {
         String sql = "INSERT INTO 日誌_攻城獎勵 (城堡,玩家,物品,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, SYSDATE())";
         L1QueryUtil.execute("INSERT INTO 日誌_攻城獎勵 (城堡,玩家,物品,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{castle, pcName, itemName,
-                Integer.valueOf(count), Integer.valueOf(item_obj), ip});
+                count, item_obj, ip});
     }
 
 
@@ -49,26 +49,26 @@ public class RecordTable {
 
     public void recordeWarehouse_elf(String pcName, String action, String warehouse, String itemName, int itemCount, int itemObjid, String ip) {
         String sql = "INSERT INTO 日誌_角色_妖倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())";
-        L1QueryUtil.execute("INSERT INTO 日誌_角色_妖倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, action, warehouse, itemName, Integer.valueOf(itemCount),
-                Integer.valueOf(itemObjid), ip});
+        L1QueryUtil.execute("INSERT INTO 日誌_角色_妖倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, action, warehouse, itemName, itemCount,
+                itemObjid, ip});
     }
 
     public void recordeWarehouse_clan(String pcName, String action, String warehouse, String itemName, int itemCount, int itemObjid, String ip) {
         String sql = "INSERT INTO 日誌_角色_盟倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())";
-        L1QueryUtil.execute("INSERT INTO 日誌_角色_盟倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, action, warehouse, itemName, Integer.valueOf(itemCount),
-                Integer.valueOf(itemObjid), ip});
+        L1QueryUtil.execute("INSERT INTO 日誌_角色_盟倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, action, warehouse, itemName, itemCount,
+                itemObjid, ip});
     }
 
     public void recordeWarehouse_pc(String pcName, String action, String warehouse, String itemName, int itemCount, int itemObjid, String ip) {
         String sql = "INSERT INTO 日誌_角色_個倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())";
-        L1QueryUtil.execute("INSERT INTO 日誌_角色_個倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, action, warehouse, itemName, Integer.valueOf(itemCount),
-                Integer.valueOf(itemObjid), ip});
+        L1QueryUtil.execute("INSERT INTO 日誌_角色_個倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, action, warehouse, itemName, itemCount,
+                itemObjid, ip});
     }
 
     public void recordWarehouse_char_pc(String pcName, String action, String warehouse, String itemName, int itemCount, int itemObjid, String ip) {
         String sql = "INSERT INTO 日誌_角色_角倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())";
-        L1QueryUtil.execute("INSERT INTO 日誌_角色_角倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, action, warehouse, itemName, Integer.valueOf(itemCount),
-                Integer.valueOf(itemObjid), ip});
+        L1QueryUtil.execute("INSERT INTO 日誌_角色_角倉 (玩家,執行,倉庫,道具,數量,編號,IP,時間) VALUE (?, ?, ?, ?, ?, ?, ?, SYSDATE())", new Object[]{pcName, action, warehouse, itemName, itemCount,
+                itemObjid, ip});
     }
 
     public void killpc(String pcName, String targeName) {
@@ -78,7 +78,7 @@ public class RecordTable {
 
     public void recordbox(String pcName, String itemNamebox, String itemName, int itemCount) {
         String sql = "INSERT INTO 日誌_角色_寶箱 (玩家,使用寶箱,獲得道具,數量,時間) VALUE (?, ?, ?, ?,  SYSDATE())";
-        L1QueryUtil.execute("INSERT INTO 日誌_角色_寶箱 (玩家,使用寶箱,獲得道具,數量,時間) VALUE (?, ?, ?, ?,  SYSDATE())", new Object[]{pcName, itemNamebox, itemName, Integer.valueOf(itemCount)});
+        L1QueryUtil.execute("INSERT INTO 日誌_角色_寶箱 (玩家,使用寶箱,獲得道具,數量,時間) VALUE (?, ?, ?, ?,  SYSDATE())", new Object[]{pcName, itemNamebox, itemName, itemCount});
     }
 
 

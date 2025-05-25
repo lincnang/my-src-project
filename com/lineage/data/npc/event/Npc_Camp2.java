@@ -23,9 +23,7 @@ public class Npc_Camp2 extends NpcExecutor {
         try {
             String[] userName = new String[11];
             String[] names = RankingHeroTimer.userNameScore();
-            for (int i = 0; i < names.length; i++) {
-                userName[i] = names[i];
-            }
+            System.arraycopy(names, 0, userName, 0, names.length);
             userName[10] = "全職業";
             if (userName != null) {
                 pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "rank168", userName));

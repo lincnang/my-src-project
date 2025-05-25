@@ -83,7 +83,7 @@ public class Chapter_2 extends NpcExecutor {
             quest.set_info(false);
             Integer time = QuestMapTable.get().getTime(9101);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             L1NpcInstance door = L1SpawnUtil.spawn(97108, new L1Location(32799, 32806, 9101), 4, showId);
             door.setStatus(32);
@@ -102,7 +102,7 @@ public class Chapter_2 extends NpcExecutor {
         }
     }
 
-    private final boolean isError(L1PcInstance pc, L1NpcInstance npc) {
+    private boolean isError(L1PcInstance pc, L1NpcInstance npc) {
         if (pc.isGm()) {
             return false;
         }

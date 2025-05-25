@@ -19,10 +19,8 @@ public class L1ChangeBoardAuction implements L1CommandExecutor {
     public void execute(L1PcInstance pc, String cmdName, String arg) {
         try {
             Calendar DeadTime = getRealTime();
-            DeadTime.add(12, Integer.parseInt(arg));
-            Iterator<L1AuctionBoardTmp> localIterator = AuctionBoardReading.get().getAuctionBoardTableList().values().iterator();
-            while (localIterator.hasNext()) {
-                L1AuctionBoardTmp board = (L1AuctionBoardTmp) localIterator.next();
+            DeadTime.add(Calendar.MINUTE, Integer.parseInt(arg));
+            for (L1AuctionBoardTmp board : AuctionBoardReading.get().getAuctionBoardTableList().values()) {
                 board.setDeadline(DeadTime);
                 AuctionBoardReading.get().updateAuctionBoard(board);
             }

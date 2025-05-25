@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class EventClass {  //src016
     private static final Log _log = LogFactory.getLog(EventClass.class);
-    private static final Map<Integer, EventExecutor> _classList = new HashMap<Integer, EventExecutor>();
+    private static final Map<Integer, EventExecutor> _classList = new HashMap<>();
     private static EventClass _instance;
 
     public static EventClass get() {
@@ -37,27 +37,20 @@ public class EventClass {  //src016
             stringBuilder.append(className);
             Class<?> cls = Class.forName(stringBuilder.toString());
             EventExecutor exe = (EventExecutor) cls.getMethod("get", new Class[0]).invoke(null, new Object[0]);
-            _classList.put(new Integer(eventid), exe);
+            _classList.put(eventid, exe);
         } catch (ClassNotFoundException e) {
             String error = "發生[Event(活動設置)檔案]錯誤, 檢查檔案是否存在:" + className + " EventId:" + eventid;
             _log.error(error);
             DataError.isError(_log, error, e);
-        } catch (IllegalArgumentException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (IllegalAccessException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (InvocationTargetException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (SecurityException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException |
+                 IllegalAccessException e) {
             _log.error(e.getLocalizedMessage(), e);
         }
     }
 
     public void startEvent(L1Event event) {
         try {
-            EventExecutor exe = (EventExecutor) _classList.get(new Integer(event.get_eventid()));
+            EventExecutor exe = (EventExecutor) _classList.get(event.get_eventid());
             if (exe != null) {
                 exe.execute(event);
             }

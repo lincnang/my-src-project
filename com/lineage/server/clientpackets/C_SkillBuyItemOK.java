@@ -80,7 +80,7 @@ public class C_SkillBuyItemOK extends ClientBasePacket {
                 final int skillId = this.readD() + 1;
                 // 檢查是否已學習該法術
                 if (!CharSkillReading.get().spellCheck(pc.getId(), skillId)) {
-                    if (skillList.contains(new Integer(skillId - 1))) {
+                    if (skillList.contains(skillId - 1)) {
                         // 取回技能資料
                         final L1Skills l1skills = SkillsTable.get().getTemplate(skillId);
                         // 取回應耗用材料表
@@ -103,6 +103,7 @@ public class C_SkillBuyItemOK extends ClientBasePacket {
                             for (boolean isOk : isOks) {
                                 if (!isOk) {
                                     isShopOk = false;
+                                    break;
                                 }
                             }
                             if (isShopOk) {

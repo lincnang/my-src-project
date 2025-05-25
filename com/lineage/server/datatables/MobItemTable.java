@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 public class MobItemTable {
     private static final Log _log = LogFactory.getLog(MobItemTable.class);
     private static final String TOKEN = ",";
-    private static ArrayList<ArrayList<Object>> _array = new ArrayList<ArrayList<Object>>();
+    private static ArrayList<ArrayList<Object>> _array = new ArrayList<>();
     private static MobItemTable _instance;
 
     private MobItemTable() {
@@ -63,10 +63,10 @@ public class MobItemTable {
             isDropGround = true;
         }
         ArrayList<?> aTempData = null;
-        for (int i = 0; i < _array.size(); i++) {
-            aTempData = _array.get(i);
-            if (((Integer) aTempData.get(0)).intValue() == npc.getNpcTemplate().get_npcId()) {
-                if (((Integer) aTempData.get(1)).intValue() != 0) { // 職業判斷
+        for (ArrayList<Object> objects : _array) {
+            aTempData = objects;
+            if ((Integer) aTempData.get(0) == npc.getNpcTemplate().get_npcId()) {
+                if ((Integer) aTempData.get(1) != 0) { // 職業判斷
                     byte class_id = (byte) 0;
                     if (pc.isCrown()) { // 王族
                         class_id = 1;
@@ -85,45 +85,45 @@ public class MobItemTable {
                     } else if (pc.isWarrior()) { // 狂戰士
                         class_id = 8;
                     }
-                    if (((Integer) aTempData.get(1)).intValue() != class_id) { // 職業不符
+                    if ((Integer) aTempData.get(1) != class_id) { // 職業不符
                         return;
                     }
                 }
                 // 等級限制
-                if (((Integer) aTempData.get(2)).intValue() != 0) {
-                    if (pc.getLevel() < ((Integer) aTempData.get(2)).intValue()) {
+                if ((Integer) aTempData.get(2) != 0) {
+                    if (pc.getLevel() < (Integer) aTempData.get(2)) {
                         return;
                     }
                 }
                 // 攜帶物品判斷
-                if (((Integer) aTempData.get(3)).intValue() != 0) {
-                    if (!pc.getInventory().checkItem(((Integer) aTempData.get(2)).intValue())) {
-                        L1Item temp = ItemTable.get().getTemplate(((Integer) aTempData.get(2)).intValue());
+                if ((Integer) aTempData.get(3) != 0) {
+                    if (!pc.getInventory().checkItem((Integer) aTempData.get(2))) {
+                        L1Item temp = ItemTable.get().getTemplate((Integer) aTempData.get(2));
                         pc.sendPackets(new S_SystemMessage("沒有 (" + temp.getName() + ") 是打不到任何好料的。"));
                         return;
                     }
                 }
                 // 陣營限制
-                if (((Integer) aTempData.get(5)).intValue() != 0) {
-                    if (pc.get_c_power().get_c1_type() != ((Integer) aTempData.get(5)).intValue()) {
+                if ((Integer) aTempData.get(5) != 0) {
+                    if (pc.get_c_power().get_c1_type() != (Integer) aTempData.get(5)) {
                         return;
                     }
                 }
                 // 陣營積分限制
-                if (((Integer) aTempData.get(6)).intValue() != 0) {
-                    if (pc.get_other().get_score() <= ((Integer) aTempData.get(6)).intValue()) {
+                if ((Integer) aTempData.get(6) != 0) {
+                    if (pc.get_other().get_score() <= (Integer) aTempData.get(6)) {
                         return;
                     }
                 }
-                if (RandomArrayList.getInc(100, 1) < 100 - ((Integer) aTempData.get(4)).intValue()) { // 成功機率
+                if (RandomArrayList.getInc(100, 1) < 100 - (Integer) aTempData.get(4)) { // 成功機率
                     return;
                 }
                 // 給予技能
                 if ((int[]) aTempData.get(10) != null) {
                     int[] Skills = (int[]) aTempData.get(10);
-                    for (int j = 0; j < Skills.length; j++) {
+                    for (int skill : Skills) {
                         L1SkillUse l1skilluse = new L1SkillUse();
-                        l1skilluse.handleCommands(pc, Skills[j], pc.getId(), pc.getX(), pc.getY(), 0, L1SkillUse.TYPE_GMBUFF);
+                        l1skilluse.handleCommands(pc, skill, pc.getId(), pc.getX(), pc.getY(), 0, L1SkillUse.TYPE_GMBUFF);
                     }
                 }
                 // 給予道具
@@ -167,8 +167,8 @@ public class MobItemTable {
                             pc.getInventory().storeItem(item);
                             if (pc.isInParty()) {
                                 L1PcInstance[] partyMember = pc.getParty().getMembers();
-                                for (int p = 0; p < partyMember.length; p++) {
-                                    partyMember[p].sendPackets(new S_ServerMessage(813, npc.getName(), item.getLogName(), pc.getName()));
+                                for (L1PcInstance l1PcInstance : partyMember) {
+                                    l1PcInstance.sendPackets(new S_ServerMessage(813, npc.getName(), item.getLogName(), pc.getName()));
                                 }
                             } else {
                                 pc.sendPackets(new S_ServerMessage(143, npc.getName(), item.getLogName()));
@@ -246,14 +246,14 @@ public class MobItemTable {
             rset = ps.executeQuery("SELECT * FROM 系統_怪物指定掉落物");
             while (rset.next()) {
                 // 每次均不同
-                aReturn = new ArrayList<Object>();
-                aReturn.add(0, new Integer(rset.getInt("怪物編號")));
-                aReturn.add(1, new Integer(rset.getInt("職業判斷")));
-                aReturn.add(2, new Integer(rset.getInt("等級判斷")));
-                aReturn.add(3, new Integer(rset.getInt("判斷需要道具")));
-                aReturn.add(4, new Integer(rset.getInt("掉落機率")));
-                aReturn.add(5, new Integer(rset.getInt("陣營判斷")));
-                aReturn.add(6, new Integer(rset.getInt("陣營積分")));
+                aReturn = new ArrayList<>();
+                aReturn.add(0, rset.getInt("怪物編號"));
+                aReturn.add(1, rset.getInt("職業判斷"));
+                aReturn.add(2, rset.getInt("等級判斷"));
+                aReturn.add(3, rset.getInt("判斷需要道具"));
+                aReturn.add(4, rset.getInt("掉落機率"));
+                aReturn.add(5, rset.getInt("陣營判斷"));
+                aReturn.add(6, rset.getInt("陣營積分"));
                 aReturn.add(7, rset.getString("怪物死亡顯示文字"));
                 // 給予道具
                 if (rset.getString("給予物品編號") != null && !rset.getString("給予物品編號").equals("") && !rset.getString("給予物品編號").equals("0")) // 給予道具

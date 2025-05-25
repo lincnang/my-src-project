@@ -31,7 +31,7 @@ import java.util.concurrent.ScheduledFuture;
  */
 public class ServerAuctionTimer extends TimerTask {
     private static final Log _log = LogFactory.getLog(ServerAuctionTimer.class);
-    private static final Queue<Integer> _removeList = new ConcurrentLinkedQueue<Integer>();
+    private static final Queue<Integer> _removeList = new ConcurrentLinkedQueue<>();
     private ScheduledFuture<?> _timer;
 
     /**
@@ -135,8 +135,7 @@ public class ServerAuctionTimer extends TimerTask {
     private static void deleteHouseInfo(final int houseId) {
         try {
             final Collection<L1Clan> allClans = WorldClan.get().getAllClans();
-            for (final Iterator<L1Clan> iter = allClans.iterator(); iter.hasNext(); ) {
-                final L1Clan clan = iter.next();
+            for (final L1Clan clan : allClans) {
                 if (clan.getHouseId() == houseId) {
                     clan.setHouseId(0);
                     ClanReading.get().updateClan(clan);
@@ -155,8 +154,7 @@ public class ServerAuctionTimer extends TimerTask {
     private static void setHouseInfo(final int houseId, final int bidderId) {
         try {
             final Collection<L1Clan> allClans = WorldClan.get().getAllClans();
-            for (final Iterator<L1Clan> iter = allClans.iterator(); iter.hasNext(); ) {
-                final L1Clan clan = iter.next();
+            for (final L1Clan clan : allClans) {
                 if (clan.getLeaderId() == bidderId) {
                     clan.setHouseId(houseId);
                     ClanReading.get().updateClan(clan);

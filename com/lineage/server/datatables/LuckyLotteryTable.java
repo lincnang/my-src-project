@@ -41,7 +41,7 @@
      private ArrayList<L1LuckyLottery> _list;
 
      private LuckyLotteryTable() {
-         this._list = new ArrayList<L1LuckyLottery>();
+         this._list = new ArrayList<>();
          loadData();
      }
 

@@ -23,7 +23,7 @@ public class WorldClan {
     private Collection<L1Clan> _allClanValues;
 
     private WorldClan() {
-        _isClan = new ConcurrentHashMap<String, L1Clan>();
+        _isClan = new ConcurrentHashMap<>();
     }
 
     public static WorldClan get() {
@@ -74,8 +74,8 @@ public class WorldClan {
             this._isClan.put(clan.getClanName(), clan);
             final int castle_id = clan.getCastleId();
             if (castle_id != 0) {
-                if (L1CastleLocation.mapCastle().get(new Integer(castle_id)) == null) {
-                    L1CastleLocation.putCastle(new Integer(castle_id), clan);
+                if (L1CastleLocation.mapCastle().get(castle_id) == null) {
+                    L1CastleLocation.putCastle(castle_id, clan);
                 }
             }
         }
@@ -114,9 +114,8 @@ public class WorldClan {
      */
     public HashMap<Integer, String> castleClanMap() {
         // <城堡編號, 血盟名稱>
-        final HashMap<Integer, String> isClan = new HashMap<Integer, String>();
-        for (final Iterator<L1Clan> iter = getAllClans().iterator(); iter.hasNext(); ) {
-            final L1Clan clan = iter.next();
+        final HashMap<Integer, String> isClan = new HashMap<>();
+        for (final L1Clan clan : getAllClans()) {
             if (clan.getCastleId() != 0) {
                 isClan.put(clan.getCastleId(), clan.getClanName());
             }

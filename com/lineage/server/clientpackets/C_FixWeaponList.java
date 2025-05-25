@@ -29,7 +29,7 @@ public class C_FixWeaponList extends ClientBasePacket {
             // this.read(decrypt);
             final L1PcInstance pc = client.getActiveChar();
             // 暫時清單
-            final List<L1ItemInstance> weaponList = new ArrayList<L1ItemInstance>();
+            final List<L1ItemInstance> weaponList = new ArrayList<>();
             // 背包物件
             final List<L1ItemInstance> itemList = pc.getInventory().getItems();
             for (final L1ItemInstance item : itemList) {

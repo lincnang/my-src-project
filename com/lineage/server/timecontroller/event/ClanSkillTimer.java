@@ -29,8 +29,8 @@ public class ClanSkillTimer extends TimerTask {
             if (allClan.isEmpty()) {
                 return;
             }
-            for (Iterator<?> iter = allClan.iterator(); iter.hasNext(); ) {
-                L1Clan clan = (L1Clan) iter.next();
+            for (Object o : allClan) {
+                L1Clan clan = (L1Clan) o;
                 if (clan.isClanskill()) {
                     Timestamp skilltime = clan.get_skilltime();
                     if (skilltime == null) {

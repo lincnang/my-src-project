@@ -18,8 +18,8 @@ import java.util.Map;
 
 public class SuperRuneTable {
     private static final Log _log = LogFactory.getLog(SuperRuneTable.class);
-    private static final Map<Integer, L1SuperRune> _superRuneList = new LinkedHashMap<Integer, L1SuperRune>();
-    private static final List<Integer> _idList = new ArrayList<Integer>();
+    private static final Map<Integer, L1SuperRune> _superRuneList = new LinkedHashMap<>();
+    private static final List<Integer> _idList = new ArrayList<>();
     private static SuperRuneTable _instance;
 
     public static SuperRuneTable getInstance() {

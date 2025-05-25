@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class BoardTable implements BoardStorage {
     private static final Log _log = LogFactory.getLog(BoardTable.class);
-    private static final Map<Integer, L1Board> _boards = new HashMap<Integer, L1Board>();
+    private static final Map<Integer, L1Board> _boards = new HashMap<>();
     private static int _maxid = 0;
 
     public void load() {
@@ -41,7 +41,7 @@ public class BoardTable implements BoardStorage {
                 board.set_date(rs.getString("date"));
                 board.set_title(rs.getString("title"));
                 board.set_content(rs.getString("content"));
-                _boards.put(Integer.valueOf(board.get_id()), board);
+                _boards.put(board.get_id(), board);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -58,11 +58,11 @@ public class BoardTable implements BoardStorage {
     }
 
     public L1Board[] getBoardTableList() {
-        return (L1Board[]) _boards.values().toArray(new L1Board[_boards.size()]);
+        return (L1Board[]) _boards.values().toArray(new L1Board[0]);
     }
 
     public L1Board getBoardTable(int houseId) {
-        return (L1Board) _boards.get(Integer.valueOf(houseId));
+        return (L1Board) _boards.get(houseId);
     }
 
     public int getMaxId() {
@@ -76,7 +76,7 @@ public class BoardTable implements BoardStorage {
         board.set_date(date);
         board.set_title(title);
         board.set_content(content);
-        _boards.put(Integer.valueOf(board.get_id()), board);
+        _boards.put(board.get_id(), board);
         Connection co = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -99,7 +99,7 @@ public class BoardTable implements BoardStorage {
     }
 
     public void deleteTopic(int number) {
-        L1Board board = (L1Board) _boards.get(Integer.valueOf(number));
+        L1Board board = (L1Board) _boards.get(number);
         if (board != null) {
             Connection co = null;
             PreparedStatement ps = null;
@@ -108,7 +108,7 @@ public class BoardTable implements BoardStorage {
                 ps = co.prepareStatement("DELETE FROM `server_board` WHERE `id`=?");
                 ps.setInt(1, board.get_id());
                 ps.execute();
-                _boards.remove(Integer.valueOf(number));
+                _boards.remove(number);
             } catch (SQLException e) {
                 _log.error(e.getLocalizedMessage(), e);
             } finally {

@@ -22,7 +22,7 @@ public class ItemTeleportTable {
     private static final Log _log = LogFactory.getLog(ItemTeleportTable.class);
     // private static final Map<Integer, int[]> _teleportList = new
     // HashMap<Integer, int[]>();
-    private static final Map<Integer, TeleportList> _teleportList = new HashMap<Integer, TeleportList>();
+    private static final Map<Integer, TeleportList> _teleportList = new HashMap<>();
     public static boolean START = false;
     private static ItemTeleportTable _instance;
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class L1ChatParty {
     private static final Log _log = LogFactory.getLog(L1ChatParty.class);
-    private final List<L1PcInstance> _membersList = new ArrayList<L1PcInstance>();
+    private final List<L1PcInstance> _membersList = new ArrayList<>();
     private L1PcInstance _leader = null;
 
     public void addMember(final L1PcInstance pc) {
@@ -69,11 +69,11 @@ public class L1ChatParty {
     }
 
     public String getMembersNameList() {
-        String _result = new String("");
+        StringBuilder _result = new StringBuilder(new String(""));
         for (final L1PcInstance pc : _membersList) {
-            _result = _result + pc.getName() + " ";
+            _result.append(pc.getName()).append(" ");
         }
-        return _result;
+        return _result.toString();
     }
 
     private void breakup() {
@@ -135,7 +135,7 @@ public class L1ChatParty {
     }
 
     public L1PcInstance[] getMembers() {
-        return _membersList.toArray(new L1PcInstance[_membersList.size()]);
+        return _membersList.toArray(new L1PcInstance[0]);
     }
 
     public int getNumOfMembers() {

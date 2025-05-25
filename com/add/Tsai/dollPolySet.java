@@ -219,8 +219,8 @@ public class dollPolySet {
     }
 
     public boolean hasNeedQuest(final int questid) {
-        for (int i = 0; i < _needquest.length; i++) {
-            if (_needquest[i] == questid) {
+        for (int j : _needquest) {
+            if (j == questid) {
                 return true;
             }
         }

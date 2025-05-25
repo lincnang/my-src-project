@@ -1368,7 +1368,7 @@ public class C_ItemUSe extends ClientBasePacket {
 
     private String byteWrite(long value) {
         long temp = value / 128;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (temp > 0) {
             sb.append((byte) hextable[(int) value % 128]);
             while (temp >= 128) {

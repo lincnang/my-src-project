@@ -42,8 +42,8 @@ public class S_CreateError extends ServerBasePacket {
         this.writeC(S_NEWS);
         String message = "";
         final StringBuilder sb = (new StringBuilder()).append(message);
-        for (int i = 0; i < this._announcements.size(); i++) {
-            message = sb.append(this._announcements.get(i)).append("\n").toString();
+        for (String announcement : this._announcements) {
+            message = sb.append(announcement).append("\n").toString();
         }
         this.writeS(message);
     }

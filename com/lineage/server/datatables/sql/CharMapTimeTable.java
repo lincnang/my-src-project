@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CharMapTimeTable implements CharMapTimeStorage {
     private static final Log _log = LogFactory.getLog(CharMapTimeTable.class);
-    private static final Map<Integer, HashMap<Integer, Integer>> _timeMap = new ConcurrentHashMap<Integer, HashMap<Integer, Integer>>();
+    private static final Map<Integer, HashMap<Integer, Integer>> _timeMap = new ConcurrentHashMap<>();
 
     /**
      * 初始化載入
@@ -98,7 +98,7 @@ public class CharMapTimeTable implements CharMapTimeStorage {
     public Map<Integer, Integer> addTime(final int objId, final int order_id, final int used_time) {
         final HashMap<Integer, Integer> list = _timeMap.get(objId);
         if (list == null) {
-            final HashMap<Integer, Integer> newlist = new HashMap<Integer, Integer>();
+            final HashMap<Integer, Integer> newlist = new HashMap<>();
             newlist.put(order_id, used_time);
             // put
             _timeMap.put(objId, newlist);

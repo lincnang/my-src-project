@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MySqlBigHotblingStorage implements BigHotblingStorage {
-    private final Map<Integer, L1BigHotbling> _BigHotbling = new ConcurrentHashMap<Integer, L1BigHotbling>();
+    private final Map<Integer, L1BigHotbling> _BigHotbling = new ConcurrentHashMap<>();
 
     public void create(int id, String number, int totalPrice, int money1, int count, int money2, int count1, int money3, int count2, int count3) {
         Connection con = null;
@@ -29,7 +29,7 @@ public class MySqlBigHotblingStorage implements BigHotblingStorage {
             BigHot.set_money3(money3);
             BigHot.set_count2(count2);
             BigHot.set_count3(count3);
-            this._BigHotbling.put(Integer.valueOf(id), BigHot);
+            this._BigHotbling.put(id, BigHot);
             con = DatabaseFactory.get().getConnection();
             String sqlstr = "INSERT INTO `race_bighotbling` SET `id`=?,`number`=?,`totalPrice`=?,`money1`=?,`count`=?,`money2`=?,`count1`=?,`money3`=?,`count2`=?,`count3`=?,`time`=?";
             pstm = con.prepareStatement(sqlstr);
@@ -77,7 +77,7 @@ public class MySqlBigHotblingStorage implements BigHotblingStorage {
                 BigHot.set_money3(rs.getInt("money3"));
                 BigHot.set_count2(rs.getInt("count2"));
                 BigHot.set_count3(rs.getInt("count3"));
-                this._BigHotbling.put(Integer.valueOf(id), BigHot);
+                this._BigHotbling.put(id, BigHot);
             }
         } catch (SQLException e) {
             e.getLocalizedMessage();
@@ -89,10 +89,10 @@ public class MySqlBigHotblingStorage implements BigHotblingStorage {
     }
 
     public L1BigHotbling[] getBigHotblingList() {
-        return (L1BigHotbling[]) this._BigHotbling.values().toArray(new L1BigHotbling[this._BigHotbling.size()]);
+        return (L1BigHotbling[]) this._BigHotbling.values().toArray(new L1BigHotbling[0]);
     }
 
     public L1BigHotbling getBigHotbling(int id) {
-        return (L1BigHotbling) this._BigHotbling.get(Integer.valueOf(id));
+        return (L1BigHotbling) this._BigHotbling.get(id);
     }
 }

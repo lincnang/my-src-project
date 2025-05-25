@@ -60,7 +60,7 @@ public class Npc_Board extends NpcExecutor {
                 String content = pc.get_board_content();
                 if (pc.getInventory().consumeItem(40308, 300L)) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                    BoardReading.get().writeTopic(pc, sdf.format(Long.valueOf(System.currentTimeMillis())), title, content);
+                    BoardReading.get().writeTopic(pc, sdf.format(System.currentTimeMillis()), title, content);
                     pc.set_board_title(null);
                     pc.set_board_content(null);
                 } else {

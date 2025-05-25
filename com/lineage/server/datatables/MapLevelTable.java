@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class MapLevelTable {
     private static final Log _log = LogFactory.getLog(MapLevelTable.class);
-    private static final Map<Integer, int[]> _level = new HashMap<Integer, int[]>();
+    private static final Map<Integer, int[]> _level = new HashMap<>();
     private static MapLevelTable _instance;
 
     public static MapLevelTable get() {
@@ -54,7 +54,7 @@ public class MapLevelTable {
                 level[2] = locx;
                 level[3] = locy;
                 level[4] = tomapid;
-                _level.put(new Integer(mapid), level);
+                _level.put(mapid, level);
             }
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -71,7 +71,7 @@ public class MapLevelTable {
      *
      */
     public void get_level(final int mapid, final L1PcInstance pc) {
-        final int[] levelX = _level.get(new Integer(mapid));
+        final int[] levelX = _level.get(mapid);
         if (levelX == null) {
             return;
         }

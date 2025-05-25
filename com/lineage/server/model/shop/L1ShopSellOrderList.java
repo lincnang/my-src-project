@@ -30,7 +30,7 @@ class L1ShopSellOrder {
 public class L1ShopSellOrderList {
     private final L1Shop _shop;
     private final L1PcInstance _pc;
-    private final List<L1ShopSellOrder> _list = new ArrayList<L1ShopSellOrder>();
+    private final List<L1ShopSellOrder> _list = new ArrayList<>();
 
     L1ShopSellOrderList(final L1Shop shop, final L1PcInstance pc) {
         this._shop = shop;

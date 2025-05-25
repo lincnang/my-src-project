@@ -52,7 +52,7 @@ public class S_FixWeaponList extends ServerBasePacket {
     private void buildPacket(final L1PcInstance pc) {
         this.writeC(S_FIXABLE_ITEM_LIST);
         this.writeD(0x000000c8); // Price
-        final List<L1ItemInstance> weaponList = new ArrayList<L1ItemInstance>();
+        final List<L1ItemInstance> weaponList = new ArrayList<>();
         final List<L1ItemInstance> itemList = pc.getInventory().getItems();
         for (final L1ItemInstance item : itemList) {
             // Find Weapon

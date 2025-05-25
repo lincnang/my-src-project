@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -57,7 +58,7 @@ public final class ConfigFreeKill {
         //_log.info("載入服務器限制設置!");
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigFreeKill));
+            final InputStream is = Files.newInputStream(new File(ConfigFreeKill).toPath());
             // 指定檔案編碼
             final InputStreamReader isr = new InputStreamReader(is, "utf-8");
             set.load(isr);

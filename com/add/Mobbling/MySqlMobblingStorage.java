@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MySqlMobblingStorage implements MobblingStorage {
-    private final Map<Integer, L1Mobbling> _Mobbling = new ConcurrentHashMap<Integer, L1Mobbling>();
+    private final Map<Integer, L1Mobbling> _Mobbling = new ConcurrentHashMap<>();
 
     public void create(int id, int npcid, double rate, int totalPrice) {
         Connection con = null;
@@ -22,7 +22,7 @@ public class MySqlMobblingStorage implements MobblingStorage {
             Mob.set_id(id);
             Mob.set_npcid(npcid);
             Mob.set_rate(rate);
-            this._Mobbling.put(Integer.valueOf(id), Mob);
+            this._Mobbling.put(id, Mob);
             con = DatabaseFactory.get().getConnection();
             String sqlstr = "INSERT INTO `race_mobbling` SET `id`=?,`npcid`=?,`rate`=?,`time`=?,`totalPrice`=?";
             pstm = con.prepareStatement(sqlstr);
@@ -57,7 +57,7 @@ public class MySqlMobblingStorage implements MobblingStorage {
                 Mob.set_id(id);
                 Mob.set_npcid(rs.getInt("npcid"));
                 Mob.set_rate(rs.getDouble("rate"));
-                this._Mobbling.put(Integer.valueOf(id), Mob);
+                this._Mobbling.put(id, Mob);
             }
         } catch (SQLException e) {
             e.getLocalizedMessage();
@@ -69,10 +69,10 @@ public class MySqlMobblingStorage implements MobblingStorage {
     }
 
     public L1Mobbling[] getMobblingList() {
-        return ((L1Mobbling[]) this._Mobbling.values().toArray(new L1Mobbling[this._Mobbling.size()]));
+        return ((L1Mobbling[]) this._Mobbling.values().toArray(new L1Mobbling[0]));
     }
 
     public L1Mobbling getMobbling(int id) {
-        return ((L1Mobbling) this._Mobbling.get(Integer.valueOf(id)));
+        return ((L1Mobbling) this._Mobbling.get(id));
     }
 }

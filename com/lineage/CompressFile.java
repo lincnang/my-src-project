@@ -13,13 +13,10 @@ public class CompressFile {
     }
 
     public synchronized void zip(File inputFile, String zipFilename) throws IOException {
-        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFilename));
-        try {
+        try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFilename))) {
             zip(inputFile, out, "");
         } catch (IOException e) {
             throw e;
-        } finally {
-            out.close();
         }
     }
 
@@ -28,8 +25,8 @@ public class CompressFile {
             File[] inputFiles = inputFile.listFiles();
             out.putNextEntry(new ZipEntry(base + "/"));
             base = base + "/";
-            for (int i = 0; i < inputFiles.length; i++) {
-                zip(inputFiles[i], out, base + inputFiles[i].getName());
+            for (File file : inputFiles) {
+                zip(file, out, base + file.getName());
             }
         } else {
             if (base.length() > 0) {
@@ -37,8 +34,7 @@ public class CompressFile {
             } else {
                 out.putNextEntry(new ZipEntry(inputFile.getName()));
             }
-            FileInputStream in = new FileInputStream(inputFile);
-            try {
+            try (FileInputStream in = new FileInputStream(inputFile)) {
                 byte[] by = new byte[1024];
                 int c;
                 while ((c = in.read(by)) != -1) {
@@ -46,8 +42,6 @@ public class CompressFile {
                 }
             } catch (IOException e) {
                 throw e;
-            } finally {
-                in.close();
             }
         }
     }

@@ -24,7 +24,7 @@ import java.util.Map;
 public class AutoTable {
     private static final Log _log = LogFactory.getLog(AutoTable.class);
     private static AutoTable _instance;
-    Map<Integer, String> _autolog = new HashMap<Integer, String>();
+    Map<Integer, String> _autolog = new HashMap<>();
 
     public static AutoTable getInstance() {
         if (_instance == null) {

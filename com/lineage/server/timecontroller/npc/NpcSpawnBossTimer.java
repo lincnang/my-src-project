@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @author dexc
  */
 public class NpcSpawnBossTimer extends TimerTask {
-    public static final Map<L1NpcInstance, Long> MAP = new ConcurrentHashMap<L1NpcInstance, Long>();
+    public static final Map<L1NpcInstance, Long> MAP = new ConcurrentHashMap<>();
     private static final Log _log = LogFactory.getLog(NpcSpawnBossTimer.class);
     private ScheduledFuture<?> _timer;
     /*

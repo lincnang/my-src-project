@@ -11,7 +11,7 @@ public class Register {
      *
      */
     public static String getMotherboardSN() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         try {
             File file = File.createTempFile("realhowto", ".vbs");
             file.deleteOnExit();
@@ -23,13 +23,13 @@ public class Register {
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             while ((line = input.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
             input.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result.trim();
+        return result.toString().trim();
     }
 
     /**
@@ -38,7 +38,7 @@ public class Register {
      * @param drive 盤符
      */
     public static String getHardDiskSN(String drive) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         try {
             File file = File.createTempFile("realhowto", ".vbs");
             file.deleteOnExit();
@@ -50,13 +50,13 @@ public class Register {
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             while ((line = input.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
             input.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result.trim();
+        return result.toString().trim();
     }
 
     /**
@@ -64,7 +64,7 @@ public class Register {
      *
      */
     public static String getCPUSerial() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         try {
             File file = File.createTempFile("tmp", ".vbs");
             file.deleteOnExit();
@@ -77,17 +77,17 @@ public class Register {
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             while ((line = input.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
             input.close();
             file.delete();
         } catch (Exception e) {
             e.fillInStackTrace();
         }
-        if (result.trim().length() < 1 || result == null) {
-            result = "錯誤。";
+        if (result.toString().trim().length() < 1 || result == null) {
+            result = new StringBuilder("錯誤。");
         }
-        return result.trim();
+        return result.toString().trim();
     }
 
     /**

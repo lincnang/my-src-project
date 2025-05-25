@@ -75,9 +75,9 @@ public class Cards extends ItemExecutor {
             //獲取列表id
             if (card1 != null) {//列表ID空白不啟動
                 if (CardQuestTable.get().IsQuest(pc, card1.getQuestId())) {
-                    stringBuilder.append(String.valueOf(card1.getAddcgfxid()) + ",");
+                    stringBuilder.append(String.valueOf(card1.getAddcgfxid())).append(",");
                 } else {
-                    stringBuilder.append(String.valueOf(card1.getAddhgfxid()) + ",");
+                    stringBuilder.append(String.valueOf(card1.getAddhgfxid())).append(",");
                 }
             }
         }

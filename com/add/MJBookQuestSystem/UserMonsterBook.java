@@ -20,11 +20,11 @@ import java.util.HashMap;
 public class UserMonsterBook {
     private HashMap<Integer, UserMonsterBookProgress> _mb;
     private L1PcInstance _owner;
-    private Object _lock;
+    private final Object _lock;
 
     public UserMonsterBook(L1PcInstance pc) {
         _owner = pc;
-        _mb = new HashMap<Integer, UserMonsterBookProgress>(10);
+        _mb = new HashMap<>(10);
         _lock = new Object();
     }
 
@@ -38,7 +38,7 @@ public class UserMonsterBook {
     }
 
     public ArrayList<UserMonsterBookProgress> getProgressList() {
-        ArrayList<UserMonsterBookProgress> list = new ArrayList<UserMonsterBookProgress>(_mb.size());
+        ArrayList<UserMonsterBookProgress> list = new ArrayList<>(_mb.size());
         list.addAll(_mb.values());
         return list;
     }
@@ -128,8 +128,8 @@ public class UserMonsterBook {
         progress.setCompleted(progress.getCompleted() + 1);
         ArrayList<NormalQuestCompensator> list = MonsterBookCompensateLoader.getInstance().getNormalCompensators(progress.getCompleted());
         int listSize = list.size();
-        for (int i = 0; i < listSize; i++) {
-            list.get(i).compensate(_owner);
+        for (NormalQuestCompensator normalQuestCompensator : list) {
+            normalQuestCompensator.compensate(_owner);
         }
         _owner.sendPackets(new S_SkillSound(_owner.getId(), 3944));
     }
@@ -177,7 +177,7 @@ public class UserMonsterBook {
         private L1PcInstance _pc;
 
         public DelaySender(L1PcInstance pc) {
-            _pck = new ArrayList<ServerBasePacket>(6);
+            _pck = new ArrayList<>(6);
             _pc = pc;
         }
 
@@ -187,8 +187,8 @@ public class UserMonsterBook {
 
         public void run() {
             int size = _pck.size();
-            for (int i = 0; i < size; i++) {
-                _pc.sendPackets(_pck.get(i));
+            for (ServerBasePacket serverBasePacket : _pck) {
+                _pc.sendPackets(serverBasePacket);
             }
         }
     }

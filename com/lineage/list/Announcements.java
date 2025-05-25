@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
 public class Announcements {
     private static final Log _log = LogFactory.getLog(Announcements.class);
     private static Announcements _instance;
-    private final ArrayList<String> _announcements = new ArrayList<String>();
+    private final ArrayList<String> _announcements = new ArrayList<>();
 
     public static Announcements get() {
         if (_instance == null) {
@@ -51,8 +51,6 @@ public class Announcements {
                 this._announcements.add(info);
             }
             _log.info("載入公告事項數量: " + this._announcements.size());
-        } catch (final FileNotFoundException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

@@ -48,37 +48,37 @@ public class GmHtml {
         _pc.get_other().set_gmHtml(this);
         _users = World.get().getAllPlayers().size();
         _des = WorldDe.get().all().size();
-        _allPcList = new TreeMap<Integer, L1PcInstance>();
-        _allDeList = new TreeMap<Integer, L1DeInstance>();
-        _banList = new TreeMap<Integer, String>();
+        _allPcList = new TreeMap<>();
+        _allDeList = new TreeMap<>();
+        _banList = new TreeMap<>();
         _mode = mode;
         // System.out.println("_mode: " + _mode);
         // 加載MAP(PC)
         int keyPc = 0;
         for (L1PcInstance tgpc : World.get().getAllPlayers()) {
-            _allPcList.put(new Integer(keyPc), tgpc);
+            _allPcList.put(keyPc, tgpc);
             keyPc++;
         }
         // 加載MAP(De)
         int keyDe = 0;
         for (L1DeInstance tgde : WorldDe.get().all()) {
-            _allDeList.put(new Integer(keyDe), tgde);
+            _allDeList.put(keyDe, tgde);
             keyDe++;
         }
         // 加載M封鎖
         int keyBan = 0;
         for (String ban : LanSecurityManager.BANIPMAP.keySet()) {
-            _banList.put(new Integer(keyBan), ban);
+            _banList.put(keyBan, ban);
             keyBan++;
         }
         for (String ban : LanSecurityManager.BANNAMEMAP.keySet()) {
-            _banList.put(new Integer(keyBan), ban);
+            _banList.put(keyBan, ban);
             keyBan++;
         }
         // 加載暫時封鎖
         int keyTmpBan = 0;
         for (final String ban : LanSecurityManager.BANIPPACK.keySet()) {
-            _banTmpList.put(new Integer(keyTmpBan), ban);
+            _banTmpList.put(keyTmpBan, ban);
             keyTmpBan++;
         }
     }
@@ -235,13 +235,13 @@ public class GmHtml {
             _pc.get_other().set_page(page);// 設置頁面
             final int or = page * 10;
             // 寫入線上人數
-            stringBuilder.append(String.valueOf(_users) + ",");
+            stringBuilder.append(String.valueOf(_users)).append(",");
             int i = 0;// 檢查號
             for (final Integer key : _allPcList.keySet()) {
                 if ((i >= or) && (i < (or + 10))) {
                     final L1PcInstance tgpc = _allPcList.get(key);
                     if (tgpc != null) {
-                        stringBuilder.append(tgpc.getName() + "(" + tgpc.getAccountName() + ") PcLv:" + tgpc.getLevel() + ",");
+                        stringBuilder.append(tgpc.getName()).append("(").append(tgpc.getAccountName()).append(") PcLv:").append(tgpc.getLevel()).append(",");
                     }
                 }
                 i++;
@@ -258,13 +258,13 @@ public class GmHtml {
             _pc.get_other().set_page(page);// 設置頁面
             final int or = page * 10;
             // 寫入線上人數
-            stringBuilder.append(String.valueOf(_des) + ",");
+            stringBuilder.append(String.valueOf(_des)).append(",");
             int i = 0;// 檢查號
             for (final Integer key : _allDeList.keySet()) {
                 if ((i >= or) && (i < (or + 10))) {
                     final L1DeInstance tgde = _allDeList.get(key);
                     if (tgde != null) {
-                        stringBuilder.append(tgde.getName() + "Lv:" + tgde.getLevel() + ",");
+                        stringBuilder.append(tgde.getName()).append("Lv:").append(tgde.getLevel()).append(",");
                     }
                 }
                 i++;
@@ -285,7 +285,7 @@ public class GmHtml {
                 if ((i >= or) && (i < (or + 10))) {
                     final String banIp = _banList.get(key);
                     if (banIp != null) {
-                        stringBuilder.append(banIp + ",");
+                        stringBuilder.append(banIp).append(",");
                     }
                 }
                 i++;
@@ -306,7 +306,7 @@ public class GmHtml {
                 if ((i >= or) && (i < (or + 10))) {
                     final String banIp = _banTmpList.get(key);
                     if (banIp != null) {
-                        stringBuilder.append(banIp + ",");
+                        stringBuilder.append(banIp).append(",");
                     }
                 }
                 i++;

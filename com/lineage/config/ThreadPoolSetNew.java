@@ -45,7 +45,7 @@ public final class ThreadPoolSetNew {
             is.close();
             if (set.getProperty("CAN_USE_ATTACK_SKILL") != null) {
                 for (String S : set.getProperty("CAN_USE_ATTACK_SKILL").split(",")) {
-                    CAN_USE_ATTACK_SKILL.add(Integer.valueOf(Integer.parseInt(S)));
+                    CAN_USE_ATTACK_SKILL.add(Integer.parseInt(S));
                 }
             }
             STOP_COUNT = Integer.parseInt(set.getProperty("STOP_COUNT", "3"));

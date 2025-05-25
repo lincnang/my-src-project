@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class L1BigHotSpList {
     private final L1PcInstance _pc;
-    private final ArrayList<int[]> _BigHotList = new ArrayList<int[]>();
-    private final ArrayList<L1ItemInstance> _BigHotSellList = new ArrayList<L1ItemInstance>();
+    private final ArrayList<int[]> _BigHotList = new ArrayList<>();
+    private final ArrayList<L1ItemInstance> _BigHotSellList = new ArrayList<>();
 
     public L1BigHotSpList(L1PcInstance pc) {
         this._pc = pc;
@@ -82,6 +82,7 @@ public class L1BigHotSpList {
         for (L1ItemInstance chItem : this._BigHotSellList) {
             if (chItem == BigHotItem) {
                 isOk = true;
+                break;
             }
         }
         if (isOk) {
@@ -109,7 +110,7 @@ public class L1BigHotSpList {
                 int ch = 0;
                 for (int a = 0; a < A.split(",").length; a++) {
                     String[] pk = B.split(",");
-                    if (("," + A).indexOf("," + pk[a] + ",") >= 0) {
+                    if (("," + A).contains("," + pk[a] + ",")) {
                         ch++;
                     }
                 }

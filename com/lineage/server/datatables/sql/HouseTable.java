@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class HouseTable implements HouseStorage {
     private static final Log _log = LogFactory.getLog(HouseTable.class);
-    private static final Map<Integer, L1House> _house = new HashMap<Integer, L1House>();
+    private static final Map<Integer, L1House> _house = new HashMap<>();
 
     private Calendar timestampToCalendar(Timestamp ts) {
         Calendar cal = Calendar.getInstance();
@@ -53,7 +53,7 @@ public class HouseTable implements HouseStorage {
                 house.setOnSale(is_on_sale);
                 house.setPurchaseBasement(is_purchase_basement);
                 house.setTaxDeadline(timestampToCalendar(tax_deadline));
-                _house.put(Integer.valueOf(houseId), house);
+                _house.put(houseId, house);
                 int locx1 = rs.getInt("locx1");
                 int locx2 = rs.getInt("locx2");
                 int locy1 = rs.getInt("locy1");
@@ -80,7 +80,7 @@ public class HouseTable implements HouseStorage {
                     locTmp.set_basement(basement);
                     locTmp.set_homelocx(homelocx);
                     locTmp.set_homelocy(homelocy);
-                    L1HouseLocation.put(Integer.valueOf(houseId), locTmp);
+                    L1HouseLocation.put(houseId, locTmp);
                 }
             }
         } catch (SQLException e) {
@@ -98,7 +98,7 @@ public class HouseTable implements HouseStorage {
     }
 
     public L1House getHouseTable(int houseId) {
-        return (L1House) _house.get(Integer.valueOf(houseId));
+        return (L1House) _house.get(houseId);
     }
 
     public void updateHouse(L1House house) {

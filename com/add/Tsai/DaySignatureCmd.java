@@ -39,11 +39,11 @@ public class DaySignatureCmd {
     public boolean Cmd(final L1PcInstance pc, final String cmd) {
         try {
             if (cmd.matches("[0-999]+")) {
-                final int cmd1 = Integer.valueOf(cmd) + 1;
+                final int cmd1 = Integer.parseInt(cmd) + 1;
                 Day_Signature Day = Day_Signature.get().getDay(cmd1);
                 if (Day != null) {
                     final StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("【" + Day.getMsg() + "】,");
+                    stringBuilder.append("【").append(Day.getMsg()).append("】,");
                     if (Day.getItem() != null) {
                         int index = 0;
                         final String[] item = Day.getItem().split(",");
@@ -55,7 +55,7 @@ public class DaySignatureCmd {
                             final String[] Count = Day.getCount().split(",");
                             String count = Count[index];
                             index++;
-                            stringBuilder.append("+【" + enchant + "】" + items.getName() + "(" + count + "),");
+                            stringBuilder.append("+【").append(enchant).append("】").append(items.getName()).append("(").append(count).append("),");
                         }
                     } else {
                         stringBuilder.append("無道具可領取,");
@@ -77,11 +77,11 @@ public class DaySignatureCmd {
                     SimpleDateFormat sdFormat = new SimpleDateFormat("MMdd");
                     Date date = new Date();
                     String strDate = sdFormat.format(date);
-                    if (Integer.valueOf(strDate) > Day.getDay()) {
+                    if (Integer.parseInt(strDate) > Day.getDay()) {
                         pc.sendPackets(new S_SystemMessage("\\aH你選擇的簽到獎勵已經過期只能補簽喔!"));
                         pc.sendPackets(new S_CloseList(pc.getId()));
                         pc.setCmd(-1);
-                    } else if (Integer.valueOf(strDate) < Day.getDay()) {
+                    } else if (Integer.parseInt(strDate) < Day.getDay()) {
                         pc.sendPackets(new S_SystemMessage("\\aH你選擇的簽到獎勵領取日期還沒到喔!"));
                         pc.sendPackets(new S_CloseList(pc.getId()));
                         pc.setCmd(-1);
@@ -146,19 +146,19 @@ public class DaySignatureCmd {
                     SimpleDateFormat sdFormat = new SimpleDateFormat("MMdd");
                     Date date = new Date();
                     String strDate = sdFormat.format(date);
-                    if (Integer.valueOf(strDate) < Day.getDay()) {
+                    if (Integer.parseInt(strDate) < Day.getDay()) {
                         pc.sendPackets(new S_SystemMessage("\\aH你選擇的簽到獎勵領取日期還沒到喔!"));
                         pc.sendPackets(new S_CloseList(pc.getId()));
                         pc.setCmd(-1);
-                    } else if (Integer.valueOf(strDate) == Day.getDay()) {
+                    } else if (Integer.parseInt(strDate) == Day.getDay()) {
                         pc.sendPackets(new S_SystemMessage("\\aH你選擇的簽到獎勵可以直接領取不需要補簽!"));
                         pc.sendPackets(new S_CloseList(pc.getId()));
                         pc.setCmd(-1);
                     } else {
                         L1Item MakeItem = ItemTable.get().getTemplate(Day.getMakeUp());
                         final StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("補簽需要消耗的道具【" + MakeItem.getName() + "(" + Day.getMakeUpC() + ")】,");
-                        stringBuilder.append("【" + Day.getMsg() + "】,");
+                        stringBuilder.append("補簽需要消耗的道具【").append(MakeItem.getName()).append("(").append(Day.getMakeUpC()).append(")】,");
+                        stringBuilder.append("【").append(Day.getMsg()).append("】,");
                         if (Day.getItem() != null) {
                             int index = 0;
                             final String[] item = Day.getItem().split(",");
@@ -170,7 +170,7 @@ public class DaySignatureCmd {
                                 final String[] Count = Day.getCount().split(",");
                                 String count = Count[index];
                                 index++;
-                                stringBuilder.append("+【" + enchant + "】" + items.getName() + "(" + count + "),");
+                                stringBuilder.append("+【").append(enchant).append("】").append(items.getName()).append("(").append(count).append("),");
                             }
                         } else {
                             stringBuilder.append("無道具可領取,");
@@ -341,30 +341,30 @@ public class DaySignatureCmd {
                 }
             }
             final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("力量 +" + str + ",");
-            stringBuilder.append("敏捷 +" + dex + ",");
-            stringBuilder.append("體質 +" + con + ",");
-            stringBuilder.append("智力 +" + Int + ",");
-            stringBuilder.append("精神 +" + wis + ",");
-            stringBuilder.append("魅力 +" + cha + ",");
-            stringBuilder.append("防禦提升 +" + ac + ",");
-            stringBuilder.append("HP +" + hp + ",");
-            stringBuilder.append("MP +" + mp + ",");
-            stringBuilder.append("血量回復 +" + hpr + ",");
-            stringBuilder.append("魔力回復 +" + mpr + ",");
-            stringBuilder.append("近距離傷害 +" + dmg + ",");
-            stringBuilder.append("遠距離傷害 +" + bdmg + ",");
-            stringBuilder.append("近距離命中 +" + hit + ",");
-            stringBuilder.append("遠距離命中 +" + bhit + ",");
-            stringBuilder.append("物理傷害減免 +" + dr + ",");
-            stringBuilder.append("魔法傷害減免 +" + mdr + ",");
-            stringBuilder.append("魔攻 +" + sp + ",");
-            stringBuilder.append("魔法命中 +" + mhit + ",");
-            stringBuilder.append("魔法防禦 +" + mr + ",");
-            stringBuilder.append("火屬性防禦 +" + f + ",");
-            stringBuilder.append("風屬性防禦 +" + wind + ",");
-            stringBuilder.append("地屬性防禦 +" + e + ",");
-            stringBuilder.append("水屬性防禦 +" + w + ",");
+            stringBuilder.append("力量 +").append(str).append(",");
+            stringBuilder.append("敏捷 +").append(dex).append(",");
+            stringBuilder.append("體質 +").append(con).append(",");
+            stringBuilder.append("智力 +").append(Int).append(",");
+            stringBuilder.append("精神 +").append(wis).append(",");
+            stringBuilder.append("魅力 +").append(cha).append(",");
+            stringBuilder.append("防禦提升 +").append(ac).append(",");
+            stringBuilder.append("HP +").append(hp).append(",");
+            stringBuilder.append("MP +").append(mp).append(",");
+            stringBuilder.append("血量回復 +").append(hpr).append(",");
+            stringBuilder.append("魔力回復 +").append(mpr).append(",");
+            stringBuilder.append("近距離傷害 +").append(dmg).append(",");
+            stringBuilder.append("遠距離傷害 +").append(bdmg).append(",");
+            stringBuilder.append("近距離命中 +").append(hit).append(",");
+            stringBuilder.append("遠距離命中 +").append(bhit).append(",");
+            stringBuilder.append("物理傷害減免 +").append(dr).append(",");
+            stringBuilder.append("魔法傷害減免 +").append(mdr).append(",");
+            stringBuilder.append("魔攻 +").append(sp).append(",");
+            stringBuilder.append("魔法命中 +").append(mhit).append(",");
+            stringBuilder.append("魔法防禦 +").append(mr).append(",");
+            stringBuilder.append("火屬性防禦 +").append(f).append(",");
+            stringBuilder.append("風屬性防禦 +").append(wind).append(",");
+            stringBuilder.append("地屬性防禦 +").append(e).append(",");
+            stringBuilder.append("水屬性防禦 +").append(w).append(",");
             final String[] clientStrAry = stringBuilder.toString().split(",");
             pc.sendPackets(new S_NPCTalkReturn(pc, "Book_D11", clientStrAry));
         } catch (final Exception e) {
@@ -380,88 +380,88 @@ public class DaySignatureCmd {
                 if (dolls != null) {
                     boolean IsIndex = true;
                     if (IsIndex) {
-                        stringBuilder.append(dolls.getMsg1() + ",");
+                        stringBuilder.append(dolls.getMsg1()).append(",");
                         int k = 0;
                         for (int j = 0; j < dolls.getNeedQuest().length; j++) {
                             if (pc.getQuest().get_step(dolls.getNeedQuest()[j]) != 0) {
-                                stringBuilder.append(dolls.getNeedName()[j] + "(已收藏),");
+                                stringBuilder.append(dolls.getNeedName()[j]).append("(已收藏),");
                                 k++;
                             } else {
-                                stringBuilder.append(dolls.getNeedName()[j] + "(未收藏),");
+                                stringBuilder.append(dolls.getNeedName()[j]).append("(未收藏),");
                             }
                         }
                         if (k == dolls.getNeedQuest().length) {
                             if (dolls.getAddStr() != 0) {
-                                stringBuilder.append("力量 +" + dolls.getAddStr() + ",");
+                                stringBuilder.append("力量 +").append(dolls.getAddStr()).append(",");
                             }
                             if (dolls.getAddDex() != 0) {
-                                stringBuilder.append("敏捷 +" + dolls.getAddDex() + ",");
+                                stringBuilder.append("敏捷 +").append(dolls.getAddDex()).append(",");
                             }
                             if (dolls.getAddCon() != 0) {
-                                stringBuilder.append("體質 +" + dolls.getAddCon() + ",");
+                                stringBuilder.append("體質 +").append(dolls.getAddCon()).append(",");
                             }
                             if (dolls.getAddInt() != 0) {
-                                stringBuilder.append("智力 +" + dolls.getAddInt() + ",");
+                                stringBuilder.append("智力 +").append(dolls.getAddInt()).append(",");
                             }
                             if (dolls.getAddWis() != 0) {
-                                stringBuilder.append("精神 +" + dolls.getAddWis() + ",");
+                                stringBuilder.append("精神 +").append(dolls.getAddWis()).append(",");
                             }
                             if (dolls.getAddCha() != 0) {
-                                stringBuilder.append("魅力 +" + dolls.getAddCha() + ",");
+                                stringBuilder.append("魅力 +").append(dolls.getAddCha()).append(",");
                             }
                             if (dolls.getAddAc() != 0) {
-                                stringBuilder.append("防禦提升 +" + dolls.getAddAc() + ",");
+                                stringBuilder.append("防禦提升 +").append(dolls.getAddAc()).append(",");
                             }
                             if (dolls.getAddHp() != 0) {
-                                stringBuilder.append("HP +" + dolls.getAddHp() + ",");
+                                stringBuilder.append("HP +").append(dolls.getAddHp()).append(",");
                             }
                             if (dolls.getAddMp() != 0) {
-                                stringBuilder.append("MP +" + dolls.getAddMp() + ",");
+                                stringBuilder.append("MP +").append(dolls.getAddMp()).append(",");
                             }
                             if (dolls.getAddHpr() != 0) {
-                                stringBuilder.append("血量回復 +" + dolls.getAddHpr() + ",");
+                                stringBuilder.append("血量回復 +").append(dolls.getAddHpr()).append(",");
                             }
                             if (dolls.getAddMpr() != 0) {
-                                stringBuilder.append("魔力回復 +" + dolls.getAddMpr() + ",");
+                                stringBuilder.append("魔力回復 +").append(dolls.getAddMpr()).append(",");
                             }
                             if (dolls.getAddDmg() != 0) {
-                                stringBuilder.append("近距離傷害 +" + dolls.getAddDmg() + ",");
+                                stringBuilder.append("近距離傷害 +").append(dolls.getAddDmg()).append(",");
                             }
                             if (dolls.getAddBowDmg() != 0) {
-                                stringBuilder.append("遠距離傷害 +" + dolls.getAddBowDmg() + ",");
+                                stringBuilder.append("遠距離傷害 +").append(dolls.getAddBowDmg()).append(",");
                             }
                             if (dolls.getAddHit() != 0) {
-                                stringBuilder.append("近距離命中 +" + dolls.getAddHit() + ",");
+                                stringBuilder.append("近距離命中 +").append(dolls.getAddHit()).append(",");
                             }
                             if (dolls.getAddBowHit() != 0) {
-                                stringBuilder.append("遠距離命中 +" + dolls.getAddBowHit() + ",");
+                                stringBuilder.append("遠距離命中 +").append(dolls.getAddBowHit()).append(",");
                             }
                             if (dolls.getAddDmgR() != 0) {
-                                stringBuilder.append("物理傷害減免 +" + dolls.getAddDmgR() + ",");
+                                stringBuilder.append("物理傷害減免 +").append(dolls.getAddDmgR()).append(",");
                             }
                             if (dolls.getAddMagicDmgR() != 0) {
-                                stringBuilder.append("魔法傷害減免 +" + dolls.getAddMagicDmgR() + ",");
+                                stringBuilder.append("魔法傷害減免 +").append(dolls.getAddMagicDmgR()).append(",");
                             }
                             if (dolls.getAddSp() != 0) {
-                                stringBuilder.append("魔攻 +" + dolls.getAddSp() + ",");
+                                stringBuilder.append("魔攻 +").append(dolls.getAddSp()).append(",");
                             }
                             if (dolls.getAddMagicHit() != 0) {
-                                stringBuilder.append("魔法命中 +" + dolls.getAddMagicHit() + ",");
+                                stringBuilder.append("魔法命中 +").append(dolls.getAddMagicHit()).append(",");
                             }
                             if (dolls.getAddMr() != 0) {
-                                stringBuilder.append("魔法防禦 +" + dolls.getAddMr() + ",");
+                                stringBuilder.append("魔法防禦 +").append(dolls.getAddMr()).append(",");
                             }
                             if (dolls.getAddFire() != 0) {
-                                stringBuilder.append("火屬性防禦 +" + dolls.getAddFire() + ",");
+                                stringBuilder.append("火屬性防禦 +").append(dolls.getAddFire()).append(",");
                             }
                             if (dolls.getAddWind() != 0) {
-                                stringBuilder.append("風屬性防禦 +" + dolls.getAddWind() + ",");
+                                stringBuilder.append("風屬性防禦 +").append(dolls.getAddWind()).append(",");
                             }
                             if (dolls.getAddEarth() != 0) {
-                                stringBuilder.append("地屬性防禦 +" + dolls.getAddEarth() + ",");
+                                stringBuilder.append("地屬性防禦 +").append(dolls.getAddEarth()).append(",");
                             }
                             if (dolls.getAddWater() != 0) {
-                                stringBuilder.append("水屬性防禦 +" + dolls.getAddWater() + ",");
+                                stringBuilder.append("水屬性防禦 +").append(dolls.getAddWater()).append(",");
                             }
                             stringBuilder.append("<以上為此套卡能力加成>,");
                         }
@@ -484,47 +484,47 @@ public class DaySignatureCmd {
                 if (doll != null) {
                     if (cmd.equals(doll.getCmd())) {
                         pc.setDollId(i);
-                        stringBuilder.append(doll.getMsg2() + ",");
-                        stringBuilder.append(doll.getAddStr() + ",");
-                        stringBuilder.append(doll.getAddDex() + ",");
-                        stringBuilder.append(doll.getAddCon() + ",");
-                        stringBuilder.append(doll.getAddInt() + ",");
-                        stringBuilder.append(doll.getAddWis() + ",");
-                        stringBuilder.append(doll.getAddCha() + ",");
-                        stringBuilder.append(doll.getAddAc() + ",");
-                        stringBuilder.append(doll.getAddHp() + ",");
-                        stringBuilder.append(doll.getAddMp() + ",");
-                        stringBuilder.append(doll.getAddHpr() + ",");
-                        stringBuilder.append(doll.getAddMpr() + ",");
-                        stringBuilder.append(doll.getAddDmg() + ",");
-                        stringBuilder.append(doll.getAddBowDmg() + ",");
-                        stringBuilder.append(doll.getAddHit() + ",");
-                        stringBuilder.append(doll.getAddBowHit() + ",");
-                        stringBuilder.append(doll.getAddDmgR() + ",");
-                        stringBuilder.append(doll.getAddMagicDmgR() + ",");
-                        stringBuilder.append(doll.getAddSp() + ",");
-                        stringBuilder.append(doll.getAddMagicHit() + ",");
-                        stringBuilder.append(doll.getAddMr() + ",");
-                        stringBuilder.append(doll.getAddFire() + ",");
-                        stringBuilder.append(doll.getAddWind() + ",");
-                        stringBuilder.append(doll.getAddEarth() + ",");
-                        stringBuilder.append(doll.getAddWater() + ",");
+                        stringBuilder.append(doll.getMsg2()).append(",");
+                        stringBuilder.append(doll.getAddStr()).append(",");
+                        stringBuilder.append(doll.getAddDex()).append(",");
+                        stringBuilder.append(doll.getAddCon()).append(",");
+                        stringBuilder.append(doll.getAddInt()).append(",");
+                        stringBuilder.append(doll.getAddWis()).append(",");
+                        stringBuilder.append(doll.getAddCha()).append(",");
+                        stringBuilder.append(doll.getAddAc()).append(",");
+                        stringBuilder.append(doll.getAddHp()).append(",");
+                        stringBuilder.append(doll.getAddMp()).append(",");
+                        stringBuilder.append(doll.getAddHpr()).append(",");
+                        stringBuilder.append(doll.getAddMpr()).append(",");
+                        stringBuilder.append(doll.getAddDmg()).append(",");
+                        stringBuilder.append(doll.getAddBowDmg()).append(",");
+                        stringBuilder.append(doll.getAddHit()).append(",");
+                        stringBuilder.append(doll.getAddBowHit()).append(",");
+                        stringBuilder.append(doll.getAddDmgR()).append(",");
+                        stringBuilder.append(doll.getAddMagicDmgR()).append(",");
+                        stringBuilder.append(doll.getAddSp()).append(",");
+                        stringBuilder.append(doll.getAddMagicHit()).append(",");
+                        stringBuilder.append(doll.getAddMr()).append(",");
+                        stringBuilder.append(doll.getAddFire()).append(",");
+                        stringBuilder.append(doll.getAddWind()).append(",");
+                        stringBuilder.append(doll.getAddEarth()).append(",");
+                        stringBuilder.append(doll.getAddWater()).append(",");
                         if (pc.getQuest().get_step(doll.getQuestId()) != 0) {
                             stringBuilder.append("已收藏,");
                         } else {
                             stringBuilder.append("未收藏,");
                         }
-                        stringBuilder.append(doll.getShanbi() + ",");
-                        stringBuilder.append(doll.getHuibi() + ",");
-                        stringBuilder.append(doll.getYaoshui() + ",");
-                        stringBuilder.append(doll.getFuzhong() + ",");
-                        stringBuilder.append(doll.getExp() + ",");
-                        stringBuilder.append(doll.getHunmi() + ",");
-                        stringBuilder.append(doll.getZhicheng() + ",");
-                        stringBuilder.append(doll.getShihua() + ",");
-                        stringBuilder.append(doll.getHanbing() + ",");
-                        stringBuilder.append(doll.getAnhei() + ",");
-                        stringBuilder.append(doll.getShuimian() + ",");
+                        stringBuilder.append(doll.getShanbi()).append(",");
+                        stringBuilder.append(doll.getHuibi()).append(",");
+                        stringBuilder.append(doll.getYaoshui()).append(",");
+                        stringBuilder.append(doll.getFuzhong()).append(",");
+                        stringBuilder.append(doll.getExp()).append(",");
+                        stringBuilder.append(doll.getHunmi()).append(",");
+                        stringBuilder.append(doll.getZhicheng()).append(",");
+                        stringBuilder.append(doll.getShihua()).append(",");
+                        stringBuilder.append(doll.getHanbing()).append(",");
+                        stringBuilder.append(doll.getAnhei()).append(",");
+                        stringBuilder.append(doll.getShuimian()).append(",");
                         final String[] clientStrAry = stringBuilder.toString().split(",");
                         pc.sendPackets(new S_NPCTalkReturn(pc, "Book_D0", clientStrAry));
                         ok = true;

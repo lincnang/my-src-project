@@ -129,15 +129,8 @@ public class C1_Name_Type_Table {
         } catch (ClassNotFoundException e) {
             String error = "發生[陣營階級能力檔案]錯誤, 檢查檔案是否存在:" + className;
             _log.error(error);
-        } catch (IllegalArgumentException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (IllegalAccessException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (InvocationTargetException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (SecurityException e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException |
+                 IllegalAccessException e) {
             _log.error(e.getLocalizedMessage(), e);
         }
         return null;

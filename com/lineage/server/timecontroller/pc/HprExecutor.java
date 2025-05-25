@@ -21,9 +21,9 @@ import static com.lineage.server.model.skill.L1SkillId.*;
 
 public class HprExecutor {
     private static final Log _log = LogFactory.getLog(HprExecutor.class);
-    private static final Map<Integer, Integer> _skill = new HashMap<Integer, Integer>();
-    private static final Map<Integer, Integer> _mapIdU = new HashMap<Integer, Integer>();
-    private static final Map<Integer, Integer> _mapIdD = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _skill = new HashMap<>();
+    private static final Map<Integer, Integer> _mapIdU = new HashMap<>();
+    private static final Map<Integer, Integer> _mapIdD = new HashMap<>();
     private static HprExecutor _instance;
 
     private HprExecutor() {
@@ -89,10 +89,10 @@ public class HprExecutor {
         if ((!tgpc.getSkillisEmpty()) && (tgpc.getSkillEffect().size() > 0)) {
             try {
                 for (Integer skillid : _skill.keySet()) {
-                    if (tgpc.hasSkillEffect(skillid.intValue())) {
+                    if (tgpc.hasSkillEffect(skillid)) {
                         Integer integer = (Integer) _skill.get(skillid);
                         if (integer != null) {
-                            bonus += integer.intValue();
+                            bonus += integer;
                         }
                     }
                 }
@@ -123,9 +123,9 @@ public class HprExecutor {
         if (L1HouseLocation.isInHouse(tgpc.getMapId())) {
             bonus += ConfigOther.HOMEHPR;
         }
-        Integer rhp = (Integer) _mapIdU.get(new Integer(tgpc.getMapId()));
+        Integer rhp = (Integer) _mapIdU.get((int) tgpc.getMapId());
         if (rhp != null) {
-            bonus += rhp.intValue();
+            bonus += rhp;
         }
         if ((tgpc.isElf()) && (tgpc.getMapId() == 4) && (tgpc.getLocation().isInScreen(new Point(33055, 32336)))) {
             bonus += ConfigOther.FORESTHPR;
@@ -148,9 +148,9 @@ public class HprExecutor {
         if (isUnderwater(tgpc)) {
             newHp -= 20;
         }
-        Integer dhp = (Integer) _mapIdD.get(new Integer(tgpc.getMapId()));
+        Integer dhp = (Integer) _mapIdD.get((int) tgpc.getMapId());
         if ((dhp != null) && (!inLifeStream)) {
-            bonus += dhp.intValue();
+            bonus += dhp;
         }
         newHp = Math.max(newHp, 0);
         tgpc.setCurrentHp(newHp);
@@ -204,7 +204,7 @@ public class HprExecutor {
             if (tgpc.isTeleport()) {
                 return false;
             }
-            Integer dhp = (Integer) _mapIdD.get(new Integer(tgpc.getMapId()));
+            Integer dhp = (Integer) _mapIdD.get((int) tgpc.getMapId());
             if (dhp != null) {
                 return true;
             }

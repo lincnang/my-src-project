@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class DIYGfxTimer extends TimerTask {
     // 角色清單
-    private static final List<L1PcInstance> _DIYList = new ArrayList<L1PcInstance>();
+    private static final List<L1PcInstance> _DIYList = new ArrayList<>();
     private int _time = 0;
     private ScheduledFuture<?> _timer;
 

@@ -20,8 +20,8 @@ public class S_RankedKill extends ServerBasePacket {
         writeD(killRanked.size());
         L1PcInstance pc = null;
         T_KillPlayCountRankModel model = null;
-        for (int i = 0; i < killRanked.size(); i++) {
-            model = killRanked.get(i);
+        for (T_KillPlayCountRankModel tKillPlayCountRankModel : killRanked) {
+            model = tKillPlayCountRankModel;
             final String name = model.getName();
             int killCount = model.getCount();
             writeS(name);

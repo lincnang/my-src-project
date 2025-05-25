@@ -27,7 +27,7 @@ public class ItemVIPTable {
     private static final Log _log = LogFactory.getLog(ItemVIPTable.class);
 
     // 用於儲存VIP道具資料，鍵為道具ID，值為L1ItemVIP物件
-    private static final Map<Integer, L1ItemVIP> _VIPList = new HashMap<Integer, L1ItemVIP>();
+    private static final Map<Integer, L1ItemVIP> _VIPList = new HashMap<>();
 
     // 單例實例
     private static ItemVIPTable _instance;
@@ -190,7 +190,7 @@ public class ItemVIPTable {
                 vip.set_sucking_mp(add_sucking_mp);//機率吸魔
 
                 // 將VIP道具資料存入_VIPList中
-                _VIPList.put(Integer.valueOf(item_id), vip);
+                _VIPList.put(item_id, vip);
             }
         } catch (SQLException e) {
             // 記錄SQL例外錯誤
@@ -215,7 +215,7 @@ public class ItemVIPTable {
         if (_VIPList.isEmpty()) {
             return null;
         }
-        return _VIPList.get(Integer.valueOf(item_id));
+        return _VIPList.get(item_id);
     }
 
     /**
@@ -225,7 +225,7 @@ public class ItemVIPTable {
      * @return 若是VIP道具則返回true，否則返回false
      */
     public boolean checkVIP(int item_id) {
-        return _VIPList.containsKey(Integer.valueOf(item_id));
+        return _VIPList.containsKey(item_id);
     }
 
     /**
@@ -239,10 +239,10 @@ public class ItemVIPTable {
         if (_VIPList.isEmpty()) {
             return;
         }
-        if (!_VIPList.containsKey(Integer.valueOf(item_id))) {
+        if (!_VIPList.containsKey(item_id)) {
             return;
         }
-        L1ItemVIP vip = _VIPList.get(Integer.valueOf(item_id));
+        L1ItemVIP vip = _VIPList.get(item_id);
         boolean status = false;
         boolean status2 = false;
         boolean spmr = false;
@@ -545,10 +545,10 @@ public class ItemVIPTable {
      * @param item_id 道具ID
      */
     public void deleItemVIP(L1PcInstance pc, int item_id) {
-        if (!_VIPList.containsKey(Integer.valueOf(item_id))) {
+        if (!_VIPList.containsKey(item_id)) {
             return;
         }
-        L1ItemVIP vip = _VIPList.get(Integer.valueOf(item_id));
+        L1ItemVIP vip = _VIPList.get(item_id);
         boolean status = false;
         boolean status2 = false;
         boolean spmr = false;

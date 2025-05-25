@@ -229,8 +229,7 @@ public class NpcMove extends NpcMoveExecutor {
             ;
             final int targetY = locY + HEADING_TABLE_Y[dir];
             final ArrayList<L1Object> objects = World.get().getVisibleObjects(_npc, 1);
-            for (final Iterator<L1Object> iter = objects.iterator(); iter.hasNext(); ) {
-                final L1Object object = iter.next();
+            for (final L1Object object : objects) {
                 boolean isCheck = false;
                 if ((object.getX() == targetX) && (object.getY() == targetY) && (object.getMapId() == _npc.getMapId())) {
                     isCheck = true;
@@ -359,7 +358,7 @@ public class NpcMove extends NpcMoveExecutor {
         int[] locCopy;
         final int[] dirFront = new int[5];
         final boolean serchMap[][] = new boolean[locCenter * 2 + 1][locCenter * 2 + 1];
-        final LinkedList<int[]> queueSerch = new LinkedList<int[]>();
+        final LinkedList<int[]> queueSerch = new LinkedList<>();
         // 設置探索地圖
         for (int j = courceRange * 2 + 1; j > 0; j--) {
             for (i = courceRange - Math.abs(locCenter - j); i >= 0; i--) {

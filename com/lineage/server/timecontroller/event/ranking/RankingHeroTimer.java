@@ -38,15 +38,15 @@ public class RankingHeroTimer extends TimerTask {//src013
     private static String[] _userNameG;
     private static String[] _userNameI;
     private static String[] _userNameWarrior;
-    private static Map<Integer, String> _top10 = new HashMap<Integer, String>();// 全職業前10名
-    private static Map<Integer, String> _top3C = new HashMap<Integer, String>();// 王族前3名
-    private static Map<Integer, String> _top3K = new HashMap<Integer, String>();// 騎士前3名
-    private static Map<Integer, String> _top3E = new HashMap<Integer, String>();// 妖精前3名
-    private static Map<Integer, String> _top3W = new HashMap<Integer, String>();// 法師前3名
-    private static Map<Integer, String> _top3D = new HashMap<Integer, String>();// 黑妖前3名
-    private static Map<Integer, String> _top3G = new HashMap<Integer, String>();// 龍騎士前3名
-    private static Map<Integer, String> _top3I = new HashMap<Integer, String>();// 幻術師前3名
-    private static Map<Integer, String> _top3Warrior = new HashMap<Integer, String>();// 幻術師前3名
+    private static Map<Integer, String> _top10 = new HashMap<>();// 全職業前10名
+    private static Map<Integer, String> _top3C = new HashMap<>();// 王族前3名
+    private static Map<Integer, String> _top3K = new HashMap<>();// 騎士前3名
+    private static Map<Integer, String> _top3E = new HashMap<>();// 妖精前3名
+    private static Map<Integer, String> _top3W = new HashMap<>();// 法師前3名
+    private static Map<Integer, String> _top3D = new HashMap<>();// 黑妖前3名
+    private static Map<Integer, String> _top3G = new HashMap<>();// 龍騎士前3名
+    private static Map<Integer, String> _top3I = new HashMap<>();// 幻術師前3名
+    private static Map<Integer, String> _top3Warrior = new HashMap<>();// 幻術師前3名
     private static String[] _userNameScore;
     private ScheduledFuture<?> _timer;
 
@@ -330,7 +330,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     if (type == 0) {
                         for (int i = 0, n = 10; i < n; i++) {
                             if (_userNameC[i].equals(" ")) {
-                                final StringBuffer sbr = new StringBuffer().append(char_name);
+                                final StringBuilder sbr = new StringBuilder().append(char_name);
                                 sbr.append(" (Lv.").append(level).append(")");
                                 sbr.append(" (").append(MeteLevel).append("轉)");
                                 _userNameC[i] = sbr.toString();
@@ -340,7 +340,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     } else if (type == 1) {
                         for (int i = 0, n = 10; i < n; i++) {
                             if (_userNameK[i].equals(" ")) {
-                                final StringBuffer sbr = new StringBuffer().append(char_name);
+                                final StringBuilder sbr = new StringBuilder().append(char_name);
                                 sbr.append(" (Lv.").append(level).append(")");
                                 sbr.append(" (").append(MeteLevel).append("轉)");
                                 _userNameK[i] = sbr.toString();
@@ -350,7 +350,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     } else if (type == 2) {
                         for (int i = 0, n = 10; i < n; i++) {
                             if (_userNameE[i].equals(" ")) {
-                                final StringBuffer sbr = new StringBuffer().append(char_name);
+                                final StringBuilder sbr = new StringBuilder().append(char_name);
                                 sbr.append(" (Lv.").append(level).append(")");
                                 sbr.append(" (").append(MeteLevel).append("轉)");
                                 _userNameE[i] = sbr.toString();
@@ -360,7 +360,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     } else if (type == 3) {
                         for (int i = 0, n = 10; i < n; i++) {
                             if (_userNameW[i].equals(" ")) {
-                                final StringBuffer sbr = new StringBuffer().append(char_name);
+                                final StringBuilder sbr = new StringBuilder().append(char_name);
                                 sbr.append(" (Lv.").append(level).append(")");
                                 sbr.append(" (").append(MeteLevel).append("轉)");
                                 _userNameW[i] = sbr.toString();
@@ -370,7 +370,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     } else if (type == 4) {
                         for (int i = 0, n = 10; i < n; i++) {
                             if (_userNameD[i].equals(" ")) {
-                                final StringBuffer sbr = new StringBuffer().append(char_name);
+                                final StringBuilder sbr = new StringBuilder().append(char_name);
                                 sbr.append(" (Lv.").append(level).append(")");
                                 sbr.append(" (").append(MeteLevel).append("轉)");
                                 _userNameD[i] = sbr.toString();
@@ -380,7 +380,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     } else if (type == 5) {
                         for (int i = 0, n = 10; i < n; i++) {
                             if (_userNameG[i].equals(" ")) {
-                                final StringBuffer sbr = new StringBuffer().append(char_name);
+                                final StringBuilder sbr = new StringBuilder().append(char_name);
                                 sbr.append(" (Lv.").append(level).append(")");
                                 sbr.append(" (").append(MeteLevel).append("轉)");
                                 _userNameG[i] = sbr.toString();
@@ -390,7 +390,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     } else if (type == 6) {
                         for (int i = 0, n = 10; i < n; i++) {
                             if (_userNameI[i].equals(" ")) {
-                                final StringBuffer sbr = new StringBuffer().append(char_name);
+                                final StringBuilder sbr = new StringBuilder().append(char_name);
                                 sbr.append(" (Lv.").append(level).append(")");
                                 sbr.append(" (").append(MeteLevel).append("轉)");
                                 _userNameI[i] = sbr.toString();
@@ -400,7 +400,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     } else if (type == 7) {
                         for (int i = 0, n = 10; i < n; i++) {
                             if (_userNameWarrior[i].equals(" ")) {
-                                final StringBuffer sbr = new StringBuffer().append(char_name);
+                                final StringBuilder sbr = new StringBuilder().append(char_name);
                                 sbr.append(" (Lv.").append(level).append(")");
                                 sbr.append(" (").append(MeteLevel).append("轉)");
                                 _userNameWarrior[i] = sbr.toString();
@@ -411,7 +411,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     // 全職業排行
                     for (int i = 0, n = 10; i < n; i++) {
                         if (_userNameAll[i].equals(" ")) {
-                            final StringBuffer sbr = new StringBuffer().append(char_name);
+                            final StringBuilder sbr = new StringBuilder().append(char_name);
                             // 排行榜是否顯示等級資訊 by terry0412
                             sbr.append(" (Lv.").append(level).append(")");
                             sbr.append(" (").append(MeteLevel).append("轉)");
@@ -454,7 +454,7 @@ public class RankingHeroTimer extends TimerTask {//src013
                     int i = 0;
                     for (int n = 10; i < n; i++) {
                         if (_userNameScore[i].equals(" ")) {
-                            StringBuffer sbr = new StringBuffer().append(char_name);
+                            StringBuilder sbr = new StringBuilder().append(char_name);
                             _userNameScore[i] = sbr.toString();
                             break;
                         }

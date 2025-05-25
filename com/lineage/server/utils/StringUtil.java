@@ -4,9 +4,9 @@ public class StringUtil {
     private static final String[] _decodeChars = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
 
     public static String decode(byte[] b) {
-        StringBuffer resultSBuffer = new StringBuffer();
-        for (int i = 0; i < b.length; i++) {
-            resultSBuffer.append(decode(b[i]));
+        StringBuilder resultSBuffer = new StringBuilder();
+        for (byte value : b) {
+            resultSBuffer.append(decode(value));
         }
         return resultSBuffer.toString();
     }

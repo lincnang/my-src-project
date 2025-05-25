@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class GetBackRestartTable {
     private static final Log _log = LogFactory.getLog(GetBackRestartTable.class);
-    private static final Map<Integer, L1GetBackRestart> _getbackrestart = new HashMap<Integer, L1GetBackRestart>();
+    private static final Map<Integer, L1GetBackRestart> _getbackrestart = new HashMap<>();
     private static GetBackRestartTable _instance;
 
     public static GetBackRestartTable get() {
@@ -42,7 +42,7 @@ public class GetBackRestartTable {
                 gbr.setLocX(rs.getInt("locx"));
                 gbr.setLocY(rs.getInt("locy"));
                 gbr.setMapId(rs.getShort("mapid"));
-                _getbackrestart.put(new Integer(area), gbr);
+                _getbackrestart.put(area, gbr);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -55,19 +55,19 @@ public class GetBackRestartTable {
     }
 
     public void add(int area, int locx, int locy, int map) {
-        L1GetBackRestart tmp = (L1GetBackRestart) _getbackrestart.get(new Integer(area));
+        L1GetBackRestart tmp = (L1GetBackRestart) _getbackrestart.get(area);
         if (tmp == null) {
             L1GetBackRestart gbr = new L1GetBackRestart();
             gbr.setArea(area);
             gbr.setLocX(locx);
             gbr.setLocY(locy);
             gbr.setMapId((short) map);
-            _getbackrestart.put(new Integer(area), gbr);
+            _getbackrestart.put(area, gbr);
         }
     }
 
     public L1GetBackRestart getGetBackRestart(int mapid) {
-        L1GetBackRestart tmp = (L1GetBackRestart) _getbackrestart.get(new Integer(mapid));
+        L1GetBackRestart tmp = (L1GetBackRestart) _getbackrestart.get(mapid);
         if (tmp == null) {
             return null;
         }
@@ -75,7 +75,7 @@ public class GetBackRestartTable {
     }
 
     public L1GetBackRestart[] getGetBackRestartTableList() {
-        return (L1GetBackRestart[]) _getbackrestart.values().toArray(new L1GetBackRestart[_getbackrestart.size()]);
+        return (L1GetBackRestart[]) _getbackrestart.values().toArray(new L1GetBackRestart[0]);
     }
 }
 /*

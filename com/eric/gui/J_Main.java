@@ -179,11 +179,7 @@ public class J_Main extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new J_Main().setVisible(true);
-            }
-        });
+        EventQueue.invokeLater(() -> new J_Main().setVisible(true));
     }
 
     private void iniAction() {
@@ -263,7 +259,7 @@ public class J_Main extends JFrame implements ActionListener {
     }
 
     public void addItemTable(String itemname, long l, long id) {
-        Object[] o = {itemname, Long.valueOf(l), Long.valueOf(id)};
+        Object[] o = {itemname, l, id};
         DTM_Item.addRow(o);
     }
 
@@ -451,11 +447,7 @@ public class J_Main extends JFrame implements ActionListener {
         TF_X.setEditable(false);
         TF_Y.setEditable(false);
         B_Item.setText("物品欄顯示");
-        B_Item.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                J_Main.this.B_ItemActionPerformed(evt);
-            }
-        });
+        B_Item.addActionListener(evt -> J_Main.this.B_ItemActionPerformed(evt));
         CB_Item.setModel(new DefaultComboBoxModel(new String[]{"0,身上物品", "1,倉庫", "2,血盟倉庫", "3,妖森倉庫"}));
         GroupLayout F_PlayerLayout = new GroupLayout(F_Player.getContentPane());
         F_Player.getContentPane().setLayout(F_PlayerLayout);
@@ -479,7 +471,7 @@ public class J_Main extends JFrame implements ActionListener {
         D_Item.getContentPane().setLayout(new GridLayout(1, 0));
         jScrollPane1.setViewportView(T_Item);
         D_Item.getContentPane().add(jScrollPane1);
-        setDefaultCloseOperation(3);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("天堂管理介面");
         setLocationByPlatform(true);
         setMinimumSize(new Dimension(1024, 768));
@@ -560,11 +552,7 @@ public class J_Main extends JFrame implements ActionListener {
         getContentPane().add(SP_Split, "Center");
         CB_Channel.setModel(new DefaultComboBoxModel(new String[]{"訊息頻道", "密語", "公告"}));
         B_Submit.setText("發送");
-        B_Submit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                J_Main.this.B_SubmitActionPerformed(evt);
-            }
-        });
+        B_Submit.addActionListener(evt -> J_Main.this.B_SubmitActionPerformed(evt));
         TF_Msg.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent evt) {
                 J_Main.this.TF_MsgKeyPressed(evt);
@@ -577,12 +565,12 @@ public class J_Main extends JFrame implements ActionListener {
         getContentPane().add(jPanel2, "South");
         M_File.setMnemonic('F');
         M_File.setText("檔案(F)");
-        MI_Save.setAccelerator(KeyStroke.getKeyStroke(83, 2));
+        MI_Save.setAccelerator(KeyStroke.getKeyStroke(83, InputEvent.CTRL_MASK));
         MI_Save.setMnemonic('S');
         MI_Save.setText("儲存訊息(S)");
         M_File.add(MI_Save);
         M_File.add(jSeparator3);
-        MI_SetClose.setAccelerator(KeyStroke.getKeyStroke(69, 2));
+        MI_SetClose.setAccelerator(KeyStroke.getKeyStroke(69, InputEvent.CTRL_MASK));
         MI_SetClose.setMnemonic('E');
         MI_SetClose.setText("設定關閉伺服器(E)...");
         M_File.add(MI_SetClose);
@@ -830,203 +818,232 @@ public class J_Main extends JFrame implements ActionListener {
         if (((e.getModifiers() & 0x10) == 0L) && (((e.getModifiers() & 0x4) != 0) || ((e.getModifiers() & 0x8) != 0))) {
             return;
         }
-        if (command.equals("強制踢除(K)")) {
-            L1PcInstance target = World.get().getPlayer((String) DTM.getValueAt(select, 1));
-            if (target != null) {
-                addConsol("您把玩家：" + (String) DTM.getValueAt(select, 1) + "強制剔除遊戲。");
-                target.sendPackets(new S_Disconnect());
-            } else {
-                addConsol("此玩家不在線上。");
-            }
-        } else if (command.equals("封鎖IP(B)")) {
-            L1PcInstance target = World.get().getPlayer((String) DTM.getValueAt(select, 2));
-            if (target != null) {
-                ClientExecutor targetClient = target.getNetConnection();
-                String ipaddr = targetClient.getIp().toString();
-                if ((ipaddr != null) && (!LanSecurityManager.BANIPMAP.containsKey(ipaddr))) {
-                    IpReading.get().add(ipaddr.toString(), getName() + ":L1PowerKick 封鎖IP");
+        switch (command) {
+            case "強制踢除(K)": {
+                L1PcInstance target = World.get().getPlayer((String) DTM.getValueAt(select, 1));
+                if (target != null) {
+                    addConsol("您把玩家：" + (String) DTM.getValueAt(select, 1) + "強制剔除遊戲。");
+                    target.sendPackets(new S_Disconnect());
+                } else {
+                    addConsol("此玩家不在線上。");
                 }
-                targetClient.kick();
+                break;
             }
-            addConsol("已封鎖" + target.getName() + "的IP");
-        } else if (command.equals("玩家資料(P)")) {
-            setPlayerView((String) DTM.getValueAt(select, 1));
-            F_Player.pack();
-            F_Player.setVisible(true);
-        } else if (command.equals("密語(W)")) {
-            TF_Target.setText((String) DTM.getValueAt(select, 1));
-            CB_Channel.setSelectedIndex(1);
-        } else if (command.equals("儲存訊息(S)")) {
-            saveChatData(false);
-        } else if (command.equals("大天使祝福(A)")) {
-            angel();
-        } else if (command.equals("關閉伺服器(C)")) {
-            closeServer();
-        } else if (command.equals("正義倍率(W)")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("當前服務正義倍率：" + ConfigRate.RATE_LA + " 請輸入新倍率：");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "封鎖IP(B)": {
+                L1PcInstance target = World.get().getPlayer((String) DTM.getValueAt(select, 2));
+                if (target != null) {
+                    ClientExecutor targetClient = target.getNetConnection();
+                    String ipaddr = targetClient.getIp().toString();
+                    if ((ipaddr != null) && (!LanSecurityManager.BANIPMAP.containsKey(ipaddr))) {
+                        IpReading.get().add(ipaddr.toString(), getName() + ":L1PowerKick 封鎖IP");
+                    }
+                    targetClient.kick();
                 }
-                int second = Integer.valueOf(temp).intValue();
-                ConfigRate.RATE_LA = second;
-                World.get().broadcastServerMessage("正義倍率變更為：" + ConfigRate.RATE_LA + "倍。");
-                addConsol(" 正義率變更為：" + ConfigRate.RATE_LA + "倍。");
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                addConsol("已封鎖" + target.getName() + "的IP");
+                break;
             }
-        } else if (command.equals("屬性強化倍率(X)")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("當前服務屬性強化%：" + ConfigRate.ATTR_ENCHANT_CHANCE + " 請輸入新倍率：");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "玩家資料(P)":
+                setPlayerView((String) DTM.getValueAt(select, 1));
+                F_Player.pack();
+                F_Player.setVisible(true);
+                break;
+            case "密語(W)":
+                TF_Target.setText((String) DTM.getValueAt(select, 1));
+                CB_Channel.setSelectedIndex(1);
+                break;
+            case "儲存訊息(S)":
+                saveChatData(false);
+                break;
+            case "大天使祝福(A)":
+                angel();
+                break;
+            case "關閉伺服器(C)":
+                closeServer();
+                break;
+            case "正義倍率(W)": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("當前服務正義倍率：" + ConfigRate.RATE_LA + " 請輸入新倍率：");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    ConfigRate.RATE_LA = second;
+                    World.get().broadcastServerMessage("正義倍率變更為：" + ConfigRate.RATE_LA + "倍。");
+                    addConsol(" 正義率變更為：" + ConfigRate.RATE_LA + "倍。");
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
                 }
-                int second = Integer.valueOf(temp).intValue();
-                ConfigRate.ATTR_ENCHANT_CHANCE = second;
-                World.get().broadcastServerMessage("屬性強化%變更為：" + ConfigRate.ATTR_ENCHANT_CHANCE + "%。");
-                addConsol(" 屬性強化%變更為：" + ConfigRate.ATTR_ENCHANT_CHANCE + "%。");
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                break;
             }
-        } else if (command.equals("防具強化倍率(S)")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("當前服務防具強化倍率：" + ConfigRate.ENCHANT_CHANCE_ARMOR + " 請輸入新倍率：");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "屬性強化倍率(X)": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("當前服務屬性強化%：" + ConfigRate.ATTR_ENCHANT_CHANCE + " 請輸入新倍率：");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    ConfigRate.ATTR_ENCHANT_CHANCE = second;
+                    World.get().broadcastServerMessage("屬性強化%變更為：" + ConfigRate.ATTR_ENCHANT_CHANCE + "%。");
+                    addConsol(" 屬性強化%變更為：" + ConfigRate.ATTR_ENCHANT_CHANCE + "%。");
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
                 }
-                int second = Integer.valueOf(temp).intValue();
-                ConfigRate.ENCHANT_CHANCE_ARMOR = second;
-                World.get().broadcastServerMessage("防具強化%變更為：" + ConfigRate.ENCHANT_CHANCE_ARMOR + "%。");
-                addConsol(" 防具強化率變更為：" + ConfigRate.ENCHANT_CHANCE_ARMOR + "%。");
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                break;
             }
-        } else if (command.equals("武器強化倍率(Q)")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("當前服務武器強化%：" + ConfigRate.ENCHANT_CHANCE_WEAPON + " 請輸入新倍率：");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "防具強化倍率(S)": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("當前服務防具強化倍率：" + ConfigRate.ENCHANT_CHANCE_ARMOR + " 請輸入新倍率：");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    ConfigRate.ENCHANT_CHANCE_ARMOR = second;
+                    World.get().broadcastServerMessage("防具強化%變更為：" + ConfigRate.ENCHANT_CHANCE_ARMOR + "%。");
+                    addConsol(" 防具強化率變更為：" + ConfigRate.ENCHANT_CHANCE_ARMOR + "%。");
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
                 }
-                int second = Integer.valueOf(temp).intValue();
-                ConfigRate.ENCHANT_CHANCE_WEAPON = second;
-                World.get().broadcastServerMessage("武器強化%變更為：" + ConfigRate.ENCHANT_CHANCE_WEAPON + "%。");
-                addConsol(" 武器強化%變更為：" + ConfigRate.ENCHANT_CHANCE_WEAPON + "%。");
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                break;
             }
-        } else if (command.equals("寵物經驗倍率(G)")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("當前服務器寵物經驗倍率：" + ConfigRate.RATE_XP + " 請輸入新倍率：");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "武器強化倍率(Q)": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("當前服務武器強化%：" + ConfigRate.ENCHANT_CHANCE_WEAPON + " 請輸入新倍率：");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    ConfigRate.ENCHANT_CHANCE_WEAPON = second;
+                    World.get().broadcastServerMessage("武器強化%變更為：" + ConfigRate.ENCHANT_CHANCE_WEAPON + "%。");
+                    addConsol(" 武器強化%變更為：" + ConfigRate.ENCHANT_CHANCE_WEAPON + "%。");
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
                 }
-                int second = Integer.valueOf(temp).intValue();
-                ConfigRate.RATE_XP = second;
-                World.get().broadcastServerMessage("遊戲寵物經驗倍率變更為：" + ConfigRate.RATE_XP + "倍。");
-                addConsol(" 遊戲寵物經驗倍率變更為：" + ConfigRate.RATE_XP + "倍。");
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                break;
             }
-        } else if (command.equals("經驗倍率(F)")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("當前服務器經驗倍率：" + ConfigRate.RATE_XP + " 請輸入新倍率：");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "寵物經驗倍率(G)": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("當前服務器寵物經驗倍率：" + ConfigRate.RATE_XP + " 請輸入新倍率：");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    ConfigRate.RATE_XP = second;
+                    World.get().broadcastServerMessage("遊戲寵物經驗倍率變更為：" + ConfigRate.RATE_XP + "倍。");
+                    addConsol(" 遊戲寵物經驗倍率變更為：" + ConfigRate.RATE_XP + "倍。");
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
                 }
-                int second = Integer.valueOf(temp).intValue();
-                ConfigRate.RATE_XP = second;
-                World.get().broadcastServerMessage("遊戲經驗倍率變更為：" + ConfigRate.RATE_XP);
-                addConsol(" 遊戲經驗倍率變更為：" + ConfigRate.RATE_XP);
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                break;
             }
-        } else if (command.equals("掉錢倍率(M)")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("當前服務器掉錢率：" + ConfigRate.RATE_DROP_ADENA + " 請輸入新倍率：");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "經驗倍率(F)": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("當前服務器經驗倍率：" + ConfigRate.RATE_XP + " 請輸入新倍率：");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    ConfigRate.RATE_XP = second;
+                    World.get().broadcastServerMessage("遊戲經驗倍率變更為：" + ConfigRate.RATE_XP);
+                    addConsol(" 遊戲經驗倍率變更為：" + ConfigRate.RATE_XP);
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
                 }
-                int second = Integer.valueOf(temp).intValue();
-                ConfigRate.RATE_DROP_ADENA = second;
-                World.get().broadcastServerMessage("掉錢倍率變更為：" + ConfigRate.RATE_DROP_ADENA);
-                addConsol(" 掉錢倍率變更為：" + ConfigRate.RATE_DROP_ADENA);
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                break;
             }
-        } else if (command.equals("掉寶率(D)")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("當前服務器掉寶倍率：" + ConfigRate.RATE_DROP_ITEMS + " 請輸入新倍率：");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "掉錢倍率(M)": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("當前服務器掉錢率：" + ConfigRate.RATE_DROP_ADENA + " 請輸入新倍率：");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    ConfigRate.RATE_DROP_ADENA = second;
+                    World.get().broadcastServerMessage("掉錢倍率變更為：" + ConfigRate.RATE_DROP_ADENA);
+                    addConsol(" 掉錢倍率變更為：" + ConfigRate.RATE_DROP_ADENA);
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
                 }
-                int second = Integer.valueOf(temp).intValue();
-                ConfigRate.RATE_DROP_ITEMS = second;
-                World.get().broadcastServerMessage("掉寶率變更為：" + ConfigRate.RATE_DROP_ITEMS);
-                addConsol(" 掉寶率變更為：" + ConfigRate.RATE_DROP_ITEMS);
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                break;
             }
-        } else if (command.equals("設定關閉伺服器(E)...")) {
-            String temp = "";
-            try {
-                temp = JOptionPane.showInputDialog("請輸入幾秒重後重開!");
-                if ((temp == null) || (temp.equals(""))) {
-                    return;
+            case "掉寶率(D)": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("當前服務器掉寶倍率：" + ConfigRate.RATE_DROP_ITEMS + " 請輸入新倍率：");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    ConfigRate.RATE_DROP_ITEMS = second;
+                    World.get().broadcastServerMessage("掉寶率變更為：" + ConfigRate.RATE_DROP_ITEMS);
+                    addConsol(" 掉寶率變更為：" + ConfigRate.RATE_DROP_ITEMS);
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
                 }
-                int second = Integer.valueOf(temp).intValue();
-                if (second == 0) {
-                    closeServer();
-                }
-                Shutdown.getInstance().startShutdown(null, second, true);
-                World.get().broadcastServerMessage("伺服器將於(" + second + ")秒鐘後關閉伺服器!");
-                addWorldChat("管理器", "伺服器將於(" + second + ")秒鐘後關閉伺服器!");
-            } catch (NumberFormatException e2) {
-                JOptionPane.showMessageDialog(this, "請輸入整數!");
+                break;
             }
-        } else {
-            L1PcInstance targetpc;
-            if (command.equals("終極祝福(B)")) {
-                int[] allBuffSkill = {14, 26, 42, 48, 55, 68, 79, 88, 89, 90, 98, 102, 104, 105, 106, 111, 114, 117, 129, 137, 147, 160, 163, 168, 169, 170, 171, 175, 176};
-                for (Iterator<?> localIterator = World.get().getAllPlayers().iterator(); localIterator.hasNext(); ) {
-                    targetpc = (L1PcInstance) localIterator.next();
-                    L1BuffUtil.haste(targetpc, 3600000);
-                    L1BuffUtil.brave(targetpc, 3600000);
-                    for (int element : allBuffSkill) {
-                        if ((element == 26) || (element == 42)) {
-                            L1Skills skill = SkillsTable.get().getTemplate(element);
-                            new L1SkillUse().handleCommands(targetpc, element, targetpc.getId(), targetpc.getX(), targetpc.getY(), skill.getBuffDuration(), 4);
+            case "設定關閉伺服器(E)...": {
+                String temp = "";
+                try {
+                    temp = JOptionPane.showInputDialog("請輸入幾秒重後重開!");
+                    if ((temp == null) || (temp.equals(""))) {
+                        return;
+                    }
+                    int second = Integer.parseInt(temp);
+                    if (second == 0) {
+                        closeServer();
+                    }
+                    Shutdown.getInstance().startShutdown(null, second, true);
+                    World.get().broadcastServerMessage("伺服器將於(" + second + ")秒鐘後關閉伺服器!");
+                    addWorldChat("管理器", "伺服器將於(" + second + ")秒鐘後關閉伺服器!");
+                } catch (NumberFormatException e2) {
+                    JOptionPane.showMessageDialog(this, "請輸入整數!");
+                }
+                break;
+            }
+            default:
+                L1PcInstance targetpc;
+                if (command.equals("終極祝福(B)")) {
+                    int[] allBuffSkill = {14, 26, 42, 48, 55, 68, 79, 88, 89, 90, 98, 102, 104, 105, 106, 111, 114, 117, 129, 137, 147, 160, 163, 168, 169, 170, 171, 175, 176};
+                    for (L1PcInstance l1PcInstance : World.get().getAllPlayers()) {
+                        targetpc = l1PcInstance;
+                        L1BuffUtil.haste(targetpc, 3600000);
+                        L1BuffUtil.brave(targetpc, 3600000);
+                        for (int element : allBuffSkill) {
+                            if ((element == 26) || (element == 42)) {
+                                L1Skills skill = SkillsTable.get().getTemplate(element);
+                                new L1SkillUse().handleCommands(targetpc, element, targetpc.getId(), targetpc.getX(), targetpc.getY(), skill.getBuffDuration(), 4);
+                            } else {
+                                L1Skills skill = SkillsTable.get().getTemplate(element);
+                                new L1SkillUse().handleCommands(targetpc, element, targetpc.getId(), targetpc.getX(), targetpc.getY(), skill.getBuffDuration(), 4);
+                            }
+                        }
+                        targetpc.sendPackets(new S_ServerMessage(166, "祝福降臨人世,全體玩家得到祝福,GM是個大好人"));
+                    }
+                } else if (command.equals("全體復活補血魔(R)")) {
+                    for (L1PcInstance tg : World.get().getAllPlayers()) {
+                        if ((tg.getCurrentHp() == 0) && (tg.isDead())) {
+                            tg.sendPackets(new S_SystemMessage("GM幫你復活嚕。"));
+                            tg.broadcastPacketX10(new S_SkillSound(tg.getId(), 3944));
+                            tg.sendPackets(new S_SkillSound(tg.getId(), 3944));
+                            tg.setTempID(tg.getId());
+                            tg.sendPackets(new S_Message_YN(322, ""));
                         } else {
-                            L1Skills skill = SkillsTable.get().getTemplate(element);
-                            new L1SkillUse().handleCommands(targetpc, element, targetpc.getId(), targetpc.getX(), targetpc.getY(), skill.getBuffDuration(), 4);
+                            tg.sendPackets(new S_SystemMessage("GM幫你治癒嚕。"));
+                            tg.broadcastPacketX10(new S_SkillSound(tg.getId(), 832));
+                            tg.sendPackets(new S_SkillSound(tg.getId(), 832));
+                            tg.setCurrentHp(tg.getMaxHp());
+                            tg.setCurrentMp(tg.getMaxMp());
                         }
                     }
-                    targetpc.sendPackets(new S_ServerMessage(166, "祝福降臨人世,全體玩家得到祝福,GM是個大好人"));
                 }
-            } else if (command.equals("全體復活補血魔(R)")) {
-                for (L1PcInstance tg : World.get().getAllPlayers()) {
-                    if ((tg.getCurrentHp() == 0) && (tg.isDead())) {
-                        tg.sendPackets(new S_SystemMessage("GM幫你復活嚕。"));
-                        tg.broadcastPacketX10(new S_SkillSound(tg.getId(), 3944));
-                        tg.sendPackets(new S_SkillSound(tg.getId(), 3944));
-                        tg.setTempID(tg.getId());
-                        tg.sendPackets(new S_Message_YN(322, ""));
-                    } else {
-                        tg.sendPackets(new S_SystemMessage("GM幫你治癒嚕。"));
-                        tg.broadcastPacketX10(new S_SkillSound(tg.getId(), 832));
-                        tg.sendPackets(new S_SkillSound(tg.getId(), 832));
-                        tg.setCurrentHp(tg.getMaxHp());
-                        tg.setCurrentMp(tg.getMaxMp());
-                    }
-                }
-            }
+                break;
         }
     }
 

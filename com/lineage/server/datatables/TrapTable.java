@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class TrapTable {
     private static final Log _log = LogFactory.getLog(TrapTable.class);
-    private static final Map<Integer, L1Trap> _traps = new HashMap<Integer, L1Trap>();
+    private static final Map<Integer, L1Trap> _traps = new HashMap<>();
     private static TrapTable _instance;
 
     public static TrapTable get() {
@@ -43,10 +43,8 @@ public class TrapTable {
             rs = pstm.executeQuery();
             while (rs.next()) {
                 L1Trap trap = new L1Trap(rs);
-                _traps.put(Integer.valueOf(trap.getId()), trap);
+                _traps.put(trap.getId(), trap);
             }
-        } catch (SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -58,7 +56,7 @@ public class TrapTable {
     }
 
     public L1Trap getTemplate(int id) {
-        return (L1Trap) _traps.get(Integer.valueOf(id));
+        return (L1Trap) _traps.get(id);
     }
 }
 /*

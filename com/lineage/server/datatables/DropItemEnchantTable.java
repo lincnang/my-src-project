@@ -22,7 +22,7 @@ import java.util.HashMap;
  */
 public final class DropItemEnchantTable {
     private static final Log _log = LogFactory.getLog(DropItemEnchantTable.class);
-    private static final HashMap<Integer, ArrayList<L1DropEnchant>> _dropItemEnchant = new HashMap<Integer, ArrayList<L1DropEnchant>>();
+    private static final HashMap<Integer, ArrayList<L1DropEnchant>> _dropItemEnchant = new HashMap<>();
     private static DropItemEnchantTable _instance;
 
     public static DropItemEnchantTable get() {
@@ -79,7 +79,7 @@ public final class DropItemEnchantTable {
                 L1DropEnchant data = new L1DropEnchant(itemid, enchants);
                 ArrayList<L1DropEnchant> datalist = _dropItemEnchant.get(npcid);
                 if (datalist == null) {
-                    datalist = new ArrayList<L1DropEnchant>();
+                    datalist = new ArrayList<>();
                 }
                 datalist.add(data);
                 _dropItemEnchant.put(npcid, datalist);

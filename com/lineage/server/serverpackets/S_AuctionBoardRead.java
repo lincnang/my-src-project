@@ -18,7 +18,7 @@ public class S_AuctionBoardRead extends ServerBasePacket {
     }
 
     private void buildPacket(final int objectId, final String house_number) {
-        final int number = Integer.valueOf(house_number);
+        final int number = Integer.parseInt(house_number);
         final L1AuctionBoardTmp board = AuctionBoardReading.get().getAuctionBoardTable(number);
         this.writeC(S_HYPERTEXT);
         this.writeD(objectId);

@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class ShopXTable {
     private static final Log _log = LogFactory.getLog(ShopXTable.class);
-    private static final Map<Integer, String> _notShopList = new HashMap<Integer, String>();
+    private static final Map<Integer, String> _notShopList = new HashMap<>();
     private static ShopXTable _instance;
 
     public static ShopXTable get() {
@@ -57,7 +57,7 @@ public class ShopXTable {
                     delete(itemid);
                 } else {
                     String note = rs.getString("note");
-                    _notShopList.put(new Integer(itemid), note);
+                    _notShopList.put(itemid, note);
                 }
             }
             _log.info("讀取->禁止拍賣物品資料數量: " + _notShopList.size() + "(" + timer.get() + "ms)");
@@ -71,7 +71,7 @@ public class ShopXTable {
     }
 
     public String getTemplate(int itemid) {
-        return (String) _notShopList.get(new Integer(itemid));
+        return (String) _notShopList.get(itemid);
     }
 
     public Map<Integer, String> getList() {

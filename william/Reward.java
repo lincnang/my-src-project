@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 
 public class Reward {
     public static final String TOKEN = ",";
-    private static ArrayList<ArrayList<Object>> array = new ArrayList<ArrayList<Object>>();
+    private static ArrayList<ArrayList<Object>> array = new ArrayList<>();
     private static boolean GET_ITEM = false;
 
     public static void main(String[] a) {
@@ -33,10 +33,10 @@ public class Reward {
             GET_ITEM = true;
             getItemData();
         }
-        for (int i = 0; i < array.size(); i++) {
-            data = (ArrayList<?>) array.get(i);
-            if ((pc.getLevel() >= ((Integer) data.get(0)).intValue()) && ((int[]) data.get(9) != null) && ((int[]) data.get(10) != null) && ((int[]) data.get(11) != null) && (pc.getQuest().get_step(((Integer) data.get(12)).intValue()) != ((Integer) data.get(13)).intValue())) {
-                if ((((Integer) data.get(1)).intValue() != 0) && (pc.isCrown())) {
+        for (ArrayList<Object> objects : array) {
+            data = (ArrayList<?>) objects;
+            if ((pc.getLevel() >= (Integer) data.get(0)) && ((int[]) data.get(9) != null) && ((int[]) data.get(10) != null) && ((int[]) data.get(11) != null) && (pc.getQuest().get_step((Integer) data.get(12)) != (Integer) data.get(13))) {
+                if (((Integer) data.get(1) != 0) && (pc.isCrown())) {
                     boolean isGet = false;
                     int[] materials = (int[]) data.get(9);
                     int[] counts = (int[]) data.get(10);
@@ -64,11 +64,11 @@ public class Reward {
                                 World.get().getInventory(pc.getX(), pc.getY(), pc.getMapId()).storeItem(item);
                             }
                             pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                            pc.getQuest().set_step(((Integer) data.get(12)).intValue(), ((Integer) data.get(13)).intValue());
+                            pc.getQuest().set_step((Integer) data.get(12), (Integer) data.get(13));
                         }
                     }
                 }
-                if ((((Integer) data.get(2)).intValue() != 0) && (pc.isKnight())) {
+                if (((Integer) data.get(2) != 0) && (pc.isKnight())) {
                     boolean isGet = false;
                     int[] materials = (int[]) data.get(9);
                     int[] counts = (int[]) data.get(10);
@@ -96,11 +96,11 @@ public class Reward {
                                 World.get().getInventory(pc.getX(), pc.getY(), pc.getMapId()).storeItem(item);
                             }
                             pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                            pc.getQuest().set_step(((Integer) data.get(12)).intValue(), ((Integer) data.get(13)).intValue());
+                            pc.getQuest().set_step((Integer) data.get(12), (Integer) data.get(13));
                         }
                     }
                 }
-                if ((((Integer) data.get(3)).intValue() != 0) && (pc.isWizard())) {
+                if (((Integer) data.get(3) != 0) && (pc.isWizard())) {
                     boolean isGet = false;
                     int[] materials = (int[]) data.get(9);
                     int[] counts = (int[]) data.get(10);
@@ -128,11 +128,11 @@ public class Reward {
                                 World.get().getInventory(pc.getX(), pc.getY(), pc.getMapId()).storeItem(item);
                             }
                             pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                            pc.getQuest().set_step(((Integer) data.get(12)).intValue(), ((Integer) data.get(13)).intValue());
+                            pc.getQuest().set_step((Integer) data.get(12), (Integer) data.get(13));
                         }
                     }
                 }
-                if ((((Integer) data.get(4)).intValue() != 0) && (pc.isElf())) {
+                if (((Integer) data.get(4) != 0) && (pc.isElf())) {
                     boolean isGet = false;
                     int[] materials = (int[]) data.get(9);
                     int[] counts = (int[]) data.get(10);
@@ -160,11 +160,11 @@ public class Reward {
                                 World.get().getInventory(pc.getX(), pc.getY(), pc.getMapId()).storeItem(item);
                             }
                             pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                            pc.getQuest().set_step(((Integer) data.get(12)).intValue(), ((Integer) data.get(13)).intValue());
+                            pc.getQuest().set_step((Integer) data.get(12), (Integer) data.get(13));
                         }
                     }
                 }
-                if ((((Integer) data.get(5)).intValue() != 0) && (pc.isDarkelf())) {
+                if (((Integer) data.get(5) != 0) && (pc.isDarkelf())) {
                     boolean isGet = false;
                     int[] materials = (int[]) data.get(9);
                     int[] counts = (int[]) data.get(10);
@@ -192,11 +192,11 @@ public class Reward {
                                 World.get().getInventory(pc.getX(), pc.getY(), pc.getMapId()).storeItem(item);
                             }
                             pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                            pc.getQuest().set_step(((Integer) data.get(12)).intValue(), ((Integer) data.get(13)).intValue());
+                            pc.getQuest().set_step((Integer) data.get(12), (Integer) data.get(13));
                         }
                     }
                 }
-                if ((((Integer) data.get(6)).intValue() != 0) && (pc.isDragonKnight())) {
+                if (((Integer) data.get(6) != 0) && (pc.isDragonKnight())) {
                     boolean isGet = false;
                     int[] materials = (int[]) data.get(9);
                     int[] counts = (int[]) data.get(10);
@@ -224,11 +224,11 @@ public class Reward {
                                 World.get().getInventory(pc.getX(), pc.getY(), pc.getMapId()).storeItem(item);
                             }
                             pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                            pc.getQuest().set_step(((Integer) data.get(12)).intValue(), ((Integer) data.get(13)).intValue());
+                            pc.getQuest().set_step((Integer) data.get(12), (Integer) data.get(13));
                         }
                     }
                 }
-                if ((((Integer) data.get(7)).intValue() != 0) && (pc.isIllusionist())) {
+                if (((Integer) data.get(7) != 0) && (pc.isIllusionist())) {
                     boolean isGet = false;
                     int[] materials = (int[]) data.get(9);
                     int[] counts = (int[]) data.get(10);
@@ -256,11 +256,11 @@ public class Reward {
                                 World.get().getInventory(pc.getX(), pc.getY(), pc.getMapId()).storeItem(item);
                             }
                             pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                            pc.getQuest().set_step(((Integer) data.get(12)).intValue(), ((Integer) data.get(13)).intValue());
+                            pc.getQuest().set_step((Integer) data.get(12), (Integer) data.get(13));
                         }
                     }
                 }
-                if ((((Integer) data.get(8)).intValue() != 0) && (pc.isWarrior())) {
+                if (((Integer) data.get(8) != 0) && (pc.isWarrior())) {
                     boolean isGet = false;
                     int[] materials = (int[]) data.get(9);
                     int[] counts = (int[]) data.get(10);
@@ -288,7 +288,7 @@ public class Reward {
                                 World.get().getInventory(pc.getX(), pc.getY(), pc.getMapId()).storeItem(item);
                             }
                             pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
-                            pc.getQuest().set_step(((Integer) data.get(12)).intValue(), ((Integer) data.get(13)).intValue());
+                            pc.getQuest().set_step((Integer) data.get(12), (Integer) data.get(13));
                         }
                     }
                 }
@@ -305,21 +305,21 @@ public class Reward {
             ArrayList<Object> arraylist = null;
             if (rset != null) {
                 while (rset.next()) {
-                    arraylist = new ArrayList<Object>();
-                    arraylist.add(0, new Integer(rset.getInt("level")));
-                    arraylist.add(1, new Integer(rset.getInt("give_royal")));
-                    arraylist.add(2, new Integer(rset.getInt("give_knight")));
-                    arraylist.add(3, new Integer(rset.getInt("give_mage")));
-                    arraylist.add(4, new Integer(rset.getInt("give_elf")));
-                    arraylist.add(5, new Integer(rset.getInt("give_darkelf")));
-                    arraylist.add(6, new Integer(rset.getInt("give_dragonKnight")));
-                    arraylist.add(7, new Integer(rset.getInt("give_illusionist")));
-                    arraylist.add(8, new Integer(rset.getInt("give_warrior")));
+                    arraylist = new ArrayList<>();
+                    arraylist.add(0, rset.getInt("level"));
+                    arraylist.add(1, rset.getInt("give_royal"));
+                    arraylist.add(2, rset.getInt("give_knight"));
+                    arraylist.add(3, rset.getInt("give_mage"));
+                    arraylist.add(4, rset.getInt("give_elf"));
+                    arraylist.add(5, rset.getInt("give_darkelf"));
+                    arraylist.add(6, rset.getInt("give_dragonKnight"));
+                    arraylist.add(7, rset.getInt("give_illusionist"));
+                    arraylist.add(8, rset.getInt("give_warrior"));
                     arraylist.add(9, getArray(rset.getString("getItem"), ",", 1));
                     arraylist.add(10, getArray(rset.getString("count"), ",", 1));
                     arraylist.add(11, getArray(rset.getString("enchantlvl"), ",", 1));
-                    arraylist.add(12, new Integer(rset.getInt("quest_id")));
-                    arraylist.add(13, new Integer(rset.getInt("quest_step")));
+                    arraylist.add(12, rset.getInt("quest_id"));
+                    arraylist.add(13, rset.getInt("quest_step"));
                     arraylist.add(14, rset.getString("message"));
                     array.add(arraylist);
                 }

@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class NpcSpawnTable {
     private static final Log _log = LogFactory.getLog(NpcSpawnTable.class);
-    private static final Map<Integer, L1Spawn> _spawntable = new HashMap<Integer, L1Spawn>();
+    private static final Map<Integer, L1Spawn> _spawntable = new HashMap<>();
     private static NpcSpawnTable _instance;
 
     public static NpcSpawnTable get() {
@@ -83,7 +83,7 @@ public class NpcSpawnTable {
                         l1spawn.setName(l1npc.get_name());
                         l1spawn.init();
                         spawnCount += l1spawn.getAmount();
-                        _spawntable.put(new Integer(l1spawn.getId()), l1spawn);
+                        _spawntable.put(l1spawn.getId(), l1spawn);
                     }
                 }
             }
@@ -174,7 +174,7 @@ public class NpcSpawnTable {
         }
     }
 
-    private final void deleteId(int id) {
+    private void deleteId(int id) {
         Connection cn = null;
         PreparedStatement ps = null;
         try {
@@ -182,7 +182,7 @@ public class NpcSpawnTable {
             ps = cn.prepareStatement("DELETE FROM `spawnlist_npc` WHERE `id`=?");
             ps.setInt(1, id);
             ps.execute();
-            _spawntable.remove(Integer.valueOf(id));
+            _spawntable.remove(id);
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -192,7 +192,7 @@ public class NpcSpawnTable {
     }
 
     public L1Spawn getTemplate(int i) {
-        return (L1Spawn) _spawntable.get(Integer.valueOf(i));
+        return (L1Spawn) _spawntable.get(i);
     }
 }
 /*

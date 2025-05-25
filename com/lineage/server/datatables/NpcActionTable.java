@@ -21,8 +21,8 @@ import java.util.List;
 
 public class NpcActionTable {
     private static final Log _log = LogFactory.getLog(LightSpawnTable.class);
-    private static final List<L1NpcAction> _actions = new ArrayList<L1NpcAction>();
-    private static final List<L1NpcAction> _talkActions = new ArrayList<L1NpcAction>();
+    private static final List<L1NpcAction> _actions = new ArrayList<>();
+    private static final List<L1NpcAction> _talkActions = new ArrayList<>();
     private static NpcActionTable _instance;
 
     private NpcActionTable() throws Exception {
@@ -48,7 +48,7 @@ public class NpcActionTable {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = builder.parse(file);
         if (!doc.getDocumentElement().getNodeName().equalsIgnoreCase(nodeName)) {
-            return new ArrayList<L1NpcAction>();
+            return new ArrayList<>();
         }
         return L1NpcXmlParser.listActions(doc.getDocumentElement());
     }

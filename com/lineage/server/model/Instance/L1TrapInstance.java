@@ -34,7 +34,7 @@ public class L1TrapInstance extends L1Object {
     // 陷阱是否啟用的標誌
     private boolean _isEnable = true;
     // 已知的玩家列表
-    private List<L1PcInstance> _knownPlayers = new CopyOnWriteArrayList<L1PcInstance>();
+    private List<L1PcInstance> _knownPlayers = new CopyOnWriteArrayList<>();
 
     /**
      * 建構子，用於初始化陷阱實例

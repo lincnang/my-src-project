@@ -42,7 +42,7 @@ import static com.lineage.server.model.skill.L1SkillId.BRAVE_AVATAR;
  */
 public class L1Party {
     private static final Log _log = LogFactory.getLog(L1Party.class);
-    private final List<L1PcInstance> _membersList = new CopyOnWriteArrayList<L1PcInstance>();
+    private final List<L1PcInstance> _membersList = new CopyOnWriteArrayList<>();
     private L1PcInstance _leader = null;
 
     /**
@@ -182,7 +182,7 @@ public class L1Party {
             return null;
         }
         for (L1PcInstance pc : _membersList) {
-            stringBuilder.append(pc.getName() + " ");
+            stringBuilder.append(pc.getName()).append(" ");
         }
         return stringBuilder.toString();
     }
@@ -303,7 +303,7 @@ public class L1Party {
      *
      */
     public L1PcInstance[] getMembers() {
-        return _membersList.toArray(new L1PcInstance[_membersList.size()]);
+        return _membersList.toArray(new L1PcInstance[0]);
     }
 
     /**
@@ -380,7 +380,7 @@ public class L1Party {
     }
 
     public L1PcInstance partyUser() {
-        final List<L1PcInstance> userList = new CopyOnWriteArrayList<L1PcInstance>();
+        final List<L1PcInstance> userList = new CopyOnWriteArrayList<>();
         for (final L1PcInstance pc : _membersList) {
             if (!_leader.equals(pc)) {
                 userList.add(pc);
@@ -393,7 +393,7 @@ public class L1Party {
     }
 
     public List<String> getPartyMembers() {
-        final List<String> partyMembers = new CopyOnWriteArrayList<String>();
+        final List<String> partyMembers = new CopyOnWriteArrayList<>();
         for (final L1PcInstance pc : _membersList) {
             if (!_leader.equals(pc)) {
                 partyMembers.add(pc.getName());

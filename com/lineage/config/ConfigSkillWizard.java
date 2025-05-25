@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -51,7 +52,7 @@ public final class ConfigSkillWizard {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigSkillWizard));
+            final InputStream is = Files.newInputStream(new File(ConfigSkillWizard).toPath());
             set.load(is);
             is.close();
             DISINTEGRATE_RND = Integer.parseInt(set.getProperty("Disintegrate_Rnd", "25"));

@@ -21,7 +21,7 @@ public class S_AuctionBoard extends ServerBasePacket {
     }
 
     private void buildPacket(final L1NpcInstance board) {
-        final ArrayList<L1AuctionBoardTmp> houseListX = new ArrayList<L1AuctionBoardTmp>();
+        final ArrayList<L1AuctionBoardTmp> houseListX = new ArrayList<>();
         final Collection<L1AuctionBoardTmp> boardList = AuctionBoardReading.get().getAuctionBoardTableList().values();
         for (final L1AuctionBoardTmp boardX : boardList) {
             final int houseId = boardX.getHouseId();

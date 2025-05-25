@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public final class ExpTable {
     private static final Log _log = LogFactory.getLog(ExpTable.class);
-    private static final Map<Integer, L1Exp> _expList = new HashMap<Integer, L1Exp>();
+    private static final Map<Integer, L1Exp> _expList = new HashMap<>();
     public static int MAX_LEVEL = 0;
     public static long MAX_EXP = 0;
     private static ExpTable _instance;
@@ -37,7 +37,7 @@ public final class ExpTable {
      * @return 所需要的經驗直
      */
     public static long getExpByLevel(final int level) {
-        final L1Exp l1exp = _expList.get(new Integer(level - 1));
+        final L1Exp l1exp = _expList.get(level - 1);
         long exp = 0;
         if (l1exp != null) {
             exp = l1exp.get_exp();
@@ -89,7 +89,7 @@ public final class ExpTable {
      *
      */
     public static double getPenaltyRate(final int level) {
-        final L1Exp l1exp = _expList.get(new Integer(level));
+        final L1Exp l1exp = _expList.get(level);
         double expPenalty = 1.0;
         if (l1exp != null) {
             expPenalty = 1.0 / l1exp.get_expPenalty();
@@ -121,7 +121,7 @@ public final class ExpTable {
                 l1exp.set_level(level);
                 l1exp.set_exp(exp);
                 l1exp.set_expPenalty(expPenalty);
-                _expList.put(new Integer(level), l1exp);
+                _expList.put(level, l1exp);
             }
             _log.info("讀取->經驗質設置資料數量: " + _expList.size() + "(" + timer.get() + "ms)");
         } catch (final SQLException e) {

@@ -19,8 +19,7 @@ public class Silver_Flute extends ItemExecutor {
         pc.sendPacketsX8(new S_Sound(10));
         if ((pc.getX() >= 32619) && (pc.getX() <= 32623) && (pc.getY() >= 33120) && (pc.getY() <= 33124) && (pc.getMapId() == 440)) {
             boolean found = false;
-            for (Iterator<L1MonsterInstance> iter = WorldMob.get().all().iterator(); iter.hasNext(); ) {
-                L1MonsterInstance mob = (L1MonsterInstance) iter.next();
+            for (L1MonsterInstance mob : WorldMob.get().all()) {
                 if ((mob != null) && (mob.getNpcTemplate().get_npcId() == 45875)) {
                     found = true;
                     break;

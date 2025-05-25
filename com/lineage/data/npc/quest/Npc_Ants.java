@@ -132,7 +132,7 @@ public class Npc_Ants extends NpcExecutor {
             }
             Integer time = QuestMapTable.get().getTime(217);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             L1Teleport.teleport(pc, 32662, 32786, (short) 217, 3, true);
             pc.getQuest().set_step(CrownLv30_1.QUEST.get_id(), 2);

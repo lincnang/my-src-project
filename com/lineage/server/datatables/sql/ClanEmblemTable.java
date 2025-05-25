@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class ClanEmblemTable implements ClanEmblemStorage {
     private static final Log _log = LogFactory.getLog(ClanEmblemTable.class);
-    private static final Map<Integer, L1EmblemIcon> _iconList = new HashMap<Integer, L1EmblemIcon>();
+    private static final Map<Integer, L1EmblemIcon> _iconList = new HashMap<>();
 
     /**
      * 初始化載入

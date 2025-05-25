@@ -26,7 +26,7 @@ public class ServerElementalStoneTimer extends TimerTask {
     private final L1Map _map = L1WorldMap.get().getMap((short) 4);
     private final L1Object _dummy = new L1Object();
     private ScheduledFuture<?> _timer;
-    private ArrayList<L1GroundInventory> _itemList = new ArrayList<L1GroundInventory>(MAX_COUNT);
+    private ArrayList<L1GroundInventory> _itemList = new ArrayList<>(MAX_COUNT);
     private Random _random = new Random();
 
     public void start() {

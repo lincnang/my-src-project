@@ -37,8 +37,7 @@ public class NpcDigestItemTimer extends TimerTask {
             if (allMob.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1MonsterInstance> iter = allMob.iterator(); iter.hasNext(); ) {
-                final L1MonsterInstance mob = iter.next();
+            for (final L1MonsterInstance mob : allMob) {
                 if (mob == null) {
                     continue;
                 }
@@ -81,8 +80,7 @@ public class NpcDigestItemTimer extends TimerTask {
                 return;
             }
             int count = allItem.size();
-            for (final Iterator<L1ItemInstance> iter = allItem.keySet().iterator(); iter.hasNext(); ) {
-                final L1ItemInstance key = iter.next();
+            for (final L1ItemInstance key : allItem.keySet()) {
                 DelItemTime value = allItem.get(key);
                 if (value._del_item_time <= 0) {
                     count -= 1;

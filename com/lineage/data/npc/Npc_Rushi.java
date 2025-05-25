@@ -48,9 +48,9 @@ public class Npc_Rushi extends NpcExecutor {
         boolean success = false;
         if (cmd.equalsIgnoreCase("A")) {
             newWeapon = 259;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 8, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 8, 1L);
                     pc.getInventory().consumeItem(40308, 5000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(7);
@@ -64,9 +64,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("B")) {
             newWeapon = 410132;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 8, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 8, 1L);
                     pc.getInventory().consumeItem(40308, 5000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(7);
@@ -80,9 +80,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("C")) {
             newWeapon = 410157;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 8, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 8, 1L);
                     pc.getInventory().consumeItem(40308, 5000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(7);
@@ -96,9 +96,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("D")) {
             newWeapon = 410131;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 8, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 8, 1L);
                     pc.getInventory().consumeItem(40308, 5000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(7);
@@ -112,9 +112,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("E")) {
             newWeapon = 410133;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 8, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 8, 1L);
                     pc.getInventory().consumeItem(40308, 5000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(7);
@@ -128,9 +128,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("F")) {
             newWeapon = 410134;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 8, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 8, 1L);
                     pc.getInventory().consumeItem(40308, 5000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(7);
@@ -144,9 +144,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("G")) {
             newWeapon = 410135;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 8, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 8, 1L)) && (pc.getInventory().checkItem(40308, 5000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 8, 1L);
                     pc.getInventory().consumeItem(40308, 5000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(7);
@@ -160,9 +160,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("H")) {
             newWeapon = 259;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 9, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 9, 1L);
                     pc.getInventory().consumeItem(40308, 10000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(8);
@@ -176,9 +176,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("I")) {
             newWeapon = 410132;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 9, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 9, 1L);
                     pc.getInventory().consumeItem(40308, 10000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(8);
@@ -192,9 +192,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("J")) {
             newWeapon = 410157;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 9, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 9, 1L);
                     pc.getInventory().consumeItem(40308, 10000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(8);
@@ -208,9 +208,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("K")) {
             newWeapon = 410131;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 9, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 9, 1L);
                     pc.getInventory().consumeItem(40308, 10000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(8);
@@ -224,9 +224,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("L")) {
             newWeapon = 410133;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 9, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 9, 1L);
                     pc.getInventory().consumeItem(40308, 10000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(8);
@@ -240,9 +240,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("M")) {
             newWeapon = 410134;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 9, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 9, 1L);
                     pc.getInventory().consumeItem(40308, 10000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(8);
@@ -256,9 +256,9 @@ public class Npc_Rushi extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("N")) {
             newWeapon = 410135;
-            for (int i = 0; i < oldweapon.length; i++) {
-                if ((pc.getInventory().checkEnchantItem(oldweapon[i], 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
-                    pc.getInventory().consumeEnchantItem(oldweapon[i], 9, 1L);
+            for (int j : oldweapon) {
+                if ((pc.getInventory().checkEnchantItem(j, 9, 1L)) && (pc.getInventory().checkItem(40308, 10000000L))) {
+                    pc.getInventory().consumeEnchantItem(j, 9, 1L);
                     pc.getInventory().consumeItem(40308, 10000000L);
                     final L1ItemInstance item = ItemTable.get().createItem(newWeapon);
                     item.setEnchantLevel(8);

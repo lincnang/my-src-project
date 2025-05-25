@@ -33,7 +33,7 @@ public class Npc_PetWar extends NpcExecutor {
         try {
             boolean isCloseList = false;
             String[] temp = cmd.split(",");
-            int objid2 = Integer.valueOf(temp[2]).intValue();
+            int objid2 = Integer.parseInt(temp[2]);
             Object[] petlist = pc.getPetList().values().toArray();
             if (petlist.length > 0) {
                 pc.sendPackets(new S_ServerMessage(1187));

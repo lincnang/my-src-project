@@ -79,21 +79,21 @@ public class L1SkillStop {
                 if ((cha instanceof L1PcInstance)) {
                     L1PcInstance pc = (L1PcInstance) cha;
                     for (int i = 0; i < ItemTable.itembuff.size(); i++) {
-                        if (skillId == ((Integer) ItemTable.itembuff.get(i)).intValue()) {
+                        if (skillId == (Integer) ItemTable.itembuff.get(i)) {
                             L1Item temper = ItemTable.get().getTemplate(skillId);
                             String[] status = ((String) ItemTable.itembuffs.get(i)).split(" ");
-                            int _str = Integer.valueOf(status[1]).intValue();
-                            int _dex = Integer.valueOf(status[2]).intValue();
-                            int _int = Integer.valueOf(status[3]).intValue();
-                            int _con = Integer.valueOf(status[4]).intValue();
-                            int _wis = Integer.valueOf(status[5]).intValue();
-                            int _cha = Integer.valueOf(status[6]).intValue();
-                            int _magic = Integer.valueOf(status[7]).intValue();
-                            int _damage = Integer.valueOf(status[8]).intValue();
-                            int _range = Integer.valueOf(status[9]).intValue();
-                            int _hit = Integer.valueOf(status[10]).intValue();
-                            int _hp = Integer.valueOf(status[11]).intValue();
-                            int _mp = Integer.valueOf(status[12]).intValue();
+                            int _str = Integer.parseInt(status[1]);
+                            int _dex = Integer.parseInt(status[2]);
+                            int _int = Integer.parseInt(status[3]);
+                            int _con = Integer.parseInt(status[4]);
+                            int _wis = Integer.parseInt(status[5]);
+                            int _cha = Integer.parseInt(status[6]);
+                            int _magic = Integer.parseInt(status[7]);
+                            int _damage = Integer.parseInt(status[8]);
+                            int _range = Integer.parseInt(status[9]);
+                            int _hit = Integer.parseInt(status[10]);
+                            int _hp = Integer.parseInt(status[11]);
+                            int _mp = Integer.parseInt(status[12]);
                             pc.addStr(-_str);
                             pc.addDex(-_dex);
                             pc.addInt(-_int);
@@ -191,7 +191,7 @@ public class L1SkillStop {
                     case AI_1:// 檢測延遲時間
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            if (!ConfigOtherSet2.NO_AI_MAP_LIST.contains(Integer.valueOf(pc.getMapId()))) {
+                            if (!ConfigOtherSet2.NO_AI_MAP_LIST.contains((int) pc.getMapId())) {
                                 // 城堡戰爭區域
                                 if (L1CastleLocation.checkInAllWarArea(pc.getX(), pc.getY(), pc.getMapId())) {
                                     return;
@@ -232,7 +232,7 @@ public class L1SkillStop {
                     case AI_2:// 輸入答案等待時間
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            if (!ConfigOtherSet2.NO_AI_MAP_LIST.contains(Integer.valueOf(pc.getMapId()))) {
+                            if (!ConfigOtherSet2.NO_AI_MAP_LIST.contains((int) pc.getMapId())) {
                                 // 城堡戰爭區域
                                 if (L1CastleLocation.checkInAllWarArea(pc.getX(), pc.getY(), pc.getMapId())) {
                                     return;
@@ -1644,33 +1644,33 @@ public class L1SkillStop {
 
     public static String getYMDHMS(Calendar c) { // 輸出格式製作
         int[] a = {c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND)};
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(a[0]);
         if (a[1] < 9) {
-            sb.append("-0" + (a[1] + 1));
+            sb.append("-0").append(a[1] + 1);
         } // 加 1 才會得到實際月份
         else {
-            sb.append("-" + (a[1] + 1));
+            sb.append("-").append(a[1] + 1);
         }
         if (a[2] < 10) {
-            sb.append("-0" + (a[2]));
+            sb.append("-0").append(a[2]);
         } else {
-            sb.append("-" + (a[2]));
+            sb.append("-").append(a[2]);
         }
         if (a[3] < 10) {
-            sb.append(" 0" + (a[3]));
+            sb.append(" 0").append(a[3]);
         } else {
-            sb.append(" " + (a[3]));
+            sb.append(" ").append(a[3]);
         }
         if (a[4] < 10) {
-            sb.append(":0" + a[4]);
+            sb.append(":0").append(a[4]);
         } else {
-            sb.append(":" + a[4]);
+            sb.append(":").append(a[4]);
         }
         if (a[5] < 10) {
-            sb.append(":0" + a[5]);
+            sb.append(":0").append(a[5]);
         } else {
-            sb.append(":" + a[5]);
+            sb.append(":").append(a[5]);
         }
         return sb.toString();
     }

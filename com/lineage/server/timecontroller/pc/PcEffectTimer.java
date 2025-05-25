@@ -36,8 +36,8 @@ public class PcEffectTimer extends TimerTask {
             if (all.isEmpty()) {
                 return;
             }
-            for (final Iterator<L1PcInstance> iter = all.iterator(); iter.hasNext(); ) {
-                final L1PcInstance tgpc = iter.next();
+            /** 使用`S_EffectLocation`避免人物異常斷線 */
+            for (final L1PcInstance tgpc : all) {
                 /** 使用`S_EffectLocation`避免人物異常斷線 */
                 // 特效編號 (每XX秒出現1次) by terry0412
                 final int effectId = tgpc.isProtector() ? ProtectorSet.EFFECT_ID : tgpc.getEffectId();

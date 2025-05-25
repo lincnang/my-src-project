@@ -36,7 +36,7 @@ public class L1Buff implements L1CommandExecutor {
             Collection<L1PcInstance> players = null;
             String s = tok.nextToken();
             if (s.equals("me")) {
-                players = new ArrayList<L1PcInstance>();
+                players = new ArrayList<>();
                 players.add(pc);
                 s = tok.nextToken();
             } else if (s.equals("all")) {

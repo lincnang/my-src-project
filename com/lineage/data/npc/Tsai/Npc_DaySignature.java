@@ -55,9 +55,9 @@ public class Npc_DaySignature extends NpcExecutor {
                 if (Day != null) {
                     final int questid = Day.getDay() + 33000;
                     if (pc.getQuest().isEnd(questid)) {//已經領過
-                        s.append(Day.getMsg() + "『已領取』,");
+                        s.append(Day.getMsg()).append("『已領取』,");
                     } else {
-                        s.append(Day.getMsg() + ",");
+                        s.append(Day.getMsg()).append(",");
                     }
                 }
             }
@@ -89,11 +89,11 @@ public class Npc_DaySignature extends NpcExecutor {
     public void action(final L1PcInstance pc, final L1NpcInstance npc, final String cmd, final long amount) {
         try {
             if (cmd.matches("[0-999]+")) {
-                final int cmd1 = Integer.valueOf(cmd) + 1;
+                final int cmd1 = Integer.parseInt(cmd) + 1;
                 Day_Signature Day = Day_Signature.get().getDay(cmd1);
                 if (Day != null) {
                     final StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("【" + Day.getMsg() + "】,");
+                    stringBuilder.append("【").append(Day.getMsg()).append("】,");
                     if (Day.getItem() != null) {
                         int index = 0;
                         final String[] item = Day.getItem().split(",");
@@ -105,7 +105,7 @@ public class Npc_DaySignature extends NpcExecutor {
                             final String[] Count = Day.getCount().split(",");
                             String count = Count[index];
                             index++;
-                            stringBuilder.append("+【" + enchant + "】" + items.getName() + "(" + count + "),");
+                            stringBuilder.append("+【").append(enchant).append("】").append(items.getName()).append("(").append(count).append("),");
                         }
                     } else {
                         stringBuilder.append("無道具可領取,");
@@ -126,11 +126,11 @@ public class Npc_DaySignature extends NpcExecutor {
                     SimpleDateFormat sdFormat = new SimpleDateFormat("MMdd");
                     Date date = new Date();
                     String strDate = sdFormat.format(date);
-                    if (Integer.valueOf(strDate) > Day.getDay()) {
+                    if (Integer.parseInt(strDate) > Day.getDay()) {
                         pc.sendPackets(new S_SystemMessage("\\aH你選擇的簽到獎勵已經過期只能補簽喔!"));
                         pc.sendPackets(new S_CloseList(pc.getId()));
                         pc.setCmd(-1);
-                    } else if (Integer.valueOf(strDate) < Day.getDay()) {
+                    } else if (Integer.parseInt(strDate) < Day.getDay()) {
                         pc.sendPackets(new S_SystemMessage("\\aH你選擇的簽到獎勵領取日期還沒到喔!"));
                         pc.sendPackets(new S_CloseList(pc.getId()));
                         pc.setCmd(-1);
@@ -194,19 +194,19 @@ public class Npc_DaySignature extends NpcExecutor {
                     SimpleDateFormat sdFormat = new SimpleDateFormat("MMdd");
                     Date date = new Date();
                     String strDate = sdFormat.format(date);
-                    if (Integer.valueOf(strDate) < Day.getDay()) {
+                    if (Integer.parseInt(strDate) < Day.getDay()) {
                         pc.sendPackets(new S_SystemMessage("\\aH你選擇的簽到獎勵領取日期還沒到喔!"));
                         pc.sendPackets(new S_CloseList(pc.getId()));
                         pc.setCmd(-1);
-                    } else if (Integer.valueOf(strDate) == Day.getDay()) {
+                    } else if (Integer.parseInt(strDate) == Day.getDay()) {
                         pc.sendPackets(new S_SystemMessage("\\aH你選擇的簽到獎勵可以直接領取不需要補簽!"));
                         pc.sendPackets(new S_CloseList(pc.getId()));
                         pc.setCmd(-1);
                     } else {
                         L1Item MakeItem = ItemTable.get().getTemplate(Day.getMakeUp());
                         final StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("補簽需要消耗的道具【" + MakeItem.getName() + "(" + Day.getMakeUpC() + ")】,");
-                        stringBuilder.append("【" + Day.getMsg() + "】,");
+                        stringBuilder.append("補簽需要消耗的道具【").append(MakeItem.getName()).append("(").append(Day.getMakeUpC()).append(")】,");
+                        stringBuilder.append("【").append(Day.getMsg()).append("】,");
                         if (Day.getItem() != null) {
                             int index = 0;
                             final String[] item = Day.getItem().split(",");
@@ -218,7 +218,7 @@ public class Npc_DaySignature extends NpcExecutor {
                                 final String[] Count = Day.getCount().split(",");
                                 String count = Count[index];
                                 index++;
-                                stringBuilder.append("+【" + enchant + "】" + items.getName() + "(" + count + "),");
+                                stringBuilder.append("+【").append(enchant).append("】").append(items.getName()).append("(").append(count).append("),");
                             }
                         } else {
                             stringBuilder.append("無道具可領取,");

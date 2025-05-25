@@ -71,7 +71,7 @@ public class Zudui_Teleprot1 extends ItemExecutor {
             }
             int mapid = pc.getMapId();
             pc.sendPacketsAll(new S_SkillSound(pc.getId(), 729));
-            World.get().broadcastPacketToAll(new S_BlueMessage(166, (new StringBuilder("\\f3 大神" + " 【").append(pc.getName()).append("】在【" + MapsTable.get().locationname(mapid) + "】. \\f4 使用了一隻穿雲箭！\\f2 千軍萬馬來相見！").toString())));
+            World.get().broadcastPacketToAll(new S_BlueMessage(166, (new StringBuilder("\\f3 大神" + " 【").append(pc.getName()).append("】在【").append(MapsTable.get().locationname(mapid)).append("】. \\f4 使用了一隻穿雲箭！\\f2 千軍萬馬來相見！").toString())));
             pc.sendPackets(new S_ServerMessage("\\fY你已經對所有在線隊伍成員發出訊息!"));
             if (_remove == 1) {
                 pc.getInventory().removeItem(item, 1);

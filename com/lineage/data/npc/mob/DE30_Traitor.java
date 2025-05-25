@@ -32,8 +32,8 @@ public class DE30_Traitor extends NpcExecutor {
                     if (pc.getInventory().checkItem(40596)) {
                         return pc;
                     }
-                    if (!pc.get_otherList().ATKNPC.contains(Integer.valueOf(npc.getNpcId()))) {
-                        pc.get_otherList().ATKNPC.add(Integer.valueOf(npc.getNpcId()));
+                    if (!pc.get_otherList().ATKNPC.contains(npc.getNpcId())) {
+                        pc.get_otherList().ATKNPC.add(npc.getNpcId());
                     }
                     if (pc.get_otherList().ATKNPC.size() >= 7) {
                         CreateNewItem.getQuestItem(pc, npc, 40596, 1L);

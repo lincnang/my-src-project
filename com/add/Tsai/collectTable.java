@@ -144,7 +144,7 @@ public class collectTable {
     }
 
     public collect getCollect(final int id) {
-        return _collectIndex.get(Integer.valueOf(id));
+        return _collectIndex.get(id);
     }
 
     public ArrayList<L1Collectibles> getList() {

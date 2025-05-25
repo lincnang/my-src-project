@@ -560,7 +560,7 @@ public class AutoAttack extends TimerTask {
         int[] locCopy;
         int[] dirFront = new int[5];
         boolean serchMap[][] = new boolean[locCenter * 2 + 1][locCenter * 2 + 1];
-        LinkedList<int[]> queueSerch = new LinkedList<int[]>();
+        LinkedList<int[]> queueSerch = new LinkedList<>();
         // 探索用設定
         for (int j = courceRange * 2 + 1; j > 0; j--) {
             for (i = courceRange - Math.abs(locCenter - j); i >= 0; i--) {
@@ -806,7 +806,7 @@ public class AutoAttack extends TimerTask {
             pc.sendPackets(new S_CharVisualUpdate(pc));
             pc.killSkillEffectTimer(MEDITATION);
             pc.setCallClanId(0); // 唱後移動召喚無效
-            HashSet<L1PcInstance> subjects = new HashSet<L1PcInstance>();
+            HashSet<L1PcInstance> subjects = new HashSet<>();
             subjects.add(pc);
             if (!pc.isGhost()) {
                 // 可以攜帶寵物

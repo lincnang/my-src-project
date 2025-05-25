@@ -78,11 +78,11 @@ public class IpTable implements IpStorage {
                 String key = rs.getString("ip");
                 if (key.lastIndexOf(".") != -1) {// 是IP位置
                     if (!LanSecurityManager.BANIPMAP.containsKey(key)) {
-                        LanSecurityManager.BANIPMAP.put(key, Integer.valueOf(100));
+                        LanSecurityManager.BANIPMAP.put(key, 100);
                         IpReading.get().checktime(key);// 檢查解封鎖時間
                     }
                 } else if (!LanSecurityManager.BANNAMEMAP.containsKey(key)) {// 是帳號名稱
-                    LanSecurityManager.BANNAMEMAP.put(key, Integer.valueOf(100));
+                    LanSecurityManager.BANNAMEMAP.put(key, 100);
                     IpReading.get().checktime(key);// 檢查解封鎖時間
                 }
             }
@@ -101,14 +101,14 @@ public class IpTable implements IpStorage {
         boolean isBan = false;
         if (key.lastIndexOf(".") != -1) {
             if (!LanSecurityManager.BANIPMAP.containsKey(key)) {
-                LanSecurityManager.BANIPMAP.put(key, Integer.valueOf(100));
+                LanSecurityManager.BANIPMAP.put(key, 100);
                 isBan = true;
                 if (Config.ISUBUNTU) {
                     ufwDeny(key);
                 }
             }
         } else if (!LanSecurityManager.BANNAMEMAP.containsKey(key)) {
-            LanSecurityManager.BANNAMEMAP.put(key, Integer.valueOf(100));
+            LanSecurityManager.BANNAMEMAP.put(key, 100);
             isBan = true;
         }
         if (check(key)) {

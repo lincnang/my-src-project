@@ -16,19 +16,19 @@ import java.util.List;
 
 public class C_Password extends ClientBasePacket {
     private static final Log _log = LogFactory.getLog(C_Password.class);
-    private static final List<Integer> password = new ArrayList<Integer>();
+    private static final List<Integer> password = new ArrayList<>();
 
     static {
-        password.add(0, Integer.valueOf(994303243));
-        password.add(1, Integer.valueOf(994303242));
-        password.add(2, Integer.valueOf(994303241));
-        password.add(3, Integer.valueOf(994303240));
-        password.add(4, Integer.valueOf(994303247));
-        password.add(5, Integer.valueOf(994303246));
-        password.add(6, Integer.valueOf(994303245));
-        password.add(7, Integer.valueOf(994303244));
-        password.add(8, Integer.valueOf(994303235));
-        password.add(9, Integer.valueOf(994303234));
+        password.add(0, 994303243);
+        password.add(1, 994303242);
+        password.add(2, 994303241);
+        password.add(3, 994303240);
+        password.add(4, 994303247);
+        password.add(5, 994303246);
+        password.add(6, 994303245);
+        password.add(7, 994303244);
+        password.add(8, 994303235);
+        password.add(9, 994303234);
     }
 
     public void start(byte[] decrypt, ClientExecutor client) {
@@ -39,10 +39,10 @@ public class C_Password extends ClientBasePacket {
                 return;
             }
             int type = readC();
-            int pass1 = password.indexOf(Integer.valueOf(readD())) * 100000 + password.indexOf(Integer.valueOf(readD())) * 10000 + password.indexOf(Integer.valueOf(readD())) * 1000 + password.indexOf(Integer.valueOf(readD())) * 100 + password.indexOf(Integer.valueOf(readD())) * 10 + password.indexOf(Integer.valueOf(readD()));
+            int pass1 = password.indexOf(readD()) * 100000 + password.indexOf(readD()) * 10000 + password.indexOf(readD()) * 1000 + password.indexOf(readD()) * 100 + password.indexOf(readD()) * 10 + password.indexOf(readD());
             L1Account account = client.getAccount();
             if (type == 0) {
-                int pass2 = password.indexOf(Integer.valueOf(readD())) * 100000 + password.indexOf(Integer.valueOf(readD())) * 10000 + password.indexOf(Integer.valueOf(readD())) * 1000 + password.indexOf(Integer.valueOf(readD())) * 100 + password.indexOf(Integer.valueOf(readD())) * 10 + password.indexOf(Integer.valueOf(readD()));
+                int pass2 = password.indexOf(readD()) * 100000 + password.indexOf(readD()) * 10000 + password.indexOf(readD()) * 1000 + password.indexOf(readD()) * 100 + password.indexOf(readD()) * 10 + password.indexOf(readD());
                 if ((pass1 < 0) && (pass2 < 0)) {
                     pc.sendPackets(new S_ServerMessage(79));
                 } else if ((pass1 < 0) && (account.get_warehouse() == 0)) {

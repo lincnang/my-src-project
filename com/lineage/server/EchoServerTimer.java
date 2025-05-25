@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class EchoServerTimer extends TimerTask {
     private static final Log _log = LogFactory.getLog(EchoServerTimer.class);
-    private static final Map<Integer, ServerExecutor> _echoList = new HashMap<Integer, ServerExecutor>();
+    private static final Map<Integer, ServerExecutor> _echoList = new HashMap<>();
     private static EchoServerTimer _instance;
 
     public static EchoServerTimer get() {
@@ -79,7 +79,7 @@ public class EchoServerTimer extends TimerTask {
                 int key = Integer.parseInt(ports);
                 ServerExecutor echoServer = new ServerExecutor(key);
                 if (echoServer != null) {
-                    _echoList.put(new Integer(key), echoServer);
+                    _echoList.put(key, echoServer);
                     echoServer.stsrtEcho();
                 }
                 TimeUnit.MILLISECONDS.sleep(100L);
@@ -107,7 +107,7 @@ public class EchoServerTimer extends TimerTask {
 
     public boolean isPort(int key) {
         try {
-            return _echoList.get(new Integer(key)) != null;
+            return _echoList.get(key) != null;
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
@@ -116,10 +116,10 @@ public class EchoServerTimer extends TimerTask {
 
     public void stopPort(int key) {
         try {
-            ServerExecutor echoServer = (ServerExecutor) _echoList.get(new Integer(key));
+            ServerExecutor echoServer = (ServerExecutor) _echoList.get(key);
             if (echoServer != null) {
                 echoServer.stopEcho();
-                _echoList.remove(new Integer(key));
+                _echoList.remove(key);
             } else {
                 _log.warn("關閉指定監聽端口 作業失敗:該端口未在作用中!");
             }
@@ -130,10 +130,10 @@ public class EchoServerTimer extends TimerTask {
 
     public void startPort(int key) {
         try {
-            ServerExecutor echoServer = (ServerExecutor) _echoList.get(new Integer(key));
+            ServerExecutor echoServer = (ServerExecutor) _echoList.get(key);
             if (echoServer == null) {
                 echoServer = new ServerExecutor(key);
-                _echoList.put(new Integer(key), echoServer);
+                _echoList.put(key, echoServer);
                 echoServer.stsrtEcho();
             } else {
                 _log.warn("啟用指定監聽端口 作業失敗:該端口已在作用中!");

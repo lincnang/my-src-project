@@ -44,7 +44,7 @@ public class C_AuthLogin extends ClientBasePacket {
      */
     private static final String _check_accname = "abcdefghijklmnopqrstuvwxyz0123456789";
     private static final String _check_pwd = "abcdefghijklmnopqrstuvwxyz0123456789!_=+-?.#";
-    private static ArrayList<L1AccountsCount> accountslist = new ArrayList<L1AccountsCount>();
+    private static ArrayList<L1AccountsCount> accountslist = new ArrayList<>();
 
     private static boolean Ishave(String i) {
         for (L1AccountsCount j : accountslist) {
@@ -233,7 +233,7 @@ public class C_AuthLogin extends ClientBasePacket {
                 if (Ishave(loginName)) {// 已在登入間隔時間檢測時間列表的帳號清單內
                     long lasttime = get(loginName);
                     long nowtime = System.currentTimeMillis();
-                    if ((lasttime + (ConfigIpCheck.ACCLOGINTIMEMILLIS * 1000)) < nowtime) {
+                    if ((lasttime + (ConfigIpCheck.ACCLOGINTIMEMILLIS * 1000L)) < nowtime) {
                         // 增加連線用戶資料
                         if (OnlineUser.get().addClient(account, client)) {
                             _log.info("增加連線用戶資料: account=" + loginName + " host=" + ip);

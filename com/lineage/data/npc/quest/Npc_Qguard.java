@@ -92,7 +92,7 @@ public class Npc_Qguard extends NpcExecutor {
             }
             Integer time = QuestMapTable.get().getTime(22);
             if (time != null) {
-                quest.set_time(time.intValue());
+                quest.set_time(time);
             }
             L1SpawnUtil.spawnDoor(quest, 10004, 89, 32769, 32778, (short) 22, 1);
             L1Location loc = new L1Location(32774, 32778, 22);

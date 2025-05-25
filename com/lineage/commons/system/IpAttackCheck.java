@@ -16,10 +16,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author loli
  */
 public class IpAttackCheck {
-    public static final Map<ClientExecutor, String> SOCKETLIST = new ConcurrentHashMap<ClientExecutor, String>();// DaiEn
+    public static final Map<ClientExecutor, String> SOCKETLIST = new ConcurrentHashMap<>();// DaiEn
     private static final Log _log = LogFactory.getLog(IpAttackCheck.class);
     // 2012-04-25
-    private static final HashMap<String, IpTemp> _ipList = new HashMap<String, IpTemp>();
+    private static final HashMap<String, IpTemp> _ipList = new HashMap<>();
     private static IpAttackCheck _instance;
 
     private IpAttackCheck() {

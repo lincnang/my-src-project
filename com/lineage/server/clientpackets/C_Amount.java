@@ -89,7 +89,7 @@ public class C_Amount extends ClientBasePacket {
                         return;
                     }
                 }
-                final int houseId = Integer.valueOf(s2);
+                final int houseId = Integer.parseInt(s2);
                 final L1AuctionBoardTmp board = AuctionBoardReading.get().getAuctionBoardTable(houseId);
                 if (board != null) {
                     // 傳回目前售價
@@ -135,7 +135,7 @@ public class C_Amount extends ClientBasePacket {
                         return;
                     }
                 }
-                final int houseId = Integer.valueOf(s2);
+                final int houseId = Integer.parseInt(s2);
                 final AuctionBoardTable boardTable = new AuctionBoardTable();
                 final L1AuctionBoardTmp board = new L1AuctionBoardTmp();
                 if (board != null) {
@@ -165,7 +165,7 @@ public class C_Amount extends ClientBasePacket {
             // 旅館NPC
             int npcId = npc.getNpcId();
             if (npcId == 70070 || npcId == 70019 || npcId == 70075 || npcId == 70012 || npcId == 70031 || npcId == 70084 || npcId == 70065 || npcId == 70054 || npcId == 70096) {
-                if (pc.getInventory().checkItem(L1ItemId.ADENA, (300 * amount))) { // 所需金幣
+                if (pc.getInventory().checkItem(L1ItemId.ADENA, (300L * amount))) { // 所需金幣
                     // =
                     // 鑰匙價格(300)
                     // *
@@ -197,7 +197,7 @@ public class C_Amount extends ClientBasePacket {
                             inn.setDueTime(ts); // 租用時間
                             // DB更新
                             InnTable.getInstance().updateInn(inn);
-                            pc.getInventory().consumeItem(L1ItemId.ADENA, (300 * amount)); // 扣除金幣
+                            pc.getInventory().consumeItem(L1ItemId.ADENA, (300L * amount)); // 扣除金幣
                             // 給予鑰匙並登入鑰匙資料
                             L1Inventory inventory;
                             if (pc.getInventory().checkAddItem(item, amount) == L1Inventory.OK) {

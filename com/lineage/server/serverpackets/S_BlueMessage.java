@@ -47,8 +47,8 @@ public class S_BlueMessage extends ServerBasePacket {
             this.writeC(0x00);
         } else {
             this.writeC(info.length);
-            for (int i = 0; i < info.length; i++) {
-                this.writeS(info[i]);
+            for (String s : info) {
+                this.writeS(s);
             }
         }
     }

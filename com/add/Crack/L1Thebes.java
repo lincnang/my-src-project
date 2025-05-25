@@ -44,7 +44,7 @@ public class L1Thebes {
     public static int _status = STATUS_NONE;
     public static int _type = 0;
     private static Logger _log = Logger.getLogger(L1Thebes.class.getName());
-    private static ArrayList<L1PcInstance> playerList = new ArrayList<L1PcInstance>();
+    private static ArrayList<L1PcInstance> playerList = new ArrayList<>();
 
     public static void enterGame(L1PcInstance pc, int npcid) {
         L1Object obj = World.get().findObject(npcid);
@@ -323,7 +323,7 @@ public class L1Thebes {
 
         public void begin() {
             Timer timer = new Timer();
-            timer.schedule(this, L1Config._2212 * 60 * 1000); // 重置時間(分)
+            timer.schedule(this, (long) L1Config._2212 * 60 * 1000); // 重置時間(分)
         }
     }
 
@@ -342,7 +342,7 @@ public class L1Thebes {
 
         public void begin() {
             Timer timer = new Timer();
-            timer.schedule(this, L1Config._2218 * 60 * 1000); // 時空裂痕減弱維持時間(分)
+            timer.schedule(this, (long) L1Config._2218 * 60 * 1000); // 時空裂痕減弱維持時間(分)
         }
     }
 

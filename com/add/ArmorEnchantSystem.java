@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class ArmorEnchantSystem {
     private static final Log _log = LogFactory.getLog(ArmorEnchantSystem.class);
-    private static final Map<Integer, ArmorEnchantSystem> _enchantlist = new HashMap<Integer, ArmorEnchantSystem>();
+    private static final Map<Integer, ArmorEnchantSystem> _enchantlist = new HashMap<>();
     private static ArmorEnchantSystem _instance;
     private int _armorid;
     private int _enchant;

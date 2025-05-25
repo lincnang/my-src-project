@@ -35,7 +35,7 @@ public class S_ShopSellListGam extends ServerBasePacket {
             int no = GamblingTime.get_gamblingNo();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(gamblingNpc.get_npc().getNameId());
-            stringBuilder.append(" [" + no + "-" + gamblingNpc.get_npc().getNpcId() + "]");
+            stringBuilder.append(" [").append(no).append("-").append(gamblingNpc.get_npc().getNpcId()).append("]");
             writeS(stringBuilder.toString());
             writeC(0);
         }

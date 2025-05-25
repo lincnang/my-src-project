@@ -53,12 +53,12 @@ public class L1SystemMessageTable {
                 resetmaptime = timestampToCalendar(rs.getTimestamp("resetMaptime"));
             }
             L1SystemMessage System_Message = new L1SystemMessage(Id, Message, resetmaptime);
-            _ConfigIndex.put(Integer.valueOf(Id), System_Message);
+            _ConfigIndex.put(Id, System_Message);
         }
     }
 
     public L1SystemMessage getTemplate(int Id) {
-        return (L1SystemMessage) _ConfigIndex.get(Integer.valueOf(Id));
+        return (L1SystemMessage) _ConfigIndex.get(Id);
     }
 
     private Calendar timestampToCalendar(Timestamp ts) {

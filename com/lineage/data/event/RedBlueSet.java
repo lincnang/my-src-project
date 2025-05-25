@@ -36,14 +36,14 @@ public class RedBlueSet extends EventExecutor {
     public static int cleartime1 = Configcamp_war.RedBlueTime_clear;
     public static int alltime2 = Configcamp_war.RedBlueTime_all;
     public static int cleartime2 = Configcamp_war.RedBlueTime_clear;
-    public static ArrayList<L1PcInstance> _room1pc = new ArrayList<L1PcInstance>();
-    public static ArrayList<L1PcInstance> _room1red = new ArrayList<L1PcInstance>();
-    public static ArrayList<L1PcInstance> _room1blue = new ArrayList<L1PcInstance>();
-    public static ArrayList<L1PcInstance> _room1win = new ArrayList<L1PcInstance>();
-    public static ArrayList<L1PcInstance> _room2pc = new ArrayList<L1PcInstance>();
-    public static ArrayList<L1PcInstance> _room2red = new ArrayList<L1PcInstance>();
-    public static ArrayList<L1PcInstance> _room2blue = new ArrayList<L1PcInstance>();
-    public static ArrayList<L1PcInstance> _room2win = new ArrayList<L1PcInstance>();
+    public static ArrayList<L1PcInstance> _room1pc = new ArrayList<>();
+    public static ArrayList<L1PcInstance> _room1red = new ArrayList<>();
+    public static ArrayList<L1PcInstance> _room1blue = new ArrayList<>();
+    public static ArrayList<L1PcInstance> _room1win = new ArrayList<>();
+    public static ArrayList<L1PcInstance> _room2pc = new ArrayList<>();
+    public static ArrayList<L1PcInstance> _room2red = new ArrayList<>();
+    public static ArrayList<L1PcInstance> _room2blue = new ArrayList<>();
+    public static ArrayList<L1PcInstance> _room2win = new ArrayList<>();
     public static boolean START = false;
 
     private RedBlueSet() {
@@ -66,8 +66,7 @@ public class RedBlueSet extends EventExecutor {
 
     public void broadcastPacketRoom(final ServerBasePacket packet, ArrayList<L1PcInstance> _team) {
         try {
-            for (int i = 0; i < _team.size(); i++) {
-                L1PcInstance pc = _team.get(i);
+            for (L1PcInstance pc : _team) {
                 if (pc != null) {
                     pc.sendPackets(packet);
                 }
@@ -79,8 +78,7 @@ public class RedBlueSet extends EventExecutor {
 
     public int getPoint(ArrayList<L1PcInstance> _point) {
         int point = 0;
-        for (int i = 0; i < _point.size(); i++) {
-            L1PcInstance pc = _point.get(i);
+        for (L1PcInstance pc : _point) {
             if (pc != null) {
                 if (pc.get_redbluepoint() > 0) {
                     point += pc.get_redbluepoint();
@@ -92,8 +90,7 @@ public class RedBlueSet extends EventExecutor {
 
     public void GameReset(ArrayList<L1PcInstance> _all) {
         try {
-            for (int i = 0; i < _all.size(); i++) {
-                L1PcInstance pc = _all.get(i);
+            for (L1PcInstance pc : _all) {
                 if (pc != null) {
                     pc.set_redbluejoin(0);
                     pc.set_redblueleader(0);
@@ -108,8 +105,7 @@ public class RedBlueSet extends EventExecutor {
 
     public void Resurrect(ArrayList<L1PcInstance> _all) {
         try {
-            for (int i = 0; i < _all.size(); i++) {
-                L1PcInstance pc = _all.get(i);
+            for (L1PcInstance pc : _all) {
                 if (pc != null) {
                     if (pc.isDead()) {
                         pc.resurrect(1);
@@ -129,8 +125,7 @@ public class RedBlueSet extends EventExecutor {
 
     public void OutRoom(ArrayList<L1PcInstance> _all) {
         try {
-            for (int i = 0; i < _all.size(); i++) {
-                L1PcInstance pc = _all.get(i);
+            for (L1PcInstance pc : _all) {
                 if (pc != null) {
                     L1Teleport.teleport(pc, Configcamp_war.RedBlueEnd_map[0], Configcamp_war.RedBlueEnd_map[1], (short) Configcamp_war.RedBlueEnd_map[2], pc.getHeading(), true);
                     pc.set_redbluejoin(0);
@@ -147,8 +142,7 @@ public class RedBlueSet extends EventExecutor {
 
     public void BonusRoom(ArrayList<L1PcInstance> _team) {
         try {
-            for (int i = 0; i < _team.size(); i++) {
-                L1PcInstance pc = _team.get(i);
+            for (L1PcInstance pc : _team) {
                 if (pc != null) {
                     if (pc.getRedblueReward() < Configcamp_war.RedBlueReward_times) {
                         if (Configcamp_war.RedBlueBonus_itemid != 0 && Configcamp_war.RedBlueBonus_count != 0) {

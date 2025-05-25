@@ -22,10 +22,10 @@ import java.util.Map;
  */
 public class ShopCnTable {
     private static final Log _log = LogFactory.getLog(ShopCnTable.class);
-    private static final Map<Integer, ArrayList<L1ShopItem>> _shopList = new HashMap<Integer, ArrayList<L1ShopItem>>();
-    private static final ArrayList<Integer> _CnitemidList = new ArrayList<Integer>();
+    private static final Map<Integer, ArrayList<L1ShopItem>> _shopList = new HashMap<>();
+    private static final ArrayList<Integer> _CnitemidList = new ArrayList<>();
     // 回收物品價格清單
-    private static final Map<Integer, Integer> _allCnShopItem = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _allCnShopItem = new HashMap<>();
     private static ShopCnTable _instance;
 
     public static ShopCnTable get() {
@@ -44,7 +44,7 @@ public class ShopCnTable {
      */
     private static void addSellList(final int itemId, final int sellingPrice, final int purchasingPrice, final int packCount) {
         // 目前回收價格
-        final Integer currentprice = _allCnShopItem.get(new Integer(itemId));
+        final Integer currentprice = _allCnShopItem.get(itemId);
         double value3 = 0;// 回收單價
         // 回收價格不為0
         if (purchasingPrice > 0) {
@@ -69,7 +69,7 @@ public class ShopCnTable {
         if (value3 < 1) {
             if (currentprice != null) {// 目前回收價格不為空
                 // 移出回收物品列
-                _allCnShopItem.remove(new Integer(itemId));
+                _allCnShopItem.remove(itemId);
             }
             return;
         }
@@ -78,12 +78,12 @@ public class ShopCnTable {
             // 計算後回收單價 小於 目前價格
             if (value3 < currentprice) {
                 // 更新回收單價(降低回收單價)
-                _allCnShopItem.put(new Integer(itemId), new Integer((int) value3));
+                _allCnShopItem.put(itemId, (int) value3);
             }
             // 目前價格為空
         } else {
             // 更新回收單價
-            _allCnShopItem.put(new Integer(itemId), new Integer((int) value3));
+            _allCnShopItem.put(itemId, (int) value3);
             // System.out.println("itemid : " + itemId + " price : " + value3);
         }
     }
@@ -185,7 +185,7 @@ public class ShopCnTable {
      */
     public int getPrice(final int itemid) {
         int tgprice = 0;// 預設價格
-        final Integer price = _allCnShopItem.get(new Integer(itemid));
+        final Integer price = _allCnShopItem.get(itemid);
         if (price != null) {// 已有回收價格
             tgprice = price;
         }
@@ -205,9 +205,9 @@ public class ShopCnTable {
      *
      */
     private void addShopItem(final int npcId, final L1ShopItem item) {
-        ArrayList<L1ShopItem> list = _shopList.get(new Integer(npcId));
+        ArrayList<L1ShopItem> list = _shopList.get(npcId);
         if (list == null) {
-            list = new ArrayList<L1ShopItem>();
+            list = new ArrayList<>();
             list.add(item);
             _shopList.put(npcId, list);
         } else {
@@ -220,7 +220,7 @@ public class ShopCnTable {
      *
      */
     public ArrayList<L1ShopItem> get(final int npcId) {
-        final ArrayList<L1ShopItem> list = _shopList.get(new Integer(npcId));
+        final ArrayList<L1ShopItem> list = _shopList.get(npcId);
         if (list != null) {
             return list;
         }
@@ -232,7 +232,7 @@ public class ShopCnTable {
      *
      */
     public L1ShopItem getTemp(final int npcId, final int id) {
-        final ArrayList<L1ShopItem> list = _shopList.get(new Integer(npcId));
+        final ArrayList<L1ShopItem> list = _shopList.get(npcId);
         if (list != null) {
             for (final L1ShopItem shopItem : list) {
                 if (shopItem.getId() == id) {
@@ -248,7 +248,7 @@ public class ShopCnTable {
      *
      */
     public boolean isSelling(final int npcId, final int itemid) {
-        final ArrayList<L1ShopItem> list = _shopList.get(new Integer(npcId));
+        final ArrayList<L1ShopItem> list = _shopList.get(npcId);
         if (list != null) {
             for (final L1ShopItem shopItem : list) {
                 if (shopItem.getItemId() == itemid) {

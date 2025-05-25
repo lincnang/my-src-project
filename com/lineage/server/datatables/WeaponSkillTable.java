@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class WeaponSkillTable {
     private static final Log _log = LogFactory.getLog(WeaponSkillTable.class);
-    private static final Map<Integer, L1WeaponSkill> _weaponIdIndex = new HashMap<Integer, L1WeaponSkill>();
+    private static final Map<Integer, L1WeaponSkill> _weaponIdIndex = new HashMap<>();
     private static WeaponSkillTable _instance;
 
     public static WeaponSkillTable get() {
@@ -189,12 +189,12 @@ public class WeaponSkillTable {
             weaponSkill.setEffectXY4(effect_xy4);
 
             // 將武器技能物件存入 _weaponIdIndex 映射中，以 weaponId 為鍵，weaponSkill 為值
-            _weaponIdIndex.put(Integer.valueOf(weaponId), weaponSkill);
+            _weaponIdIndex.put(weaponId, weaponSkill);
         }
     }
 
 
     public L1WeaponSkill getTemplate(int weaponId) {
-        return (L1WeaponSkill) _weaponIdIndex.get(Integer.valueOf(weaponId));
+        return (L1WeaponSkill) _weaponIdIndex.get(weaponId);
     }
 }

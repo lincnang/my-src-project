@@ -20,8 +20,7 @@ public class S_RankedLevel extends ServerBasePacket {
         writeD(T_RankTable._basedTime);
         writeD(models.size());
         L1PcInstance pc = null;
-        for (int i = 0; i < models.size(); i++) {
-            final T_LevelRankModel model = models.get(i);
+        for (final T_LevelRankModel model : models) {
             final String name = model.getName();
             long exp = model.getExp();
             final int turnLife = model.getTurnLife();

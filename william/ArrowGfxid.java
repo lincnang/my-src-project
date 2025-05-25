@@ -41,17 +41,17 @@ public class ArrowGfxid {
             getData15b();
         }
 
-        for (int i = 0; i < aData17.size(); i++) {
-            ArrayList aTempData = (ArrayList) aData17.get(i);
+        for (Object o : aData17) {
+            ArrayList aTempData = (ArrayList) o;
 
-            if (((Integer) aTempData.get(0)).intValue() == poly) {
+            if ((Integer) aTempData.get(0) == poly) {
                 if (!user.hasSkillEffect(64)) {
                     user.setpolyarrow(0);
                     continue;
                 }
 
-                if (user.getpolyarrow() != ((Integer) aTempData.get(1)).intValue()) {
-                    user.setpolyarrow(((Integer) aTempData.get(1)).intValue());
+                if (user.getpolyarrow() != (Integer) aTempData.get(1)) {
+                    user.setpolyarrow((Integer) aTempData.get(1));
                     break;
                 }
             }

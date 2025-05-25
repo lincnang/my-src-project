@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class C1_Name_Table {
     private static final Log _log = LogFactory.getLog(C1_Name_Table.class);
-    private static final Map<Integer, String> _names = new HashMap<Integer, String>();
+    private static final Map<Integer, String> _names = new HashMap<>();
     private static C1_Name_Table _instance;
 
     public static C1_Name_Table get() {
@@ -37,7 +37,7 @@ public class C1_Name_Table {
             while (rs.next()) {
                 int c1_id = rs.getInt("c1_id");
                 String c1_name = rs.getString("c1_name");
-                _names.put(Integer.valueOf(c1_id), c1_name);
+                _names.put(c1_id, c1_name);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -50,7 +50,7 @@ public class C1_Name_Table {
     }
 
     public String get(int key) {
-        return (String) _names.get(Integer.valueOf(key));
+        return (String) _names.get(key);
     }
 
     public Integer getv(String v) {
@@ -60,7 +60,7 @@ public class C1_Name_Table {
                 return key;
             }
         }
-        return Integer.valueOf(-1);
+        return -1;
     }
 }
 /*

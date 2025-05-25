@@ -15,7 +15,7 @@ import java.util.Map;
 
 public final class ExpMeteUpTable {
     private static final Log _log = LogFactory.getLog(ExpMeteUpTable.class);
-    private static final Map<Integer, Double> _expmeteupList = new HashMap<Integer, Double>();
+    private static final Map<Integer, Double> _expmeteupList = new HashMap<>();
     private static ExpMeteUpTable _instance;
 
     public static ExpMeteUpTable get() {
@@ -37,7 +37,7 @@ public final class ExpMeteUpTable {
             while (rs.next()) {
                 int level = rs.getInt("轉身次數");
                 double expPenalty = rs.getDouble("經驗減少倍數");
-                _expmeteupList.put(new Integer(level), new Double(expPenalty));
+                _expmeteupList.put(level, expPenalty);
             }
             _log.info("讀取->轉生經驗減少： " + _expmeteupList.size() + " (" + timer.get() + "ms)");
         } catch (SQLException e) {
@@ -54,8 +54,8 @@ public final class ExpMeteUpTable {
         if (_expmeteupList.isEmpty()) {
             return expPenalty;
         }
-        if (_expmeteupList.containsKey(Integer.valueOf(meteup))) {
-            return ((Double) _expmeteupList.get(Integer.valueOf(meteup))).doubleValue();
+        if (_expmeteupList.containsKey(meteup)) {
+            return (Double) _expmeteupList.get(meteup);
         }
         return expPenalty;
     }

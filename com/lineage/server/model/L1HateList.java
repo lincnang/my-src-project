@@ -29,7 +29,7 @@ public class L1HateList {
      * 攻擊目標清單
      */
     public L1HateList() {
-        this._hateMap = new HashMap<L1Character, Integer>();
+        this._hateMap = new HashMap<>();
     }
 
     /**
@@ -44,12 +44,7 @@ public class L1HateList {
         if (cha == null) {
             return;
         }
-        Integer h = this._hateMap.get(cha);
-        if (h != null) {
-            this._hateMap.put(cha, h + hate);
-        } else {
-            this._hateMap.put(cha, hate);
-        }
+        this._hateMap.merge(cha, hate, Integer::sum);
     }
 
     /**
@@ -135,7 +130,7 @@ public class L1HateList {
     }
 
     public synchronized void removeInvalidCharacter(final L1NpcInstance npc) {
-        final ArrayList<L1Character> invalidChars = new ArrayList<L1Character>();
+        final ArrayList<L1Character> invalidChars = new ArrayList<>();
         for (final L1Character cha : this._hateMap.keySet()) {
             if ((cha == null) || cha.isDead() || !npc.knownsObject(cha)) {
                 invalidChars.add(cha);
@@ -204,7 +199,7 @@ public class L1HateList {
      *
      */
     public synchronized L1HateList copy() {
-        return new L1HateList(new HashMap<L1Character, Integer>(this._hateMap));
+        return new L1HateList(new HashMap<>(this._hateMap));
     }
 
     /**
@@ -235,7 +230,7 @@ public class L1HateList {
      *
      */
     public synchronized ArrayList<L1Character> toTargetArrayList() {
-        return new ArrayList<L1Character>(this._hateMap.keySet());
+        return new ArrayList<>(this._hateMap.keySet());
     }
 
     /**
@@ -250,6 +245,6 @@ public class L1HateList {
      *
      */
     public synchronized ArrayList<Integer> toHateArrayList() {
-        return new ArrayList<Integer>(this._hateMap.values());
+        return new ArrayList<>(this._hateMap.values());
     }
 }

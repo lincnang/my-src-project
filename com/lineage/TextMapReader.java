@@ -71,7 +71,7 @@ public class TextMapReader extends MapReader {
      */
     @Override
     public Map<Integer, L1Map> read() {
-        final Map<Integer, L1Map> maps = new HashMap<Integer, L1Map>();
+        final Map<Integer, L1Map> maps = new HashMap<>();
         final Map<Integer, MapData> mapDatas = MapsTable.get().getMaps();
         for (final Integer key : mapDatas.keySet()) {
             final MapData mapData = mapDatas.get(key);

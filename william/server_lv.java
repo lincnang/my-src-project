@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class server_lv {
     public static final String TOKEN = ",";
-    private static ArrayList<ArrayList<Object>> aData = new ArrayList<ArrayList<Object>>();
+    private static ArrayList<ArrayList<Object>> aData = new ArrayList<>();
     private static boolean BUILD_DATA = false;
     private static server_lv _instance;
 
@@ -52,22 +52,22 @@ public class server_lv {
             BUILD_DATA = true;
             getData();
         }
-        for (int i = 0; i < aData.size(); i++) {
-            aTempData = (ArrayList<Object>) aData.get(i);
-            if (((Integer) aTempData.get(0)).intValue() == tgitem.getItem().getItemId() && tgitem.getEnchantLevel() == ((Integer) aTempData.get(1)).intValue()) {
-                tgitem.setItemAttack(((Integer) aTempData.get(2)).intValue());
-                tgitem.setItemBowAttack(((Integer) aTempData.get(3)).intValue());
-                tgitem.setItemReductionDmg(((Integer) aTempData.get(4)).intValue());
-                tgitem.setItemSp(((Integer) aTempData.get(5)).intValue());
-                tgitem.setItemprobability(((Integer) aTempData.get(6)).intValue());
-                tgitem.setItemStr(((Integer) aTempData.get(7)).intValue());
-                tgitem.setItemDex(((Integer) aTempData.get(8)).intValue());
-                tgitem.setItemInt(((Integer) aTempData.get(9)).intValue());
-                tgitem.setItemHp(((Integer) aTempData.get(10)).intValue());
-                tgitem.setItemMp(((Integer) aTempData.get(11)).intValue());
-                tgitem.setItemCon(((Integer) aTempData.get(12)).intValue());
-                tgitem.setItemWis(((Integer) aTempData.get(13)).intValue());
-                tgitem.setItemCha(((Integer) aTempData.get(14)).intValue());
+        for (ArrayList<Object> aDatum : aData) {
+            aTempData = (ArrayList<Object>) aDatum;
+            if ((Integer) aTempData.get(0) == tgitem.getItem().getItemId() && tgitem.getEnchantLevel() == (Integer) aTempData.get(1)) {
+                tgitem.setItemAttack((Integer) aTempData.get(2));
+                tgitem.setItemBowAttack((Integer) aTempData.get(3));
+                tgitem.setItemReductionDmg((Integer) aTempData.get(4));
+                tgitem.setItemSp((Integer) aTempData.get(5));
+                tgitem.setItemprobability((Integer) aTempData.get(6));
+                tgitem.setItemStr((Integer) aTempData.get(7));
+                tgitem.setItemDex((Integer) aTempData.get(8));
+                tgitem.setItemInt((Integer) aTempData.get(9));
+                tgitem.setItemHp((Integer) aTempData.get(10));
+                tgitem.setItemMp((Integer) aTempData.get(11));
+                tgitem.setItemCon((Integer) aTempData.get(12));
+                tgitem.setItemWis((Integer) aTempData.get(13));
+                tgitem.setItemCha((Integer) aTempData.get(14));
                 CharItemsTable cit = new CharItemsTable();
                 try {
                     pc.save();
@@ -117,22 +117,22 @@ public class server_lv {
             ArrayList<Object> aReturn = null;
             if (rs != null) {
                 while (rs.next()) {
-                    aReturn = new ArrayList<Object>();
-                    aReturn.add(0, new Integer(rs.getInt("武防編號")));
-                    aReturn.add(1, new Integer(rs.getInt("加乘數")));
-                    aReturn.add(2, new Integer(rs.getInt("近距離傷害")));
-                    aReturn.add(3, new Integer(rs.getInt("遠距離傷害")));
-                    aReturn.add(4, new Integer(rs.getInt("PVP傷害")));
-                    aReturn.add(5, new Integer(rs.getInt("魔攻")));
-                    aReturn.add(6, new Integer(rs.getInt("魔法發動率")));
-                    aReturn.add(7, new Integer(rs.getInt("力量")));
-                    aReturn.add(8, new Integer(rs.getInt("敏捷")));
-                    aReturn.add(9, new Integer(rs.getInt("智力")));
-                    aReturn.add(10, new Integer(rs.getInt("血量")));
-                    aReturn.add(11, new Integer(rs.getInt("魔量")));
-                    aReturn.add(12, new Integer(rs.getInt("體力")));
-                    aReturn.add(13, new Integer(rs.getInt("精神")));
-                    aReturn.add(14, new Integer(rs.getInt("魅力")));
+                    aReturn = new ArrayList<>();
+                    aReturn.add(0, rs.getInt("武防編號"));
+                    aReturn.add(1, rs.getInt("加乘數"));
+                    aReturn.add(2, rs.getInt("近距離傷害"));
+                    aReturn.add(3, rs.getInt("遠距離傷害"));
+                    aReturn.add(4, rs.getInt("PVP傷害"));
+                    aReturn.add(5, rs.getInt("魔攻"));
+                    aReturn.add(6, rs.getInt("魔法發動率"));
+                    aReturn.add(7, rs.getInt("力量"));
+                    aReturn.add(8, rs.getInt("敏捷"));
+                    aReturn.add(9, rs.getInt("智力"));
+                    aReturn.add(10, rs.getInt("血量"));
+                    aReturn.add(11, rs.getInt("魔量"));
+                    aReturn.add(12, rs.getInt("體力"));
+                    aReturn.add(13, rs.getInt("精神"));
+                    aReturn.add(14, rs.getInt("魅力"));
                     aData.add(aReturn);
                 }
             }

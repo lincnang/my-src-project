@@ -22,8 +22,8 @@ import java.util.Map;
  */
 public class ItemPowerUpdateTable {
     private static final Log _log = LogFactory.getLog(ItemPowerUpdateTable.class);
-    private static final ArrayList<Integer> _updateitemidList = new ArrayList<Integer>();
-    private static Map<String, L1ItemPowerUpdate> _updateMap = new HashMap<String, L1ItemPowerUpdate>();
+    private static final ArrayList<Integer> _updateitemidList = new ArrayList<>();
+    private static Map<String, L1ItemPowerUpdate> _updateMap = new HashMap<>();
     private static ItemPowerUpdateTable _instance;
 
     public static ItemPowerUpdateTable get() {
@@ -169,7 +169,7 @@ public class ItemPowerUpdateTable {
      *
      */
     public Map<Integer, L1ItemPowerUpdate> get_type_id(final String key) {
-        final Map<Integer, L1ItemPowerUpdate> updateMap = new HashMap<Integer, L1ItemPowerUpdate>();
+        final Map<Integer, L1ItemPowerUpdate> updateMap = new HashMap<>();
         final L1ItemPowerUpdate tmp = _updateMap.get(key);
         if (tmp != null) {
             final int type_id = tmp.get_type_id();

@@ -529,8 +529,9 @@ public class C_Attr extends ClientBasePacket {
                         name = name.replaceAll("　", "");
                         name = name.substring(0, 1).toUpperCase() + name.substring(1);
                         for (String ban : C_CreateChar.BANLIST) {
-                            if (name.indexOf(ban) != -1) {
+                            if (name.contains(ban)) {
                                 name = "";
+                                break;
                             }
                         }
                         if (name.length() == 0) {
@@ -1222,12 +1223,12 @@ public class C_Attr extends ClientBasePacket {
                 return;
             }
             final L1PcInstance clanMember[] = clan.getOnlineClanMember();
-            for (int cnt = 0; cnt < clanMember.length; cnt++) {
+            for (L1PcInstance l1PcInstance : clanMember) {
                 // 94 \f1你接受%0當你的血盟成員。
-                clanMember[cnt].sendPackets(new S_ServerMessage(94, joinPc.getName()));
+                l1PcInstance.sendPackets(new S_ServerMessage(94, joinPc.getName()));
             }
-            for (int i = 0; i < oldClanMemberName.length; i++) {
-                final L1PcInstance oldClanMember = World.get().getPlayer(oldClanMemberName[i]);
+            for (String s : oldClanMemberName) {
+                final L1PcInstance oldClanMember = World.get().getPlayer(s);
                 if (oldClanMember != null) { // 中舊
                     ClanMembersTable.getInstance().deleteMember(oldClanMember.getId());
                     oldClanMember.setClanid(clanId);
@@ -1251,7 +1252,7 @@ public class C_Attr extends ClientBasePacket {
                     oldClanMember.sendPackets(new S_ServerMessage(95, clanName));
                 } else { // 中舊
                     try {
-                        final L1PcInstance offClanMember = CharacterTable.get().restoreCharacter(oldClanMemberName[i]);
+                        final L1PcInstance offClanMember = CharacterTable.get().restoreCharacter(s);
                         offClanMember.setClanid(clanId);
                         offClanMember.setClanname(clanName);
                         offClanMember.setClanRank(L1Clan.CLAN_RANK_PUBLIC);

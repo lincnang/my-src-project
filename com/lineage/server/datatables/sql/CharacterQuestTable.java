@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 
 public class CharacterQuestTable implements CharacterQuestStorage {
     private static final Log _log = LogFactory.getLog(CharacterQuestTable.class);
-    private static final Map<Integer, HashMap<Integer, CharQuest>> _questList = new HashMap<Integer, HashMap<Integer, CharQuest>>();
+    private static final Map<Integer, HashMap<Integer, CharQuest>> _questList = new HashMap<>();
 
     private static void delete() {
         deleteData(110);
@@ -127,13 +127,13 @@ public class CharacterQuestTable implements CharacterQuestStorage {
                             final CharQuest quest = new CharQuest();
                             quest.set_quest_step(quest_step);
                             quest.set_mob_count(mob_count);
-                            HashMap<Integer, CharQuest> hsMap = _questList.get(new Integer(char_id));
+                            HashMap<Integer, CharQuest> hsMap = _questList.get(char_id);
                             if (hsMap == null) {
-                                hsMap = new HashMap<Integer, CharQuest>();
-                                hsMap.put(new Integer(key), quest);
-                                _questList.put(new Integer(char_id), hsMap);
+                                hsMap = new HashMap<>();
+                                hsMap.put(key, quest);
+                                _questList.put(char_id, hsMap);
                             } else {
-                                hsMap.put(new Integer(key), quest);
+                                hsMap.put(key, quest);
                             }
                             break;
                     }
@@ -153,18 +153,18 @@ public class CharacterQuestTable implements CharacterQuestStorage {
 
     @Override
     public Map<Integer, CharQuest> get(final int char_id) {
-        return _questList.get(new Integer(char_id));
+        return _questList.get(char_id);
     }
 
     @Override
     public void storeQuest(final int char_id, final int key, final CharQuest value) {
-        HashMap<Integer, CharQuest> hsMap = _questList.get(new Integer(char_id));
+        HashMap<Integer, CharQuest> hsMap = _questList.get(char_id);
         if (hsMap == null) {
-            hsMap = new HashMap<Integer, CharQuest>();
-            hsMap.put(new Integer(key), value);
-            _questList.put(new Integer(char_id), hsMap);
+            hsMap = new HashMap<>();
+            hsMap.put(key, value);
+            _questList.put(char_id, hsMap);
         } else {
-            hsMap.put(new Integer(key), value);
+            hsMap.put(key, value);
         }
         L1Quest quest = null;
         if (value.get_quest_step() == 1) {
@@ -220,13 +220,13 @@ public class CharacterQuestTable implements CharacterQuestStorage {
 
     @Override
     public void updateQuest(final int char_id, final int key, final CharQuest value) {
-        HashMap<Integer, CharQuest> hsMap = _questList.get(new Integer(char_id));
+        HashMap<Integer, CharQuest> hsMap = _questList.get(char_id);
         if (hsMap == null) {
-            hsMap = new HashMap<Integer, CharQuest>();
-            hsMap.put(new Integer(key), value);
-            _questList.put(new Integer(char_id), hsMap);
+            hsMap = new HashMap<>();
+            hsMap.put(key, value);
+            _questList.put(char_id, hsMap);
         } else {
-            hsMap.put(new Integer(key), value);
+            hsMap.put(key, value);
         }
         Connection co = null;
         PreparedStatement pm = null;
@@ -249,7 +249,7 @@ public class CharacterQuestTable implements CharacterQuestStorage {
 
     @Override
     public void delQuest(final int char_id, final int key) {
-        HashMap<Integer, CharQuest> hsMap = _questList.get(new Integer(char_id));
+        HashMap<Integer, CharQuest> hsMap = _questList.get(char_id);
         if (hsMap == null) {
             return;
         } else {
@@ -277,7 +277,7 @@ public class CharacterQuestTable implements CharacterQuestStorage {
         final Map<Integer, HashMap<Integer, CharQuest>> hsMap = _questList;
         final Set<Integer> keySet = hsMap.keySet();
         for (final Integer charId : keySet) {
-            HashMap<Integer, CharQuest> pchasQuest = _questList.get(new Integer(charId));
+            HashMap<Integer, CharQuest> pchasQuest = _questList.get(charId);
             if (pchasQuest == null) {
                 continue;
             } else {
@@ -302,13 +302,13 @@ public class CharacterQuestTable implements CharacterQuestStorage {
 
     @Override
     public void storeQuest(int char_id, int key, CharQuest value, int clean) {
-        HashMap<Integer, CharQuest> hsMap = _questList.get(new Integer(char_id));
+        HashMap<Integer, CharQuest> hsMap = _questList.get(char_id);
         if (hsMap == null) {
-            hsMap = new HashMap<Integer, CharQuest>();
-            hsMap.put(new Integer(key), value);
-            _questList.put(new Integer(char_id), hsMap);
+            hsMap = new HashMap<>();
+            hsMap.put(key, value);
+            _questList.put(char_id, hsMap);
         } else {
-            hsMap.put(new Integer(key), value);
+            hsMap.put(key, value);
         }
         L1Quest quest = null;
         if (value.get_quest_step() == 1) {

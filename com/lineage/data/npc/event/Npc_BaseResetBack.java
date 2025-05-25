@@ -185,56 +185,67 @@ public class Npc_BaseResetBack extends NpcExecutor {
         //        	error(pc,"已經扣完點數");
         //        	return false;
         //        }
-        if (type.equals("baseStr-")) {
-            if (pc.getBaseStr() - 1 < baseStr) {
-                msg1(pc);
-                return false;
-            }
-        } else if (type.equals("baseDex-")) {
-            if (pc.getBaseDex() - 1 < baseDex) {
-                msg1(pc);
-                return false;
-            }
-        } else if (type.equals("baseInt-")) {
-            if (pc.getBaseInt() - 1 < baseInt) {
-                msg1(pc);
-                return false;
-            }
-        } else if (type.equals("baseCha-")) {
-            if (pc.getBaseCha() - 1 < baseCha) {
-                msg1(pc);
-                return false;
-            }
-        } else if (type.equals("baseStr+")) {
-            if (pc.getBaseStr() + 1 > 45) {
-                msg2(pc);
-                return false;
-            }
-        } else if (type.equals("baseDex+")) {
-            if (pc.getBaseDex() + 1 > 45) {
-                msg2(pc);
-                return false;
-            }
-        } else if (type.equals("baseInt+")) {
-            if (pc.getBaseInt() + 1 > 45) {
-                msg2(pc);
-                return false;
-            }
-        } else if (type.equals("baseCha+")) {
-            if (pc.getBaseCha() + 1 > 45) {
-                msg2(pc);
-                return false;
-            }
-        } else if (type.equals("baseCon+")) {
-            if (pc.getBaseCon() + 1 > 45) {
-                msg2(pc);
-                return false;
-            }
-        } else if (type.equals("baseWis+")) {
-            if (pc.getBaseWis() + 1 > 45) {
-                msg2(pc);
-                return false;
-            }
+        switch (type) {
+            case "baseStr-":
+                if (pc.getBaseStr() - 1 < baseStr) {
+                    msg1(pc);
+                    return false;
+                }
+                break;
+            case "baseDex-":
+                if (pc.getBaseDex() - 1 < baseDex) {
+                    msg1(pc);
+                    return false;
+                }
+                break;
+            case "baseInt-":
+                if (pc.getBaseInt() - 1 < baseInt) {
+                    msg1(pc);
+                    return false;
+                }
+                break;
+            case "baseCha-":
+                if (pc.getBaseCha() - 1 < baseCha) {
+                    msg1(pc);
+                    return false;
+                }
+                break;
+            case "baseStr+":
+                if (pc.getBaseStr() + 1 > 45) {
+                    msg2(pc);
+                    return false;
+                }
+                break;
+            case "baseDex+":
+                if (pc.getBaseDex() + 1 > 45) {
+                    msg2(pc);
+                    return false;
+                }
+                break;
+            case "baseInt+":
+                if (pc.getBaseInt() + 1 > 45) {
+                    msg2(pc);
+                    return false;
+                }
+                break;
+            case "baseCha+":
+                if (pc.getBaseCha() + 1 > 45) {
+                    msg2(pc);
+                    return false;
+                }
+                break;
+            case "baseCon+":
+                if (pc.getBaseCon() + 1 > 45) {
+                    msg2(pc);
+                    return false;
+                }
+                break;
+            case "baseWis+":
+                if (pc.getBaseWis() + 1 > 45) {
+                    msg2(pc);
+                    return false;
+                }
+                break;
         }
         ok(pc, "變更成功");
         return true;

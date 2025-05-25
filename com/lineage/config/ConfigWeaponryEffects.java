@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -72,7 +73,7 @@ public final class ConfigWeaponryEffects {
         final Properties set = new Properties();
         try {
             //final InputStream is = new FileInputStream(new File(ConfigOtherSet2));
-            InputStream is = new FileInputStream(new File("./config/☆老爹專屬製作☆遊戲設定☆/武器加成特效設置.properties"));
+            InputStream is = Files.newInputStream(new File("./config/☆老爹專屬製作☆遊戲設定☆/武器加成特效設置.properties").toPath());
             // 指定檔案編碼
             final InputStreamReader isr = new InputStreamReader(is, "utf-8");
             set.load(isr);

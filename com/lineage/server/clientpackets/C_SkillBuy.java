@@ -63,7 +63,7 @@ public class C_SkillBuy extends ClientBasePacket {
             } else {
                 pc.get_other().set_shopSkill(false);
                 final ArrayList<Integer> skillList = PcLvSkillList.scount(pc);
-                final ArrayList<Integer> newSkillList = new ArrayList<Integer>();
+                final ArrayList<Integer> newSkillList = new ArrayList<>();
                 // 判斷可以學習的魔法
                 for (final Integer integer : skillList) {
                     // 檢查是否已學習該法術

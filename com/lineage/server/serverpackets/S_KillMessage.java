@@ -23,13 +23,13 @@ public class S_KillMessage extends ServerBasePacket {
             writeC(S_MESSAGE); // 螢幕
             writeC(84);
             writeC(2);
-            String x1 = (String) ConfigKill.KILL_TEXT_LIST.get(Integer.valueOf(_random.nextInt(ConfigKill.KILL_TEXT_LIST.size()) + 1));
+            String x1 = (String) ConfigKill.KILL_TEXT_LIST.get(_random.nextInt(ConfigKill.KILL_TEXT_LIST.size()) + 1);
             writeS(String.format(x1, new Object[]{winName, deathName}));
         } else {
             writeC(S_MESSAGE); // 聊天
             writeC(0);
             writeD(0);
-            String x1 = (String) ConfigKill.KILL_TEXT_LIST.get(Integer.valueOf(_random.nextInt(ConfigKill.KILL_TEXT_LIST.size()) + 1));
+            String x1 = (String) ConfigKill.KILL_TEXT_LIST.get(_random.nextInt(ConfigKill.KILL_TEXT_LIST.size()) + 1);
             writeS(String.format(x1, new Object[]{winName, deathName}));
         }
     }

@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public final class ExtraMeteAbilityTable {
     private static final Log _log = LogFactory.getLog(ExtraMeteAbilityTable.class);
-    private static final Map<Integer, L1MeteAbility> _meteList = new LinkedHashMap<Integer, L1MeteAbility>();
+    private static final Map<Integer, L1MeteAbility> _meteList = new LinkedHashMap<>();
     private static ExtraMeteAbilityTable _instance;
 
     public static ExtraMeteAbilityTable getInstance() {
@@ -36,7 +36,7 @@ public final class ExtraMeteAbilityTable {
         return _instance;
     }
 
-    public static final void effectBuff(L1PcInstance pc, L1MeteAbility value, int negative) {
+    public static void effectBuff(L1PcInstance pc, L1MeteAbility value, int negative) {
         pc.addAc(value.getAc() * negative);
         pc.addMaxHp(value.getHp() * negative);
         pc.addMaxMp(value.getMp() * negative);
@@ -69,7 +69,7 @@ public final class ExtraMeteAbilityTable {
         pc.addRegistBlind(value.getRegistBlind() * negative);
     }
 
-    public final void load() {
+    public void load() {
         PerformanceTimer timer = new PerformanceTimer();
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -118,7 +118,7 @@ public final class ExtraMeteAbilityTable {
                 if (type != -1) {
                     index = index * 10000 + type;
                 }
-                _meteList.put(Integer.valueOf(index), meteAbility);
+                _meteList.put(index, meteAbility);
             }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -130,12 +130,12 @@ public final class ExtraMeteAbilityTable {
         _log.info("讀取->[系統]_轉身附加能力資料數量: " + _meteList.size() + "(" + timer.get() + "ms)");
     }
 
-    public final L1MeteAbility get(int meteLevel, int type) {
+    public L1MeteAbility get(int meteLevel, int type) {
         int index = meteLevel * 10000 + type;
-        L1MeteAbility temp = (L1MeteAbility) _meteList.get(Integer.valueOf(index));
+        L1MeteAbility temp = (L1MeteAbility) _meteList.get(index);
         if (temp != null) {
             return temp;
         }
-        return (L1MeteAbility) _meteList.get(Integer.valueOf(meteLevel));
+        return (L1MeteAbility) _meteList.get(meteLevel);
     }
 }

@@ -41,7 +41,7 @@ public class S_SkillBuyItemCN extends ServerBasePacket {
         } else if (pc.isWarrior()) {// 戰士
             skillList = PcLvSkillList.isWarrior(pc);
         }
-        final ArrayList<Integer> newSkillList = new ArrayList<Integer>();
+        final ArrayList<Integer> newSkillList = new ArrayList<>();
         for (final Integer integer : skillList) {
             // 檢查是否已學習該法術
             if (!CharSkillReading.get().spellCheck(pc.getId(), (integer + 1))) {

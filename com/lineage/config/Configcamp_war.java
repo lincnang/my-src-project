@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -45,7 +46,7 @@ public final class Configcamp_war {
         //_log.info("載入服務器限制設置!");
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(Configcamp_war));
+            final InputStream is = Files.newInputStream(new File(Configcamp_war).toPath());
             // 指定檔案編碼
             final InputStreamReader isr = new InputStreamReader(is, "utf-8");
             set.load(isr);
@@ -68,31 +69,31 @@ public final class Configcamp_war {
             String rb1 = set.getProperty("RedBlue_End_map", "33080,33392,4");
             if (!rb1.equalsIgnoreCase("null")) {
                 String[] rb11 = rb1.split(",");
-                int[] rb111 = {Integer.valueOf(rb11[0]), Integer.valueOf(rb11[1]), Integer.valueOf(rb11[2])};
+                int[] rb111 = {Integer.parseInt(rb11[0]), Integer.parseInt(rb11[1]), Integer.parseInt(rb11[2])};
                 RedBlueEnd_map = rb111;
             }
             String rb2 = set.getProperty("RedBlue_Red_map1", "33080,33392,4");
             if (!rb2.equalsIgnoreCase("null")) {
                 String[] rb22 = rb2.split(",");
-                int[] rb222 = {Integer.valueOf(rb22[0]), Integer.valueOf(rb22[1]), Integer.valueOf(rb22[2])};
+                int[] rb222 = {Integer.parseInt(rb22[0]), Integer.parseInt(rb22[1]), Integer.parseInt(rb22[2])};
                 RedBlueRed_map1 = rb222;
             }
             String rb3 = set.getProperty("RedBlue_Blue_map1", "33080,33392,4");
             if (!rb3.equalsIgnoreCase("null")) {
                 String[] rb33 = rb3.split(",");
-                int[] rb333 = {Integer.valueOf(rb33[0]), Integer.valueOf(rb33[1]), Integer.valueOf(rb33[2])};
+                int[] rb333 = {Integer.parseInt(rb33[0]), Integer.parseInt(rb33[1]), Integer.parseInt(rb33[2])};
                 RedBlueBlue_map1 = rb333;
             }
             String rb4 = set.getProperty("RedBlue_Red_map2", "33080,33392,4");
             if (!rb4.equalsIgnoreCase("null")) {
                 String[] rb44 = rb4.split(",");
-                int[] rb444 = {Integer.valueOf(rb44[0]), Integer.valueOf(rb44[1]), Integer.valueOf(rb44[2])};
+                int[] rb444 = {Integer.parseInt(rb44[0]), Integer.parseInt(rb44[1]), Integer.parseInt(rb44[2])};
                 RedBlueRed_map2 = rb444;
             }
             String rb5 = set.getProperty("RedBlue_Blue_map2", "33080,33392,4");
             if (!rb5.equalsIgnoreCase("null")) {
                 String[] rb55 = rb5.split(",");
-                int[] rb555 = {Integer.valueOf(rb55[0]), Integer.valueOf(rb55[1]), Integer.valueOf(rb55[2])};
+                int[] rb555 = {Integer.parseInt(rb55[0]), Integer.parseInt(rb55[1]), Integer.parseInt(rb55[2])};
                 RedBlueBlue_map2 = rb555;
             }
             final String tmp12 = set.getProperty("RedBlue_Reward_RESET_TIME", "");

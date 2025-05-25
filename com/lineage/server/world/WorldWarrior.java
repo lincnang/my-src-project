@@ -15,7 +15,7 @@ public class WorldWarrior {
     private Collection<L1PcInstance> _allPlayer;
 
     private WorldWarrior() {
-        _isWarrior = new ConcurrentHashMap<Integer, L1PcInstance>();
+        _isWarrior = new ConcurrentHashMap<>();
     }
 
     public static WorldWarrior get() {

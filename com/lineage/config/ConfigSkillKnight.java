@@ -3,6 +3,7 @@ package com.lineage.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -50,7 +51,7 @@ public final class ConfigSkillKnight {
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
-            final InputStream is = new FileInputStream(new File(ConfigSkillKnight));
+            final InputStream is = Files.newInputStream(new File(ConfigSkillKnight).toPath());
             set.load(is);
             is.close();
             STUN_SEC = set.getProperty("SHOCK_STUN_TIMER ", "3~6");

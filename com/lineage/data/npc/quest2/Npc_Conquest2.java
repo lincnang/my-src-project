@@ -49,7 +49,7 @@ public class Npc_Conquest2 extends NpcExecutor {
                             }
                         }
                     }
-                    final List<L1PcInstance> pcList = new ArrayList<L1PcInstance>();
+                    final List<L1PcInstance> pcList = new ArrayList<>();
                     for (L1Character cha : targetList) {
                         if (cha instanceof L1PcInstance) {
                             final L1PcInstance find_pc = (L1PcInstance) cha;

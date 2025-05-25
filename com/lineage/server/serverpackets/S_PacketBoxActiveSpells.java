@@ -35,38 +35,38 @@ public class S_PacketBoxActiveSpells extends ServerBasePacket {
         }
         /** 附魔石效果 START */
         int[] bs_gx = {4401, 4402, 4403, 4404, 4405, 4406, 4407, 4408, 4409};
-        for (int i = 0; i < bs_gx.length; i++) {
-            if (pc.hasSkillEffect(bs_gx[i])) {
-                data[102] = (pc.getSkillEffectTimeSec(bs_gx[i]) >> 5);
+        for (int bsGx : bs_gx) {
+            if (pc.hasSkillEffect(bsGx)) {
+                data[102] = (pc.getSkillEffectTimeSec(bsGx) >> 5);
                 if (data[102] != 0) {
-                    data[103] = (bs_gx[i] - 4317);
+                    data[103] = (bsGx - 4317);
                 }
             }
         }
         int[] bs_ax = {4411, 4412, 4413, 4414, 4415, 4416, 4417, 4418, 4419};
-        for (int i = 0; i < bs_ax.length; i++) {
-            if (pc.hasSkillEffect(bs_ax[i])) {
-                data[102] = (pc.getSkillEffectTimeSec(bs_ax[i]) >> 5);
+        for (int bsAx : bs_ax) {
+            if (pc.hasSkillEffect(bsAx)) {
+                data[102] = (pc.getSkillEffectTimeSec(bsAx) >> 5);
                 if (data[102] != 0) {
-                    data[103] = (bs_ax[i] - 4318);
+                    data[103] = (bsAx - 4318);
                 }
             }
         }
         int[] bs_wx = {4421, 4422, 4423, 4424, 4425, 4426, 4427, 4428, 4429};
-        for (int i = 0; i < bs_wx.length; i++) {
-            if (pc.hasSkillEffect(bs_wx[i])) {
-                data[102] = (pc.getSkillEffectTimeSec(bs_wx[i]) >> 5);
+        for (int bsWx : bs_wx) {
+            if (pc.hasSkillEffect(bsWx)) {
+                data[102] = (pc.getSkillEffectTimeSec(bsWx) >> 5);
                 if (data[102] != 0) {
-                    data[103] = (bs_wx[i] - 4319);
+                    data[103] = (bsWx - 4319);
                 }
             }
         }
         int[] bs_asx = {4431, 4432, 4433, 4434, 4435, 4436, 4437, 4438, 4439};
-        for (int i = 0; i < bs_asx.length; i++) {
-            if (pc.hasSkillEffect(bs_asx[i])) {
-                data[102] = (pc.getSkillEffectTimeSec(bs_asx[i]) >> 5);
+        for (int bsAsx : bs_asx) {
+            if (pc.hasSkillEffect(bsAsx)) {
+                data[102] = (pc.getSkillEffectTimeSec(bsAsx) >> 5);
                 if (data[102] != 0) {
-                    data[103] = (bs_asx[i] - 4320);
+                    data[103] = (bsAsx - 4320);
                 }
             }
         }

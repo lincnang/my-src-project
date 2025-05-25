@@ -25,7 +25,7 @@ public class TimePeriod {
         return _timeStart.after(_timeEnd) ? true : includes(time, _timeEnd, _timeStart) ? false : includes(time, _timeStart, _timeEnd);
     }
 
-    private final boolean includes(final Time time, final Time timeStart, final Time timeEnd) {
+    private boolean includes(final Time time, final Time timeStart, final Time timeEnd) {
         return (timeStart.compareTo(time) <= 0) && (0 < timeEnd.compareTo(time));
     }
 

@@ -7,35 +7,35 @@ public class L1ItemPower {
     /**
      * 抗魔加成變化清單
      */
-    public static final Map<Integer, Integer> MR = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> MR = new HashMap<>();
     /**
      * 回魔量加成變化清單
      */
-    public static final Map<Integer, Integer> MPR = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> MPR = new HashMap<>();
     /**
      * 魔攻加成變化清單
      */
-    public static final Map<Integer, Integer> SP = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> SP = new HashMap<>();
     /**
      * 雙擊率加成變化清單
      */
-    public static final Map<Integer, Integer> X2 = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> X2 = new HashMap<>();
     /**
      * 防具增加命中率加成變化清單
      */
-    public static final Map<Integer, Integer> HIT = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> HIT = new HashMap<>();
     /**
      * 體力上限加成變化清單
      */
-    public static final Map<Integer, Integer> HP = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> HP = new HashMap<>();
     /**
      * 魔力上限加成變化清單
      */
-    public static final Map<Integer, Integer> MP = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> MP = new HashMap<>();
     /**
      * 傷害減免加成變化清單
      */
-    public static final Map<Integer, Integer> DMG_REDUCE = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> DMG_REDUCE = new HashMap<>();
     private final L1ItemInstance _itemInstance;
 
     protected L1ItemPower(L1ItemInstance itemInstance) {
@@ -43,47 +43,47 @@ public class L1ItemPower {
     }
 
     public static void load() {
-        MR.put(Integer.valueOf(20011), new Integer(1));// 抗魔法頭盔
-        MR.put(Integer.valueOf(120011), new Integer(1));// 抗魔法頭盔
-        MR.put(Integer.valueOf(20110), new Integer(1));// 抗魔法鏈甲
-        MR.put(Integer.valueOf(120110), new Integer(1));// 抗魔法鏈甲
-        MR.put(Integer.valueOf(20056), new Integer(2));// 抗魔法斗篷
-        MR.put(Integer.valueOf(120056), new Integer(2));// 抗魔法斗篷
-        MR.put(Integer.valueOf(330005), new Integer(1));// 抗魔法脛甲
-        MR.put(Integer.valueOf(20117), new Integer(1));// 巴風特盔甲
-        MR.put(Integer.valueOf(20049), new Integer(2));// 巨蟻女皇的金翅膀
-        MR.put(Integer.valueOf(20050), new Integer(2));// 巨蟻女皇的銀翅膀
-        MR.put(Integer.valueOf(20078), new Integer(3));// 混沌斗篷
-        MR.put(Integer.valueOf(400019), new Integer(1));// 特製究極抗魔法T恤
-        MR.put(Integer.valueOf(400023), new Integer(1));// 酷金盔甲
-        MR.put(Integer.valueOf(300427), new Integer(1));// 塔拉斯長靴
-        MR.put(Integer.valueOf(300433), new Integer(3));// 馬昆斯斗篷
-        MR.put(Integer.valueOf(1300433), new Integer(3));// 馬昆斯斗篷
-        MR.put(Integer.valueOf(310126), new Integer(2));// 暴走的變異披風
-        MR.put(Integer.valueOf(70092), new Integer(2));// 神威斗篷
-        MR.put(Integer.valueOf(70093), new Integer(2));// 強化抗魔斗篷
-        MR.put(Integer.valueOf(401028), new Integer(1));// 滅魔的小籐甲
-        MR.put(Integer.valueOf(401029), new Integer(1));// 滅魔的長袍
-        MR.put(Integer.valueOf(401030), new Integer(1));// 滅魔的鱗甲
-        MR.put(Integer.valueOf(401031), new Integer(1));// 滅魔的金屬盔甲
-        MR.put(Integer.valueOf(400052), new Integer(2));// 神聖的魔法防禦頭盔
-        MPR.put(Integer.valueOf(410163), new Integer(1));// 冥想魔杖
-        MPR.put(Integer.valueOf(1410163), new Integer(1));// 冥想魔杖
-        SP.put(Integer.valueOf(20107), new Integer(1));// 巫妖斗篷
-        SP.put(Integer.valueOf(120107), new Integer(1));// 巫妖斗篷
-        SP.put(Integer.valueOf(300431), new Integer(1));// 法師臂甲
-        SP.put(Integer.valueOf(300432), new Integer(1));// 幻象眼魔的心眼
-        SP.put(Integer.valueOf(1300432), new Integer(1));// 幻象眼魔的心眼
-        SP.put(Integer.valueOf(300433), new Integer(1));// 馬昆斯斗篷
-        SP.put(Integer.valueOf(1300433), new Integer(1));// 馬昆斯斗篷
-        X2.put(Integer.valueOf(410188), new Integer(1));// 咆哮雙刀
-        HIT.put(Integer.valueOf(400051), new Integer(1));// 激怒手套
-        HIT.put(Integer.valueOf(21309), new Integer(1));// 激怒手套
-        HP.put(Integer.valueOf(300429), new Integer(25));// 體力臂甲
-        MP.put(Integer.valueOf(300426), new Integer(10));// 大法師之帽
-        DMG_REDUCE.put(Integer.valueOf(300430), new Integer(1));// 守護的臂甲
-        DMG_REDUCE.put(Integer.valueOf(310125), new Integer(1));// 石製手套
-        DMG_REDUCE.put(Integer.valueOf(1310125), new Integer(1));// 石製手套
+        MR.put(20011, 1);// 抗魔法頭盔
+        MR.put(120011, 1);// 抗魔法頭盔
+        MR.put(20110, 1);// 抗魔法鏈甲
+        MR.put(120110, 1);// 抗魔法鏈甲
+        MR.put(20056, 2);// 抗魔法斗篷
+        MR.put(120056, 2);// 抗魔法斗篷
+        MR.put(330005, 1);// 抗魔法脛甲
+        MR.put(20117, 1);// 巴風特盔甲
+        MR.put(20049, 2);// 巨蟻女皇的金翅膀
+        MR.put(20050, 2);// 巨蟻女皇的銀翅膀
+        MR.put(20078, 3);// 混沌斗篷
+        MR.put(400019, 1);// 特製究極抗魔法T恤
+        MR.put(400023, 1);// 酷金盔甲
+        MR.put(300427, 1);// 塔拉斯長靴
+        MR.put(300433, 3);// 馬昆斯斗篷
+        MR.put(1300433, 3);// 馬昆斯斗篷
+        MR.put(310126, 2);// 暴走的變異披風
+        MR.put(70092, 2);// 神威斗篷
+        MR.put(70093, 2);// 強化抗魔斗篷
+        MR.put(401028, 1);// 滅魔的小籐甲
+        MR.put(401029, 1);// 滅魔的長袍
+        MR.put(401030, 1);// 滅魔的鱗甲
+        MR.put(401031, 1);// 滅魔的金屬盔甲
+        MR.put(400052, 2);// 神聖的魔法防禦頭盔
+        MPR.put(410163, 1);// 冥想魔杖
+        MPR.put(1410163, 1);// 冥想魔杖
+        SP.put(20107, 1);// 巫妖斗篷
+        SP.put(120107, 1);// 巫妖斗篷
+        SP.put(300431, 1);// 法師臂甲
+        SP.put(300432, 1);// 幻象眼魔的心眼
+        SP.put(1300432, 1);// 幻象眼魔的心眼
+        SP.put(300433, 1);// 馬昆斯斗篷
+        SP.put(1300433, 1);// 馬昆斯斗篷
+        X2.put(410188, 1);// 咆哮雙刀
+        HIT.put(400051, 1);// 激怒手套
+        HIT.put(21309, 1);// 激怒手套
+        HP.put(300429, 25);// 體力臂甲
+        MP.put(300426, 10);// 大法師之帽
+        DMG_REDUCE.put(300430, 1);// 守護的臂甲
+        DMG_REDUCE.put(310125, 1);// 石製手套
+        DMG_REDUCE.put(1310125, 1);// 石製手套
     }
 
     /**
@@ -92,9 +92,9 @@ public class L1ItemPower {
      */
     protected int getMr() {
         int mr = _itemInstance.getItem().get_mdef();// DB設定抗魔
-        Integer integer = MR.get(Integer.valueOf(_itemInstance.getItemId()));
+        Integer integer = MR.get(_itemInstance.getItemId());
         if (integer != null) {
-            mr += _itemInstance.getEnchantLevel() * integer.intValue();
+            mr += _itemInstance.getEnchantLevel() * integer;
         }
         return mr;
     }
@@ -105,9 +105,9 @@ public class L1ItemPower {
      */
     protected int getMpr() {
         int mpr = _itemInstance.getItem().get_addmpr();// DB設定回魔量
-        Integer integer = MPR.get(Integer.valueOf(_itemInstance.getItemId()));
+        Integer integer = MPR.get(_itemInstance.getItemId());
         if (integer != null) {
-            mpr += _itemInstance.getEnchantLevel() * integer.intValue();
+            mpr += _itemInstance.getEnchantLevel() * integer;
         }
         return mpr;
     }
@@ -168,32 +168,32 @@ public class L1ItemPower {
      */
     protected int getSp() {
         int sp = _itemInstance.getItem().get_addsp();// DB設定SP
-        Integer integer = SP.get(Integer.valueOf(_itemInstance.getItemId()));
+        Integer integer = SP.get(_itemInstance.getItemId());
         if (integer != null) {
             if (_itemInstance.getItemId() == 20107 || _itemInstance.getItemId() == 120107) {// 巫妖斗篷
                 if (_itemInstance.getEnchantLevel() >= 3) {// 加3開始增加魔攻
-                    sp += (_itemInstance.getEnchantLevel() - 2) * integer.intValue();
+                    sp += (_itemInstance.getEnchantLevel() - 2) * integer;
                 }
             } else if (_itemInstance.getItemId() == 300431) {// 法師臂甲
                 int enchantlvl = _itemInstance.getEnchantLevel();
                 if (enchantlvl >= 5 && enchantlvl <= 6) {
-                    sp += integer.intValue();
+                    sp += integer;
                 } else if (enchantlvl >= 7 && enchantlvl <= 8) {
-                    sp += integer.intValue() * 2;
+                    sp += integer * 2;
                 } else if (enchantlvl >= 9) {
-                    sp += integer.intValue() * 3;
+                    sp += integer * 3;
                 }
 
             } else if (_itemInstance.getItemId() == 300433 || _itemInstance.getItemId() == 1300433) {
                 if (_itemInstance.getEnchantLevel() >= 7) {// 加7開始增加魔攻
-                    sp += (_itemInstance.getEnchantLevel() - 6) * integer.intValue();
+                    sp += (_itemInstance.getEnchantLevel() - 6) * integer;
                 }
             } else if (_itemInstance.getItemId() == 300432 || _itemInstance.getItemId() == 1300432) {
                 if (_itemInstance.getEnchantLevel() >= 8) {// 加8開始增加魔攻
-                    sp += (_itemInstance.getEnchantLevel() - 6) * integer.intValue();
+                    sp += (_itemInstance.getEnchantLevel() - 6) * integer;
                 }
             } else {
-                sp += _itemInstance.getEnchantLevel() * integer.intValue();
+                sp += _itemInstance.getEnchantLevel() * integer;
             }
         }
         return sp;
@@ -205,9 +205,9 @@ public class L1ItemPower {
      */
     protected int getDoubleDmgChance() {
         int x2 = _itemInstance.getItem().getDoubleDmgChance();// DB設定雙擊率
-        Integer integer = X2.get(Integer.valueOf(_itemInstance.getItemId()));
+        Integer integer = X2.get(_itemInstance.getItemId());
         if (integer != null) {
-            x2 += _itemInstance.getEnchantLevel() * integer.intValue();
+            x2 += _itemInstance.getEnchantLevel() * integer;
         }
         return x2;
     }
@@ -218,14 +218,14 @@ public class L1ItemPower {
      */
     protected int getHitModifierByArmor() {
         int hit = _itemInstance.getItem().getHitModifierByArmor();// DB設定命中率
-        Integer integer = HIT.get(Integer.valueOf(_itemInstance.getItemId()));
+        Integer integer = HIT.get(_itemInstance.getItemId());
         if (integer != null) {
             if (_itemInstance.getItemId() == 400051 || _itemInstance.getItemId() == 21309) {// 激怒手套
                 if (_itemInstance.getEnchantLevel() >= 5) {// 加5開始增加命中率
-                    hit += (_itemInstance.getEnchantLevel() - 4) * integer.intValue();
+                    hit += (_itemInstance.getEnchantLevel() - 4) * integer;
                 }
             } else {
-                hit += _itemInstance.getEnchantLevel() * integer.intValue();
+                hit += _itemInstance.getEnchantLevel() * integer;
             }
         }
         return hit;
@@ -237,19 +237,19 @@ public class L1ItemPower {
      */
     protected int get_addhp() {
         int hp = _itemInstance.getItem().get_addhp();// DB設定增加血量
-        Integer integer = HP.get(Integer.valueOf(_itemInstance.getItemId()));
+        Integer integer = HP.get(_itemInstance.getItemId());
         if (integer != null) {
             if (_itemInstance.getItemId() == 300429) {// 體力臂甲
                 int enchantlvl = _itemInstance.getEnchantLevel();
                 if (enchantlvl >= 5 && enchantlvl <= 6) {
-                    hp += integer.intValue();
+                    hp += integer;
                 } else if (enchantlvl >= 7 && enchantlvl <= 8) {
-                    hp += integer.intValue() * 2;
+                    hp += integer * 2;
                 } else if (enchantlvl >= 9) {
-                    hp += integer.intValue() * 3;
+                    hp += integer * 3;
                 }
             } else {
-                hp += _itemInstance.getEnchantLevel() * integer.intValue();
+                hp += _itemInstance.getEnchantLevel() * integer;
             }
         }
         return hp;
@@ -261,9 +261,9 @@ public class L1ItemPower {
      */
     protected int get_addmp() {
         int mp = _itemInstance.getItem().get_addmp();// DB設定增加mp
-        Integer integer = MP.get(Integer.valueOf(_itemInstance.getItemId()));
+        Integer integer = MP.get(_itemInstance.getItemId());
         if (integer != null) {
-            mp += _itemInstance.getEnchantLevel() * integer.intValue();
+            mp += _itemInstance.getEnchantLevel() * integer;
         }
         return mp;
     }
@@ -274,23 +274,23 @@ public class L1ItemPower {
      */
     protected int getDamageReduction() {
         int reduce = _itemInstance.getItem().getDamageReduction();// DB設定傷害減免
-        Integer integer = DMG_REDUCE.get(Integer.valueOf(_itemInstance.getItemId()));
+        Integer integer = DMG_REDUCE.get(_itemInstance.getItemId());
         if (integer != null) {
             if (_itemInstance.getItemId() == 300430) {// 守護的臂甲
                 int enchantlvl = _itemInstance.getEnchantLevel();
                 if (enchantlvl >= 5 && enchantlvl <= 6) {
-                    reduce += integer.intValue();
+                    reduce += integer;
                 } else if (enchantlvl >= 7 && enchantlvl <= 8) {
-                    reduce += integer.intValue() * 2;
+                    reduce += integer * 2;
                 } else if (enchantlvl >= 9) {
-                    reduce += integer.intValue() * 3;
+                    reduce += integer * 3;
                 }
             } else if (_itemInstance.getItemId() == 310125 || _itemInstance.getItemId() == 1310125) {
                 if (_itemInstance.getEnchantLevel() >= 7) {// 加7開始增加傷害減免
-                    reduce += (_itemInstance.getEnchantLevel() - 6) * integer.intValue();
+                    reduce += (_itemInstance.getEnchantLevel() - 6) * integer;
                 }
             } else {
-                reduce += _itemInstance.getEnchantLevel() * integer.intValue();
+                reduce += _itemInstance.getEnchantLevel() * integer;
             }
         }
         return reduce;
@@ -349,21 +349,21 @@ public class L1ItemPower {
                         break;
                     case 5:
                         owner.addMaxHp(randomELevel * 10);
-                        owner.addDmgModifierByArmor(randomELevel * 1);
-                        owner.addBowDmgModifierByArmor(randomELevel * 1);
+                        owner.addDmgModifierByArmor(randomELevel);
+                        owner.addBowDmgModifierByArmor(randomELevel);
                         break;
                     case 6:
-                        owner.addDmgModifierByArmor(randomELevel * 1);
-                        owner.addBowDmgModifierByArmor(randomELevel * 1);
+                        owner.addDmgModifierByArmor(randomELevel);
+                        owner.addBowDmgModifierByArmor(randomELevel);
                         break;
                     case 7:
                         owner.addMaxHp(randomELevel * 10);
-                        owner.addDmgModifierByArmor(randomELevel * 1);
-                        owner.addBowDmgModifierByArmor(randomELevel * 1);
+                        owner.addDmgModifierByArmor(randomELevel);
+                        owner.addBowDmgModifierByArmor(randomELevel);
                         break;
                     case 8:
-                        owner.addDmgModifierByArmor(randomELevel * 1);
-                        owner.addBowDmgModifierByArmor(randomELevel * 1);
+                        owner.addDmgModifierByArmor(randomELevel);
+                        owner.addBowDmgModifierByArmor(randomELevel);
                         break;
                 }
                 break;
@@ -381,17 +381,17 @@ public class L1ItemPower {
                         break;
                     case 5:
                         owner.addMaxHp(randomELevel * 10);
-                        owner.addDamageReductionByArmor(randomELevel * 1);
+                        owner.addDamageReductionByArmor(randomELevel);
                         break;
                     case 6:
-                        owner.addDamageReductionByArmor(randomELevel * 1);
+                        owner.addDamageReductionByArmor(randomELevel);
                         break;
                     case 7:
                         owner.addMaxHp(randomELevel * 10);
-                        owner.addDamageReductionByArmor(randomELevel * 1);
+                        owner.addDamageReductionByArmor(randomELevel);
                         break;
                     case 8:
-                        owner.addDamageReductionByArmor(randomELevel * 1);
+                        owner.addDamageReductionByArmor(randomELevel);
                         break;
                 }
                 break;

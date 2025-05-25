@@ -132,7 +132,7 @@ public class L1AllBuff implements L1CommandExecutor {
      *
      * @author daien
      */
-    private class AllBuffRunnable implements Runnable {
+    private static class AllBuffRunnable implements Runnable {
         @Override
         public void run() {
             try {

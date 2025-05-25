@@ -1352,7 +1352,7 @@ public class C_Attr extends ClientBasePacket {
         return this.getClass().getSimpleName();
     }
 
-    private class KickPc implements Runnable {
+    private static class KickPc implements Runnable {
         private ClientExecutor _client;
 
         private KickPc(L1PcInstance pc) {

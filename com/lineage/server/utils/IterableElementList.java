@@ -19,7 +19,7 @@ public class IterableElementList implements Iterable<Element> {
         return new MyIterator(this._list.iterator());
     }
 
-    private class MyIterator implements Iterator<Element> {
+    private static class MyIterator implements Iterator<Element> {
         private Iterator<Node> _itr;
         private Element _next = null;
 

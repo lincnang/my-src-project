@@ -2853,7 +2853,7 @@ public class L1NpcInstance extends L1Character {
 
 
     // 刪除物件計時器
-    public class DelItemTime {
+    public static class DelItemTime {
         public int _del_item_time = 0;// 單位:秒
     }
 }

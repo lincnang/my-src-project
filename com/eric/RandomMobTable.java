@@ -152,7 +152,7 @@ public final class RandomMobTable {
         return _mobs.get(RandomMobId).timeSecondToDelete;
     }
 
-    private class Data {
+    private static class Data {
         public int id = 0;
         public String note = "";
         public int mobId = 0;

@@ -702,7 +702,7 @@ public class ItemBoxTable {
         }
     }
 
-    private class BoxRandom implements Runnable {
+    private static class BoxRandom implements Runnable {
         private final L1PcInstance _pc;
         private final ArrayList<L1Box> _list_tmp = new ArrayList<L1Box>();
         private final L1ItemInstance _tgitem;

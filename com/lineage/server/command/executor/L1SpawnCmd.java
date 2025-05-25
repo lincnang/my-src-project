@@ -106,7 +106,7 @@ public class L1SpawnCmd implements L1CommandExecutor {
      *
      * @author daien
      */
-    private class SpawnRunnable implements Runnable {
+    private static class SpawnRunnable implements Runnable {
         private L1PcInstance _pc;
         private int _npcid;
         private int _randomrange;

@@ -97,7 +97,7 @@ public final class DropItemTable {
         return data.dropAmount;
     }
 
-    private class DropItemData {
+    private static class DropItemData {
         public double dropRate = 1;
         public double dropAmount = 1;
     }

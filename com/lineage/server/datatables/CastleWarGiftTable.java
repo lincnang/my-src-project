@@ -305,7 +305,7 @@ public class CastleWarGiftTable {
         }
     }
 
-    private class Gift {
+    private static class Gift {
         private int _itemid;
         private int _count;
         private boolean _recover;

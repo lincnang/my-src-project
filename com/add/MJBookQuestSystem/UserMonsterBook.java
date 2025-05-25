@@ -172,7 +172,7 @@ public class UserMonsterBook {
         ds.run();
     }
 
-    class DelaySender {
+    static class DelaySender {
         private ArrayList<ServerBasePacket> _pck;
         private L1PcInstance _pc;
 

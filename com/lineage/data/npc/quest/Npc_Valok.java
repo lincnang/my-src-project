@@ -39,7 +39,7 @@ public class Npc_Valok extends NpcExecutor {
         GeneralThreadPool.get().execute(valokR);
     }
 
-    class ValokR implements Runnable {
+    static class ValokR implements Runnable {
         private final L1NpcInstance _npc;
 
         public ValokR(L1NpcInstance npc) {

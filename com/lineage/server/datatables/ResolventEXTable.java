@@ -112,7 +112,7 @@ public final class ResolventEXTable {
         return false;
     }
 
-    private class Gift {
+    private static class Gift {
         private int[] _crystal_id = null;
         private int[] _crystalMincount = null;
         private int[] _crystalMaxcount = null;

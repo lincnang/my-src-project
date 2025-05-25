@@ -94,7 +94,7 @@ public class NpcAiThreadPool {//src032
      *
      * @author daien
      */
-    private class PriorityThreadFactory implements ThreadFactory {
+    private static class PriorityThreadFactory implements ThreadFactory {
         private final int _prio;
         private final String _name;
         private final AtomicInteger _threadNumber = new AtomicInteger(1);

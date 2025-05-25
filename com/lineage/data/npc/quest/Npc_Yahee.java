@@ -39,7 +39,7 @@ public class Npc_Yahee extends NpcExecutor {
         GeneralThreadPool.get().execute(yaheeR);
     }
 
-    class YaheeR implements Runnable {
+    static class YaheeR implements Runnable {
         private final L1NpcInstance _npc;
 
         public YaheeR(L1NpcInstance npc) {

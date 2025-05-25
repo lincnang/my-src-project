@@ -37,7 +37,7 @@ public class L1Color implements L1CommandExecutor {
         }
     }
 
-    private class ColorTimeController implements Runnable {
+    private static class ColorTimeController implements Runnable {
         int _mode = 0;
         private L1PcInstance _pc;
 

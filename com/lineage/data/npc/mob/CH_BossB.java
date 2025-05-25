@@ -50,7 +50,7 @@ public class CH_BossB extends NpcExecutor {
         }
     }
 
-    class BossBR implements Runnable {
+    static class BossBR implements Runnable {
         private final L1NpcInstance _npc;
 
         public BossBR(L1NpcInstance npc) {

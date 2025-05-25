@@ -1161,7 +1161,7 @@ public class L1SpawnUtil {
         GeneralThreadPool.get().schedule(spawn, 0);
     }
 
-    private class SpawnR1 implements Runnable {
+    private static class SpawnR1 implements Runnable {
         // final L1PcInstance _pc;
         final L1Location _location;
         final int _npcId;
@@ -1283,7 +1283,7 @@ public class L1SpawnUtil {
         }
     }
 
-    private class SpawnR2 implements Runnable {
+    private static class SpawnR2 implements Runnable {
         private final L1Character _cha;
         private final int _targetX;
         private final int _targetY;

@@ -137,7 +137,7 @@ public class SOR_UserSet2 extends ItemExecutor {
         }
     }
 
-    private class TeleportRunnable implements Runnable {
+    private static class TeleportRunnable implements Runnable {
         private final L1PcInstance _pc;
         private int _locX = 0;
         private int _locY = 0;

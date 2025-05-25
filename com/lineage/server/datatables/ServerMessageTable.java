@@ -154,7 +154,7 @@ public class ServerMessageTable {
         }
     }
 
-    private class L1ServerMessage {
+    private static class L1ServerMessage {
         private boolean _show;
         private String _message;
 

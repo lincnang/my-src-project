@@ -71,7 +71,7 @@ public class EffectAISet extends EventExecutor {
         }
     }
 
-    private class EffectTimer extends TimerTask {
+    private static class EffectTimer extends TimerTask {
         private ScheduledFuture<?> _timer;
 
         public void start() {

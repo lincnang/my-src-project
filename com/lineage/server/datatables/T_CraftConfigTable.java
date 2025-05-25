@@ -152,7 +152,7 @@ public class T_CraftConfigTable {
         _security = sHA_1;
     }
 
-    public class NewL1NpcMakeItemAction {
+    public static class NewL1NpcMakeItemAction {
         private final List<L1ObjectAmount<Integer>> _material_list = new ArrayList<L1ObjectAmount<Integer>>();
         private final List<L1ObjectAmount<Integer>> _aid_material_list = new ArrayList<L1ObjectAmount<Integer>>();
         private final List<L1ObjectAmount<Integer>> _item_list = new ArrayList<L1ObjectAmount<Integer>>();

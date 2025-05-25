@@ -435,7 +435,7 @@ public class RedKnight implements Runnable {
         }
     }
 
-    class NpcMove implements Runnable {
+    static class NpcMove implements Runnable {
         private L1NpcInstance npc = null;
         private int count = 0;
         private int direct = 0;

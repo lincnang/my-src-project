@@ -82,7 +82,7 @@ public class IpAttackCheck {
         }
     }
 
-    private class IpTemp {
+    private static class IpTemp {
         long _time;
         int _count;
     }

@@ -86,7 +86,7 @@ public class L1GfxId implements L1CommandExecutor {
         GeneralThreadPool.get().execute(delMe);
     }
 
-    private class DelMe implements Runnable {
+    private static class DelMe implements Runnable {
         private L1NpcInstance _npc;
         // private boolean _isDel = false;
         private int _isTest = 0;

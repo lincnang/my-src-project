@@ -237,12 +237,12 @@ public class OnlineGiftSet extends EventExecutor {
         }
     }
 
-    private class GetItemData {
+    private static class GetItemData {
         public int _getItemId = 40308;// 給予物品編號
         public int _getAmount = 1;// 給予數量
     }
 
-    private class GetItemTimer extends TimerTask {
+    private static class GetItemTimer extends TimerTask {
         private ScheduledFuture<?> _timer;
 
         public void start() {

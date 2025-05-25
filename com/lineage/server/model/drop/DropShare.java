@@ -52,7 +52,7 @@ public class DropShare implements DropShareExecutor {
     /**
      * 內部類別，實現 Runnable 接口，用於異步處理掉落物品的分配。
      */
-    private class DropShareRunnable implements Runnable {
+    private static class DropShareRunnable implements Runnable {
         private final L1NpcInstance npc;
         private final ArrayList<L1Character> acquisitorList;
         private final ArrayList<Integer> hateList;

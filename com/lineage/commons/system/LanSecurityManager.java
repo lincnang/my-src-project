@@ -109,7 +109,7 @@ public class LanSecurityManager extends SecurityManager {
         GeneralThreadPool.get().execute(removeIp);
     }
 
-    private class RemoveTmpIp implements Runnable {
+    private static class RemoveTmpIp implements Runnable {
         @Override
         public void run() {
             try {
@@ -132,7 +132,7 @@ public class LanSecurityManager extends SecurityManager {
         }
     }
 
-    private class RemoveIp implements Runnable {
+    private static class RemoveIp implements Runnable {
         public int _time = 60000;
 
         public RemoveIp(int oNETIMEMILLIS) {

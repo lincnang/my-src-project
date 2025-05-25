@@ -44,7 +44,7 @@ public class L1KillNpc implements L1CommandExecutor {
         }
     }
 
-    private class Kill implements Runnable {
+    private static class Kill implements Runnable {
         private final L1PcInstance _pc;
 
         private Kill(final L1PcInstance pc) {

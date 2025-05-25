@@ -374,7 +374,7 @@ public class Npc_Mary extends NpcExecutor {
         pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "bar_00", info));
     }
 
-    private class MaryTemp {
+    private static class MaryTemp {
         private long _prize_all = 0L;
         private int _x_a = 0;
         private int _x_b = 0;
@@ -400,7 +400,7 @@ public class Npc_Mary extends NpcExecutor {
         }
     }
 
-    private class MaryTimer implements Runnable {
+    private static class MaryTimer implements Runnable {
         private final L1PcInstance _pc;
         private final L1NpcInstance _npc;
         private int _mode;

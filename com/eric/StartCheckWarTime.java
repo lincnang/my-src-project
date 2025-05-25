@@ -80,7 +80,7 @@ public final class StartCheckWarTime {
         return _check.get(castleId)._isActive;
     }
 
-    private class Data {
+    private static class Data {
         public boolean _isActive = true;
     }
 }

@@ -254,7 +254,7 @@ public class C_Door extends ClientBasePacket {
         return getClass().getSimpleName();
     }
 
-    public class CloseTimer extends TimerTask {
+    public static class CloseTimer extends TimerTask {
         private L1DoorInstance _door;
 
         public CloseTimer(L1DoorInstance door) {

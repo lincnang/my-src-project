@@ -1974,332 +1974,377 @@ public class C_NPCAction extends ClientBasePacket {
                     }
                 }
             } else if (npctemp.get_npcId() == 71128) {
-                if (cmd.equals("A")) {
-                    if (pc.getInventory().checkItem(41010, 1L)) {
-                        htmlid = "perita2";
-                    } else {
-                        htmlid = "perita3";
-                    }
-                } else if (cmd.equals("p")) {
-                    if ((pc.getInventory().checkItem(40987, 1L)) && (pc.getInventory().checkItem(40988, 1L)) && (pc.getInventory().checkItem(40989, 1L))) {
-                        htmlid = "perita43";
-                    } else if ((pc.getInventory().checkItem(40987, 1L)) && (pc.getInventory().checkItem(40989, 1L))) {
-                        htmlid = "perita44";
-                    } else if ((pc.getInventory().checkItem(40987, 1L)) && (pc.getInventory().checkItem(40988, 1L))) {
-                        htmlid = "perita45";
-                    } else if ((pc.getInventory().checkItem(40988, 1L)) && (pc.getInventory().checkItem(40989, 1L))) {
-                        htmlid = "perita47";
-                    } else if (pc.getInventory().checkItem(40987, 1L)) {
-                        htmlid = "perita46";
-                    } else if (pc.getInventory().checkItem(40988, 1L)) {
-                        htmlid = "perita49";
-                    } else if (pc.getInventory().checkItem(40987, 1L)) {
-                        htmlid = "perita48";
-                    } else {
-                        htmlid = "perita50";
-                    }
-                } else if (cmd.equals("q")) {
-                    if ((pc.getInventory().checkItem(41173, 1L)) && (pc.getInventory().checkItem(41174, 1L)) && (pc.getInventory().checkItem(41175, 1L))) {
-                        htmlid = "perita54";
-                    } else if ((pc.getInventory().checkItem(41173, 1L)) && (pc.getInventory().checkItem(41175, 1L))) {
-                        htmlid = "perita55";
-                    } else if ((pc.getInventory().checkItem(41173, 1L)) && (pc.getInventory().checkItem(41174, 1L))) {
-                        htmlid = "perita56";
-                    } else if ((pc.getInventory().checkItem(41174, 1L)) && (pc.getInventory().checkItem(41175, 1L))) {
-                        htmlid = "perita58";
-                    } else if (pc.getInventory().checkItem(41174, 1L)) {
-                        htmlid = "perita57";
-                    } else if (pc.getInventory().checkItem(41175, 1L)) {
-                        htmlid = "perita60";
-                    } else if (pc.getInventory().checkItem(41176, 1L)) {
-                        htmlid = "perita59";
-                    } else {
-                        htmlid = "perita61";
-                    }
-                } else if (cmd.equals("s")) {
-                    if ((pc.getInventory().checkItem(41161, 1L)) && (pc.getInventory().checkItem(41162, 1L)) && (pc.getInventory().checkItem(41163, 1L))) {
-                        htmlid = "perita62";
-                    } else if ((pc.getInventory().checkItem(41161, 1L)) && (pc.getInventory().checkItem(41163, 1L))) {
-                        htmlid = "perita63";
-                    } else if ((pc.getInventory().checkItem(41161, 1L)) && (pc.getInventory().checkItem(41162, 1L))) {
-                        htmlid = "perita64";
-                    } else if ((pc.getInventory().checkItem(41162, 1L)) && (pc.getInventory().checkItem(41163, 1L))) {
-                        htmlid = "perita66";
-                    } else if (pc.getInventory().checkItem(41161, 1L)) {
-                        htmlid = "perita65";
-                    } else if (pc.getInventory().checkItem(41162, 1L)) {
-                        htmlid = "perita68";
-                    } else if (pc.getInventory().checkItem(41163, 1L)) {
-                        htmlid = "perita67";
-                    } else {
-                        htmlid = "perita69";
-                    }
-                } else if (cmd.equals("B")) {
-                    if ((pc.getInventory().checkItem(40651, 10L)) && (pc.getInventory().checkItem(40643, 10L)) && (pc.getInventory().checkItem(40618, 10L)) && (pc.getInventory().checkItem(40645, 10L)) && (pc.getInventory().checkItem(40676, 10L)) && (pc.getInventory().checkItem(40442, 5L)) && (pc.getInventory().checkItem(40051, 1L))) {
-                        htmlid = "perita7";
-                        materials = new int[]{40651, 40643, 40618, 40645, 40676, 40442, 40051};
-                        counts = new int[]{10, 10, 10, 10, 20, 5, 1};
-                        createitem = new int[]{40925};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita8";
-                    }
-                } else if ((cmd.equals("G")) || (cmd.equals("h")) || (cmd.equals("i"))) {
-                    if ((pc.getInventory().checkItem(40651, 5L)) && (pc.getInventory().checkItem(40643, 5L)) && (pc.getInventory().checkItem(40618, 5L)) && (pc.getInventory().checkItem(40645, 5L)) && (pc.getInventory().checkItem(40676, 5L)) && (pc.getInventory().checkItem(40675, 5L)) && (pc.getInventory().checkItem(40049, 3L)) && (pc.getInventory().checkItem(40051, 1L))) {
-                        htmlid = "perita27";
-                        materials = new int[]{40651, 40643, 40618, 40645, 40676, 40675, 40049, 40051};
-                        counts = new int[]{5, 5, 5, 5, 10, 10, 3, 1};
-                        createitem = new int[]{40926};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita28";
-                    }
-                } else if ((cmd.equals("H")) || (cmd.equals("j")) || (cmd.equals("k"))) {
-                    if ((pc.getInventory().checkItem(40651, 10L)) && (pc.getInventory().checkItem(40643, 10L)) && (pc.getInventory().checkItem(40618, 10L)) && (pc.getInventory().checkItem(40645, 10L)) && (pc.getInventory().checkItem(40676, 20L)) && (pc.getInventory().checkItem(40675, 10L)) && (pc.getInventory().checkItem(40048, 3L)) && (pc.getInventory().checkItem(40051, 1L))) {
-                        htmlid = "perita29";
-                        materials = new int[]{40651, 40643, 40618, 40645, 40676, 40675, 40048, 40051};
-                        counts = new int[]{10, 10, 10, 10, 20, 10, 3, 1};
-                        createitem = new int[]{40927};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita30";
-                    }
-                } else if ((cmd.equals("I")) || (cmd.equals("l")) || (cmd.equals("m"))) {
-                    if ((pc.getInventory().checkItem(40651, 20L)) && (pc.getInventory().checkItem(40643, 20L)) && (pc.getInventory().checkItem(40618, 20L)) && (pc.getInventory().checkItem(40645, 20L)) && (pc.getInventory().checkItem(40676, 30L)) && (pc.getInventory().checkItem(40675, 10L)) && (pc.getInventory().checkItem(40050, 3L)) && (pc.getInventory().checkItem(40051, 1L))) {
-                        htmlid = "perita31";
-                        materials = new int[]{40651, 40643, 40618, 40645, 40676, 40675, 40050, 40051};
-                        counts = new int[]{20, 20, 20, 20, 30, 10, 3, 1};
-                        createitem = new int[]{40928};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita32";
-                    }
-                } else if ((cmd.equals("J")) || (cmd.equals("n")) || (cmd.equals("o"))) {
-                    if ((pc.getInventory().checkItem(40651, 30L)) && (pc.getInventory().checkItem(40643, 30L)) && (pc.getInventory().checkItem(40618, 30L)) && (pc.getInventory().checkItem(40645, 30L)) && (pc.getInventory().checkItem(40676, 30L)) && (pc.getInventory().checkItem(40675, 20L)) && (pc.getInventory().checkItem(40052, 1L)) && (pc.getInventory().checkItem(40051, 1L))) {
-                        htmlid = "perita33";
-                        materials = new int[]{40651, 40643, 40618, 40645, 40676, 40675, 40052, 40051};
-                        counts = new int[]{30, 30, 30, 30, 30, 20, 1, 1};
-                        createitem = new int[]{40928};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita34";
-                    }
-                } else if (cmd.equals("K")) {
-                    int earinga = 0;
-                    int earingb = 0;
-                    if ((pc.getInventory().checkEquipped(21014)) || (pc.getInventory().checkEquipped(21006)) || (pc.getInventory().checkEquipped(21007))) {
-                        htmlid = "perita36";
-                    } else if (pc.getInventory().checkItem(21014, 1L)) {
-                        earinga = 21014;
-                        earingb = 41176;
-                    } else if (pc.getInventory().checkItem(21006, 1L)) {
-                        earinga = 21006;
-                        earingb = 41177;
-                    } else if (pc.getInventory().checkItem(21007, 1L)) {
-                        earinga = 21007;
-                        earingb = 41178;
-                    } else {
-                        htmlid = "perita36";
-                    }
-                    if (earinga > 0) {
-                        materials = new int[]{earinga};
-                        counts = new int[]{1};
-                        createitem = new int[]{earingb};
-                        createcount = new int[]{1};
-                    }
-                } else if (cmd.equals("L")) {
-                    if (pc.getInventory().checkEquipped(21015)) {
-                        htmlid = "perita22";
-                    } else if (pc.getInventory().checkItem(21015, 1L)) {
-                        materials = new int[]{21015};
-                        counts = new int[]{1};
-                        createitem = new int[]{41179};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita22";
-                    }
-                } else if (cmd.equals("M")) {
-                    if (pc.getInventory().checkEquipped(21016)) {
-                        htmlid = "perita26";
-                    } else if (pc.getInventory().checkItem(21016, 1L)) {
-                        materials = new int[]{21016};
-                        counts = new int[]{1};
-                        createitem = new int[]{41182};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita26";
-                    }
-                } else if (cmd.equals("b")) {
-                    if (pc.getInventory().checkEquipped(21009)) {
-                        htmlid = "perita39";
-                    } else if (pc.getInventory().checkItem(21009, 1L)) {
-                        materials = new int[]{21009};
-                        counts = new int[]{1};
-                        createitem = new int[]{41180};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita39";
-                    }
-                } else if (cmd.equals("d")) {
-                    if (pc.getInventory().checkEquipped(21012)) {
-                        htmlid = "perita41";
-                    } else if (pc.getInventory().checkItem(21012, 1L)) {
-                        materials = new int[]{21012};
-                        counts = new int[]{1};
-                        createitem = new int[]{41183};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita41";
-                    }
-                } else if (cmd.equals("a")) {
-                    if (pc.getInventory().checkEquipped(21008)) {
-                        htmlid = "perita38";
-                    } else if (pc.getInventory().checkItem(21008, 1L)) {
-                        materials = new int[]{21008};
-                        counts = new int[]{1};
-                        createitem = new int[]{41181};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita38";
-                    }
-                } else if (cmd.equals("c")) {
-                    if (pc.getInventory().checkEquipped(21010)) {
-                        htmlid = "perita40";
-                    } else if (pc.getInventory().checkItem(21010, 1L)) {
-                        materials = new int[]{21010};
-                        counts = new int[]{1};
-                        createitem = new int[]{41184};
-                        createcount = new int[]{1};
-                    } else {
-                        htmlid = "perita40";
-                    }
-                }
-            } else if (npctemp.get_npcId() == 71129) {
-                if (cmd.equals("Z")) {
-                    htmlid = "rumtis2";
-                } else if (cmd.equals("Y")) {
-                    if (pc.getInventory().checkItem(41010, 1L)) {
-                        htmlid = "rumtis3";
-                    } else {
-                        htmlid = "rumtis4";
-                    }
-                } else if (cmd.equals("q")) {
-                    htmlid = "rumtis92";
-                } else if (cmd.equals("A")) {
-                    if (pc.getInventory().checkItem(41161, 1L)) {
-                        htmlid = "rumtis6";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("B")) {
-                    if (pc.getInventory().checkItem(41164, 1L)) {
-                        htmlid = "rumtis7";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("C")) {
-                    if (pc.getInventory().checkItem(41167, 1L)) {
-                        htmlid = "rumtis8";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("T")) {
-                    if (pc.getInventory().checkItem(41167, 1L)) {
-                        htmlid = "rumtis9";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("w")) {
-                    if (pc.getInventory().checkItem(41162, 1L)) {
-                        htmlid = "rumtis14";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("x")) {
-                    if (pc.getInventory().checkItem(41165, 1L)) {
-                        htmlid = "rumtis15";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("y")) {
-                    if (pc.getInventory().checkItem(41168, 1L)) {
-                        htmlid = "rumtis16";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("z")) {
-                    if (pc.getInventory().checkItem(41171, 1L)) {
-                        htmlid = "rumtis17";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("U")) {
-                    if (pc.getInventory().checkItem(41163, 1L)) {
-                        htmlid = "rumtis10";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("V")) {
-                    if (pc.getInventory().checkItem(41166, 1L)) {
-                        htmlid = "rumtis11";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("W")) {
-                    if (pc.getInventory().checkItem(41169, 1L)) {
-                        htmlid = "rumtis12";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if (cmd.equals("X")) {
-                    if (pc.getInventory().checkItem(41172, 1L)) {
-                        htmlid = "rumtis13";
-                    } else {
-                        htmlid = "rumtis101";
-                    }
-                } else if ((cmd.equals("D")) || (cmd.equals("E")) || (cmd.equals("F")) || (cmd.equals("G"))) {
-                    int insn = 0;
-                    int bacn = 0;
-                    int me = 0;
-                    int mr = 0;
-                    int mj = 0;
-                    int an = 0;
-                    int men = 0;
-                    int mrn = 0;
-                    int mjn = 0;
-                    int ann = 0;
-                    if ((pc.getInventory().checkItem(40959, 1L)) && (pc.getInventory().checkItem(40960, 1L)) && (pc.getInventory().checkItem(40961, 1L)) && (pc.getInventory().checkItem(40962, 1L))) {
-                        insn = 1;
-                        me = 40959;
-                        mr = 40960;
-                        mj = 40961;
-                        an = 40962;
-                        men = 1;
-                        mrn = 1;
-                        mjn = 1;
-                        ann = 1;
-                    } else if ((pc.getInventory().checkItem(40642, 10L)) && (pc.getInventory().checkItem(40635, 10L)) && (pc.getInventory().checkItem(40638, 10L)) && (pc.getInventory().checkItem(40667, 10L))) {
-                        bacn = 1;
-                        me = 40642;
-                        mr = 40635;
-                        mj = 40638;
-                        an = 40667;
-                        men = 10;
-                        mrn = 10;
-                        mjn = 10;
-                        ann = 10;
-                    }
-                    if ((pc.getInventory().checkItem(40046, 1L)) && (pc.getInventory().checkItem(40618, 5L)) && (pc.getInventory().checkItem(40643, 5L)) && (pc.getInventory().checkItem(40645, 5L)) && (pc.getInventory().checkItem(40651, 5L)) && (pc.getInventory().checkItem(40676, 5L))) {
-                        if ((insn == 1) || (bacn == 1)) {
-                            htmlid = "rumtis60";
-                            materials = new int[]{me, mr, mj, an, 40046, 40618, 40643, 40651, 40676};
-                            counts = new int[]{men, mrn, mjn, ann, 1, 5, 5, 5, 5, 5};
+                switch (cmd) {
+                    case "A":
+                        if (pc.getInventory().checkItem(41010, 1L)) {
+                            htmlid = "perita2";
+                        } else {
+                            htmlid = "perita3";
+                        }
+                        break;
+                    case "p":
+                        if ((pc.getInventory().checkItem(40987, 1L)) && (pc.getInventory().checkItem(40988, 1L)) && (pc.getInventory().checkItem(40989, 1L))) {
+                            htmlid = "perita43";
+                        } else if ((pc.getInventory().checkItem(40987, 1L)) && (pc.getInventory().checkItem(40989, 1L))) {
+                            htmlid = "perita44";
+                        } else if ((pc.getInventory().checkItem(40987, 1L)) && (pc.getInventory().checkItem(40988, 1L))) {
+                            htmlid = "perita45";
+                        } else if ((pc.getInventory().checkItem(40988, 1L)) && (pc.getInventory().checkItem(40989, 1L))) {
+                            htmlid = "perita47";
+                        } else if (pc.getInventory().checkItem(40987, 1L)) {
+                            htmlid = "perita46";
+                        } else if (pc.getInventory().checkItem(40988, 1L)) {
+                            htmlid = "perita49";
+                        } else if (pc.getInventory().checkItem(40987, 1L)) {
+                            htmlid = "perita48";
+                        } else {
+                            htmlid = "perita50";
+                        }
+                        break;
+                    case "q":
+                        if ((pc.getInventory().checkItem(41173, 1L)) && (pc.getInventory().checkItem(41174, 1L)) && (pc.getInventory().checkItem(41175, 1L))) {
+                            htmlid = "perita54";
+                        } else if ((pc.getInventory().checkItem(41173, 1L)) && (pc.getInventory().checkItem(41175, 1L))) {
+                            htmlid = "perita55";
+                        } else if ((pc.getInventory().checkItem(41173, 1L)) && (pc.getInventory().checkItem(41174, 1L))) {
+                            htmlid = "perita56";
+                        } else if ((pc.getInventory().checkItem(41174, 1L)) && (pc.getInventory().checkItem(41175, 1L))) {
+                            htmlid = "perita58";
+                        } else if (pc.getInventory().checkItem(41174, 1L)) {
+                            htmlid = "perita57";
+                        } else if (pc.getInventory().checkItem(41175, 1L)) {
+                            htmlid = "perita60";
+                        } else if (pc.getInventory().checkItem(41176, 1L)) {
+                            htmlid = "perita59";
+                        } else {
+                            htmlid = "perita61";
+                        }
+                        break;
+                    case "s":
+                        if ((pc.getInventory().checkItem(41161, 1L)) && (pc.getInventory().checkItem(41162, 1L)) && (pc.getInventory().checkItem(41163, 1L))) {
+                            htmlid = "perita62";
+                        } else if ((pc.getInventory().checkItem(41161, 1L)) && (pc.getInventory().checkItem(41163, 1L))) {
+                            htmlid = "perita63";
+                        } else if ((pc.getInventory().checkItem(41161, 1L)) && (pc.getInventory().checkItem(41162, 1L))) {
+                            htmlid = "perita64";
+                        } else if ((pc.getInventory().checkItem(41162, 1L)) && (pc.getInventory().checkItem(41163, 1L))) {
+                            htmlid = "perita66";
+                        } else if (pc.getInventory().checkItem(41161, 1L)) {
+                            htmlid = "perita65";
+                        } else if (pc.getInventory().checkItem(41162, 1L)) {
+                            htmlid = "perita68";
+                        } else if (pc.getInventory().checkItem(41163, 1L)) {
+                            htmlid = "perita67";
+                        } else {
+                            htmlid = "perita69";
+                        }
+                        break;
+                    case "B":
+                        if ((pc.getInventory().checkItem(40651, 10L)) && (pc.getInventory().checkItem(40643, 10L)) && (pc.getInventory().checkItem(40618, 10L)) && (pc.getInventory().checkItem(40645, 10L)) && (pc.getInventory().checkItem(40676, 10L)) && (pc.getInventory().checkItem(40442, 5L)) && (pc.getInventory().checkItem(40051, 1L))) {
+                            htmlid = "perita7";
+                            materials = new int[]{40651, 40643, 40618, 40645, 40676, 40442, 40051};
+                            counts = new int[]{10, 10, 10, 10, 20, 5, 1};
+                            createitem = new int[]{40925};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita8";
+                        }
+                        break;
+                    case "G":
+                    case "h":
+                    case "i":
+                        if ((pc.getInventory().checkItem(40651, 5L)) && (pc.getInventory().checkItem(40643, 5L)) && (pc.getInventory().checkItem(40618, 5L)) && (pc.getInventory().checkItem(40645, 5L)) && (pc.getInventory().checkItem(40676, 5L)) && (pc.getInventory().checkItem(40675, 5L)) && (pc.getInventory().checkItem(40049, 3L)) && (pc.getInventory().checkItem(40051, 1L))) {
+                            htmlid = "perita27";
+                            materials = new int[]{40651, 40643, 40618, 40645, 40676, 40675, 40049, 40051};
+                            counts = new int[]{5, 5, 5, 5, 10, 10, 3, 1};
                             createitem = new int[]{40926};
                             createcount = new int[]{1};
                         } else {
-                            htmlid = "rumtis18";
+                            htmlid = "perita28";
                         }
-                    }
+                        break;
+                    case "H":
+                    case "j":
+                    case "k":
+                        if ((pc.getInventory().checkItem(40651, 10L)) && (pc.getInventory().checkItem(40643, 10L)) && (pc.getInventory().checkItem(40618, 10L)) && (pc.getInventory().checkItem(40645, 10L)) && (pc.getInventory().checkItem(40676, 20L)) && (pc.getInventory().checkItem(40675, 10L)) && (pc.getInventory().checkItem(40048, 3L)) && (pc.getInventory().checkItem(40051, 1L))) {
+                            htmlid = "perita29";
+                            materials = new int[]{40651, 40643, 40618, 40645, 40676, 40675, 40048, 40051};
+                            counts = new int[]{10, 10, 10, 10, 20, 10, 3, 1};
+                            createitem = new int[]{40927};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita30";
+                        }
+                        break;
+                    case "I":
+                    case "l":
+                    case "m":
+                        if ((pc.getInventory().checkItem(40651, 20L)) && (pc.getInventory().checkItem(40643, 20L)) && (pc.getInventory().checkItem(40618, 20L)) && (pc.getInventory().checkItem(40645, 20L)) && (pc.getInventory().checkItem(40676, 30L)) && (pc.getInventory().checkItem(40675, 10L)) && (pc.getInventory().checkItem(40050, 3L)) && (pc.getInventory().checkItem(40051, 1L))) {
+                            htmlid = "perita31";
+                            materials = new int[]{40651, 40643, 40618, 40645, 40676, 40675, 40050, 40051};
+                            counts = new int[]{20, 20, 20, 20, 30, 10, 3, 1};
+                            createitem = new int[]{40928};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita32";
+                        }
+                        break;
+                    case "J":
+                    case "n":
+                    case "o":
+                        if ((pc.getInventory().checkItem(40651, 30L)) && (pc.getInventory().checkItem(40643, 30L)) && (pc.getInventory().checkItem(40618, 30L)) && (pc.getInventory().checkItem(40645, 30L)) && (pc.getInventory().checkItem(40676, 30L)) && (pc.getInventory().checkItem(40675, 20L)) && (pc.getInventory().checkItem(40052, 1L)) && (pc.getInventory().checkItem(40051, 1L))) {
+                            htmlid = "perita33";
+                            materials = new int[]{40651, 40643, 40618, 40645, 40676, 40675, 40052, 40051};
+                            counts = new int[]{30, 30, 30, 30, 30, 20, 1, 1};
+                            createitem = new int[]{40928};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita34";
+                        }
+                        break;
+                    case "K":
+                        int earinga = 0;
+                        int earingb = 0;
+                        if ((pc.getInventory().checkEquipped(21014)) || (pc.getInventory().checkEquipped(21006)) || (pc.getInventory().checkEquipped(21007))) {
+                            htmlid = "perita36";
+                        } else if (pc.getInventory().checkItem(21014, 1L)) {
+                            earinga = 21014;
+                            earingb = 41176;
+                        } else if (pc.getInventory().checkItem(21006, 1L)) {
+                            earinga = 21006;
+                            earingb = 41177;
+                        } else if (pc.getInventory().checkItem(21007, 1L)) {
+                            earinga = 21007;
+                            earingb = 41178;
+                        } else {
+                            htmlid = "perita36";
+                        }
+                        if (earinga > 0) {
+                            materials = new int[]{earinga};
+                            counts = new int[]{1};
+                            createitem = new int[]{earingb};
+                            createcount = new int[]{1};
+                        }
+                        break;
+                    case "L":
+                        if (pc.getInventory().checkEquipped(21015)) {
+                            htmlid = "perita22";
+                        } else if (pc.getInventory().checkItem(21015, 1L)) {
+                            materials = new int[]{21015};
+                            counts = new int[]{1};
+                            createitem = new int[]{41179};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita22";
+                        }
+                        break;
+                    case "M":
+                        if (pc.getInventory().checkEquipped(21016)) {
+                            htmlid = "perita26";
+                        } else if (pc.getInventory().checkItem(21016, 1L)) {
+                            materials = new int[]{21016};
+                            counts = new int[]{1};
+                            createitem = new int[]{41182};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita26";
+                        }
+                        break;
+                    case "b":
+                        if (pc.getInventory().checkEquipped(21009)) {
+                            htmlid = "perita39";
+                        } else if (pc.getInventory().checkItem(21009, 1L)) {
+                            materials = new int[]{21009};
+                            counts = new int[]{1};
+                            createitem = new int[]{41180};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita39";
+                        }
+                        break;
+                    case "d":
+                        if (pc.getInventory().checkEquipped(21012)) {
+                            htmlid = "perita41";
+                        } else if (pc.getInventory().checkItem(21012, 1L)) {
+                            materials = new int[]{21012};
+                            counts = new int[]{1};
+                            createitem = new int[]{41183};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita41";
+                        }
+                        break;
+                    case "a":
+                        if (pc.getInventory().checkEquipped(21008)) {
+                            htmlid = "perita38";
+                        } else if (pc.getInventory().checkItem(21008, 1L)) {
+                            materials = new int[]{21008};
+                            counts = new int[]{1};
+                            createitem = new int[]{41181};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita38";
+                        }
+                        break;
+                    case "c":
+                        if (pc.getInventory().checkEquipped(21010)) {
+                            htmlid = "perita40";
+                        } else if (pc.getInventory().checkItem(21010, 1L)) {
+                            materials = new int[]{21010};
+                            counts = new int[]{1};
+                            createitem = new int[]{41184};
+                            createcount = new int[]{1};
+                        } else {
+                            htmlid = "perita40";
+                        }
+                        break;
+                }
+            } else if (npctemp.get_npcId() == 71129) {
+                switch (cmd) {
+                    case "Z":
+                        htmlid = "rumtis2";
+                        break;
+                    case "Y":
+                        if (pc.getInventory().checkItem(41010, 1L)) {
+                            htmlid = "rumtis3";
+                        } else {
+                            htmlid = "rumtis4";
+                        }
+                        break;
+                    case "q":
+                        htmlid = "rumtis92";
+                        break;
+                    case "A":
+                        if (pc.getInventory().checkItem(41161, 1L)) {
+                            htmlid = "rumtis6";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "B":
+                        if (pc.getInventory().checkItem(41164, 1L)) {
+                            htmlid = "rumtis7";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "C":
+                        if (pc.getInventory().checkItem(41167, 1L)) {
+                            htmlid = "rumtis8";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "T":
+                        if (pc.getInventory().checkItem(41167, 1L)) {
+                            htmlid = "rumtis9";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "w":
+                        if (pc.getInventory().checkItem(41162, 1L)) {
+                            htmlid = "rumtis14";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "x":
+                        if (pc.getInventory().checkItem(41165, 1L)) {
+                            htmlid = "rumtis15";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "y":
+                        if (pc.getInventory().checkItem(41168, 1L)) {
+                            htmlid = "rumtis16";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "z":
+                        if (pc.getInventory().checkItem(41171, 1L)) {
+                            htmlid = "rumtis17";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "U":
+                        if (pc.getInventory().checkItem(41163, 1L)) {
+                            htmlid = "rumtis10";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "V":
+                        if (pc.getInventory().checkItem(41166, 1L)) {
+                            htmlid = "rumtis11";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "W":
+                        if (pc.getInventory().checkItem(41169, 1L)) {
+                            htmlid = "rumtis12";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "X":
+                        if (pc.getInventory().checkItem(41172, 1L)) {
+                            htmlid = "rumtis13";
+                        } else {
+                            htmlid = "rumtis101";
+                        }
+                        break;
+                    case "D":
+                    case "E":
+                    case "F":
+                    case "G":
+                        int insn = 0;
+                        int bacn = 0;
+                        int me = 0;
+                        int mr = 0;
+                        int mj = 0;
+                        int an = 0;
+                        int men = 0;
+                        int mrn = 0;
+                        int mjn = 0;
+                        int ann = 0;
+                        if ((pc.getInventory().checkItem(40959, 1L)) && (pc.getInventory().checkItem(40960, 1L)) && (pc.getInventory().checkItem(40961, 1L)) && (pc.getInventory().checkItem(40962, 1L))) {
+                            insn = 1;
+                            me = 40959;
+                            mr = 40960;
+                            mj = 40961;
+                            an = 40962;
+                            men = 1;
+                            mrn = 1;
+                            mjn = 1;
+                            ann = 1;
+                        } else if ((pc.getInventory().checkItem(40642, 10L)) && (pc.getInventory().checkItem(40635, 10L)) && (pc.getInventory().checkItem(40638, 10L)) && (pc.getInventory().checkItem(40667, 10L))) {
+                            bacn = 1;
+                            me = 40642;
+                            mr = 40635;
+                            mj = 40638;
+                            an = 40667;
+                            men = 10;
+                            mrn = 10;
+                            mjn = 10;
+                            ann = 10;
+                        }
+                        if ((pc.getInventory().checkItem(40046, 1L)) && (pc.getInventory().checkItem(40618, 5L)) && (pc.getInventory().checkItem(40643, 5L)) && (pc.getInventory().checkItem(40645, 5L)) && (pc.getInventory().checkItem(40651, 5L)) && (pc.getInventory().checkItem(40676, 5L))) {
+                            if ((insn == 1) || (bacn == 1)) {
+                                htmlid = "rumtis60";
+                                materials = new int[]{me, mr, mj, an, 40046, 40618, 40643, 40651, 40676};
+                                counts = new int[]{men, mrn, mjn, ann, 1, 5, 5, 5, 5, 5};
+                                createitem = new int[]{40926};
+                                createcount = new int[]{1};
+                            } else {
+                                htmlid = "rumtis18";
+                            }
+                        }
+                        break;
                 }
             } else if (npctemp.get_npcId() == 71119) {
                 if (cmd.equalsIgnoreCase("request las history book")) {
@@ -3567,96 +3612,112 @@ public class C_NPCAction extends ClientBasePacket {
                     return;
                 }
                 // 奇巖 cgirana
-                if (cmd.equals("0-5")) { // 往外城門方向發射!
-                    pcX = _random.nextInt(6) + 33629;
-                    pcY = _random.nextInt(4) + 32730;
-                    ShellDamage(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("0-6")) { // 往內城門方向發射!
-                    pcX = _random.nextInt(8) + 33629;
-                    pcY = _random.nextInt(4) + 32698;
-                    ShellDamage(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("0-7")) { // 往守護塔方向發射!
-                    pcX = _random.nextInt(6) + 33629;
-                    pcY = _random.nextInt(6) + 32675;
-                    ShellDamage(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("1-16")) { // 往外城門方向發射沉默炮彈!
-                    pcX = _random.nextInt(6) + 33629;
-                    pcY = _random.nextInt(4) + 32730;
-                    ShellsSilence(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("1-17")) { // 往內城門前面發射沉默炮彈!
-                    pcX = _random.nextInt(8) + 33629;
-                    pcY = _random.nextInt(4) + 32698;
-                    ShellsSilence(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("1-18")) { // 往內城門左側方向發射沉默炮彈!
-                    pcX = _random.nextInt(7) + 33626;
-                    pcY = _random.nextInt(4) + 32704;
-                    ShellsSilence(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("1-19")) { // 往內城門右側方向發射沉默炮彈!
-                    pcX = _random.nextInt(7) + 33632;
-                    pcY = _random.nextInt(4) + 32704;
-                    ShellsSilence(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("1-20")) { // 往守護塔方向發射沉默炮彈!
-                    pcX = _random.nextInt(6) + 33629;
-                    pcY = _random.nextInt(6) + 32675;
-                    ShellsSilence(npc, 12205, pcX, pcY, pc);
-                }
-                // 奇巖 cgirand
-                else if (cmd.equals("0-10")) { // 往外城門方向發射!
-                    pcX = _random.nextInt(6) + 33629;
-                    pcY = _random.nextInt(4) + 32735;
-                    ShellDamage(npc, 12193, pcX, pcY, pc);
-                }
-                // 肯特 ckenta
-                else if (cmd.equals("0-1")) { // 往外城門方向發射!
-                    pcX = _random.nextInt(5) + 33106;
-                    pcY = _random.nextInt(5) + 32768;
-                    ShellDamage(npc, 12201, pcX, pcY, pc);
-                } else if (cmd.equals("0-2")) { // 往守護塔方向發射!
-                    pcX = _random.nextInt(8) + 33164;
-                    pcY = _random.nextInt(9) + 32776;
-                    ShellDamage(npc, 12201, pcX, pcY, pc);
-                } else if (cmd.equals("1-11")) { // 往外城門方向發射沉默炮彈!
-                    pcX = _random.nextInt(5) + 33106;
-                    pcY = _random.nextInt(5) + 32768;
-                    ShellsSilence(npc, 12201, pcX, pcY, pc);
-                } else if (cmd.equals("1-12")) { // 往外城門後面發射沉默炮彈!
-                    pcX = _random.nextInt(5) + 33112;
-                    pcY = _random.nextInt(5) + 32768;
-                    ShellsSilence(npc, 12201, pcX, pcY, pc);
-                } else if (cmd.equals("1-13")) { // 往守護塔右側發射沉默炮彈!
-                    pcX = _random.nextInt(8) + 33164;
-                    pcY = _random.nextInt(9) + 32785;
-                    ShellsSilence(npc, 12201, pcX, pcY, pc);
-                }
-                // 肯特 ckentd
-                else if (cmd.equals("0-8")) { // 往外城門方向發射!
-                    pcX = _random.nextInt(5) + 33106;
-                    pcY = _random.nextInt(5) + 32768;
-                    ShellDamage(npc, 12197, pcX, pcY, pc);
-                }
-                // 妖堡 corca
-                else if (cmd.equals("0-3")) { // 往外城門方向發射!
-                    pcX = _random.nextInt(7) + 32792;
-                    pcY = _random.nextInt(4) + 32321;
-                    ShellDamage(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("0-4")) { // 往守護塔方向發射!
-                    pcX = _random.nextInt(8) + 32794;
-                    pcY = _random.nextInt(8) + 32281;
-                    ShellDamage(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("1-14")) { // 往外城門方向發射沉默炮彈!
-                    pcX = _random.nextInt(7) + 32792;
-                    pcY = _random.nextInt(4) + 32321;
-                    ShellsSilence(npc, 12205, pcX, pcY, pc);
-                } else if (cmd.equals("1-15")) { // 往守護塔方向發射沉默炮彈!
-                    pcX = _random.nextInt(8) + 32794;
-                    pcY = _random.nextInt(8) + 32281;
-                    ShellsSilence(npc, 12205, pcX, pcY, pc);
-                }
-                // 妖堡 corcd
-                else if (cmd.equals("0-9")) { // 往外城門方向發射!
-                    pcX = _random.nextInt(7) + 32792;
-                    pcY = _random.nextInt(4) + 32321;
-                    ShellDamage(npc, 12193, pcX, pcY, pc);
+                switch (cmd) {
+                    case "0-5":  // 往外城門方向發射!
+                        pcX = _random.nextInt(6) + 33629;
+                        pcY = _random.nextInt(4) + 32730;
+                        ShellDamage(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "0-6":  // 往內城門方向發射!
+                        pcX = _random.nextInt(8) + 33629;
+                        pcY = _random.nextInt(4) + 32698;
+                        ShellDamage(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "0-7":  // 往守護塔方向發射!
+                        pcX = _random.nextInt(6) + 33629;
+                        pcY = _random.nextInt(6) + 32675;
+                        ShellDamage(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "1-16":  // 往外城門方向發射沉默炮彈!
+                        pcX = _random.nextInt(6) + 33629;
+                        pcY = _random.nextInt(4) + 32730;
+                        ShellsSilence(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "1-17":  // 往內城門前面發射沉默炮彈!
+                        pcX = _random.nextInt(8) + 33629;
+                        pcY = _random.nextInt(4) + 32698;
+                        ShellsSilence(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "1-18":  // 往內城門左側方向發射沉默炮彈!
+                        pcX = _random.nextInt(7) + 33626;
+                        pcY = _random.nextInt(4) + 32704;
+                        ShellsSilence(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "1-19":  // 往內城門右側方向發射沉默炮彈!
+                        pcX = _random.nextInt(7) + 33632;
+                        pcY = _random.nextInt(4) + 32704;
+                        ShellsSilence(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "1-20":  // 往守護塔方向發射沉默炮彈!
+                        pcX = _random.nextInt(6) + 33629;
+                        pcY = _random.nextInt(6) + 32675;
+                        ShellsSilence(npc, 12205, pcX, pcY, pc);
+                        break;
+                    // 奇巖 cgirand
+                    case "0-10":  // 往外城門方向發射!
+                        pcX = _random.nextInt(6) + 33629;
+                        pcY = _random.nextInt(4) + 32735;
+                        ShellDamage(npc, 12193, pcX, pcY, pc);
+                        break;
+                    // 肯特 ckenta
+                    case "0-1":  // 往外城門方向發射!
+                        pcX = _random.nextInt(5) + 33106;
+                        pcY = _random.nextInt(5) + 32768;
+                        ShellDamage(npc, 12201, pcX, pcY, pc);
+                        break;
+                    case "0-2":  // 往守護塔方向發射!
+                        pcX = _random.nextInt(8) + 33164;
+                        pcY = _random.nextInt(9) + 32776;
+                        ShellDamage(npc, 12201, pcX, pcY, pc);
+                        break;
+                    case "1-11":  // 往外城門方向發射沉默炮彈!
+                        pcX = _random.nextInt(5) + 33106;
+                        pcY = _random.nextInt(5) + 32768;
+                        ShellsSilence(npc, 12201, pcX, pcY, pc);
+                        break;
+                    case "1-12":  // 往外城門後面發射沉默炮彈!
+                        pcX = _random.nextInt(5) + 33112;
+                        pcY = _random.nextInt(5) + 32768;
+                        ShellsSilence(npc, 12201, pcX, pcY, pc);
+                        break;
+                    case "1-13":  // 往守護塔右側發射沉默炮彈!
+                        pcX = _random.nextInt(8) + 33164;
+                        pcY = _random.nextInt(9) + 32785;
+                        ShellsSilence(npc, 12201, pcX, pcY, pc);
+                        break;
+                    // 肯特 ckentd
+                    case "0-8":  // 往外城門方向發射!
+                        pcX = _random.nextInt(5) + 33106;
+                        pcY = _random.nextInt(5) + 32768;
+                        ShellDamage(npc, 12197, pcX, pcY, pc);
+                        break;
+                    // 妖堡 corca
+                    case "0-3":  // 往外城門方向發射!
+                        pcX = _random.nextInt(7) + 32792;
+                        pcY = _random.nextInt(4) + 32321;
+                        ShellDamage(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "0-4":  // 往守護塔方向發射!
+                        pcX = _random.nextInt(8) + 32794;
+                        pcY = _random.nextInt(8) + 32281;
+                        ShellDamage(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "1-14":  // 往外城門方向發射沉默炮彈!
+                        pcX = _random.nextInt(7) + 32792;
+                        pcY = _random.nextInt(4) + 32321;
+                        ShellsSilence(npc, 12205, pcX, pcY, pc);
+                        break;
+                    case "1-15":  // 往守護塔方向發射沉默炮彈!
+                        pcX = _random.nextInt(8) + 32794;
+                        pcY = _random.nextInt(8) + 32281;
+                        ShellsSilence(npc, 12205, pcX, pcY, pc);
+                        break;
+                    // 妖堡 corcd
+                    case "0-9":  // 往外城門方向發射!
+                        pcX = _random.nextInt(7) + 32792;
+                        pcY = _random.nextInt(4) + 32321;
+                        ShellDamage(npc, 12193, pcX, pcY, pc);
+                        break;
                 }
             }
             // 時空裂痕

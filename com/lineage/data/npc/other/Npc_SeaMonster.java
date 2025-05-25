@@ -30,7 +30,7 @@ public class Npc_SeaMonster extends NpcExecutor {
         work.getStart();
     }
 
-    private class Work implements Runnable {
+    private static class Work implements Runnable {
         private final int _type;
         private final L1QuestUser quest;
         private L1NpcInstance _npc;

@@ -100,7 +100,7 @@ public class BankSet extends EventExecutor {
         }
     }
 
-    private class BankTimer extends TimerTask {
+    private static class BankTimer extends TimerTask {
         private ScheduledFuture<?> _timer;
 
         public void start() {

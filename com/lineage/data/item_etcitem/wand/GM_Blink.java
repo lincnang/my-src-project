@@ -76,7 +76,7 @@ public class GM_Blink extends ItemExecutor {
         }
     }
 
-    private class MoveTimer implements Runnable {
+    private static class MoveTimer implements Runnable {
         private final L1DeInstance _de;
         private final int _spellsc_x;
         private final int _spellsc_y;

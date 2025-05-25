@@ -171,7 +171,7 @@ public class CharacterGiftTable {
         }
     }
 
-    private class GiftData {
+    private static class GiftData {
         public int objid = 0;
         public byte[] data = new byte[512];
 
@@ -180,7 +180,7 @@ public class CharacterGiftTable {
         }
     }
 
-    private class LevelGiftData {
+    private static class LevelGiftData {
         public int index;
         public int itemid;
         public int count;

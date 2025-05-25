@@ -64,7 +64,7 @@ public class L1SpawnDe implements L1CommandExecutor {
         }
     }
 
-    private class DeRunnable implements Runnable {
+    private static class DeRunnable implements Runnable {
         private L1PcInstance _pc;
         private int _randomrange;
         private int _count;

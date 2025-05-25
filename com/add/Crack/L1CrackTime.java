@@ -263,7 +263,7 @@ public class L1CrackTime extends TimerTask {
         _GateOpen = GateOpen;
     }
 
-    class Teleport implements Runnable {
+    static class Teleport implements Runnable {
         private L1NpcInstance _npc = null;
         private int _to_x = 0;
         private int _to_y = 0;

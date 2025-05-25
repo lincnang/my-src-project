@@ -263,7 +263,7 @@ public class Npc_Bank extends NpcExecutor {
         }
     }
 
-    public class BankType {
+    public static class BankType {
         String _account_name = null;
         boolean _isNew = false;
         String _pass_x1 = "";

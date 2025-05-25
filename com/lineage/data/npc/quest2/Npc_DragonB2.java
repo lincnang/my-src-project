@@ -62,7 +62,7 @@ public class Npc_DragonB2 extends NpcExecutor {
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
     }
 
-    private class checkDragonTimer2 extends TimerTask {
+    private static class checkDragonTimer2 extends TimerTask {
         private final int mapId;
         private final L1QuestUser quest;
 

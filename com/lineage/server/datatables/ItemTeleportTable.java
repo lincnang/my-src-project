@@ -98,7 +98,7 @@ public class ItemTeleportTable {
     // public int[] getLoc(final int item_id) {
     // return _teleportList.get(item_id);
     // }
-    public class TeleportList {
+    public static class TeleportList {
         //
         private int _locx;
         //

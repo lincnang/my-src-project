@@ -220,7 +220,7 @@ public class L1PetMatch {
         _pet2[petMatchNo] = null;
     }
 
-    public class L1PetMatchReadyTimer extends TimerTask {
+    public static class L1PetMatchReadyTimer extends TimerTask {
         private final int _petMatchNo;
         private final L1PcInstance _pc;
         private final L1PetInstance _pet;
@@ -255,7 +255,7 @@ public class L1PetMatch {
         }
     }
 
-    public class L1PetMatchTimer extends TimerTask {
+    public static class L1PetMatchTimer extends TimerTask {
         private final L1PetInstance _pet1;
         private final L1PetInstance _pet2;
         private final int _petMatchNo;

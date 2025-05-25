@@ -234,7 +234,7 @@ public class L1TowerInstance extends L1NpcInstance {
      *
      * @author daien
      */
-    private class Death implements Runnable {
+    private static class Death implements Runnable {
         private L1TowerInstance _tower = null;// 塔
 
         public Death(L1TowerInstance tower, L1Character attacker) {

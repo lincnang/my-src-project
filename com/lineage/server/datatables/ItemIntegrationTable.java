@@ -452,7 +452,7 @@ public class ItemIntegrationTable {
         }
     }
 
-    private class ItemIntegration {
+    private static class ItemIntegration {
         private int _item_id;
         private int _checkClass;
         private int _level;

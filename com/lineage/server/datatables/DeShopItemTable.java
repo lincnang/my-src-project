@@ -119,7 +119,7 @@ public class DeShopItemTable {
         GeneralThreadPool.get().schedule(de_shop, 250);
     }
 
-    class SetDeShopItem implements Runnable {
+    static class SetDeShopItem implements Runnable {
         private final L1DeInstance _deInstance;
 
         public SetDeShopItem(final L1DeInstance deInstance) {

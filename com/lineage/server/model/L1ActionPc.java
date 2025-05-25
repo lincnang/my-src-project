@@ -3497,7 +3497,7 @@ public class L1ActionPc {
         }
     }
 
-    private class DataComparatorAdenaTrade<T> implements Comparator<L1CharacterAdenaTrade> {
+    private static class DataComparatorAdenaTrade<T> implements Comparator<L1CharacterAdenaTrade> {
         @Override
         public int compare(L1CharacterAdenaTrade s1, L1CharacterAdenaTrade s2) {
             final int n1 = s1.get_adena_count() / s1.get_count();
@@ -3506,7 +3506,7 @@ public class L1ActionPc {
         }
     }
 
-    private class DataComparatorCharacterTrade<T> implements Comparator<Object> {
+    private static class DataComparatorCharacterTrade<T> implements Comparator<Object> {
         @Override
         public int compare(Object s1, Object s2) {
             final L1CharaterTrade temp1 = (L1CharaterTrade) s1;

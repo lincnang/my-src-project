@@ -69,7 +69,7 @@ public class Npc_Doett extends NpcExecutor {
         work.getStart();
     }
 
-    private class Work implements Runnable {
+    private static class Work implements Runnable {
         private final L1NpcInstance _npc;
         private final int _spr;
         private final NpcWorkMove _npcMove;

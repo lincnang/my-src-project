@@ -77,7 +77,7 @@ public class Npc_Dio extends NpcExecutor {
         work.getStart();
     }
 
-    private class Work implements Runnable {
+    private static class Work implements Runnable {
         private L1NpcInstance _npc;
         private int _spr;
         private NpcWorkMove _npcMove;

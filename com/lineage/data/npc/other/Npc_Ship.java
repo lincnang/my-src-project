@@ -29,7 +29,7 @@ public class Npc_Ship extends NpcExecutor {
         work.getStart();
     }
 
-    private class Work implements Runnable {
+    private static class Work implements Runnable {
         private final L1QuestUser quest;
         private final Point[] _point;
         private L1NpcInstance _npc;

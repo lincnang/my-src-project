@@ -110,7 +110,7 @@ public class SoulTowerTable {
         }
     }
 
-    public class SoulTowerRank {
+    public static class SoulTowerRank {
         public String name;
         public int classType;
         public int time;

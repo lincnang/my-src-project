@@ -99,7 +99,7 @@ public class AllPcBuff {
      *
      * @author daien
      */
-    private class AllBuffRunnable implements Runnable {
+    private static class AllBuffRunnable implements Runnable {
         @Override
         public void run() {
             try {

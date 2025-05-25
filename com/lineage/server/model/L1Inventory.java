@@ -1688,7 +1688,7 @@ public class L1Inventory extends L1Object {
      *
      * @author daien
      */
-    public class DataComparator implements Comparator<Object> {
+    public static class DataComparator implements Comparator<Object> {
         @Override
         public int compare(final Object item1, final Object item2) {
             return ((L1ItemInstance) item1).getEnchantLevel() - ((L1ItemInstance) item2).getEnchantLevel();

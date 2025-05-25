@@ -75,7 +75,7 @@ public class RandomGiftSet extends EventExecutor {  //src016
         }
     }
 
-    private class GetItemTimer extends TimerTask {
+    private static class GetItemTimer extends TimerTask {
         private ScheduledFuture<?> _timer;
         private L1Event _event;
         private List<L1PcInstance> _allPc; // 隨機抽取玩家列表

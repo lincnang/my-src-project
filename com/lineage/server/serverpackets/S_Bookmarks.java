@@ -12,11 +12,6 @@ public class S_Bookmarks extends ServerBasePacket {
     /**
      * 角色座標名單
      *
-     * @param name
-     * @param map
-     * @param x
-     * @param y
-     * @param bookid
      */
     public S_Bookmarks(String name, int map, int x, int y, int bookid) {
         buildPacket(name, map, x, y, bookid);

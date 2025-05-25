@@ -21,12 +21,7 @@ public interface MailStorage {
     /**
      * 寫入信件 by terry0412
      *
-     * @param type
-     * @param receiver
-     * @param writer
-     * @param text
      * @param sendType 信件發送類型 (0:發信 1:收信)
-     * @return
      */
     public L1Mail writeMail(int type, String receiver, String writer, byte[] text, final int sendType);
 
@@ -37,8 +32,6 @@ public interface MailStorage {
     /**
      * 信箱系統 - 更新玩家名稱 by terry0412
      *
-     * @param ori_name
-     * @param new_name
      */
     public void renewPcName(String ori_name, String new_name);
 }

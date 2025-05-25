@@ -22,7 +22,6 @@ public abstract class ArmorSet {
     /**
      * 全部套裝設置
      *
-     * @return
      */
     public static HashMap<Integer, ArmorSet> getAllSet() {
         return _allSet;
@@ -198,7 +197,6 @@ public abstract class ArmorSet {
      *
      * @param id 套件編號
      * @param s  轉換的字串
-     * @return
      */
     private static int[] getArray(final int id, final String s) {
         // 根據給定正則表達式的匹配拆分此字符串。
@@ -217,52 +215,42 @@ public abstract class ArmorSet {
     /**
      * 套裝物品編號陣列
      *
-     * @param pc
      */
     public abstract int[] get_ids();
 
     /**
      * 傳回該套裝附加的效果陣列
      *
-     * @return
      */
     public abstract int[] get_mode();
 
     /**
      * 套裝完成效果
      *
-     * @param pc
      */
     public abstract void giveEffect(L1PcInstance pc);
 
     /**
      * 套裝解除效果
      *
-     * @param pc
      */
     public abstract void cancelEffect(L1PcInstance pc);
 
     /**
      * 套裝完成
      *
-     * @param pc
-     * @return
      */
     public abstract boolean isValid(L1PcInstance pc);
 
     /**
      * 是否為套裝中組件
      *
-     * @param id
-     * @return
      */
     public abstract boolean isPartOfSet(int id);
 
     /**
      * 是否裝備了相同界指2個
      *
-     * @param pc
-     * @return
      */
     public abstract boolean isEquippedRingOfArmorSet(L1PcInstance pc);
     /**

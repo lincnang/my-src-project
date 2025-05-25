@@ -22,7 +22,6 @@ public class L1MobGroupInfo {
     /**
      * NPC隊長
      *
-     * @return
      */
     public L1NpcInstance getLeader() {
         return this._leader;
@@ -31,7 +30,6 @@ public class L1MobGroupInfo {
     /**
      * NPC隊長
      *
-     * @param npc
      */
     public void setLeader(final L1NpcInstance npc) {
         this._leader = npc;
@@ -40,8 +38,6 @@ public class L1MobGroupInfo {
     /**
      * 是隊伍的隊長
      *
-     * @param npc
-     * @return
      */
     public boolean isLeader(final L1NpcInstance npc) {
         return npc.getId() == this._leader.getId();
@@ -58,7 +54,6 @@ public class L1MobGroupInfo {
     /**
      * 加入隊伍
      *
-     * @param npc
      */
     public void addMember(final L1NpcInstance npc) {
         if (npc == null) {
@@ -83,8 +78,6 @@ public class L1MobGroupInfo {
     /**
      * 移出隊伍並傳回剩餘隊員數量
      *
-     * @param npc
-     * @return
      */
     public synchronized int removeMember(final L1NpcInstance npc) {
         if (npc == null) {
@@ -117,7 +110,6 @@ public class L1MobGroupInfo {
     /**
      * 隊員數量
      *
-     * @return
      */
     public int getNumOfMembers() {
         return this._membersList.size();
@@ -126,7 +118,6 @@ public class L1MobGroupInfo {
     /**
      * 是否解散隊伍
      *
-     * @return
      */
     public boolean isRemoveGroup() {
         return this._isRemoveGroup;
@@ -135,7 +126,6 @@ public class L1MobGroupInfo {
     /**
      * 是否解散隊伍
      *
-     * @param flag
      */
     public void setRemoveGroup(final boolean flag) {
         this._isRemoveGroup = flag;
@@ -144,7 +134,6 @@ public class L1MobGroupInfo {
     /**
      * 隊伍內成員
      *
-     * @return
      */
     public List<L1NpcInstance> getList() {
         return _membersList;

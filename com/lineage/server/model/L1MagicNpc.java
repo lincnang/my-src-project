@@ -269,8 +269,6 @@ public class L1MagicNpc extends L1MagicMode {
     /**
      * NPC對PC傷害計算
      *
-     * @param skillId
-     * @return
      */
     public int calcPcMagicDamage(int skillId) {
         if (_targetPc == null) {

@@ -34,7 +34,6 @@ public class WorldWizard {
     /**
      * 全部法師玩家
      *
-     * @return
      */
     public Collection<L1PcInstance> all() {
         try {
@@ -50,7 +49,6 @@ public class WorldWizard {
     /**
      * 法師玩家清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1PcInstance> map() {
         return _isWizard;
@@ -59,8 +57,6 @@ public class WorldWizard {
     /**
      * 加入法師玩家清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1PcInstance value) {
         try {
@@ -73,7 +69,6 @@ public class WorldWizard {
     /**
      * 移出法師玩家清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {

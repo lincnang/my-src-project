@@ -24,7 +24,6 @@ public class Skill_Awake_Timer extends TimerTask {
     /**
      * 龍騎士覺醒技能MP自然減少處理
      *
-     * @param tgpc
      */
     private static void decreaseMp(final L1PcInstance tgpc) {
         try {

@@ -17,7 +17,6 @@ public class Doll_Weight2 extends L1DollExecutor {
     /**
      * 設置娃娃能力描述
      *
-     * @param note
      */
     private String _note;
 

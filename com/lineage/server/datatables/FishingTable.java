@@ -120,8 +120,6 @@ public class FishingTable {
     /**
      * 更新釣魚訊息
      *
-     * @param fishitem
-     * @param key
      */
     private void updata_name(int fishitemid, int giveitemid) {
         Connection cn = null;
@@ -149,9 +147,6 @@ public class FishingTable {
     /**
      * 更新釣魚訊息
      *
-     * @param fishitem
-     * @param key
-     * @param failitemid
      */
     private void updata_name(int fishitemid, int giveitemid, int failitemid) {
         Connection cn = null;

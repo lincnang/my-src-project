@@ -37,8 +37,6 @@ public class L1SpawnCmd implements L1CommandExecutor {
     /**
      * 取回NPCID
      *
-     * @param nameId
-     * @return
      */
     private int parseNpcId(final String nameId) {
         int npcid = 0;

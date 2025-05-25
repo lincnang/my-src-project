@@ -16,8 +16,6 @@ public class S_RetrieveList extends ServerBasePacket {
     /**
      * 物品名單(個人倉庫)
      *
-     * @param objid
-     * @param pc
      */
     public S_RetrieveList(final int objid, final L1PcInstance pc) {
         if (pc.getInventory().getSize() < 180) {

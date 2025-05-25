@@ -22,7 +22,6 @@ public class QuitGame {
     /**
      * 人物離開遊戲的處理
      *
-     * @param pc
      */
     public static void quitGame(final L1PcInstance pc) {
         if (pc == null) {

@@ -466,7 +466,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 設定套裝效果資料
      *
-     * @param mode
      */
     public void set_mode(int[] mode) {
         _mode = mode;
@@ -871,7 +870,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 強化值影響的增減魔防值 by terry0412
      *
-     * @return
      */
     public int getInfluenceMr() {
         return 0;
@@ -880,7 +878,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 強化值影響的增減魔攻值 by terry0412
      *
-     * @return
      */
     public int getInfluenceSp() {
         return 0;
@@ -889,7 +886,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 強化值影響的增減HP值 by terry0412
      *
-     * @return
      */
     public int getInfluenceHp() {
         return 0;
@@ -898,7 +894,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 強化值影響的增減MP值 by terry0412
      *
-     * @return
      */
     public int getInfluenceMp() {
         return 0;
@@ -907,7 +902,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 強化值影響的增減傷害減免值 by terry0412
      *
-     * @return
      */
     public int getInfluenceDmgR() {
         return 0;
@@ -916,7 +910,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 強化值影響的增減近距離命中以及近距離攻擊值 by terry0412
      *
-     * @return
      */
     public int getInfluenceHitAndDmg() {
         return 0;
@@ -925,7 +918,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 強化值影響的增減遠距離命中以及遠距離攻擊值 by terry0412
      *
-     * @return
      */
     public int getInfluenceBowHitAndDmg() {
         return 0;
@@ -934,7 +926,6 @@ public abstract class L1Item implements Serializable {
     /**
      * 是否為活動戒指或收費戒指 by terry0412
      *
-     * @return
      */
     public boolean isActivity() { //src013
         return false;

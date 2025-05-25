@@ -66,7 +66,6 @@ public class L1QuestUser {
     /**
      * 副本唯一編號
      *
-     * @return
      */
     public int get_id() {
         return _id;
@@ -75,7 +74,6 @@ public class L1QuestUser {
     /**
      * 副本任務編號
      *
-     * @return
      */
     public int get_questid() {
         return _questid;
@@ -84,7 +82,6 @@ public class L1QuestUser {
     /**
      * 副本地圖編號
      *
-     * @return
      */
     public int get_mapid() {
         return _mapid;
@@ -93,7 +90,6 @@ public class L1QuestUser {
     /**
      * 加入副本執行成員
      *
-     * @param pc
      */
     public void add(final L1PcInstance pc) {
         try {
@@ -112,7 +108,6 @@ public class L1QuestUser {
     /**
      * 移出副本執行成員
      *
-     * @param pc
      */
     public void remove(final L1PcInstance pc) {
         try {
@@ -132,7 +127,6 @@ public class L1QuestUser {
      * 進入時間限制(單位:秒)<BR>
      * -1 不限制
      *
-     * @return
      */
     public int get_time() {
         return _time;
@@ -151,7 +145,6 @@ public class L1QuestUser {
      * 進入時間限制(單位:秒)<BR>
      * -1 不限制
      *
-     * @param time
      */
     public void set_time(final int time) {
         this._time = time;
@@ -160,7 +153,6 @@ public class L1QuestUser {
     /**
      * 該執行中副本剩餘PC
      *
-     * @return
      */
     public ArrayList<L1PcInstance> pcList() {
         return _userList;
@@ -169,7 +161,6 @@ public class L1QuestUser {
     /**
      * 該執行中副本剩餘人數
      *
-     * @return
      */
     public int size() {
         return _userList.size();
@@ -178,7 +169,6 @@ public class L1QuestUser {
     /**
      * 該執行中副本剩餘NPC
      *
-     * @return
      */
     public List<L1NpcInstance> npcList() {
         return _npcList;
@@ -187,7 +177,6 @@ public class L1QuestUser {
     /**
      * 增加副本中NPC
      *
-     * @param door
      */
     public void addNpc(L1NpcInstance npc) {
         _npcList.add(npc);
@@ -196,7 +185,6 @@ public class L1QuestUser {
     /**
      * 該執行中副本中指定NPCID的NPC
      *
-     * @return
      */
     public ArrayList<L1NpcInstance> npcList(int npcid) {
         final ArrayList<L1NpcInstance> npcList = new ArrayList<L1NpcInstance>();
@@ -215,7 +203,6 @@ public class L1QuestUser {
     /**
      * 該執行中副本剩餘NPC(全部)數量
      *
-     * @return
      */
     public int npcSize() {
         return _npcList.size();
@@ -224,7 +211,6 @@ public class L1QuestUser {
     /**
      * 該執行中副本剩餘NPC(怪物)數量
      *
-     * @return
      */
     public int mobSize() {
         int i = 0;
@@ -240,7 +226,6 @@ public class L1QuestUser {
     /**
      * 召喚副本怪物
      *
-     * @param get_id 任務編號
      */
     public void spawnQuestMob() {
         final PerformanceTimer timer = new PerformanceTimer();
@@ -339,7 +324,6 @@ public class L1QuestUser {
     /**
      * 召喚NPC
      *
-     * @param mobSpawn
      */
     private void spawn(final L1QuestMobSpawn mobSpawn) {
         try {
@@ -399,8 +383,6 @@ public class L1QuestUser {
     /**
      * 召喚隊伍成員
      *
-     * @param group_id
-     * @param mob
      */
     private void groupSpawn(final int group_id, final L1NpcInstance mob) {
         if (group_id != 0) {
@@ -420,7 +402,6 @@ public class L1QuestUser {
     /**
      * 移除副本怪物
      *
-     * @param mob
      */
     public void removeMob(final L1NpcInstance mob) {
         try {
@@ -483,7 +464,6 @@ public class L1QuestUser {
     /**
      * 發送封包資料給予任務中執行玩家
      *
-     * @param s_HelpMessage
      */
     public void sendPackets(final ServerBasePacket basePacket) {
         try {
@@ -498,7 +478,6 @@ public class L1QuestUser {
     /**
      * 怪物剩餘訊息
      *
-     * @return
      */
     public boolean is_info() {
         return _info;
@@ -507,7 +486,6 @@ public class L1QuestUser {
     /**
      * 怪物剩餘訊息
      *
-     * @param _info
      */
     public void set_info(boolean _info) {
         this._info = _info;
@@ -516,7 +494,6 @@ public class L1QuestUser {
     /**
      * 該副本參加者其中之一離開 是否立即結束
      *
-     * @return
      */
     public boolean is_outStop() {
         return _outStop;
@@ -525,7 +502,6 @@ public class L1QuestUser {
     /**
      * 該副本參加者其中之一離開 是否立即結束
      *
-     * @param _outStop
      */
     public void set_outStop(boolean _outStop) {
         this._outStop = _outStop;
@@ -534,7 +510,6 @@ public class L1QuestUser {
     /**
      * 怪物剩餘0特殊處理
      *
-     * @return
      */
     public QuestMobExecutor get_object() {
         return _mobNull;
@@ -543,7 +518,6 @@ public class L1QuestUser {
     /**
      * 怪物剩餘0特殊處理
      *
-     * @param _outStop
      */
     public void set_object(QuestMobExecutor mobNull) {
         this._mobNull = mobNull;

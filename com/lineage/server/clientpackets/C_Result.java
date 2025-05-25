@@ -447,8 +447,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 托售管理員(購買物品)
      *
-     * @param pc
-     * @param size
      */
     private void mode_shopS(L1PcInstance pc, int size) {
         try {
@@ -471,9 +469,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 托售管理員(托售物品)
      *
-     * @param pc
-     * @param size
-     * @param npcObjectId
      */
     private void mode_shop_item(L1PcInstance pc, int size, int npcObjectId) {
         try {
@@ -574,9 +569,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 玩家賣出物品給予萬物回收商
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_sellall(final L1PcInstance pc, final int size) {
         try {
@@ -599,8 +591,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 玩家買入商城物品
      *
-     * @param pc
-     * @param size
      */
     private void mode_cn_buy(final L1PcInstance pc, final int size) {
         try {
@@ -623,9 +613,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 特殊商店 -> 購買自動喝水補魔道具
      *
-     * @param pc
-     * @param size
-     * @param isShop
      */
     private void mode_auto_hp(final L1PcInstance pc, final int size, final boolean isShop) {
         try {
@@ -646,8 +633,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 特殊商店 -> 添加刪除物品
      *
-     * @param pc
-     * @param size
      */
     private void mode_removeItem_sell(final L1PcInstance pc, final int size) {
         try {
@@ -670,9 +655,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 特殊商店 -> 取消刪除物品
      *
-     * @param pc
-     * @param size
-     * @param isShop
      */
     private void mode_remove_item(final L1PcInstance pc, final int size, final boolean isShop) {
         try {
@@ -693,8 +675,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 玩家賣出物品給予商城道具回收專員
      *
-     * @param pc
-     * @param size
      */
     private void mode_cn_sell(final L1PcInstance pc, final int size) {
         try {
@@ -717,8 +697,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 玩家賣出物品取得火神結晶
      *
-     * @param pc
-     * @param size
      */
     private void mode_firecrystal(final L1PcInstance pc, final int size) {
         try {
@@ -741,9 +719,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 賭場NPC
      *
-     * @param pc
-     * @param npcId
-     * @param size
      * @param isShop true買入 false賣出
      */
     private void mode_gambling(final L1PcInstance pc, final int npcId, final int size, final boolean isShop) {
@@ -780,9 +755,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 精靈倉庫取出 XXX
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_warehouse_elf_out(final L1PcInstance pc, final int npcId, final int size) {
         int objectId, count;
@@ -836,9 +808,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 精靈倉庫存入
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_warehouse_elf_in(final L1PcInstance pc, final int npcId, final int size) {
         int objectId, count;
@@ -925,9 +894,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 血盟倉庫取出 XXX
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_warehouse_clan_out(final L1PcInstance pc, final int npcId, final int size) {
         int objectId, count;
@@ -991,9 +957,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 血盟倉庫存入
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_warehouse_clan_in(final L1PcInstance pc, final int npcId, final int size) {
         int objectId, count;
@@ -1096,9 +1059,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 帳號倉庫取出 XXX
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_warehouse_out(final L1PcInstance pc, final int npcId, final int size) {
         int objectId, count;
@@ -1153,9 +1113,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 帳號倉庫存入
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_warehouse_in(final L1PcInstance pc, final int npcId, final int size) {
         int objectId, count;
@@ -1249,9 +1206,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 角色專屬倉庫取出 XXX
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_warehouse_cha_out(final L1PcInstance pc, final int npcId, final int size) {
         int objectId, count;
@@ -1306,9 +1260,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 角色專屬倉庫存入
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_warehouse_cha_in(final L1PcInstance pc, final int npcId, final int size) {
         int objectId, count;
@@ -1702,8 +1653,6 @@ public class C_Result extends ClientBasePacket {
      * 虛擬假人
      *
      * @param pc   買入者
-     * @param de
-     * @param size
      */
     private void mode_buyde(L1PcInstance pc, L1DeInstance de, int size) {
         Map<L1ItemInstance, Integer> sellList = de.get_sellList();
@@ -1785,9 +1734,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 玩家賣出物品給予商店
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_sell(final L1PcInstance pc, final int npcId, final int size) {
         final L1Shop shop = ShopTable.get().get(npcId);
@@ -1813,9 +1759,6 @@ public class C_Result extends ClientBasePacket {
     /**
      * 玩家從商店買入物品
      *
-     * @param pc
-     * @param npcId
-     * @param size
      */
     private void mode_buy(final L1PcInstance pc, final int npcId, final int size) {
         final L1Shop shop = ShopTable.get().get(npcId);

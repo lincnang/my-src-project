@@ -30,7 +30,6 @@ public class CreateNewItem {
     /**
      * 刪除需要的材料(僅於刪除/不會給與)
      *
-     * @param pc
      * @param srcItemIds 刪除物品群
      * @param counts     刪除物品數量群
      * @param amount     數量
@@ -89,13 +88,11 @@ public class CreateNewItem {
      * 如果文字串較長 將會導致封包變大<BR>
      *
      * @param pc      執行者
-     * @param pc      對話NPC
      * @param items   需要物件組
      * @param counts  需要物件數量組
      * @param gitems  給予物件組
      * @param gcounts 給予物件組數量組
      * @param amount  指定交換數量
-     * @return
      */
     public static boolean getItem(final L1PcInstance pc, final L1NpcInstance npc, final String cmd, final int[] items, final int[] counts, final int[] gitems, final int[] gcounts, long amount) {
         // 可製作數量
@@ -517,7 +514,6 @@ public class CreateNewItem {
      *
      * @param pc   執行人物
      * @param item 物件
-     * @return
      */
     public static void createNewItem(final L1PcInstance pc, final L1ItemInstance item) {
         try {
@@ -539,9 +535,6 @@ public class CreateNewItem {
      * 給予物件的處理(物件已加入世界)<BR>
      * 超出數量掉落地面
      *
-     * @param pc
-     * @param item
-     * @param count
      */
     public static void createNewItem(final L1PcInstance pc, final L1ItemInstance item, final long count) {
         try {
@@ -574,7 +567,6 @@ public class CreateNewItem {
      * @param pc      執行人物
      * @param item_id 物件編號
      * @param count   數量
-     * @return
      */
     public static boolean createNewItem(final L1PcInstance pc, final int item_id, final long count) {
         try {
@@ -730,10 +722,6 @@ public class CreateNewItem {
     /**
      * 給予強化過的物品(過重 容量不足不給予物品) (可堆疊物品)(不可堆疊限定只給一個)
      *
-     * @param pc
-     * @param item_id
-     * @param count
-     * @param EnchantLevel
      */
     public static void createNewItem_LV(L1PcInstance pc, int item_id, int count, int EnchantLevel) {
         L1ItemInstance item = ItemTable.get().createItem(item_id);
@@ -759,10 +747,6 @@ public class CreateNewItem {
     /**
      * NPC給予道具(身上空間不足將掉落地面)
      *
-     * @param pc
-     * @param npcName
-     * @param item_id
-     * @param count
      */
     public static void createNewItem_NPC(L1PcInstance pc, String npcName, int item_id, int count) {
         L1ItemInstance item = ItemTable.get().createItem(item_id);
@@ -795,9 +779,6 @@ public class CreateNewItem {
     /**
      * 線上抽獎系統 -> 新增
      *
-     * @param pc
-     * @param item_id
-     * @param count
      */
     public static boolean createNewItemRandomGifts(final L1PcInstance pc, final int item_id, final int count) {
         try {

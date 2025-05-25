@@ -13,7 +13,6 @@ public class S_OwnCharAttrDef extends ServerBasePacket {
     /**
      * 更新角色防禦屬性
      *
-     * @param pc
      */
     public S_OwnCharAttrDef(final L1PcInstance pc) {
         buildPacket(pc);
@@ -22,7 +21,6 @@ public class S_OwnCharAttrDef extends ServerBasePacket {
     /**
      * 更新角色防禦屬性-測試
      *
-     * @param pc
      */
     public S_OwnCharAttrDef() {
         writeC(S_AC);

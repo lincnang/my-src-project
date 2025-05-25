@@ -386,11 +386,6 @@ public class Teleportation {
     /**
      * 寵物的傳送
      *
-     * @param npc
-     * @param x
-     * @param y
-     * @param map
-     * @param head
      */
     private static void teleport(L1NpcInstance npc, int x, int y, short map, int head) {
         try {

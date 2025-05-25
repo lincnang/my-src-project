@@ -31,7 +31,6 @@ public class CheckUtil {
     /**
      * 檢查攻擊致死成立的PC
      *
-     * @param lastAttacker
      * @return 攻擊致死成立的PC
      */
     public static L1PcInstance checkAtkPc(final L1Character lastAttacker) {
@@ -147,7 +146,6 @@ public class CheckUtil {
      * 全物件無法使用
      *
      * @param pc 檢查對像
-     * @return
      */
     public static boolean getUseItemAll(final L1PcInstance pc) {
         if (pc.hasSkillEffect(STATUS_CURSE_PARALYZED)) {
@@ -183,7 +181,6 @@ public class CheckUtil {
      * 無法使用指定類型道具_治癒類
      *
      * @param pc 檢查對像
-     * @return
      */
     public static boolean getUseItem_heal(final L1PcInstance pc) {
         //		if (pc.hasSkillEffect(DECAY_POTION)) {
@@ -226,7 +223,6 @@ public class CheckUtil {
      * 無法使用指定類型道具
      *
      * @param pc 檢查對像
-     * @return
      */
     public static boolean getUseItem(final L1PcInstance pc) {
         if (pc.hasSkillEffect(STATUS_CURSE_PARALYZED)) {
@@ -265,9 +261,6 @@ public class CheckUtil {
      * 該座標點上有物件(不可穿透目標)
      *
      * @param pc    檢查對像
-     * @param locx
-     * @param locy
-     * @param mapid
      * @return true有 false沒有
      */
     public static boolean checkPassable(final L1PcInstance pc, final int locx, final int locy, final short mapid) {
@@ -341,8 +334,6 @@ public class CheckUtil {
     /**
      * 檢查該物件是否允許攻擊(技能)
      *
-     * @param cha
-     * @return
      */
     public static boolean checkAttackSkill(final L1Character cha) {
         try {

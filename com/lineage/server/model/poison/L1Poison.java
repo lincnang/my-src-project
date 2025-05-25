@@ -15,7 +15,6 @@ public abstract class L1Poison {
     /**
      * 毒性抵抗狀態
      *
-     * @param cha
      * @return true:中毒 false:不會中毒
      */
     protected static boolean isValidTarget(L1Character cha) {
@@ -45,8 +44,6 @@ public abstract class L1Poison {
     /**
      * 傳送訊息
      *
-     * @param cha
-     * @param msgId
      */
     protected static void sendMessageIfPlayer(L1Character cha, int msgId) {
         if (!(cha instanceof L1PcInstance)) {

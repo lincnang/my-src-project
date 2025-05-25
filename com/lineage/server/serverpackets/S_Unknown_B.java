@@ -11,7 +11,6 @@ public class S_Unknown_B extends ServerBasePacket {
     /**
      * 未知 B 人物列表之前
      *
-     * @param i
      */
     public S_Unknown_B() {
         /*

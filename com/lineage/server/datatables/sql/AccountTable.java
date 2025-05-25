@@ -407,7 +407,6 @@ public class AccountTable implements AccountStorage {
     /**
      * vip 等級、時限、最終時間
      *
-     * @param vip_Level、vip_Time、vip_Finally_Time
      */
     @Override
     public void updateVip(final L1PcInstance pc) {

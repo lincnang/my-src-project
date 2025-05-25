@@ -142,7 +142,6 @@ public class RevertHpMp {
     /**
      * 回傳地圖回血魔size
      *
-     * @return
      */
     public int RevertSize() {
         return _relist.size();
@@ -151,8 +150,6 @@ public class RevertHpMp {
     /**
      * 回傳地圖回血魔list
      *
-     * @param id
-     * @return
      */
     public RevertHpMp getRevert(final int id) {
         return _relist.get(id);

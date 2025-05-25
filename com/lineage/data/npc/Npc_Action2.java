@@ -66,9 +66,6 @@ public class Npc_Action2 extends NpcExecutor {
      * 兌換積分
      *
      * @param pc:玩家
-     * @param ietmid:給予物品ID
-     * @param count:給予物品數量
-     * @param delscore:需求積分
      */
     private void getScore(final L1PcInstance pc, int toitemid, int toitemcount, int needitemid1, int needcount1, int needitemid2, int needcount2) {
         try {

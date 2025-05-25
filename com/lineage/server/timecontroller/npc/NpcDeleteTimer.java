@@ -30,7 +30,6 @@ public class NpcDeleteTimer extends TimerTask {
     /**
      * 刪除NPC(解除召喚)
      *
-     * @param tgnpc
      */
     private static void remove(final L1NpcInstance tgnpc) {
         try {

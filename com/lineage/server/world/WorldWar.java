@@ -33,7 +33,6 @@ public class WorldWar {
     /**
      * 加入戰爭清單
      *
-     * @param war
      */
     public void addWar(final L1War war) {
         try {
@@ -48,7 +47,6 @@ public class WorldWar {
     /**
      * 移出戰爭清單
      *
-     * @param war
      */
     public void removeWar(final L1War war) {
         try {
@@ -63,7 +61,6 @@ public class WorldWar {
     /**
      * 全部戰爭
      *
-     * @return
      */
     public List<L1War> getWarList() {
         try {
@@ -78,9 +75,6 @@ public class WorldWar {
     /**
      * 是否為對戰中血盟
      *
-     * @param clanname
-     * @param tgclanname
-     * @return
      */
     public boolean isWar(String clanname, String tgclanname) {
         try {

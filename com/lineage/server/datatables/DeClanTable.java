@@ -127,7 +127,6 @@ public class DeClanTable {
     /**
      * 更新虛擬血盟資料
      *
-     * @param deClan
      */
     private void updata_deClan(final DeClan deClan) {
         Connection cn = null;
@@ -180,8 +179,6 @@ public class DeClanTable {
     /**
      * 指定虛擬人物 是否為盟主
      *
-     * @param name
-     * @return
      */
     public DeClan get(final String name) {
         return _cdeclanList.get(name);
@@ -190,7 +187,6 @@ public class DeClanTable {
     /**
      * 全部虛擬血盟
      *
-     * @return
      */
     public Collection<DeClan> getList() {
         return _cdeclanList.values();

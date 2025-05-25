@@ -56,9 +56,6 @@ public class GMCommands {
     /**
      * 系統命令執行
      *
-     * @param cmd
-     * @param arg
-     * @return
      */
     private void executeDatabaseCommand(final String cmd, final String arg) {
         try {
@@ -130,7 +127,6 @@ public class GMCommands {
     /**
      * 系統命令執行
      *
-     * @param cmdLine
      */
     public void handleCommands(final String cmdLine) {
         final StringTokenizer token = new StringTokenizer(cmdLine);
@@ -154,10 +150,6 @@ public class GMCommands {
     /**
      * GM 命令執行
      *
-     * @param pc
-     * @param cmd
-     * @param arg
-     * @return
      */
     private boolean executeDatabaseCommand(final L1PcInstance pc, final String cmd, final String arg) {
         try {
@@ -189,8 +181,6 @@ public class GMCommands {
     /**
      * GM命令執行
      *
-     * @param gm
-     * @param cmdLine
      */
     public void handleCommands(final L1PcInstance gm, final String cmdLine) {
         final StringTokenizer token = new StringTokenizer(cmdLine);

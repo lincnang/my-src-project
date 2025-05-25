@@ -61,8 +61,6 @@ public class WenYangJiLuTable {
     /**
      * 更新資料
      *
-     * @param pcgetid
-     * @param wenyang
      */
     public void updateItem(L1PcInstance pc, final L1WenYangJiLu wenyang) {
         Connection co = null;
@@ -87,8 +85,6 @@ public class WenYangJiLuTable {
     /**
      * 寫入資料
      *
-     * @param pcgetid
-     * @param wenyang
      */
     public void storeItem(L1PcInstance pc, final L1WenYangJiLu wenyang) {
         if (_wenyangj.get(pc.getId()) != null) {

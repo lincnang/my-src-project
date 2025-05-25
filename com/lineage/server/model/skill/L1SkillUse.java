@@ -193,7 +193,6 @@ public class L1SkillUse {
     /**
      * 攻擊倍率(1/10)
      *
-     * @return
      */
     public int getLeverage() {
         return this._leverage;
@@ -209,7 +208,6 @@ public class L1SkillUse {
     /**
      * 是否已檢查過技能設定
      *
-     * @return
      */
     private boolean isCheckedUseSkill() {
         return this._checkedUseSkill;
@@ -218,7 +216,6 @@ public class L1SkillUse {
     /**
      * 設定是否已檢查過技能設定
      *
-     * @param flg
      */
     private void setCheckedUseSkill(final boolean flg) {
         this._checkedUseSkill = flg;
@@ -235,7 +232,6 @@ public class L1SkillUse {
      * @param time      時間
      * @param type      類型
      * @param attacker  攻擊者為NPC
-     * @return
      */
     public boolean checkUseSkill(final L1PcInstance player, final int skillid, final int target_id, final int x, final int y, final int time, final int type, final L1Character attacker) {
         return checkUseSkill(player, skillid, target_id, x, y, time, type, attacker, 0, 0);
@@ -245,15 +241,7 @@ public class L1SkillUse {
      * 是否通過技能相關設定的檢查
      *
      * @param player    攻擊者為PC
-     * @param skillid
-     * @param target_id
-     * @param x
-     * @param y
-     * @param time
-     * @param type
      * @param attacker  攻擊者為NPC
-     * @param actid
-     * @param gfxid
      * @return true:檢查通過 ;false:檢查未通過
      */
     public boolean checkUseSkill(L1PcInstance player, int skillid, int target_id, int x, int y, int time, int type, L1Character attacker, int actid, int gfxid) {
@@ -508,13 +496,7 @@ public class L1SkillUse {
     /**
      * pc 用技能施放判斷
      *
-     * @param player
-     * @param skillId
-     * @param targetId
-     * @param x
-     * @param y
      * @param timeSecs 秒
-     * @param type
      */
     public void handleCommands(final L1PcInstance player, final int skillId, final int targetId, final int x, final int y, final int timeSecs, final int type) {
         this.handleCommands(player, skillId, targetId, x, y, timeSecs, type, null);
@@ -523,14 +505,6 @@ public class L1SkillUse {
     /**
      * 通用技能施放判斷
      *
-     * @param player
-     * @param skillId
-     * @param targetId
-     * @param x
-     * @param y
-     * @param timeSecs
-     * @param type
-     * @param attacker
      */
     public void handleCommands(final L1PcInstance player, final int skillId, final int targetId, final int x, final int y, final int timeSecs, final int type, final L1Character attacker) {
         try {
@@ -595,7 +569,6 @@ public class L1SkillUse {
      *
      * @param cha 加入判斷的目標物件
      * @return true:可加入目標 false:不可加入目標
-     * @throws Exception
      */
     private boolean isTarget(final L1Character cha) throws Exception {
         if (cha == null) {
@@ -888,9 +861,6 @@ public class L1SkillUse {
     /**
      * 是否為同組
      *
-     * @param npc
-     * @param cha
-     * @return
      */
     private boolean isParty(final L1NpcInstance npc, final L1Character cha) {
         if (npc.getMaster() == null) {
@@ -1038,7 +1008,6 @@ public class L1SkillUse {
     /**
      * 訊息發送
      *
-     * @param pc
      */
     private void sendHappenMessage(final L1PcInstance pc) {
         final int msgID = this._skill.getSysmsgIdHappen();
@@ -1081,7 +1050,6 @@ public class L1SkillUse {
     /**
      * 判?技能的使用是否需要消耗HP/MP
      *
-     * @return
      */
     private boolean isHPMPConsume() {
         _mpConsume = _skill.getMpConsume();
@@ -1230,7 +1198,6 @@ public class L1SkillUse {
     /**
      * 更新右上角狀態圖示及效果時間
      *
-     * @param cha
      * @param repetition true重新發送狀態圖示 false 不發送狀態圖示
      */
     private void addMagicList(final L1Character cha, final boolean repetition) {
@@ -1284,7 +1251,6 @@ public class L1SkillUse {
     /**
      * 發送技能圖示
      *
-     * @param pc
      */
     private void sendIcon(final L1PcInstance pc) {
         if (this._skillTime == 0) {
@@ -1587,7 +1553,6 @@ public class L1SkillUse {
     /**
      * 刪除不能重複/同時使用的技能，圖標更改為剛使用時的圖標
      *
-     * @param cha
      */
     private void deleteRepeatedSkills(final L1Character cha) {
         for (final int[] skills : REPEATEDSKILLS) {
@@ -1602,8 +1567,6 @@ public class L1SkillUse {
     /**
      * 刪除全部重複的正在使用的技能
      *
-     * @param cha
-     * @param repeat_skill
      */
     private void stopSkillList(final L1Character cha, final int[] repeat_skill) {
         for (final int skillId : repeat_skill) {
@@ -2873,9 +2836,6 @@ public class L1SkillUse {
     /**
      * 群體魔法目標判定
      *
-     * @param cha
-     * @param cha
-     * @return
      */
     private boolean isTargetCalc(final L1Character cha) {
         // 攻擊魔法のNon?PvP判定
@@ -2935,8 +2895,6 @@ public class L1SkillUse {
     /**
      * 目標對像 是否為寵物 召喚獸 虛擬人物
      *
-     * @param cha
-     * @return
      */
     private boolean isPcSummonPet(final L1Character cha) {
         // PC 對 PC
@@ -2969,7 +2927,6 @@ public class L1SkillUse {
     /**
      * 檢查是否為不合法的目標
      *
-     * @param cha
      * @return true:不合法 false:合法
      */
     private boolean isTargetFailure(final L1Character cha) {
@@ -3047,7 +3004,6 @@ public class L1SkillUse {
     /**
      * 生成毒霧區域
      *
-     * @param /*loc
      */
     @SuppressWarnings("unused")
     private void SpawnPoisonArea(L1Location baseloc) {

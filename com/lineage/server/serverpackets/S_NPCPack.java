@@ -23,7 +23,6 @@ public class S_NPCPack extends ServerBasePacket {
     /**
      * 物件封包
      *
-     * @param npc
      */
     public S_NPCPack(final L1NpcInstance npc) {
         this.writeC(S_PUT_OBJECT);

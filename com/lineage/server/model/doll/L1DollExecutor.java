@@ -51,9 +51,6 @@ public abstract class L1DollExecutor {
     /**
      * 設置能力設定值
      *
-     * @param int1
-     * @param int2
-     * @param int3
      */
     public abstract void set_power(int int1, int int2, int int3);
 
@@ -65,30 +62,24 @@ public abstract class L1DollExecutor {
     /**
      * 設置娃娃能力描述
      *
-     * @param note
      */
     public abstract void set_note(String note);
 
     /**
      * 裝備娃娃效果
      *
-     * @param pc
-     * @return
      */
     public abstract void setDoll(L1PcInstance pc);
 
     /**
      * 解除娃娃效果
      *
-     * @param pc
-     * @return
      */
     public abstract void removeDoll(L1PcInstance pc);
 
     /**
      * 是否具有輔助技能
      *
-     * @return
      */
     public abstract boolean is_reset();
 

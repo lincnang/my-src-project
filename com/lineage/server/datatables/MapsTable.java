@@ -78,8 +78,6 @@ public final class MapsTable {
     /**
      * 取回計時地圖最大可用時間(分)
      *
-     * @param mapId
-     * @return
      */
     public int getMapTime(final int mapId) {
         final MapData map = _maps.get(mapId);
@@ -92,8 +90,6 @@ public final class MapsTable {
     /**
      * 是否為計時地圖
      *
-     * @param mapId
-     * @return
      */
     public boolean isTimingMap(final int mapId) {
         final MapData map = _maps.get(mapId);
@@ -258,8 +254,6 @@ public final class MapsTable {
     /**
      * 該地圖是否可擺設商店 by terry0412
      *
-     * @param mapId
-     * @return
      */
     public int isUsableShop(final int mapId) {
         final MapData map = _maps.get(mapId);
@@ -272,8 +266,6 @@ public final class MapsTable {
     /**
      * 該地圖是否可挂机
      *
-     * @param mapId
-     * @return
      */
     public boolean isAutoBot(int mapId) {
         MapData map = (MapData) _maps.get(Integer.valueOf(mapId));
@@ -286,8 +278,6 @@ public final class MapsTable {
     /**
      * 虛擬地圖 把複製的地圖這個欄位輸入官方原有的地圖編號即可 其他官方原本地圖預設-1
      *
-     * @param mapId
-     * @return
      */
     public int getCopyMapId(int mapId) {
         final MapData map = _maps.get(mapId);

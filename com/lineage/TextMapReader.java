@@ -32,7 +32,6 @@ public class TextMapReader extends MapReader {
      * @param xSize X座標長度
      * @param ySize Y座標長度
      * @return byte[][]
-     * @throws IOException
      */
     private byte[][] read(final int mapId, final int xSize, final int ySize) {
         final byte[][] map = new byte[xSize][ySize];

@@ -41,8 +41,6 @@ public class L1DoorGfx {
      * door_gfxs指定gfxid主行返。<br>
      * 常最新返。
      *
-     * @param gfxId
-     * @return
      */
     public static L1DoorGfx findByGfxId(int gfxId) {
         Connection con = null;

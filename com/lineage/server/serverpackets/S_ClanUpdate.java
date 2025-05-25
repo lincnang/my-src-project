@@ -11,9 +11,6 @@ public class S_ClanUpdate extends ServerBasePacket {
     /**
      * 更新血盟數據(加入 創立)
      *
-     * @param pc [Server] opcode = 97 0000: 61 c2 6b b1 00 a4 d1 b0 f3 31 00 00
-     *           00 00 00 00 a.k......1...... 0010: 07 25 cb 44 06 5a b4 3a
-     *           .%.D.Z.:
      */
     public S_ClanUpdate(final int objid, final String Clanname, final int rank) {
         writeC(S_PLEDGE); // XXX S_OPCODE_CLANUPDATE 修改為 S_OPCODE_UPDATECLANID
@@ -27,7 +24,6 @@ public class S_ClanUpdate extends ServerBasePacket {
     /**
      * 更新血盟數據(驅逐退出解散血盟)
      *
-     * @param objid
      */
     public S_ClanUpdate(final int objid) {
         writeC(S_PLEDGE); // XXX S_OPCODE_CLANUPDATE 修改為 S_OPCODE_UPDATECLANID

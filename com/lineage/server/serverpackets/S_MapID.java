@@ -55,7 +55,6 @@ public class S_MapID extends ServerBasePacket {
     /**
      * GM 移動專用
      *
-     * @param mapid
      */
     public S_MapID(final int mapid) {
         // 0000: 20 00 50 00 10 f8 00 00 00 00 00 00 10 0d 35 c5 .P...........5.

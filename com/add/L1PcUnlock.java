@@ -8,7 +8,6 @@ public class L1PcUnlock {
     /**
      * 原地更新畫面
      *
-     * @param pc
      */
     public static void Pc_Unlock(L1PcInstance pc) {
         if (pc == null) {

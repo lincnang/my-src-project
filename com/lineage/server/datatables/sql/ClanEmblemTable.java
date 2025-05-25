@@ -75,8 +75,6 @@ public class ClanEmblemTable implements ClanEmblemStorage {
     /**
      * 增加虛擬血盟盟輝
      *
-     * @param clan_id
-     * @param icon
      */
     @Override
     public void add(final int clan_id, final byte[] icon) {
@@ -90,7 +88,6 @@ public class ClanEmblemTable implements ClanEmblemStorage {
     /**
      * 刪除盟輝資料
      *
-     * @param clan_id
      */
     @Override
     public void deleteIcon(final int clan_id) {
@@ -113,7 +110,6 @@ public class ClanEmblemTable implements ClanEmblemStorage {
     /**
      * 新建 ICON
      *
-     * @return
      */
     @Override
     public L1EmblemIcon storeClanIcon(final int clan_id, final byte[] icon) {

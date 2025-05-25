@@ -37,7 +37,6 @@ public class L1Collectibles {
     /**
      * 傳回流水號
      *
-     * @return
      */
     public int get_id() {
         return this.id;
@@ -46,7 +45,6 @@ public class L1Collectibles {
     /**
      * 設置流水號
      *
-     * @param id
      */
     public void set_id(int id) {
         this.id = id;
@@ -55,7 +53,6 @@ public class L1Collectibles {
     /**
      * 傳回兌換收集列表名稱
      *
-     * @return
      */
     public String get_note() {
         return this.note;
@@ -64,7 +61,6 @@ public class L1Collectibles {
     /**
      * 設置兌換收集列表名稱
      *
-     * @param note
      */
     public void set_note(String note) {
         this.note = note;

@@ -33,7 +33,6 @@ public class EzpayReading {
      * 傳回指定帳戶匯款資料
      *
      * @param loginName 帳號名稱
-     * @return
      */
     public Map<Integer, int[]> ezpayInfo(final String loginName) {
         this._lock.lock();
@@ -51,7 +50,6 @@ public class EzpayReading {
      *
      * @param loginName 帳號名稱
      * @param id        流水號
-     * @return
      */
     public int[] ezpayInfo(final String loginName, final int id) {
         this._lock.lock();

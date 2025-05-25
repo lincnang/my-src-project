@@ -32,7 +32,6 @@ public class WorldTrap {
     /**
      * NPC清單
      *
-     * @return
      */
     public HashMap<Integer, L1TrapInstance> map() {
         return _isTrap;
@@ -41,8 +40,6 @@ public class WorldTrap {
     /**
      * 加入NPC清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1TrapInstance value) {
         try {
@@ -55,7 +52,6 @@ public class WorldTrap {
     /**
      * 移出NPC清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {
@@ -79,7 +75,6 @@ public class WorldTrap {
     /**
      * 踩到陷阱的處理
      *
-     * @param pc
      */
     public void onPlayerMoved(final L1PcInstance pc) {
         final L1Location loc = pc.getLocation();
@@ -95,7 +90,6 @@ public class WorldTrap {
     /**
      * 偵測陷阱的處理
      *
-     * @param pc
      */
     public void onDetection(final L1PcInstance pc) {
         final L1Location loc = pc.getLocation();

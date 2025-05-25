@@ -13,9 +13,6 @@ public class S_WeightStatus extends ServerBasePacket {
     /**
      * 負重程度資訊 7.6
      *
-     * @param stage
-     * @param invWeight
-     * @param maxWeight
      */
     public S_WeightStatus(final int stage, final int invWeight, final int maxWeight) {
         this.writeC(S_EXTENDED_PROTOBUF);

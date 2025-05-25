@@ -21,15 +21,12 @@ public interface ClanEmblemStorage {
     /**
      * 增加虛擬血盟盟輝
      *
-     * @param clan_id
-     * @param icon
      */
     public void add(final int clan_id, final byte[] icon);
 
     /**
      * 刪除盟輝資料
      *
-     * @param clan_id
      */
     public void deleteIcon(final int clan_id);
 

@@ -41,16 +41,12 @@ public interface CharaterTradeStorage {
     /**
      * 更新人物的綁定狀態
      *
-     * @param objId
-     * @return
      */
     public abstract boolean updateBindChar(final int objId, final int state);
 
     /**
      * 獲取交易的簡易人物
      *
-     * @param objId
-     * @return
      */
     public abstract L1PcInstance getPcInstance(final int objId);
 

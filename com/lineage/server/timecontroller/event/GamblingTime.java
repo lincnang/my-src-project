@@ -47,7 +47,6 @@ public class GamblingTime extends TimerTask {
     /**
      * 傳回場次編號
      *
-     * @return
      */
     public static int get_gamblingNo() {
         return _gamblingNo;
@@ -56,7 +55,6 @@ public class GamblingTime extends TimerTask {
     /**
      * 傳回比賽模組
      *
-     * @return
      */
     public static Gambling get_gambling() {
         return _gambling;
@@ -65,7 +63,6 @@ public class GamblingTime extends TimerTask {
     /**
      * 傳回是否已開始比賽
      *
-     * @return
      */
     public static boolean isStart() {
         return _isStart;
@@ -87,7 +84,6 @@ public class GamblingTime extends TimerTask {
     /**
      * 給予奇巖城稅金2%
      *
-     * @param previous
      */
     /*
      * private void getCastle(long previous) { final L1Castle l1castle =
@@ -269,9 +265,6 @@ public class GamblingTime extends TimerTask {
     /**
      * NPC對話內容
      *
-     * @param i
-     * @param mode
-     * @param gamblingNpc
      */
     private void npcChat(final int i, final int mode, final GamblingNpc gamblingNpc) {
         final Collection<L1NpcInstance> allObj = WorldNpc.get().all();

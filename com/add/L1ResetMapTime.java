@@ -86,8 +86,6 @@ public class L1ResetMapTime {
     /**
      * 更新限時地監重置時間
      *
-     * @param id
-     * @param reset_cal
      */
     private void updateResetMapTime(int id, Calendar reset_cal) {
         Connection con = null;

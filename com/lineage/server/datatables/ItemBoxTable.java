@@ -49,8 +49,6 @@ public class ItemBoxTable {
     /**
      * 更新物品注記
      *
-     * @param key
-     * @param itemId
      */
     private static void updata_name(int key, int itemId) {
         Connection cn = null;
@@ -76,9 +74,6 @@ public class ItemBoxTable {
     /**
      * 更新物品注記
      *
-     * @param key
-     * @param itemId
-     * @param note
      */
     private static void updata_name2(int key, int itemId) {
         Connection cn = null;
@@ -104,9 +99,6 @@ public class ItemBoxTable {
     /**
      * 更新物品注記
      *
-     * @param key
-     * @param itemId
-     * @param note
      */
     private static void updata_name3(int key, int itemId) {
         Connection cn = null;
@@ -132,9 +124,6 @@ public class ItemBoxTable {
     /**
      * 取回盒子物件
      *
-     * @param pc
-     * @param box
-     * @param tgitemName
      */
     private static void outItem(final L1PcInstance pc, final L1Box box, final String tgitemName) {
         if (box != null) {
@@ -202,9 +191,6 @@ public class ItemBoxTable {
     /**
      * 給予物件的處理
      *
-     * @param pc
-     * @param item
-     * @param tgitem
      */
     private static void createNewItem(final L1PcInstance pc, final L1ItemInstance item) {
         try {
@@ -598,9 +584,6 @@ public class ItemBoxTable {
     /**
      * 是否是正確鑰匙
      *
-     * @param tgid
-     * @param keyid
-     * @return
      */
     public boolean is_key(final int tgid, final int keyid) {
         final HashMap<Integer, ArrayList<L1Box>> map = _boxkey.get(tgid);
@@ -637,13 +620,6 @@ public class ItemBoxTable {
     /**
      * 新增 etcitem_box
      *
-     * @param box_item_id
-     * @param get_item_id
-     * @param name
-     * @param randomint
-     * @param random
-     * @param min_count
-     * @param max_count
      */
     public void set_box(final int box_item_id, final int get_item_id, final String name, final int randomint, final int random, final int min_count, final int max_count, int enchant) {
         Connection cn = null;
@@ -673,10 +649,6 @@ public class ItemBoxTable {
     /**
      * 新增 etcitem_boxs
      *
-     * @param box_item_id
-     * @param get_item_id
-     * @param name
-     * @param count
      */
     public void set_boxs(int box_item_id, int get_item_id, String name, int count, int broad, int enchant, int out) {
         Connection cn = null;
@@ -716,7 +688,6 @@ public class ItemBoxTable {
         /**
          * 啟動
          *
-         * @return
          */
         public void getStart() {
             GeneralThreadPool.get().schedule(this, 0);
@@ -773,8 +744,6 @@ public class ItemBoxTable {
         /**
          * 開始計算機率並傳回獲得物品
          *
-         * @param tempList
-         * @return
          */
         private L1Box runItem(final Map<Integer, Integer> tempList) {
             try {

@@ -35,7 +35,6 @@ public final class DropItemEnchantTable {
     /**
      * 刪除錯誤物品資料
      *
-     * @param objid
      */
     private static void errorItem(int itemid) {
         Connection con = null;
@@ -98,8 +97,6 @@ public final class DropItemEnchantTable {
     /**
      * 取回NPC掉落道具強化值資料
      *
-     * @param npcid
-     * @return
      */
     public ArrayList<L1DropEnchant> getDatalist(final int npcid) {
         final ArrayList<L1DropEnchant> datalist = _dropItemEnchant.get(npcid);
@@ -112,9 +109,6 @@ public final class DropItemEnchantTable {
     /**
      * 隨機決定強化值
      *
-     * @param itemid
-     * @param npcid
-     * @return
      */
     public int getEnchant(L1DropEnchant data) {
         int[] enchants = data.getEnchants();

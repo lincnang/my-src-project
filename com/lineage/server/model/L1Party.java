@@ -48,7 +48,6 @@ public class L1Party {
     /**
      * 加入新的隊伍成員
      *
-     * @param pc
      */
     public void addMember(final L1PcInstance pc) {
         try {
@@ -97,7 +96,6 @@ public class L1Party {
     /**
      * 移出隊伍成員
      *
-     * @param pc
      */
     private void removeMember(final L1PcInstance pc) {
         try {
@@ -126,7 +124,6 @@ public class L1Party {
     /**
      * 隊伍成員尚未飽和
      *
-     * @return
      */
     public boolean isVacancy() {
         return _membersList.size() < ConfigAlt.MAX_PARTY_SIZE;
@@ -135,7 +132,6 @@ public class L1Party {
     /**
      * 剩餘可加入隊伍人數
      *
-     * @return
      */
     public int getVacancy() {
         return ConfigAlt.MAX_PARTY_SIZE - _membersList.size();
@@ -144,8 +140,6 @@ public class L1Party {
     /**
      * 是否為隊員
      *
-     * @param pc
-     * @return
      */
     public boolean isMember(final L1PcInstance pc) {
         return _membersList.contains(pc);
@@ -154,7 +148,6 @@ public class L1Party {
     /**
      * 傳回隊長
      *
-     * @return
      */
     public L1PcInstance getLeader() {
         return _leader;
@@ -163,7 +156,6 @@ public class L1Party {
     /**
      * 設置隊長
      *
-     * @param pc
      */
     private void setLeader(final L1PcInstance pc) {
         _leader = pc;
@@ -172,8 +164,6 @@ public class L1Party {
     /**
      * 是否為隊長
      *
-     * @param pc
-     * @return
      */
     public boolean isLeader(final L1PcInstance pc) {
         return pc.getId() == _leader.getId();
@@ -182,7 +172,6 @@ public class L1Party {
     /**
      * 全隊員名稱
      *
-     * @return
      */
     public String getMembersNameList() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -201,7 +190,6 @@ public class L1Party {
     /**
      * 顯示組隊UI介面
      *
-     * @param pc
      */
     private void showAddPartyInfo(final L1PcInstance pc) {
         final S_Party packet = new S_Party(S_PacketBox.PARTY_ADD_NEWMEMBER, pc);
@@ -227,7 +215,6 @@ public class L1Party {
     /**
      * 隊員離開時HP顯示的移除
      *
-     * @param pc
      */
     private void deleteMiniHp(final L1PcInstance pc) {
         final S_HPMeter packet = new S_HPMeter(pc.getId(), 0xff, 0XFF);
@@ -240,7 +227,6 @@ public class L1Party {
     /**
      * 隊員血條更新
      *
-     * @param pc
      */
     public void updateMiniHP(final L1PcInstance pc) {
         final S_HPMeter packet = new S_HPMeter(pc.getId(), 100 * pc.getCurrentHp() / pc.getMaxHp(), 100 * pc.getCurrentMp() / pc.getMaxMp());
@@ -263,7 +249,6 @@ public class L1Party {
     /**
      * 隊長委任給其他隊員
      *
-     * @param pc
      */
     public void passLeader(final L1PcInstance pc) {
         final S_Party packet = new S_Party(0x6A, pc);
@@ -276,7 +261,6 @@ public class L1Party {
     /**
      * 離開隊伍
      *
-     * @param pc
      */
     public void leaveMember(final L1PcInstance pc) {
         if (getNumOfMembers() == 2) { // 隊伍成員總數只有2位成員
@@ -301,7 +285,6 @@ public class L1Party {
     /**
      * 驅逐隊員
      *
-     * @param pc
      */
     public void kickMember(final L1PcInstance pc) {
         if (getNumOfMembers() == 2) {
@@ -318,7 +301,6 @@ public class L1Party {
     /**
      * 隊伍成員清單
      *
-     * @return
      */
     public L1PcInstance[] getMembers() {
         return _membersList.toArray(new L1PcInstance[_membersList.size()]);
@@ -327,7 +309,6 @@ public class L1Party {
     /**
      * 隊伍成員數量
      *
-     * @return
      */
     public int getNumOfMembers() {
         return _membersList.size();
@@ -336,7 +317,6 @@ public class L1Party {
     /**
      * 發送驅逐隊員訊息
      *
-     * @param kickpc
      */
     private void sendKickMessage(final L1PcInstance kickpc) {
         kickpc.sendPackets(new S_ServerMessage(419));
@@ -345,8 +325,6 @@ public class L1Party {
     /**
      * 隊員離開隊伍訊息
      *
-     * @param sendTo
-     * @param left
      */
     private void sendLeftMessage(final L1PcInstance sendTo, final L1PcInstance left) {
         sendTo.sendPackets(new S_ServerMessage(420, left.getName()));
@@ -355,7 +333,6 @@ public class L1Party {
     /**
      * 該隊伍目前人數(同地圖)
      *
-     * @return
      */
     public int partyUserInMap(final short mapid) {
         int i = 0;
@@ -393,7 +370,6 @@ public class L1Party {
     /**
      * 傳回隊長OBJID
      *
-     * @return
      */
     public int getLeaderID() {
         return _leader.getId();

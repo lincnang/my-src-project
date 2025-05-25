@@ -44,8 +44,6 @@ public class CharItemBlessReading {
     /**
      * 增加物品凹槽資料
      *
-     * @param objId
-     * @param power
      */
     public void storeItem(final int objId, final L1ItemPower_bless power) {
         this._lock.lock();
@@ -61,8 +59,6 @@ public class CharItemBlessReading {
     /**
      * 更新凹槽資料
      *
-     * @param item_obj_id
-     * @param power
      */
     public void updateItem(final int item_obj_id, final L1ItemPower_bless power) {
         this._lock.lock();

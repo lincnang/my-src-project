@@ -38,7 +38,6 @@ public class NpcMove extends NpcMoveExecutor {
      * @param y  目前Y
      * @param tx 目標X
      * @param ty 目標Y
-     * @return
      */
     private static int _targetDirection(final int h, final int x, final int y, final int tx, final int ty) {
         try {
@@ -213,8 +212,6 @@ public class NpcMove extends NpcMoveExecutor {
     /**
      * 前進方向障礙者攻擊判斷
      *
-     * @param dir
-     * @return
      */
     private boolean _exsistCharacterBetweenTarget(final int dir) {
         try {
@@ -281,7 +278,6 @@ public class NpcMove extends NpcMoveExecutor {
      *
      * @param tx 目標X
      * @param ty 目標Y
-     * @return
      */
     public int targetDirection(int tx, int ty) {
         float dis_x = Math.abs(_npc.getX() - tx); // Ｘ方向のターゲットまでの距離
@@ -560,7 +556,6 @@ public class NpcMove extends NpcMoveExecutor {
      * 轉向2,3點判斷
      *
      * @param h 方向
-     * @return
      */
     @Override
     public int checkObject(final int h) {

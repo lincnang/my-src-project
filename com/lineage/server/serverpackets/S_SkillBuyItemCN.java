@@ -21,8 +21,6 @@ public class S_SkillBuyItemCN extends ServerBasePacket {
     /**
      * 魔法購買清單(材料)
      *
-     * @param pc
-     * @param npc
      */
     public S_SkillBuyItemCN(final L1PcInstance pc, final L1NpcInstance npc) {
         ArrayList<Integer> skillList = null;

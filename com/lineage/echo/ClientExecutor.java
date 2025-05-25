@@ -47,8 +47,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 啟用設置
      *
-     * @param socket
-     * @throws IOException
      */
     public ClientExecutor(final Socket socket) throws IOException {
         _csocket = socket;
@@ -147,7 +145,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 關閉連線線程
      *
-     * @throws IOException
      */
     public void close() {
         try {
@@ -209,7 +206,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回帳號暫存資料
      *
-     * @return
      */
     public L1Account getAccount() {
         return _account;
@@ -218,7 +214,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 設置登入帳號
      *
-     * @param account
      */
     public void setAccount(final L1Account account) {
         _account = account;
@@ -227,7 +222,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回登入帳號
      *
-     * @return
      */
     public String getAccountName() {
         if (_account == null) {
@@ -239,7 +233,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回目前登入人物
      *
-     * @return
      */
     public L1PcInstance getActiveChar() {
         return _activeChar;
@@ -248,7 +241,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 設置目前登入人物
      *
-     * @param pc
      */
     public void setActiveChar(final L1PcInstance pc) {
         _activeChar = pc;
@@ -257,7 +249,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回IP位置
      *
-     * @return
      */
     public StringBuilder getIp() {
         return _ip;
@@ -266,7 +257,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回MAC位置
      *
-     * @return
      */
     public StringBuilder getMac() {
         return _mac;
@@ -275,7 +265,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 設置MAC位置
      *
-     * @param mac
      * @return true:允許登入 false:禁止登入
      */
     public boolean setMac(final StringBuilder mac) {
@@ -286,7 +275,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回 Socket
      *
-     * @return
      */
     public Socket get_socket() {
         return _csocket;
@@ -329,8 +317,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 封包解密
      *
-     * @return
-     * @throws Exception
      */
     private byte[] readPacket() {
         try {
@@ -369,7 +355,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回錯誤次數
      *
-     * @return
      */
     public int get_error() {
         return _error;
@@ -378,7 +363,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 設置錯誤次數
      *
-     * @param error
      */
     public void set_error(final int error) {
         _error = error;
@@ -390,7 +374,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回自動存檔背包物件時間
      *
-     * @return
      */
     public int get_saveInventory() {
         return _saveInventory;
@@ -399,7 +382,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 設置自動存檔背包物件時間
      *
-     * @param saveInventory
      */
     public void set_saveInventory(final int saveInventory) {
         _saveInventory = saveInventory;
@@ -408,7 +390,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 傳回自動存檔人物資料時間
      *
-     * @return
      */
     public int get_savePc() {
         return _savePc;
@@ -417,7 +398,6 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     /**
      * 設置自動存檔人物資料時間
      *
-     * @param savePc
      */
     public void set_savePc(final int savePc) {
         _savePc = savePc;

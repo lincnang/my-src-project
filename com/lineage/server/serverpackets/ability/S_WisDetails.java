@@ -16,11 +16,6 @@ public class S_WisDetails extends ServerBasePacket {
     /**
      * 精神能力資訊
      *
-     * @param type
-     * @param mpr
-     * @param manaMpr
-     * @param mr
-     * @param mpUpRange
      */
     public S_WisDetails(final int type, final int mpr, final int manaMpr, final int mr, final int[] mpUpRange) {
         this.writeC(S_EXTENDED_PROTOBUF);
@@ -44,12 +39,6 @@ public class S_WisDetails extends ServerBasePacket {
     /**
      * 精神能力資訊
      *
-     * @param type
-     * @param mpr
-     * @param manaMpr
-     * @param mr
-     * @param mpUpRange
-     * @param addMp
      */
     public S_WisDetails(final int type, final int mpr, final int manaMpr, final int mr, final int[] mpUpRange, int addMp) {
         this.writeC(S_EXTENDED_PROTOBUF);

@@ -129,10 +129,6 @@ public class S_InventoryIcon extends ServerBasePacket {
     /**
      * 未測試
      *
-     * @param type
-     * @param time
-     * @param invgfx
-     * @param desc
      */
     public S_InventoryIcon(int type, int time, int invgfx, int desc) {
         writeC(S_EXTENDED_PROTOBUF);

@@ -87,7 +87,6 @@ public class NpcChatTable {
      * 出現時NPC對話
      *
      * @param i NPCID
-     * @return
      */
     public L1NpcChat getTemplateAppearance(final int i) {
         return _npcChatAppearance.get(new Integer(i));
@@ -97,7 +96,6 @@ public class NpcChatTable {
      * 死亡時NPC對話
      *
      * @param i NPCID
-     * @return
      */
     public L1NpcChat getTemplateDead(final int i) {
         return _npcChatDead.get(new Integer(i));
@@ -107,7 +105,6 @@ public class NpcChatTable {
      * 取消隱藏時NPC對話
      *
      * @param i NPCID
-     * @return
      */
     public L1NpcChat getTemplateHide(final int i) {
         return _npcChatHide.get(new Integer(i));
@@ -117,7 +114,6 @@ public class NpcChatTable {
      * 定時NPC對話
      *
      * @param i NPCID
-     * @return
      */
     public L1NpcChat getTemplateGameTime(final int i) {
         return _npcChatGameTime.get(new Integer(i));
@@ -126,7 +122,6 @@ public class NpcChatTable {
     /**
      * 全部定時NPC對話
      *
-     * @return
      */
     public Collection<L1NpcChat> all() {
         try {

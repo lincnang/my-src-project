@@ -11,8 +11,6 @@ public class CommonUtil {
     /**
      * 2011.08.05 金額表示
      *
-     * @param number
-     * @return
      */
     public static String numberFormat(int number) {
         try {
@@ -26,8 +24,6 @@ public class CommonUtil {
     /**
      * 2011.08.05 ランダム関数
      *
-     * @param number
-     * @return
      */
     public static int random(int number) {
         Random rnd = new Random();
@@ -37,9 +33,6 @@ public class CommonUtil {
     /**
      * 2011.08.05 ランダム関数
      *
-     * @param lbound
-     * @param ubound
-     * @return
      */
     public static int random(int lbound, int ubound) {
         return (int) ((Math.random() * (ubound - lbound + 1)) + lbound);
@@ -48,8 +41,6 @@ public class CommonUtil {
     /**
      * 2011.08.30 データフォーマット
      *
-     * @param type
-     * @return
      */
     public static String dateFormat(String type) {
         SimpleDateFormat sdf = new SimpleDateFormat(type, Locale.KOREA);
@@ -59,8 +50,6 @@ public class CommonUtil {
     /**
      * 2011.08.30 データフォーマット
      *
-     * @param type
-     * @return
      */
     public static String dateFormat(String type, Timestamp date) {
         SimpleDateFormat sdf = new SimpleDateFormat(type, Locale.KOREA);
@@ -70,7 +59,6 @@ public class CommonUtil {
     /**
      * 2011.08.31 指定時間までの残り時間
      *
-     * @param item
      */
     public static int getRestTime(int hh) {
         int hour = Integer.parseInt(dateFormat("HH"));

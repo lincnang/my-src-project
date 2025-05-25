@@ -32,8 +32,6 @@ public class CharItemsPowerTable implements CharItemsPowerStorage {
     /**
      * 初始化建立資料
      *
-     * @param item_obj_id
-     * @param value
      */
     private static void addValue(final int item_obj_id, final L1ItemPower_name power) {
         L1ItemInstance item = WorldItem.get().getItem(item_obj_id);
@@ -53,7 +51,6 @@ public class CharItemsPowerTable implements CharItemsPowerStorage {
     /**
      * 刪除 錯誤/遺失 物品資料
      *
-     * @param objid
      */
     private static void errorItem(int item_obj_id) {
         Connection con = null;
@@ -141,9 +138,6 @@ public class CharItemsPowerTable implements CharItemsPowerStorage {
     /**
      * 增加古文字物品資料
      *
-     * @param item_obj_id
-     * @param power
-     * @throws Exception
      */
     @Override
     public void storeItem(final int item_obj_id, final L1ItemPower_name power) throws Exception {
@@ -206,8 +200,6 @@ public class CharItemsPowerTable implements CharItemsPowerStorage {
     /**
      * 更新凹槽資料
      *
-     * @param item_obj_id
-     * @param power
      */
     @Override
     public void updateItem(final int item_obj_id, final L1ItemPower_name power) {

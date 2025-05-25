@@ -33,7 +33,6 @@ public class WorldItem {
     /**
      * 全部ITEM
      *
-     * @return
      */
     public Collection<L1ItemInstance> all() {
         try {
@@ -49,7 +48,6 @@ public class WorldItem {
     /**
      * ITEM清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1ItemInstance> map() {
         return _isItem;
@@ -58,8 +56,6 @@ public class WorldItem {
     /**
      * 加入ITEM清單
      *
-     * @param key
-     * @param value
      */
     public void put(final int key, final L1ItemInstance value) {
         try {
@@ -72,7 +68,6 @@ public class WorldItem {
     /**
      * 移出ITEM清單
      *
-     * @param key
      */
     public void remove(final int key) {
         try {
@@ -85,8 +80,6 @@ public class WorldItem {
     /**
      * 傳回ITEM數據
      *
-     * @param clan_name
-     * @return
      */
     public L1ItemInstance getItem(final int key) {
         if (key == 0) {

@@ -5,8 +5,6 @@ import com.add.JiezEnchant;
 import com.add.Tsai.NewEnchantSystem;
 import com.lineage.data.ItemClass;
 import com.lineage.data.item_armor.set.ArmorSet;
-import com.lineage.data.item_weapon.proficiency.L1WeaponProficiency;
-import com.lineage.data.item_weapon.proficiency.WeaponProficiency;
 import com.lineage.server.datatables.*;
 import com.lineage.server.datatables.lock.CharItemsTimeReading;
 import com.lineage.server.datatables.lock.CharSkillReading;
@@ -1708,7 +1706,7 @@ public class L1EquipmentSlot {  //src039
         }
         final int updatemr = eq.getUpdateMr();// 抗魔
         if (updatemr != 0) {
-            addMr += -updatemr;
+            addMr += updatemr;
         }
         final int updateac = eq.getUpdateAc();// 防禦
         if (updateac != 0) {
@@ -1716,7 +1714,7 @@ public class L1EquipmentSlot {  //src039
         }
         final int updatesp = eq.getUpdateSp();// 魔法攻擊
         if (updatesp != 0) {
-            addSp += -updatesp;
+            addSp += updatesp;
         }
         final int updatehpr = eq.getUpdateHpr();// 回血
         if (updatehpr != 0) {
@@ -1814,11 +1812,11 @@ public class L1EquipmentSlot {  //src039
                         // SRC0909
                         final int sp = l1StonePower.getSp();
                         if (sp != 0) {
-                            addSp += -sp;
+                            addSp += sp;
                         }
                         final int mr = l1StonePower.getMr();
                         if (mr != 0) {
-                            addMr += -mr;
+                            addMr += mr;
                         }
                         // SRC0909  END
                         final int hitModifer = l1StonePower.getHitModifier();
@@ -2558,7 +2556,6 @@ public class L1EquipmentSlot {  //src039
     /**
      * 穿上特殊魔法裝備
      *
-     * @param item
      */
     private void setMagic(L1ItemInstance item) {
         switch (item.getItemId()) {
@@ -2661,8 +2658,6 @@ public class L1EquipmentSlot {  //src039
     /**
      * 解除特殊魔法裝備
      *
-     * @param objectId
-     * @param item
      */
     private void removeMagic(int objectId, L1ItemInstance item) {
         switch (item.getItemId()) {

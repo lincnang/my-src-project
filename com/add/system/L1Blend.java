@@ -263,10 +263,6 @@ public class L1Blend {
     /**
      * 顯示製造道具條件清單
      *
-     * @param pc
-     * @param npc
-     * @param npcId
-     * @param cmd
      */
     public void ShowCraftHtml(L1PcInstance pc, L1NpcInstance npc, L1Blend ItemBlend) {
         String msg0 = "";
@@ -400,9 +396,6 @@ public class L1Blend {
     /**
      * 檢查火神痕跡數量是否足夠
      *
-     * @param pc
-     * @param ItemBlend
-     * @return
      */
     private boolean CheckForReplacement(L1PcInstance pc, L1Blend ItemBlend) {
         boolean replace = false;
@@ -419,9 +412,6 @@ public class L1Blend {
     /**
      * 檢查身上火神之槌的數量(最多5支)
      *
-     * @param pc
-     * @param npc
-     * @return
      */
     private int CheckForFireHammerCount(L1PcInstance pc, L1NpcInstance npc) {
         int HammerCount = 0;
@@ -438,9 +428,6 @@ public class L1Blend {
     /**
      * 製造道具條件判斷
      *
-     * @param pc
-     * @param npc
-     * @param ItemBlend
      * @param amount    要求製造的數量
      * @param checked   是否已確認製造數量
      */
@@ -651,9 +638,6 @@ public class L1Blend {
     /**
      * 製造道具並給予玩家物品
      *
-     * @param pc
-     * @param npc
-     * @param ItemBlend
      * @param amount    要求製造的數量
      */
     private void CraftItem(L1PcInstance pc, L1NpcInstance npc, L1Blend ItemBlend, int amount) {

@@ -15,7 +15,6 @@ public class S_CharCreateStatus extends ServerBasePacket {
     /**
      * 角色創造結果
      *
-     * @param reason
      */
     public S_CharCreateStatus(final int reason) {
         // 0000: 1d 02 3c 6c 12 a1 43 46 ..<l..CF

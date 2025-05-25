@@ -64,7 +64,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 隨機傳送處理
      *
-     * @param pc
      */
     private static void teleportation(L1PcInstance pc) {
         try {
@@ -202,7 +201,6 @@ public class AutoAttack2020_1 extends TimerTask {
      * @param y  目前Y
      * @param tx 目標X
      * @param ty 目標Y
-     * @return
      */
     private static int _targetDirection(int h, int x, int y, int tx, int ty) {
         try {
@@ -273,11 +271,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 寵物的傳送
      *
-     * @param npc
-     * @param x
-     * @param y
-     * @param map
-     * @param head
      */
     private static void teleport(L1NpcInstance npc, int x, int y, short map, int head) {
         try {
@@ -422,8 +415,6 @@ public class AutoAttack2020_1 extends TimerTask {
      * true = 異常 (執行飛行) <br>
      * false = 正常 (繼續往下執行)<br>
      *
-     * @param pc
-     * @return
      */
     private boolean CheckStatus(final L1PcInstance pc) {
         try {
@@ -445,8 +436,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 確認超過格數
      *
-     * @param pc
-     * @return
      */
     public boolean CheckLsRange(final L1PcInstance pc) {
         if (pc.getFollowId() == 0 && pc.getLsLocX() > 0 && pc.getLsLocY() > 0 && pc.getLocation().getTileLineDistance(new Point(pc.getLsLocX(), pc.getLsLocY())) > pc.getLsRange()) {
@@ -461,8 +450,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 無目標行走 true = 移動結束 false = 無法移動
      *
-     * @param pc
-     * @return
      */
     private boolean GoallessWalking(final L1PcInstance pc) {
         try {
@@ -496,7 +483,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 傳送前先檢查
      *
-     * @param pc
      */
     private void FlyChecking(final L1PcInstance pc) {
         try {
@@ -563,8 +549,6 @@ public class AutoAttack2020_1 extends TimerTask {
      * true = 有敵人 (執行飛行) <br>
      * false = 沒有敵人 (繼續往下執行)<br>
      *
-     * @param pc
-     * @return
      */
     private boolean ConfirmTheEnemy(final L1PcInstance pc) {
         try {
@@ -634,8 +618,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 遇見BOSS飛
      *
-     * @param pc
-     * @return
      */
     private boolean ConfirmTheBOSS(final L1PcInstance pc) {
         try {
@@ -663,8 +645,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * true = 有搜尋到目標 false = 無搜尋到目標 搜尋怪物
      *
-     * @param pc
-     * @return
      */
     private boolean SearchTarget(final L1PcInstance pc) {
         try {
@@ -729,7 +709,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 技能攻擊
      *
-     * @param pc
      * @param targets true = 怪物死亡 false = 怪物沒死
      */
     private boolean SkillDmg(final L1PcInstance pc, final L1Character targets) {
@@ -770,8 +749,6 @@ public class AutoAttack2020_1 extends TimerTask {
      * true = 怪物已經死亡<br>
      * false = 怪物尚未死亡<br>
      *
-     * @param pc
-     * @param targets
      */
     private boolean AttackMon(final L1PcInstance pc, final L1Character targets) {
         try {
@@ -806,8 +783,6 @@ public class AutoAttack2020_1 extends TimerTask {
      * true = 正確往敵人前進一格<br>
      * false = 尋找不到可以前進的方向<br>
      *
-     * @param pc
-     * @param targets
      */
     private boolean Move(final L1PcInstance pc, final L1Character targets) {
         try {
@@ -854,7 +829,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 計算走到目標處的初始面向
      *
-     * @param pc
      * @param targetsx 目標X
      * @param targetsy 目標Y
      * @return dir 前進方向
@@ -866,9 +840,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 走到目標處的距離
      *
-     * @param pc
-     * @param targetsx
-     * @param targetsy
      * @param d        與目標直線距離
      * @return dir 前進方向
      */
@@ -1076,9 +1047,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 判斷前進方向
      *
-     * @param pc
-     * @param h
-     * @return
      */
     private int checkObject(L1PcInstance pc, int h) {
         if ((h >= 0) && (h <= 7)) {
@@ -1100,8 +1068,6 @@ public class AutoAttack2020_1 extends TimerTask {
     /**
      * 人物進行移動
      *
-     * @param pc
-     * @param dir
      */
     private void setDirectionMove(final L1PcInstance pc, final int dir) {
         int locx = pc.getX();

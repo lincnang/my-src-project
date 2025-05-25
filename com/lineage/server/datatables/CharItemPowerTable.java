@@ -36,8 +36,6 @@ public class CharItemPowerTable {
     /**
      * 初始化建立資料
      *
-     * @param item_obj_id
-     * @param value
      */
     private static void addValue(final int item_obj_id, final L1CharItemPower power) {
         final L1ItemInstance item = WorldItem.get().getItem(item_obj_id);
@@ -80,7 +78,6 @@ public class CharItemPowerTable {
     /**
      * 刪除遺失資料
      *
-     * @param objid
      */
     private static void deleteItem(final Integer objid) {
         Connection cn = null;
@@ -154,8 +151,6 @@ public class CharItemPowerTable {
     /**
      * 取回凹槽強化紀錄
      *
-     * @param item
-     * @return
      */
     public L1CharItemPower getPower(final L1ItemInstance item) {
         final L1CharItemPower powerTmp = _itemUpdate.get(item.getId());
@@ -165,7 +160,6 @@ public class CharItemPowerTable {
     /**
      * 刪除遺失資料 道具升級用
      *
-     * @param objid
      */
     public void deleteItemUpdate(final Integer objid) {
         Connection cn = null;
@@ -187,7 +181,6 @@ public class CharItemPowerTable {
     /**
      * 增加資料
      *
-     * @param item
      */
     public void storeItem(final L1ItemInstance item) {
         if (_itemUpdate.get(item.getId()) != null) {
@@ -263,7 +256,6 @@ public class CharItemPowerTable {
     /**
      * 更新資料
      *
-     * @param item
      */
     public void updateItem(final L1ItemInstance item) {
         final L1CharItemPower power = _itemUpdate.get(item.getId());

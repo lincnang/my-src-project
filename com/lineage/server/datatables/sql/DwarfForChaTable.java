@@ -40,8 +40,6 @@ public class DwarfForChaTable implements DwarfForChaStorage {
     /**
      * 建立資料
      *
-     * @param owner_name
-     * @param item
      */
     private static void addItem(final String owner_name, final L1ItemInstance item) {
         // System.out.println("建立資料-角色專屬倉庫");
@@ -66,7 +64,6 @@ public class DwarfForChaTable implements DwarfForChaStorage {
     /**
      * 刪除遺失資料
      *
-     * @param objid
      */
     private static void deleteItem(final String owner_name) {
         System.out.println("刪除遺失資料-角色名稱不存在");
@@ -204,7 +201,6 @@ public class DwarfForChaTable implements DwarfForChaStorage {
     /**
      * 傳回全部倉庫數據
      *
-     * @return
      */
     @Override
     public Map<String, CopyOnWriteArrayList<L1ItemInstance>> allItems() {
@@ -214,7 +210,6 @@ public class DwarfForChaTable implements DwarfForChaStorage {
     /**
      * 傳回倉庫數據
      *
-     * @return
      */
     @Override
     public CopyOnWriteArrayList<L1ItemInstance> loadItems(final String owner_name) {
@@ -229,7 +224,6 @@ public class DwarfForChaTable implements DwarfForChaStorage {
     /**
      * 刪除倉庫資料(完整)
      *
-     * @param owner_name
      */
     @Override
     public void delUserItems(final String owner_name) {
@@ -239,10 +233,6 @@ public class DwarfForChaTable implements DwarfForChaStorage {
     /**
      * 該倉庫是否有指定數據
      *
-     * @param owner_name
-     * @param objid
-     * @param count
-     * @return
      */
     @Override
     public boolean getUserItems(final String owner_name, final int objid, final int count) {
@@ -320,7 +310,6 @@ public class DwarfForChaTable implements DwarfForChaStorage {
     /**
      * 角色專屬倉庫資料更新(物品數量)
      *
-     * @param item
      */
     @Override
     public void updateItem(final L1ItemInstance item) {
@@ -344,8 +333,6 @@ public class DwarfForChaTable implements DwarfForChaStorage {
     /**
      * 角色專屬倉庫物品資料刪除
      *
-     * @param owner_name
-     * @param item
      */
     @Override
     public void deleteItem(final String owner_name, final L1ItemInstance item) {

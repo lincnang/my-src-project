@@ -38,7 +38,6 @@ public class WorldMob {
     /**
      * 全部怪物
      *
-     * @return
      */
     public Collection<L1MonsterInstance> all() {
         try {
@@ -53,7 +52,6 @@ public class WorldMob {
     /**
      * 怪物清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1MonsterInstance> map() {
         return _isMob;
@@ -62,8 +60,6 @@ public class WorldMob {
     /**
      * 加入怪物清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1MonsterInstance value) {
         try {
@@ -76,7 +72,6 @@ public class WorldMob {
     /**
      * 移出怪物清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {
@@ -90,7 +85,6 @@ public class WorldMob {
      * 19格範圍NPC物件
      *
      * @param src 原始物件
-     * @return
      */
     public ArrayList<L1MonsterInstance> getVisibleMob(final L1MonsterInstance src) {
         final L1Map map = src.getMap();
@@ -136,7 +130,6 @@ public class WorldMob {
      * 19格範圍內相同NPC物件數量
      *
      * @param src 原始物件
-     * @return
      */
     public int getVisibleCount(final L1MonsterInstance src) {
         final L1Map map = src.getMap();

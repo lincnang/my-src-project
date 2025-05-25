@@ -280,7 +280,6 @@ public class L1Skills {
     /**
      * 是否無視障礙物
      *
-     * @return
      */
     public boolean isThrough() {
         return _isThrough;

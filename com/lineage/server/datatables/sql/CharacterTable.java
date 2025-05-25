@@ -158,7 +158,6 @@ public class CharacterTable {
     /**
      * 重建人物背包及倉庫資料
      *
-     * @param pc
      */
     public static void restoreInventory(L1PcInstance pc) {
         pc.getInventory().loadItems();
@@ -173,8 +172,6 @@ public class CharacterTable {
     /**
      * 此名稱是否存在資料庫中
      *
-     * @param name
-     * @return
      */
     public static boolean doesCharNameExist(String name) {
         boolean result = true;
@@ -229,8 +226,6 @@ public class CharacterTable {
     /**
      * 傳回此角色名稱的帳號
      *
-     * @param name
-     * @return
      */
     public static String getAccountName(String name) {
         Connection con = null;
@@ -260,8 +255,6 @@ public class CharacterTable {
     /**
      * 傳回此角色名稱的帳號
      *
-     * @param //name
-     * @return
      */
     public static HashMap<Integer, String> getAllNameByLevel(int level) {
         Connection con = null;
@@ -293,7 +286,6 @@ public class CharacterTable {
     /**
      * 更新戒指欄位擴充狀態 by terry0412
      *
-     * @param pc
      */
     public static void updateRingsExpansion(final L1PcInstance pc) {  //src013
         Connection con = null;
@@ -382,8 +374,6 @@ public class CharacterTable {
     /**
      * 新增角色資料
      *
-     * @param pc
-     * @throws Exception
      */
     public void storeNewCharacter(L1PcInstance pc) throws Exception {
         synchronized (pc) {
@@ -401,8 +391,6 @@ public class CharacterTable {
     /**
      * 更新角色的DB資料
      *
-     * @param pc
-     * @throws Exception
      */
     public void storeCharacter(L1PcInstance pc) throws Exception {
         synchronized (pc) {
@@ -413,8 +401,6 @@ public class CharacterTable {
     /**
      * 更新角色的VIP DB資料
      *
-     * @param pc
-     * @throws Exception
      */
     public void updateVipTime(L1PcInstance pc) throws Exception {
         synchronized (pc) {
@@ -459,8 +445,6 @@ public class CharacterTable {
     /**
      * 新建角色名稱資料
      *
-     * @param objid
-     * @param name
      */
     public void newCharName(int objid, String name) {
         L1CharName cn = new L1CharName();
@@ -486,7 +470,6 @@ public class CharacterTable {
     /**
      * 傳回所有角色名稱列表
      *
-     * @return
      */
     public L1CharName[] getCharNameList() {
         return (L1CharName[]) _charNameList.values().toArray(new L1CharName[_charNameList.size()]);
@@ -495,8 +478,6 @@ public class CharacterTable {
     /**
      * 依照objid取回人物名稱
      *
-     * @param objid
-     * @return
      */
     public String getCharName(int objid) {
         for (L1CharName charName : _charNameList.values()) {

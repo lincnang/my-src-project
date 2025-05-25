@@ -14,7 +14,6 @@ public class S_CharReset extends ServerBasePacket {
     /**
      * 重置系統初始化
      *
-     * @param pc
      */
     public S_CharReset(final L1PcInstance pc) {
         writeC(S_VOICE_CHAT);
@@ -71,7 +70,6 @@ public class S_CharReset extends ServerBasePacket {
     /**
      * 萬能藥點數
      *
-     * @param point
      */
     public S_CharReset(final int point) {
         writeC(S_VOICE_CHAT);
@@ -94,8 +92,6 @@ public class S_CharReset extends ServerBasePacket {
     /**
      * 初始能力加成 7.6
      *
-     * @param pc
-     * @param type
      */
     public S_CharReset(final L1PcInstance pc, final int type) {
         final int baseStr = L1ClassFeature.ORIGINAL_STR[pc.getType()];

@@ -88,7 +88,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 傳回100階段重量 XXX  7.6c add
      *
-     * @return
      */
     public int getWeight100() {
         return calcWeight100(getWeight());
@@ -97,8 +96,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 100階段重量計算  XXX  7.6c add
      *
-     * @param weight
-     * @return
      */
     public int calcWeight100(int calcWeight) {
         int weight = 0;
@@ -133,7 +130,6 @@ public class L1PcInventory extends L1Inventory {
      *
      * @param item    物品數據
      * @param count   數量
-     * @param message 發送訊息
      * @return 0:成功 1:超過可攜帶數量 2:超過可攜帶重量 3:超過LONG最大質
      */
     public int checkAddItem(final L1Item item, final long count) {
@@ -545,8 +541,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 設置道具的穿脫狀態
      *
-     * @param item
-     * @param equipped
      */
     public void setEquipped(L1ItemInstance item, boolean equipped) {
         setEquipped(item, equipped, false, false);
@@ -746,7 +740,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 裝備中耳環陣列
      *
-     * @return
      */
     public L1ItemInstance[] getEaringEquipped() {
         final L1ItemInstance equipeItem[] = new L1ItemInstance[2];
@@ -822,7 +815,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 裝備中界指陣列
      *
-     * @return
      */
     public L1ItemInstance[] getRingEquipped() {
         final L1ItemInstance equipeItem[] = new L1ItemInstance[4];
@@ -848,7 +840,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 裝備中耳環陣列
      *
-     * @return
      */
     public L1ItemInstance[] getEarRingEquipped() {
         L1ItemInstance[] equipeItem = new L1ItemInstance[2];
@@ -1003,7 +994,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 裝備 hp自然回復補正
      *
-     * @return
      */
     public int hpRegenPerTick() {
         int hpr = 0;
@@ -1023,7 +1013,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 裝備 mp自然回復補正
      *
-     * @return
      */
     public int mpRegenPerTick() {
         int mpr = 0;
@@ -1043,7 +1032,6 @@ public class L1PcInventory extends L1Inventory {
     /**
      * 傳回死亡逞罰掉落物品
      *
-     * @return
      */
     public L1ItemInstance caoPenalty() {
         try {

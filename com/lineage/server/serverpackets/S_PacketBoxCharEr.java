@@ -11,7 +11,6 @@ public class S_PacketBoxCharEr extends ServerBasePacket {
     /**
      * 更新角色的迴避率
      *
-     * @param pc
      */
     public S_PacketBoxCharEr(final L1PcInstance pc) {
         writeC(S_EVENT);

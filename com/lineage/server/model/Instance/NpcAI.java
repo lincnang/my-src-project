@@ -20,7 +20,6 @@ public class NpcAI implements Runnable {
     /**
      * NPC AI Runnable
      *
-     * @param npc
      */
     public NpcAI(final L1NpcInstance npc) {
         _npc = npc;

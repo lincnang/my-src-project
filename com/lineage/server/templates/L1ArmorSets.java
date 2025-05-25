@@ -64,7 +64,6 @@ public class L1ArmorSets {
     /**
      * 套裝編號
      *
-     * @return
      */
     public int getId() {
         return this._id;
@@ -73,7 +72,6 @@ public class L1ArmorSets {
     /**
      * 套裝編號
      *
-     * @param i
      */
     public void setId(final int i) {
         this._id = i;
@@ -82,7 +80,6 @@ public class L1ArmorSets {
     /**
      * 套裝組件編號
      *
-     * @return
      */
     public String getSets() {
         return this._sets;
@@ -91,7 +88,6 @@ public class L1ArmorSets {
     /**
      * 套裝組件編號
      *
-     * @param s
      */
     public void setSets(final String s) {
         this._sets = s;
@@ -100,7 +96,6 @@ public class L1ArmorSets {
     /**
      * 變身代號
      *
-     * @return
      */
     public int getPolyId() {
         return this._polyId;
@@ -109,7 +104,6 @@ public class L1ArmorSets {
     /**
      * 變身代號
      *
-     * @param i
      */
     public void setPolyId(final int i) {
         this._polyId = i;
@@ -118,7 +112,6 @@ public class L1ArmorSets {
     /**
      * 變身名字編號
      *
-     * @return
      */
     public int getPolyDesc() {
         return _polydesc;
@@ -127,7 +120,6 @@ public class L1ArmorSets {
     /**
      * 變身名字編號
      *
-     * @param i
      */
     public void setPolyDesc(int i) {
         this._polydesc = i;
@@ -136,7 +128,6 @@ public class L1ArmorSets {
     /**
      * 防禦力增加
      *
-     * @return
      */
     public int getAc() {
         return this._ac;
@@ -145,7 +136,6 @@ public class L1ArmorSets {
     /**
      * 防禦力增加
      *
-     * @param i
      */
     public void setAc(final int i) {
         this._ac = i;
@@ -154,7 +144,6 @@ public class L1ArmorSets {
     /**
      * HP增加
      *
-     * @return
      */
     public int getHp() {
         return this._hp;
@@ -163,7 +152,6 @@ public class L1ArmorSets {
     /**
      * HP增加
      *
-     * @param i
      */
     public void setHp(final int i) {
         this._hp = i;
@@ -172,7 +160,6 @@ public class L1ArmorSets {
     /**
      * MP增加
      *
-     * @return
      */
     public int getMp() {
         return this._mp;
@@ -181,7 +168,6 @@ public class L1ArmorSets {
     /**
      * MP增加
      *
-     * @param i
      */
     public void setMp(final int i) {
         this._mp = i;
@@ -190,7 +176,6 @@ public class L1ArmorSets {
     /**
      * HP回復增加
      *
-     * @return
      */
     public int getHpr() {
         return this._hpr;
@@ -199,7 +184,6 @@ public class L1ArmorSets {
     /**
      * HP回復增加
      *
-     * @param i
      */
     public void setHpr(final int i) {
         this._hpr = i;
@@ -208,7 +192,6 @@ public class L1ArmorSets {
     /**
      * MP回復增加
      *
-     * @return
      */
     public int getMpr() {
         return this._mpr;
@@ -217,7 +200,6 @@ public class L1ArmorSets {
     /**
      * MP回復增加
      *
-     * @param i
      */
     public void setMpr(final int i) {
         this._mpr = i;
@@ -226,7 +208,6 @@ public class L1ArmorSets {
     /**
      * 抗魔增加
      *
-     * @return
      */
     public int getMr() {
         return this._mr;
@@ -235,7 +216,6 @@ public class L1ArmorSets {
     /**
      * 抗魔增加
      *
-     * @param i
      */
     public void setMr(final int i) {
         this._mr = i;
@@ -244,7 +224,6 @@ public class L1ArmorSets {
     /**
      * 力量增加
      *
-     * @return
      */
     public int getStr() {
         return this._str;
@@ -253,7 +232,6 @@ public class L1ArmorSets {
     /**
      * 力量增加
      *
-     * @param i
      */
     public void setStr(final int i) {
         this._str = i;
@@ -262,7 +240,6 @@ public class L1ArmorSets {
     /**
      * 敏捷增加
      *
-     * @return
      */
     public int getDex() {
         return this._dex;
@@ -271,7 +248,6 @@ public class L1ArmorSets {
     /**
      * 敏捷增加
      *
-     * @param i
      */
     public void setDex(final int i) {
         this._dex = i;
@@ -280,7 +256,6 @@ public class L1ArmorSets {
     /**
      * 體質增加
      *
-     * @return
      */
     public int getCon() {
         return this._con;
@@ -289,7 +264,6 @@ public class L1ArmorSets {
     /**
      * 體質增加
      *
-     * @param i
      */
     public void setCon(final int i) {
         this._con = i;
@@ -298,7 +272,6 @@ public class L1ArmorSets {
     /**
      * 精神增加
      *
-     * @return
      */
     public int getWis() {
         return this._wis;
@@ -307,7 +280,6 @@ public class L1ArmorSets {
     /**
      * 精神增加
      *
-     * @param i
      */
     public void setWis(final int i) {
         this._wis = i;
@@ -316,7 +288,6 @@ public class L1ArmorSets {
     /**
      * 魅力增加
      *
-     * @return
      */
     public int getCha() {
         return this._cha;
@@ -325,7 +296,6 @@ public class L1ArmorSets {
     /**
      * 魅力增加
      *
-     * @param i
      */
     public void setCha(final int i) {
         this._cha = i;
@@ -334,7 +304,6 @@ public class L1ArmorSets {
     /**
      * 智力增加
      *
-     * @return
      */
     public int getIntl() {
         return this._intl;
@@ -343,7 +312,6 @@ public class L1ArmorSets {
     /**
      * 智力增加
      *
-     * @param i
      */
     public void setIntl(final int i) {
         this._intl = i;
@@ -352,7 +320,6 @@ public class L1ArmorSets {
     /**
      * 水屬性增加
      *
-     * @return
      */
     public int getDefenseWater() {
         return this._defenseWater;
@@ -361,7 +328,6 @@ public class L1ArmorSets {
     /**
      * 水屬性增加
      *
-     * @param i
      */
     public void setDefenseWater(final int i) {
         this._defenseWater = i;
@@ -370,7 +336,6 @@ public class L1ArmorSets {
     /**
      * 風屬性增加
      *
-     * @return
      */
     public int getDefenseWind() {
         return this._defenseWind;
@@ -379,7 +344,6 @@ public class L1ArmorSets {
     /**
      * 風屬性增加
      *
-     * @param i
      */
     public void setDefenseWind(final int i) {
         this._defenseWind = i;
@@ -388,7 +352,6 @@ public class L1ArmorSets {
     /**
      * 火屬性增加
      *
-     * @return
      */
     public int getDefenseFire() {
         return this._defenseFire;
@@ -397,7 +360,6 @@ public class L1ArmorSets {
     /**
      * 火屬性增加
      *
-     * @param i
      */
     public void setDefenseFire(final int i) {
         this._defenseFire = i;
@@ -406,7 +368,6 @@ public class L1ArmorSets {
     /**
      * 地屬性增加
      *
-     * @return
      */
     public int getDefenseEarth() {
         return this._defenseEarth;
@@ -415,7 +376,6 @@ public class L1ArmorSets {
     /**
      * 地屬性增加
      *
-     * @param i
      */
     public void setDefenseEarth(final int i) {
         this._defenseEarth = i;
@@ -424,7 +384,6 @@ public class L1ArmorSets {
     /**
      * 暈眩耐性增加
      *
-     * @return
      */
     public int get_regist_stun() {
         return _regist_stun;
@@ -433,7 +392,6 @@ public class L1ArmorSets {
     /**
      * 暈眩耐性增加
      *
-     * @param i
      */
     public void set_regist_stun(final int i) {
         this._regist_stun = i;
@@ -442,7 +400,6 @@ public class L1ArmorSets {
     /**
      * 石化耐性增加
      *
-     * @return
      */
     public int get_regist_stone() {
         return _regist_stone;
@@ -451,7 +408,6 @@ public class L1ArmorSets {
     /**
      * 石化耐性增加
      *
-     * @param i
      */
     public void set_regist_stone(final int i) {
         this._regist_stone = i;
@@ -460,7 +416,6 @@ public class L1ArmorSets {
     /**
      * 睡眠耐性增加
      *
-     * @return
      */
     public int get_regist_sleep() {
         return _regist_sleep;
@@ -469,7 +424,6 @@ public class L1ArmorSets {
     /**
      * 睡眠耐性增加
      *
-     * @param i
      */
     public void set_regist_sleep(final int i) {
         this._regist_sleep = i;
@@ -478,7 +432,6 @@ public class L1ArmorSets {
     /**
      * 寒冰耐性增加
      *
-     * @return
      */
     public int get_regist_freeze() {
         return _regist_freeze;
@@ -487,7 +440,6 @@ public class L1ArmorSets {
     /**
      * 寒冰耐性增加
      *
-     * @param i
      */
     public void set_regist_freeze(final int i) {
         this._regist_freeze = i;
@@ -496,7 +448,6 @@ public class L1ArmorSets {
     /**
      * 支撐耐性增加
      *
-     * @return
      */
     public int get_regist_sustain() {
         return _regist_sustain;
@@ -505,7 +456,6 @@ public class L1ArmorSets {
     /**
      * 支撐耐性增加
      *
-     * @param i
      */
     public void set_regist_sustain(final int i) {
         this._regist_sustain = i;
@@ -514,7 +464,6 @@ public class L1ArmorSets {
     /**
      * 暗闇耐性增加
      *
-     * @return
      */
     public int get_regist_blind() {
         return _regist_blind;
@@ -523,7 +472,6 @@ public class L1ArmorSets {
     /**
      * 暗闇耐性增加
      *
-     * @param i
      */
     public void set_regist_blind(final int i) {
         this._regist_blind = i;
@@ -532,7 +480,6 @@ public class L1ArmorSets {
     /**
      * 套裝效果動畫
      *
-     * @return
      */
     public int[] get_gfxs() {
         return _gfxs;
@@ -541,7 +488,6 @@ public class L1ArmorSets {
     /**
      * 套裝效果動畫
      *
-     * @param i
      */
     public void set_gfxs(final int[] i) {
         this._gfxs = i;
@@ -550,7 +496,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加物理傷害
      *
-     * @return
      */
     public int get_modifier_dmg() {
         return _modifier_dmg;
@@ -559,7 +504,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加物理傷害
      *
-     * @param _modifier_dmg
      */
     public void set_modifier_dmg(int _modifier_dmg) {
         this._modifier_dmg = _modifier_dmg;
@@ -568,7 +512,6 @@ public class L1ArmorSets {
     /**
      * 套裝減免物理傷害
      *
-     * @return
      */
     public int get_reduction_dmg() {
         return _reduction_dmg;
@@ -577,7 +520,6 @@ public class L1ArmorSets {
     /**
      * 套裝減免物理傷害
      *
-     * @param _reduction_dmg
      */
     public void set_reduction_dmg(int _reduction_dmg) {
         this._reduction_dmg = _reduction_dmg;
@@ -586,7 +528,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加魔法傷害
      *
-     * @return
      */
     public int get_magic_modifier_dmg() {
         return _magic_modifier_dmg;
@@ -595,7 +536,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加魔法傷害
      *
-     * @param _magic_modifier_dmg
      */
     public void set_magic_modifier_dmg(int _magic_modifier_dmg) {
         this._magic_modifier_dmg = _magic_modifier_dmg;
@@ -604,7 +544,6 @@ public class L1ArmorSets {
     /**
      * 套裝減免魔法傷害
      *
-     * @return
      */
     public int get_magic_reduction_dmg() {
         return _magic_reduction_dmg;
@@ -613,7 +552,6 @@ public class L1ArmorSets {
     /**
      * 套裝減免魔法傷害
      *
-     * @param _magic_reduction_dmg
      */
     public void set_magic_reduction_dmg(int _magic_reduction_dmg) {
         this._magic_reduction_dmg = _magic_reduction_dmg;
@@ -622,7 +560,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加弓的物理傷害
      *
-     * @return
      */
     public int get_bow_modifier_dmg() {
         return _bow_modifier_dmg;
@@ -631,7 +568,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加弓的物理傷害
      *
-     * @param _bow_modifier_dmg
      */
     public void set_bow_modifier_dmg(int _bow_modifier_dmg) {
         this._bow_modifier_dmg = _bow_modifier_dmg;
@@ -640,7 +576,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加加速效果
      *
-     * @return
      */
     public int get_haste() {
         return _haste;
@@ -649,7 +584,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加加速效果
      *
-     * @param haste
      */
     public void set_haste(int haste) {
         this._haste = haste;
@@ -658,7 +592,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加魔攻
      *
-     * @return
      */
     public int get_sp() {
         return _sp;
@@ -667,7 +600,6 @@ public class L1ArmorSets {
     /**
      * 套裝增加魔攻
      *
-     * @param sp
      */
     public void set_sp(int sp) {
         this._sp = sp;

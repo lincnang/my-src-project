@@ -36,7 +36,6 @@ public class ItemPowerUpdateTable {
     /**
      * 刪除錯誤資料
      *
-     * @param itemid
      */
     public static void delete(final int itemid) {
         Connection cn = null;
@@ -106,8 +105,6 @@ public class ItemPowerUpdateTable {
     /**
      * 傳回物品升級typeid
      *
-     * @param itemid
-     * @return
      */
     public int get_original_type(int itemid) {
         int type_id = 0;
@@ -135,8 +132,6 @@ public class ItemPowerUpdateTable {
     /**
      * 傳回已升級物品的原始物品ID
      *
-     * @param typeid
-     * @return
      */
     public int get_original_itemid(int typeid) {
         int itemid = 0;
@@ -164,7 +159,6 @@ public class ItemPowerUpdateTable {
     /**
      * 傳回物品升級 ITEMID列表
      *
-     * @return
      */
     public ArrayList<Integer> get_updeatitemidlist() {
         return _updateitemidList;
@@ -173,8 +167,6 @@ public class ItemPowerUpdateTable {
     /**
      * 資訊
      *
-     * @param key
-     * @return
      */
     public Map<Integer, L1ItemPowerUpdate> get_type_id(final String key) {
         final Map<Integer, L1ItemPowerUpdate> updateMap = new HashMap<Integer, L1ItemPowerUpdate>();
@@ -193,8 +185,6 @@ public class ItemPowerUpdateTable {
     /**
      * L1ItemPowerUpdate 資訊
      *
-     * @param key
-     * @return
      */
     public L1ItemPowerUpdate get(final String key) {
         return _updateMap.get(key);
@@ -203,7 +193,6 @@ public class ItemPowerUpdateTable {
     /**
      * Map<Integer, L1ItemPowerUpdate> 資訊
      *
-     * @return
      */
     public Map<String, L1ItemPowerUpdate> map() {
         return _updateMap;

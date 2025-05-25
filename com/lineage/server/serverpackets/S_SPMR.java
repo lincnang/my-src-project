@@ -19,7 +19,6 @@ public class S_SPMR extends ServerBasePacket {
     /**
      * 更新魔攻與魔防
      *
-     * @param pc
      */
     public S_SPMR(L1PcInstance pc) {
         buildPacket(pc);
@@ -28,7 +27,6 @@ public class S_SPMR extends ServerBasePacket {
     /**
      * 更新魔攻與魔防 - 測試
      *
-     * @param pc
      */
     public S_SPMR() {
         writeC(S_MAGIC_STATUS);

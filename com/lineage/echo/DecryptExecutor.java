@@ -32,8 +32,6 @@ public class DecryptExecutor {
     /**
      * 客戶端封包解密處理(IO)
      *
-     * @return
-     * @throws Exception
      */
     public byte[] decrypt() throws Exception {
         try {

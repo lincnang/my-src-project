@@ -11,7 +11,6 @@ public class S_BoxMessage extends ServerBasePacket {
     /**
      * 寶物公告
      *
-     * @param msg
      */
     public S_BoxMessage(final String msg) {
         this.writeC(S_MESSAGE);

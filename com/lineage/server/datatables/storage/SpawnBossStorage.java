@@ -20,16 +20,12 @@ public interface SpawnBossStorage {
     /**
      * 更新資料庫 下次召喚時間紀錄
      *
-     * @param id
-     * @param spawnTime
      */
     public void upDateNextSpawnTime(final int id, final Calendar spawnTime);
 
     /**
      * BOSS召喚列表中物件
      *
-     * @param key
-     * @return
      */
     public L1Spawn getTemplate(final int key);
 

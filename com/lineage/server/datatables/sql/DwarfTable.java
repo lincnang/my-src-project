@@ -41,8 +41,6 @@ public class DwarfTable implements DwarfStorage {
     /**
      * 建立資料
      *
-     * @param accName
-     * @param item
      */
     private static void addItem(final String account_name, final L1ItemInstance item) {
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(account_name);
@@ -66,7 +64,6 @@ public class DwarfTable implements DwarfStorage {
     /**
      * 刪除遺失資料
      *
-     * @param objid
      */
     private static void deleteItem(final String account_name) {
         System.out.println("刪除遺失資料-帳號不存在");
@@ -204,7 +201,6 @@ public class DwarfTable implements DwarfStorage {
     /**
      * 傳回全部倉庫數據
      *
-     * @return
      */
     @Override
     public Map<String, CopyOnWriteArrayList<L1ItemInstance>> allItems() {
@@ -214,7 +210,6 @@ public class DwarfTable implements DwarfStorage {
     /**
      * 傳回倉庫數據
      *
-     * @return
      */
     @Override
     public CopyOnWriteArrayList<L1ItemInstance> loadItems(final String account_name) {
@@ -228,7 +223,6 @@ public class DwarfTable implements DwarfStorage {
     /**
      * 刪除倉庫資料(完整)
      *
-     * @param account_name
      */
     @Override
     public void delUserItems(final String account_name) {
@@ -238,10 +232,6 @@ public class DwarfTable implements DwarfStorage {
     /**
      * 該倉庫是否有指定數據
      *
-     * @param account_name
-     * @param objid
-     * @param count
-     * @return
      */
     @Override
     public boolean getUserItems(final String account_name, final int objid, final int count) {
@@ -319,7 +309,6 @@ public class DwarfTable implements DwarfStorage {
     /**
      * 帳號倉庫資料更新(物品數量)
      *
-     * @param item
      */
     @Override
     public void updateItem(final L1ItemInstance item) {
@@ -343,8 +332,6 @@ public class DwarfTable implements DwarfStorage {
     /**
      * 帳號倉庫物品資料刪除
      *
-     * @param account_name
-     * @param item
      */
     @Override
     public void deleteItem(final String account_name, final L1ItemInstance item) {

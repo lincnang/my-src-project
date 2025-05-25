@@ -31,7 +31,6 @@ public class ServerUseMapTimer extends TimerTask {
      * 同時更新地圖使用時間<BR>
      * 送出時間封包
      *
-     * @param pc
      * @param time 秒
      */
     public static void put(final L1PcInstance pc, final int time) {
@@ -46,7 +45,6 @@ public class ServerUseMapTimer extends TimerTask {
     /**
      * PC 執行 判斷
      *
-     * @param tgpc
      * @return true:執行 false:不執行
      */
     private static boolean check(final L1PcInstance tgpc) {
@@ -73,7 +71,6 @@ public class ServerUseMapTimer extends TimerTask {
     /**
      * 傳出PC
      *
-     * @param item
      */
     public static void teleport(final L1PcInstance tgpc) {
         MAP.remove(tgpc);

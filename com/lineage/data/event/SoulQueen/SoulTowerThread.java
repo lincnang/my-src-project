@@ -328,10 +328,6 @@ public class SoulTowerThread extends Thread {
     /**
      * 召喚NPC
      *
-     * @param loc
-     * @param npcid
-     * @param count
-     * @return
      */
     private ArrayList<L1NpcInstance> spawn(final L1Location loc, final int npcid, final int count) {
         final ArrayList<L1NpcInstance> list = new ArrayList<L1NpcInstance>();
@@ -348,8 +344,6 @@ public class SoulTowerThread extends Thread {
     /**
      * 是否在規定時間內清除怪物
      *
-     * @param list
-     * @return
      */
     private int isKillNpc(final ArrayList<L1NpcInstance> list) {
         boolean isAllKill = true;
@@ -436,10 +430,6 @@ public class SoulTowerThread extends Thread {
     /**
      * 召喚NPC
      *
-     * @param loc
-     * @param npcid
-     * @param randomRange
-     * @return
      */
     private L1NpcInstance spawnNpc(final L1Location loc, final int npcid, final int randomRange) {
         final L1Npc l1npc = NpcTable.get().getTemplate(npcid);
@@ -492,17 +482,6 @@ public class SoulTowerThread extends Thread {
     /**
      * 召喚門
      *
-     * @param doorId
-     * @param gfxId
-     * @param locx
-     * @param locy
-     * @param mapid
-     * @param hp
-     * @param keeper
-     * @param isopening
-     * @param left_edge_location
-     * @param right_edge_location
-     * @return
      */
     public L1DoorInstance spawnDoor(final int doorId, final int gfxId, final int locx, final int locy, final short mapid, final int hp, final int keeper, final boolean isopening, final int left_edge_location, final int right_edge_location) {
         return spawnDoor(doorId, gfxId, locx, locy, mapid, hp, keeper, isopening, left_edge_location, right_edge_location, 0);
@@ -511,18 +490,6 @@ public class SoulTowerThread extends Thread {
     /**
      * 召喚門
      *
-     * @param doorId
-     * @param gfxId
-     * @param locx
-     * @param locy
-     * @param mapid
-     * @param hp
-     * @param keeper
-     * @param isopening
-     * @param left_edge_location
-     * @param right_edge_location
-     * @param direction
-     * @return
      */
     public L1DoorInstance spawnDoor(final int doorId, final int gfxId, final int locx, final int locy, final short mapid, final int hp, final int keeper, final boolean isopening, final int left_edge_location, final int right_edge_location, final int direction) {
         for (final L1DoorInstance temp : DoorSpawnTable.get().getDoorList()) {

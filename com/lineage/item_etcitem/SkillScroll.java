@@ -13,8 +13,6 @@ public class SkillScroll {
     /**
      * 自動技能新增 -> 使用技能 會損耗需求 判斷
      *
-     * @param pc
-     * @param skillid
      */
     public static void DoMySkill1(L1PcInstance pc, int skillid) {
         L1Skills l1skills = SkillsTable.get().getTemplate(skillid);

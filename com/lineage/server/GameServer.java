@@ -70,7 +70,6 @@ public class GameServer {
      * 獲取網絡文件的大小
      *
      * @param URLName 地址
-     * @throws Exception
      */
     public static void getUrlImg(String URLName) throws Exception {
         int HttpResult = 0; // 服務器返回的狀態

@@ -33,7 +33,6 @@ public final class L1Alliance {
     /**
      * 取回區隔用物件ID
      *
-     * @return
      */
     public int getOrderId() {
         return _orderId;
@@ -46,7 +45,6 @@ public final class L1Alliance {
     /**
      * 檢查是否可以締結同盟
      *
-     * @param l1clan
      * @return 如果可以締結:true, 反之:false
      */
     public final boolean addAlliance(final L1Clan l1clan) {
@@ -68,8 +66,6 @@ public final class L1Alliance {
     /**
      * 對所有締結血盟線上成員發送封包 (遮蔽特定玩家)
      *
-     * @param excludingPcName
-     * @param packet
      */
     public void sendPacketsAll(final String excludingPcName, final ServerBasePacket packet) {
         try {

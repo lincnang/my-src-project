@@ -69,7 +69,6 @@ public class MailTable implements MailStorage {
     /**
      * 收件人遺失 刪除信件
      *
-     * @param receiver
      */
     private void deleteMail(final String receiver) {
         Connection con = null;
@@ -162,12 +161,7 @@ public class MailTable implements MailStorage {
     /**
      * 寫入信件 by terry0412
      *
-     * @param type
-     * @param receiver
-     * @param writer
-     * @param text
      * @param sendType 信件發送類型 (0:發信 1:收信)
-     * @return
      */
     @Override
     public L1Mail writeMail(final int type, final String receiver, final String writer, final byte[] text, final int sendType) { // 信件發送類型
@@ -252,8 +246,6 @@ public class MailTable implements MailStorage {
     /**
      * 信箱系統 - 更新玩家名稱 (用於更名卡修正) by terry0412
      *
-     * @param ori_name
-     * @param new_name
      */
     @Override
     public void renewPcName(final String ori_name, final String new_name) {

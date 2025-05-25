@@ -44,7 +44,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 套裝編號
      *
-     * @return
      */
     public int get_id() {
         return _id;
@@ -53,7 +52,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 套裝物品編號陣列
      *
-     * @return
      */
     @Override
     public int[] get_ids() {
@@ -63,7 +61,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 加入該套裝效果組合
      *
-     * @param effect
      */
     public void addEffect(final ArmorSetEffect effect) {
         this._effects.add(effect);
@@ -72,7 +69,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 移除該套裝效果組合
      *
-     * @param effect
      */
     public void removeEffect(final ArmorSetEffect effect) {
         this._effects.remove(effect);
@@ -81,7 +77,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 傳回該套裝附加的效果陣列
      *
-     * @return
      */
     @Override
     public int[] get_mode() {
@@ -235,7 +230,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 套裝完成效果
      *
-     * @param pc
      */
     @Override
     public void giveEffect(final L1PcInstance pc) {
@@ -261,7 +255,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 套裝解除效果
      *
-     * @param pc
      */
     @Override
     public void cancelEffect(final L1PcInstance pc) {
@@ -280,8 +273,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 套裝完成
      *
-     * @param pc
-     * @return
      */
     @Override
     public final boolean isValid(final L1PcInstance pc) {
@@ -291,8 +282,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 是否為套裝中組件
      *
-     * @param id
-     * @return
      */
     @Override
     public boolean isPartOfSet(final int id) {
@@ -307,8 +296,6 @@ public class ArmorSetImpl extends ArmorSet {
     /**
      * 是否裝備了相同界指2個
      *
-     * @param pc
-     * @return
      */
     @Override
     public boolean isEquippedRingOfArmorSet(final L1PcInstance pc) {

@@ -57,7 +57,6 @@ public class ACard {
     /**
      * @param Id            流水號
      * @param Group         群組
-     * @param Html          對話檔名
      * @param Cmd           對話指令
      * @param QuestId       任務編號
      * @param PolyId        可變身編號
@@ -142,7 +141,6 @@ public class ACard {
     /**
      * 閃避
      *
-     * @return
      */
     public int getShanbi() {
         return _addshanbi;
@@ -151,7 +149,6 @@ public class ACard {
     /**
      * 迴避
      *
-     * @return
      */
     public int getHuibi() {
         return _addhuibi;
@@ -160,7 +157,6 @@ public class ACard {
     /**
      * 藥水增加
      *
-     * @return
      */
     public int getYaoshui() {
         return _addyaoshui;
@@ -169,7 +165,6 @@ public class ACard {
     /**
      * 負重
      *
-     * @return
      */
     public int getFuzhong() {
         return _addfuzhong;
@@ -178,7 +173,6 @@ public class ACard {
     /**
      * 經驗
      *
-     * @return
      */
     public int getExp() {
         return _addexp;
@@ -187,7 +181,6 @@ public class ACard {
     /**
      * 昏迷耐性
      *
-     * @return
      */
     public int getHunmi() {
         return _addhunmi;
@@ -196,7 +189,6 @@ public class ACard {
     /**
      * 支撐耐性
      *
-     * @return
      */
     public int getZhicheng() {
         return _addzhicheng;
@@ -205,7 +197,6 @@ public class ACard {
     /**
      * 石化耐性
      *
-     * @return
      */
     public int getShihua() {
         return _addshihua;
@@ -214,7 +205,6 @@ public class ACard {
     /**
      * 睡眠耐性
      *
-     * @return
      */
     public int getShuimian() {
         return _addshuimian;
@@ -223,7 +213,6 @@ public class ACard {
     /**
      * 寒冰耐性
      *
-     * @return
      */
     public int getHanbing() {
         return _addhanbing;
@@ -232,7 +221,6 @@ public class ACard {
     /**
      * 暗黑耐性
      *
-     * @return
      */
     public int getAnhei() {
         return _addanhei;

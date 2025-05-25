@@ -11,9 +11,6 @@ public class S_TradeAddItem extends ServerBasePacket {
     /**
      * 交易增加物品
      *
-     * @param item
-     * @param count
-     * @param type
      */
     public S_TradeAddItem(L1ItemInstance item, long count, int type) {
         writeC(S_ADD_XCHG);

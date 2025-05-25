@@ -39,7 +39,6 @@ public class ServerGcTimePool {
     /**
      * 使該線程開始執行；Java 虛擬機調用該線程的 run 方法。
      *
-     * @param r
      */
     public void execute(final Runnable r) {
         try {
@@ -59,7 +58,6 @@ public class ServerGcTimePool {
      *
      * @param r     要執行的任務
      * @param delay 從現在開始延遲執行的時間
-     * @return
      */
     public ScheduledFuture<?> schedule(final Runnable r, final long delay) {
         try {
@@ -79,7 +77,6 @@ public class ServerGcTimePool {
      *
      * @param r     - 要執行的任務
      * @param delay - 從現在開始延遲執行的時間
-     * @return
      */
     public ScheduledFuture<?> pcSchedule(final L1PcMonitor r, final long delay) {
         try {
@@ -108,7 +105,6 @@ public class ServerGcTimePool {
      * @param command      - 要執行的任務
      * @param initialDelay - 首次執行的延遲時間
      * @param period       - 連續執行之間的週期
-     * @return
      */
     public ScheduledFuture<?> scheduleAtFixedRate(final TimerTask command, final long initialDelay, final long period) {
         try {

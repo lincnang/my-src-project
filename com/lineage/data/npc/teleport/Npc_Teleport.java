@@ -33,8 +33,6 @@ public class Npc_Teleport extends NpcExecutor {
     /**
      * 執行傳送
      *
-     * @param pc
-     * @param key
      */
     public static void teleport(L1PcInstance pc, Integer key) {
         final Map<Integer, L1TeleportLoc> list = pc.get_otherList().teleportMap();
@@ -191,9 +189,6 @@ public class Npc_Teleport extends NpcExecutor {
     /**
      * 展示指定頁面
      *
-     * @param pc
-     * @param npc
-     * @param page
      */
     public static void showPage(L1PcInstance pc, L1NpcInstance npc, int page) {
         final Map<Integer, L1TeleportLoc> list = pc.get_otherList().teleportMap();

@@ -293,7 +293,6 @@ public class ServerMultiChatLogWindow extends JInternalFrame {
     /**
      * 管理器聊天調用
      *
-     * @param evt
      */
     private void chatKeyPressed(KeyEvent evt) {
         if (Eva.isServerStarted) {

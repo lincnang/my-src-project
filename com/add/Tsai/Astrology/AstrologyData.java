@@ -233,7 +233,6 @@ public class AstrologyData {
     /**
      * 閃避
      *
-     * @return
      */
     public int getShanbi() {
         return _addshanbi;
@@ -242,7 +241,6 @@ public class AstrologyData {
     /**
      * 迴避
      *
-     * @return
      */
     public int getHuibi() {
         return _addhuibi;
@@ -251,7 +249,6 @@ public class AstrologyData {
     /**
      * 藥水增加
      *
-     * @return
      */
     public int getYaoshui() {
         return _addyaoshui;
@@ -260,7 +257,6 @@ public class AstrologyData {
     /**
      * 經驗
      *
-     * @return
      */
     public int getExp() {
         return _addexp;
@@ -269,7 +265,6 @@ public class AstrologyData {
     /**
      * 昏迷耐性
      *
-     * @return
      */
     public int getHunmi() {
         return _addhunmi;

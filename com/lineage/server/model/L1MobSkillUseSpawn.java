@@ -42,7 +42,6 @@ public class L1MobSkillUseSpawn {
      * @param attacker 執行的NPC
      * @param target   目標物件
      * @param summonId 召喚的NPC編號
-     * @return
      */
     private L1MonsterInstance mobspawn(L1Character attacker, L1Character target, int summonId) {
         try {
@@ -167,9 +166,6 @@ public class L1MobSkillUseSpawn {
     /**
      * NPC召喚技能
      *
-     * @param attacker
-     * @param target
-     * @param summonId
      */
     public void mobspawnSrc(L1Character attacker, L1Character target, int summonId) {
         try {

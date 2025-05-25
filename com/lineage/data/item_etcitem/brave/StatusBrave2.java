@@ -112,8 +112,6 @@ public class StatusBrave2 extends ItemExecutor {
     /**
      * 可執行職業判斷
      *
-     * @param pc
-     * @return
      */
     private boolean check(final L1PcInstance pc) {
         try {
@@ -150,7 +148,6 @@ public class StatusBrave2 extends ItemExecutor {
     /**
      * 任務可執行職業設置
      *
-     * @param questuser
      */
     private void set_use_type(int use_type) {
         try {

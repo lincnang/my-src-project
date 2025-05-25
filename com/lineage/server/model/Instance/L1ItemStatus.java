@@ -343,8 +343,6 @@ public class L1ItemStatus {
     /**
      * 傳回物品描述
      *
-     * @param statusx(是否取回物品轉移狀態)
-     * @return
      */
     public BinaryOutputStream getStatusBytes(boolean statusx) {
         int use_type = _item.getUseType();
@@ -961,8 +959,6 @@ public class L1ItemStatus {
     /**
      * 道具狀態系統
      *
-     * @param power
-     * @return
      */
     private BinaryOutputStream etcitem_Buff(L1ItemBuff power) {
         if (power.get_ac() != 0) { // 防禦
@@ -1345,7 +1341,6 @@ public class L1ItemStatus {
     /**
      * 飛刀 箭
      *
-     * @return
      */
     private BinaryOutputStream arrow() {
         _os.writeC(1);
@@ -1385,7 +1380,6 @@ public class L1ItemStatus {
     /**
      * 食物
      *
-     * @return
      */
     private BinaryOutputStream fooditem() {
         _os.writeC(21);
@@ -1502,7 +1496,6 @@ public class L1ItemStatus {
     /**
      * 照明道具
      *
-     * @return
      */
     private BinaryOutputStream lightitem() {
         _os.writeC(22);
@@ -1530,7 +1523,6 @@ public class L1ItemStatus {
     /**
      * 防具類
      *
-     * @return
      */
     private BinaryOutputStream armor() {
         _os.writeC(19);
@@ -2817,7 +2809,6 @@ public class L1ItemStatus {
     /**
      * 飾品類
      *
-     * @return
      */
     private BinaryOutputStream accessories() {
         _os.writeC(19);
@@ -3247,7 +3238,7 @@ public class L1ItemStatus {
             _os.writeC(59);
             _os.writeC(addpvpdmg);
         }
-        int pvpDmgdrd = +greater()[11];
+        int pvpDmgdrd = greater()[11];
         int addpvpdmg_r = _item.getPvpDmg_R() + pvpDmgdrd; // 减免PVP傷害
         if (addpvpdmg_r != 0) {
             _os.writeC(60);
@@ -3821,7 +3812,6 @@ public class L1ItemStatus {
     /**
      * 副助道具
      *
-     * @return
      */
     private BinaryOutputStream accessories2() {
         _os.writeC(19);
@@ -4512,7 +4502,6 @@ public class L1ItemStatus {
     /**
      * 武器
      *
-     * @return
      */
     private BinaryOutputStream weapon() {
         _os.writeC(1);
@@ -5375,7 +5364,6 @@ public class L1ItemStatus {
     /**
      * 一般道具
      *
-     * @return
      */
     private BinaryOutputStream etcitem() {
         if (_item.getItemId() == 40312) {// 旅館鑰匙
@@ -5516,7 +5504,6 @@ public class L1ItemStatus {
     /**
      * 寵物防具
      *
-     * @return
      */
     private BinaryOutputStream petarmor(L1PetItem petItem) {
         _os.writeC(19);
@@ -5610,7 +5597,6 @@ public class L1ItemStatus {
     /**
      * 寵物武器
      *
-     * @return
      */
     private BinaryOutputStream petweapon(L1PetItem petItem) {
         _os.writeC(1);
@@ -5701,7 +5687,6 @@ public class L1ItemStatus {
      * [0]:MP [1]:HP [2]:藥水回復量% [3]:近距離傷害 [4]:遠距離傷害 [5]:傷害減免 [6]:魔法命中 [7]:PVP傷害
      * [8]:防禦 [9]:魔攻 [10]:魔防 [11]:PVP傷害值減少
      *
-     * @return
      */
     private int[] greater() {
         int level = _itemInstance.getEnchantLevel();

@@ -40,8 +40,6 @@ public class L1PetInstance extends L1NpcInstance {
     /**
      * GM用寵物
      *
-     * @param template
-     * @param master
      */
     public L1PetInstance(L1Npc template, L1PcInstance master) {
         super(template);
@@ -119,9 +117,6 @@ public class L1PetInstance extends L1NpcInstance {
     /**
      * 馴養寵物
      *
-     * @param target
-     * @param master
-     * @param itemobjid
      */
     public L1PetInstance(L1NpcInstance target, L1PcInstance master, int itemobjid) {
         super(null);
@@ -306,7 +301,6 @@ public class L1PetInstance extends L1NpcInstance {
     /**
      * 寵物死亡
      *
-     * @param lastAttacker
      */
     public synchronized void death(L1Character lastAttacker) {
         if (!isDead()) {
@@ -323,7 +317,6 @@ public class L1PetInstance extends L1NpcInstance {
     /**
      * 寵物進化的處理
      *
-     * @param new_itemobjid
      */
     public void evolvePet(int new_itemobjid) {
         L1Pet pet = PetReading.get().getTemplate(_itemObjId);
@@ -423,7 +416,6 @@ public class L1PetInstance extends L1NpcInstance {
     /**
      * 收集
      *
-     * @param isDepositnpc
      */
     public void collect(boolean isDepositnpc) {
         L1Inventory masterInv = _petMaster.getInventory();

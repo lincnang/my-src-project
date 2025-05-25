@@ -275,9 +275,6 @@ public class L1WeaponSkill {
     /**
      * 奇古獸傷害計算
      *
-     * @param pc
-     * @param cha
-     * @return
      */
     public static double getKiringkuDamage(L1PcInstance pc, L1Character cha) {
         int dmg = 0;
@@ -518,11 +515,6 @@ public class L1WeaponSkill {
     /**
      * 魔防及屬性減傷計算
      *
-     * @param pc
-     * @param cha
-     * @param dmg
-     * @param attr
-     * @return
      */
     public static double calcDamageReduction(L1PcInstance pc, L1Character cha, double dmg, int attr) {
         if (isFreeze(cha)) {

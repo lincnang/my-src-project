@@ -14,7 +14,6 @@ public class S_BoardRead extends ServerBasePacket {
     /**
      * 佈告欄內容
      *
-     * @param number
      */
     public S_BoardRead(final int number) {
         this.buildPacket(number);
@@ -23,7 +22,6 @@ public class S_BoardRead extends ServerBasePacket {
     /**
      * 佈告欄內容 - 測試
      *
-     * @param number
      */
     public S_BoardRead() {
         this.writeC(S_BOARD_READ);

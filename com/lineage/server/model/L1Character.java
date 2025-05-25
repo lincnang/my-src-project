@@ -209,7 +209,6 @@ public class L1Character extends L1Object {
     /**
      * 傳回與目標相反的面向
      *
-     * @param cha
      * @return heading
      */
     public int targetReverseHeading(L1Character cha) {
@@ -246,7 +245,6 @@ public class L1Character extends L1Object {
     /**
      * 發送該物件可見HP
      *
-     * @param pc
      */
     public void broadcastPacketHP(L1PcInstance pc) {
         try {
@@ -341,7 +339,6 @@ public class L1Character extends L1Object {
     /**
      * 鬼魂/傳送/商店
      *
-     * @param pc
      * @return true:狀態中 false:無
      */
     public boolean isParalyzedX1(final L1PcInstance pc) {
@@ -753,8 +750,6 @@ public class L1Character extends L1Object {
     /**
      * 加入技能效果清單
      *
-     * @param skillId
-     * @param timeMillis
      */
     private void addSkillEffect(int skillId, int timeMillis) {
         L1SkillTimer timer = null;
@@ -768,8 +763,6 @@ public class L1Character extends L1Object {
     /**
      * 給予技能效果與時間
      *
-     * @param skillId
-     * @param timeMillis
      */
     public void setSkillEffect(int skillId, int timeMillis) {
         L1SkillTimer timer = (L1SkillTimer) _skillEffect.get(skillId);
@@ -787,7 +780,6 @@ public class L1Character extends L1Object {
     /**
      * 刪除技能效果
      *
-     * @param skillId
      */
     public void removeSkillEffect(int skillId) {
         L1SkillTimer timer = (L1SkillTimer) _skillEffect.remove(skillId);
@@ -811,7 +803,6 @@ public class L1Character extends L1Object {
     /**
      * 刪除技能計時器
      *
-     * @param skillId
      */
     public void killSkillEffectTimer(int skillId) {
         L1SkillTimer timer = (L1SkillTimer) _skillEffect.remove(skillId);
@@ -885,7 +876,6 @@ public class L1Character extends L1Object {
     /**
      * 移除寵物清單
      *
-     * @param npc
      */
     public void removePet(L1NpcInstance npc) {
         _petlist.remove(npc.getId());
@@ -895,7 +885,6 @@ public class L1Character extends L1Object {
     /**
      * 傳回寵物控制清單
      *
-     * @return
      */
     public Map<Integer, L1NpcInstance> getPetList() {
         return _petlist;
@@ -904,7 +893,6 @@ public class L1Character extends L1Object {
     /**
      * 寵物選單控制
      *
-     * @param npc
      * @param type true:顯示 false:關閉
      */
     private final void sendPetCtrlMenu(L1NpcInstance npc, boolean type) {
@@ -942,7 +930,6 @@ public class L1Character extends L1Object {
     /**
      * 加入使用中娃娃清單
      *
-     * @param doll
      */
     public void addDoll(L1DollInstance doll) {
         _dolls.put(doll.getItemObjId(), doll);
@@ -951,7 +938,6 @@ public class L1Character extends L1Object {
     /**
      * 從使用中娃娃清單中移出
      *
-     * @param doll
      */
     public void removeDoll(L1DollInstance doll) {
         _dolls.remove(doll.getItemObjId());
@@ -960,8 +946,6 @@ public class L1Character extends L1Object {
     /**
      * 取回使用中的娃娃資料
      *
-     * @param ItemObjId
-     * @return
      */
     public L1DollInstance getDoll(int ItemObjId) {
         return (L1DollInstance) _dolls.get(ItemObjId);
@@ -970,7 +954,6 @@ public class L1Character extends L1Object {
     /**
      * 取回使用中的娃娃清單
      *
-     * @return
      */
     public Map<Integer, L1DollInstance> getDolls() {
         return _dolls;
@@ -979,7 +962,6 @@ public class L1Character extends L1Object {
     /**
      * 設置娃娃
      *
-     * @param doll
      */
     public void addDoll2(final L1DollInstance2 doll) {
         _dolls2.put(doll.getItemObjId(), doll);
@@ -995,7 +977,6 @@ public class L1Character extends L1Object {
     /**
      * 移除娃娃
      *
-     * @return
      */
     public L1DollInstance2 getDoll2(final int key) {
         return _dolls2.get(key);
@@ -1013,7 +994,6 @@ public class L1Character extends L1Object {
     /**
      * 設置超級娃娃
      *
-     * @param doll
      */
     public void add_power_doll(final L1DollInstance doll) {
         _power_doll = doll;
@@ -1304,7 +1284,6 @@ public class L1Character extends L1Object {
     /**
      * 增加(減少)魔攻
      *
-     * @param i
      */
     public void add_magic_plus(final int i) {
         this.setS(this._add_magic_plus + i);
@@ -1313,7 +1292,6 @@ public class L1Character extends L1Object {
     /**
      * 增加(減少)攻擊
      *
-     * @param i
      */
     public void add_damage_plus(final int i) {
         this.setS(this._add_damage_plus + i);
@@ -1322,7 +1300,6 @@ public class L1Character extends L1Object {
     /**
      * 增加(減少)額外攻擊
      *
-     * @param i
      */
     public void add_range_plus(final int i) {
         this.setS(this._add_range_plus + i);
@@ -1509,7 +1486,6 @@ public class L1Character extends L1Object {
     /**
      * 寒冰耐性
      *
-     * @return
      */
     public int getRegistFreeze() {
         return _registFreeze;
@@ -1518,7 +1494,6 @@ public class L1Character extends L1Object {
     /**
      * 寒冰耐性
      *
-     * @param i
      */
     public void add_regist_freeze(int i) {
         _trueRegistFreeze += i;
@@ -1653,7 +1628,6 @@ public class L1Character extends L1Object {
     /**
      * 魔攻
      *
-     * @return
      */
     public int getSp() {
         return getTrueSp() + _sp;
@@ -1662,7 +1636,6 @@ public class L1Character extends L1Object {
     /**
      * 魔法等級+魔法額外點數
      *
-     * @return
      */
     public int getTrueSp() {
         return getMagicLevel() + getMagicBonus();
@@ -1871,7 +1844,6 @@ public class L1Character extends L1Object {
     /**
      * 傳回目前目標objid
      *
-     * @return
      */
     public int get_tmp_targetid() {
         return _tmp_targetid;
@@ -1880,7 +1852,6 @@ public class L1Character extends L1Object {
     /**
      * 暫存目前目標objid
      *
-     * @param targetid
      */
     public void set_tmp_targetid(int targetid) {
         _tmp_targetid = targetid;
@@ -1967,7 +1938,6 @@ public class L1Character extends L1Object {
     /**
      * 加入精準目標特效清單
      *
-     * @param effect
      */
     public void add_TrueTargetEffect(L1EffectInstance effect) {
         _TrueTargetEffectList.add(effect);
@@ -1976,7 +1946,6 @@ public class L1Character extends L1Object {
     /**
      * 傳回精準目標特效清單
      *
-     * @return
      */
     public ArrayList<L1EffectInstance> get_TrueTargetEffectList() {
         return _TrueTargetEffectList;
@@ -2097,7 +2066,6 @@ public class L1Character extends L1Object {
     /**
      * 物理傷害減免
      *
-     * @return
      */
     public int getDmgR() {
         int dmgr = 0;
@@ -2112,7 +2080,6 @@ public class L1Character extends L1Object {
     /**
      * 物理傷害減免
      *
-     * @param i
      */
     public void addDmgR(final int i) {
         _DmgR += i;
@@ -2121,7 +2088,6 @@ public class L1Character extends L1Object {
     /**
      * 魔法傷害減免
      *
-     * @return
      */
     public int getMagicR() {
         int dmgr = 0;
@@ -2136,7 +2102,6 @@ public class L1Character extends L1Object {
     /**
      * 魔法傷害減免
      *
-     * @param i
      */
     public void addMagicR(final int i) {
         _magicR += i;

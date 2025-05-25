@@ -92,7 +92,6 @@ public class L1ShopS {
     /**
      * 購買人OBJID
      *
-     * @param userObjId the _user_obj_id to set
      */
     public void set_buy_objid(int buyObjId) {
         _buy_obj_id = buyObjId;
@@ -110,7 +109,6 @@ public class L1ShopS {
     /**
      * 購買人名字
      *
-     * @param userObjId the _user_obj_id to set
      */
     public void set_buy_name(String name) {
         _buy_name = name;

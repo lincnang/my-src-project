@@ -40,7 +40,6 @@ public class WorldEffect {
     /**
      * 全部Effect
      *
-     * @return
      */
     public Collection<L1EffectInstance> all() {
         try {
@@ -56,7 +55,6 @@ public class WorldEffect {
     /**
      * Effect清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1EffectInstance> map() {
         return _isEff;
@@ -65,8 +63,6 @@ public class WorldEffect {
     /**
      * 加入Effect清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1EffectInstance value) {
         try {
@@ -79,7 +75,6 @@ public class WorldEffect {
     /**
      * 移出Effect清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {
@@ -93,7 +88,6 @@ public class WorldEffect {
      * 座標是否有 重疊Effect物件
      *
      * @param loc   原始座標
-     * @param npcid
      * @return true:有 false:沒有
      */
     public boolean isEffect(final L1Location loc, int npcid) {
@@ -120,7 +114,6 @@ public class WorldEffect {
      * 座標重疊Effect物件
      *
      * @param loc 原始座標
-     * @return
      */
     public ArrayList<L1EffectInstance> getVisibleEffect(final L1Location loc) {
         final ArrayList<L1EffectInstance> result = new ArrayList<L1EffectInstance>();
@@ -143,7 +136,6 @@ public class WorldEffect {
      * 座標重疊Effect物件
      *
      * @param src 原始物件
-     * @return
      */
     public ArrayList<L1EffectInstance> getVisibleEffect(final L1EffectInstance src) {
         final L1Map map = src.getMap();
@@ -174,7 +166,6 @@ public class WorldEffect {
      * 13格範圍內相同Effect物件數量
      *
      * @param src 原始物件
-     * @return
      */
     public int getVisibleCount(final L1EffectInstance src) {
         final L1Map map = src.getMap();
@@ -203,7 +194,6 @@ public class WorldEffect {
      * 火牢範圍物件
      *
      * @param firewall 計算物件(火牢)
-     * @return
      */
     public ArrayList<L1Character> getFirewall(final L1EffectInstance firewall) {
         final L1Map map = firewall.getMap();

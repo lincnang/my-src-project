@@ -85,7 +85,6 @@ public class L1AttackNpc extends L1AttackMode {
     /**
      * NPC對PC命中
      *
-     * @return
      */
     private boolean calcPcHit() {
         if ((((_npc instanceof L1PetInstance)) || ((_npc instanceof L1SummonInstance))) && (_targetPc.getZoneType() == 1)) {
@@ -156,7 +155,6 @@ public class L1AttackNpc extends L1AttackMode {
     /**
      * NPC對NPC命中
      *
-     * @return
      */
     private boolean calcNpcHit() {
         if (dmg0(_targetNpc)) {
@@ -225,8 +223,6 @@ public class L1AttackNpc extends L1AttackMode {
     /**
      * 基礎傷害計算
      *
-     * @param dmg
-     * @return
      */
     private double npcDmgMode(double dmg) {
         if (_npc.getNpcTemplate().get_nameid().startsWith("BOSS")) {// BOSS傷害加倍
@@ -293,7 +289,6 @@ public class L1AttackNpc extends L1AttackMode {
     /**
      * NPC對PC傷害
      *
-     * @return
      */
     private int calcPcDamage() {
         if (_targetPc == null) {
@@ -488,7 +483,6 @@ public class L1AttackNpc extends L1AttackMode {
     /**
      * NPC對NPC傷害
      *
-     * @return
      */
     private int calcNpcDamage() {
         if (_targetNpc == null) {
@@ -526,7 +520,6 @@ public class L1AttackNpc extends L1AttackMode {
     /**
      * 夜間攻擊力增加
      *
-     * @return
      */
     private boolean isUndeadDamage() {
         boolean flag = false;
@@ -547,7 +540,6 @@ public class L1AttackNpc extends L1AttackMode {
     /**
      * 毒素附加攻擊
      *
-     * @param target
      */
     private void addNpcPoisonAttack(L1Character target) {
         switch (_npc.getNpcTemplate().get_poisonatk()) {

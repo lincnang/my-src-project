@@ -95,11 +95,6 @@ public class DungeonTable {
     /**
      * 執行座標移動
      *
-     * @param locX
-     * @param locY
-     * @param mapId
-     * @param pc
-     * @return
      */
     public boolean dg(final int locX, final int locY, final int mapId, final L1PcInstance pc) {
         final int servertime = L1GameTimeClock.getInstance().currentTime().getSeconds();

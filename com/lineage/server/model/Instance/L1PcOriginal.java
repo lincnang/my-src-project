@@ -1425,8 +1425,6 @@ public class L1PcOriginal {
     /**
      * 設置個職業智力魔法命中
      *
-     * @param pc
-     * @return
      */
     public static int resetOriginalMagicHit(final L1PcInstance pc) {
         int originalMagicHit = 0;

@@ -20,7 +20,6 @@ public class S_IconConfig extends ServerBasePacket {
      * 可控制時間<BR>
      * 範例: pc.sendPackets(new S_IconConfig(S_IconConfig.SKILL_ICON, 2176, 1200 , false, false));
      *
-     * @param subCode
      * @param type    (List 效果編號)
      * @param time    (單位 :秒)
      * @param second  false

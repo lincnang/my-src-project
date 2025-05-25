@@ -74,8 +74,6 @@ public class C_CreateChar extends ClientBasePacket {
     /**
      * 創造角色
      *
-     * @param client
-     * @param pc
      */
     private static void initNewChar(final ClientExecutor client, final L1PcInstance pc) {
         try {

@@ -57,7 +57,6 @@ public class DeathThreadPool {
     /**
      * 使該線程開始執行；Java 虛擬機調用該線程的 run 方法。
      *
-     * @param r
      */
     public void execute(final Runnable r) {
         try {
@@ -75,7 +74,6 @@ public class DeathThreadPool {
     /**
      * 使該線程開始執行；Java 虛擬機調用該線程的 run 方法。
      *
-     * @param t
      */
     public void execute(final Thread t) {
         try {
@@ -90,7 +88,6 @@ public class DeathThreadPool {
      *
      * @param r     要執行的任務
      * @param delay 從現在開始延遲執行的時間
-     * @return
      */
     public ScheduledFuture<?> schedule(final Runnable r, final long delay) {
         try {
@@ -117,7 +114,6 @@ public class DeathThreadPool {
      * @param r            要執行的任務
      * @param initialDelay 首次執行的延遲時間
      * @param period       連續執行之間的週期
-     * @return
      */
     public ScheduledFuture<?> scheduleAtFixedRate(final Runnable r, final long initialDelay, final long period) {
         try {
@@ -134,7 +130,6 @@ public class DeathThreadPool {
      *
      * @param r     - 要執行的任務
      * @param delay - 從現在開始延遲執行的時間
-     * @return
      */
     public ScheduledFuture<?> pcSchedule(final L1PcMonitor r, final long delay) {
         try {
@@ -163,7 +158,6 @@ public class DeathThreadPool {
      * @param command      - 要執行的任務
      * @param initialDelay - 首次執行的延遲時間
      * @param period       - 連續執行之間的週期
-     * @return
      */
     public ScheduledFuture<?> scheduleAtFixedRate(final TimerTask command, final long initialDelay, final long period) {
         try {
@@ -214,7 +208,6 @@ public class DeathThreadPool {
      * @param task   - 所要安排的任務。
      * @param delay  - 執行任務前的延遲時間，單位是毫秒。
      * @param period - 執行各後續任務之間的時間間隔，單位是毫秒。
-     * @return
      */
     public Timer aiScheduleAtFixedRate(final TimerTask task, final long delay, final long period) {
         try {
@@ -259,10 +252,6 @@ public class DeathThreadPool {
      * RejectedExecutionException - 如果任務不能按期執行 NullPointerException異常 - 如果命令是空的
      * IllegalArgumentException - 如果週期小於或等於零
      *
-     * @param r
-     * @param initialDelay
-     * @param period
-     * @return
      */
     public ScheduledFuture<?> pcScheduleAtFixedRateHell(L1PcMonitor r, long initialDelay, long period) {
         return _pcScheduler.scheduleAtFixedRate(r, initialDelay, period, TimeUnit.MILLISECONDS);

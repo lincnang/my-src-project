@@ -17,7 +17,6 @@ public class L1SkillUseMode {
      *
      * @param user  執行者
      * @param skill 技能資料
-     * @return
      */
     public boolean isConsume(L1Character user, L1Skills skill) {
         int mpConsume = skill.getMpConsume();

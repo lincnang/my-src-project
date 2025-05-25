@@ -37,8 +37,6 @@ public class DropMapTable {
     /**
      * 更新物品註記
      *
-     * @param npcId
-     * @param itemId
      */
     private static void updata_name(int mapid, int itemId) {
         Connection cn = null;
@@ -64,7 +62,6 @@ public class DropMapTable {
     /**
      * 刪除錯誤物品資料
      *
-     * @param objid
      */
     private static void errorItem(int itemid) {
         Connection con = null;

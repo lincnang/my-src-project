@@ -46,7 +46,6 @@ public class ClanAllianceReading {
     /**
      * 建立資料
      *
-     * @param alliance
      */
     public void insertAlliance(final L1Alliance alliance) {
         _lock.lock();
@@ -60,8 +59,6 @@ public class ClanAllianceReading {
     /**
      * 更新資料
      *
-     * @param order_id
-     * @param totalList
      */
     public void updateAlliance(final int order_id, final ArrayList<L1Clan> totalList) {
         _lock.lock();
@@ -75,7 +72,6 @@ public class ClanAllianceReading {
     /**
      * 刪除資料
      *
-     * @param order_id
      */
     public void deleteAlliance(final int order_id) {
         _lock.lock();
@@ -89,8 +85,6 @@ public class ClanAllianceReading {
     /**
      * 取得指定同盟資料
      *
-     * @param clan_id
-     * @return
      */
     public L1Alliance getAlliance(final int clan_id) {
         _lock.lock();

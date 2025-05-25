@@ -334,7 +334,6 @@ public class L1AttackPc extends L1AttackMode {
     }
     /**
      * 玩家攻擊NPC命中計算
-     * @return
      */
     private boolean calcNpcHit() { // 判斷對 NPC 的攻擊是否命中
         int gfxid = _targetNpc.getNpcTemplate().get_gfxid(); // 取得目標 NPC 的外觀 ID（圖像 ID）
@@ -448,7 +447,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 鏡像 暗影閃避
      *
-     * @return
      */
     private int calcSkillAdd() {
         int value = 0;
@@ -513,7 +511,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 料理追加命中
      *
-     * @return
      */
     private int hitUp() {
         int hitUp = 0;
@@ -855,8 +852,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 武器亂數傷害計算
      *
-     * @param weaponMaxDamage
-     * @return
      */
     private int weaponDamage1(int weaponMaxDamage) {
         int weaponDamage;
@@ -944,8 +939,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 屬性加成、道具加成、力量加成、初始加成計算
      *
-     * @param weaponTotalDamage
-     * @return
      */
     private double weaponDamage2(double weaponTotalDamage) {
         double dmg = 0.0D;
@@ -1120,8 +1113,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 其它增傷計算
      *
-     * @param dmg
-     * @return
      */
     private double pcDmgMode(double dmg) {
         dmg = calcBuffDamage(dmg);// 近戰BUFF增傷
@@ -1224,7 +1215,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 攻擊PC時的傷害計算
      *
-     * @return
      */
     public int calcPcDamage() {
         if (_targetPc == null) {
@@ -1968,7 +1958,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 攻擊NPC時的傷害計算
      *
-     * @return
      */
     private int calcNpcDamage() {
         if (_targetNpc == null) {
@@ -2230,7 +2219,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 料裡增傷
      *
-     * @return
      */
     private double dmgUp() {
         double dmg = 0.0D;
@@ -2267,10 +2255,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 魔法武器傷害計算
      *
-     * @param pcInstance
-     * @param character
-     * @param weaponTotalDamage
-     * @return
      */
     private double weaponSkill(L1PcInstance pcInstance, L1Character character, double weaponTotalDamage) {
         double dmg;
@@ -2310,8 +2294,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 近戰武器輔助魔法增傷
      *
-     * @param dmg
-     * @return
      */
     private double calcBuffDamage(double dmg) {
         if (_weaponType == 20) {// 弓
@@ -2363,7 +2345,6 @@ public class L1AttackPc extends L1AttackMode {
      * 祝福武器 銀/米索莉/奧裡哈魯根材質武器<BR>
      * 其他屬性定義
      *
-     * @return
      */
     private int calcMaterialBlessDmg() {
         int damage = 0;
@@ -2687,7 +2668,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 附加劇毒機率計算
      *
-     * @param target
      */
     private void addPcPoisonAttack(L1Character target) {
         if (_weaponId != 0 && _pc.hasSkillEffect(ENCHANT_VENOM)) {
@@ -2707,7 +2687,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 屬火、燃斗、勇猛意志增傷計算
      *
-     * @param dmg
      */
     private double BuffDmgUp(double dmg) {
         int random = _random.nextInt(100) + 1;

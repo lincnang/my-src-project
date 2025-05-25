@@ -13,7 +13,6 @@ public class L1DropMob {
     /**
      * 最小量
      *
-     * @return
      */
     public int getMin() {
         return this._min;
@@ -26,7 +25,6 @@ public class L1DropMob {
     /**
      * 最大量
      *
-     * @return
      */
     public int getMax() {
         return this._max;
@@ -39,7 +37,6 @@ public class L1DropMob {
     /**
      * 機率
      *
-     * @return
      */
     public int getChance() {
         return this._chance;

@@ -42,9 +42,6 @@ public class NPC_Ezpay extends NpcExecutor {
     /**
      * 展示指定頁面
      *
-     * @param pc
-     * @param npc
-     * @param page
      */
     private static final void showPage(L1PcInstance pc, L1NpcInstance npc, int page) {
         Map<Integer, int[]> list = pc.get_otherList().SHOPLIST;

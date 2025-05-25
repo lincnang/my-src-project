@@ -17,9 +17,6 @@ public class Encryption {
     /**
      * 設置加密解密模組
      *
-     * @param clientID
-     * @param seed
-     * @throws ClientIdExistsException
      */
     public void initKeys(final long seed) throws Exception {
         try {
@@ -40,9 +37,6 @@ public class Encryption {
      * 加密
      *
      * @param buf         char[]
-     * @param currentKeys LineageKeys
-     * @return
-     * @throws NoEncryptionKeysSelectedException
      */
     public char[] encrypt(final char[] buf) throws Exception {
         try {
@@ -64,9 +58,6 @@ public class Encryption {
     /**
      * 加密處理
      *
-     * @param buf
-     * @param currentKeys
-     * @return
      */
     private char[] _encrypt(final char[] buf) {
         try {
@@ -91,10 +82,6 @@ public class Encryption {
      * 解密
      *
      * @param buf         byte[]
-     * @param length
-     * @param currentKeys
-     * @return
-     * @throws NoEncryptionKeysSelectedException
      */
     public byte[] decrypt(final byte[] buf) throws Exception {
         try {
@@ -116,10 +103,6 @@ public class Encryption {
     /**
      * 解密處理
      *
-     * @param buf
-     * @param size
-     * @param currentKeys
-     * @return
      */
     private byte[] _decrypt(final byte[] buf) {
         try {

@@ -39,7 +39,6 @@ public class L1Quest {
     /**
      * 任務編號
      *
-     * @return
      */
     public int get_id() {
         return _id;
@@ -48,7 +47,6 @@ public class L1Quest {
     /**
      * 任務編號
      *
-     * @param _id
      */
     public void set_id(int _id) {
         this._id = _id;
@@ -57,7 +55,6 @@ public class L1Quest {
     /**
      * 任務NAMEID
      *
-     * @return
      */
     public String get_questname() {
         return _questname;
@@ -66,7 +63,6 @@ public class L1Quest {
     /**
      * 任務NAMEID
      *
-     * @param _questname
      */
     public void set_questname(String _questname) {
         this._questname = _questname;
@@ -75,7 +71,6 @@ public class L1Quest {
     /**
      * 任務CLASS
      *
-     * @return
      */
     public String get_questclass() {
         return _questclass;
@@ -84,7 +79,6 @@ public class L1Quest {
     /**
      * 任務CLASS
      *
-     * @param _questclass
      */
     public void set_questclass(String _questclass) {
         this._questclass = _questclass;
@@ -93,7 +87,6 @@ public class L1Quest {
     /**
      * 任務是否啟用
      *
-     * @return
      */
     public boolean is_queststart() {
         return _queststart;
@@ -102,7 +95,6 @@ public class L1Quest {
     /**
      * 任務是否啟用
      *
-     * @param _queststart
      */
     public void set_queststart(boolean _queststart) {
         this._queststart = _queststart;
@@ -111,7 +103,6 @@ public class L1Quest {
     /**
      * 任務可執行等級
      *
-     * @return
      */
     public int get_questlevel() {
         return _questlevel;
@@ -120,7 +111,6 @@ public class L1Quest {
     /**
      * 任務可執行等級
      *
-     * @param _questlevel
      */
     public void set_questlevel(int _questlevel) {
         this._questlevel = _questlevel;
@@ -129,7 +119,6 @@ public class L1Quest {
     /**
      * 任務步驟
      *
-     * @return
      */
     public int get_difficulty() {
         return _difficulty;
@@ -138,7 +127,6 @@ public class L1Quest {
     /**
      * 任務步驟
      *
-     * @param _difficulty
      */
     public void set_difficulty(int _difficulty) {
         this._difficulty = _difficulty;
@@ -147,7 +135,6 @@ public class L1Quest {
     /**
      * 任務說明
      *
-     * @return
      */
     public String get_note() {
         return _note;
@@ -156,7 +143,6 @@ public class L1Quest {
     /**
      * 任務說明
      *
-     * @param _note
      */
     public void set_note(String _note) {
         this._note = _note;
@@ -165,7 +151,6 @@ public class L1Quest {
     /**
      * 任務可執行職業設置
      *
-     * @param questuser
      */
     public void set_questuser(int questuser) {
         try {
@@ -270,8 +255,6 @@ public class L1Quest {
     /**
      * 可執行職業判斷
      *
-     * @param pc
-     * @return
      */
     public boolean check(final L1PcInstance pc) {
         try {

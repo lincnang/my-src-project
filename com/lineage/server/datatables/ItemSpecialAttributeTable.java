@@ -121,8 +121,6 @@ public class ItemSpecialAttributeTable {
     /**
      * 傳回指定編號特殊屬性
      *
-     * @param id
-     * @return
      */
     public L1ItemSpecialAttribute getAttrId(final int id) {
         return _atrrList.get(id);

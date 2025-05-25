@@ -16,8 +16,6 @@ public class S_RetrieveDevilKingList extends ServerBasePacket {
     /**
      * 提煉 武器/防具 物品名單
      *
-     * @param pc
-     * @param items
      */
     public S_RetrieveDevilKingList(final L1PcInstance pc, final int objid, final List<L1ItemInstance> items) {
         this.writeC(S_RETRIEVE_LIST);

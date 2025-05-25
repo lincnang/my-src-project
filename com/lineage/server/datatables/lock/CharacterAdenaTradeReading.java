@@ -41,7 +41,6 @@ public class CharacterAdenaTradeReading {
     /**
      * 創建一個新的交易
      *
-     * @param adenaTrade
      */
     public boolean createAdenaTrade(final L1CharacterAdenaTrade adenaTrade) {
         this._lock.lock();
@@ -57,9 +56,6 @@ public class CharacterAdenaTradeReading {
     /**
      * 更新交易狀態
      *
-     * @param id
-     * @param over
-     * @return
      */
     public boolean updateAdenaTrade(final int id, final int over) {
         this._lock.lock();
@@ -75,7 +71,6 @@ public class CharacterAdenaTradeReading {
     /**
      * 獲取最大交易流水號
      *
-     * @return
      */
     public int nextId() {
         this._lock.lock();
@@ -91,7 +86,6 @@ public class CharacterAdenaTradeReading {
     /**
      * 獲取所有金幣交易清單
      *
-     * @return
      */
     public Map<Integer, L1CharacterAdenaTrade> getAdenaTrades() {
         this._lock.lock();
@@ -107,7 +101,6 @@ public class CharacterAdenaTradeReading {
     /**
      * 獲取所有交易清單
      *
-     * @return
      */
     public Collection<L1CharacterAdenaTrade> getAllCharacterAdenaTrades() {
         this._lock.lock();
@@ -123,8 +116,6 @@ public class CharacterAdenaTradeReading {
     /**
      * 根據流水號獲取出售的金幣
      *
-     * @param id
-     * @return
      */
     public L1CharacterAdenaTrade getCharacterAdenaTrade(final int id) {
         this._lock.lock();

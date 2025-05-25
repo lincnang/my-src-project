@@ -41,10 +41,6 @@ public class L1DollInstance2 extends L1NpcInstance {  //src016
     /**
      * 召喚魔法娃娃
      *
-     * @param template
-     * @param master
-     * @param itemObjId
-     * @param type
      */
     public L1DollInstance2(L1Npc template, L1PcInstance master, int itemObjId, L1Doll type) {
         super(template);
@@ -216,7 +212,6 @@ public class L1DollInstance2 extends L1NpcInstance {  //src016
     /**
      * 傳回娃娃召喚剩餘時間
      *
-     * @return
      */
     public int get_time() {
         return _time;
@@ -225,7 +220,6 @@ public class L1DollInstance2 extends L1NpcInstance {  //src016
     /**
      * 設定娃娃召喚時間
      *
-     * @param time
      */
     public void set_time(int time) {
         _time = time;
@@ -427,7 +421,6 @@ public class L1DollInstance2 extends L1NpcInstance {  //src016
     /**
      * 觸發娃娃特效動畫
      *
-     * @param i
      */
     public void show_action(int i) {
         if (!_type.getPowerList().isEmpty()) {

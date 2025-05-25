@@ -87,7 +87,6 @@ public class L1ItemPower_bless {  //src039
     /**
      * "1:力","2:敏","3:體","4:精","5:智","6:魅","7:血","8:魔","9:額","10:防","11:抗"
      *
-     * @return
      */
     public int get_hole_dex() {
         return _hole_dex;
@@ -101,7 +100,6 @@ public class L1ItemPower_bless {  //src039
     /**
      * "1:力","2:敏","3:體","4:精","5:智","6:魅","7:血","8:魔","9:額","10:防","11:抗"
      *
-     * @return
      */
     public int get_hole_int() {
         return _hole_int;
@@ -115,7 +113,6 @@ public class L1ItemPower_bless {  //src039
     /**
      * "1:力","2:敏","3:體","4:精","5:智","6:魅","7:血","8:魔","9:額","10:防","11:抗"
      *
-     * @return
      */
     public int get_hole_dmg() {
         return _hole_dmg;
@@ -129,7 +126,6 @@ public class L1ItemPower_bless {  //src039
     /**
      * "1:力","2:敏","3:體","4:精","5:智","6:魅","7:血","8:魔","9:額","10:防","11:抗"
      *
-     * @return
      */
     public int get_hole_bowdmg() {
         return _hole_bowdmg;
@@ -143,7 +139,6 @@ public class L1ItemPower_bless {  //src039
     /**
      * "1:力","2:敏","3:體","4:精","5:智","6:魅","7:血","8:魔","9:額","10:防","11:抗"
      *
-     * @return
      */
     public int get_hole_mcdmg() {
         return _hole_mcdmg;

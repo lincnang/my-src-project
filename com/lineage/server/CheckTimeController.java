@@ -94,9 +94,6 @@ public final class CheckTimeController implements Runnable {
      * [地監可停留時間剩餘 %0分了] 1527<BR>
      * [地監可停留時間剩餘 %0秒了] 1528<BR>
      *
-     * @param pc
-     * @param usedTime
-     * @param limitTime
      */
     private final void checkTime(final L1PcInstance pc, final int usedTime, final int limitTime) {
         // 已超過可停留時間

@@ -30,7 +30,6 @@ public class CharOtherTable implements CharOtherStorage {
     /**
      * 刪除遺失額外紀錄資料
      *
-     * @param objid
      */
     private static void delete(final int objid) {
         // 清空資料庫紀錄
@@ -53,8 +52,6 @@ public class CharOtherTable implements CharOtherStorage {
     /**
      * 加入額外紀錄清單
      *
-     * @param objId
-     * @param buffTmp
      */
     private static void addMap(final int objId, final L1PcOther other) {
         final L1PcOther otherTmp = _otherMap.get(objId);
@@ -137,7 +134,6 @@ public class CharOtherTable implements CharOtherStorage {
     /**
      * 取回保留額外紀錄
      *
-     * @param pc
      */
     @Override
     public L1PcOther getOther(final L1PcInstance pc) {
@@ -148,8 +144,6 @@ public class CharOtherTable implements CharOtherStorage {
     /**
      * 增加/更新 保留額外紀錄
      *
-     * @param objId
-     * @param other
      */
     @Override
     public void storeOther(final int objId, final L1PcOther other) {
@@ -165,7 +159,6 @@ public class CharOtherTable implements CharOtherStorage {
     /**
      * 更新紀錄
      *
-     * @param other
      */
     private void updateOther(final L1PcOther other) {
         Connection cn = null;
@@ -222,7 +215,6 @@ public class CharOtherTable implements CharOtherStorage {
     /**
      * 增加紀錄
      *
-     * @param other
      */
     private void addNewOther(final L1PcOther other) {
         Connection cn = null;

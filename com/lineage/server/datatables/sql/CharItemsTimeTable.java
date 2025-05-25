@@ -120,8 +120,6 @@ public class CharItemsTimeTable implements CharItemsTimeStorage {
     /**
      * 是否存在時間資料
      *
-     * @param itemr_obj_id
-     * @return
      */
     @SuppressWarnings("resource")
     public boolean isExistTimeData(int itemr_obj_id) {

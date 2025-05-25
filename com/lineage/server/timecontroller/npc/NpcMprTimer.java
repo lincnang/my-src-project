@@ -24,7 +24,6 @@ public class NpcMprTimer extends TimerTask {
     /**
      * 判斷是否執行回復
      *
-     * @param mob
      */
     private static void mpUpdate(final L1MonsterInstance mob) {
         int mprInterval = mob.getNpcTemplate().get_mprinterval();
@@ -48,8 +47,6 @@ public class NpcMprTimer extends TimerTask {
     /**
      * 執行回復MP
      *
-     * @param mob
-     * @param mpr
      */
     private static void mprInterval(final L1MonsterInstance mob, final int mpr) {
         try {

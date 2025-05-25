@@ -32,7 +32,6 @@ public class PetTable implements PetStorage {
     /**
      * 道具遺失 刪除相關資訊
      *
-     * @param item_obj_id
      */
     private static void delete(int item_obj_id) {
         Connection co = null;

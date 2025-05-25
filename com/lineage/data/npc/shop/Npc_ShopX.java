@@ -49,8 +49,6 @@ public class Npc_ShopX extends NpcExecutor {
     /**
      * 我的出售紀錄
      *
-     * @param pc
-     * @param npc
      */
     public static void cmd_1(L1PcInstance pc, L1NpcInstance npc) {
         try {
@@ -69,8 +67,6 @@ public class Npc_ShopX extends NpcExecutor {
     /**
      * 決定價格
      *
-     * @param pc
-     * @param npc
      */
     public static void cmd_ma(final L1PcInstance pc, final L1NpcInstance npc, final long amount) {
         try {
@@ -185,8 +181,6 @@ public class Npc_ShopX extends NpcExecutor {
     /**
      * 我要取消托售
      *
-     * @param pc
-     * @param npc
      */
     public static void cmd_over(L1PcInstance pc, L1NpcInstance npc) {
         try {
@@ -205,8 +199,6 @@ public class Npc_ShopX extends NpcExecutor {
     /**
      * 我要進行道具出售
      *
-     * @param pc
-     * @param npc
      */
     public static void cmd_s2(L1PcInstance pc, L1NpcInstance npc) {
         try {
@@ -348,9 +340,6 @@ public class Npc_ShopX extends NpcExecutor {
     /**
      * 展示出售紀錄
      *
-     * @param pc
-     * @param npcobjid
-     * @param page
      */
     public static void showPage(L1PcInstance pc, int npcobjid, int page) {
         Map<Integer, L1ShopS> list = pc.get_otherList().SHOPXMAP;

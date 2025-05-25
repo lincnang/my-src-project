@@ -20,9 +20,6 @@ public class L1Trade {
     /**
      * 加入交易物品到視窗
      *
-     * @param pc
-     * @param itemid
-     * @param itemcount
      */
     public void tradeAddItem(final L1PcInstance pc, final int itemObjid, final long itemcount) {
         // 取回交易對象
@@ -57,7 +54,6 @@ public class L1Trade {
     /**
      * 執行交易
      *
-     * @param pc
      */
     public void tradeOK(final L1PcInstance pc) {
         // 取回交易對象
@@ -119,7 +115,6 @@ public class L1Trade {
     /**
      * 交易取消
      *
-     * @param pc
      */
     public void tradeCancel(final L1PcInstance pc) {
         final L1PcInstance tradeTarget = (L1PcInstance) World.get().findObject(pc.getTradeID());

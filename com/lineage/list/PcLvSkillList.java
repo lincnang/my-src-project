@@ -10,8 +10,6 @@ public class PcLvSkillList {
     /**
      * 一般魔法老師(限制教學到3級魔法)
      *
-     * @param pc
-     * @return
      */
     public static ArrayList<Integer> scount(final L1PcInstance pc) {
         final ArrayList<Integer> skillList = new ArrayList<Integer>();
@@ -95,7 +93,6 @@ public class PcLvSkillList {
     /**
      * 幻術
      *
-     * @param pc
      */
     public static ArrayList<Integer> isIllusionist(final L1PcInstance pc) {
         final ArrayList<Integer> skillList = new ArrayList<Integer>();
@@ -125,7 +122,6 @@ public class PcLvSkillList {
     /**
      * 龍騎
      *
-     * @param pc
      */
     public static ArrayList<Integer> isDragonKnight(final L1PcInstance pc) {
         final ArrayList<Integer> skillList = new ArrayList<Integer>();
@@ -150,7 +146,6 @@ public class PcLvSkillList {
     /**
      * 黑妖
      *
-     * @param pc
      */
     public static ArrayList<Integer> isDarkelf(final L1PcInstance pc) {
         final ArrayList<Integer> skillList = new ArrayList<Integer>();
@@ -188,7 +183,6 @@ public class PcLvSkillList {
     /**
      * 法師
      *
-     * @param pc
      */
     public static ArrayList<Integer> isWizard(final L1PcInstance pc) {
         final ArrayList<Integer> skillList = new ArrayList<Integer>();
@@ -249,7 +243,6 @@ public class PcLvSkillList {
     /**
      * 精靈
      *
-     * @param pc
      */
     public static ArrayList<Integer> isElf(final L1PcInstance pc) {
         final ArrayList<Integer> skillList = new ArrayList<Integer>();
@@ -369,7 +362,6 @@ public class PcLvSkillList {
     /**
      * 騎士
      *
-     * @param pc
      */
     public static ArrayList<Integer> isKnight(final L1PcInstance pc) {
         final ArrayList<Integer> skillList = new ArrayList<Integer>();
@@ -397,7 +389,6 @@ public class PcLvSkillList {
     /**
      * 王族
      *
-     * @param pc
      */
     public static ArrayList<Integer> isCrown(final L1PcInstance pc) {
         final ArrayList<Integer> skillList = new ArrayList<Integer>();

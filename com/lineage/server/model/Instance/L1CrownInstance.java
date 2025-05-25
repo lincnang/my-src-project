@@ -33,7 +33,6 @@ public class L1CrownInstance extends L1NpcInstance {
     /**
      * 對像:王冠
      *
-     * @param template
      */
     public L1CrownInstance(final L1Npc template) {
         super(template);

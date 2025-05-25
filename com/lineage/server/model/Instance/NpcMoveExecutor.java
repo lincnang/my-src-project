@@ -17,7 +17,6 @@ public abstract class NpcMoveExecutor {
     /**
      * 往指定面向移動1格
      *
-     * @param dir
      */
     public abstract void setDirectionMove(int dir);
 
@@ -26,7 +25,6 @@ public abstract class NpcMoveExecutor {
      *
      * @param x 目標點Ｘ
      * @param y 目標點Ｙ
-     * @return
      */
     public abstract int moveDirection(int x, int y);
 
@@ -35,15 +33,12 @@ public abstract class NpcMoveExecutor {
      *
      * @param tx 目標點Ｘ
      * @param ty 目標點Ｙ
-     * @return
      */
     public abstract int targetReverseDirection(int tx, int ty);
 
     /**
      * 對於前進方向是否有障礙的確認
      *
-     * @param h
-     * @return
      */
     public abstract int checkObject(final int h);
 

@@ -25,9 +25,6 @@ public class S_RangeSkill extends ServerBasePacket {
      *
      * @param cha        攻擊者
      * @param targetList 被攻擊者列表
-     * @param spellgfx
-     * @param actionId
-     * @param type
      */
     public S_RangeSkill(final L1Character cha, final ArrayList<TargetStatus> targetList, final int spellgfx, final int actionId, final int type) {
         // 0000: 07 12 be ac bf 01 c1 83 e4 7e 04 47 8f c2 01 ab

@@ -34,7 +34,6 @@ public class WorldDarkelf {
     /**
      * 全部黑妖玩家
      *
-     * @return
      */
     public Collection<L1PcInstance> all() {
         try {
@@ -50,7 +49,6 @@ public class WorldDarkelf {
     /**
      * 黑妖玩家清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1PcInstance> map() {
         return _isDarkelf;
@@ -59,8 +57,6 @@ public class WorldDarkelf {
     /**
      * 加入黑妖玩家清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1PcInstance value) {
         try {
@@ -73,7 +69,6 @@ public class WorldDarkelf {
     /**
      * 移出黑妖玩家清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {

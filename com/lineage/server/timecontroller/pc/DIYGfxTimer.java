@@ -24,7 +24,6 @@ public class DIYGfxTimer extends TimerTask {
     /**
      * 判斷
      *
-     * @param tgpc
      * @return true:執行 false:不執行
      */
     private static boolean check(L1PcInstance tgpc) {
@@ -53,7 +52,6 @@ public class DIYGfxTimer extends TimerTask {
     /**
      * 加入清單
      *
-     * @param pc
      */
     public static void addMember(final L1PcInstance pc) {
         if ((pc == null) || _DIYList.contains(pc)) {
@@ -65,7 +63,6 @@ public class DIYGfxTimer extends TimerTask {
     /**
      * 移出清單
      *
-     * @param pc
      */
     public static void removeMember(final L1PcInstance pc) {
         if ((pc == null) || !_DIYList.contains(pc)) {

@@ -21,7 +21,6 @@ class L1ShopSellOrder {
     /**
      * 傳回堆疊數量
      *
-     * @return
      */
     public int getCount() {
         return this._count;

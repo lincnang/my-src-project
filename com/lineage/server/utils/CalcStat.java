@@ -8,14 +8,6 @@ public class CalcStat {
     /**
      * 各職業等級提升時HP上升值計算
      *
-     * @param charType
-     * 職業
-     * @param baseMaxHp
-     * 目前HP最大值
-     * @param baseCon
-     * 體質
-     * @param originalHpup
-     * @return HP上升後數值
      */
     public static final int[] ORIGINAL_CON = new int[]{10, 14, 12, 12, 8, 14, 12, 16};
     private static Random rnd = new Random();
@@ -65,7 +57,6 @@ public class CalcStat {
     /**
      * 精神增加魔防
      *
-     * @param wis
      * @return mrBonus
      */
     public static int calcStatMr(int wis) {
@@ -167,10 +158,6 @@ public class CalcStat {
     /**
      * 各職業等級提升時MP上升值計算
      *
-     * @param charType
-     * @param baseMaxMp
-     * @param baseWis
-     * @param originalMpup
      * @return MP上升後數值
      */
     public static short calcStatMp(int charType, int baseMaxMp, int baseWis, int originalMpup) {

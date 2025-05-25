@@ -94,7 +94,6 @@ public class GetbackTable {
     /**
      * pc現在地歸還取得。
      *
-     * @param pc
      * @param bScroll_Escape (未使用)
      * @return locx, locy, mapid順格納配列
      */
@@ -163,7 +162,6 @@ public class GetbackTable {
     /**
      * 具有多重回村座標
      *
-     * @return
      */
     private boolean isSpecifyArea() {
         return ((this._areaX1 != 0) && (this._areaY1 != 0) && (this._areaX2 != 0) && (this._areaY2 != 0));

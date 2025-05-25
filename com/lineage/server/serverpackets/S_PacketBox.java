@@ -912,9 +912,6 @@ public class S_PacketBox extends ServerBasePacket {
     /**
      * 升級經驗獎勵狀態
      *
-     * @param time
-     * @param ck
-     * @param ck2
      */
     public S_PacketBox(int time, boolean ck, boolean ck2) {
         writeC(S_EVENT);
@@ -928,10 +925,6 @@ public class S_PacketBox extends ServerBasePacket {
     /**
      * 鎧甲護持
      *
-     * @param subCode
-     * @param time
-     * @param gfxid
-     * @param type
      */
     public S_PacketBox(int subCode, int time, int gfxid, int type) {
         writeC(S_EVENT);
@@ -949,8 +942,6 @@ public class S_PacketBox extends ServerBasePacket {
     /**
      * 精靈的祝賀禮物
      *
-     * @param subCode
-     * @param b
      */
     public S_PacketBox(final int subCode, final byte[] b) {
         writeC(S_EVENT);

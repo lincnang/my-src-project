@@ -19,9 +19,6 @@ public class PacketPrint {
      * <font color=#0000ff>印出封包</font> 目的:<BR>
      * 用於檢查客戶端傳出的封包資料<BR>
      *
-     * @param data
-     * @param len
-     * @return
      */
     public String printData(final byte[] data, final int len) {
         final StringBuffer result = new StringBuffer();
@@ -69,9 +66,6 @@ public class PacketPrint {
     /**
      * <font color=#0000ff>將數字轉成 16 進位</font>
      *
-     * @param data
-     * @param digits
-     * @return
      */
     private String fillHex(final int data, final int digits) {
         String number = Integer.toHexString(data);

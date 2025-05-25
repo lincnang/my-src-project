@@ -38,7 +38,6 @@ public abstract class ClientBasePacket {
     /**
      * 載入BYTE陣列
      *
-     * @param abyte0
      */
     protected void read(final byte abyte0[]) {
         try {
@@ -52,7 +51,6 @@ public abstract class ClientBasePacket {
     /**
      * 由byte[]中取回一個int
      *
-     * @return
      */
     protected int readD() {
         try {
@@ -81,7 +79,6 @@ public abstract class ClientBasePacket {
     /**
      * 由byte[]中取回一個byte
      *
-     * @return
      */
     protected int readC() {
         try {
@@ -103,7 +100,6 @@ public abstract class ClientBasePacket {
     /**
      * 由byte[]中取回一個short
      *
-     * @return
      */
     protected int readH() {
         try {
@@ -126,7 +122,6 @@ public abstract class ClientBasePacket {
     /**
      * 由byte[]中取回一個short
      *
-     * @return
      */
     protected int readCH() {
         try {
@@ -150,7 +145,6 @@ public abstract class ClientBasePacket {
     /**
      * 由byte[]中取回一個double
      *
-     * @return
      */
     protected double readF() {
         try {
@@ -179,7 +173,6 @@ public abstract class ClientBasePacket {
     /**
      * 由byte[]中取回一個String
      *
-     * @return
      */
     protected String readS() {
         String s = null;
@@ -198,7 +191,6 @@ public abstract class ClientBasePacket {
     /**
      * 由byte[]中取回一組byte[]
      *
-     * @return
      */
     protected byte[] readByte() {
         final byte[] result = new byte[_decrypt.length - _off];

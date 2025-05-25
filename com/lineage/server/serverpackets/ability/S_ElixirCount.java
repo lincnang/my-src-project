@@ -13,9 +13,6 @@ public class S_ElixirCount extends ServerBasePacket {
     /**
      * 萬能藥使用數量
      *
-     * @param stage
-     * @param invWeight
-     * @param maxWeight
      */
     public S_ElixirCount(final int count) {
         this.writeC(S_EXTENDED_PROTOBUF);

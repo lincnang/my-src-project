@@ -33,7 +33,6 @@ public class WorldSummons {
     /**
      * 全部召喚獸
      *
-     * @return
      */
     public Collection<L1SummonInstance> all() {
         try {
@@ -49,7 +48,6 @@ public class WorldSummons {
     /**
      * 召喚獸清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1SummonInstance> map() {
         return _isSummons;
@@ -58,8 +56,6 @@ public class WorldSummons {
     /**
      * 加入召喚獸清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1SummonInstance value) {
         try {
@@ -72,7 +68,6 @@ public class WorldSummons {
     /**
      * 移出召喚獸清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {

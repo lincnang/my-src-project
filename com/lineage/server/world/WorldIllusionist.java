@@ -34,7 +34,6 @@ public class WorldIllusionist {
     /**
      * 全部幻術玩家
      *
-     * @return
      */
     public Collection<L1PcInstance> all() {
         try {
@@ -50,7 +49,6 @@ public class WorldIllusionist {
     /**
      * 幻術玩家清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1PcInstance> map() {
         return _isIllusionist;
@@ -59,8 +57,6 @@ public class WorldIllusionist {
     /**
      * 加入幻術玩家清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1PcInstance value) {
         try {
@@ -73,7 +69,6 @@ public class WorldIllusionist {
     /**
      * 移出幻術玩家清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {

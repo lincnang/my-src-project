@@ -36,8 +36,6 @@ public class AutoTable {
     /**
      * 建立清單
      *
-     * @param pc
-     * @param srpc
      */
     public void AddAuto(final L1PcInstance pc, final L1Character srpc) {
         Connection con = null;
@@ -62,7 +60,6 @@ public class AutoTable {
     /**
      * 查詢清單
      *
-     * @param pc
      */
     public void AddAutolist(final L1PcInstance pc) {
         Connection conn = null;

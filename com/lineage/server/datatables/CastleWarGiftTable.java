@@ -115,8 +115,6 @@ public class CastleWarGiftTable {
     /**
      * 是否具有攻城獎勵設置
      *
-     * @param objid
-     * @return
      */
     public boolean isGift(final int key) {
         final ArrayList<Gift> list = _gifts.get(key);
@@ -129,7 +127,6 @@ public class CastleWarGiftTable {
     /**
      * 給予攻城獎勵
      *
-     * @param key
      */
     public void get_gift(final int key) {
         L1Clan castle_clan = null;
@@ -165,9 +162,6 @@ public class CastleWarGiftTable {
     /**
      * 給予物品
      *
-     * @param castle_clan
-     * @param itemid
-     * @param count
      */
     private void get_gift(final L1Clan castle_clan, final Gift gift) {
         try {
@@ -202,7 +196,6 @@ public class CastleWarGiftTable {
     /**
      * 回收其他人物該物品
      *
-     * @param itemid
      */
     private void recover_item(final Gift gift) {
         try {
@@ -281,7 +274,6 @@ public class CastleWarGiftTable {
     /**
      * 登入遊戲給予附加能力 by terry0412
      *
-     * @param tgpc
      */
     public final void login_gift(final L1PcInstance tgpc) {
         try {

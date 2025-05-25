@@ -17,8 +17,6 @@ public class DmgAcMr {
     /**
      * 防禦減傷
      *
-     * @param target
-     * @return
      */
     public static int calcDefense(L1Character target) {
         try {
@@ -50,10 +48,6 @@ public class DmgAcMr {
     /**
      * 魔防減傷 弓類無視魔防
      *
-     * @param pc
-     * @param target
-     * @param dmg
-     * @return
      */
     public static double calcMrDefense(L1PcInstance pc, L1Character target, double dmg, L1ItemInstance weapon) {
         if (weapon.getItem().getType1() == 20) {// 弓類型武器
@@ -79,10 +73,6 @@ public class DmgAcMr {
     /**
      * 魔防減傷
      *
-     * @param pc
-     * @param target
-     * @param dmg
-     * @return
      */
     public static double calcMrDefense2(L1PcInstance pc, L1Character target, double dmg, L1ItemInstance weapon) {
         int mr = getTargetMr(target);
@@ -105,8 +95,6 @@ public class DmgAcMr {
     /**
      * 取得對方魔防
      *
-     * @param target
-     * @return
      */
     private static int getTargetMr(L1Character target) {
         int mr = 0;
@@ -138,8 +126,6 @@ public class DmgAcMr {
     /**
      * 智力魔攻加成傷害計算
      *
-     * @param pc
-     * @return
      */
     public static double getDamage(L1PcInstance pc) {
         L1ItemInstance weapon = pc.getWeapon();
@@ -178,8 +164,6 @@ public class DmgAcMr {
     /**
      * 智力魔攻加成傷害計算
      *
-     * @param pc
-     * @return
      */
     public static double getSpInt(L1PcInstance pc) {
         int spByItem = pc.getSp() - pc.getTrueSp();

@@ -37,8 +37,6 @@ public class EffectCubeExecutor {
     /**
      * 幻術師技能狀態送出的執行(對成員)
      *
-     * @param cha
-     * @param effect
      */
     private static void cubeToAlly(final L1Character cha, final L1EffectInstance effect) {
         final int castGfx = SkillsTable.get().getTemplate(effect.getSkillId()).getCastGfx();
@@ -75,8 +73,6 @@ public class EffectCubeExecutor {
     /**
      * 幻術師技能狀態送出的執行(對敵人)
      *
-     * @param cha
-     * @param effect
      */
     private static void cubeToEnemy(final L1Character cha, final L1EffectInstance effect) {
         final int castGfx2 = SkillsTable.get().getTemplate(effect.getSkillId()).getCastGfx2();
@@ -97,8 +93,6 @@ public class EffectCubeExecutor {
     /**
      * 取回技能編號
      *
-     * @param effectType
-     * @return
      */
     private static int cubeToAllyId(final L1EffectType effectType) {
         int cubeToAllyId = 0;
@@ -124,8 +118,6 @@ public class EffectCubeExecutor {
     /**
      * 取回技能編號
      *
-     * @param effectType
-     * @return
      */
     private static int cubeToEnemyId(final L1EffectType effectType) {
         int cubeToEnemyId = 0;
@@ -151,7 +143,6 @@ public class EffectCubeExecutor {
     /**
      * 幻術師技能狀態送出的判斷
      *
-     * @param effect
      */
     protected void cubeBurn(final L1EffectInstance effect) {
         try {

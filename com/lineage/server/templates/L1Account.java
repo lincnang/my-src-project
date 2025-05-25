@@ -117,7 +117,6 @@ public class L1Account {
     /**
      * 帳戶是否首儲值
      *
-     * @return
      */
     public int get_first_pay() {
         return _first_pay;
@@ -126,7 +125,6 @@ public class L1Account {
     /**
      * 帳戶是否首儲值
      *
-     * @param first_pay
      */
     public void set_first_pay(int first_pay) {
         _first_pay = first_pay;
@@ -135,7 +133,6 @@ public class L1Account {
     /**
      * 帳戶tam點數
      *
-     * @return
      */
     public int get_tam_point() { // 成長果實系統(Tam幣)
         return _tam_point;
@@ -144,7 +141,6 @@ public class L1Account {
     /**
      * 帳戶tam點數
      *
-     * @param tam_point
      */
     public void set_tam_point(int tam_point) { // 成長果實系統(Tam幣)
         _tam_point = tam_point;

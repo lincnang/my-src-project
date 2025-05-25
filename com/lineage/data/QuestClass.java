@@ -31,8 +31,6 @@ public class QuestClass {
     /**
      * 加入CLASS清單
      *
-     * @param npcid
-     * @param className
      */
     public void addList(final int questid, final String className) {
         if (className.equals("0")) {
@@ -65,7 +63,6 @@ public class QuestClass {
     /**
      * Quest(任務) 設置啟用執行
      *
-     * @param event
      */
     public void execute(final L1Quest quest) {
         try {
@@ -84,8 +81,6 @@ public class QuestClass {
      * 設置任務開始執行<BR>
      * 相關NPC可與執行者進行對話<BR>
      *
-     * @param pc
-     * @param questid
      */
     public void startQuest(final L1PcInstance pc, final int questid) {
         try {
@@ -104,8 +99,6 @@ public class QuestClass {
      * 假設該任務可以重複執行<BR>
      * 在此設置任務狀態移除<BR>
      *
-     * @param pc
-     * @param questid
      */
     public void endQuest(final L1PcInstance pc, final int questid) {
         try {
@@ -122,8 +115,6 @@ public class QuestClass {
     /**
      * 展示任務說明<BR>
      *
-     * @param pc
-     * @param questid
      */
     public void showQuest(final L1PcInstance pc, final int questid) {
         try {
@@ -140,8 +131,6 @@ public class QuestClass {
     /**
      * 任務終止
      *
-     * @param pc
-     * @param questid
      */
     public void stopQuest(L1PcInstance pc, int questid) {
         try {

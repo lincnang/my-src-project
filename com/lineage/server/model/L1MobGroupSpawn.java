@@ -93,8 +93,6 @@ public class L1MobGroupSpawn {
     /**
      * 是否可召喚
      *
-     * @param mob
-     * @return
      */
     private boolean canSpawn(L1NpcInstance mob) {
         if ((mob.getMap().isInMap(mob.getLocation())) && (mob.getMap().isPassable(mob.getLocation(), mob))) {

@@ -419,8 +419,6 @@ public class Npc_clan extends NpcExecutor {
     /**
      * 創立血盟技能
      *
-     * @param pc
-     * @param npc
      */
     private void get_clanSkill(L1PcInstance pc, L1NpcInstance npc) {
         // 道具不足的顯示清單
@@ -482,7 +480,6 @@ public class Npc_clan extends NpcExecutor {
     /**
      * 解散血盟
      *
-     * @param pc
      */
     private void delClan(L1PcInstance pc) {
         final L1Clan clan = pc.getClan();

@@ -144,10 +144,6 @@ public class L1PolyMorph {
     /**
      * 執行變身
      *
-     * @param cha
-     * @param polyId
-     * @param timeSecs
-     * @param cause
      */
     public static void doPoly(L1Character cha, int polyId, int timeSecs, int cause) {  //src014
         try {
@@ -399,7 +395,6 @@ public class L1PolyMorph {
     /**
      * 取消變身
      *
-     * @param cha
      */
     public static void undoPoly(L1Character cha) {//src014
         try {
@@ -496,9 +491,6 @@ public class L1PolyMorph {
     /**
      * 是否為可裝備的武器
      *
-     * @param polyId
-     * @param weaponType
-     * @return
      */
     public static boolean isEquipableWeapon(int polyId, int weaponType) {
         try {
@@ -520,9 +512,6 @@ public class L1PolyMorph {
     /**
      * 是否為可裝備的防具
      *
-     * @param polyId
-     * @param armorType
-     * @return
      */
     public static boolean isEquipableArmor(int polyId, int armorType) {
         try {
@@ -544,8 +533,6 @@ public class L1PolyMorph {
     /**
      * 變身原因
      *
-     * @param polyId
-     * @param cause
      * @return true 可以變身 ; false 無法變身
      */
     public static boolean isMatchCause(final int polyId, final int cause) {
@@ -567,7 +554,6 @@ public class L1PolyMorph {
     /**
      * 變身原因 (檢查任務ID)
      *
-     * @param polyId
      * @return true 可以變身 ; false 無法變身
      */
     public static boolean isQuestIdEnd(final L1PcInstance pc, final int polyId) {

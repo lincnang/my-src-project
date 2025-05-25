@@ -124,7 +124,7 @@ public class W_SK0017 extends L1WeaponSkillType {
 
             // 計算額外傷害
             // 【力量+敏捷】*2 +【浮動0-50】
-            double damage = ((_random.nextInt(pc.getStr() + pc.getDex()) + 1) * _type1) + +dmg1();
+            double damage = ((_random.nextInt(pc.getStr() + pc.getDex()) + 1) * _type1) + dmg1();
 
             if (_type3 > 0) {
                 damage *= (_type3 / 100D);

@@ -68,7 +68,6 @@ public class InnTable {
     /**
      * 更新此房間資料數據
      *
-     * @param inn
      */
     public void updateInn(L1Inn inn) {
         Connection con = null;

@@ -136,7 +136,6 @@ public class collect {
     /**
      * 閃避
      *
-     * @return
      */
     public int getShanbi() {
         return _addshanbi;
@@ -145,7 +144,6 @@ public class collect {
     /**
      * 迴避
      *
-     * @return
      */
     public int getHuibi() {
         return _addhuibi;
@@ -154,7 +152,6 @@ public class collect {
     /**
      * 藥水增加
      *
-     * @return
      */
     public int getYaoshui() {
         return _addyaoshui;
@@ -163,7 +160,6 @@ public class collect {
     /**
      * 負重
      *
-     * @return
      */
     public int getFuzhong() {
         return _addfuzhong;
@@ -172,7 +168,6 @@ public class collect {
     /**
      * 經驗
      *
-     * @return
      */
     public int getExp() {
         return _addexp;
@@ -181,7 +176,6 @@ public class collect {
     /**
      * 昏迷耐性
      *
-     * @return
      */
     public int getHunmi() {
         return _addhunmi;
@@ -190,7 +184,6 @@ public class collect {
     /**
      * 支撐耐性
      *
-     * @return
      */
     public int getZhicheng() {
         return _addzhicheng;
@@ -199,7 +192,6 @@ public class collect {
     /**
      * 石化耐性
      *
-     * @return
      */
     public int getShihua() {
         return _addshihua;
@@ -208,7 +200,6 @@ public class collect {
     /**
      * 睡眠耐性
      *
-     * @return
      */
     public int getShuimian() {
         return _addshuimian;
@@ -217,7 +208,6 @@ public class collect {
     /**
      * 寒冰耐性
      *
-     * @return
      */
     public int getHanbing() {
         return _addhanbing;
@@ -226,7 +216,6 @@ public class collect {
     /**
      * 暗黑耐性
      *
-     * @return
      */
     public int getAnhei() {
         return _addanhei;

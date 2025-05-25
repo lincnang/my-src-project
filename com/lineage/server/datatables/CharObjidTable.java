@@ -86,8 +86,6 @@ public class CharObjidTable {
     /**
      * 更改已用
      *
-     * @param objid
-     * @param char_name
      */
     public void reChar(int objid, String char_name) {
         _objList.put(objid, char_name);
@@ -96,8 +94,6 @@ public class CharObjidTable {
     /**
      * 加入該OBJID
      *
-     * @param objid
-     * @param char_name
      */
     public void addChar(int objid, String char_name) {
         int tmp = charObjid(char_name);
@@ -109,8 +105,6 @@ public class CharObjidTable {
     /**
      * 是否具有該OBJID
      *
-     * @param objid
-     * @return
      */
     public String isChar(int objid) {
         String username = _objList.get(objid);
@@ -123,8 +117,6 @@ public class CharObjidTable {
     /**
      * 該名稱所屬的OBJID
      *
-     * @param char_name
-     * @return
      */
     public int charObjid(String char_name) {
         for (Integer integer : _objList.keySet()) {
@@ -139,8 +131,6 @@ public class CharObjidTable {
     /**
      * 移除已使用名稱
      *
-     * @param objid
-     * @return
      */
     public void charRemove(String char_name) {
         int objid = charObjid(char_name);
@@ -154,8 +144,6 @@ public class CharObjidTable {
     /**
      * 加入該OBJID
      *
-     * @param clan_id
-     * @param clan_name
      */
     public void addClan(int clan_id, String clan_name) {
         int tmp = clanObjid(clan_name);
@@ -167,8 +155,6 @@ public class CharObjidTable {
     /**
      * 是否具有該OBJID
      *
-     * @param objid
-     * @return
      */
     public boolean isClan(int clan_id) {
         String username = _objClanList.get(clan_id);
@@ -181,8 +167,6 @@ public class CharObjidTable {
     /**
      * 該名稱所屬的OBJID
      *
-     * @param char_name
-     * @return
      */
     public int clanObjid(String clan_name) {
         for (Integer integer : _objClanList.keySet()) {

@@ -30,7 +30,6 @@ public class WorldBow {
     /**
      * NPC清單
      *
-     * @return
      */
     public HashMap<Integer, L1BowInstance> map() {
         return _isBow;
@@ -39,8 +38,6 @@ public class WorldBow {
     /**
      * 加入NPC清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1BowInstance value) {
         try {
@@ -53,7 +50,6 @@ public class WorldBow {
     /**
      * 移出NPC清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {

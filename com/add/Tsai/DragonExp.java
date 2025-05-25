@@ -89,7 +89,6 @@ public class DragonExp {
     /**
      * 傳回上次登出時間(殷海薩祝福計算用)
      *
-     * @return
      */
     public int getLastLoginOutTime() {
         return _outtime;
@@ -98,7 +97,6 @@ public class DragonExp {
     /**
      * 設定上次登出時間(殷海薩祝福計算用)
      *
-     * @return
      */
     public void setLastLoginOutTime(int out_time) {
         _outtime = out_time;
@@ -107,7 +105,6 @@ public class DragonExp {
     /**
      * 殷海薩的祝福-休息系統(EXP)
      *
-     * @return
      */
     public int getStoreExp() {
         return _storeexp;
@@ -116,7 +113,6 @@ public class DragonExp {
     /**
      * 殷海薩的祝福-休息系統(EXP)
      *
-     * @param exp
      */
     public void setStoreExp(final int exp) {
         _storeexp = exp;

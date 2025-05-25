@@ -186,8 +186,6 @@ public final class InvSwapTable {
     /**
      * 保存をクリック時に呼び出される。
      *
-     * @param pc
-     * @param code
      */
     public void toSaveSet(L1PcInstance pc, int code) {
         //

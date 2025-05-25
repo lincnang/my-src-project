@@ -15,8 +15,6 @@ public class S_ChangeShape extends ServerBasePacket {
     /**
      * 物件外型改變
      *
-     * @param obj
-     * @param polyId
      */
     public S_ChangeShape(final L1Character obj, final int polyId) {
         this.buildPacket(obj, polyId, false);
@@ -25,9 +23,6 @@ public class S_ChangeShape extends ServerBasePacket {
     /**
      * 物件外型改變
      *
-     * @param obj
-     * @param polyId
-     * @param weaponTakeoff
      */
     public S_ChangeShape(final L1Character obj, final int polyId, final boolean weaponTakeoff) {
         this.buildPacket(obj, polyId, weaponTakeoff);

@@ -107,7 +107,6 @@ public class TimeInform {
      *                  type = 2 : X時X分X秒<BR>
      *                  type = 3 : X年X月X日-X時X分X秒<BR>
      * @param type_year 0:西元 1:民國
-     * @return
      */
     public static String getNowTime(int type, int type_year) {
         String NowTime = null;

@@ -36,7 +36,6 @@ public class PacketSc implements Runnable {
     /**
      * 加入工作列隊
      *
-     * @param data
      */
     private void requestWork(final byte[] data) {
         _queue.offer(data);
@@ -45,8 +44,6 @@ public class PacketSc implements Runnable {
     /**
      * 加密封包
      *
-     * @param packet
-     * @throws Exception
      */
     public void encrypt(final ServerBasePacket packet) throws Exception {
         final byte[] encrypt = packet.getContent();
@@ -98,7 +95,6 @@ public class PacketSc implements Runnable {
     /**
      * 輸出封包
      *
-     * @param decrypt
      */
     private void outPacket(final byte[] decrypt) {
         try {

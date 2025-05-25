@@ -137,7 +137,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 是否出生於隊長周圍
      *
-     * @return
      */
     public boolean isRespawnScreen() {
         return _respaenScreen;
@@ -146,7 +145,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 設定是否出生於隊長周圍
      *
-     * @param flag
      */
     public void setRespawnScreen(boolean flag) {
         _respaenScreen = flag;
@@ -179,7 +177,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 傳回召喚編號
      *
-     * @return
      */
     public int getId() {
         return _id;
@@ -188,7 +185,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 設定召喚編號
      *
-     * @param id
      */
     public void setId(int id) {
         _id = id;
@@ -285,7 +281,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 召喚延遲(秒)
      *
-     * @param i
      */
     public void setMinRespawnDelay(int i) {
         _minRespawnDelay = i;
@@ -318,8 +313,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 是否到達出生時間
      *
-     * @param npcTemp
-     * @return
      */
     private boolean isSpawnTime(L1NpcInstance npcTemp) {
         if (_nextSpawnTime != null) {
@@ -358,7 +351,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 傳回BOSS存在時間限制(分)
      *
-     * @return
      */
     public int get_existTime() {
         return _existTime;
@@ -367,7 +359,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 設定BOSS存在時間限制(分)
      *
-     * @param exist_time
      */
     public void set_existTime(int exist_time) {
         _existTime = exist_time;
@@ -584,7 +575,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 執行召喚
      *
-     * @param spawnNumber
      */
     protected void doSpawn(final int spawnNumber) { // 初期配置
         // 指定時間外、次spawn予約終。
@@ -917,7 +907,6 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
     /**
      * 傳回NpcInstance資料
      *
-     * @return
      */
     public final L1NpcInstance getNpcTemp() {
         return npcTemp;

@@ -184,9 +184,6 @@ public class C_War extends ClientBasePacket {
     /**
      * 對城宣戰
      *
-     * @param player
-     * @param clan
-     * @param enemyClan
      * @param type      0:宣戰 2:投降 3:終止
      */
     private void war_castle(final L1PcInstance player, final L1Clan clan, final L1Clan enemyClan, final int type) {

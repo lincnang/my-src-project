@@ -13,14 +13,6 @@ public class S_ChatText extends ServerBasePacket {
     /**
      * 聊天頻道字串
      *
-     * @param chat_time
-     * @param chat_type
-     * @param chat_text
-     * @param chat_name
-     * @param server_id
-     * @param chat_objid
-     * @param chat_locX
-     * @param chat_locY
      */
     public S_ChatText(final int chat_time, final int chat_type, final String chat_text, final String chat_name, final int server_id, int chat_objid, int chat_locX, int chat_locY) {
         this.writeC(S_EXTENDED_PROTOBUF);
@@ -39,11 +31,6 @@ public class S_ChatText extends ServerBasePacket {
     /**
      * 聊天頻道字串
      *
-     * @param chat_time
-     * @param chat_type
-     * @param chat_text
-     * @param chat_name
-     * @param server_id
      */
     public S_ChatText(final int chat_time, final int chat_type, final String chat_text, final String chat_name, final int server_id) {
         this.writeC(S_EXTENDED_PROTOBUF);

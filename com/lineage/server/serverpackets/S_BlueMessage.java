@@ -11,7 +11,6 @@ public class S_BlueMessage extends ServerBasePacket {
     /**
      * 畫面中藍色訊息
      *
-     * @param type
      */
     public S_BlueMessage(final int type) {
         this.buildPacket(type, null);
@@ -20,8 +19,6 @@ public class S_BlueMessage extends ServerBasePacket {
     /**
      * 畫面中藍色訊息
      *
-     * @param type
-     * @param msg1
      */
     public S_BlueMessage(final int type, final String msg1) {
         this.buildPacket(type, new String[]{msg1});
@@ -30,9 +27,6 @@ public class S_BlueMessage extends ServerBasePacket {
     /**
      * 畫面中藍色訊息
      *
-     * @param type
-     * @param msg1
-     * @param msg2
      */
     public S_BlueMessage(final int type, final String msg1, final String msg2) {
         this.buildPacket(type, new String[]{msg1, msg2});
@@ -41,8 +35,6 @@ public class S_BlueMessage extends ServerBasePacket {
     /**
      * 畫面中藍色訊息
      *
-     * @param type
-     * @param info
      */
     public S_BlueMessage(final int type, final String[] info) {
         this.buildPacket(type, info);

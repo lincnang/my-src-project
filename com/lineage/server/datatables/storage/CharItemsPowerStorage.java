@@ -16,9 +16,6 @@ public interface CharItemsPowerStorage {
     /**
      * 增加古文字物品資料
      *
-     * @param objid
-     * @param power
-     * @return
      */
     public void storeItem(final int objId, final L1ItemPower_name power) throws Exception;
 
@@ -27,8 +24,6 @@ public interface CharItemsPowerStorage {
     /**
      * 更新凹槽資料
      *
-     * @param item_obj_id
-     * @param power
      */
     public void updateItem(final int item_obj_id, final L1ItemPower_name power);
 }

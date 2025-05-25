@@ -40,8 +40,6 @@ public class ConfigDescs {
     /**
      * 傳回SHOW
      *
-     * @param nameid
-     * @return
      */
     public static String getShow(int nameid) {
         try {
@@ -55,7 +53,6 @@ public class ConfigDescs {
     /**
      * 傳回SHOW size
      *
-     * @return
      */
     public static int get_show_size() {
         return _show_desc.size();

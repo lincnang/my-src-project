@@ -124,8 +124,6 @@ public class L1Teleport {
     /**
      * 隨機執行移動
      *
-     * @param pc
-     * @param effectable
      */
     public static void randomTeleport(final L1PcInstance pc, final boolean effectable) {
         try {

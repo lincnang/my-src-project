@@ -78,7 +78,6 @@ public final class MapsGroupTable {
     /**
      * 傳回全部入場地圖資料
      *
-     * @return
      */
     public final Map<Integer, L1MapsLimitTime> getGroupMaps() {
         return _mapsGroup;
@@ -87,8 +86,6 @@ public final class MapsGroupTable {
     /**
      * 檢查人物所在地圖編號是否符合
      *
-     * @param mapId
-     * @return
      */
     public final L1MapsLimitTime findGroupMap(final int mapId) {
         for (final L1MapsLimitTime mapsLimitTime : _mapsGroup.values()) {

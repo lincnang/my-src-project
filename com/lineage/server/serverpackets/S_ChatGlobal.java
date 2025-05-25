@@ -14,8 +14,6 @@ public class S_ChatGlobal extends ServerBasePacket {
     /**
      * 廣播頻道
      *
-     * @param pc
-     * @param chat
      */
     public S_ChatGlobal(final L1PcInstance pc, final String chat) {
         buildPacket(pc, chat);
@@ -24,8 +22,6 @@ public class S_ChatGlobal extends ServerBasePacket {
     /**
      * NPC對話輸出
      *
-     * @param npc
-     * @param chat
      */
     public S_ChatGlobal(final L1NpcInstance npc, final String chat) {
         writeC(S_MESSAGE);
@@ -43,8 +39,6 @@ public class S_ChatGlobal extends ServerBasePacket {
     /**
      * 共用廣播頻道
      *
-     * @param pc
-     * @param chat
      */
     public S_ChatGlobal(final String chat) {
         writeC(S_MESSAGE);

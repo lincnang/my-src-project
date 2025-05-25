@@ -36,7 +36,6 @@ public class L1WarCastle implements L1CommandExecutor {
     /**
      * 目前時間
      *
-     * @return
      */
     public Calendar getRealTime() {
         final TimeZone _tz = TimeZone.getTimeZone(Config.TIME_ZONE);

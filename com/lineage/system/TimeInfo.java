@@ -133,7 +133,6 @@ public class TimeInfo {
     /**
      * <font color=#00800>傳回計時器已使用時間</font>
      *
-     * @return
      */
     public long get() {
         return System.currentTimeMillis() - _begin;

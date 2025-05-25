@@ -50,9 +50,6 @@ public class S_PacketBoxWar extends ServerBasePacket {
      * <font color=#00800> 攻城戰結束訊息<BR>
      * </font>
      *
-     * @param value    被佔領城堡數量 1: 肯特城 2: 妖魔城 3: 風木城 4: 奇巖城 5: 海音城 6: 侏儒城 7: 亞丁城 8:
-     *                 狄亞得要塞
-     * @param clanName 血盟名稱
      */
     public S_PacketBoxWar() {
         final HashMap<Integer, String> map = WorldClan.get().castleClanMap();
@@ -108,7 +105,6 @@ public class S_PacketBoxWar extends ServerBasePacket {
      * </font>
      *
      * @param subCode  訊息編號
-     * @param id
      * @param name     盟主名稱
      * @param clanName 血盟名稱
      */

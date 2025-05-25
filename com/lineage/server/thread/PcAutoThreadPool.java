@@ -50,7 +50,6 @@ public class PcAutoThreadPool {
      *
      * @param r     要執行的任務
      * @param delay 從現在開始延遲執行的時間
-     * @return
      */
     public ScheduledFuture<?> schedule(final Runnable r, final long delay) {
         try {

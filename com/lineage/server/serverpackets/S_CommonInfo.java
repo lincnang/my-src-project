@@ -11,7 +11,6 @@ public class S_CommonInfo extends ServerBasePacket {
     /**
      * 服務器登入訊息(使用string.tbl)
      *
-     * @param skillid
      */
     public S_CommonInfo(final int type, final String[] info) {
         buildPacket(type, info);

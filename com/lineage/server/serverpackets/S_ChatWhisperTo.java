@@ -19,8 +19,6 @@ public class S_ChatWhisperTo extends ServerBasePacket {
     /**
      * 管理器調用密語
      *
-     * @param from
-     * @param chat
      */
     public S_ChatWhisperTo(String from, String chat) {
         writeC(S_OPCODE_WHISPERCHAT);

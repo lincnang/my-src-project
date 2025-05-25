@@ -39,9 +39,6 @@ public class PacketHandler extends PacketHandlerExecutor {
     /**
      * 客戶端封包處理
      *
-     * @param decrypt
-     * @param //*object
-     * @throws Exception
      */
     @Override
     public void handlePacket(final byte[] decrypt) {
@@ -265,9 +262,6 @@ public class PacketHandler extends PacketHandlerExecutor {
     /**
      * 日版封包顯示
      *
-     * @param data
-     * @param len
-     * @return
      */
     public String DataToPacket(byte[] data, int len) {
         StringBuffer result = new StringBuffer();
@@ -315,9 +309,6 @@ public class PacketHandler extends PacketHandlerExecutor {
     /**
      * 日版封包顯示
      *
-     * @param data
-     * @param digits
-     * @return
      */
     private String HexToDex(int data, int digits) {
         String number = Integer.toHexString(data);

@@ -15,8 +15,6 @@ public class S_ChangeName extends ServerBasePacket {
     /**
      * 物件名稱改變
      *
-     * @param objectId
-     * @param name
      */
     public S_ChangeName(int objectId, String name) {
         writeC(S_CHANGE_DESC);
@@ -27,9 +25,6 @@ public class S_ChangeName extends ServerBasePacket {
     /**
      * 物件名稱改變(GM)
      *
-     * @param objectId
-     * @param name
-     * @param mode
      */
     public S_ChangeName(int objectId, String name, int mode) {
         String color = "";

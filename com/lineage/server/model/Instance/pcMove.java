@@ -46,7 +46,6 @@ public class pcMove extends NpcMoveExecutor {
      * @param y  目前Y
      * @param tx 目標X
      * @param ty 目標Y
-     * @return
      */
     private static int _targetDirection(final int h, final int x, final int y, final int tx, final int ty) {
         try {
@@ -233,9 +232,6 @@ public class pcMove extends NpcMoveExecutor {
     /**
      * 遺傳路徑移動 add hjx1000
      *
-     * @param x
-     * @param y
-     * @return
      */
     @SuppressWarnings("unused")
     private int _check_targe_list(int x, int y) {
@@ -266,10 +262,6 @@ public class pcMove extends NpcMoveExecutor {
     /**
      * 周邊8點方位判斷 add hjx1000
      *
-     * @param x
-     * @param y
-     * @param d
-     * @return
      */
     private int _check_targe_re8(int x, int y, double d) {
         int dir = _check_targe(x - 1, y, d);
@@ -311,9 +303,6 @@ public class pcMove extends NpcMoveExecutor {
     /**
      * 遺傳路徑判斷 add hjx1000
      *
-     * @param x
-     * @param y
-     * @param d
      * @return 傳回第一個移動點
      */
     @SuppressWarnings("unchecked")
@@ -358,8 +347,6 @@ public class pcMove extends NpcMoveExecutor {
     /**
      * 前進方向障礙者攻擊判斷
      *
-     * @param dir
-     * @return
      */
     private boolean _exsistCharacterBetweenTarget(final int dir) {
         try {
@@ -480,7 +467,6 @@ public class pcMove extends NpcMoveExecutor {
      * 轉向2,3點判斷
      *
      * @param h 方向
-     * @return
      */
     @Override
     public int checkObject(final int h) {
@@ -521,8 +507,6 @@ public class pcMove extends NpcMoveExecutor {
     /**
      * 取得正面
      *
-     * @param ary
-     * @param d
      */
     private void _getFront(final int[] ary, final int d) {
         switch (d) {
@@ -588,8 +572,6 @@ public class pcMove extends NpcMoveExecutor {
     /**
      * 移動位置
      *
-     * @param ary
-     * @param d
      */
     private void _moveLocation(final int[] ary, final int d) {
         switch (d) {

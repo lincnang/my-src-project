@@ -13,7 +13,6 @@ public class L1EmblemIcon {
     }
 
     /**
-     * @param _clanid the _clanid to set
      */
     public void set_clanid(final int clanid) {
         _clanid = clanid;

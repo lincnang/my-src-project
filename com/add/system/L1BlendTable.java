@@ -142,7 +142,6 @@ public class L1BlendTable {
     /**
      * 載入道具製造清單
      *
-     * @param npcid
      */
     private void loadCraftList(final int npcid) {
         Connection con = null;
@@ -171,8 +170,6 @@ public class L1BlendTable {
     /**
      * 傳回此製造命令的資料
      *
-     * @param craftkey
-     * @return
      */
     public L1Blend getTemplate(String craftkey) {
         return _CraftIndex.get(craftkey);
@@ -181,7 +178,6 @@ public class L1BlendTable {
     /**
      * 傳回製造清單
      *
-     * @return
      */
     public Map<String, String> get_craftlist() {
         return _CraftList;

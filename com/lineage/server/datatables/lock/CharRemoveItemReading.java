@@ -44,7 +44,6 @@ public class CharRemoveItemReading {
     /**
      * 傳回全部輔助(自動刪物)倉庫數據
      *
-     * @return
      */
     public Map<Integer, CopyOnWriteArrayList<L1ItemInstance>> allItems() {
         this._lock.lock();
@@ -60,8 +59,6 @@ public class CharRemoveItemReading {
     /**
      * 傳回輔助(自動刪物)倉庫數據
      *
-     * @param char_id
-     * @return
      */
     public CopyOnWriteArrayList<L1ItemInstance> loadItems(final int char_id) {
         this._lock.lock();
@@ -77,8 +74,6 @@ public class CharRemoveItemReading {
     /**
      * 加入輔助(自動刪物)倉庫數據
      *
-     * @param char_id
-     * @param item
      */
     public void insertItem(final int char_id, final L1ItemInstance item) {
         this._lock.lock();
@@ -92,8 +87,6 @@ public class CharRemoveItemReading {
     /**
      * 輔助(自動刪物)倉庫物品資料刪除
      *
-     * @param char_id
-     * @param item
      */
     public void deleteItem(final int char_id, final L1ItemInstance item) {
         this._lock.lock();
@@ -107,9 +100,6 @@ public class CharRemoveItemReading {
     /**
      * 輔助(自動刪物)倉庫是否有指定數據
      *
-     * @param char_id
-     * @param objid
-     * @return
      */
     public boolean getUserItems(final int char_id, final int objid) {
         this._lock.lock();

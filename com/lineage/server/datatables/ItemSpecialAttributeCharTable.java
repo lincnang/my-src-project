@@ -37,8 +37,6 @@ public class ItemSpecialAttributeCharTable {
     /**
      * 初始化建立資料
      *
-     * @param item_obj_id
-     * @param ItemAttr
      */
     private static void addValue(final int item_obj_id, final L1ItemSpecialAttributeChar ItemAttr) {
         final L1ItemInstance item = WorldItem.get().getItem(item_obj_id);
@@ -94,8 +92,6 @@ public class ItemSpecialAttributeCharTable {
     /**
      * 傳回指定人物物品特殊屬
      *
-     * @param itemobjid
-     * @return
      */
     public L1ItemSpecialAttributeChar getAttrId(final int itemobjid) {
         return _AtrrCharList.get(itemobjid);
@@ -104,9 +100,6 @@ public class ItemSpecialAttributeCharTable {
     /**
      * 增加物品特殊屬性
      *
-     * @param itemobjid
-     * @param ItemAttr
-     * @throws Exception
      */
     public void storeItem(final int itemobjid, final L1ItemSpecialAttributeChar ItemAttr) throws Exception {
         if (_AtrrCharList.get(itemobjid) != null) {
@@ -139,8 +132,6 @@ public class ItemSpecialAttributeCharTable {
     /**
      * 更新物品特殊屬性
      *
-     * @param itemobjid
-     * @param ItemAttr
      */
     public void updateItem(final int itemobjid, final L1ItemSpecialAttributeChar ItemAttr) {
         Connection co = null;

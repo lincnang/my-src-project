@@ -154,7 +154,6 @@ public class L1Clan {
     /**
      * 加入血盟成員清單
      *
-     * @param member_name
      */
     public void addMemberName(final String member_name) {
         _lock.lock();
@@ -175,7 +174,6 @@ public class L1Clan {
     /**
      * 移出血盟成員清單
      *
-     * @param member_name
      */
     public void delMemberName(final String member_name) {
         _lock.lock();
@@ -197,7 +195,6 @@ public class L1Clan {
     /**
      * 血盟線上成員數量
      *
-     * @return
      */
     public int getOnlineClanMemberSize() {
         int count = 0;
@@ -233,7 +230,6 @@ public class L1Clan {
     /**
      * 全部血盟成員數量
      *
-     * @return
      */
     public int getAllMembersSize() {
         try {
@@ -322,7 +318,6 @@ public class L1Clan {
     /**
      * 血盟線上成員
      *
-     * @return
      */
     public L1PcInstance[] getOnlineClanMember() {
         // 清單緩存
@@ -346,7 +341,6 @@ public class L1Clan {
     /**
      * 血盟線上成員名單
      *
-     * @return
      */
     public StringBuilder getOnlineMembersFP() {
         // 清單緩存
@@ -370,7 +364,6 @@ public class L1Clan {
     /**
      * 全部血盟成員名單(包含離線)
      *
-     * @return
      */
     public StringBuilder getAllMembersFP() {
         // 清單緩存
@@ -399,7 +392,6 @@ public class L1Clan {
     /**
      * 全部血盟成員姓名清單
      *
-     * @return
      */
     public String[] getAllMembers() {
         return (String[]) _membersNameList.toArray(new String[_membersNameList.size()]);
@@ -408,7 +400,6 @@ public class L1Clan {
     /**
      * 血盟倉庫資料
      *
-     * @return
      */
     public L1DwarfForClanInventory getDwarfForClanInventory() {
         return _dwarfForClan;
@@ -560,7 +551,6 @@ public class L1Clan {
     /**
      * 全部血盟成員名單(包含離線)
      *
-     * @return
      */
     public ArrayList<L1PcInstance> getAllMembersRank() {
         // 清單緩存

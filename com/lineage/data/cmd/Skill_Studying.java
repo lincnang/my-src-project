@@ -672,7 +672,6 @@ public class Skill_Studying implements Skill_StudyingExecutor {
      * @param pc      使用物品的人物
      * @param skillId 技能編號
      * @param itemObj 點選的物品 objectId
-     * @return
      */
     private void spellBook(final L1PcInstance pc, final int skillId, final int itemObj) {
         // 刪除道具

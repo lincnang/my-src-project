@@ -62,9 +62,6 @@ public class NPC_Promotion extends NpcExecutor {
     /**
      * 展示指定頁面
      *
-     * @param pc
-     * @param npc
-     * @param page
      */
     private static void showPage(final L1PcInstance pc, final L1NpcInstance npc, int page) {
         final Map<Integer, int[]> list = pc.get_otherList().SHOPLIST;

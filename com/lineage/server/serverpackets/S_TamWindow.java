@@ -21,7 +21,6 @@ public class S_TamWindow extends ServerBasePacket {
     /**
      * 帳號顯示TAM幣
      *
-     * @param pc
      */
     public S_TamWindow(final L1PcInstance pc) {
         writeC(S_EXTENDED_PROTOBUF);

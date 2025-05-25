@@ -21,10 +21,6 @@ public class S_NPCTalkReturn extends ServerBasePacket {
     /**
      * 可交換物件清單
      *
-     * @param objid
-     * @param htmlid
-     * @param pc
-     * @param list
      */
     public S_NPCTalkReturn(int objid, String htmlid, L1PcInstance pc, List<Integer> list) {
         this.writeC(S_HYPERTEXT);
@@ -50,10 +46,7 @@ public class S_NPCTalkReturn extends ServerBasePacket {
     /**
      * NPC對話視窗
      *
-     * @param objid
-     * @param htmlid
      * @param list   List
-     * @param pc
      */
     public S_NPCTalkReturn(int objid, String htmlid, List<L1ItemInstance> list, L1PcInstance pc) {
         this.writeC(S_HYPERTEXT);
@@ -78,10 +71,6 @@ public class S_NPCTalkReturn extends ServerBasePacket {
     /**
      * NPC對話視窗
      *
-     * @param npc
-     * @param objid
-     * @param action
-     * @param data
      */
     public S_NPCTalkReturn(final L1NpcTalkData npc, final int objid, final int action, final String[] data) {
         String htmlid = "";
@@ -98,9 +87,6 @@ public class S_NPCTalkReturn extends ServerBasePacket {
     /**
      * NPC對話視窗
      *
-     * @param npc
-     * @param objid
-     * @param action
      */
     public S_NPCTalkReturn(final L1NpcTalkData npc, final int objid, final int action) {
         this(npc, objid, action, null);
@@ -113,9 +99,6 @@ public class S_NPCTalkReturn extends ServerBasePacket {
     /**
      * NPC對話視窗
      *
-     * @param objid
-     * @param htmlid
-     * @param data
      */
     public S_NPCTalkReturn(final int objid, final String htmlid, final String[] data) {
         this.buildPacket(objid, htmlid, data);
@@ -128,8 +111,6 @@ public class S_NPCTalkReturn extends ServerBasePacket {
     /**
      * NPC對話視窗
      *
-     * @param objid
-     * @param htmlid
      */
     public S_NPCTalkReturn(final int objid, final String htmlid) {
         this.buildPacket(objid, htmlid, null);
@@ -142,8 +123,6 @@ public class S_NPCTalkReturn extends ServerBasePacket {
     /**
      * NPC對話視窗
      *
-     * @param objid
-     * @param html
      */
     public S_NPCTalkReturn(final int objid, final L1NpcHtml html) {
         this.buildPacket(objid, html.getName(), html.getArgs());
@@ -169,8 +148,6 @@ public class S_NPCTalkReturn extends ServerBasePacket {
     /**
      * NPC對話視窗
      *
-     * @param objid
-     * @param htmlid
      */
     private void buildPacket(final int objid, final String htmlid, final String[] data) {
         this.writeC(S_HYPERTEXT);

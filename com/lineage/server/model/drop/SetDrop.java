@@ -32,7 +32,6 @@ public class SetDrop implements SetDropExecutor {//src016
     /**
      * 設置掉落資料
      *
-     * @param droplists
      */
     public void addDropMap(final Map<Integer, ArrayList<L1Drop>> droplists) {
         if (_droplist != null) {
@@ -44,7 +43,6 @@ public class SetDrop implements SetDropExecutor {//src016
     /**
      * 設置指定MAP掉落資料
      *
-     * @param droplists
      */
     @Override
     public void addDropMapX(final Map<Integer, ArrayList<L1DropMap>> droplists) {
@@ -57,7 +55,6 @@ public class SetDrop implements SetDropExecutor {//src016
     /**
      * 設定全怪物掉落資料
      *
-     * @param droplists
      */
     public void addDropMob(Map<Integer, L1DropMob> droplists) {
         if (_moblist != null) {
@@ -69,8 +66,6 @@ public class SetDrop implements SetDropExecutor {//src016
     /**
      * NPC持有物品資料取回
      *
-     * @param npc
-     * @param inventory
      */
     @Override
     public void setDrop(final L1NpcInstance npc, final L1Inventory inventory) {
@@ -80,9 +75,6 @@ public class SetDrop implements SetDropExecutor {//src016
     /**
      * NPC持有物品資料取回
      *
-     * @param npc
-     * @param inventory
-     * @param random
      */
     @Override
     public void setDrop(final L1NpcInstance npc, final L1Inventory inventory, final double random) {
@@ -171,9 +163,7 @@ public class SetDrop implements SetDropExecutor {//src016
     /**
      * 指定地圖NPC持有物品資料取回
      *
-     * @param npc
      * @param inventory 怪物背包
-     * @param dropList
      */
     private void setDrop(final L1NpcInstance npc, final L1Inventory inventory, final ArrayList<L1DropMap> dropListX) {
         final Calendar cal = Calendar.getInstance();
@@ -249,9 +239,6 @@ public class SetDrop implements SetDropExecutor {//src016
     /**
      * 全怪物掉落
      *
-     * @param npc
-     * @param inventory
-     * @param dropList
      */
     private void setDrop(final L1NpcInstance npc, final L1Inventory inventory, final Map<Integer, L1DropMob> moblist) {
         for (Integer key : moblist.keySet()) {
@@ -277,10 +264,7 @@ public class SetDrop implements SetDropExecutor {//src016
     /**
      * 對指定背包加入物件
      *
-     * @param npc
      * @param inventory 怪物背包
-     * @param itemId
-     * @param itemCount
      */
     private void additem(final L1NpcInstance npc, L1Inventory inventory, int itemId, long itemCount) {
         try {

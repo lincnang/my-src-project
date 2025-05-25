@@ -22,8 +22,6 @@ public class S_FollowerPack extends ServerBasePacket {
     /**
      * 物件封包 - 跟隨者
      *
-     * @param follower
-     * @param pc
      */
     public S_FollowerPack(final L1FollowerInstance follower, final L1PcInstance pc) {
         this.writeC(S_PUT_OBJECT);

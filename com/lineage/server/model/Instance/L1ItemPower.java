@@ -89,7 +89,6 @@ public class L1ItemPower {
     /**
      * 抗魔加成變化
      *
-     * @return
      */
     protected int getMr() {
         int mr = _itemInstance.getItem().get_mdef();// DB設定抗魔
@@ -103,7 +102,6 @@ public class L1ItemPower {
     /**
      * 回魔量加成變化
      *
-     * @return
      */
     protected int getMpr() {
         int mpr = _itemInstance.getItem().get_addmpr();// DB設定回魔量
@@ -117,7 +115,6 @@ public class L1ItemPower {
     /**
      * 喝水量加成變化
      *
-     * @return
      */
     protected int getUhp() {
         int uhp = _itemInstance.getItem().get_up_hp_potion();// 增加藥水回復量%
@@ -144,7 +141,6 @@ public class L1ItemPower {
     /**
      * 喝水量加成變化 num
      *
-     * @return
      */
     protected int getUhp_NUM() {
         int uhp_num = _itemInstance.getItem().get_uhp_number();// 增加藥水回復量num
@@ -169,7 +165,6 @@ public class L1ItemPower {
     /**
      * 魔攻加成變化
      *
-     * @return
      */
     protected int getSp() {
         int sp = _itemInstance.getItem().get_addsp();// DB設定SP
@@ -207,7 +202,6 @@ public class L1ItemPower {
     /**
      * 雙擊率加成變化
      *
-     * @return
      */
     protected int getDoubleDmgChance() {
         int x2 = _itemInstance.getItem().getDoubleDmgChance();// DB設定雙擊率
@@ -221,7 +215,6 @@ public class L1ItemPower {
     /**
      * 防具增加命中率加成變化
      *
-     * @return
      */
     protected int getHitModifierByArmor() {
         int hit = _itemInstance.getItem().getHitModifierByArmor();// DB設定命中率
@@ -241,7 +234,6 @@ public class L1ItemPower {
     /**
      * 體力上限加成變化
      *
-     * @return
      */
     protected int get_addhp() {
         int hp = _itemInstance.getItem().get_addhp();// DB設定增加血量
@@ -266,7 +258,6 @@ public class L1ItemPower {
     /**
      * MP上限加成變化
      *
-     * @return
      */
     protected int get_addmp() {
         int mp = _itemInstance.getItem().get_addmp();// DB設定增加mp
@@ -280,7 +271,6 @@ public class L1ItemPower {
     /**
      * 傷害減免加成變化
      *
-     * @return
      */
     protected int getDamageReduction() {
         int reduce = _itemInstance.getItem().getDamageReduction();// DB設定傷害減免
@@ -309,8 +299,6 @@ public class L1ItemPower {
     /**
      * 飾品加成變化
      *
-     * @param owner
-     * @param i
      */
     protected void GreaterAtEnchant(L1PcInstance owner, int randomELevel) {
         int level = _itemInstance.getEnchantLevel();

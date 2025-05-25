@@ -24,9 +24,6 @@ public class S_ShopBuyListCn extends ServerBasePacket {
     /**
      * NPC回收道具
      *
-     * @param pc
-     * @param tgObjid
-     * @param npcid
      */
     public S_ShopBuyListCn(L1PcInstance pc, L1NpcInstance npc) {
         Map<L1ItemInstance, Integer> assessedItems = assessItems(pc.getInventory());

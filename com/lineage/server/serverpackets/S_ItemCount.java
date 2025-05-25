@@ -50,12 +50,6 @@ public class S_ItemCount extends ServerBasePacket {
     /**
      * 選取物品數量 (道具進化使用)
      *
-     * @param objId
-     * @param min
-     * @param max
-     * @param html
-     * @param cmd
-     * @param data
      */
     public S_ItemCount(final int objId, final int min, final int max, final String html, final String cmd, final String[] data) {
         this.writeC(S_HYPERTEXT_INPUT);

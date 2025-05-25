@@ -149,8 +149,6 @@ public class SprTable {
     /**
      * 傳回攻擊速度
      *
-     * @param sprid
-     * @param actid
      * @return 指定spr攻擊速度(ms)
      */
     public int getAttackSpeed(final int sprid, final int actid) {
@@ -169,9 +167,6 @@ public class SprTable {
     /**
      * 傳回移動速度
      *
-     * @param sprid
-     * @param actid
-     * @return
      */
     public int getMoveSpeed(final int sprid, final int actid) {
         if (_dataMap.containsKey(sprid)) {
@@ -189,8 +184,6 @@ public class SprTable {
     /**
      * 有方向技能速度
      *
-     * @param sprid
-     * @return
      */
     public int getDirSpellSpeed(final int sprid) {
         if (_dataMap.containsKey(sprid)) {
@@ -202,8 +195,6 @@ public class SprTable {
     /**
      * 無方向技能速度
      *
-     * @param sprid
-     * @return
      */
     public int getNodirSpellSpeed(final int sprid) {
         if (_dataMap.containsKey(sprid)) {
@@ -215,8 +206,6 @@ public class SprTable {
     /**
      * NPC30動作技能速度
      *
-     * @param sprid
-     * @return
      */
     public int getDirSpellSpeed30(final int sprid) {
         if (_dataMap.containsKey(sprid)) {
@@ -228,8 +217,6 @@ public class SprTable {
     /**
      * 受傷動作速度
      *
-     * @param sprid
-     * @return
      */
     public int getDmg(final int sprid) {
         if (_dataMap.containsKey(sprid)) {
@@ -261,9 +248,6 @@ public class SprTable {
     /**
      * 取回結構
      *
-     * @param sprid
-     * @param actid
-     * @return
      */
     public int[] getFrame(final int sprid, final int actid) {
         if (_dataMap.containsKey(sprid)) {

@@ -125,8 +125,6 @@ public class ShopTable {
     /**
      * 更新物品注記
      *
-     * @param npcId
-     * @param itemId
      */
     private static void updata_name(int npcId, int itemId) {
         Connection cn = null;
@@ -152,7 +150,6 @@ public class ShopTable {
     /**
      * 刪除錯誤資料
      *
-     * @param clan_id
      */
     private static void delete(final int npc_id, final int item_id) {
         Connection cn = null;
@@ -262,8 +259,6 @@ public class ShopTable {
     /**
      * 傳回回收單價
      *
-     * @param itemid
-     * @return
      */
     public int getPrice(final int itemid) {
         int tgprice = 0;// 預設價格
@@ -281,8 +276,6 @@ public class ShopTable {
     /**
      * 傳回此NPCID的商店資料
      *
-     * @param npcId
-     * @return
      */
     public L1Shop get(final int npcId) {
         return _allShops.get(npcId);

@@ -17,8 +17,6 @@ public class S_NPCPack_Doll extends ServerBasePacket {
     /**
      * 物件封包 - 魔法娃娃
      *
-     * @param pet
-     * @param pc
      */
     public S_NPCPack_Doll(final L1DollInstance pet, final L1PcInstance pc) {
         /*
@@ -69,8 +67,6 @@ public class S_NPCPack_Doll extends ServerBasePacket {
     /**
      * 物件封包 - 魔法娃娃
      *
-     * @param pet
-     * @param pc
      */
     public S_NPCPack_Doll(final L1DollInstance2 pet, final L1PcInstance pc) {
         /*

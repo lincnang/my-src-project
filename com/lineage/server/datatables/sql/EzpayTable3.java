@@ -25,7 +25,6 @@ public class EzpayTable3 implements EzpayStorage3 {
      * 傳回指定帳戶購物資料
      *
      * @param loginName 帳號名稱
-     * @return
      */
     public Map<Integer, int[]> ezpayInfo(String loginName) {
         Connection co = null;
@@ -67,7 +66,6 @@ public class EzpayTable3 implements EzpayStorage3 {
      *
      * @param loginName 帳號名稱
      * @param id        流水號
-     * @return
      */
     private boolean is_holding(String loginName, int id) {
         Connection co = null;
@@ -103,7 +101,6 @@ public class EzpayTable3 implements EzpayStorage3 {
      * @param id        ID
      * @param pcname    領取人物
      * @param ip        IP
-     * @return
      */
     public boolean update(String loginName, int id, String pcname, String ip) {
         if (!is_holding(loginName, id)) {// 已經領回

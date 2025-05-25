@@ -163,8 +163,6 @@ public class ServerQuestMobTable {  //src027
     /**
      * 判定玩家所接的任務編號，並且讓怪物顯示特效
      *
-     * @param pc
-     * @param npc
      */
     public synchronized void checkQuestMobGfx(final L1PcInstance pc, L1NpcInstance npc) {
         if (_questMobList == null) {

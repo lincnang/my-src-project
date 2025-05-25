@@ -37,7 +37,6 @@ public class ServerAuctionTimer extends TimerTask {
     /**
      * 取回現在時間
      *
-     * @return
      */
     private static Calendar getRealTime() {
         final TimeZone tz = TimeZone.getTimeZone(Config.TIME_ZONE);
@@ -132,8 +131,6 @@ public class ServerAuctionTimer extends TimerTask {
     /**
      * 以前所有者消
      *
-     * @param houseId
-     * @return
      */
     private static void deleteHouseInfo(final int houseId) {
         try {
@@ -154,7 +151,6 @@ public class ServerAuctionTimer extends TimerTask {
      * 設置得標血盟 小屋編號
      *
      * @param houseId bidderId
-     * @return
      */
     private static void setHouseInfo(final int houseId, final int bidderId) {
         try {
@@ -192,8 +188,6 @@ public class ServerAuctionTimer extends TimerTask {
     /**
      * 結束拍賣 公告移除
      *
-     * @param houseId
-     * @return
      */
     private static void deleteNote(final int houseId) {
         try {

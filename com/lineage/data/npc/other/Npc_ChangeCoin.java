@@ -33,7 +33,6 @@ public class Npc_ChangeCoin extends NpcExecutor {
     /**
      * 兌換商城
      *
-     * @param player
      */
     public static void changelog(L1PcInstance player, long xcount) {
         try {

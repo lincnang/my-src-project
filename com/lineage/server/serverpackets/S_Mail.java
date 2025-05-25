@@ -81,8 +81,6 @@ public class S_Mail extends ServerBasePacket {
     /**
      * 取回一般信件的標題
      *
-     * @param mails
-     * @param type
      */
     public S_Mail(final ArrayList<L1Mail> mails, final int type) {
         writeC(S_EXTENDED_PROTOBUF);
@@ -102,7 +100,6 @@ public class S_Mail extends ServerBasePacket {
     /**
      * 無法傳送信件
      *
-     * @param type
      */
     public S_Mail(final int type) { // 受信者通知
         writeC(S_EXTENDED_PROTOBUF);
@@ -112,8 +109,6 @@ public class S_Mail extends ServerBasePacket {
     /**
      * 讀取一般信件 信件存到保管箱
      *
-     * @param mail
-     * @param type
      */
     public S_Mail(final L1Mail mail, final int type) {
         switch (type) {
@@ -133,9 +128,6 @@ public class S_Mail extends ServerBasePacket {
     /**
      * 讀取指定id的信件 by terry0412
      *
-     * @param mail
-     * @param type
-     * @param id
      */
     public S_Mail(final L1Mail mail, final int type, final int id) {
         writeC(S_EXTENDED_PROTOBUF);
@@ -148,8 +140,6 @@ public class S_Mail extends ServerBasePacket {
     }
 
     /**
-     * @param mail
-     * @param type
      */
     private void buildPacket_1(final L1Mail mail, final int type) {
         writeC(S_EXTENDED_PROTOBUF);

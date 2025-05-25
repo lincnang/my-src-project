@@ -16,11 +16,6 @@ public class S_ConDetails extends ServerBasePacket {
     /**
      * 體質能力資訊
      *
-     * @param type
-     * @param hpr
-     * @param potionHpr
-     * @param maxWeight
-     * @param hpUp
      */
     public S_ConDetails(final int type, final int hpr, final int potionHpr, final int maxWeight, final int hpUp) {
         this.writeC(S_EXTENDED_PROTOBUF);
@@ -43,12 +38,6 @@ public class S_ConDetails extends ServerBasePacket {
     /**
      * 體質能力資訊
      *
-     * @param type
-     * @param hpr
-     * @param potionHpr
-     * @param maxWeight
-     * @param hpUp
-     * @param addHp
      */
     public S_ConDetails(final int type, final int hpr, final int potionHpr, final int maxWeight, final int hpUp, final int addHp) {
         this.writeC(S_EXTENDED_PROTOBUF);

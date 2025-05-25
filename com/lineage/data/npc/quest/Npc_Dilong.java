@@ -38,8 +38,6 @@ public class Npc_Dilong extends NpcExecutor {
     /**
      * 進入副本執行任務
      *
-     * @param pc
-     * @return
      */
     public static void staraQuest(L1PcInstance pc) {
         try {

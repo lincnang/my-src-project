@@ -18,38 +18,30 @@ public interface SetDropExecutor {
     /**
      * 設置MAP資料
      *
-     * @param droplists
      */
     public void addDropMapX(Map<Integer, ArrayList<L1DropMap>> droplists);
 
     /**
      * 設定全怪物掉落資料
      *
-     * @param droplists
      */
     public void addDropMob(Map<Integer, L1DropMob> droplists);
 
     /**
      * NPC持有物品資料取回
      *
-     * @param npc
-     * @param inventory
      */
     public void setDrop(L1NpcInstance npc, L1Inventory inventory);
 
     /**
      * NPC持有物品資料取回
      *
-     * @param npc
-     * @param inventory
-     * @param random
      */
     public void setDrop(L1NpcInstance npc, L1Inventory inventory, double random);
 
     /**
      * 設置MAP資料
      *
-     * @param droplists
      */
     public void addDropMap(Map<Integer, ArrayList<L1Drop>> droplists);
 }

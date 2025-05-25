@@ -9,8 +9,6 @@ public abstract interface LogEnchantStorage {
     /**
      * 衝裝贖回系統
      *
-     * @param pc
-     * @param item
      */
     public abstract void resetEnchant(L1PcInstance pc, L1ItemInstance item);
 }

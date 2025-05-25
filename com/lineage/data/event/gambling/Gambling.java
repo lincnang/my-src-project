@@ -42,7 +42,6 @@ public class Gambling extends GamblingConfig {
     /**
      * 傳回本場總下注金額
      *
-     * @return
      */
     public long get_allAdena() {
         return this._adena;
@@ -51,7 +50,6 @@ public class Gambling extends GamblingConfig {
     /**
      * 建立參賽NPC
      *
-     * @param previous
      */
     public void set_gmaNpc(final long previous) {
         if (GamblingConfig.ISGFX) {// 賽狗外型
@@ -76,7 +74,6 @@ public class Gambling extends GamblingConfig {
     /**
      * 目前下注金額
      *
-     * @return
      */
     public long get_allRate() {
         long adena = 0;
@@ -105,8 +102,6 @@ public class Gambling extends GamblingConfig {
     /**
      * 計算每個NPC該獲取的賠率
      *
-     * @param npc
-     * @param adena
      */
     private void set_npcRate(final GamblingNpc npc, final long adena) {
         double chip = npc.get_adena();// 該NPC總共下注金額
@@ -129,7 +124,6 @@ public class Gambling extends GamblingConfig {
     /**
      * 傳回全部參賽者
      *
-     * @return
      */
     public Map<Integer, GamblingNpc> get_allNpc() {
         return _npcidMap;
@@ -138,7 +132,6 @@ public class Gambling extends GamblingConfig {
     /**
      * 傳回冠軍
      *
-     * @return
      */
     public GamblingNpc get_oneNpc() {
         return this._onenpc;
@@ -147,7 +140,6 @@ public class Gambling extends GamblingConfig {
     /**
      * 設置冠軍
      *
-     * @param npc
      */
     public void set_oneNpc(final GamblingNpc onenpc) {
         this._onenpc = onenpc;

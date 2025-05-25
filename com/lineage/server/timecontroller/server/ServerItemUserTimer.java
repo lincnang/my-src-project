@@ -93,9 +93,6 @@ public class ServerItemUserTimer extends TimerTask {
     /**
      * 檢查道具是否已超過時限2 超過則移除附魔效果 [魔法武器DIY系統(DB自製)]
      *
-     * @param item
-     * @param ts
-     * @throws Exception
      */
     private static void checkItem2(final L1ItemInstance item, final L1ItemPower_name power, final Timestamp ts) throws Exception {
         power.set_magic_weapon(null);

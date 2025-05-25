@@ -35,7 +35,6 @@ public class NpcTable {
     /**
      * 建立NPC家族清單
      *
-     * @return
      */
     private static Map<String, Integer> buildFamily() {
         final Map<String, Integer> result = new HashMap<String, Integer>();
@@ -74,8 +73,6 @@ public class NpcTable {
     /**
      * 取得執行類位置
      *
-     * @param implName
-     * @return
      */
     private Constructor<?> getConstructor(final String implName) {
         try {
@@ -91,7 +88,6 @@ public class NpcTable {
     /**
      * 加載NPC執行類位置
      *
-     * @param implName
      */
     private void registerConstructorCache(final String implName) {
         if (implName.isEmpty() || _constructorCache.containsKey(implName)) {
@@ -205,9 +201,6 @@ public class NpcTable {
     /**
      * 加入獨立執行CLASS位置
      *
-     * @param npcid
-     * @param className
-     * @return
      */
     private NpcExecutor addClass(final int npcid, final String className) {
         try {
@@ -243,8 +236,6 @@ public class NpcTable {
     /**
      * 傳回該編號NPC資料
      *
-     * @param npcid
-     * @return
      */
     public L1Npc getTemplate(final int npcid) {
         return _npcs.get(npcid);
@@ -253,8 +244,6 @@ public class NpcTable {
     /**
      * 取回NPC名稱
      *
-     * @param id
-     * @return
      */
     public String getNpcName(final int id) {
         final L1Npc npcTemp = this.getTemplate(id);
@@ -269,7 +258,6 @@ public class NpcTable {
      * 依照NPCID取回新的L1NpcInstance資料
      *
      * @param id NPCID
-     * @return
      */
     public L1NpcInstance newNpcInstance(final int id) {
         try {
@@ -289,7 +277,6 @@ public class NpcTable {
      * 依照NPC資料 取回新的L1NpcInstance資料
      *
      * @param template NPC資料
-     * @return
      */
     public L1NpcInstance newNpcInstance(final L1Npc template) {
         try {
@@ -309,7 +296,6 @@ public class NpcTable {
      * 依照NPC名稱傳回NPCID
      *
      * @param name 依照NPC名稱
-     * @return
      */
     public int findNpcIdByName(final String name) {
         for (final L1Npc npc : _npcs.values()) {
@@ -324,7 +310,6 @@ public class NpcTable {
      * 依照NPC名稱傳回NPCID
      *
      * @param name 依照NPC名稱
-     * @return
      */
     public int findNpcIdByNameWithoutSpace(final String name) {
         for (final L1Npc npc : _npcs.values()) {

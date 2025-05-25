@@ -211,7 +211,6 @@ public class L1PolyPower // src014
     /**
      * 經驗
      *
-     * @return
      */
     public int getExpPoint() {
         return _addexp;
@@ -220,7 +219,6 @@ public class L1PolyPower // src014
     /**
      * 增加藥水回復量%
      *
-     * @return
      */
     public int get_up_hp_potion() {
         // 假設有相應的屬性
@@ -231,7 +229,6 @@ public class L1PolyPower // src014
     /**
      * 增加PVP攻擊
      *
-     * @return
      */
     public int getPvpDmg() {
         // 假設有相應的屬性
@@ -241,7 +238,6 @@ public class L1PolyPower // src014
     /**
      * 增加PVP減免
      *
-     * @return
      */
     public int getPvpDmg_R() {
         // 假設有相應的屬性

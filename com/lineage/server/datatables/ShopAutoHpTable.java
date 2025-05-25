@@ -35,8 +35,6 @@ public class ShopAutoHpTable {
     /**
      * 刪除錯誤資料
      *
-     * @param Type
-     * @param item_id
      */
     public static void delete(final int Type, final int item_id) {
         Connection cn = null;
@@ -58,8 +56,6 @@ public class ShopAutoHpTable {
     /**
      * 更新道具訊息
      *
-     * @param type
-     * @param itemId
      */
     private static void updata_name(int type, int itemId) {
         Connection cn = null;
@@ -128,8 +124,6 @@ public class ShopAutoHpTable {
     /**
      * 加入販賣物品
      *
-     * @param Type
-     * @param item
      */
     private void addShopItem(final int Type, final L1ShopAutoHp item) {
         ArrayList<L1ShopAutoHp> list = _shopList.get(new Integer(Type));
@@ -145,8 +139,6 @@ public class ShopAutoHpTable {
     /**
      * 傳回販賣清單
      *
-     * @param Type
-     * @return
      */
     public ArrayList<L1ShopAutoHp> get(final int Type) {
         final ArrayList<L1ShopAutoHp> list = _shopList.get(new Integer(Type));
@@ -159,9 +151,6 @@ public class ShopAutoHpTable {
     /**
      * 傳回該販賣物品資料
      *
-     * @param Type
-     * @param id
-     * @return
      */
     public L1ShopAutoHp getTemp(final int Type, final int id) {
         final ArrayList<L1ShopAutoHp> list = _shopList.get(new Integer(Type));

@@ -25,8 +25,6 @@ public class L1SkillMode {
     /**
      * 不會被相消的技能
      *
-     * @param skillNum
-     * @return
      */
     public boolean isNotCancelable(int skillNum) {
         return /*(skillNum == ENCHANT_WEAPON) || */(skillNum == BLESSED_ARMOR) ||

@@ -21,7 +21,6 @@ public class L1BuffUtil {  //src029
      * 無法使用指定類型道具(傳送卷軸)
      *
      * @param pc 檢查對象
-     * @return
      */
     public static boolean getUseItemTeleport(final L1PcInstance pc) {
         if (pc.hasSkillEffect(EARTH_BIND)) {
@@ -39,7 +38,6 @@ public class L1BuffUtil {  //src029
     /**
      * 無法使用藥水
      *
-     * @param pc
      * @return true:可以使用 false:無法使用
      */
     public static boolean stopPotion(L1PcInstance pc) {
@@ -54,7 +52,6 @@ public class L1BuffUtil {  //src029
     /**
      * 解除魔法技能絕對屏障
      *
-     * @param pc
      */
     public static void cancelAbsoluteBarrier(L1PcInstance pc) { // 解除魔法技能絕對屏障
         if (pc.hasSkillEffect(ABSOLUTE_BARRIER)) {
@@ -67,7 +64,6 @@ public class L1BuffUtil {  //src029
     /**
      * 加速效果 抵銷對應技能
      *
-     * @param pc
      */
     public static void hasteStart(L1PcInstance pc) {
         try {
@@ -97,8 +93,6 @@ public class L1BuffUtil {  //src029
     /**
      * 加速藥水效果
      *
-     * @param pc
-     * @param timeMillis
      */
     public static void haste(L1PcInstance pc, int timeMillis) {
         try {
@@ -118,7 +112,6 @@ public class L1BuffUtil {  //src029
     /**
      * 勇敢效果 抵銷對應技能
      *
-     * @param pc
      */
     public static void braveStart(L1PcInstance pc) {
         try {
@@ -457,7 +450,6 @@ public class L1BuffUtil {  //src029
      * 無法使用指定類型技能(傳送技能)
      *
      * @param pc 檢查對像
-     * @return
      */
     public static boolean getUseSkillTeleport(final L1PcInstance pc) {
         // added by Erics4179

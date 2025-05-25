@@ -55,7 +55,6 @@ public class L1EffectInstance extends L1NpcInstance {
     /**
      * 效果類型
      *
-     * @return
      */
     public L1EffectType effectType() {
         return _effectType;
@@ -108,7 +107,6 @@ public class L1EffectInstance extends L1NpcInstance {
     /**
      * 跟隨目標
      *
-     * @param target
      */
     public void Follow(L1Character target) {
         try {

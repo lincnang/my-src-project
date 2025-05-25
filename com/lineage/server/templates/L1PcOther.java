@@ -42,7 +42,6 @@ public class L1PcOther {
     /**
      * 傳回贊助額度
      *
-     * @return
      */
     private int _getbonus = 0;
     private int _Artifact = 0;
@@ -237,7 +236,6 @@ public class L1PcOther {
     /**
      * 傳回上次登入時間(殷海薩祝福計算用)
      *
-     * @return
      */
     public int get_login_time() {
         return _login_time;
@@ -246,7 +244,6 @@ public class L1PcOther {
     /**
      * 設定上次登入時間(殷海薩祝福計算用)
      *
-     * @param login_time
      */
     public void set_login_time(int login_time) {
         _login_time = login_time;
@@ -255,7 +252,6 @@ public class L1PcOther {
     /**
      * 傳回殷海薩休息時間
      *
-     * @return
      */
     public int get_leaves_time() {
         return _leaves_time;
@@ -264,7 +260,6 @@ public class L1PcOther {
     /**
      * 設定殷海薩休息時間
      *
-     * @param leaves_time
      */
     public void set_leaves_time(int leaves_time) {
         _leaves_time = leaves_time;
@@ -273,7 +268,6 @@ public class L1PcOther {
     /**
      * 傳回殷海薩的祝福經驗額度
      *
-     * @return
      */
     public int get_leaves_time_exp() {
         return _leaves_time_exp;
@@ -282,7 +276,6 @@ public class L1PcOther {
     /**
      * 設定殷海薩的祝福經驗額度
      *
-     * @param leaves_time_exp
      */
     public void set_leaves_time_exp(int leaves_time_exp) {
         if (leaves_time_exp < 0) {
@@ -353,7 +346,6 @@ public class L1PcOther {
     /**
      * 掛機剩餘點數
      *
-     * @return
      */
     public int get_Auto_Points() {
         return _auto_points;
@@ -362,7 +354,6 @@ public class L1PcOther {
     /**
      * 掛機剩餘點數
      *
-     * @param points
      */
     public void set_Auto_Points(final int points) {
         _auto_points = points;

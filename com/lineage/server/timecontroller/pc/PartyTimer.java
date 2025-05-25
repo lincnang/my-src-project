@@ -25,7 +25,6 @@ public class PartyTimer extends TimerTask {
     /**
      * PC 執行 判斷
      *
-     * @param tgpc
      * @return true:執行 false:不執行
      */
     private static boolean check(L1PcInstance tgpc) {

@@ -22,7 +22,6 @@ public class DollTimer extends TimerTask {
     /**
      * 收回魔法娃娃
      *
-     * @param doll
      */
     private static void outDoll(L1DollInstance doll) {
         try {
@@ -73,7 +72,6 @@ public class DollTimer extends TimerTask {
     /**
      * 特殊動作執行
      *
-     * @param doll
      */
     private void checkAction(L1DollInstance doll) {
         try {

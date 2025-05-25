@@ -41,8 +41,6 @@ public abstract class ServerBasePacket extends OpcodesServer {
     /**
      * boolean
      *
-     * @param b
-     * @return
      */
     protected Object writeBoolean(final boolean b) {
         _bao.write(b ? 0x01 : 0x00);
@@ -89,7 +87,6 @@ public abstract class ServerBasePacket extends OpcodesServer {
     /**
      * 寫入一個布林至暫存器中
      *
-     * @param b
      */
     protected void writeB(final boolean b) {
         // true = 1, false = 0
@@ -145,7 +142,6 @@ public abstract class ServerBasePacket extends OpcodesServer {
     /**
      * 不足8組 補滿8組BYTE
      *
-     * @return
      */
     protected byte[] getBytes() {
         final int padding = _bao.size() % 8;

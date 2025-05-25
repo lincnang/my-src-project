@@ -14,8 +14,6 @@ public class S_ApplyAuction extends ServerBasePacket {
     /**
      * 選取物品數量 (盟屋拍賣公告)
      *
-     * @param objectId
-     * @param houseNumber
      */
     public S_ApplyAuction(final int objectId, final String houseNumber) {
         this.buildPacket(objectId, houseNumber);

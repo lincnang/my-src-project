@@ -98,7 +98,6 @@ public abstract class L1AttackMode {
     /**
      * 血盟技能傷害增加
      *
-     * @return
      */
     protected static double getDamageUpByClan(L1PcInstance pc) {
         double dmg = 0.0D;
@@ -125,8 +124,6 @@ public abstract class L1AttackMode {
     /**
      * 血盟技能傷害減免
      *
-     * @param targetPc
-     * @return
      */
     protected static double getDamageReductionByClan(L1PcInstance targetPc) {
         double dmg = 0.0D;
@@ -153,8 +150,6 @@ public abstract class L1AttackMode {
     /**
      * 身上有特定法術效果 傷害為0
      *
-     * @param character
-     * @return
      */
     protected static boolean dmg0(L1Character character) {
         try {
@@ -203,7 +198,6 @@ public abstract class L1AttackMode {
     /**
      * 攻擊倍率(1/10)
      *
-     * @return
      */
     protected int getLeverage() {
         return _leverage;
@@ -212,7 +206,6 @@ public abstract class L1AttackMode {
     /**
      * 攻擊倍率(1/10)
      *
-     * @param i
      */
     public void setLeverage(int i) {
         _leverage = i;
@@ -269,7 +262,6 @@ public abstract class L1AttackMode {
     /**
      * PC防禦力傷害減低
      *
-     * @return
      */
     protected int calcPcDefense() {
         try {
@@ -291,7 +283,6 @@ public abstract class L1AttackMode {
     /**
      * (NPC防禦力 + 額外傷害減低) 傷害減低
      *
-     * @return
      */
     protected int calcNpcDamageReduction() {
         int damagereduction = _targetNpc.getNpcTemplate().get_damagereduction(); // 額外傷害減低
@@ -312,7 +303,6 @@ public abstract class L1AttackMode {
     /**
      * 計算反擊屏障傷害
      *
-     * @return
      */
     protected int calcCounterBarrierDamage() {
         // 初始化傷害值為 0
@@ -362,7 +352,6 @@ public abstract class L1AttackMode {
     /**
      * 傷害計算
      *
-     * @return
      */
     public abstract int calcDamage();
 
@@ -374,7 +363,6 @@ public abstract class L1AttackMode {
     /**
      * 攻擊使用武器是否為近距離武器判斷
      *
-     * @return
      */
     public abstract boolean isShortDistance();
 

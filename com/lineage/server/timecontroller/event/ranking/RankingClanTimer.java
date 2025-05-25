@@ -26,7 +26,6 @@ public class RankingClanTimer extends TimerTask {
     /**
      * 血盟風雲榜
      *
-     * @return
      */
     public static String[] userName() {
         if (!_load) {
@@ -74,10 +73,6 @@ public class RankingClanTimer extends TimerTask {
     }
 
     /**
-     * @param level
-     * @param name
-     * @param userName
-     * @return
      */
     private static String[] intTree(final int count, final String clanName, final String[] userName) {
         if (userName[0].equals(" ")) {// NO 1

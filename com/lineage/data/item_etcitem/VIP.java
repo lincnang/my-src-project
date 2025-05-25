@@ -71,7 +71,6 @@ public class VIP extends ItemExecutor {
     /**
      * 給予時間限制物品
      *
-     * @param item
      */
     private void set_time_item(final L1ItemInstance item, final L1PcInstance pc) {
         if (item.get_time() == null) {

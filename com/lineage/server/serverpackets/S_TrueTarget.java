@@ -30,9 +30,6 @@ public class S_TrueTarget extends ServerBasePacket {
     /**
      * 任務怪物顯示特效
      *
-     * @param targetObjId
-     * @param gfxid
-     * @param type
      */
     public S_TrueTarget(int targetObjId, int gfxid, int type) {
         writeC(S_EVENT);

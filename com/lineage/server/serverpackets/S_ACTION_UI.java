@@ -15,7 +15,6 @@ public class S_ACTION_UI extends ServerBasePacket {
     private byte[] attendance = new byte[0];
 
     /**
-     * @param 安全區域右下顯示死亡懲罰狀態圖示
      * @param isOpen           on/off
      **/
     public S_ACTION_UI(int code, boolean isOpen) {
@@ -39,8 +38,6 @@ public class S_ACTION_UI extends ServerBasePacket {
     /**
      * 顯示地圖剩餘時間
      *
-     * @param pc
-     * @param code
      */
     public S_ACTION_UI(L1PcInstance pc, int code) {
         writeC(S_EXTENDED_PROTOBUF);

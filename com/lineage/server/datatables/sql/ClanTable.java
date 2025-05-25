@@ -127,9 +127,6 @@ public class ClanTable implements ClanStorage {
     /**
      * 建立血盟資料
      *
-     * @param player
-     * @param clan_name
-     * @return
      */
     @Override
     public L1Clan createClan(L1PcInstance player, String clan_name) {

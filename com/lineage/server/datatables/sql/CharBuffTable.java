@@ -60,7 +60,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 刪除遺失資料
      *
-     * @param objid
      */
     private static void delete(int objid) {
         ArrayList<?> list = (ArrayList<?>) _buffMap.get(Integer.valueOf(objid));
@@ -86,7 +85,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 刪除指定資料
      *
-     * @param objid
      */
     private static void delete_skill(int skillid) {
         Connection cn = null;
@@ -111,8 +109,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 加入清單
      *
-     * @param objId
-     * @param buffTmp
      */
     private static void addMap(int objId, L1BuffTmp buffTmp) {
         ArrayList<L1BuffTmp> list = (ArrayList<L1BuffTmp>) _buffMap.get(Integer.valueOf(objId));
@@ -128,8 +124,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 刪除清單
      *
-     * @param objId
-     * @param buffTmp
      */
     private static void delMap(int objid) {
         final ArrayList<L1BuffTmp> list = _buffMap.get(objid);
@@ -147,10 +141,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 寫入保留技能紀錄
      *
-     * @param objId
-     * @param skillId
-     * @param time
-     * @param polyId
      */
     //private void storeBuff(int objId, int skillId, int time, int polyId) {
     public static void storeBuff(int objId, int skillId, int time, int polyId) {
@@ -168,7 +158,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 寫入保留技能紀錄
      *
-     * @param buffTmp
      */
     private static void storeBuffR(L1BuffTmp buffTmp) {
         Connection cn = null;
@@ -230,7 +219,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 增加保留技能紀錄
      *
-     * @param pc
      */
     @Override
     public void saveBuff(L1PcInstance pc) {
@@ -807,7 +795,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 刪除全部保留技能紀錄
      *
-     * @param pc
      */
     @Override
     public void deleteBuff(final L1PcInstance pc) {
@@ -817,7 +804,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 刪除全部保留技能紀錄
      *
-     * @param objid
      */
     @Override
     public void deleteBuff(final int objid) {
@@ -827,7 +813,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 刪除指定保留技能紀錄
      *
-     * @param objid
      */
     @Override
     public void deleteBuff_skill(int skillid) {
@@ -837,7 +822,6 @@ public class CharBuffTable implements CharBuffStorage {
     /**
      * 刪除指定保留技能紀錄buff
      *
-     * @param objid
      */
     @Override
     public void deleteBuff_skill_buff(int objid) {

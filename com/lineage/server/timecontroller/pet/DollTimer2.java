@@ -28,7 +28,6 @@ public class DollTimer2 extends TimerTask {
     /**
      * 移除魔法娃娃
      *
-     * @param tgpc
      */
     private static void outDoll(final L1DollInstance2 doll) {
         try {
@@ -82,7 +81,6 @@ public class DollTimer2 extends TimerTask {
     /**
      * 娃娃動作
      *
-     * @param doll
      */
     private void checkAction(final L1DollInstance2 doll) {
         try {

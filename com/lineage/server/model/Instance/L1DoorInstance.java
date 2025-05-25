@@ -366,7 +366,6 @@ public class L1DoorInstance extends L1NpcInstance {
      * 10008~10013 法利昂洞穴<BR>
      * 10014~10035 哈汀副本<BR>
      *
-     * @return
      */
     public int getDoorId() {
         return this._doorId;
@@ -375,7 +374,6 @@ public class L1DoorInstance extends L1NpcInstance {
     /**
      * 門的編號
      *
-     * @param i
      */
     public void setDoorId(final int i) {
         this._doorId = i;
@@ -384,7 +382,6 @@ public class L1DoorInstance extends L1NpcInstance {
     /**
      * 門的定位
      *
-     * @return
      */
     public int getDirection() {
         return this._direction;
@@ -424,7 +421,6 @@ public class L1DoorInstance extends L1NpcInstance {
     /**
      * 門的左端
      *
-     * @return
      */
     public int getLeftEdgeLocation() {
         return this._leftEdgeLocation;
@@ -433,7 +429,6 @@ public class L1DoorInstance extends L1NpcInstance {
     /**
      * 門的左端
      *
-     * @param i
      */
     public void setLeftEdgeLocation(final int i) {
         this._leftEdgeLocation = i;
@@ -442,7 +437,6 @@ public class L1DoorInstance extends L1NpcInstance {
     /**
      * 門的右端
      *
-     * @return
      */
     public int getRightEdgeLocation() {
         return this._rightEdgeLocation;
@@ -451,7 +445,6 @@ public class L1DoorInstance extends L1NpcInstance {
     /**
      * 門的右端
      *
-     * @param i
      */
     public void setRightEdgeLocation(final int i) {
         this._rightEdgeLocation = i;
@@ -490,7 +483,6 @@ public class L1DoorInstance extends L1NpcInstance {
     /**
      * 管理員編號
      *
-     * @return
      */
     public int getKeeperId() {
         return this._keeperId;
@@ -499,7 +491,6 @@ public class L1DoorInstance extends L1NpcInstance {
     /**
      * 管理員編號
      *
-     * @param i
      */
     public void setKeeperId(final int i) {
         this._keeperId = i;

@@ -16,7 +16,6 @@ public class L1SystemMessage {
     /**
      * 傳回ID
      *
-     * @return
      */
     public int getId() {
         return _id;
@@ -25,7 +24,6 @@ public class L1SystemMessage {
     /**
      * 傳回設定文字
      *
-     * @return
      */
     public String getMessage() {
         return _message;
@@ -34,7 +32,6 @@ public class L1SystemMessage {
     /**
      * 傳回自動重置限時地監時間
      *
-     * @return
      */
     public Calendar get_resetmaptime() {
         return _resetmaptime;

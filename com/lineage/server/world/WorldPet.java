@@ -33,7 +33,6 @@ public class WorldPet {
     /**
      * 全部寵物
      *
-     * @return
      */
     public Collection<L1PetInstance> all() {
         try {
@@ -49,7 +48,6 @@ public class WorldPet {
     /**
      * 寵物清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1PetInstance> map() {
         return _isPet;
@@ -58,8 +56,6 @@ public class WorldPet {
     /**
      * 指定寵物數據
      *
-     * @param key
-     * @return
      */
     public L1PetInstance get(final Integer key) {
         try {
@@ -73,8 +69,6 @@ public class WorldPet {
     /**
      * 加入寵物清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1PetInstance value) {
         try {
@@ -87,7 +81,6 @@ public class WorldPet {
     /**
      * 移出寵物清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {

@@ -10,7 +10,6 @@ public interface EzpayStorage3 {
      * 傳回指定帳戶匯款資料
      *
      * @param loginName 帳號名稱
-     * @return
      */
     public Map<Integer, int[]> ezpayInfo(final String loginName);
 

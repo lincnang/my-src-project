@@ -24,8 +24,6 @@ public abstract class NpcExecutor {
     /**
      * NPC對話判斷(1)
      *
-     * @param pc
-     * @param npc
      */
     public void talk(final L1PcInstance pc, final L1NpcInstance npc) {
         // TODO Auto-generated method stub
@@ -34,9 +32,6 @@ public abstract class NpcExecutor {
     /**
      * NPC對話執行(2)
      *
-     * @param pc
-     * @param npc
-     * @param cmd
      */
     public void action(final L1PcInstance pc, final L1NpcInstance npc, final String cmd, final long amount) {
         // TODO Auto-generated method stub
@@ -46,8 +41,6 @@ public abstract class NpcExecutor {
      * NPC受到攻擊(4)<BR>
      * 任務NPC作為抵達目標檢查的方法
      *
-     * @param pc
-     * @param npc
      */
     public void attack(final L1PcInstance pc, final L1NpcInstance npc) {
         // TODO Auto-generated method stub
@@ -58,7 +51,6 @@ public abstract class NpcExecutor {
      * 任務NPC作為給予任務道具的判斷
      *
      * @param lastAttacker 攻擊者
-     * @param npc
      */
     public L1PcInstance death(final L1Character lastAttacker, final L1NpcInstance npc) {
         return null;
@@ -75,7 +67,6 @@ public abstract class NpcExecutor {
     /**
      * NPC工作執行
      *
-     * @param mode
      */
     public void work(final L1NpcInstance npc) {
         // TODO Auto-generated method stub
@@ -84,7 +75,6 @@ public abstract class NpcExecutor {
     /**
      * NPC召喚(32)
      *
-     * @param mode
      */
     public void spawn(final L1NpcInstance npc) {
         // TODO Auto-generated method stub

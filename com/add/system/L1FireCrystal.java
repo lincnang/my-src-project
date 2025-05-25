@@ -59,8 +59,6 @@ public class L1FireCrystal {
     /**
      * 傳回熔煉後可獲得火神結晶數量
      *
-     * @param item
-     * @return
      */
     public int get_CrystalCount(L1ItemInstance item) {
         // System.out.println("計算結晶數量");

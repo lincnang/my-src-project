@@ -69,8 +69,6 @@ public class MapLevelTable {
     /**
      * 等級吻合要求
      *
-     * @param mapid
-     * @param pc
      */
     public void get_level(final int mapid, final L1PcInstance pc) {
         final int[] levelX = _level.get(new Integer(mapid));

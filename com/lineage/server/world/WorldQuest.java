@@ -46,7 +46,6 @@ public class WorldQuest {
     /**
      * 取回新的副本編號
      *
-     * @return
      */
     public int nextId() {
         this._lock.lock();
@@ -61,7 +60,6 @@ public class WorldQuest {
     /**
      * 目前的副本編號使用數字
      *
-     * @return
      */
     public int maxId() {
         this._lock.lock();
@@ -75,7 +73,6 @@ public class WorldQuest {
     /**
      * 全部執行中副本
      *
-     * @return
      */
     public Collection<L1QuestUser> all() {
         try {
@@ -90,7 +87,6 @@ public class WorldQuest {
     /**
      * 副本清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1QuestUser> map() {
         return _isQuest;
@@ -125,7 +121,6 @@ public class WorldQuest {
      * 指定副本數據
      *
      * @param key 副本編號
-     * @return
      */
     public L1QuestUser get(final int key) {
         try {
@@ -144,7 +139,6 @@ public class WorldQuest {
      * @param mapid   副本地圖編號
      * @param questid 副本任務編號
      * @param pc      執行者
-     * @return
      */
     public L1QuestUser put(final int key, final int mapid, final int questid, final L1PcInstance pc) {
         try {

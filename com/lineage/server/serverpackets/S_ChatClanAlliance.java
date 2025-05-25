@@ -13,8 +13,6 @@ public class S_ChatClanAlliance extends ServerBasePacket {
     /**
      * 同盟頻道(~)
      *
-     * @param pc
-     * @param chat
      */
     public S_ChatClanAlliance(final L1PcInstance pc, final String clanName, final String chat) {
         buildPacket(pc, clanName, chat);

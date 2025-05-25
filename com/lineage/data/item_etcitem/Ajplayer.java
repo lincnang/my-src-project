@@ -54,7 +54,7 @@ public class Ajplayer extends ItemExecutor {
                     msg0 = target_pc.getName();
                     msg1 = "" + target_pc.getLevel(); // 等級
                     msg2 = "" + target_pc.getCurrentHp() + " / " + target_pc.getMaxHp(); // 體力
-                    msg3 = "" + target_pc.getCurrentMp() + " / " + +target_pc.getMaxMp(); // 魔力
+                    msg3 = "" + target_pc.getCurrentMp() + " / " + target_pc.getMaxMp(); // 魔力
                     msg4 = "" + target_pc.getAc(); // 防禦
                     msg5 = "" + target_pc.getEr(); // 迴避
                     msg6 = "" + target_pc.getMr() + " %"; // 抗魔
@@ -98,7 +98,7 @@ public class Ajplayer extends ItemExecutor {
                 msg0 = target_npc.getName();
                 msg1 = "" + target_npc.getLevel(); // 等級
                 msg2 = "" + target_npc.getCurrentHp() + " / " + target_npc.getMaxHp(); // 體力
-                msg3 = "" + target_npc.getCurrentMp() + " / " + +target_npc.getMaxMp(); // 魔力
+                msg3 = "" + target_npc.getCurrentMp() + " / " + target_npc.getMaxMp(); // 魔力
                 msg4 = "" + target_npc.getAc(); // 防禦
                 msg5 = "0"; // 迴避
                 msg6 = "" + target_npc.getMr() + " %"; // 抗魔

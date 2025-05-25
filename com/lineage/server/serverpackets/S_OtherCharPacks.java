@@ -24,7 +24,6 @@ public class S_OtherCharPacks extends ServerBasePacket {
     /**
      * 物件封包 - 其他人物
      *
-     * @param pc
      */
     public S_OtherCharPacks(final L1PcInstance pc) {
         int status = STATUS_PC;

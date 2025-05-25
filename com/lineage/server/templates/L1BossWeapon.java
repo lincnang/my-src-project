@@ -453,7 +453,6 @@ public class L1BossWeapon {
     /**
      * 新增額外負面技能類型(不受距離限制)
      *
-     * @return
      */
     public final int getNegativeId() {
         return _negativeId;
@@ -462,7 +461,6 @@ public class L1BossWeapon {
     /**
      * 新增額外負面技能時間(不受距離限制)
      *
-     * @return
      */
     public final int getNegativeTime() {
         return _negativeTime;

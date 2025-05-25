@@ -26,7 +26,6 @@ public class L1MerchantInstance extends L1NpcInstance {
     /**
      * 對象:對話NPC
      *
-     * @param template
      */
     public L1MerchantInstance(L1Npc template) {
         super(template);

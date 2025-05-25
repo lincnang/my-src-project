@@ -14,7 +14,6 @@ public class S_ItemAmount extends ServerBasePacket {
     /**
      * 更新物品使用狀態(背包)-可用次數
      *
-     * @param item
      */
     public S_ItemAmount(final L1ItemInstance item, int test) {
         if (item == null) {

@@ -270,8 +270,6 @@ public class L1ActionPc {
     /**
      * 查看執行中任務
      *
-     * @param pc
-     * @param //*id
      */
     public static void showStartQuest(L1PcInstance pc, int objid) {
         try {
@@ -306,8 +304,6 @@ public class L1ActionPc {
     /**
      * 可執行任務
      *
-     * @param pc
-     * @param objid
      */
     public static void showQuest(L1PcInstance pc, int objid) {
         try {
@@ -349,8 +345,6 @@ public class L1ActionPc {
     /**
      * 全部任務
      *
-     * @param pc
-     * @param objid
      */
     public static void showQuestAll(L1PcInstance pc, int objid) {
         try {
@@ -376,7 +370,6 @@ public class L1ActionPc {
     /**
      * 傳回執行命令者
      *
-     * @return
      */
     public L1PcInstance get_pc() {
         return _pc;
@@ -385,8 +378,6 @@ public class L1ActionPc {
     /**
      * 選單命令執行
      *
-     * @param cmd
-     * @param amount
      */
     public void action(final String cmd, final long amount) {
         try {
@@ -1713,9 +1704,6 @@ public class L1ActionPc {
     /**
      * 使用自訂變身卷軸
      *
-     * @param pc
-     * @param item
-     * @param s
      */
     private void usePolyScroll(L1PcInstance pc, L1ItemInstance item, String s) {
         try {
@@ -1788,9 +1776,6 @@ public class L1ActionPc {
     /**
      * 使用神秘的魔法變身書
      *
-     * @param pc
-     * @param item
-     * @param s
      */
     private void usePolyBook(L1PcInstance pc, L1ItemInstance item, String s) {
         try {
@@ -1831,8 +1816,6 @@ public class L1ActionPc {
     /**
      * 使用幻象的傲慢之塔傳送符進行移動
      *
-     * @param pc
-     * @param cmd
      */
     private void usePhantomTeleport(L1PcInstance pc, String cmd) {
         try {
@@ -1911,7 +1894,6 @@ public class L1ActionPc {
     /**
      * 任務解除執行
      *
-     * @param quest
      */
     private void questDel(final L1Quest quest) {
         try {
@@ -1942,7 +1924,6 @@ public class L1ActionPc {
     /**
      * 確定解除任務執行
      *
-     * @param quest
      */
     private void isDel(final L1Quest quest) {
         try {
@@ -1965,7 +1946,6 @@ public class L1ActionPc {
     }
 
     /**
-     * @param //type
      */
     private void adenaTrade(final String cmd, final long amount) {
         final int type = Integer.parseInt(cmd.substring(12));
@@ -2719,7 +2699,6 @@ public class L1ActionPc {
     /**
      * 展示指定任務進度資料
      *
-     * @param key
      */
     private void showPage(int key) {
         try {
@@ -2746,7 +2725,6 @@ public class L1ActionPc {
     /**
      * 檢查個人狀態
      *
-     * @param pc
      */
     private void showStatus11(final L1PcInstance pc) {
         try {
@@ -2810,9 +2788,6 @@ public class L1ActionPc {
     /**
      * 遊戲便捷優化
      *
-     * @param pc
-     * @param //*add_type
-     * @param //*consume_item
      */
     private void showCulture2(final L1PcInstance pc) {
         try {
@@ -2858,7 +2833,6 @@ public class L1ActionPc {
     /**
      * 輔助(自動補血)
      *
-     * @param pc
      */
     private void show_zdbx(final L1PcInstance pc) {
         try {
@@ -2957,7 +2931,6 @@ public class L1ActionPc {
     /**
      * 輔助狀態(道具)
      *
-     * @param pc
      */
     private void show_yxdj(final L1PcInstance pc) {
         try {
@@ -3111,7 +3084,6 @@ public class L1ActionPc {
     /**
      * 輔助狀態(魔法)
      *
-     * @param pc
      */
     private void show_ngxtAll(final L1PcInstance pc) {
         try {
@@ -3461,7 +3433,6 @@ public class L1ActionPc {
     /**
      * 輔助(自動刪物)
      *
-     * @param pc
      */
     private void show_yxzdsw(final L1PcInstance pc) {
         try {

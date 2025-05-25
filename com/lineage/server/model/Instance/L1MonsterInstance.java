@@ -64,7 +64,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * NPC死亡開門的處理
      *
-     * @param npc
      */
     private static void openDoorWhenNpcDied(L1NpcInstance npc) {
         int[] npcId = {46143, 46144, 46145, 46146, 46147, 46148, 46149, 46150, 46151, 46152};
@@ -79,7 +78,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 開門的處理
      *
-     * @param doorId
      */
     private static void openDoorInCrystalCave(int doorId) {
         for (final L1NpcInstance object : WorldNpc.get().all()) {
@@ -170,7 +168,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 搜尋NPC目標
      *
-     * @return
      */
     private L1MonsterInstance searchTargetNpc() {
         L1MonsterInstance targetNpc = null;
@@ -246,7 +243,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 搜尋玩家目標
      *
-     * @return
      */
     private L1PcInstance searchTargetPlayer() {
         // 攻擊目標搜尋
@@ -373,8 +369,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 克特追殺王族及黑妖
      *
-     * @param pc
-     * @return
      */
     private L1PcInstance attackPc2(final L1PcInstance pc) {
         if (this.getNpcId() == 45600) { // 克特
@@ -393,8 +387,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 競技場
      *
-     * @param pc
-     * @return
      */
     private L1PcInstance attackPc1(final L1PcInstance pc) {
         final int mapId = this.getMapId();
@@ -425,8 +417,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 邪惡玩家追殺
      *
-     * @param pc
-     * @return
      */
     private L1PcInstance targetPlayer1000(final L1PcInstance pc) {
         if (ConfigOther.KILLRED) {
@@ -523,9 +513,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 受到傷害的處理
      *
-     * @param attacker
-     * @param damage
-     * @param attr
      */
     public void receiveDamage(L1Character attacker, double damage, int attr) {
         int mrdef = getMr();// 魔防
@@ -563,8 +550,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 受到傷害的處理
      *
-     * @param attacker
-     * @param damage
      */
     @Override
     public void receiveDamage(L1Character attacker, int damage) {
@@ -810,7 +795,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 判斷主要攻擊者(最後殺死NPC的人)
      *
-     * @param lastAttacker
      */
     private void distributeExpDropKarma(L1Character lastAttacker) {
         if (lastAttacker == null) {
@@ -933,7 +917,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 陣營
      *
-     * @param pc
      */
     private void giveKarma(L1PcInstance pc) {
         int karma = getKarma();
@@ -989,7 +972,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 給予勇氣之證數量
      *
-     * @return
      */
     public int getUbSealCount() {
         return this._ubSealCount;
@@ -998,7 +980,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * 設置給予勇氣之證數量
      *
-     * @param i
      */
     public void setUbSealCount(final int i) {
         this._ubSealCount = i;
@@ -1007,7 +988,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * UBID
      *
-     * @return
      */
     public int getUbId() {
         return this._ubId;
@@ -1016,7 +996,6 @@ public class L1MonsterInstance extends L1NpcInstance {
     /**
      * UBID
      *
-     * @param i
      */
     public void setUbId(final int i) {
         this._ubId = i;

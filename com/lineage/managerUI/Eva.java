@@ -197,10 +197,6 @@ public class Eva {
     /**
      * 服務器日誌窗口：S - 連接，終端
      *
-     * @param s
-     * @param pc
-     * @param string
-     * @param i
      */
     public static synchronized void LogServerAppend(String s, L1PcInstance pc, String string, int i) {
         if (jServerUserInfoWindow != null) {
@@ -248,9 +244,6 @@ public class Eva {
     /**
      * 世界頻道
      *
-     * @param s
-     * @param pcname
-     * @param text
      */
     public static void LogChatAppend(String s, String pcname, String text) {
         if (jWorldChatLogWindow != null && !jWorldChatLogWindow.isClosed()) {
@@ -273,9 +266,6 @@ public class Eva {
     /**
      * 一般頻道、大叫頻道
      *
-     * @param s
-     * @param pcname
-     * @param text
      */
     public static void LogChatNormalAppend(String s, String pcname, String text) {
         if (jNomalChatLogWindow != null && !jNomalChatLogWindow.isClosed()) {
@@ -298,9 +288,6 @@ public class Eva {
     /**
      * 聯合血盟頻道、隊伍頻道
      *
-     * @param s
-     * @param pcname
-     * @param text
      */
     public static void LogChatPartyAppend(String s, String pcname, String text) {
         if (jPartyChatLogWindow != null && !jPartyChatLogWindow.isClosed()) {
@@ -323,11 +310,6 @@ public class Eva {
     /**
      * 密語、私聊
      *
-     * @param s
-     * @param pcname
-     * @param c
-     * @param text
-     * @param sel
      */
     public static void LogChatWisperAppend(String s, String pcname, String c, String text, String sel) {
         if (jWhisperChatLogWindow != null && !jWhisperChatLogWindow.isClosed()) {
@@ -350,10 +332,6 @@ public class Eva {
     /**
      * 血盟頻道
      *
-     * @param s
-     * @param pcname
-     * @param c
-     * @param text
      */
     public static void LogChatClanAppend(String s, String pcname, String c, String text) {
         if (jClanChatLogWindow != null && !jClanChatLogWindow.isClosed()) {
@@ -376,9 +354,6 @@ public class Eva {
     /**
      * 交易頻道
      *
-     * @param s
-     * @param pcname
-     * @param text
      */
     public static void LogChatTradeAppend(String s, String pcname, String text) {
         if (jTradeChatLogWindow != null && !jTradeChatLogWindow.isClosed()) {
@@ -394,12 +369,6 @@ public class Eva {
     /**
      * 倉庫日誌
      *
-     * @param s
-     * @param pcname
-     * @param clanname
-     * @param item
-     * @param count
-     * @param obj
      */
     public static void LogWareHouseAppend(String s, String pcname, String clanname, L1ItemInstance item, int count, int obj) {
         if (jWareHouseLogWindow != null && !jWareHouseLogWindow.isClosed()) {
@@ -429,12 +398,6 @@ public class Eva {
     /**
      * 交易日誌
      *
-     * @param s
-     * @param pcname
-     * @param targetname
-     * @param itemname
-     * @param count
-     * @param obj
      */
     public static void LogTradeAppend(String s, String pcname, String targetname, String itemname, long count, int obj) {
         if (jTradeLogWindow != null && !jTradeLogWindow.isClosed()) {
@@ -456,11 +419,6 @@ public class Eva {
     /**
      * 強化日誌
      *
-     * @param s
-     * @param pcname
-     * @param enchantlvl
-     * @param itemname
-     * @param obj
      */
     public static void LogEnchantAppend(String s, String pcname, String itemname, int obj) {
         if (jEnchantLogWindow != null && !jEnchantLogWindow.isClosed()) {
@@ -484,11 +442,6 @@ public class Eva {
     /**
      * 丟棄物品日誌
      *
-     * @param s
-     * @param pcname
-     * @param item
-     * @param count
-     * @param obj
      */
     public static void LogObserverAppend(String s, String pcname, L1ItemInstance item, int count, int obj) {
         if (jObserveLogWindow != null && !jObserveLogWindow.isClosed()) {
@@ -512,8 +465,6 @@ public class Eva {
     /**
      * 穿牆日誌
      *
-     * @param s
-     * @param pcname
      */
     public static void LogMoveerrorAppend(String s, String pcname) {
         if (MoveErrorLogWindow != null && !MoveErrorLogWindow.isClosed()) {
@@ -537,8 +488,6 @@ public class Eva {
     /**
      * 錯誤日誌
      *
-     * @param s
-     * @param pc
      * @param type 1：錯誤信息<br>
      *             2：x、y、mapid，錯誤信息<br>
      *             3：玩家名稱，錯誤信息<br>
@@ -585,9 +534,6 @@ public class Eva {
     /**
      * 命令日誌
      *
-     * @param pcname
-     * @param cmd
-     * @param arg
      */
     public static void LogCommandAppend(String pcname, String cmd, String arg) {
         if (jCommandLogWindow != null && !jCommandLogWindow.isClosed()) {
@@ -604,7 +550,6 @@ public class Eva {
      * 管理器點擊事件出現是、否的提示框
      *
      * @param s 內容
-     * @return
      */
     public static int QMsg(String s) {
         int result = JOptionPane.showConfirmDialog(null, s, "大陸Manly提醒你：", 2, JOptionPane.INFORMATION_MESSAGE);
@@ -614,7 +559,6 @@ public class Eva {
     /**
      * 管理器點擊事件提示框，只有確定選項
      *
-     * @param s
      */
     public static void infoMsg(String s) {
         JOptionPane.showMessageDialog(null, s, "大陸Manly提醒你：", JOptionPane.INFORMATION_MESSAGE);
@@ -623,7 +567,6 @@ public class Eva {
     /**
      * 管理器錯誤提示語
      *
-     * @param s
      */
     public static void errorMsg(String s) {
         JOptionPane.showMessageDialog(null, s, "Server Message", JOptionPane.ERROR_MESSAGE);

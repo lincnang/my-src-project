@@ -106,8 +106,6 @@ public class PcAI implements Runnable {
     /**
      * 遇見BOSS飛
      *
-     * @param pc
-     * @return
      */
     private boolean ConfirmTheBOSS(final L1PcInstance pc) {
         try {

@@ -17,8 +17,6 @@ public class S_KillMessage extends ServerBasePacket {
     /**
      * 殺人公告
      *
-     * @param winName
-     * @param deathName
      */
     public S_KillMessage(String winName, String deathName) {
         if (ConfigSay.KILL_Position) {
@@ -39,8 +37,6 @@ public class S_KillMessage extends ServerBasePacket {
     /**
      * 賭場NPC對話
      *
-     * @param winName
-     * @param deathName
      */
     public S_KillMessage(String name, String msg, int i) {
         writeC(S_MESSAGE);

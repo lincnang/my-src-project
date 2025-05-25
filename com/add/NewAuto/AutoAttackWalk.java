@@ -62,8 +62,6 @@ public class AutoAttackWalk extends TimerTask {
     /**
      * 搜尋怪物
      *
-     * @param pc
-     * @return
      */
     private static L1Character SearchTarget(L1PcInstance pc) {
         try {
@@ -97,7 +95,6 @@ public class AutoAttackWalk extends TimerTask {
     /**
      * 隨機傳送處理
      *
-     * @param pc
      */
     private static void teleportation(L1PcInstance pc) {
         try {
@@ -229,7 +226,6 @@ public class AutoAttackWalk extends TimerTask {
      * @param y  目前Y
      * @param tx 目標X
      * @param ty 目標Y
-     * @return
      */
     private static int _targetDirection(int h, int x, int y, int tx, int ty) {
         try {
@@ -308,11 +304,6 @@ public class AutoAttackWalk extends TimerTask {
     /**
      * 寵物的傳送
      *
-     * @param npc
-     * @param x
-     * @param y
-     * @param map
-     * @param head
      */
     private static void teleport(L1NpcInstance npc, int x, int y, short map, int head) {
         try {
@@ -484,8 +475,6 @@ public class AutoAttackWalk extends TimerTask {
     /**
      * 確認怪物目標進行攻擊
      *
-     * @param pc
-     * @param target
      */
     private void AttackMon(L1PcInstance pc, L1Character target) {
         try {
@@ -513,8 +502,6 @@ public class AutoAttackWalk extends TimerTask {
     /**
      * 移動判斷
      *
-     * @param pc
-     * @param target
      */
     private void Move(L1PcInstance pc, L1Character target) {
         try {
@@ -793,9 +780,6 @@ public class AutoAttackWalk extends TimerTask {
     /**
      * 判斷前進方向
      *
-     * @param pc
-     * @param h
-     * @return
      */
     private int checkObject(L1PcInstance pc, int h) {
         if ((h >= 0) && (h <= 7)) {
@@ -817,8 +801,6 @@ public class AutoAttackWalk extends TimerTask {
     /**
      * 人物進行移動
      *
-     * @param pc
-     * @param dir
      */
     private void setDirectionMove(L1PcInstance pc, int dir) {
         update++;

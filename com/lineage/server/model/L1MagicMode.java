@@ -118,7 +118,6 @@ public abstract class L1MagicMode {
     /**
      * 計算施展者額外增加魔攻
      *
-     * @return
      */
     protected int getTargetSp() {
         int sp = 0;

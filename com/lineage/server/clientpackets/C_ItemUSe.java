@@ -796,8 +796,6 @@ public class C_ItemUSe extends ClientBasePacket {
     /**
      * 武器防具的使用<BR>
      *
-     * @param pc
-     * @param useItem
      * @return 該職業可用傳回:true
      */
     private boolean useItem(final L1PcInstance pc, final L1ItemInstance useItem) {
@@ -847,8 +845,6 @@ public class C_ItemUSe extends ClientBasePacket {
     /**
      * 設置防具的裝備
      *
-     * @param pc
-     * @param armor
      */
     private void useArmor(L1PcInstance pc, L1ItemInstance armor) {
         //int itemid = armor.getItem().getItemId();
@@ -1151,8 +1147,6 @@ public class C_ItemUSe extends ClientBasePacket {
     /**
      * 設置武器的裝備
      *
-     * @param pc
-     * @param weapon
      */
     private void useWeapon(L1PcInstance pc, L1ItemInstance weapon) {
         /** [原碼] 未滿 15 級的人物將無法裝備會減少「體質」點數的道具 */

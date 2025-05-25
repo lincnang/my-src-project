@@ -91,7 +91,6 @@ public class L1FieldObjectInstance extends L1NpcInstance {
      * 紅騎士 訓練副本
      * by darling
      *
-     * @param id
      */
     public void setMoveMapId(int id) {
         moveMapId = id;

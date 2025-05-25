@@ -51,7 +51,6 @@ public class ServerExecutor extends Thread {
     /**
      * 啟動監聽
      *
-     * @throws IOException
      */
     public void stsrtEcho() throws IOException {
         GeneralThreadPool.get().execute(this);

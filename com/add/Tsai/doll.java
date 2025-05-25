@@ -139,7 +139,6 @@ public class doll {
     /**
      * 閃避
      *
-     * @return
      */
     public int getShanbi() {
         return _addshanbi;
@@ -148,7 +147,6 @@ public class doll {
     /**
      * 迴避
      *
-     * @return
      */
     public int getHuibi() {
         return _addhuibi;
@@ -157,7 +155,6 @@ public class doll {
     /**
      * 藥水增加
      *
-     * @return
      */
     public int getYaoshui() {
         return _addyaoshui;
@@ -166,7 +163,6 @@ public class doll {
     /**
      * 負重
      *
-     * @return
      */
     public int getFuzhong() {
         return _addfuzhong;
@@ -175,7 +171,6 @@ public class doll {
     /**
      * 經驗
      *
-     * @return
      */
     public int getExp() {
         return _addexp;
@@ -184,7 +179,6 @@ public class doll {
     /**
      * 昏迷耐性
      *
-     * @return
      */
     public int getHunmi() {
         return _addhunmi;
@@ -193,7 +187,6 @@ public class doll {
     /**
      * 支撐耐性
      *
-     * @return
      */
     public int getZhicheng() {
         return _addzhicheng;
@@ -202,7 +195,6 @@ public class doll {
     /**
      * 石化耐性
      *
-     * @return
      */
     public int getShihua() {
         return _addshihua;
@@ -211,7 +203,6 @@ public class doll {
     /**
      * 睡眠耐性
      *
-     * @return
      */
     public int getShuimian() {
         return _addshuimian;
@@ -220,7 +211,6 @@ public class doll {
     /**
      * 寒冰耐性
      *
-     * @return
      */
     public int getHanbing() {
         return _addhanbing;
@@ -229,7 +219,6 @@ public class doll {
     /**
      * 暗黑耐性
      *
-     * @return
      */
     public int getAnhei() {
         return _addanhei;

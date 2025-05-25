@@ -14,7 +14,6 @@ public class S_Buddy extends ServerBasePacket {
     /**
      * 好友清單
      *
-     * @param objId
      */
     public S_Buddy(final int objId, final L1Buddy buddy) {
         buildPacket(objId, buddy);

@@ -55,8 +55,6 @@ public class S_AddSkill extends ServerBasePacket {
     /**
      * 增加技能列表(技能陣列)
      *
-     * @param pc
-     * @param skills
      */
     public S_AddSkill(final L1PcInstance pc, final int[] skills) {
         //final int i6 = skills[4] + skills[5] + skills[6] + skills[7];
@@ -192,7 +190,6 @@ public class S_AddSkill extends ServerBasePacket {
      * @param de1     黑妖技能1
      * @param de2     黑妖技能2 <BR>
      * @param royal   王族技能 <BR>
-     * @param un2     <BR>
      * @param elf1    精靈技能1
      * @param elf2    精靈技能2
      * @param elf3    精靈技能3
@@ -205,7 +202,6 @@ public class S_AddSkill extends ServerBasePacket {
      * @param l1      幻術師1
      * @param l2      幻術師2
      * @param l3      幻術師3 * @param wa1戰士1
-     * @param wa2戰士2
      */
     public S_AddSkill(final L1PcInstance pc, final int level1, final int level2, final int level3, final int level4, final int level5, final int level6, final int level7, final int level8, final int level9, final int level10, final int knight1, final int knight2, final int de1, final int de2, final int royal, final int un, final int elf1, final int elf2, final int elf3, final int elf4, final int elf5, final int elf6, final int k1, final int k2, final int k3, final int l1, final int l2, final int l3, final int wa1, final int wa2) {
         //final int i6 = level5 + level6 + level7 + level8;
@@ -307,9 +303,6 @@ public class S_AddSkill extends ServerBasePacket {
     /**
      * 測試
      *
-     * @param pc
-     * @param mode
-     * @param dx
      */
     public S_AddSkill(L1PcInstance pc, int mode, int dx) {
         final byte skill_list_values = 0x20;

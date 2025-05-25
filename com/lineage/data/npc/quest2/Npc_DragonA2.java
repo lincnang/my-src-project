@@ -168,8 +168,6 @@ public class Npc_DragonA2 extends NpcExecutor {
     /**
      * 開始執行副本任務
      *
-     * @param npc
-     * @param pc
      */
     private void staraQuestA(L1NpcInstance npc, L1PcInstance pc) {
         try {
@@ -224,9 +222,6 @@ public class Npc_DragonA2 extends NpcExecutor {
     /**
      * 是否無法進入副本
      *
-     * @param pc
-     * @param npc
-     * @return
      */
     private boolean isError2(L1PcInstance pc, L1NpcInstance npc) {
         if (!pc.getInventory().checkItem(82504, 1)) {

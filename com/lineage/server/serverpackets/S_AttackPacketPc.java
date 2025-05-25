@@ -70,8 +70,6 @@ public class S_AttackPacketPc extends ServerBasePacket {
     /**
      * 物件攻擊 - <font color="#ff0000">未命中</font>(PC 用 - 近距離)
      *
-     * @param pc
-     * @param target
      */
     public S_AttackPacketPc(final L1PcInstance pc, final L1Character target) {
         this.writeC(S_ATTACK);
@@ -91,7 +89,6 @@ public class S_AttackPacketPc extends ServerBasePacket {
     /**
      * 物件攻擊 - <font color="#ff0000">空擊</font>(PC 用 - 近距離)
      *
-     * @param pc
      */
     public S_AttackPacketPc(final L1PcInstance pc) {
         this.writeC(S_ATTACK);
@@ -111,8 +108,6 @@ public class S_AttackPacketPc extends ServerBasePacket {
     /**
      * 取回特定外型的特殊攻擊動作(近戰用)
      *
-     * @param pc
-     * @return
      */
     private int SpecialActid(final L1PcInstance pc) {
         int tempgfxid = pc.getTempCharGfx();

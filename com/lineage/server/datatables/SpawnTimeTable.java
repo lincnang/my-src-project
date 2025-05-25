@@ -41,7 +41,6 @@ public class SpawnTimeTable {
     /**
      * 刪除錯誤資料
      *
-     * @param clan_id
      */
     public static void delete(final int npc_id) {
         Connection cn = null;

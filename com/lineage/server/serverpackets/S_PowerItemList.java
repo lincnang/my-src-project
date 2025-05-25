@@ -16,8 +16,6 @@ public class S_PowerItemList extends ServerBasePacket {
     /**
      * 物品清單
      *
-     * @param pc
-     * @param items
      */
     public S_PowerItemList(L1PcInstance pc, int objid, List<L1ItemInstance> items) {
         writeC(S_RETRIEVE_LIST);

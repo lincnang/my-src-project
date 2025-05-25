@@ -36,7 +36,6 @@ public class WorldClan {
     /**
      * 全部血盟
      *
-     * @return
      */
     public Collection<L1Clan> getAllClans() {
         try {
@@ -52,8 +51,6 @@ public class WorldClan {
     /**
      * 傳回此血盟ID的血盟資料
      *
-     * @param objid
-     * @return
      */
     public L1Clan getClan(int clan_id) {
         L1Clan clan = null;
@@ -70,7 +67,6 @@ public class WorldClan {
     /**
      * 加入血盟清單
      *
-     * @param clan
      */
     public void storeClan(final L1Clan clan) {
         final L1Clan temp = this.getClan(clan.getClanName());
@@ -88,7 +84,6 @@ public class WorldClan {
     /**
      * 移出血盟清單
      *
-     * @param clan
      */
     public void removeClan(final L1Clan clan) {
         final L1Clan temp = this.getClan(clan.getClanName());
@@ -100,8 +95,6 @@ public class WorldClan {
     /**
      * 傳回血盟數據
      *
-     * @param clan_name
-     * @return
      */
     public L1Clan getClan(final String clan_name) {
         return this._isClan.get(clan_name);
@@ -110,7 +103,6 @@ public class WorldClan {
     /**
      * 血盟清單
      *
-     * @return
      */
     public ConcurrentHashMap<String, L1Clan> map() {
         return _isClan;
@@ -119,7 +111,6 @@ public class WorldClan {
     /**
      * 有城堡的血盟清單
      *
-     * @return
      */
     public HashMap<Integer, String> castleClanMap() {
         // <城堡編號, 血盟名稱>
@@ -136,8 +127,6 @@ public class WorldClan {
     /**
      * 加入血盟清單
      *
-     * @param key
-     * @param value
      */
     public void put(final String key, final L1Clan value) {
         try {
@@ -150,7 +139,6 @@ public class WorldClan {
     /**
      * 移出血盟清單
      *
-     * @param key
      */
     public void remove(final String key) {
         try {
@@ -163,8 +151,6 @@ public class WorldClan {
     /**
      * 地圖城堡顯示稅收
      *
-     * @param castleId
-     * @return
      */
     public String getCastleClanName(final int castleId) {
         for (L1Clan clan : _isClan.values()) {

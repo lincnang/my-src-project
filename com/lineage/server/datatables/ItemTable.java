@@ -251,7 +251,7 @@ public class ItemTable {
         _weapons = this.allWeapon();
         _armors = this.allArmor();
         this.buildFastLookupTable();
-        _log.info("讀取->道具,武器,防具資料: " + _etcitems.size() + "+" + _weapons.size() + "+" + _armors.size() + "=" + +(_etcitems.size() + _weapons.size() + _armors.size()) + "(" + timer.get() + "ms)");
+        _log.info("讀取->道具,武器,防具資料: " + _etcitems.size() + "+" + _weapons.size() + "+" + _armors.size() + "=" + (_etcitems.size() + _weapons.size() + _armors.size()) + "(" + timer.get() + "ms)");
     }
 
     public void loadarmors() {
@@ -609,8 +609,6 @@ public class ItemTable {
     /**
      * 傳回指定編號物品資料
      *
-     * @param itemid
-     * @return
      */
     public L1Item getTemplate(final int itemid) {
         try {
@@ -623,8 +621,6 @@ public class ItemTable {
     /**
      * 傳回指定名稱物品資料
      *
-     * @param nameid
-     * @return
      */
     public L1Item getTemplate(final String nameid) {
         for (final L1Item item : this._allTemplates) {
@@ -638,8 +634,6 @@ public class ItemTable {
     /**
      * 產生新物件
      *
-     * @param itemId
-     * @return
      */
     public L1ItemInstance createItem(final int itemId) {
         final L1Item temp = this.getTemplate(itemId);
@@ -672,8 +666,6 @@ public class ItemTable {
     /**
      * 依名稱(NameId)找回itemid
      *
-     * @param name
-     * @return
      */
     public int findItemIdByName(final String name) {
         int itemid = 0;
@@ -689,8 +681,6 @@ public class ItemTable {
     /**
      * 依名稱(中文)找回itemid
      *
-     * @param name
-     * @return
      */
     public int findItemIdByNameWithoutSpace(final String name) {
         int itemid = 0;
@@ -706,8 +696,6 @@ public class ItemTable {
     /**
      * 依名稱(中文)找回itemid
      *
-     * @param name
-     * @return
      */
     public int findItemIdByNameWithoutSpace2(final String name) {
         int itemid = 0;

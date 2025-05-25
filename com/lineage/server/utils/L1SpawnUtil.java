@@ -44,7 +44,6 @@ public class L1SpawnUtil {
      * @param user   施展的PC
      * @param skiiId 技能編號
      * @param gfxid  外型編號
-     * @return
      */
     public static L1EffectInstance spawnTrueTargetEffect(final int npcId, final int time, final L1Character cha, final L1PcInstance user, final int skiiId, final int gfxid) {
         L1EffectInstance effect = null;
@@ -243,7 +242,6 @@ public class L1SpawnUtil {
     /**
      * 召喚已有傢俱資料
      *
-     * @param temp
      */
     public static void spawn(final L1Furniture temp) {
         try {
@@ -270,8 +268,6 @@ public class L1SpawnUtil {
     /**
      * 執行傢俱召喚
      *
-     * @param pc
-     * @return
      */
     public static L1FurnitureInstance spawn(final L1PcInstance pc, final int npcid, final int itemObjectId) {
         try {
@@ -306,12 +302,6 @@ public class L1SpawnUtil {
     /**
      * 召喚指定編號NPC
      *
-     * @param npcid
-     * @param x
-     * @param y
-     * @param m
-     * @param h
-     * @return
      */
     public static L1NpcInstance spawn(final int npcid, final int x, final int y, final short m, final int h) {
         return spawnT(npcid, x, y, m, h, 0);
@@ -320,13 +310,7 @@ public class L1SpawnUtil {
     /**
      * 召喚指定編號NPC
      *
-     * @param npcid
-     * @param x
-     * @param y
-     * @param m
-     * @param h
      * @param time  存在時間(秒)
-     * @return
      */
     public static L1NpcInstance spawnT(final int npcid, final int x, final int y, final short m, final int h, int time) {
         try {
@@ -360,10 +344,6 @@ public class L1SpawnUtil {
     /**
      * 召喚分身
      *
-     * @param pc
-     * @param loc
-     * @param h
-     * @return
      */
     public static L1IllusoryInstance spawn(final L1PcInstance pc, final L1Location loc, final int h, final int time) {
         try {
@@ -505,10 +485,7 @@ public class L1SpawnUtil {
     /**
      * 召喚救援
      *
-     * @param npcid
-     * @param loc
      * @param show_id 副本編號
-     * @return
      */
     public static L1MonsterInstance spawnX(final int npcid, final L1Location loc, int show_id) {
         try {
@@ -542,10 +519,6 @@ public class L1SpawnUtil {
     /**
      * 召喚指定隊員
      *
-     * @param master
-     * @param npcid
-     * @param loc
-     * @return
      */
     public static L1MonsterInstance spawnParty(final L1NpcInstance master, final int npcid, final L1Location loc) {
         try {
@@ -580,9 +553,6 @@ public class L1SpawnUtil {
     /**
      * 依照L1Location召喚指定NPC
      *
-     * @param npcid
-     * @param loc
-     * @return
      */
     public static L1NpcInstance spawn(final int npcid, final L1Location loc) {
         try {
@@ -610,11 +580,6 @@ public class L1SpawnUtil {
      * 依召L1Location喚指定NPC<BR>
      * 附加 副本編號
      *
-     * @param npcid
-     * @param loc
-     * @param heading
-     * @param showId
-     * @return
      */
     public static L1NpcInstance spawn(int npcid, L1Location loc, int heading, int showId) {
         try {
@@ -701,13 +666,6 @@ public class L1SpawnUtil {
     /**
      * 召喚賭場參賽者
      *
-     * @param npcid
-     * @param x
-     * @param y
-     * @param m
-     * @param h
-     * @param gfxid
-     * @return
      */
     public static L1NpcInstance spawn(final int npcid, final int x, final int y, final short m, final int h, final int gfxid) {
         try {
@@ -756,7 +714,6 @@ public class L1SpawnUtil {
      * @param mapId  設置的地圖編號
      * @param user   施展的PC
      * @param skiiId 技能編號
-     * @return
      */
     public static L1EffectInstance spawnEffect(final int npcId, final int time, final int locX, final int locY, final short mapId, final L1Character user, final int skiiId) {
         L1EffectInstance effect = null;
@@ -821,8 +778,6 @@ public class L1SpawnUtil {
      * @param x         X
      * @param y         Y
      * @param mapid     地圖編號
-     * @param direction
-     * @return
      */
     public static L1DoorInstance spawnDoor(L1QuestUser quest, int doorId, int gfxid, int x, int y, short mapid, int direction) {
         L1Npc l1npc = NpcTable.get().getTemplate(81158);
@@ -893,11 +848,6 @@ public class L1SpawnUtil {
     /**
      * 召喚假人
      *
-     * @param pc
-     * @param de
-     * @param randomRange
-     * @param timeMillisToDelete
-     * @return
      */
     public static L1DeInstance spawnde(L1PcInstance pc, DeName de, int randomRange, int timeMillisToDelete) {
         try {
@@ -1000,8 +950,6 @@ public class L1SpawnUtil {
      * @param x                  X
      * @param y                  Y
      * @param map                MAP
-     * @param timeMillisToDelete
-     * @return
      */
     public static L1FieldObjectInstance spawn(int showid, int gfxid, int x, int y, int map, int timeMillisToDelete) {
         try {

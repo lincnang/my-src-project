@@ -138,7 +138,6 @@ public class BuddyTable {
     /**
      * 刪除改名玩家所有好友
      *
-     * @param pc
      */
     public void removeallbuddys(L1PcInstance pc) {
         Connection con = null;

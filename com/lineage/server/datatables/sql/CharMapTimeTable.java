@@ -93,10 +93,6 @@ public class CharMapTimeTable implements CharMapTimeStorage {
     /**
      * 新增地圖入場時間紀錄
      *
-     * @param objId
-     * @param order_id
-     * @param used_time
-     * @return
      */
     @Override
     public Map<Integer, Integer> addTime(final int objId, final int order_id, final int used_time) {
@@ -116,7 +112,6 @@ public class CharMapTimeTable implements CharMapTimeStorage {
     /**
      * 取回地圖入場時間紀錄
      *
-     * @param pc
      */
     @Override
     public void getTime(final L1PcInstance pc) {
@@ -129,7 +124,6 @@ public class CharMapTimeTable implements CharMapTimeStorage {
     /**
      * 刪除地圖入場時間紀錄
      *
-     * @param objid
      */
     @Override
     public void deleteTime(final int objid) {

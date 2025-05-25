@@ -56,7 +56,6 @@ public class S_DelSkill extends ServerBasePacket {
      * @param de1     黑妖技能1
      * @param de2     黑妖技能2 <BR>
      * @param royal   王族技能 <BR>
-     * @param un2     <BR>
      * @param elf1    精靈技能1
      * @param elf2    精靈技能2
      * @param elf3    精靈技能3

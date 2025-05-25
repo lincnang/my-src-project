@@ -16,7 +16,6 @@ public class S_MoveCharPacket extends ServerBasePacket {
     /**
      * 物件移動
      *
-     * @param cha
      */
     public S_MoveCharPacket(final L1Character cha) {
         int locx = cha.getX();

@@ -193,7 +193,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 增加物件主人(寵物)
      *
-     * @param master
      */
     public void addMaster(L1PcInstance master) {
         try {
@@ -276,8 +275,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 該物件是否為目標
      *
-     * @param cha
-     * @return
      */
     public boolean isHate(final L1Character cha) {
         return _hateList.isHate(cha);
@@ -286,8 +283,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 攻擊目標設置
      *
-     * @param cha
-     * @param hate
      */
     public void setHate(final L1Character cha, int hate) {
         try {
@@ -312,7 +307,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 攻擊目標設置
      *
-     * @param cha
      */
     public void setLink(final L1Character cha) {
     }
@@ -320,8 +314,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 互相幫助的判斷
      *
-     * @param targetPlayer
-     * @param family
      */
     public void serchLink(final L1PcInstance targetPlayer, final int family) {
         final List<L1Object> targetKnownObjects = targetPlayer.getKnownObjects();
@@ -491,7 +483,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 攻擊目標
      *
-     * @param target
      */
     private void attack(L1Character target) {
         // 物理攻擊可能位置
@@ -576,7 +567,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 脫逃
      *
-     * @param location
      */
     private void ascape(L1Location location) {
         int escapeDistance = 17;
@@ -599,7 +589,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 是否可以成為目標
      *
-     * @param cha
      * @return 人物 寵物 召喚獸 進入安全區 傳回無法攻擊(false)
      */
     private boolean isTraget(final L1Character cha) {
@@ -629,7 +618,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 對目標進行攻擊
      *
-     * @param target
      */
     public void attackTarget(final L1Character target) {
         // 攻擊者是分身
@@ -812,7 +800,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 檢取物品
      *
-     * @param targetItem
      */
     public void pickupTargetItem(final L1ItemInstance targetItem) {
         try {
@@ -929,8 +916,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC對話結果的處理
      *
-     * @param pc
-     * @param s
      */
     public void onFinalAction(final L1PcInstance pc, final String s) {
     }
@@ -949,7 +934,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 指定目標消除(hateList)
      *
-     * @param target
      */
     public void targetRemove(final L1Character target) {
         this._hateList.remove(target);
@@ -979,7 +963,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 傳回主人
      *
-     * @return
      */
     public L1Character getMaster() {
         return this._master;
@@ -988,7 +971,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 設置主人
      *
-     * @param cha
      */
     public void setMaster(final L1Character cha) {
         this._master = cha;
@@ -1101,7 +1083,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 目標清單
      *
-     * @return
      */
     public L1HateList getHateList() {
         return this._hateList;
@@ -1110,7 +1091,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * HP是否具備回覆條件
      *
-     * @return
      */
     public final boolean isHpR() {
         if (this.destroyed()) {// 進行刪除
@@ -1158,7 +1138,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * HP是否允許回覆
      *
-     * @return
      */
     public final boolean isHpRegenerationX() {
         return this._hprRunning;
@@ -1176,7 +1155,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * MP是否具備回覆條件
      *
-     * @return
      */
     public final boolean isMpR() {
         if (this.destroyed()) {// 進行刪除
@@ -1221,7 +1199,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * MP是否允許回覆
      *
-     * @return
      */
     public final boolean isMpRegenerationX() {
         return this._mprRunning;
@@ -1239,7 +1216,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * TODO NPC召喚後 各項數值初始化
      *
-     * @param template
      */
     public void setting_template(final L1Npc template) {
         this._npcTemplate = template;
@@ -1396,7 +1372,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 特定外型改變初始型態
      *
-     * @param gfxid
      */
     public void setGfxidInStatus(int gfxid) {
         switch (gfxid) {
@@ -1425,8 +1400,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 名稱顏色改變
      *
-     * @param npcid
-     * @return
      */
     private String newName(final int npcid) {
         String color = "";
@@ -1436,8 +1409,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 取回多外型
      *
-     * @param get_gfxid
-     * @return
      */
     private int newGfx(int get_gfxid) {
         int[] r = null;
@@ -1522,7 +1493,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 取回出生資訊
      *
-     * @return
      */
     public L1Spawn getSpawn() {
         return _spawn;
@@ -1531,7 +1501,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 暫存出生資訊
      *
-     * @param spawn
      */
     public void setSpawn(L1Spawn spawn) {
         _spawn = spawn;
@@ -1548,7 +1517,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 世界物件編號是否再利用
      *
-     * @param isReuseId
      */
     public void onDecay(final boolean isReuseId) {
         int id = 0;
@@ -1781,7 +1749,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 刪除隊員
      *
-     * @param mob
      */
     public void outParty(L1NpcInstance mob) {
         // 刪除隊員
@@ -1804,8 +1771,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 受攻擊mp減少計算
      *
-     * @param attacker
-     * @param damageMp
      */
     public void ReceiveManaDamage(final L1Character attacker, final int damageMp) {
     }
@@ -1813,8 +1778,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 受攻擊hp減少計算
      *
-     * @param attacker
-     * @param damage
      */
     public void receiveDamage(final L1Character attacker, final int damage) {
     }
@@ -1822,7 +1785,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC消化道具時間清單
      *
-     * @return
      */
     public HashMap<L1ItemInstance, DelItemTime> getDigestItem() {
         return _del_map;
@@ -1831,7 +1793,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 加入NPC消化道具時間清單
      *
-     * @param item
      */
     public void setDigestItem(final L1ItemInstance item) {
         final DelItemTime delItemTime = new DelItemTime();
@@ -1860,7 +1821,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 獲得道具的處理
      *
-     * @param item
      */
     public void onGetItem(L1ItemInstance item) {
         refineItem();
@@ -1873,7 +1833,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 隱藏狀態下玩家接觸時的處理
      *
-     * @param pc
      */
     public void approachPlayer(L1PcInstance pc) {
         if ((pc.hasSkillEffect(INVISIBILITY)) || (pc.hasSkillEffect(BLIND_HIDING) || pc.isGmInvis())) {
@@ -2018,8 +1977,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 使用治愈藥水
      *
-     * @param healHp
-     * @param effectId
      */
     private void useHealPotion(int healHp, final int effectId) {
         this.broadcastPacketAll(new S_SkillSound(this.getId(), effectId));
@@ -2044,7 +2001,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 使用加速藥水
      *
-     * @param time
      */
     private void useHastePotion(final int time) {
         this.broadcastPacketAll(new S_SkillHaste(this.getId(), 1, time));
@@ -2056,8 +2012,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 使用加速、補血道具
      *
-     * @param type
-     * @param chance
      */
     public void useItem(int type, int chance) {
         if (is_decay_potion()) {// 藥水霜化狀態
@@ -2099,7 +2053,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 往指定面向移動1格
      *
-     * @param dir
      */
     public void setDirectionMoveSrc(int dir) {
         if ((dir >= 0) && (dir <= 7)) {
@@ -2114,9 +2067,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 目標鄰近位置指定傳送
      *
-     * @param nx
-     * @param ny
-     * @return
      */
     public boolean nearTeleport(int nx, int ny) {
         int rdir = _random.nextInt(8);
@@ -2143,9 +2093,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 目標位置指定座標傳送
      *
-     * @param nx
-     * @param ny
-     * @param heading
      */
     public void teleport(int nx, int ny, int heading) {
         try {
@@ -2233,7 +2180,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 死亡後是否再召喚
      *
-     * @return
      */
     public boolean isReSpawn() {
         return _reSpawn;
@@ -2242,7 +2188,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 設定死亡後是否再召喚
      *
-     * @param flag
      */
     public void setreSpawn(boolean flag) {
         _reSpawn = flag;
@@ -2267,7 +2212,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 1:遁地2:飛天3:冰凍4:吉爾塔斯反屏
      *
-     * @return
      */
     public int getHiddenStatus() {
         return _hiddenStatus;
@@ -2276,7 +2220,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 1:遁地2:飛天3:冰凍4:吉爾塔斯反屏
      *
-     * @param i
      */
     public void setHiddenStatus(int i) {
         _hiddenStatus = i;
@@ -2335,7 +2278,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC AI時間軸 正在運行
      *
-     * @return
      */
     protected boolean isAiRunning() {
         return this._aiRunning;
@@ -2344,7 +2286,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC AI時間軸 正在運行
      *
-     * @param aiRunning
      */
     protected void setAiRunning(final boolean aiRunning) {
         this._aiRunning = aiRunning;
@@ -2412,7 +2353,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 動作間隔時間
      *
-     * @return
      */
     protected int getSleepTime() {
         return _sleep_time;
@@ -2421,7 +2361,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 動作間隔時間
      *
-     * @param sleep_time
      */
     public void setSleepTime(int sleep_time) {
         _sleep_time = sleep_time;
@@ -2430,7 +2369,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 死亡處理中
      *
-     * @return
      */
     protected boolean isDeathProcessing() {
         return this._deathProcessing;
@@ -2439,7 +2377,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 死亡處理中
      *
-     * @param deathProcessing
      */
     protected void setDeathProcessing(final boolean deathProcessing) {
         this._deathProcessing = deathProcessing;
@@ -2482,7 +2419,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC 動作暫停
      *
-     * @return
      */
     public boolean isRest() {
         return this._rest;
@@ -2491,7 +2427,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 設置 NPC 動作暫停
      *
-     * @param rest
      */
     public void setRest(final boolean rest) {
         this._rest = rest;
@@ -2500,7 +2435,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 是復活過的
      *
-     * @return
      */
     public boolean isResurrect() {
         return this._isResurrect;
@@ -2509,7 +2443,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 是復活過的
      *
-     * @param flag
      */
     public void setResurrect(final boolean flag) {
         this._isResurrect = flag;
@@ -2552,7 +2485,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 是否在隊伍中
      *
-     * @return
      */
     public boolean isInMobGroup() {
         return this.getMobGroupInfo() != null;
@@ -2561,7 +2493,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC隊伍資訊
      *
-     * @return
      */
     public L1MobGroupInfo getMobGroupInfo() {
         return this._mobGroupInfo;
@@ -2570,7 +2501,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC隊伍資訊
      *
-     * @param m
      */
     public void setMobGroupInfo(final L1MobGroupInfo m) {
         this._mobGroupInfo = m;
@@ -2579,7 +2509,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC隊伍 隊長NPCID
      *
-     * @return
      */
     public int getMobGroupId() {
         return this._mobGroupId;
@@ -2588,7 +2517,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC隊伍 隊長NPCID
      *
-     * @param i
      */
     public void setMobGroupId(final int i) {
         this._mobGroupId = i;
@@ -2597,7 +2525,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * NPC出現的對話
      *
-     * @param chatTiming
      */
     public void startChat(final int chatTiming) {
         // 出現時のチャットにも關わらず死亡中、死亡時のチャットにも關わらず生存中
@@ -2644,7 +2571,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 弓的攻擊動畫
      *
-     * @return
      */
     public int getBowActId() {
         if (_bowActId != -1) {
@@ -2656,7 +2582,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 弓的攻擊動畫
      *
-     * @param bowActId
      */
     public void setBowActId(int bowActId) {
         _bowActId = bowActId;
@@ -2665,7 +2590,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 攻擊距離
      *
-     * @return
      */
     public int get_ranged() {
         if (_ranged != -1) {
@@ -2677,7 +2601,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 攻擊距離
      *
-     * @param ranged
      */
     public void set_ranged(int ranged) {
         _ranged = ranged;
@@ -2714,7 +2637,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 傳回存在時間(秒)
      *
-     * @return
      */
     public int get_spawnTime() {
         return _spawnTime;
@@ -2723,7 +2645,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 具有存在時間
      *
-     * @return
      */
     public boolean is_spawnTime() {
         return _isspawnTime;
@@ -2732,7 +2653,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 設定存在時間(秒)
      *
-     * @param spawnTime
      */
     public void set_spawnTime(int spawnTime) {
         _spawnTime = spawnTime;
@@ -2742,7 +2662,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 施展過移除裝備
      *
-     * @return
      */
     public boolean isremovearmor() {
         return _isremovearmor;
@@ -2751,7 +2670,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 施展過移除裝備
      *
-     * @param isremovearmor
      */
     public void set_removearmor(boolean isremovearmor) {
         _isremovearmor = isremovearmor;
@@ -2760,7 +2678,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 死亡時間(秒)
      *
-     * @return
      */
     public int get_deadTimerTemp() {
         return _deadTimerTemp;
@@ -2769,7 +2686,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 死亡時間(秒)
      *
-     * @param time
      */
     public void set_deadTimerTemp(int time) {
         _deadTimerTemp = time;
@@ -2778,7 +2694,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 動作暫停時間(秒)
      *
-     * @return
      */
     public int get_stop_time() {
         return _stop_time;
@@ -2787,7 +2702,6 @@ public class L1NpcInstance extends L1Character {
     /**
      * 動作暫停時間(秒)
      *
-     * @param time
      */
     public void set_stop_time(int time) {
         _stop_time = time;

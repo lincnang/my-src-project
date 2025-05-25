@@ -172,7 +172,6 @@ public class NpcTeleportTable {
     /**
      * 是否為團隊地圖
      *
-     * @param mapid
      * @return !=0:是 0:不是
      */
     public Integer isPartyMap(final int mapid) {
@@ -182,7 +181,6 @@ public class NpcTeleportTable {
     /**
      * 團隊地圖清單
      *
-     * @param mapid
      * @return true:是 false:不是
      */
     public Map<Integer, Integer> partyMaps() {
@@ -192,7 +190,6 @@ public class NpcTeleportTable {
     /**
      * 是否為短時間計時地圖
      *
-     * @param mapid
      * @return true:是 false:不是
      */
     public boolean isTimeMap(final int mapid) {
@@ -202,7 +199,6 @@ public class NpcTeleportTable {
     /**
      * 短時間計時地圖清單
      *
-     * @param mapid
      * @return true:是 false:不是
      */
     public Map<Integer, Integer> timeMaps() {

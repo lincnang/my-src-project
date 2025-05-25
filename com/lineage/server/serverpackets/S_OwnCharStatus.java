@@ -14,7 +14,6 @@ public class S_OwnCharStatus extends ServerBasePacket {
     /**
      * 角色資訊
      *
-     * @param pc
      */
     public S_OwnCharStatus(final L1PcInstance pc) {
         int time = L1GameTimeClock.getInstance().currentTime().getSeconds();

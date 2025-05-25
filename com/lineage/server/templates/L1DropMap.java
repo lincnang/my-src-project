@@ -27,7 +27,6 @@ public class L1DropMap {
     /**
      * 指定地圖
      *
-     * @return
      */
     public int get_mapid() {
         return this._mapid;
@@ -36,7 +35,6 @@ public class L1DropMap {
     /**
      * 機率
      *
-     * @return
      */
     public int getChance() {
         return this._chance;
@@ -45,7 +43,6 @@ public class L1DropMap {
     /**
      * 物品編號
      *
-     * @return
      */
     public int getItemid() {
         return this._itemId;
@@ -54,7 +51,6 @@ public class L1DropMap {
     /**
      * 最大量
      *
-     * @return
      */
     public int getMax() {
         return this._max;
@@ -63,7 +59,6 @@ public class L1DropMap {
     /**
      * 最小量
      *
-     * @return
      */
     public int getMin() {
         return this._min;
@@ -72,7 +67,6 @@ public class L1DropMap {
     /**
      * 最大強化值
      *
-     * @return
      */
     public int getEnchantMax() {
         return this._enchant_max;
@@ -81,7 +75,6 @@ public class L1DropMap {
     /**
      * 最小強化值
      *
-     * @return
      */
     public int getEnchantMin() {
         return this._enchant_min;

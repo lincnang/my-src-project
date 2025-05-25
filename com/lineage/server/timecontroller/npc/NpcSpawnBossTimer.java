@@ -28,7 +28,6 @@ public class NpcSpawnBossTimer extends TimerTask {
     /**
      * 召喚BOSS
      *
-     * @param npc
      */
     private static void spawn(L1NpcInstance npc) {
         try {

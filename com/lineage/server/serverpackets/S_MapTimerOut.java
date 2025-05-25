@@ -22,7 +22,6 @@ public class S_MapTimerOut extends ServerBasePacket {
     /**
      * ctrl+Q顯示剩餘時間
      *
-     * @param pc
      */
     public S_MapTimerOut(final L1PcInstance pc) {
         final Collection<L1MapsLimitTime> mapLimitList = MapsGroupTable.get().getGroupMaps().values();

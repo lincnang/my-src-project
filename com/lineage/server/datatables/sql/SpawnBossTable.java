@@ -174,8 +174,6 @@ public class SpawnBossTable implements SpawnBossStorage {
     /**
      * 更新資料庫 下次召喚時間紀錄
      *
-     * @param id
-     * @param spawnTime
      */
     @Override
     public void upDateNextSpawnTime(final int id, final Calendar spawnTime) {
@@ -206,8 +204,6 @@ public class SpawnBossTable implements SpawnBossStorage {
     /**
      * BOSS召喚列表中物件
      *
-     * @param key
-     * @return
      */
     @Override
     public L1Spawn getTemplate(final int key) {

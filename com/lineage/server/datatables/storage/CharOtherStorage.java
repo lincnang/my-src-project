@@ -17,15 +17,12 @@ public interface CharOtherStorage {
     /**
      * 取回保留額外紀錄
      *
-     * @param pc
      */
     public L1PcOther getOther(final L1PcInstance pc);
 
     /**
      * 增加保留額外紀錄
      *
-     * @param objId
-     * @param other
      */
     public void storeOther(final int objId, final L1PcOther other);
 

@@ -563,37 +563,31 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 武器特效動畫 [自己] 開關
      *
-     * @return flag true:接收 false:拒絕
      */
     private boolean _attackme = true;
     /**
      * 武器特效動畫 [對方] 開關
      *
-     * @return flag true:接收 false:拒絕
      */
     private boolean _attackhe = false;
     /**
      * 套裝特效動畫 [自己] 開關
      *
-     * @return flag true:接收 false:拒絕
      */
     private boolean _armorme = true;
     /**
      * 套裝特效動畫 [對方] 開關
      *
-     * @return flag true:接收 false:拒絕
      */
     private boolean _armorhe = false;
     /**
      * 掉寶公告訊息 [自身] 開關
      *
-     * @return flag true:接收 false:拒絕
      */
     private boolean _droplist = true;
     /**
      * 殺人公告訊息 [自身] 開關
      *
-     * @return flag true:接收 false:拒絕
      */
     private boolean _kill = true;
     private int _weaponMD;
@@ -1082,13 +1076,11 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛召喚補血PC魔量判定
      *
-     * @param i
      */
     private int _summon_skillidmp;
     /**
      * 是否開啟寵物補血內掛
      *
-     * @return
      */
     private boolean _checksummidhp = false;
     private boolean _bossfei = true;//內掛遇見BOSS是否飛
@@ -1390,7 +1382,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 人物訊息拒絕清單
      *
-     * @return
      */
     public void addHpr(int i) {
         _trueHpr = (short) (_trueHpr + i);
@@ -2026,8 +2017,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 可以觀看HP的對象(特別定義)
      *
-     * @param obj
-     * @return
      */
     public boolean isHpBarTarget(final L1Object obj) {
         if (obj instanceof L1PcInstance) {// 加入陣營戰活動同隊血條顯示
@@ -2055,8 +2044,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * GM HPBAR 可以觀看HP的對象
      *
-     * @param obj
-     * @return
      */
     public boolean isGmHpBarTarget(L1Object obj) {
         if (obj instanceof L1PetInstance) {
@@ -2077,8 +2064,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * GM HPBAR 只看PC角色
      *
-     * @param obj
-     * @return
      */
     public boolean GmHpBarForPc(L1Object obj) {
         return obj instanceof L1PcInstance;
@@ -2225,7 +2210,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 輔助(自動刪物)
      *
-     * @return
      */
     public L1RemoveItemInventory getRemoveItemInventory() {
         return _dwarfForRemoveItem;
@@ -2352,7 +2336,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否有監看權限
      *
-     * @return
      */
     public boolean isMonitor() {
         return _monitor;
@@ -2361,7 +2344,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 設定是否有監看權限
      *
-     * @param flag
      */
     public void setMonitor(boolean flag) {
         _monitor = flag;
@@ -2999,9 +2981,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否在戰爭旗中並在攻城時段中
      *
-     * @param pc
-     * @param target
-     * @return
      */
     private boolean isInWarAreaAndWarTime(L1PcInstance pc, L1PcInstance target) {
         int castleId = L1CastleLocation.getCastleIdByArea(pc);
@@ -3081,8 +3060,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 受攻擊MP減少時的處理
      *
-     * @param attacker
-     * @param mpDamage
      */
     public void receiveManaDamage(L1Character attacker, int mpDamage) {
         if (mpDamage > 0 && !isDead()) {
@@ -3110,8 +3087,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 魔法傷害遞減計算
      *
-     * @param damage
-     * @return
      */
     public double isMagicDamager(double damage) {
         long nowTime = System.currentTimeMillis();
@@ -3522,7 +3497,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 死亡噴出物品
      *
-     * @param count
      */
     private void caoPenaltyResult(int count) {
         new Timestamp(System.currentTimeMillis());
@@ -3615,8 +3589,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否參加血盟戰中
      *
-     * @param lastAttacker
-     * @return
      */
     public boolean simWarResult(L1Character lastAttacker) {
         if (getClanid() == 0) {
@@ -3783,7 +3755,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 死亡損失經驗值
      *
-     * @return
      */
     private long deathPenalty() {
         int oldLevel = getLevel();
@@ -4425,7 +4396,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 人物資料存檔
      *
-     * @throws Exception
      */
     public void save() throws Exception {
         if (isGhost()) {
@@ -4445,7 +4415,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 人物VIP資料存檔
      *
-     * @throws Exception
      */
     public void saveVip() throws Exception {
         CharacterTable.get().updateVipTime(this);
@@ -4492,7 +4461,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否具有生命之樹果實效果
      *
-     * @return
      */
     public boolean isRibrave() { // 生命之樹果實 移速 * 1.15
         return hasSkillEffect(STATUS_RIBRAVE);
@@ -4501,7 +4469,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 神聖疾走效果 行走加速效果 風之疾走效果 生命之樹果實效果
      *
-     * @return
      */
     public boolean isFastMovable() {
         return this.hasSkillEffect(HOLY_WALK) || this.hasSkillEffect(MOVING_ACCELERATION) || this.hasSkillEffect(WIND_WALK) || this.hasSkillEffect(STATUS_RIBRAVE);
@@ -4514,7 +4481,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否具有勇敢藥水效果
      *
-     * @return
      */
     public boolean isBrave() {
         return hasSkillEffect(STATUS_BRAVE) || hasSkillEffect(FIRE_BLESS) || hasSkillEffect(BLOODLUST);
@@ -4523,7 +4489,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 荒神加速效果
      *
-     * @return
      */
     public boolean isSuperBrave() {
         return hasSkillEffect(STATUS_BRAVE2);
@@ -4532,7 +4497,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否具有精靈餅乾效果
      *
-     * @return
      */
     public boolean isElfBrave() {
         return hasSkillEffect(STATUS_ELFBRAVE);
@@ -4541,7 +4505,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否具有三段加速效果
      *
-     * @return
      */
     public boolean isBraveX() {
         return hasSkillEffect(STATUS_BRAVE3);
@@ -4550,7 +4513,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否具有綠色藥水加速效果
      *
-     * @return
      */
     public boolean isHaste() {
         return hasSkillEffect(STATUS_HASTE) || hasSkillEffect(HASTE) || hasSkillEffect(GREATER_HASTE) || getMoveSpeed() == 1;
@@ -5333,7 +5295,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 傳回一個信件的黑名單 // 7.6
      *
-     * @return
      */
     // public L1ExcludingMailList getExcludingMailList() {
     // return _excludingMailList;
@@ -5544,7 +5505,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加古文字魔法武器傷害
      *
-     * @param weaponMD
      */
     public void addweaponMD(int weaponMD) {
         _weaponMD += weaponMD;
@@ -5557,7 +5517,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加古文字魔法武器機率
      *
-     * @param ///lift
      */
     public void addweaponMDC(int weaponMDC) {
         _weaponMDC += weaponMDC;
@@ -5570,7 +5529,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加古文字魔法武器機率
      *
-     * @param //lift
      */
     public void addreducedmg(int reducedmg) {
         _reducedmg += reducedmg;
@@ -5589,7 +5547,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加古文字魔法武器機率
      *
-     * @param //*lift
      */
     public void addreduceMdmg(int reduceMdmg) {
         _reduceMdmg += reduceMdmg;
@@ -5716,7 +5673,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否展開變身控制選單
      *
-     * @return
      */
     public boolean isShapeChange() {
         return _isShapeChange;
@@ -5725,7 +5681,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 設定是否展開變身控制選單
      *
-     * @param isShapeChange
      */
     public void setShapeChange(boolean isShapeChange) {
         _isShapeChange = isShapeChange;
@@ -5819,7 +5774,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 設置目前攻擊對像
      *
-     * @param cha
      */
     public void setNowTarget(final L1Character cha) {
         this._aiTarget = cha;
@@ -5868,7 +5822,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 設定對話輸出
      *
-     * @param b
      */
     public void set_outChat(L1DeInstance b) {
         _outChat = b;
@@ -5893,7 +5846,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 媽祖祝福時間
      *
-     * @return
      */
     public int get_mazu_time() {
         return _mazu_time;
@@ -5906,7 +5858,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 機率增加傷害
      *
-     * @param int1
      * @param int2 發動機率
      */
     public void set_dmgAdd(int int1, int int2) {
@@ -6011,7 +5962,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 弱點曝光時間
      *
-     * @return
      */
     public long get_weaknss_t() {
         return _weaknss_t;
@@ -6020,7 +5970,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 弱點曝光階段
      *
-     * @return
      */
     public int get_weaknss() {
         return _weaknss;
@@ -6029,7 +5978,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 弱點曝光階段
      *
-     * @param lv
      */
     public void set_weaknss(int lv, long t) {
         _weaknss = lv;
@@ -6039,7 +5987,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 角色表情動作代號
      *
-     * @return
      */
     public int get_actionId() {
         return _actionId;
@@ -6048,7 +5995,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 角色表情動作代號
      *
-     * @param actionId
      */
     public void set_actionId(int actionId) {
         _actionId = actionId;
@@ -6148,8 +6094,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加機率吸魔
      *
-     * @param dice_mp
-     * @param sucking_mp
      */
     public void add_dice_mp(int dice_mp, int sucking_mp) {
         _dice_mp += dice_mp;
@@ -6175,7 +6119,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加機率防禦解除
      *
-     * @param lift
      */
     public void add_lift(int lift) {
         _lift += lift;
@@ -6204,7 +6147,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 重設名稱
      *
-     * @param b
      */
     public void rename(boolean b) {
         _rname = b;
@@ -6213,7 +6155,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 重設名稱
      *
-     * @return
      */
     public boolean is_rname() {
         return _rname;
@@ -6222,7 +6163,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 重設封號
      *
-     * @return
      */
     public boolean is_retitle() {
         return _retitle;
@@ -6231,7 +6171,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 重設封號
      *
-     * @param b
      */
     public void retitle(boolean b) {
         _retitle = b;
@@ -6462,7 +6401,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加藥水回復量%
      *
-     * @param up_hp_potion
      */
     public void add_up_hp_potion(int up_hp_potion) {
         _up_hp_potion += up_hp_potion;
@@ -6475,7 +6413,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加藥水回復指定量
      *
-     * @param uhp_number
      */
     public void add_uhp_number(int uhp_number) {
         _uhp_number += uhp_number;
@@ -6496,7 +6433,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 加入邀請列表
      *
-     * @param playername
      */
     public void addInviteList(String playername) {
         if (_InviteList.contains(playername)) {
@@ -6508,7 +6444,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 從邀請列表中移除
      *
-     * @param name
      */
     public void removeInviteList(String name) {
         if (!_InviteList.contains(name)) {
@@ -6520,7 +6455,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 傳回邀請列表
      *
-     * @return
      */
     public ArrayList<String> getInviteList() {
         return _InviteList;
@@ -6553,7 +6487,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 傳回血盟申請列表
      *
-     * @return
      */
     public ArrayList<String> getCMAList() {
         return _cmalist;
@@ -6642,7 +6575,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否有真妲蒂斯魔石效果
      *
-     * @return
      */
     public final boolean isEffectDADIS() {
         return _EffectDADIS;
@@ -6651,7 +6583,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 給予真妲蒂斯魔石效果
      *
-     * @param checkFlag
      */
     public final void setDADIS(boolean checkFlag) {
         if (_EffectDADIS != checkFlag) {
@@ -6669,7 +6600,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 給予真妲蒂斯魔石效果
      *
-     * @param checkFlag
      */
     public final void giveDADIS(boolean checkFlag) {
         _EffectDADIS = checkFlag;
@@ -6699,7 +6629,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否有妲蒂斯魔石效果
      *
-     * @return
      */
     public final boolean isEffectGS() {
         return _EffectGS;
@@ -6708,7 +6637,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 給予妲蒂斯魔石效果
      *
-     * @param checkFlag
      */
     public final void setGS(boolean checkFlag) {
         if (_EffectGS != checkFlag) {
@@ -6726,7 +6654,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 給予妲蒂斯魔石效果
      *
-     * @param checkFlag
      */
     public final void giveGS(boolean checkFlag) {
         _EffectGS = checkFlag;
@@ -6756,7 +6683,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否有守護者的靈魂效果
      *
-     * @return
      */
     public final boolean isProtector() {
         return _isProtector;
@@ -6765,7 +6691,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 給予守護者的靈魂效果
      *
-     * @param checkFlag
      */
     public final void setProtector(boolean checkFlag) {
         if (_isProtector != checkFlag) {
@@ -6784,7 +6709,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 守護者靈魂效果
      *
-     * @param checkFlag
      */
     public final void giveProtector(boolean checkFlag) {
         _isProtector = checkFlag;
@@ -6810,7 +6734,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否有戰神之魂的效果
      *
-     * @return
      */
     public final boolean isMars() {
         return _isMars;
@@ -6819,7 +6742,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 給予戰神之魂的效果
      *
-     * @param checkFlag
      */
     public final void setMars(boolean checkFlag) {
         if (_isMars != checkFlag) {
@@ -6837,7 +6759,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 給予戰神之魂的效果
      *
-     * @param checkFlag
      */
     public final void giveMars(boolean checkFlag) {
         _isMars = checkFlag;
@@ -7077,7 +6998,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 經驗加成%數
      *
-     * @return
      */
     public int getExpPoint() {
         return _expPoint;
@@ -7086,7 +7006,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 設定經驗加成%數
      *
-     * @param i
      */
     public void setExpPoint(int i) {
         _expPoint = i;
@@ -7393,7 +7312,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回奇巖地監/古魯丁地監已使用時間(秒).
      *
-     * @return
      */
     public int getRocksPrisonTime() {
         return this._rocksPrisonTime;
@@ -7411,7 +7329,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回拉斯塔巴德地監已使用時間(秒).
      *
-     * @return
      */
     public int getLastabardTime() {
         return this._lastabardTime;
@@ -7429,7 +7346,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回象牙塔已使用時間(秒).
      *
-     * @return
      */
     public int getIvoryTowerTime() {
         return this._ivorytowerTime;
@@ -7447,7 +7363,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回龍之谷地監已使用時間(秒).
      *
-     * @return
      */
     public int getDragonValleyTime() {
         return this._dragonvalleyTime;
@@ -7465,7 +7380,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回噬魂塔副本已使用時間(秒).
      *
-     * @return
      */
     public int getSoulTime() {
         return this._SoulTime;
@@ -7483,7 +7397,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回冰女副本已使用時間(秒).
      *
-     * @return
      */
     public int getIceTime() {
         return this._iceTime;
@@ -7501,7 +7414,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回媽祖已使用狀態.
      *
-     * @return
      */
     public int getMazuTime() {
         return this._MazuTime;
@@ -7531,7 +7443,6 @@ public class L1PcInstance extends L1Character { // src015
      * 取回計時地圖已使用時間(秒)
      *
      * @param mapid 玩家所在的地圖
-     * @return
      */
     public int getMapUseTime(final int mapid) {
         int result = 0;
@@ -7675,7 +7586,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 昏迷命中
      *
-     * @return
      */
     public void addStunLevel(int add) {
         _stunlevel += add;
@@ -7813,7 +7723,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 狂戰士-粉碎
      *
-     * @return
      */
     public boolean isCRASH() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_CRASH);
@@ -7822,7 +7731,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 狂戰士-狂暴
      *
-     * @return
      */
     public boolean isFURY() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_FURY);
@@ -7831,7 +7739,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 狂戰士-迅猛雙斧
      *
-     * @return
      */
     public boolean isSLAYER() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_SLAYER);
@@ -7840,7 +7747,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 狂戰士-泰坦：岩石
      *
-     * @return
      */
     public boolean isTITANROCK() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_TITANROCK);
@@ -7849,7 +7755,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 狂戰士-泰坦：子彈
      *
-     * @return
      */
     public boolean isTITANBULLET() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_TITANBULLET);
@@ -7859,7 +7764,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 狂戰士-護甲身軀
      *
-     * @return
      */
     public boolean isARMORGARDE() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_ARMORGARDE);
@@ -7868,7 +7772,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 狂戰士-泰坦：魔法
      *
-     * @return
      */
     public boolean isTITANMAGIC() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_TITANMAGIC);
@@ -7877,7 +7780,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 法師-神諭
      *
-     * @return
      */
     public boolean isOracle() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_ORACLE);
@@ -7886,7 +7788,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 騎士-單手劍
      *
-     * @return
      */
     public boolean isSWORD() {
         return CharSkillReading.get().spellCheck(this.getId(), PASSIVE_SWORD);
@@ -7895,7 +7796,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 騎士-雙手劍
      *
-     * @return
      */
     public boolean isSWORD_2() {
 
@@ -7905,7 +7805,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 妖精-重擊之矢
      *
-     * @return
      */
     public boolean isHeavyStrikeArrow() {
         return CharSkillReading.get().spellCheck(this.getId(), HeavyStrikeArrow);
@@ -7914,7 +7813,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 檢查玩家是否擁有妖精被動 - 重擊之矢技能
      *
-     * @return 如果擁有此技能則回傳 true，否則 false
      */
 
     public void addTripleArrowCount(L1Character enemyTarget) {
@@ -8097,8 +7995,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否在記時地圖
      *
-     * @return true 在記時地圖
-     * @return false 不在記時地圖
      */
     public void setTimeMap(boolean isTimeMap) {
         this.isTimeMap = isTimeMap;
@@ -8118,7 +8014,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回魔族實驗室已使用時間(秒)
      *
-     * @return
      */
     public int get_MonsterLabTime() {
         return _MonsterLabTime;
@@ -8127,7 +8022,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 取回破滅戰場已使用時間(秒)
      *
-     * @return
      */
     public int get_WarzoneTime() {
         return _WarzoneTime;
@@ -8471,7 +8365,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * PC AI時間軸 正在運行
      *
-     * @return
      */
     protected boolean isAiRunning() {
         return this._aiRunning;
@@ -8480,7 +8373,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * PC AI時間軸 正在運行
      *
-     * @param aiRunning
      */
     protected void setAiRunning(final boolean aiRunning) {
         this._aiRunning = aiRunning;
@@ -8563,7 +8455,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 對目標進行攻擊
      *
-     * @param target
      */
     public void attackTarget(final L1Character target) {
         // System.out.println("對目標進行攻擊");
@@ -9055,8 +8946,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 攻擊目標設置
      *
-     * @param cha
-     * @param hate
      */
     public void setHate(final L1Character cha, int hate) {
         try {
@@ -9082,7 +8971,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 目標為空掛機尋路中
      *
-     * @return
      */
     public boolean isPathfinding() {
         // System.out.println("目標為空掛機尋路中");
@@ -9589,7 +9477,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加PVP傷害
      *
-     * @return
      */
     public int getPvpDmg() {
         return _PvpDmg;
@@ -9598,7 +9485,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加PVP傷害
      *
-     * @param i
      */
     public void setPvpDmg(final int i) {
         _PvpDmg += i;
@@ -9607,7 +9493,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 减免PVP傷害
      *
-     * @return
      */
     public int getPvpDmg_R() {
         return _PvpDmg_R;
@@ -9616,7 +9501,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 减免PVP傷害
      *
-     * @param i
      */
     public void setPvpDmg_R(final int i) {
         _PvpDmg_R += i;
@@ -9625,7 +9509,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 正義滿角色名稱變黃
      *
-     * @return
      */
     public boolean isLawfulName() {
         return _LawfulName;
@@ -9634,7 +9517,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 正義滿角色名稱變黃
      *
-     * @param flag
      */
     public void setLawfulName(final boolean flag) {
         _LawfulName = flag;
@@ -10957,7 +10839,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 離開遊戲
      *
-     * @return
      */
     public boolean IsDisconnect() {
         return _disconnect;
@@ -10966,7 +10847,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 離開遊戲
      *
-     * @param b
      */
     public void setDisconnect(boolean b) {
         _disconnect = b;
@@ -10979,7 +10859,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否開啟自動練功(新版)
      *
-     * @return
      */
     public boolean IsAuto() {
         return _isauto;
@@ -10988,7 +10867,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否開啟自動練功(新版)
      *
-     * @param b
      */
     public void setIsAuto(boolean b) {
         _isauto = b;
@@ -11041,7 +10919,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛幾分鐘後進行線程重置
      *
-     * @return
      */
     public int getRestartAuto() {
         return _resetautosec;
@@ -11050,7 +10927,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛幾分鐘後進行線程重置
      *
-     * @param i
      */
     public void setRestartAuto(int i) {
         _resetautosec = i;
@@ -11059,7 +10935,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛重置處理秒數
      *
-     * @return
      */
     public int getRestartAutoStartSec() {
         return _resetautostartsec;
@@ -11068,7 +10943,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛重置處理秒數
      *
-     * @param i
      */
     public void setRestartAutoStartSec(int i) {
         _resetautostartsec = i;
@@ -11077,7 +10951,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 掛機死亡回練功點X
      *
-     * @return
      */
     public int getDeathReturnX() {
         return _drx;
@@ -11095,7 +10968,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 掛機死亡回練功點Y
      *
-     * @return
      */
     public int getDeathReturnY() {
         return _dry;
@@ -11104,7 +10976,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 掛機死亡回練功點Y
      *
-     * @param i
      */
     public void setDeathReturnY(int i) {
         _dry = i;
@@ -11113,7 +10984,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 掛機死亡回練功點map
      *
-     * @return
      */
     public int getDeathReturnMap() {
         return _drm;
@@ -11122,7 +10992,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 掛機死亡回練功點map
      *
-     * @param i
      */
     public void setDeathReturnMap(int i) {
         _drm = i;
@@ -11131,7 +11000,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 死亡自動回到練功點
      *
-     * @return
      */
     public boolean IsDeathReturn() {
         return _deathreturn;
@@ -11140,7 +11008,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 死亡自動回到練功點
      *
-     * @param b
      */
     public void setDeathReturn(boolean b) {
         if (_deathreturn) {
@@ -11165,7 +11032,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛自動購買箭
      *
-     * @return
      */
     public boolean IsBuyArrow() {
 //        return _buyarrow;
@@ -11175,7 +11041,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛自動購買箭
      *
-     * @param b
      */
     public void setBuyArrow(boolean b) {
 //        _buyarrow = b;
@@ -11185,7 +11050,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否開啟內掛被攻擊瞬移狀態
      *
-     * @return
      */
     public boolean IsAttackTeleport() {
 //        return _attackteleport;
@@ -11195,7 +11059,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否開啟內掛被攻擊瞬移狀態
      *
-     * @param b
      */
     public void setIsAttackTeleport(boolean b) {
 //        _attackteleport = b;
@@ -11205,7 +11068,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛被玩家攻擊瞬移
      *
-     * @return
      */
     public boolean IsAttackTeleportHp() {
 //        return _attackteleporthp;
@@ -11215,7 +11077,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛被玩家攻擊瞬移
      *
-     * @param b
      */
     public void setIsAttackTeleportHp(boolean b) {
 //        _attackteleporthp = b;
@@ -11226,8 +11087,6 @@ public class L1PcInstance extends L1Character { // src015
      * 內掛專用AutoAttack2020_1<br>
      * 是否存在於不要被搜尋到的目標對像
      *
-     * @param id
-     * @return
      */
     public boolean InTargetList(Integer id) {
         return _targetId.contains(id);
@@ -11237,7 +11096,6 @@ public class L1PcInstance extends L1Character { // src015
      * 內掛專用AutoAttack2020_1<br>
      * 抓取不要搜尋到的目標對像
      *
-     * @return
      */
     public ArrayList<Integer> TargetList() {
         return _targetId;
@@ -11260,7 +11118,6 @@ public class L1PcInstance extends L1Character { // src015
      * 內掛專用AutoAttack2020_1<br>
      * 目標對像加入暫存
      *
-     * @param // skillid
      */
     public void addTargetList(Integer id) {
         if (!_targetId.contains(id)) {
@@ -11271,7 +11128,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 看到仇人瞬移
      *
-     * @return
      */
     public boolean IsEnemyTeleport() {
 //        return _enemyteleport;
@@ -11281,7 +11137,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 看到仇人瞬移
      *
-     * @param b
      */
     public void setIsEnemyTeleport(boolean b) {
 //        _enemyteleport = b;
@@ -11291,7 +11146,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 寫入仇人名稱
      *
-     * @return
      */
     public boolean IsKeyInEnemy() {
         return _keyenemy;
@@ -11300,7 +11154,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 寫入仇人名稱
      *
-     * @param b
      */
     public void setKeyInEnemy(boolean b) {
         _keyenemy = b;
@@ -11309,7 +11162,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 移除仇人名稱
      *
-     * @return
      */
     public boolean IsKeyOutEnemy() {
         return _outenemy;
@@ -11318,7 +11170,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 移除仇人名稱
      *
-     * @param b
      */
     public void setKeyOutEnemy(boolean b) {
         _outenemy = b;
@@ -11327,7 +11178,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 加入仇人陣列
      *
-     * @param
      */
     public void setInEnemyList(String id) {
         if (!_attackenemy.contains(id)) {
@@ -11338,7 +11188,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 移出仇人陣列
      *
-     * @param //*skillid
      */
     public void removeInEnemyList(String id) {
         _attackenemy.remove(id);
@@ -11347,8 +11196,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否在已知仇人陣列內
      *
-     * @param id
-     * @return
      */
     public boolean isInEnemyList(String id) {
         return _attackenemy.contains(id);
@@ -11388,8 +11235,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 檢查是否已經存在內掛自動施放技能
      *
-     * @param id
-     * @return
      */
     public boolean isAttackSkillList(Integer id) {
         return _autoattackNew.contains(id);
@@ -11398,7 +11243,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 查詢目前已經紀錄技能數量
      *
-     * @return
      */
     public int AttackSkillSize() {
         return _autoattackNew.size();
@@ -11407,7 +11251,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 傳回隨機技能id
      *
-     * @return
      */
     public int AttackSkillId() {
         int id = _random.nextInt(_autoattackNew.size());
@@ -11427,7 +11270,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 加入內掛自動施放技能陣列
      *
-     * @param id
      */
     public void setAttackSkillList(Integer id) {
         if (!_autoattackNew.contains(id)) {
@@ -11443,7 +11285,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛紀錄自動施放技能
      *
-     * @return
      */
     public boolean IsAttackSkill() {
         return _attackskill;
@@ -11452,7 +11293,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛紀錄自動施放技能
      *
-     * @param b
      */
     public void setAttackSkill(boolean b) {
         _attackskill = b;
@@ -11461,7 +11301,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛自動召喚模組
      *
-     * @return
      */
     public int getSummonIdOfAuto() {
         return _summonid;
@@ -11470,7 +11309,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 內掛自動召喚模組
      *
-     * @param i
      */
     public void setSummonIdOfAuto(int i) {
         _summonid = i;
@@ -11479,7 +11317,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否正在設定自動召喚
      *
-     * @return
      */
     public boolean IsSetSummonFalg() {
         return _issetsummonfalg;
@@ -11488,7 +11325,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否正在設定自動召喚
      *
-     * @param b
      */
     public void setSetSummonFalg(boolean b) {
         _issetsummonfalg = b;
@@ -11542,7 +11378,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否開啟內掛瞬移
      *
-     * @param b
      */
     public void setAutoTeleport(boolean b) {
 //        _autoteleport = b;
@@ -11552,7 +11387,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 是否開啟內掛瞬移
      *
-     * @return
      */
     public boolean IsAutoTeleport() {
 //        return _autoteleport;
@@ -11571,7 +11405,6 @@ public class L1PcInstance extends L1Character { // src015
      * 召喚盟友<br>
      * 一般用
      *
-     * @return
      */
     public boolean IsClanCall() {
         return _iscall;
@@ -11581,7 +11414,6 @@ public class L1PcInstance extends L1Character { // src015
      * 召喚盟友<br>
      * 一般用
      *
-     * @param b
      */
     public void setClanCall(boolean b) {
         _iscall = b;
@@ -11592,7 +11424,6 @@ public class L1PcInstance extends L1Character { // src015
      * 輸入盟友NAME<br>
      * 一般用
      *
-     * @return
      */
     public boolean IndexCallClanPcName() {
         return _indexcall;
@@ -11603,7 +11434,6 @@ public class L1PcInstance extends L1Character { // src015
      * 輸入盟友NAME<br>
      * 一般用
      *
-     * @param b
      */
     public void setIndexCallClanPcName(boolean b) {
         _indexcall = b;
@@ -11620,7 +11450,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 開怪後剩餘延遲秒數
      *
-     * @return
      */
     public int getNA432() {
         return _na432;
@@ -11629,7 +11458,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 開怪後剩餘延遲秒數
      *
-     * @param i
      */
     public void setNA432(int i) {
         _na432 = i;
@@ -11639,7 +11467,6 @@ public class L1PcInstance extends L1Character { // src015
      * 實際運算<BR>
      * 自設定無怪幾秒飛
      *
-     * @return
      */
     public int getNA61() {
         return _na61;
@@ -11649,7 +11476,6 @@ public class L1PcInstance extends L1Character { // src015
      * 實際運算<BR>
      * 自設定無怪幾秒飛
      *
-     * @param i
      */
     public void setNA61(int i) {
         _na61 = i;
@@ -11666,7 +11492,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 三重矢
      *
-     * @return
      */
     public boolean getIsTRIPLE_ARROW() {
         return _TRIPLEARROW;
@@ -11675,7 +11500,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 三重矢
      *
-     * @param s
      */
     public void setIsTRIPLE_ARROW(boolean s) {
         _TRIPLEARROW = s;
@@ -11950,7 +11774,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 呼喚隊友
      *
-     * @return
      */
     public boolean iszudui() {
         return _zudui;
@@ -11959,7 +11782,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 呼喚隊友
      *
-     * @param flag
      */
     public void setzudui(boolean flag) {
         _zudui = flag;
@@ -12021,7 +11843,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 龍之祝福
      *
-     * @return
      */
     public int getDragonExp() {
         return _dragonexp;
@@ -12030,7 +11851,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 龍之祝福
      *
-     * @param i
      */
     public void setDragonExp(int i) {
         _dragonexp = i;
@@ -12051,7 +11871,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 金幣交易 獲取輸入的金幣數量
      *
-     * @return
      */
     public long getAdenaTradeCount() {
         return _adenaTradeCount;
@@ -12060,7 +11879,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 金幣交易 記錄輸入的金幣數量
      *
-     * @param adenaTradeCount
      */
     public void setAdenaTradeCount(final long adenaTradeCount) {
         _adenaTradeCount = adenaTradeCount;
@@ -12069,7 +11887,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 金幣交易 獲取輸入的元寶數量
      *
-     * @return
      */
     public long getAdenaTradeAmount() {
         return _adenaTradeAmount;
@@ -12078,7 +11895,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 金幣交易 記錄輸入的元寶數量
      *
-     * @param adenaTradeAmount
      */
     public void setAdenaTradeAmount(final long adenaTradeAmount) {
         _adenaTradeAmount = adenaTradeAmount;
@@ -12111,7 +11927,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 金幣交易 獲取選擇的流水號
      *
-     * @return
      */
     public int getAdenaTradeId() {
         return _adenaTradeId;
@@ -12120,7 +11935,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 金幣交易 記錄選擇的流水號
      *
-     * @param adenaTradeId
      */
     public void setAdenaTradeId(final int adenaTradeId) {
         _adenaTradeId = adenaTradeId;
@@ -12828,7 +12642,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 移植7.6近距離爆擊率
      *
-     * @return
      */
     public int getCloseCritical() {
         return _closeCritical;
@@ -12837,7 +12650,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 移植7.6近距離爆擊率
      *
-     * @param i
      */
     public void addCloseCritical(final int i) {
         _closeCritical += i;
@@ -12846,7 +12658,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 移植7.6遠距離爆擊率
      *
-     * @return
      */
     public int getBowCritical() {
         return _bowCritical;
@@ -12855,7 +12666,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 移植7.6遠距離爆擊率
      *
-     * @param i
      */
     public void addBowCritical(final int i) {
         _bowCritical += i;
@@ -12953,7 +12763,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 增加積分
      *
-     * @param score
      */
     public void add_Honor(int Honor) {
         if (Honor < 0) {
@@ -12968,7 +12777,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 傳回積分
      *
-     * @return
      */
     public int getHonor() {
         return _Honor;
@@ -12977,7 +12785,6 @@ public class L1PcInstance extends L1Character { // src015
     /**
      * 設置積分
      *
-     * @param honor
      */
     public void setHonor(int honor) {
         if (honor < 0) {

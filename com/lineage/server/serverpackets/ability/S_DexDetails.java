@@ -16,12 +16,6 @@ public class S_DexDetails extends ServerBasePacket {
     /**
      * 敏捷能力資訊
      *
-     * @param type
-     * @param bowDmg
-     * @param bowHit
-     * @param bowCritical
-     * @param ac
-     * @param er
      */
     public S_DexDetails(final int type, final int bowDmg, final int bowHit, final int bowCritical, final int ac, final int er) {
         this.writeC(S_EXTENDED_PROTOBUF);

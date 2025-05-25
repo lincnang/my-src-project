@@ -25,7 +25,6 @@ public class VIPTable implements VIPStorage {
     /**
      * 刪除VIP系統紀錄資料
      *
-     * @param objid
      */
     private static void delete(final int objid) {
         // 清空資料庫紀錄
@@ -48,8 +47,6 @@ public class VIPTable implements VIPStorage {
     /**
      * 加入紀錄清單
      *
-     * @param objId
-     * @param buffTmp
      */
     private static void addMap(final int objId, final Timestamp overtime) {
         final Timestamp otherTmp = _vipMap.get(objId);
@@ -61,8 +58,6 @@ public class VIPTable implements VIPStorage {
     /**
      * 更新VIP系統紀錄
      *
-     * @param objId
-     * @param other
      */
     private static void updateOther(final int objId, final Timestamp other) {
         Connection cn = null;
@@ -85,8 +80,6 @@ public class VIPTable implements VIPStorage {
     /**
      * 增加VIP系統紀錄
      *
-     * @param objId
-     * @param other
      */
     private static void addNewOther(final int objId, final Timestamp other) {
         Connection cn = null;
@@ -142,7 +135,6 @@ public class VIPTable implements VIPStorage {
     /**
      * 全部VIP紀錄
      *
-     * @return
      */
     @Override
     public Map<Integer, Timestamp> map() {
@@ -152,7 +144,6 @@ public class VIPTable implements VIPStorage {
     /**
      * 取回VIP系統紀錄
      *
-     * @param pc
      */
     @Override
     public Timestamp getOther(final L1PcInstance pc) {
@@ -163,8 +154,6 @@ public class VIPTable implements VIPStorage {
     /**
      * 增加/更新 VIP系統紀錄
      *
-     * @param key
-     * @param value
      */
     @Override
     public void storeOther(final int key, final Timestamp value) {

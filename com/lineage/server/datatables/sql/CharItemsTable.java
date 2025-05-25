@@ -29,7 +29,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 刪除錯誤的物品資料
      *
-     * @param objid
      */
     private static void errorItem(int objid) {
         Connection con = null;
@@ -50,8 +49,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 建立資料
      *
-     * @param objid
-     * @param item
      */
     private static void addItem(final Integer objid, final L1ItemInstance item) {
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(objid);
@@ -75,7 +72,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 刪除遺失角色的物品資料
      *
-     * @param objid
      */
     private static void deleteItem(final Integer objid) {
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.remove(objid);
@@ -230,8 +226,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 傳回該人物背包資料
      *
-     * @param objid
-     * @return
      */
     @Override
     public CopyOnWriteArrayList<L1ItemInstance> loadItems(final Integer objid) {
@@ -245,7 +239,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 刪除人物背包資料(完整)
      *
-     * @param objid
      */
     @Override
     public void delUserItems(final Integer objid) {
@@ -255,10 +248,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 該人物背包是否有指定數據
      *
-     * @param pcObjid
-     * @param objid
-     * @param count
-     * @return
      */
     @Override
     public boolean getUserItems(final Integer pcObjid, final int objid, final long count) {
@@ -276,10 +265,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 是否有指定數據
      *
-     * @param pcObjid
-     * @param objid
-     * @param count
-     * @return
      */
     @Override
     public boolean getUserItem(final int objid) {
@@ -297,8 +282,6 @@ public class CharItemsTable implements CharItemsStorage {
      * 傳回佣有該物品ID的人物清單<BR>
      * (適用該物品每人只能傭有一個的狀態)
      *
-     * @param itemid
-     * @return
      */
     @Override
     public Map<Integer, L1ItemInstance> getUserItems(final int itemid) {
@@ -322,7 +305,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 刪除指定編號全部數據
      *
-     * @param itemid
      */
     @Override
     public void del_item(final int itemid) {
@@ -344,9 +326,6 @@ public class CharItemsTable implements CharItemsStorage {
     /**
      * 增加背包物品
      *
-     * @param objId
-     * @param item
-     * @throws Exception
      */
     @Override
     public void storeItem(int objId, L1ItemInstance item) throws Exception {
@@ -413,7 +392,6 @@ public class CharItemsTable implements CharItemsStorage {
      *
      * @param objid 人物OBJID
      * @param item  物品
-     * @throws Exception
      */
     @Override
     public void deleteItem(final int objid, final L1ItemInstance item) throws Exception {

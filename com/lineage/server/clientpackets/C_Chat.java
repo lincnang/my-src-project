@@ -603,8 +603,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 密碼變更卷軸
      *
-     * @param pc
-     * @param password
      */
     private void re_repass(L1PcInstance pc, String password) {
         try {
@@ -666,8 +664,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 封號卡
      *
-     * @param pc
-     * @param chatText
      */
     private void re_title(L1PcInstance pc, String chatText) {
         try {
@@ -696,8 +692,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 聊天頻道
      *
-     * @param pc
-     * @param chatText
      */
     private void chatType_14(L1PcInstance pc, String chatText) {
         if (pc.isInChatParty()) {
@@ -723,8 +717,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 聯合血盟頻道
      *
-     * @param pc
-     * @param chatText
      */
     private void chatType_13(L1PcInstance pc, String chatText) {
         if (pc.getClanid() != 0) {
@@ -775,8 +767,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 隊伍頻道(#)
      *
-     * @param pc
-     * @param chatText
      */
     private void chatType_11(final L1PcInstance pc, final String chatText) {
         if (pc.isInParty()) {
@@ -811,8 +801,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 血盟頻道
      *
-     * @param pc
-     * @param chatText
      */
     private void chatType_4(L1PcInstance pc, String chatText) {
         if (pc.getClanid() != 0) {
@@ -841,8 +829,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 大喊
      *
-     * @param pc
-     * @param chatText
      */
     private void chatType_2(L1PcInstance pc, String chatText) {
         if (pc.isGhost()) {
@@ -879,8 +865,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 一般頻道
      *(棄用中)
-     * @param pc
-     * @param chatText
      */
     private void chatType_0(L1PcInstance pc, String chatText) {
         if ((pc.isGhost()) && (!pc.isGm()) && (!pc.isMonitor())) {
@@ -955,8 +939,6 @@ public class C_Chat extends ClientBasePacket {
     /**
      * 廣播卡判斷時間 by terry0412
      *
-     * @param pc
-     * @param chatText
      */
     private void check_broadcast(final L1PcInstance pc, final String chatText) {
         try {

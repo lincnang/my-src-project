@@ -421,10 +421,6 @@ public class L1DeathMatch {
     /**
      * // 勝利欠片入手判定
      *
-     * @param winner1
-     * @param winner2
-     * @param winner3
-     * @param winner4
      */
     private void fragment(L1PcInstance winner1, L1PcInstance winner2, L1PcInstance winner3, L1PcInstance winner4) {
         L1ItemInstance item = ItemTable.get().createItem(47024);// 勝利欠片

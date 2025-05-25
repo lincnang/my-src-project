@@ -94,15 +94,11 @@ public class L1ItemInstance extends L1Object {
     /**
      * 四戒指顯示裝備
      *
-     * @param item
-     * @param isEq
      */
     private int _ringId;
     /**
      * 雙耳環顯示裝備
      *
-     * @param item
-     * @param isEq
      */
     private int _earringId;
     /**
@@ -213,7 +209,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 設定場次代號
      *
-     * @param count
      */
     public void setraceGamNo(final String racegamno) {
         _racegamno = racegamno;
@@ -522,7 +517,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回屬性強化階段描述
      *
-     * @return
      */
     private StringBuilder attrEnchantLevelEva() {
         StringBuilder attrEnchant = new StringBuilder();
@@ -538,8 +532,6 @@ public class L1ItemInstance extends L1Object {
      * 物件完整名稱取回
      *
      * @param count 數量
-     * @param mode  模式 true:使用NAMEID false:使用中文註解名稱
-     * @return
      */
     public String getItemNameEva(final long count) {
         final StringBuilder name = new StringBuilder();
@@ -613,7 +605,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回道具顯示名稱(強化值、屬性、使用次數、數量)
      *
-     * @return
      */
 
     public String getNumberedViewName(long count) {
@@ -985,7 +976,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回屬性強化階段描述
      *
-     * @return
      */
     private StringBuilder attrEnchantLevel() {
         StringBuilder attrEnchant = new StringBuilder();
@@ -1000,7 +990,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回抗魔值(計算加成變化)
      *
-     * @return
      */
     public int getMr() {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1010,7 +999,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回回魔量(計算加成變化)
      *
-     * @return
      */
     public int getMpr() {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1020,7 +1008,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回魔攻(計算加成變化)
      *
-     * @return
      */
     public int getSp() {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1030,7 +1017,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回雙擊率(計算加成變化)
      *
-     * @return
      */
     public int getDoubleDmgChance() {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1040,7 +1026,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回防具增加命中率(計算加成變化)
      *
-     * @return
      */
     public int getHitModifierByArmor() {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1050,7 +1035,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回血量上限(計算加成變化)
      *
-     * @return
      */
     public int get_addhp() {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1060,7 +1044,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回MP上限(計算加成變化)
      *
-     * @return
      */
     public int get_addmp() {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1070,7 +1053,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回傷害減免(計算加成變化)
      *
-     * @return
      */
     public int getDamageReduction() {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1088,8 +1070,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 飾品加成變化
      *
-     * @param owner
-     * @param i
      */
     public void GreaterAtEnchant(L1PcInstance owner, int i) {
         L1ItemPower itemPower = new L1ItemPower(this);
@@ -1171,9 +1151,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 附在防具上的魔法
      *
-     * @param pc
-     * @param skillId
-     * @param skillTime
      */
     public void setSkillArmorEnchant(L1PcInstance pc, int skillId, int skillTime) {
         int type = getItem().getType();
@@ -1204,9 +1181,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 附在武器上的魔法
      *
-     * @param pc
-     * @param skillId
-     * @param skillTime
      */
     public void setSkillWeaponEnchant(L1PcInstance pc, int skillId, int skillTime) {
         if (getItem().getType2() != 1) {
@@ -1299,7 +1273,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 取回使用者ID
      *
-     * @return
      */
     public int get_char_objid() {
         return _char_objid;
@@ -1308,7 +1281,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 使用者ID
      *
-     * @param char_objid
      */
     public void set_char_objid(int char_objid) {
         _char_objid = char_objid;
@@ -1317,7 +1289,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 傳回存在期限資料
      *
-     * @return
      */
     public Timestamp get_time() {
         return _time;
@@ -1326,7 +1297,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 設定存在期限
      *
-     * @param time
      */
     public void set_time(Timestamp time) {
         _time = time;
@@ -1339,7 +1309,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 古文字
      *
-     * @return
      */
     public L1ItemPower_name get_power_name() {
         return _power_name;
@@ -1348,7 +1317,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 古文字
      *
-     * @param power_name
      */
     public void set_power_name(L1ItemPower_name power_name) {
         _power_name = power_name;
@@ -1462,7 +1430,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 場次代號
      *
-     * @return
      */
     public String getGamNo2() {
         return _gamno;
@@ -1471,7 +1438,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 設定場次代號
      *
-     * @param count
      */
     public void setGamNo2(final String gamno) {
         _gamno = gamno;
@@ -1480,8 +1446,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 四戒指顯示裝備
      *
-     * @param item
-     * @param isEq
      */
     public int getRingID() {
         return _ringId;
@@ -1490,8 +1454,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 四戒指顯示裝備
      *
-     * @param item
-     * @param isEq
      */
     public void setRingID(int ringId) {
         _ringId = ringId;
@@ -1500,8 +1462,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 雙耳環顯示裝備
      *
-     * @param item
-     * @param isEq
      */
     public int getEarRingID() {
         return _earringId;
@@ -1510,8 +1470,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 雙耳環顯示裝備
      *
-     * @param item
-     * @param isEq
      */
     public void setEarRingID(int earringId) {
         _earringId = earringId;
@@ -1973,7 +1931,6 @@ public class L1ItemInstance extends L1Object {
     /**
      * 傳回人物物品特殊屬性資料表
      *
-     * @return
      */
     public L1ItemSpecialAttributeChar get_ItemAttrName() {
         return _ItemAttrName2;

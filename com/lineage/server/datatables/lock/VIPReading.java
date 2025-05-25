@@ -46,7 +46,6 @@ public class VIPReading {
     /**
      * 全部VIP紀錄
      *
-     * @return
      */
     public Map<Integer, Timestamp> map() {
         this._lock.lock();
@@ -62,7 +61,6 @@ public class VIPReading {
     /**
      * VIP系統紀錄
      *
-     * @param pc
      */
     public Timestamp getOther(final L1PcInstance pc) {
         this._lock.lock();
@@ -78,8 +76,6 @@ public class VIPReading {
     /**
      * 增加/更新 VIP系統紀錄
      *
-     * @param key
-     * @param value
      */
     public void storeOther(final int key, final Timestamp value) {
         this._lock.lock();

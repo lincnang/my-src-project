@@ -50,7 +50,6 @@ public class S_EffectLocation extends ServerBasePacket {
      * 測試用
      *
      * @param opid 封包編號
-     * @param loc
      */
     public S_EffectLocation(final int opid, final L1Location loc) {
         this.writeC(opid);

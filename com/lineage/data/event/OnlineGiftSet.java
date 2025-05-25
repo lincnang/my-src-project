@@ -71,7 +71,6 @@ public class OnlineGiftSet extends EventExecutor {
     /**
      * 加入在線獎勵清單
      *
-     * @param tgpc
      */
     public static void add(final L1PcInstance tgpc) {
         if (_time == 0) {
@@ -96,7 +95,6 @@ public class OnlineGiftSet extends EventExecutor {
     /**
      * 給予物品的處理
      *
-     * @param tgpc
      */
     private static void getitem(L1PcInstance tgpc) {
         try {
@@ -139,7 +137,6 @@ public class OnlineGiftSet extends EventExecutor {
     /**
      * 判斷
      *
-     * @param tgpc
      * @return true:執行 false:不執行
      */
     public static boolean check(final L1PcInstance tgpc) {

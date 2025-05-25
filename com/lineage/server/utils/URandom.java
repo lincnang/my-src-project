@@ -44,7 +44,6 @@ public class URandom {
     /**
      * 取出隨機的布爾值
      *
-     * @return
      */
     public static boolean nextBoolean() {
         return (nextInt(2) == 1);
@@ -62,7 +61,6 @@ public class URandom {
     /**
      * 取出隨機的Long值
      *
-     * @return
      */
     public static long nextLong() {
         long value = nextInt(Integer.MAX_VALUE) << 32 + nextInt(Integer.MAX_VALUE);
@@ -72,7 +70,6 @@ public class URandom {
     /**
      * 取出隨機的Double值(java.util.Random)
      *
-     * @return
      */
     public static double nextGaussian() {
         return _random.nextGaussian();

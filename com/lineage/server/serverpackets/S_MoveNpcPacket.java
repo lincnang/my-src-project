@@ -14,10 +14,6 @@ public class S_MoveNpcPacket extends ServerBasePacket {
     /***
      * 物件移動
      *
-     * @param npc
-     * @param x
-     * @param y
-     * @param heading
      */
     public S_MoveNpcPacket(final L1MonsterInstance npc, final int x, final int y, final int heading) {
         // 0000: 3e d1 72 08 00 d3 83 e7 7e 02 80 9a 0f c3 0f b8
@@ -33,7 +29,6 @@ public class S_MoveNpcPacket extends ServerBasePacket {
     /***
      * 物件移動
      *
-     * @param cha
      */
     public S_MoveNpcPacket(final L1Character cha) {
         // 0000: 3e d1 72 08 00 d3 83 e7 7e 02 80 9a 0f c3 0f b8

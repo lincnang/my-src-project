@@ -13,7 +13,6 @@ public class S_ShowPolyList extends ServerBasePacket {
     /**
      * NPC對話視窗(變身清單)
      *
-     * @param objid
      */
     public S_ShowPolyList(final int objid) {
         this.writeC(S_HYPERTEXT);
@@ -24,7 +23,6 @@ public class S_ShowPolyList extends ServerBasePacket {
     /**
      * NPC對話視窗(變身清單)
      *
-     * @param target
      */
     public S_ShowPolyList(final L1Character target) {
         this.writeC(S_HYPERTEXT);
@@ -35,7 +33,6 @@ public class S_ShowPolyList extends ServerBasePacket {
     /**
      * 自訂變身清單
      *
-     * @param objid
      */
     public S_ShowPolyList(int objid, String htmlid) {
         this.writeC(S_HYPERTEXT);

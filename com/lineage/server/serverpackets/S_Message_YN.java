@@ -17,7 +17,6 @@ public class S_Message_YN extends ServerBasePacket {
     /**
      * 選項(Yes/No)
      *
-     * @param type
      */
     public S_Message_YN(final int type) {
         writeC(S_ASK);
@@ -30,7 +29,6 @@ public class S_Message_YN extends ServerBasePacket {
      * 選項(Yes/No)<BR>
      * 交易
      *
-     * @param name
      */
     public S_Message_YN(final String name) {
         writeC(S_ASK);
@@ -43,8 +41,6 @@ public class S_Message_YN extends ServerBasePacket {
     /**
      * 選項(Yes/No)
      *
-     * @param type
-     * @param msg
      */
     public S_Message_YN(final int type, final String msg) {
         writeC(S_ASK);
@@ -57,9 +53,6 @@ public class S_Message_YN extends ServerBasePacket {
     /**
      * 選項(Yes/No)
      *
-     * @param type
-     * @param msg1
-     * @param msg2
      */
     public S_Message_YN(final int type, final String msg1, final String msg2) {
         writeC(S_ASK);

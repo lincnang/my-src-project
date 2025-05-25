@@ -93,8 +93,6 @@ public class Holy_Spellbook extends ItemExecutor {
     /**
      * 計算傷害值並顯示特效
      *
-     * @param user
-     * @param target
      */
     private void doAction(L1PcInstance user, L1Object target) {
         Random _random = new Random();

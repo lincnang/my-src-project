@@ -10,15 +10,6 @@ public class S_ServerMessage extends ServerBasePacket {
     /**
      * 服務器訊息(NPC對話)
      *
-     * @param winName
-     * @param color<br> <font color="#bdaaa5">\\fR <b>顏色範例</b></font><br>
-     *                  <font color="#739e84">\\fS <b>顏色範例</b></font><br>
-     *                  <font color="#7b9e7b">\\fT <b>顏色範例</b></font><br>
-     *                  <font color="#7b9aad">\\fU <b>顏色範例</b></font><br>
-     *                  <font color="#a59ac6">\\fV <b>顏色範例</b></font><br>
-     *                  <font color="#ad92b5">\\fW <b>顏色範例</b></font><br>
-     *                  <font color="#b592ad">\\fX <b>顏色範例</b></font><br>
-     *                  <font color="#bd9a94">\\fY <b>顏色範例</b></font><br>
      */
     public S_ServerMessage(String msg) {
         writeC(S_SAY_CODE);

@@ -60,7 +60,6 @@ public final class BroadcastController implements Runnable {
     /**
      * PC 執行 判斷
      *
-     * @param tgpc
      * @return true:執行 false:不執行
      */
     private static boolean check(final L1PcInstance tgpc) {
@@ -91,7 +90,6 @@ public final class BroadcastController implements Runnable {
     /**
      * 取回目前廣播訊息等待數量
      *
-     * @return
      */
     public final int getMsgSize() {
         return _msgQueue.size();
@@ -100,8 +98,6 @@ public final class BroadcastController implements Runnable {
     /**
      * 將元素放入佇列
      *
-     * @param data
-     * @return
      */
     public final boolean requestWork(final String data) {
         // 超過允許存在數量
@@ -114,7 +110,6 @@ public final class BroadcastController implements Runnable {
     /**
      * 是否關閉中
      *
-     * @return
      */
     public final boolean isStop() {
         return _isStop;

@@ -129,8 +129,6 @@ public class BeginnerTable {
     /**
      * 給予物品
      *
-     * @param objid
-     * @param beginner
      */
     private void get_item(final L1PcInstance pc, final int objid, final L1Beginner beginner) {
         try {
@@ -163,7 +161,6 @@ public class BeginnerTable {
     /**
      * 玩家出生就有的記憶座標
      *
-     * @param pc
      */
     public void writeBookmark(L1PcInstance pc) { // 日版記憶座標
         Connection c = null;

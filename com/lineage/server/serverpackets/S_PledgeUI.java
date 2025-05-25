@@ -170,7 +170,6 @@ public class S_PledgeUI extends ServerBasePacket {
     /**
      * 更新個人血盟備註資訊
      *
-     * @param pc
      */
     public S_PledgeUI(final L1PcInstance pc) {
         this.writeC(S_EVENT);

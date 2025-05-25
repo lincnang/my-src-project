@@ -50,8 +50,6 @@ public class L1MobSkillUse {
     /**
      * 傳回技能使用次數
      *
-     * @param idx
-     * @return
      */
     private int getSkillUseCount(int idx) {
         return _skillUseCount[idx];
@@ -60,7 +58,6 @@ public class L1MobSkillUse {
     /**
      * 技能使用次數+1
      *
-     * @param idx
      */
     private void skillUseCountUp(int idx) {
         _skillUseCount[idx] += 1;
@@ -81,7 +78,6 @@ public class L1MobSkillUse {
     /**
      * 動作間隔時間
      *
-     * @return
      */
     public int getSleepTime() {
         return _sleepTime;
@@ -90,7 +86,6 @@ public class L1MobSkillUse {
     /**
      * 動作間隔時間
      *
-     * @param i
      */
     public void setSleepTime(int i) {
         _sleepTime = i;
@@ -99,7 +94,6 @@ public class L1MobSkillUse {
     /**
      * 傳回怪物技能設定
      *
-     * @return
      */
     public L1MobSkill getMobSkillTemplate() {
         return _mobSkillTemplate;
@@ -108,8 +102,6 @@ public class L1MobSkillUse {
     /**
      * 是否符合DB技能數量裡任何一種技能的使用條件
      *
-     * @param tg
-     * @return
      */
     public boolean isSkillTrigger(L1Character tg) {
         if (_mobSkillTemplate == null) {
@@ -131,7 +123,6 @@ public class L1MobSkillUse {
     /**
      * 使用技能的判定
      *
-     * @param tg
      * @return true:技能使用成功;false:技能使用失敗
      */
     public boolean skillUse(L1Character tg) {
@@ -173,7 +164,6 @@ public class L1MobSkillUse {
     /**
      * 使用技能是否成功
      *
-     * @param idx
      * @return true:技能使用成功;false:技能使用失敗
      */
     private boolean useSkill(int idx) {
@@ -305,8 +295,6 @@ public class L1MobSkillUse {
     /**
      * 範圍毒霧(只生成一個毒霧)
      *
-     * @param idx
-     * @return
      */
     private boolean area_poison(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -331,8 +319,6 @@ public class L1MobSkillUse {
     /**
      * 集體負面魔法(計算命中機率)
      *
-     * @param idx
-     * @return
      */
     private boolean areadebuff(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -371,8 +357,6 @@ public class L1MobSkillUse {
     /**
      * 範圍風之枷鎖(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean areawindshackle(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -400,8 +384,6 @@ public class L1MobSkillUse {
     /**
      * 範圍藥霜(16秒)(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean areadecaypotion(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -426,8 +408,6 @@ public class L1MobSkillUse {
     /**
      * 範圍封印禁地(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean areasilence(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -453,8 +433,6 @@ public class L1MobSkillUse {
     /**
      * 範圍治癒侵蝕術(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean healturntodmg(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -480,8 +458,6 @@ public class L1MobSkillUse {
     /**
      * 範圍污濁的水流(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean pollutewaterwave(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -507,8 +483,6 @@ public class L1MobSkillUse {
     /**
      * 範圍藥水侵蝕術(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean potionturntodmg(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -534,8 +508,6 @@ public class L1MobSkillUse {
     /**
      * 範圍壞物術(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean weapon_break(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -564,8 +536,6 @@ public class L1MobSkillUse {
     /**
      * 範圍相消(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean areacancellation(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -588,8 +558,6 @@ public class L1MobSkillUse {
     /**
      * 範圍沖暈(無視抗暈)
      *
-     * @param idx
-     * @return
      */
     private boolean areashock_stun(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -624,8 +592,6 @@ public class L1MobSkillUse {
     /**
      * 召喚怪物
      *
-     * @param idx
-     * @return
      */
     private boolean summon(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰不召怪
@@ -656,8 +622,6 @@ public class L1MobSkillUse {
     /**
      * 集體變形(無視魔防)
      *
-     * @param idx
-     * @return
      */
     private boolean poly(int idx) {
         if (_attacker.getMapId() == 93) {// 怪物對戰
@@ -708,8 +672,6 @@ public class L1MobSkillUse {
     /**
      * 魔法攻擊(計算命中機率)
      *
-     * @param idx
-     * @return
      */
     private boolean magicAttack(int idx) {
         L1SkillUse skillUse = new L1SkillUse();
@@ -825,8 +787,6 @@ public class L1MobSkillUse {
     /**
      * 是否符合施展條件
      *
-     * @param skillIdx
-     * @return
      */
     private boolean isSkillUseble(int skillIdx) {
         boolean useble = false;
@@ -871,7 +831,6 @@ public class L1MobSkillUse {
     /**
      * 傳回畫面內同族的怪物
      *
-     * @return
      */
     private L1NpcInstance searchMinCompanionHp() {
         L1NpcInstance minHpNpc = null;
@@ -890,9 +849,6 @@ public class L1MobSkillUse {
     /**
      * 變更目標
      *
-     * @param type
-     * @param idx
-     * @return
      */
     private L1Character changeTarget(final int type, final int idx) {
         L1Character target;

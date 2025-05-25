@@ -87,7 +87,6 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
     /**
      * 建立資料
      *
-     * @param alliance
      */
     @Override
     public final void insertAlliance(final L1Alliance alliance) {
@@ -117,8 +116,6 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
     /**
      * 更新資料
      *
-     * @param order_id
-     * @param totalList
      */
     @Override
     public final void updateAlliance(final int order_id, final ArrayList<L1Clan> totalList) {
@@ -144,7 +141,6 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
     /**
      * 刪除資料
      *
-     * @param order_id
      */
     @Override
     public final void deleteAlliance(final int order_id) {
@@ -168,8 +164,6 @@ public final class ClanAllianceTable implements ClanAllianceStorage {
     /**
      * 取得指定同盟資料
      *
-     * @param clan_id
-     * @return
      */
     @Override
     public final L1Alliance getAlliance(final int clan_id) {

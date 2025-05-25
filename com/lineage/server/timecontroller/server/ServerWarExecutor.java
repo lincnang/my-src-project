@@ -99,7 +99,6 @@ public class ServerWarExecutor {
     /**
      * 發佈訊息給予上線玩家
      *
-     * @param player
      */
     public void checkCastleWar(final L1PcInstance player) {
         for (int i = 0; i < 8; i++) {
@@ -116,7 +115,6 @@ public class ServerWarExecutor {
     /**
      * 戰爭中城堡數量
      *
-     * @return
      */
     public int checkCastleWar() {
         int x = 0;

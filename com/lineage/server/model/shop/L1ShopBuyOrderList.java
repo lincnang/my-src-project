@@ -26,7 +26,6 @@ class L1ShopBuyOrder {
     /**
      * 傳回堆疊數量
      *
-     * @return
      */
     public int getCount() {
         return this._count;
@@ -52,7 +51,6 @@ public class L1ShopBuyOrderList {
     /**
      * 如果列表不包含元素，則返回 true。
      *
-     * @return
      */
     public boolean isEmpty() {
         return _list.isEmpty();
@@ -96,7 +94,6 @@ public class L1ShopBuyOrderList {
     /**
      * 傳回總重量
      *
-     * @return
      */
     public int getTotalWeight() {
         return this._totalWeight;
@@ -105,7 +102,6 @@ public class L1ShopBuyOrderList {
     /**
      * 傳回總價
      *
-     * @return
      */
     public int getTotalPrice() {
         return this._totalPrice;
@@ -114,7 +110,6 @@ public class L1ShopBuyOrderList {
     /**
      * 傳回含稅總價
      *
-     * @return
      */
     public int getTotalPriceTaxIncluded() {
         return this._totalPriceTaxIncluded;

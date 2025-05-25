@@ -391,8 +391,6 @@ public class CalcExp {
     /**
      * 經驗加倍計算
      *
-     * @param pc
-     * @return
      */
     private static double add(L1PcInstance pc) {
         try {
@@ -551,8 +549,6 @@ public class CalcExp {
     /**
      * 寵物獲得經驗值判斷
      *
-     * @param pet
-     * @param exp
      */
     private static void addExpPet(L1PetInstance pet, long exp) {
         try {

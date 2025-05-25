@@ -77,7 +77,6 @@ public class AutoAttackUpdate {
     /**
      * 訊息更新
      *
-     * @param pc
      */
     public void MsgUpdate(final L1PcInstance pc) {
         try {
@@ -184,9 +183,6 @@ public class AutoAttackUpdate {
     /**
      * 內掛選單判斷
      *
-     * @param _pc
-     * @param cmd
-     * @return
      */
     public boolean PcCommand(final L1PcInstance _pc, final String cmd) {
         try {
@@ -679,7 +675,6 @@ public class AutoAttackUpdate {
     /**
      * 查詢可記錄技能清單
      *
-     * @param pc
      */
     public void CanSkillList(final L1PcInstance pc) {
         final StringBuilder msg = new StringBuilder();
@@ -696,7 +691,6 @@ public class AutoAttackUpdate {
     /**
      * 查詢已登錄技能清單
      *
-     * @param pc
      */
     public void SkillList(final L1PcInstance pc) {
         final StringBuilder msg = new StringBuilder();
@@ -711,7 +705,6 @@ public class AutoAttackUpdate {
     /**
      * 查詢仇人名單
      *
-     * @param pc
      */
     public void EnemyList(final L1PcInstance pc) {
         final StringBuilder msg = new StringBuilder();
@@ -725,8 +718,6 @@ public class AutoAttackUpdate {
     /**
      * 檢測是否為可以記錄的技能
      *
-     * @param Skillid
-     * @return
      */
     public boolean isAttackSkill(int Skillid) {
         for (final int skillId : _autoskill_attack) {

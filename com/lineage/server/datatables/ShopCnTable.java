@@ -91,8 +91,6 @@ public class ShopCnTable {
     /**
      * 更新物品注記
      *
-     * @param npcId
-     * @param itemId
      */
     private static void updata_name(int npcId, int itemId) {
         Connection cn = null;
@@ -118,7 +116,6 @@ public class ShopCnTable {
     /**
      * 刪除錯誤資料
      *
-     * @param clan_id
      */
     private static void delete(final int npc_id, final int item_id) {
         Connection cn = null;
@@ -185,8 +182,6 @@ public class ShopCnTable {
     /**
      * 傳回回收單價
      *
-     * @param itemid
-     * @return
      */
     public int getPrice(final int itemid) {
         int tgprice = 0;// 預設價格
@@ -200,7 +195,6 @@ public class ShopCnTable {
     /**
      * 傳回商城物品ID列表
      *
-     * @return
      */
     public ArrayList<Integer> get_cnitemidlist() {
         return _CnitemidList;
@@ -209,8 +203,6 @@ public class ShopCnTable {
     /**
      * 加入販賣物品
      *
-     * @param npcId
-     * @param item
      */
     private void addShopItem(final int npcId, final L1ShopItem item) {
         ArrayList<L1ShopItem> list = _shopList.get(new Integer(npcId));
@@ -226,8 +218,6 @@ public class ShopCnTable {
     /**
      * 傳回NPC販賣清單
      *
-     * @param npcId
-     * @return
      */
     public ArrayList<L1ShopItem> get(final int npcId) {
         final ArrayList<L1ShopItem> list = _shopList.get(new Integer(npcId));
@@ -240,9 +230,6 @@ public class ShopCnTable {
     /**
      * 傳回該販賣物品資料
      *
-     * @param npcId
-     * @param id
-     * @return
      */
     public L1ShopItem getTemp(final int npcId, final int id) {
         final ArrayList<L1ShopItem> list = _shopList.get(new Integer(npcId));
@@ -259,9 +246,6 @@ public class ShopCnTable {
     /**
      * 指定NPC是否有販賣此itemid物品
      *
-     * @param npcId
-     * @param itemid
-     * @return
      */
     public boolean isSelling(final int npcId, final int itemid) {
         final ArrayList<L1ShopItem> list = _shopList.get(new Integer(npcId));

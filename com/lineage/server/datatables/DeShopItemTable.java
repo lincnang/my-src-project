@@ -41,7 +41,6 @@ public class DeShopItemTable {
     /**
      * 刪除錯誤物品資料
      *
-     * @param objid
      */
     private static void errorItem(final int itemid) {
         Connection con = null;
@@ -112,7 +111,6 @@ public class DeShopItemTable {
     /**
      * 隨機虛擬商店買賣物品清單
      *
-     * @param deInstance
      */
     public void getItems(final L1DeInstance deInstance) {
         final SetDeShopItem de_shop = new SetDeShopItem(deInstance);

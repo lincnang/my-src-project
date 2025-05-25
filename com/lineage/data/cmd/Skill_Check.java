@@ -14,11 +14,6 @@ public class Skill_Check {
     /**
      * 技能學習成功與否的判斷
      *
-     * @param pc
-     * @param item
-     * @param skillid
-     * @param magicLv
-     * @param attribute
      */
     public static void check(final L1PcInstance pc, final L1ItemInstance item, final int skillid, final int magicLv, final int attribute) {
         // 檢查是否已學習該法術

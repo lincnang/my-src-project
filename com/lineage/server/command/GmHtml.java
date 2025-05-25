@@ -39,7 +39,6 @@ public class GmHtml {
     /**
      * GM管理選單
      *
-     * @param pc
      * @param mode 0:PC清單 1:DE清單 2:封鎖清單
      */
     public GmHtml(final L1PcInstance pc, int mode) {
@@ -94,7 +93,6 @@ public class GmHtml {
     /**
      * 執行指令判斷
      *
-     * @param cmd
      */
     public void action(final String cmd) {
         // System.out.println("cmd: " + cmd);

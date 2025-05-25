@@ -25,7 +25,6 @@ public class TargetStatus {
     /**
      * 傳回目標
      *
-     * @return
      */
     public L1Character getTarget() {
         return this._target;
@@ -34,7 +33,6 @@ public class TargetStatus {
     /**
      * 是否命中
      *
-     * @return
      */
     public boolean isCalc() {
         // System.out.println("是否命中:" + _isCalc);
@@ -44,7 +42,6 @@ public class TargetStatus {
     /**
      * 設置為未命中
      *
-     * @param flg
      */
     public void isCalc(final boolean flg) {
         // System.out.println("設置為未命中:" + flg);

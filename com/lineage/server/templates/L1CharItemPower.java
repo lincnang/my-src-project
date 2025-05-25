@@ -61,7 +61,6 @@ public class L1CharItemPower {
     /**
      * 傳回強化物品OBJID
      *
-     * @return
      */
     public int getId() {
         return _id;
@@ -70,7 +69,6 @@ public class L1CharItemPower {
     /**
      * 設置強化物品的OBJID
      *
-     * @param i
      */
     public void setId(int i) {
         _id = i;
@@ -263,7 +261,6 @@ public class L1CharItemPower {
     /**
      * 武器劍靈值
      *
-     * @return
      */
     public int getUpdateWeaponSoul() {
         return _Weapon_Soul;
@@ -272,7 +269,6 @@ public class L1CharItemPower {
     /**
      * 武器劍靈值
      *
-     * @param i
      */
     public void setUpdateWeaponSoul(final int i) {
         _Weapon_Soul = i;

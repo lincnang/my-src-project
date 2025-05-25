@@ -20,7 +20,6 @@ public class L1HateList {
     /**
      * 攻擊目標清單
      *
-     * @param hateMap
      */
     private L1HateList(final Map<L1Character, Integer> hateMap) {
         this._hateMap = hateMap;
@@ -40,7 +39,6 @@ public class L1HateList {
      * 才能說映射 m 包含鍵 k 的映射關係）<BR>
      *
      * @param cha  攻擊目標
-     * @param hate
      */
     public synchronized void add(final L1Character cha, final int hate) {
         if (cha == null) {
@@ -57,7 +55,6 @@ public class L1HateList {
     /**
      * 攻擊目標清單中
      *
-     * @param cha
      * @return true:是 false:否
      */
     public synchronized boolean isHate(final L1Character cha) {
@@ -77,8 +74,6 @@ public class L1HateList {
      * 如果此映射允許 null 值，則返回 null 值並不一定 表示該映射不包含該鍵的映射關係；<BR>
      * 也可能該映射將該鍵顯示地映射到 null。使用 containsKey 操作可區分這兩種情況。<BR>
      *
-     * @param cha
-     * @return
      */
     public synchronized int get(final L1Character cha) {
         return this._hateMap.get(cha);
@@ -90,8 +85,6 @@ public class L1HateList {
      * <BR>
      * 返回 true。（最多只能有一個這樣的映射關係）。<BR>
      *
-     * @param cha
-     * @return
      */
     public synchronized boolean containsKey(final L1Character cha) {
         return this._hateMap.containsKey(cha);
@@ -109,7 +102,6 @@ public class L1HateList {
      * <BR>
      * 調用返回後，此映射將不再包含指定鍵的映射關係。<BR>
      *
-     * @param cha
      */
     public synchronized void remove(final L1Character cha) {
         this._hateMap.remove(cha);
@@ -125,7 +117,6 @@ public class L1HateList {
     /**
      * 如果此映射未包含鍵-值映射關係，則返回 true。
      *
-     * @return
      */
     public synchronized boolean isEmpty() {
         return this._hateMap.isEmpty();
@@ -211,7 +202,6 @@ public class L1HateList {
      * 構造一個映射關係與指定 Map 相同的新 HashMap。<BR>
      * 所創建的 HashMap 具有默認加載因子 (0.75) 和足以容納指定 Map 中映射關係的初始容量。<BR>
      *
-     * @return
      */
     public synchronized L1HateList copy() {
         return new L1HateList(new HashMap<L1Character, Integer>(this._hateMap));
@@ -228,7 +218,6 @@ public class L1HateList {
      * 操作可從映射中移除相應的映射關係。<BR>
      * 它不支持 add 或 addAll 操作。<BR>
      *
-     * @return
      */
     public synchronized Set<Entry<L1Character, Integer>> entrySet() {
         return this._hateMap.entrySet();
@@ -244,7 +233,6 @@ public class L1HateList {
      * 操作可從映射中移除相應的映射關係。<BR>
      * 它不支持 add 或 addAll 操作。<BR>
      *
-     * @return
      */
     public synchronized ArrayList<L1Character> toTargetArrayList() {
         return new ArrayList<L1Character>(this._hateMap.keySet());
@@ -260,7 +248,6 @@ public class L1HateList {
      * 操作可從映射中移除相應的映射關係。<BR>
      * 它不支持 add 或 addAll 操作。<BR>
      *
-     * @return
      */
     public synchronized ArrayList<Integer> toHateArrayList() {
         return new ArrayList<Integer>(this._hateMap.values());

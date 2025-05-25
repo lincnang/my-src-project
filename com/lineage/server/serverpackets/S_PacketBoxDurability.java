@@ -11,7 +11,6 @@ public class S_PacketBoxDurability extends ServerBasePacket {
     /**
      * 更新武器的損壞狀態(會變動滑鼠鼠標攻擊狀態)
      *
-     * @param item
      */
     public S_PacketBoxDurability(final L1ItemInstance item) {
         writeC(S_EVENT);
@@ -22,7 +21,6 @@ public class S_PacketBoxDurability extends ServerBasePacket {
     /**
      * 更新武器的損壞狀態(空)
      *
-     * @param 空
      */
     public S_PacketBoxDurability() {
         writeC(S_EVENT);

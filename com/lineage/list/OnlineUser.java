@@ -41,7 +41,6 @@ public class OnlineUser {
      *
      * @param value  帳號
      * @param client 連線線程
-     * @return
      */
     public boolean addClient(final L1Account value, final ClientExecutor client) {
         final String accountName = value.get_login();
@@ -66,8 +65,6 @@ public class OnlineUser {
     /**
      * 用戶連線中
      *
-     * @param accountName
-     * @return
      */
     public boolean isLan(final String accountName) {
         final ClientExecutor client = _clientList.get(accountName);
@@ -80,7 +77,6 @@ public class OnlineUser {
     /**
      * 移除連線用戶資料
      *
-     * @param accountName
      */
     public void remove(final String accountName) {
         final ClientExecutor xclient = _clientList.get(accountName);
@@ -97,7 +93,6 @@ public class OnlineUser {
     /**
      * 取回連線用戶 ClientThread 資料
      *
-     * @param accountName
      * @return 該帳戶未連線 傳回NULL
      */
     public ClientExecutor get(final String accountName) {
@@ -108,7 +103,6 @@ public class OnlineUser {
     /**
      * 全部連線用戶(Map)
      *
-     * @return
      */
     public Map<String, ClientExecutor> map() {
         return _clientList;
@@ -117,7 +111,6 @@ public class OnlineUser {
     /**
      * 全部連線用戶(Collection)
      *
-     * @return
      */
     public Collection<ClientExecutor> all() {
         try {
@@ -132,7 +125,6 @@ public class OnlineUser {
     /**
      * 傳回全部連線中帳戶
      *
-     * @return
      */
     public Collection<String> getObject() {
         final Collection<String> vs = _allValues;
@@ -142,7 +134,6 @@ public class OnlineUser {
     /**
      * 是否已達最大連線數量
      *
-     * @return
      */
     public boolean isMax() {
         if (_clientList.size() >= Config.MAX_ONLINE_USERS) {
@@ -154,7 +145,6 @@ public class OnlineUser {
     /**
      * 連線數量
      *
-     * @return
      */
     public int size() {
         return _clientList.size();
@@ -163,7 +153,6 @@ public class OnlineUser {
     /**
      * 中斷全部用戶
      *
-     * @return
      */
     public void kickAll() {
         for (String acc : _clientList.keySet()) {

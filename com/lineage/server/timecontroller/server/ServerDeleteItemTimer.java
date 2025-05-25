@@ -48,8 +48,6 @@ public class ServerDeleteItemTimer extends TimerTask {
     /**
      * 檢查物品
      *
-     * @param item
-     * @return
      */
     private static boolean checkItem(final L1ItemInstance item) {
         World.get().getVisiblePlayer(item);

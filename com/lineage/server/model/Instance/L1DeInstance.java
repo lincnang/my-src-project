@@ -607,7 +607,6 @@ public class L1DeInstance extends L1NpcInstance {
     /**
      * 傳回血盟ID
      *
-     * @return
      */
     public int getClanid() {
         return _clanid;
@@ -616,7 +615,6 @@ public class L1DeInstance extends L1NpcInstance {
     /**
      * 傳回血盟名稱
      *
-     * @return
      */
     public String getClanname() {
         return _clan_name;
@@ -625,7 +623,6 @@ public class L1DeInstance extends L1NpcInstance {
     /**
      * 傳回盟徽
      *
-     * @return
      */
     public L1EmblemIcon getEmblem() {
         return _emblem;
@@ -713,7 +710,6 @@ public class L1DeInstance extends L1NpcInstance {
     /**
      * 賣出 物品/價格
      *
-     * @return
      */
     public Map<L1ItemInstance, Integer> get_sellList() {
         return _sellList;
@@ -722,7 +718,6 @@ public class L1DeInstance extends L1NpcInstance {
     /**
      * 購入 Integer:物品編號 0:價格 1:強化質 2:購入數量
      *
-     * @return
      */
     public Map<Integer, int[]> get_buyList() {
         return _buyList;

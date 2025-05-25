@@ -204,7 +204,6 @@ public class L1UltimateBattle {
     /**
      * 開始。
      *
-     * @param ubId 開始ID
      */
     public void start() {
         int patternsMax = UBSpawnTable.getInstance().getMaxPattern(_ubId);
@@ -566,7 +565,6 @@ public class L1UltimateBattle {
         /**
          * 競技開始。
          *
-         * @throws InterruptedException
          */
         private void countDown() throws InterruptedException {
             // XXX - ID間違
@@ -597,7 +595,6 @@ public class L1UltimateBattle {
          * 全出現後、次始時間待機。
          *
          * @param curRound 現在
-         * @throws InterruptedException
          */
         private void waitForNextRound(int curRound) throws InterruptedException {
             final int WAIT_TIME_TABLE[] = {6, 6, 2, 18};

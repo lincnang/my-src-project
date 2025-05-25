@@ -36,8 +36,6 @@ public class Scarecrow extends NpcExecutor {
      * NPC受到攻擊(4)<BR>
      * 任務NPC作為抵達目標檢查的方法
      *
-     * @param pc
-     * @param npc
      */
     @Override
     public void attack(final L1PcInstance pc, final L1NpcInstance npc) {

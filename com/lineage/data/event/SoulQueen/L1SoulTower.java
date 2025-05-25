@@ -37,7 +37,6 @@ public class L1SoulTower {
     /**
      * 人物進入副本
      *
-     * @param pc
      */
     public void soulTowerStart(final L1PcInstance pc) {
         for (int i = 0; i < mapStat.length; i++) {

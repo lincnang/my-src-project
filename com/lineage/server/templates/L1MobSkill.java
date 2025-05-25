@@ -48,7 +48,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 技能數量
      *
-     * @param sSize
      */
     public L1MobSkill(final int sSize) {
         this.skillSize = sSize;
@@ -86,7 +85,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 技能數量
      *
-     * @return
      */
     public int getSkillSize() {
         return this.skillSize;
@@ -95,8 +93,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 設定技能是否延遲
      *
-     * @param idx
-     * @param flag
      */
     public void setSkillDelayIdx(int idx, boolean flag) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -108,8 +104,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 此技能是否延遲中
      *
-     * @param idx
-     * @return
      */
     public boolean isSkillDelayIdx(int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -121,7 +115,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * NPC編號
      *
-     * @return
      */
     public int get_mobid() {
         return this.mobid;
@@ -130,7 +123,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * NPC編號
      *
-     * @param i
      */
     public void set_mobid(final int i) {
         this.mobid = i;
@@ -139,7 +131,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * NPC名稱
      *
-     * @return
      */
     public String getMobName() {
         return this.mobName;
@@ -148,7 +139,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * NPC名稱
      *
-     * @param s
      */
     public void setMobName(final String s) {
         this.mobName = s;
@@ -170,8 +160,6 @@ public class L1MobSkill implements Cloneable {
      * 12 集體藥水霜化術<BR>
      * 13 集體風之枷鎖<BR>
      *
-     * @param idx
-     * @return
      */
     public int getType(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -196,8 +184,6 @@ public class L1MobSkill implements Cloneable {
      * 12 集體藥水霜化術<BR>
      * 13 集體風之枷鎖<BR>
      *
-     * @param idx
-     * @param i
      */
     public void setType(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -209,8 +195,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 發動機率(%)
      *
-     * @param idx
-     * @return
      */
     public int getTriggerRandom(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -222,8 +206,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 發動機率(%)
      *
-     * @param idx
-     * @param i
      */
     public void setTriggerRandom(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -235,8 +217,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * HP條件發動(低於設定值)
      *
-     * @param idx
-     * @return
      */
     public int getTriggerHp(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -248,8 +228,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * HP條件發動(HP低於設定值)
      *
-     * @param idx
-     * @param i
      */
     public void setTriggerHp(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -261,8 +239,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 同族HP條件發動(同族HP低於設定值)
      *
-     * @param idx
-     * @return
      */
     public int getTriggerCompanionHp(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -274,8 +250,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 同族HP條件發動(同族HP低於設定值)
      *
-     * @param idx
-     * @param i
      */
     public void setTriggerCompanionHp(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -287,8 +261,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 傳回技能發動距離
      *
-     * @param idx
-     * @return
      */
     public int getTriggerRange(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -301,8 +273,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 設定技能發動距離
      *
-     * @param idx
-     * @param i
      */
     public void setTriggerRange(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -316,9 +286,6 @@ public class L1MobSkill implements Cloneable {
      * 設定值小於0 則小於設定距離(轉正整數)發動技能<BR>
      * 設定值大於0 則超出設定距離發動技能
      *
-     * @param idx
-     * @param distance
-     * @return
      */
     public boolean isTriggerDistance(final int idx, final int distance) {
         final int triggerRange = this.getTriggerRange(idx);
@@ -331,8 +298,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 技能發動次數
      *
-     * @param idx
-     * @return
      */
     public int getTriggerCount(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -344,8 +309,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 技能發動次數
      *
-     * @param idx
-     * @param i
      */
     public void setTriggerCount(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -359,8 +322,6 @@ public class L1MobSkill implements Cloneable {
      * 2:自己<BR>
      * 3:畫面內的隨機目標<BR>
      *
-     * @param idx
-     * @return
      */
     public int getChangeTarget(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -374,8 +335,6 @@ public class L1MobSkill implements Cloneable {
      * 2:自己<BR>
      * 3:畫面內的隨機目標<BR>
      *
-     * @param idx
-     * @param i
      */
     public void setChangeTarget(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -388,8 +347,6 @@ public class L1MobSkill implements Cloneable {
      * 攻擊距離(物理攻擊設置)<BR>
      * 物理攻擊必須設定1以上
      *
-     * @param idx
-     * @return
      */
     public int getRange(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -402,8 +359,6 @@ public class L1MobSkill implements Cloneable {
      * 攻擊距離(物理攻擊設置)<BR>
      * 物理攻擊必須設定1以上
      *
-     * @param idx
-     * @param i
      */
     public void setRange(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -417,8 +372,6 @@ public class L1MobSkill implements Cloneable {
      * 單體攻擊設置0<BR>
      * 範圍攻擊必須設定1以上
      *
-     * @param idx
-     * @return
      */
     public int getAreaWidth(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -432,8 +385,6 @@ public class L1MobSkill implements Cloneable {
      * 單體攻擊設置0<BR>
      * 範圍攻擊必須設定1以上
      *
-     * @param idx
-     * @param i
      */
     public void setAreaWidth(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -447,8 +398,6 @@ public class L1MobSkill implements Cloneable {
      * 單體攻擊設置0<BR>
      * 範圍攻擊必須設定1以上
      *
-     * @param idx
-     * @return
      */
     public int getAreaHeight(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -462,8 +411,6 @@ public class L1MobSkill implements Cloneable {
      * 單體攻擊設置0<BR>
      * 範圍攻擊必須設定1以上
      *
-     * @param idx
-     * @param i
      */
     public void setAreaHeight(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -475,8 +422,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 攻擊倍率(1/10)
      *
-     * @param idx
-     * @return
      */
     public int getLeverage(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -488,8 +433,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 攻擊倍率(1/10)
      *
-     * @param idx
-     * @param i
      */
     public void setLeverage(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -501,8 +444,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 對應魔法技能編號
      *
-     * @param idx
-     * @return
      */
     public int getSkillId(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -514,8 +455,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 對應魔法技能編號
      *
-     * @param idx
-     * @param i
      */
     public void setSkillId(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -527,8 +466,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 使用的技能動畫
      *
-     * @param idx
-     * @return
      */
     public int getGfxid(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -540,8 +477,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 使用的技能動畫
      *
-     * @param idx
-     * @param i
      */
     public void setGfxid(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -553,8 +488,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 使用的動作編號
      *
-     * @param idx
-     * @return
      */
     public int getActid(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -566,8 +499,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 使用的動作編號
      *
-     * @param idx
-     * @param i
      */
     public void setActid(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -579,8 +510,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 召喚技能使用屬下編號
      *
-     * @param idx
-     * @return
      */
     public int getSummon(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -592,8 +521,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 召喚技能使用屬下編號
      *
-     * @param idx
-     * @param i
      */
     public void setSummon(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -605,8 +532,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 召喚最小數量
      *
-     * @param idx
-     * @return
      */
     public int getSummonMin(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -618,8 +543,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 召喚最小數量
      *
-     * @param idx
-     * @param i
      */
     public void setSummonMin(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -631,8 +554,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 召喚最大數量
      *
-     * @param idx
-     * @return
      */
     public int getSummonMax(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -644,8 +565,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 召喚最大數量
      *
-     * @param idx
-     * @param i
      */
     public void setSummonMax(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -657,8 +576,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 強制變身代號
      *
-     * @param idx
-     * @return
      */
     public int getPolyId(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -670,8 +587,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 強制變身代號
      *
-     * @param idx
-     * @param i
      */
     public void setPolyId(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -683,8 +598,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 再次使用的延遲時間
      *
-     * @param idx
-     * @return
      */
     public int getReuseDelay(final int idx) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {
@@ -696,8 +609,6 @@ public class L1MobSkill implements Cloneable {
     /**
      * 再次使用的延遲時間
      *
-     * @param idx
-     * @param i
      */
     public void setReuseDelay(final int idx, final int i) {
         if ((idx < 0) || (idx >= this.getSkillSize())) {

@@ -35,7 +35,6 @@ public final class MapTimerThread extends TimerTask {
     /**
      * 取回實例
      *
-     * @return
      */
     public static MapTimerThread getInstance() {
         if (_instance == null) {
@@ -50,7 +49,6 @@ public final class MapTimerThread extends TimerTask {
      * 同時更新地圖使用時間<BR>
      * 送出時間封包
      *
-     * @param pc
      * @param time 秒
      */
     public static void put(final L1PcInstance pc, final int time) {
@@ -66,7 +64,6 @@ public final class MapTimerThread extends TimerTask {
     /**
      * 地圖時間檢查
      *
-     * @param pc
      */
     private void MapTimeCheck(final L1PcInstance pc) {
         // 玩家所在的地圖
@@ -93,7 +90,6 @@ public final class MapTimerThread extends TimerTask {
     /**
      * 時間提示訊息
      *
-     * @param pc
      */
     private void message(final L1PcInstance pc) {
         // 玩家所在的地圖
@@ -195,7 +191,6 @@ public final class MapTimerThread extends TimerTask {
     /**
      * 傳出PC的處理
      *
-     * @param pc
      */
     private void teleport(final L1PcInstance pc) {
         TIMINGMAP.remove(pc);// 移出清單

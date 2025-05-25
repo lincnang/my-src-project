@@ -16,8 +16,6 @@ public class S_CnSRetrieve extends ServerBasePacket {
     /**
      * 托售 物品名單
      *
-     * @param pc
-     * @param items
      */
     public S_CnSRetrieve(final L1PcInstance pc, final int objid, final List<L1ItemInstance> items) {
         this.writeC(S_RETRIEVE_LIST);

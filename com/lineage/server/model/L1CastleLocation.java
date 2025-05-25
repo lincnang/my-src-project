@@ -218,7 +218,6 @@ public class L1CastleLocation {
     /**
      * 世界城堡數據清單
      *
-     * @return
      */
     public static Map<Integer, L1Clan> mapCastle() {
         return _isCastle;
@@ -228,7 +227,6 @@ public class L1CastleLocation {
      * 世界城堡數據清單(該城堡血盟資料)
      *
      * @param key 城堡編號
-     * @return
      */
     public static L1Clan castleClan(final Integer key) {
         return _isCastle.get(key);
@@ -501,8 +499,6 @@ public class L1CastleLocation {
     /**
      * npcidcastle_id返
      *
-     * @param npcid
-     * @return
      */
     public static int getCastleIdByNpcid(final int npcid) {
         // 城：王國全域

@@ -29,28 +29,24 @@ public abstract class L1Map {
     /**
      * 起點X
      *
-     * @return
      */
     public abstract int getX();
 
     /**
      * 起點Y
      *
-     * @return
      */
     public abstract int getY();
 
     /**
      * 地圖寬度(終點X - 起點X)
      *
-     * @return
      */
     public abstract int getWidth();
 
     /**
      * 地圖高度(終點Y - 起點Y)
      *
-     * @return
      */
     public abstract int getHeight();
 
@@ -109,7 +105,6 @@ public abstract class L1Map {
      * 指定座標通行可能
      *
      * @param pt  座標Point
-     * @param cha
      * @return true:可以通過 false:不能通過
      */
     public abstract boolean isPassable(Point pt, final L1Character cha);
@@ -119,7 +114,6 @@ public abstract class L1Map {
      *
      * @param x   座標X值
      * @param y   座標Y值
-     * @param cha
      * @return true:可以通過 false:不能通過
      */
     public abstract boolean isPassable(int x, int y, final L1Character cha);
@@ -128,8 +122,6 @@ public abstract class L1Map {
      * 指定座標heading方向通行可能
      *
      * @param pt      座標Point
-     * @param heading
-     * @param cha
      * @return true:可以通過 false:不能通過
      */
     public abstract boolean isPassable(Point pt, int heading, final L1Character cha);
@@ -139,8 +131,6 @@ public abstract class L1Map {
      *
      * @param x       座標X值
      * @param y       座標Y值
-     * @param heading
-     * @param cha
      * @return true:可以通過 false:不能通過
      */
     public abstract boolean isPassable(int x, int y, int heading, final L1Character cha);
@@ -150,19 +140,12 @@ public abstract class L1Map {
      *
      * @param x       座標X值
      * @param y       座標Y值
-     * @param heading
-     * @return
      */
     public abstract boolean isPassableDna(final int x, final int y, final int heading);
 
     /**
      * 該座標門的判斷
      *
-     * @param x
-     * @param y
-     * @param heading
-     * @param npc
-     * @return
      */
     public abstract boolean isDoorPassable(final int x, final int y, final int heading, final L1NpcInstance npc);
 
@@ -187,7 +170,6 @@ public abstract class L1Map {
     /**
      * 指定座標位置是安全區域。
      *
-     * @param pt
      * @return 安全區域返回true
      */
     public abstract boolean isSafetyZone(Point pt);
@@ -398,7 +380,6 @@ public abstract class L1Map {
     /**
      * 是否可以使用血盟支援令
      *
-     * @return
      */
     public abstract boolean chuanyunjian();
 }

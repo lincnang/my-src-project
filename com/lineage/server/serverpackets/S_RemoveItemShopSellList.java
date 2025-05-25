@@ -20,8 +20,6 @@ public class S_RemoveItemShopSellList extends ServerBasePacket {
     /**
      * 添加刪除物品
      *
-     * @param pc
-     * @param objid
      */
     public S_RemoveItemShopSellList(final L1PcInstance pc, final int objid) {
         writeC(S_SELL_LIST);

@@ -65,8 +65,6 @@ public class C_Trade extends ClientBasePacket {
     /**
      * 檢查世界玩家當中是否有兩個相同帳號的PC
      *
-     * @param c
-     * @return
      */
     private boolean isTwoLogin(L1PcInstance c) {
         boolean bool = false;

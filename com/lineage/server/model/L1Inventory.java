@@ -57,7 +57,6 @@ public class L1Inventory extends L1Object {
     /**
      * 背包內全部數量
      *
-     * @return
      */
     public int getSize() {
         if (_items.isEmpty()) {
@@ -69,7 +68,6 @@ public class L1Inventory extends L1Object {
     /**
      * 背包內全物件清單
      *
-     * @return
      */
     public List<L1ItemInstance> getItems() {
         return _items;
@@ -78,7 +76,6 @@ public class L1Inventory extends L1Object {
     /**
      * 背包內全部重量
      *
-     * @return
      */
     public int getWeight() {
         int weight = 0;
@@ -186,9 +183,6 @@ public class L1Inventory extends L1Object {
     /**
      * 全新物件加入背包
      *
-     * @param itemid
-     * @param count
-     * @return
      */
     public synchronized L1ItemInstance storeItem(final int itemid, final long count) {
         try {
@@ -227,8 +221,6 @@ public class L1Inventory extends L1Object {
     /**
      * 背包中新物品的增加(物品已加入世界) (道具製造/寶箱開出/交易物品/商店購買)
      *
-     * @param item
-     * @return
      */
     public synchronized L1ItemInstance storeItem(L1ItemInstance item) {
         try {
@@ -460,8 +452,6 @@ public class L1Inventory extends L1Object {
     /**
      * 背包中新物品的增加 (托售領回/倉庫取出及存入/撿取物品/丟棄物品)
      *
-     * @param item
-     * @return
      */
     public synchronized L1ItemInstance storeTradeItem(L1ItemInstance item) {
         try {
@@ -634,7 +624,6 @@ public class L1Inventory extends L1Object {
      * 刪除指定編號物品
      *
      * @param itemid - 刪除物品的編號
-     * @param count  - 刪除的數量
      * @return true:刪除完成 false:刪除失敗
      */
     public boolean consumeItem(final int itemid) {
@@ -697,7 +686,6 @@ public class L1Inventory extends L1Object {
     /**
      * 刪除指定編號物品及數量 (可堆疊、不可堆疊共用)
      *
-     * @param itemid 刪除物品的編號
      * @param count  刪除的數量
      * @return true:刪除完成 false:刪除失敗
      */
@@ -736,9 +724,6 @@ public class L1Inventory extends L1Object {
     /**
      * 移轉物品
      *
-     * @param objectId
-     * @param count
-     * @return
      */
     public L1ItemInstance shiftingItem(int objectId, long count) {
         L1ItemInstance item = getItem(objectId);
@@ -761,8 +746,6 @@ public class L1Inventory extends L1Object {
     /**
      * 指定OBJID以及數量 刪除物品
      *
-     * @param objectId
-     * @param count
      * @return 實際刪除數量
      */
     public long removeItem(int objectId, long count) {
@@ -773,7 +756,6 @@ public class L1Inventory extends L1Object {
     /**
      * 指定物品(全部數量) 刪除物品
      *
-     * @param item
      * @return 實際刪除數量
      */
     public long removeItem(L1ItemInstance item) {
@@ -783,8 +765,6 @@ public class L1Inventory extends L1Object {
     /**
      * 指定物品以及數量 刪除物品
      *
-     * @param item
-     * @param count
      * @return 實際刪除數量
      */
     public long removeItem(L1ItemInstance item, long count) {
@@ -827,7 +807,6 @@ public class L1Inventory extends L1Object {
     /**
      * 物品資料消除
      *
-     * @param item
      */
     public void deleteItem(final L1ItemInstance item) {
         int itemid = item.getItemId();
@@ -846,10 +825,6 @@ public class L1Inventory extends L1Object {
     /**
      * 個人/精靈/角色專屬/血盟倉庫存入
      *
-     * @param objectId
-     * @param count
-     * @param inventory
-     * @return
      */
     public synchronized L1ItemInstance tradeItem(int objectId, long count, L1Inventory inventory) {
         L1ItemInstance item = getItem(objectId);
@@ -911,8 +886,6 @@ public class L1Inventory extends L1Object {
     /**
      * 衝裝贖回系統
      *
-     * @param item
-     * @param bless
      */
     public synchronized L1ItemInstance storeItem(L1ItemInstance item, int bless) {
         try {
@@ -1062,7 +1035,6 @@ public class L1Inventory extends L1Object {
      * @param item      轉移的物品
      * @param count     移出的數量
      * @param inventory 移入對象的背包
-     * @return
      */
     public synchronized L1ItemInstance tradeItem(L1ItemInstance item, long count, L1Inventory inventory) {
         if (item == null) {
@@ -1170,8 +1142,6 @@ public class L1Inventory extends L1Object {
     /**
      * 找尋指定物品(未裝備)
      *
-     * @param itemId
-     * @return
      */
     public L1ItemInstance findItemIdNoEq(final int itemId) {
         for (final L1ItemInstance item : this._items) {
@@ -1185,8 +1155,6 @@ public class L1Inventory extends L1Object {
     /**
      * 找尋指定物品 不檢查裝備狀態
      *
-     * @param itemId
-     * @return
      */
     public L1ItemInstance findItemId(final int itemId) {
         for (final L1ItemInstance item : this._items) {
@@ -1200,8 +1168,6 @@ public class L1Inventory extends L1Object {
     /**
      * 找尋指定物品 不檢查裝備狀態
      *
-     * @param nameid
-     * @return
      */
     public L1ItemInstance findItemId(final String nameid) {
         for (final L1ItemInstance item : this._items) {
@@ -1215,8 +1181,6 @@ public class L1Inventory extends L1Object {
     /**
      * 找回相同KEYID的物品
      *
-     * @param id
-     * @return
      */
     public L1ItemInstance findKeyId(int keyid) {
         for (L1ItemInstance item : _items) {
@@ -1231,7 +1195,6 @@ public class L1Inventory extends L1Object {
      * 傳回該編號物品(陣列) (不可堆疊物品)
      *
      * @param itemId 物品編號
-     * @return
      */
     public L1ItemInstance[] findItemsId(final int itemId) {
         final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
@@ -1256,8 +1219,6 @@ public class L1Inventory extends L1Object {
     /**
      * 未裝備物品清單(陣列) (不可堆疊物品)
      *
-     * @param itemId
-     * @return
      */
     public L1ItemInstance[] findItemsIdNotEquipped(final int itemId) {
         final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
@@ -1274,9 +1235,7 @@ public class L1Inventory extends L1Object {
     /**
      * 未裝備物品清單包含強化值(陣列) (不可堆疊物品)
      *
-     * @param itemId
      * @param enchant 檢查強化值
-     * @return
      */
     public L1ItemInstance[] findItemsIdNoEqWithEnchant(final int itemId, int enchant) {
         final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
@@ -1293,8 +1252,6 @@ public class L1Inventory extends L1Object {
     /**
      * 未裝備物品清單(陣列) (不可堆疊物品)
      *
-     * @param nameid
-     * @return
      */
     public L1ItemInstance[] findItemsIdNotEquipped(final String nameid) {
         final ArrayList<L1ItemInstance> itemList = new ArrayList<L1ItemInstance>();
@@ -1311,8 +1268,6 @@ public class L1Inventory extends L1Object {
     /**
      * 傳回指定OBJID物品
      *
-     * @param objectId
-     * @return
      */
     public L1ItemInstance getItem(final int objectId) {
         for (final Object itemObject : this._items) {
@@ -1327,8 +1282,6 @@ public class L1Inventory extends L1Object {
     /**
      * 檢查指定物品是否足夠數量1（矢 魔石的確認）
      *
-     * @param itemid
-     * @return
      */
     public boolean checkItem(final int itemid) {
         return this.checkItem(itemid, 1);
@@ -1339,7 +1292,6 @@ public class L1Inventory extends L1Object {
      *
      * @param itemId 物品編號
      * @param count  需要數量
-     * @return
      */
     public boolean checkItem(final int itemId, final long count) {
         if (count <= 0) {
@@ -1366,7 +1318,6 @@ public class L1Inventory extends L1Object {
      *
      * @param item  物品
      * @param count 需要數量
-     * @return
      */
     public boolean checkItem(final L1ItemInstance item, final long count) {
         if (count <= 0) {
@@ -1382,8 +1333,6 @@ public class L1Inventory extends L1Object {
      * 指定物品編號以及數量(可堆疊物品)<BR>
      * 該物件未在裝備狀態
      *
-     * @param itemid
-     * @param count
      * @return 足夠傳回物品
      */
     public L1ItemInstance checkItemX(final int itemid, final long count) {
@@ -1402,10 +1351,8 @@ public class L1Inventory extends L1Object {
     /**
      * 是否具有未裝備指定的物品包含強化質 (可堆疊 不可堆疊通用)
      *
-     * @param id      指定物件編號
      * @param enchant 指定強化質
      * @param count   數量
-     * @return
      */
     public boolean checkEnchantItem(final int itemid, final int enchant, final long count) {
         if (ItemTable.get().getTemplate(itemid).isStackable()) {// 可以堆疊的物品
@@ -1446,10 +1393,8 @@ public class L1Inventory extends L1Object {
     /**
      * 刪除未裝備指定的物品包含強化質 (可堆疊 不可堆疊通用)
      *
-     * @param id      指定物件編號
      * @param enchant 指定強化質
      * @param count   數量
-     * @return
      */
     public boolean consumeEnchantItem(final int itemid, final int enchant, final long count) {
         if (ItemTable.get().getTemplate(itemid).isStackable()) {// 可以堆疊的物品
@@ -1480,8 +1425,6 @@ public class L1Inventory extends L1Object {
     /**
      * 檢查材料是否足夠
      *
-     * @param nameid
-     * @param count
      * @return true 材料足夠 ; false 材料不足
      */
     public boolean checkItemNotEquipped(final String nameid, final long count) {
@@ -1494,8 +1437,6 @@ public class L1Inventory extends L1Object {
     /**
      * 檢查材料是否足夠(不可堆疊道具只尋找未裝備道具)
      *
-     * @param itemid
-     * @param count
      * @return true 材料足夠 ; false 材料不足
      */
     public boolean checkItemNotEquipped(final int itemid, final long count) {
@@ -1527,7 +1468,6 @@ public class L1Inventory extends L1Object {
     /**
      * 查找未裝備物品數量 (可堆疊 不可堆疊通用)
      *
-     * @param itemId
      * @return 數量
      */
     public long countItems(final int itemId) {
@@ -1548,7 +1488,6 @@ public class L1Inventory extends L1Object {
     /**
      * 查找未裝備物品數量 (可堆疊 不可堆疊通用)
      *
-     * @param nameid
      * @return 數量
      */
     public long countItems(final String nameid) {
@@ -1598,7 +1537,6 @@ public class L1Inventory extends L1Object {
     /**
      * 限制道具存在時間
      *
-     * @param item
      */
     private void set_time_item(L1ItemInstance item) {
         //		if (item.get_time() == null) {

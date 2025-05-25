@@ -175,8 +175,6 @@ public class ItemBuffTable {
     /**
      * 道具顯示信息
      *
-     * @param item_id
-     * @return
      */
     public L1ItemBuff getUseEX(int item_id) {
         if (_list.isEmpty()) {
@@ -204,10 +202,6 @@ public class ItemBuffTable {
     /**
      * 增加效果
      *
-     * @param pc
-     * @param item_id
-     * @param buff_time
-     * @return
      */
     public boolean add(final L1PcInstance pc, final int item_id, final int buff_time) {
         if (!_list.containsKey(item_id)) {
@@ -501,8 +495,6 @@ public class ItemBuffTable {
     /**
      * 移除效果
      *
-     * @param pc
-     * @param item_id
      */
     public void remove(final L1PcInstance pc, final int item_id) {
         final L1ItemBuff value = _list.get(item_id);

@@ -26,7 +26,6 @@ public class RankingWealthTimer extends TimerTask {
     /**
      * 財富風雲榜
      *
-     * @return
      */
     public static String[] userName() {
         if (!_load) {
@@ -98,10 +97,6 @@ public class RankingWealthTimer extends TimerTask {
     }
 
     /**
-     * @param count
-     * @param name
-     * @param userName
-     * @return
      */
     private static String[] intTree(final long count, final String name, final String[] userName) {
         if (userName[0].equals(" ")) {// NO 1

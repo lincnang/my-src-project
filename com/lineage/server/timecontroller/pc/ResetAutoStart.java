@@ -25,8 +25,6 @@ public class ResetAutoStart extends TimerTask {
     /**
      * 檢查掛機時間
      *
-     * @param tgpc
-     * @param time
      */
     private static void check(final L1PcInstance tgpc, final Integer time) {
         if (time > 0) {//還有掛機時間

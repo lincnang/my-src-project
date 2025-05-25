@@ -66,7 +66,6 @@ public class NewAutoPractice {
     /**
      * 設置自動練功仇人名單
      *
-     * @param pc
      */
     public void addEnemy(final L1PcInstance pc) {
         Connection co = null;
@@ -93,8 +92,6 @@ public class NewAutoPractice {
     /**
      * 仇人名單建立
      *
-     * @param pc
-     * @param srpc
      */
     public void AddEnemyList(final L1PcInstance pc, final String name) {
         int id = LoadMaxId() + 1;
@@ -144,8 +141,6 @@ public class NewAutoPractice {
     /**
      * 仇人名單刪除
      *
-     * @param pc
-     * @param srpc
      */
     public void DeleteEnemyList(final L1PcInstance pc, final String name) {
         Connection cn = null;
@@ -169,8 +164,6 @@ public class NewAutoPractice {
      * OK
      * 使用內掛被殺名單建立
      *
-     * @param pc
-     * @param srpc
      */
     public void AddAutoList(final L1PcInstance pc, final L1Character srpc) {
         int id = LoadMaxId2() + 1;
@@ -225,7 +218,6 @@ public class NewAutoPractice {
      * OK
      * 使用內掛被殺查詢清單
      *
-     * @param pc
      */
     public void SearchAutoLog(final L1PcInstance pc) {
         Connection conn = null;
@@ -266,7 +258,6 @@ public class NewAutoPractice {
      * OK
      * 使用內掛被殺名單清除
      *
-     * @param pc
      */
     public void ClearAutoLog(final int objid) {
         Connection cn = null;

@@ -67,7 +67,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回前十名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top10() {
         return _top10;
@@ -76,7 +75,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回王族前三名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top3C() {
         return _top3C;
@@ -85,7 +83,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回騎士前三名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top3K() {
         return _top3K;
@@ -94,7 +91,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回妖精前三名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top3E() {
         return _top3E;
@@ -103,7 +99,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回法師前三名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top3W() {
         return _top3W;
@@ -112,7 +107,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回黑妖前三名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top3D() {
         return _top3D;
@@ -121,7 +115,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回龍騎士前三名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top3G() {
         return _top3G;
@@ -130,7 +123,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回幻術師前三名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top3I() {
         return _top3I;
@@ -139,7 +131,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 取回幻術師前三名名單
      *
-     * @return
      */
     public static Map<Integer, String> get_top3Warrior() {
         return _top3Warrior;
@@ -148,7 +139,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 全職業風雲榜
      *
-     * @return
      */
     public static String[] userNameAll() {
         if (!_load) {
@@ -168,7 +158,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 王族風雲榜
      *
-     * @return
      */
     public static String[] userNameC() {
         if (!_load) {
@@ -188,7 +177,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 騎士風雲榜
      *
-     * @return
      */
     public static String[] userNameK() {
         if (!_load) {
@@ -208,7 +196,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 精靈風雲榜
      *
-     * @return
      */
     public static String[] userNameE() {
         if (!_load) {
@@ -228,7 +215,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 法師風雲榜
      *
-     * @return
      */
     public static String[] userNameW() {
         if (!_load) {
@@ -248,7 +234,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 黑妖風雲榜
      *
-     * @return
      */
     public static String[] userNameD() {
         if (!_load) {
@@ -268,7 +253,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 龍騎風雲榜
      *
-     * @return
      */
     public static String[] userNameG() {
         if (!_load) {
@@ -288,7 +272,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 幻術風雲榜
      *
-     * @return
      */
     public static String[] userNameI() {
         if (!_load) {
@@ -308,7 +291,6 @@ public class RankingHeroTimer extends TimerTask {//src013
     /**
      * 戰士風雲榜
      *
-     * @return
      */
     public static String[] userNameWarrior() {
         if (!_load) {

@@ -49,7 +49,6 @@ public class Shutdown extends Thread {
      * <font color=#00800>執行關機讀秒</font>
      *
      * @param seconds 時間:單位(秒)
-     * @param mode    關機模式(true關機後重新啟動 false關機後不重新啟動)
      */
     public Shutdown(int seconds, boolean restart) {
         if (seconds < 0) {
@@ -115,9 +114,7 @@ public class Shutdown extends Thread {
     /**
      * <font color=#00800>啟動關機計時</font>
      *
-     * @param pc      指令執行者
      * @param seconds 時間:單位(秒)
-     * @param mode    關機模式(true關機後重新啟動 false關機後不重新啟動)
      */
     public void startShutdown(L1PcInstance activeChar, int seconds, boolean restart) {
         if (_counterInstance != null) {
@@ -136,7 +133,6 @@ public class Shutdown extends Thread {
     /**
      * <font color=#00800>取消關機計時</font>
      *
-     * @param pc 指令執行者
      */
     public void abort(L1PcInstance activeChar) {
         if (_counterInstance != null) {

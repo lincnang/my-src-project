@@ -83,7 +83,6 @@ public class Point {
     /**
      * 指定座標直線距離
      *
-     * @param pt
      * @return 距離質
      */
     public double getLineDistance(final Point pt) {
@@ -95,8 +94,6 @@ public class Point {
     /**
      * 指定座標直線距離
      *
-     * @param x
-     * @param y
      * @return 距離質
      */
     public double getLineDistance(final int x, final int y) {
@@ -121,7 +118,6 @@ public class Point {
     /**
      * 指定座標直線距離(相對位置最大距離)
      *
-     * @param pt
      * @return 距離質
      */
     public int getTileLineDistance(final Point pt) {
@@ -131,7 +127,6 @@ public class Point {
     /**
      * 指定座標距離(XY距離總合)
      *
-     * @param pt
      * @return 距離質
      */
     public int getTileDistance(final Point pt) {
@@ -141,7 +136,6 @@ public class Point {
     /**
      * 指定座標19格範圍內
      *
-     * @param pt
      * @return 指定座標在19格範圍內 返回true
      */
     public boolean isInScreen(final Point pt) {
@@ -165,7 +159,6 @@ public class Point {
     /**
      * 是否與指定座標位置重疊
      *
-     * @param pt
      * @return TRUE是 FALSE否
      */
     public boolean isSamePoint(Point pt) {

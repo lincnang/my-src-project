@@ -15,9 +15,6 @@ public class S_PetCtrlMenu extends ServerBasePacket {
     /**
      * 新的寵物控制界面
      *
-     * @param cha
-     * @param npc
-     * @param open
      */
     public S_PetCtrlMenu(final L1Character cha, final L1NpcInstance npc, final boolean open) {
         if (open) {

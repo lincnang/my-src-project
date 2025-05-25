@@ -37,7 +37,6 @@ public class WorldNpc {
     /**
      * 全部NPC
      *
-     * @return
      */
     public Collection<L1NpcInstance> all() {
         try {
@@ -53,7 +52,6 @@ public class WorldNpc {
     /**
      * NPC清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1NpcInstance> map() {
         return _isNpc;
@@ -62,8 +60,6 @@ public class WorldNpc {
     /**
      * 加入NPC清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1NpcInstance value) {
         try {
@@ -76,7 +72,6 @@ public class WorldNpc {
     /**
      * 移出NPC清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {
@@ -89,8 +84,6 @@ public class WorldNpc {
     /**
      * 找尋Npc Oid
      *
-     * @param key
-     * @return
      */
     public L1NpcInstance find(final Integer key) {
         try {
@@ -109,7 +102,6 @@ public class WorldNpc {
      * 19格範圍NPC物件
      *
      * @param src 原始物件
-     * @return
      */
     public ArrayList<L1NpcInstance> getVisibleMob(final L1NpcInstance src) {
         final L1Map map = src.getMap();
@@ -136,7 +128,6 @@ public class WorldNpc {
      * 19格範圍內相同NPC物件數量
      *
      * @param src 原始物件
-     * @return
      */
     public int getVisibleCount(final L1NpcInstance src) {
         final L1Map map = src.getMap();

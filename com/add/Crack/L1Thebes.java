@@ -128,7 +128,6 @@ public class L1Thebes {
     /**
      * 傳回副本狀態
      *
-     * @return
      */
     private static int getGameStatus() {
         return _status;
@@ -137,7 +136,6 @@ public class L1Thebes {
     /**
      * 設定副本狀態
      *
-     * @param i
      */
     public static void setGameStatus(int i) {
         _status = i;
@@ -146,7 +144,6 @@ public class L1Thebes {
     /**
      * 副本結束狀態(攻略BOSS是否成功)
      *
-     * @return
      */
     public static int getGameEnd() {
         return _type;
@@ -155,7 +152,6 @@ public class L1Thebes {
     /**
      * 設定副本結束狀態(攻略BOSS是否成功)
      *
-     * @param type
      */
     private static void setGameEnd(int type) {
         switch (type) {
@@ -198,7 +194,6 @@ public class L1Thebes {
     /**
      * 離場倒數
      *
-     * @param type
      */
     private static void Overtime2(int type) {
         int time = 40; // 副本倒數時間
@@ -248,7 +243,6 @@ public class L1Thebes {
     /**
      * 開場倒數並召喚BOSS開始副本
      *
-     * @param time
      */
     public static void OverTime(int time) {
         try {

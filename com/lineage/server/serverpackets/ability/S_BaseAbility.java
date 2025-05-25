@@ -13,12 +13,6 @@ public class S_BaseAbility extends ServerBasePacket {
     /**
      * 純能力資訊
      *
-     * @param baseStr
-     * @param baseInt
-     * @param baseWis
-     * @param baseDex
-     * @param baseCon
-     * @param baseCha
      */
     public S_BaseAbility(final int baseStr, final int baseInt, final int baseWis, final int baseDex, final int baseCon, final int baseCha) {
         this.writeC(S_EXTENDED_PROTOBUF);

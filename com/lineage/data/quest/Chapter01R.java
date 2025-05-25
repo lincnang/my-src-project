@@ -210,7 +210,6 @@ public class Chapter01R implements Runnable {
     /**
      * 加入NPC清單
      *
-     * @param mob
      */
     private void add(final L1NpcInstance value) {
         try {
@@ -223,7 +222,6 @@ public class Chapter01R implements Runnable {
     /**
      * 移出NPC清單
      *
-     * @param mob
      */
     private void remove(final L1NpcInstance value) {
         try {
@@ -358,7 +356,6 @@ public class Chapter01R implements Runnable {
     /**
      * 執行時間
      *
-     * @return
      */
     public int get_time() {
         return _time;
@@ -2070,7 +2067,6 @@ public class Chapter01R implements Runnable {
     /**
      * 檢查第1個門是否達到啟動條件
      *
-     * @return
      */
     private boolean check_loc1() {
         try {
@@ -2113,7 +2109,6 @@ public class Chapter01R implements Runnable {
     /**
      * 檢查第2個門是否達到啟動條件
      *
-     * @return
      */
     private boolean check_loc2() {
         try {
@@ -2156,7 +2151,6 @@ public class Chapter01R implements Runnable {
     /**
      * 檢查第3個門是否達到啟動條件
      *
-     * @return
      */
     private boolean check_loc3() {
         try {
@@ -2199,7 +2193,6 @@ public class Chapter01R implements Runnable {
     /**
      * 檢查第4個門是否達到啟動條件
      *
-     * @return
      */
     private boolean check_loc4() {
         try {
@@ -2247,7 +2240,6 @@ public class Chapter01R implements Runnable {
     /**
      * 隊員進入地監傳送 X:32725 Y:32723 X:32727 Y:32725
      *
-     * @return
      */
     private boolean all_teleport() {
         try {
@@ -2278,7 +2270,6 @@ public class Chapter01R implements Runnable {
     /**
      * 檢察隊員回應(啟動第1個傳送光圈)
      *
-     * @return
      */
     private boolean all_ok() {
         try {

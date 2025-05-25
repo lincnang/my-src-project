@@ -39,7 +39,6 @@ public class ServerRestartTimer extends TimerTask {
     /**
      * 重新啟動時間
      *
-     * @return
      */
     public static String get_restartTime() {
         return _restartTime;
@@ -48,7 +47,6 @@ public class ServerRestartTimer extends TimerTask {
     /**
      * 啟動時間
      *
-     * @return
      */
     public static String get_startTime() {
         return _startTime;
@@ -57,7 +55,6 @@ public class ServerRestartTimer extends TimerTask {
     /**
      * 距離關機小逾10分鐘
      *
-     * @return
      */
     public static boolean isRtartTime() {
         if (_restart == null) {

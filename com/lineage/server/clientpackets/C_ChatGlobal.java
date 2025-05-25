@@ -133,8 +133,6 @@ public class C_ChatGlobal extends ClientBasePacket {
     /**
      * 交易頻道($)
      *
-     * @param pc
-     * @param chatText
      */
     private void chatType_12(L1PcInstance pc, String chatText) {
         S_ChatTransaction packet = new S_ChatTransaction(pc, chatText);
@@ -162,8 +160,6 @@ public class C_ChatGlobal extends ClientBasePacket {
     /**
      * 廣播頻道(&)
      *
-     * @param pc
-     * @param chatText
      */
     private void chatType_3(L1PcInstance pc, String chatText) {
         S_ChatGlobal packet = new S_ChatGlobal(pc, chatText);

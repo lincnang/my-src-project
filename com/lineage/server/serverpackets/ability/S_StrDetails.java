@@ -16,11 +16,6 @@ public class S_StrDetails extends ServerBasePacket {
     /**
      * 力量能力資訊
      *
-     * @param type
-     * @param dmg
-     * @param hit
-     * @param dmgCritical
-     * @param maxWeight
      */
     public S_StrDetails(final int type, final int dmg, final int hit, final int dmgCritical, final int maxWeight) {
         this.writeC(S_EXTENDED_PROTOBUF);
@@ -38,11 +33,6 @@ public class S_StrDetails extends ServerBasePacket {
     /**
      * 力量能力資訊
      *
-     * @param dmg
-     * @param hit
-     * @param dmgCritical
-     * @param maxWeight
-     * @return
      */
     private byte[] buildSTR(final int dmg, final int hit, final int dmgCritical, final int maxWeight) {
         S_StrDetails data = new S_StrDetails();

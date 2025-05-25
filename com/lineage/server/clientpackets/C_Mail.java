@@ -302,9 +302,6 @@ public class C_Mail extends ClientBasePacket {
     /**
      * 讀取指定id的信件
      *
-     * @param pc
-     * @param type
-     * @param id
      */
     private final void clientPackB(final L1PcInstance pc, final int type, final int id) {
         try {
@@ -323,9 +320,6 @@ public class C_Mail extends ClientBasePacket {
     /**
      * 讀取全信件標題
      *
-     * @param pc
-     * @param type
-     * @param count
      */
     private final void clientPackA(final L1PcInstance pc, final int type/*
      * , final int count

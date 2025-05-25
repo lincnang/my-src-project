@@ -50,10 +50,6 @@ public class CharMapTimeReading {
     /**
      * 新增地圖入場時間紀錄
      *
-     * @param objId
-     * @param order_id
-     * @param used_time
-     * @return
      */
     public Map<Integer, Integer> addTime(int objId, int order_id, int used_time) {
         this._lock.lock();
@@ -69,7 +65,6 @@ public class CharMapTimeReading {
     /**
      * 取回地圖入場時間紀錄
      *
-     * @param pc
      */
     public void getTime(final L1PcInstance pc) {
         this._lock.lock();
@@ -83,7 +78,6 @@ public class CharMapTimeReading {
     /**
      * 刪除地圖入場時間紀錄
      *
-     * @param objid
      */
     public void deleteTime(final int objid) {
         this._lock.lock();

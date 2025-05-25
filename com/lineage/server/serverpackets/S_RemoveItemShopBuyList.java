@@ -16,8 +16,6 @@ public class S_RemoveItemShopBuyList extends ServerBasePacket {
     /**
      * 取消刪除物品
      *
-     * @param pc
-     * @param type 第幾組
      */
     public S_RemoveItemShopBuyList(final L1PcInstance pc, final int objid) {
         writeC(S_BUY_LIST);

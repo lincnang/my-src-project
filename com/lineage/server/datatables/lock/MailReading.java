@@ -70,12 +70,7 @@ public class MailReading {
     /**
      * 寫入信件 by terry0412
      *
-     * @param type
-     * @param receiver
-     * @param writer
-     * @param text
      * @param sendType 信件發送類型 (0:發信 1:收信)
-     * @return
      */
     public L1Mail writeMail(final int type, final String receiver, final String writer, final byte[] text, final int sendType) {
         _lock.lock();
@@ -113,9 +108,6 @@ public class MailReading {
     /**
      * 取得全信件標題 by terry0412
      *
-     * @param pcName
-     * @param type
-     * @return
      */
     public ArrayList<L1Mail> getMails(final String pcName, final int type) {
         final ArrayList<L1Mail> mailList = new ArrayList<L1Mail>();
@@ -132,9 +124,6 @@ public class MailReading {
     /**
      * 取得信件總數量 by terry0412
      *
-     * @param pcName
-     * @param type
-     * @return
      */
     public int getMailSize(final String pcName, final int type) {
         final ArrayList<L1Mail> mailList = getMails(pcName, type);
@@ -147,8 +136,6 @@ public class MailReading {
     /**
      * 信箱系統 - 更新玩家名稱 by terry0412
      *
-     * @param ori_name
-     * @param new_name
      */
     public void renewPcName(final String ori_name, final String new_name) {
         _lock.lock();

@@ -39,13 +39,7 @@ public class CardPolySet {
 
     /**
      * @param Id            流水號
-     * @param Html          對話檔名
-     * @param Cmd           對話指令
      * @param QuestId       任務編號
-     * @param PolyId        可變身編號
-     * @param PolyTime      變身持續時間
-     * @param PolyItemId    變身需求道具
-     * @param PolyItemCount 變身需求道具數量
      * @param AddStr        力量
      * @param AddDex        敏捷
      * @param AddCon        體質

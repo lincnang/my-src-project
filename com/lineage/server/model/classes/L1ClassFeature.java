@@ -230,7 +230,6 @@ public abstract class L1ClassFeature {
      * 返回職業專屬計算模組
      *
      * @param key (職業type)
-     * @return
      */
     public static L1ClassFeature newClassFeature(final int key) {
         if (!IntRange.includes(key, 0, 7)) {
@@ -242,7 +241,6 @@ public abstract class L1ClassFeature {
     /**
      * 初始化人物hp  XXX 7.6C ADD
      *
-     * @param chartype
      * @return hp
      */
     public static int calcInitHp(final int chartype) {
@@ -252,9 +250,6 @@ public abstract class L1ClassFeature {
     /**
      * 初始化人物 mp  XXX 7.6C ADD
      *
-     * @param chartype
-     * @param wis
-     * @return
      */
     public static int calcInitMp(final int chartype, final int wis) {
         return wis <= 20 ? INIT_MP[chartype] + INIT_BASE_WIS_MP_UP[chartype][wis] : INIT_MP[chartype] + INIT_BASE_WIS_MP_UP[chartype][20];
@@ -265,7 +260,6 @@ public abstract class L1ClassFeature {
      *
      * @param str     BUFF加成+裝備加成+空身力量 總加成的力量
      * @param baseStr 空身力量 用來計算純力獎勵額外的近距離傷害
-     * @return
      */
     public static int calcStrDmg(final int str, final int baseStr) {
         // XXX 近距離傷害，自力量8=+2開始，每2點力量多1傷害值
@@ -289,7 +283,6 @@ public abstract class L1ClassFeature {
      *
      * @param str     BUFF加成+裝備加成+空身力量 總加成的力量
      * @param baseStr 空身力量 用來計算純力獎勵額外的近距離命中
-     * @return
      */
     public static int calcStrHit(final int str, final int baseStr) {
         // XXX 近距離命中，每3點力量多2命中，自力量=8開始，先連續增加2點命中，第3次增加力量時，不增加命中
@@ -313,7 +306,6 @@ public abstract class L1ClassFeature {
      *
      * @param str     BUFF加成+裝備加成+空身力量 總加成的力量
      * @param baseStr 空身力量 用來計算純力獎勵額外的近距離最大傷害值發動率
-     * @return
      */
     public static int calcStrDmgCritical(final int str, final int baseStr) {
         // XXX 力量40、50與60點時，都會增加近距離最大傷害值發動率1%。
@@ -335,7 +327,6 @@ public abstract class L1ClassFeature {
      *
      * @param intel     BUFF加成+裝備加成+空身智力 總加成的智力
      * @param baseIntel 空身智力 用來計算純智獎勵額外的魔法傷害
-     * @return
      */
     public static int calcIntMagicDmg(final int intel, final int baseIntel) {
         // XXX 魔法傷害從INT=15開始+1魔法傷害，之後每5個等級+1魔法傷害。
@@ -359,7 +350,6 @@ public abstract class L1ClassFeature {
      *
      * @param intel     BUFF加成+裝備加成+空身智力 總加成的智力
      * @param baseIntel 空身智力 用來計算純智獎勵額外的魔法命中
-     * @return
      */
     public static int calcIntMagicHit(final int intel, final int baseIntel) {
         // XXX INT=8時，魔法命中=-4。魔法命中的增加分兩個階段，魔法命中從INT=9開始=-3，每3點INT，增加1點魔法命中，直到INT=18為止魔法命中+0；再來就需要到INT=23開始=+1，仍是每3點INT，增加1點魔法命中
@@ -386,7 +376,6 @@ public abstract class L1ClassFeature {
      *
      * @param intel     BUFF加成+裝備加成+空身智力 總加成的智力
      * @param baseIntel 空身力量 用來計算純智獎勵額外的魔法暴擊率
-     * @return
      */
     public static int calcIntMagicCritical(final int intel, final int baseIntel) {
         // XXX 魔法暴擊率從智力35開始，每5等+1魔法暴擊率
@@ -406,7 +395,6 @@ public abstract class L1ClassFeature {
      * 返回智力影響額外魔法點 XXX 7.6C add
      *
      * @param intel BUFF加成+裝備加成+空身智力 總加成的智力
-     * @return
      */
     public static int calcIntMagicBonus(final int charType, final int intel) {
         // XXX 額外魔法點，自INT=8開始+2額外魔法點數，之後每4個等級+1額外魔法點數
@@ -418,7 +406,6 @@ public abstract class L1ClassFeature {
      * 返回智力影響MP消耗減少% XXX 7.6C add
      *
      * @param intel BUFF加成+裝備加成+空身智力 總加成的智力
-     * @return
      */
     public static int calcIntMagicConsumeReduction(final int intel) {
         // XXX  MP消耗減少%，每多3點增加2%MP消耗減少，自INT=8的-5%開始，先連續增加2% MP消耗減少，第三次增加智力時，不增加MP消耗減少。最多到智力=45時，MP消耗減少30%
@@ -430,7 +417,6 @@ public abstract class L1ClassFeature {
      *
      * @param wis     BUFF加成+裝備加成+空身精神 總加成的精神
      * @param baseWis 空身精神 用來計算純精獎勵額外的MP恢復增加量
-     * @return
      */
     public static int calcWisMpr(final int wis, final int baseWis) {
         // 純精25、35的額外加成，MP恢復分別+1，純精45的額外加成MP恢復+3
@@ -457,7 +443,6 @@ public abstract class L1ClassFeature {
      *
      * @param wis     BUFF加成+裝備加成+空身精神 總加成的精神
      * @param baseWis 空身精神 用來計算純精獎勵額外的MP藥水恢復增加量
-     * @return
      */
     public static int calcWisPotionMpr(final int wis, final int baseWis) {
         // 純精25、35的額外加成，MP藥水恢復分別+1，純精45的額外加成，MP藥水恢復+3
@@ -481,8 +466,6 @@ public abstract class L1ClassFeature {
     /**
      * 返回各職業空身精神影響升等時MP增加量 XXX 7.6C add
      *
-     * @param charType
-     * @param baseWis
      * @return 各職業升等時MP增加量範圍陣列
      */
     public static int[] calcBaseWisLevUpMpUp(final int charType, final int baseWis) {
@@ -500,9 +483,6 @@ public abstract class L1ClassFeature {
     /**
      * 各職業等級提升時MP上升值計算  XXX 7.6C ADD
      *
-     * @param charType
-     * @param baseMaxMp
-     * @param baseWis
      * @return MP上升後數值
      */
     public static int calcStatMp(final int charType, final int baseMaxMp, final byte baseWis) {
@@ -538,7 +518,6 @@ public abstract class L1ClassFeature {
      * 返回空身精神MP上限增加量 XXX 7.6C add
      *
      * @param baseWis 空身精神 用來計算純精獎勵MP上限增加量
-     * @return
      */
     public static int calcWisAddMaxMp(final int baseWis) {
         // 純精 25 35 45 額外MP上限增加量計算
@@ -561,10 +540,6 @@ public abstract class L1ClassFeature {
     /**
      * 空身敏捷追加防禦力計算(空身AC的計算=敏捷對AC的影響+各職業的等級，對AC的增益) XXX 7.6C add
      *
-     * @param classType
-     * @param level
-     * @param dex
-     * @return
      */
     public static int calcAc(final int classType, final int level, final int dex) {
         return 10 + _dexAc[dex] - _classFeatures[classType].getAcLevel(level);
@@ -573,8 +548,6 @@ public abstract class L1ClassFeature {
     /**
      * 返回敏捷影響AC XXX 7.6C add
      *
-     * @param dex
-     * @return
      */
     public static int calcDexAc(final int dex) {
         //final int calc = -2 + (dex - 6) / 3 * -1;
@@ -584,8 +557,6 @@ public abstract class L1ClassFeature {
     /**
      * 返回敏捷影響ER XXX 7.6C add
      *
-     * @param dex
-     * @return
      */
     public static int calcDexEr(final int dex) {
         //final int calc = dex >> 1;
@@ -597,7 +568,6 @@ public abstract class L1ClassFeature {
      *
      * @param dex     BUFF加成+裝備加成+空身敏捷 總加成的敏捷
      * @param baseDex 空身敏捷 用來計算純敏獎勵額外的遠距離傷害
-     * @return
      */
     public static int calcDexDmg(final int dex, final int baseDex) {
         // 在敏捷=7時，遠距離傷害+2，自敏捷=9開始，每3點敏捷，遠距離傷害+1
@@ -621,7 +591,6 @@ public abstract class L1ClassFeature {
      *
      * @param dex     BUFF加成+裝備加成+空身敏捷 總加成的敏捷
      * @param baseDex 空身敏捷 用來計算純敏獎勵額外的遠距離命中
-     * @return
      */
     public static int calcDexHit(final int dex, final int baseDex) {
         // XXX 在敏捷=7時，遠距離命中=-3，之後每1點敏捷，就增加1點的遠距離命中
@@ -645,7 +614,6 @@ public abstract class L1ClassFeature {
      *
      * @param dex     BUFF加成+裝備加成+空身敏捷 總加成的敏捷
      * @param baseDex 空身敏捷 用來計算純敏獎勵額外的遠距離最大傷害值發動率
-     * @return
      */
     public static int calcDexDmgCritical(final int dex, final int baseDex) {
         // XXX 敏捷40、50與60點時，都會增加遠距離最大傷害值發動率1%
@@ -664,8 +632,6 @@ public abstract class L1ClassFeature {
     /**
      * 返回各職業升等時HP基礎增加量 XXX 7.6C add
      *
-     * @param charType
-     * @return
      */
     public static int calcBaseClassLevUpHpUp(final int charType) {
         return _calHpUpDefaultType[charType];
@@ -674,8 +640,6 @@ public abstract class L1ClassFeature {
     /**
      * 返回各職業空身體質影響升等時HP增加量 XXX 7.6C add
      *
-     * @param charType
-     * @param baseCon
      * @return 各職業空身體質升等時HP額外增加量
      */
     public static int calcBaseConLevUpExtraHpUp(final int charType, final int baseCon) {
@@ -687,10 +651,6 @@ public abstract class L1ClassFeature {
     /**
      * 各職業等級提升時HP上升值計算  XXX 7.6C ADD
      *
-     * @param charType
-     * @param baseMaxHp
-     * @param baseCon
-     * @return
      */
     public static int calcStatHp(final int charType, final int baseMaxHp, final byte baseCon) {
         // 增加量 = 各職業升等時HP基礎增加量 + 各職業空身體質影響升等時HP增加量 + 隨機數字0~1(小數點0.5)
@@ -707,7 +667,6 @@ public abstract class L1ClassFeature {
      *
      * @param con     BUFF加成+裝備加成+空身體質 總加成的體質
      * @param baseCon 空身體質 用來計算純體獎勵額外的恢復量
-     * @return
      */
     public static int calcConHpr(final int con, final int baseCon) {
         // XXX HP恢復：體質11時，HP恢復為1~5；
@@ -738,7 +697,6 @@ public abstract class L1ClassFeature {
      *
      * @param con     BUFF加成+裝備加成+空身體質 總加成的體質
      * @param baseCon 空身體質 用來計算純體獎勵額外的HP藥水恢復增加量
-     * @return
      */
     public static int calcConPotionHpr(final int con, final int baseCon) {
         // XXX HP藥水恢復增加：
@@ -765,9 +723,6 @@ public abstract class L1ClassFeature {
     /**
      * 返回基礎負重能力 XXX 7.6C add
      *
-     * @param str
-     * @param con
-     * @return
      */
     public static int calcAbilityMaxWeight(final int str, final int con) {
         // XXX 基礎負重能力=1,000 + Rounddown [ (力量+體質)/2,0 ]x100
@@ -784,7 +739,6 @@ public abstract class L1ClassFeature {
      * 返回空身體質HP上限增加量 XXX 7.6C add
      *
      * @param baseCon 空身體質 用來計算純體獎勵HP上限增加量
-     * @return
      */
     public static int calcConAddMaxHp(final int baseCon) {
         // 純體 25 35 45 額外HP上限增加量計算
@@ -807,47 +761,36 @@ public abstract class L1ClassFeature {
     /**
      * 職業魔法等級
      *
-     * @param playerLevel
-     * @return
      */
     public abstract int getMagicLevel(int playerLevel);
 
     /**
      * 職業AC補正
      *
-     * @param ac
-     * @return
      */
     public abstract int getAcDefenseMax(int ac);
 
     /**
      * 職業等級對AC的增益
      *
-     * @param playerLevel
-     * @return
      */
     public abstract int getAcLevel(int playerLevel);
 
     /**
      * 職業初始抗魔補正
      *
-     * @return
      */
     public abstract int getClassOriginalMr();
 
     /**
      * 職業物理攻擊補正
      *
-     * @param playerLevel
-     * @return
      */
     public abstract int getAttackLevel(int playerLevel);
 
     /**
      * 職業物理命中補正
      *
-     * @param playerLevel
-     * @return
      */
     public abstract int getHitLevel(int playerLevel);
 
@@ -855,7 +798,6 @@ public abstract class L1ClassFeature {
      * 職業代號<br>
      * 全職=A,王=P,騎=K,妖=E,法=W,黑=D,龍=R,幻=I,戰=O<br>
      *
-     * @return
      */
     public abstract String getClassToken();
     /* 新手任務 */

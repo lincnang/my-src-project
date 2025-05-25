@@ -9,7 +9,6 @@ public class Register {
     /**
      * 獲取主板序列號
      *
-     * @return
      */
     public static String getMotherboardSN() {
         String result = "";
@@ -37,7 +36,6 @@ public class Register {
      * 獲取硬盤序列號
      *
      * @param drive 盤符
-     * @return
      */
     public static String getHardDiskSN(String drive) {
         String result = "";
@@ -64,7 +62,6 @@ public class Register {
     /**
      * 獲取CPU序列號
      *
-     * @return
      */
     public static String getCPUSerial() {
         String result = "";

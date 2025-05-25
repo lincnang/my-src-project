@@ -14,8 +14,6 @@ public class DigitalUtil {
     /**
      * 傳回數組最小值
      *
-     * @param longs
-     * @return
      */
     public static long returnMin(final long[] longs) {
         long i = -1;
@@ -35,8 +33,6 @@ public class DigitalUtil {
     /**
      * 傳回數組最小值
      *
-     * @param ints
-     * @return
      */
     public static long returnMin(final int[] ints) {
         long i = -1;
@@ -56,8 +52,6 @@ public class DigitalUtil {
     /**
      * 傳回數組最小值
      *
-     * @param shorts
-     * @return
      */
     public static long returnMin(final short[] shorts) {
         long i = -1;
@@ -77,8 +71,6 @@ public class DigitalUtil {
     /**
      * 傳回數組最小值
      *
-     * @param bytes
-     * @return
      */
     public static long returnMin(final byte[] bytes) {
         long i = -1;
@@ -98,8 +90,6 @@ public class DigitalUtil {
     /**
      * 傳回數組最大值
      *
-     * @param longs
-     * @return
      */
     public static long returnMax(final long[] longs) {
         long i = -1;
@@ -116,8 +106,6 @@ public class DigitalUtil {
     /**
      * 傳回數組最大值
      *
-     * @param ints
-     * @return
      */
     public static long returnMax(final int[] ints) {
         long i = -1;
@@ -134,8 +122,6 @@ public class DigitalUtil {
     /**
      * 傳回數組最大值
      *
-     * @param shorts
-     * @return
      */
     public static long returnMax(final short[] shorts) {
         long i = -1;
@@ -152,8 +138,6 @@ public class DigitalUtil {
     /**
      * 傳回數組最大值
      *
-     * @param bytes
-     * @return
      */
     public static long returnMax(final byte[] bytes) {
         long i = -1;

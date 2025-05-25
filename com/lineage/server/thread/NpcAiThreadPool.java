@@ -41,7 +41,6 @@ public class NpcAiThreadPool {//src032
     /**
      * 使該線程開始執行；Java 虛擬機調用該線程的 run 方法。
      *
-     * @param r
      */
     public void execute(final Runnable r) {
         try {
@@ -59,7 +58,6 @@ public class NpcAiThreadPool {//src032
     /**
      * 使該線程開始執行；Java 虛擬機調用該線程的 run 方法。
      *
-     * @param t
      */
     public void execute(final Thread t) {
         try {
@@ -74,7 +72,6 @@ public class NpcAiThreadPool {//src032
      *
      * @param r     要執行的任務
      * @param delay 從現在開始延遲執行的時間
-     * @return
      */
     public ScheduledFuture<?> schedule(final Runnable r, final long delay) {
         try {

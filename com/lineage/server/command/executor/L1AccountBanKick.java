@@ -73,8 +73,6 @@ public class L1AccountBanKick implements L1CommandExecutor {
     /**
      * 加入封鎖帳號
      *
-     * @param target
-     * @param info
      */
     private void start(final L1PcInstance target, String info) {
         // 加入封鎖帳號

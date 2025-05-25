@@ -82,7 +82,6 @@ public class DeNameTable {
     /**
      * 刪除重複名稱資料
      *
-     * @param name_id
      */
     private void del(final int deobjid) {
         Connection con = null;
@@ -103,8 +102,6 @@ public class DeNameTable {
     /**
      * 重建虛擬人物血盟資料
      *
-     * @param name
-     * @param deName
      */
     private void reclanInfo(final String name, final DeName deName) {
         final DeClan deClan = DeClanTable.get().get(name);
@@ -145,7 +142,6 @@ public class DeNameTable {
     /**
      * 更新虛擬人物血盟資料
      *
-     * @param deName
      */
     private void updata_deName(final DeName deName) {
         Connection cn = null;
@@ -170,8 +166,6 @@ public class DeNameTable {
     /**
      * 指定虛擬人物資料
      *
-     * @param objid
-     * @return
      */
     public DeName getDeName(final int objid) {
         return _denames.get(objid);
@@ -180,8 +174,6 @@ public class DeNameTable {
     /**
      * 指定虛擬人物資料
      *
-     * @param name
-     * @return
      */
     public DeName getDeName(final String name) {
         return _denameList.get(name);
@@ -190,7 +182,6 @@ public class DeNameTable {
     /**
      * 虛擬人物清單
      *
-     * @return
      */
     public Collection<DeName> getList() {
         return _denameList.values();
@@ -199,7 +190,6 @@ public class DeNameTable {
     /**
      * 虛擬人物清單陣列
      *
-     * @return
      */
     public DeName[] getDeNameList() {
         return _denameList.values().toArray(new DeName[_denameList.size()]);

@@ -17,7 +17,6 @@ public class L1DropEnchant {
     /**
      * 取回物品ID
      *
-     * @return
      */
     public int getItemid() {
         return _itemId;
@@ -26,7 +25,6 @@ public class L1DropEnchant {
     /**
      * 取回強化值陣列
      *
-     * @return
      */
     public int[] getEnchants() {
         return _enchants;

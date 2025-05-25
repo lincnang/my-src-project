@@ -26,8 +26,6 @@ public class PcHellTimer extends TimerTask {
     /**
      * 檢查地獄模式時間
      *
-     * @param player
-     * @param time
      */
     private static void check(final L1PcInstance player, final Integer time) {
         if (time > 0) {// 還有處罰時間
@@ -46,7 +44,6 @@ public class PcHellTimer extends TimerTask {
     /**
      * 離開地獄模式
      *
-     * @param player
      */
     private static void outPc(final L1PcInstance player) {
         try {

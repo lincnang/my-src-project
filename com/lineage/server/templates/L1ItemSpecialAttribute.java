@@ -51,7 +51,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回特殊屬性ID
      *
-     * @return
      */
     public int get_id() {
         return _id;
@@ -60,7 +59,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置特殊屬性ID
      *
-     * @param id
      */
     public void set_id(int id) {
         _id = id;
@@ -69,7 +67,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回顏色代碼
      *
-     * @return
      */
     public String get_colour() {
         return _colour;
@@ -78,7 +75,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置顏色代碼
      *
-     * @param colour
      */
     public void set_colour(String colour) {
         _colour = colour;
@@ -109,7 +105,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置特殊屬性所屬類型
      *
-     * @param type
      */
     public void set_type(int type) {
         this._type = type;
@@ -118,7 +113,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回特殊屬性名稱
      *
-     * @return
      */
     public String get_name() {
         return this._name;
@@ -127,7 +121,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置特殊屬性名稱
      *
-     * @param name
      */
     public void set_name(String name) {
         this._name = name;
@@ -136,7 +129,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回最小攻擊力
      *
-     * @return
      */
     public int get_dmg_small() {
         return this._dmg_small;
@@ -145,7 +137,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置最小攻擊力
      *
-     * @param dmg_small
      */
     public void set_dmg_small(int dmg_small) {
         this._dmg_small = dmg_small;
@@ -154,7 +145,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回最大攻擊力
      *
-     * @return
      */
     public int get_dmg_large() {
         return this._dmg_large;
@@ -163,7 +153,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置最大攻擊力
      *
-     * @param dmg_large
      */
     public void set_dmg_large(int dmg_large) {
         this._dmg_large = dmg_large;
@@ -172,7 +161,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回命中
      *
-     * @return
      */
     public int get_hitmodifier() {
         return this._hitmodifier;
@@ -181,7 +169,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置命中
      *
-     * @param hitmodifier
      */
     public void set_hitmodifier(int hitmodifier) {
         this._hitmodifier = hitmodifier;
@@ -190,7 +177,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回額外攻擊力
      *
-     * @return
      */
     public int get_dmgmodifier() {
         return this._dmgmodifier;
@@ -199,7 +185,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置額外攻擊力
      *
-     * @param dmgmodifier
      */
     public void set_dmgmodifier(int dmgmodifier) {
         this._dmgmodifier = dmgmodifier;
@@ -208,7 +193,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回力量
      *
-     * @return
      */
     public int get_add_str() {
         return this._add_str;
@@ -217,7 +201,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置力量
      *
-     * @param add_str
      */
     public void set_add_str(int add_str) {
         this._add_str = add_str;
@@ -226,7 +209,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回體質
      *
-     * @return
      */
     public int get_add_con() {
         return this._add_con;
@@ -235,7 +217,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置體質
      *
-     * @param add_con
      */
     public void set_add_con(int add_con) {
         this._add_con = add_con;
@@ -244,7 +225,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回敏捷
      *
-     * @return
      */
     public int get_add_dex() {
         return this._add_dex;
@@ -253,7 +233,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置敏捷
      *
-     * @param add_dex
      */
     public void set_add_dex(int add_dex) {
         this._add_dex = add_dex;
@@ -262,7 +241,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回智力
      *
-     * @return
      */
     public int get_add_int() {
         return this._add_int;
@@ -271,7 +249,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置智力
      *
-     * @param add_int
      */
     public void set_add_int(int add_int) {
         this._add_int = add_int;
@@ -280,7 +257,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回精神
      *
-     * @return
      */
     public int get_add_wis() {
         return this._add_wis;
@@ -289,7 +265,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置精神
      *
-     * @param add_wis
      */
     public void set_add_wis(int add_wis) {
         this._add_wis = add_wis;
@@ -298,7 +273,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回魅力
      *
-     * @return
      */
     public int get_add_cha() {
         return this._add_cha;
@@ -307,7 +281,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置魅力
      *
-     * @param add_cha
      */
     public void set_add_cha(int add_cha) {
         this._add_cha = add_cha;
@@ -316,7 +289,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回HP
      *
-     * @return
      */
     public int get_add_hp() {
         return this._add_hp;
@@ -325,7 +297,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置HP
      *
-     * @param add_hp
      */
     public void set_add_hp(int add_hp) {
         this._add_hp = add_hp;
@@ -334,7 +305,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回MP
      *
-     * @return
      */
     public int get_add_mp() {
         return this._add_mp;
@@ -343,7 +313,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置MP
      *
-     * @param add_mp
      */
     public void set_add_mp(int add_mp) {
         this._add_mp = add_mp;
@@ -352,7 +321,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回回血量
      *
-     * @return
      */
     public int get_add_hpr() {
         return this._add_hpr;
@@ -361,7 +329,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置回血量
      *
-     * @param add_hpr
      */
     public void set_add_hpr(int add_hpr) {
         this._add_hpr = add_hpr;
@@ -370,7 +337,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回回魔量
      *
-     * @return
      */
     public int get_add_mpr() {
         return this._add_mpr;
@@ -379,7 +345,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置回魔量
      *
-     * @param add_mpr
      */
     public void set_add_mpr(int add_mpr) {
         this._add_mpr = add_mpr;
@@ -388,7 +353,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回魔攻
      *
-     * @return
      */
     public int get_add_sp() {
         return this._add_sp;
@@ -397,7 +361,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置魔攻
      *
-     * @param add_sp
      */
     public void set_add_sp(int add_sp) {
         this._add_sp = add_sp;
@@ -406,7 +369,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回獲取幾率
      *
-     * @return
      */
     public int get_add_rand() {
         return this._add_rand;
@@ -415,7 +377,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置獲取幾率
      *
-     * @param rand
      */
     public void set_add_rand(int add_rand) {
         this._add_rand = add_rand;
@@ -424,7 +385,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回魔防
      *
-     * @return
      */
     public int get_add_m_def() {
         return this._add_m_def;
@@ -433,7 +393,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置魔防
      *
-     * @param add_m_def
      */
     public void set_add_m_def(int add_m_def) {
         this._add_m_def = add_m_def;
@@ -442,7 +401,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回最小吸血量
      *
-     * @return
      */
     public int get_add_drain_min_hp() {
         return this._add_drain_min_hp;
@@ -451,7 +409,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置最小吸血量
      *
-     * @param drain_min_hp
      */
     public void set_add_drain_min_hp(int drain_min_hp) {
         this._add_drain_min_hp = drain_min_hp;
@@ -460,7 +417,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回最大吸血量
      *
-     * @return
      */
     public int get_add_drain_max_hp() {
         return this._add_drain_max_hp;
@@ -469,7 +425,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置最大吸血量
      *
-     * @param add_drain_max_hp
      */
     public void set_add_drain_max_hp(int drain_max_hp) {
         this._add_drain_max_hp = drain_max_hp;
@@ -478,7 +433,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回發動吸血的幾率
      *
-     * @return
      */
     public int get_drain_hp_rand() {
         return this._drain_hp_rand;
@@ -487,7 +441,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置發動吸血的幾率
      *
-     * @param drain_hp_rand
      */
     public void set_drain_hp_rand(int drain_hp_rand) {
         this._drain_hp_rand = drain_hp_rand;
@@ -496,7 +449,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回最小吸魔量
      *
-     * @return
      */
     public int get_add_drain_min_mp() {
         return this._add_drain_min_mp;
@@ -505,7 +457,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置最小吸魔量
      *
-     * @param drain_min_mp
      */
     public void set_add_drain_min_mp(int drain_min_mp) {
         this._add_drain_min_mp = drain_min_mp;
@@ -514,7 +465,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回最大吸魔量
      *
-     * @return
      */
     public int get_add_drain_max_mp() {
         return this._add_drain_max_mp;
@@ -523,7 +473,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置最大吸魔量
      *
-     * @param add_drain_max_mp
      */
     public void set_add_drain_max_mp(int drain_max_mp) {
         this._add_drain_max_mp = drain_max_mp;
@@ -532,7 +481,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回吸魔幾率
      *
-     * @return
      */
     public int get_drain_mp_rand() {
         return this._drain_mp_rand;
@@ -541,7 +489,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置吸魔幾率
      *
-     * @param drain_mp_rand
      */
     public void set_drain_mp_rand(int drain_mp_rand) {
         this._drain_mp_rand = drain_mp_rand;
@@ -550,7 +497,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回魔法施展幾率
      *
-     * @return
      */
     public int get_add_skill_rand() {
         return this._add_skill_rand;
@@ -559,7 +505,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置魔法施展幾率
      *
-     * @param skill_rand
      */
     public void set_add_skill_rand(int skill_rand) {
         this._add_skill_rand = skill_rand;
@@ -568,7 +513,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回施展魔法gfxid
      *
-     * @return
      */
     public int get_add_skill_gfxid() {
         return this._add_skill_gfxid;
@@ -577,7 +521,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置施展魔法gfxid
      *
-     * @param skill_gfxid
      */
     public void set_add_skill_gfxid(int skill_gfxid) {
         this._add_skill_gfxid = skill_gfxid;
@@ -586,7 +529,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回是否為遠程魔法
      *
-     * @return
      */
     public boolean Is_add_skill_arrow() {
         return this._add_skill_arrow;
@@ -595,7 +537,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置是否為遠程魔法
      *
-     * @param skill_arrow
      */
     public void set_add_skill_arrow(boolean skill_arrow) {
         this._add_skill_arrow = skill_arrow;
@@ -604,7 +545,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回魔法傷害
      *
-     * @return
      */
     public int get_add_skill_dmg() {
         return this._add_skill_dmg;
@@ -613,7 +553,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置魔法傷害
      *
-     * @param skill_dmg
      */
     public void set_add_skill_dmg(int skill_dmg) {
         this._add_skill_dmg = skill_dmg;
@@ -622,7 +561,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回施展魔法類型
      *
-     * @return
      */
     public int get_add_Special_magic() {
         return this._add_Special_magic;
@@ -631,7 +569,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置施展魔法類型
      *
-     * @param Special_magic
      */
     public void set_add_Special_magic(int Special_magic) {
         this._add_Special_magic = Special_magic;
@@ -640,7 +577,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 傳回施展魔法類型對應成功幾率
      *
-     * @return
      */
     public int get_Special_magic_rand() {
         return this._Special_magic_rand;
@@ -649,7 +585,6 @@ public class L1ItemSpecialAttribute {
     /**
      * 設置施展魔法類型對應成功幾率
      *
-     * @param Special_magic_rand
      */
     public void set_Special_magic_rand(int Special_magic_rand) {
         this._Special_magic_rand = Special_magic_rand;

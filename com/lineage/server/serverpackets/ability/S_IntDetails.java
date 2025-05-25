@@ -16,12 +16,6 @@ public class S_IntDetails extends ServerBasePacket {
     /**
      * 智力能力資訊
      *
-     * @param type
-     * @param magicDmg
-     * @param magicHit
-     * @param magicCritical
-     * @param magicBonus
-     * @param magicConsumeReduction
      */
     public S_IntDetails(final int type, final int magicDmg, final int magicHit, final int magicCritical, final int magicBonus, final int magicConsumeReduction) {
         this.writeC(S_EXTENDED_PROTOBUF);
@@ -39,12 +33,6 @@ public class S_IntDetails extends ServerBasePacket {
     /**
      * 智力能力資訊
      *
-     * @param magicDmg
-     * @param magicHit
-     * @param magicCritical
-     * @param magicBonus
-     * @param magicConsumeReduction
-     * @return
      */
     private byte[] buildInt(final int magicDmg, final int magicHit, final int magicCritical, final int magicBonus, final int magicConsumeReduction) {
         S_IntDetails data = new S_IntDetails();

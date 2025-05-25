@@ -23,7 +23,6 @@ public class NpcHprTimer extends TimerTask {
     /**
      * 判斷是否執行回復
      *
-     * @param mob
      */
     private static void hpUpdate(final L1MonsterInstance mob) {
         int hprInterval = mob.getNpcTemplate().get_hprinterval();
@@ -47,8 +46,6 @@ public class NpcHprTimer extends TimerTask {
     /**
      * 執行回復HP
      *
-     * @param mob
-     * @param hpr
      */
     private static void hprInterval(final L1MonsterInstance mob, final int hpr) {
         try {

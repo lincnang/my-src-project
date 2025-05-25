@@ -193,8 +193,6 @@ public class C_GiveItem extends ClientBasePacket {
     /**
      * 馴服寵物
      *
-     * @param pc
-     * @param target
      */
     private void tamePet(L1PcInstance pc, L1NpcInstance target) {
         if (((target instanceof L1PetInstance)) || ((target instanceof L1SummonInstance))) {
@@ -248,8 +246,6 @@ public class C_GiveItem extends ClientBasePacket {
     /**
      * 進化寵物的判斷
      *
-     * @param pc
-     * @param pet
      */
     private void evolvePet(L1PcInstance pc, L1PetInstance pet) {
         L1PcInventory inv = pc.getInventory();
@@ -269,8 +265,6 @@ public class C_GiveItem extends ClientBasePacket {
     /**
      * 是否馴服成功
      *
-     * @param npc
-     * @return
      */
     private boolean isTamePet(L1NpcInstance npc) {
         boolean isSuccess = false;

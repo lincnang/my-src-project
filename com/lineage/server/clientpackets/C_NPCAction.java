@@ -4062,8 +4062,6 @@ public class C_NPCAction extends ClientBasePacket {
     /**
      * 顯示道具製造清單
      *
-     * @param pc
-     * @param npc
      */
     private void ShowCraftList(L1PcInstance pc, L1NpcInstance npc) {
         String msg0 = "";
@@ -4833,8 +4831,6 @@ public class C_NPCAction extends ClientBasePacket {
     /**
      * 檢查世界玩家當中是否有兩個相同帳號的PC
      *
-     * @param c
-     * @return
      */
     private boolean isTwoLogin(L1PcInstance c) {
         boolean bool = false;

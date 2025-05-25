@@ -13,8 +13,6 @@ public class CommonUtil {
     /**
      * 2011.08.05 金額顯示
      *
-     * @param number
-     * @return
      */
     public static String numberFormat(int number) {
         try {
@@ -28,8 +26,6 @@ public class CommonUtil {
     /**
      * 2011.08.05 隨機函數
      *
-     * @param number
-     * @return
      */
     public static int random(int number) {
         Random rnd = new Random();
@@ -39,9 +35,6 @@ public class CommonUtil {
     /**
      * 2011.08.05 隨機函數
      *
-     * @param lbound
-     * @param ubound
-     * @return
      */
     public static int random(int lbound, int ubound) {
         return (int) ((Math.random() * (ubound - lbound + 1)) + lbound);
@@ -50,8 +43,6 @@ public class CommonUtil {
     /**
      * 2011.08.30 數據格式
      *
-     * @param type
-     * @return
      */
     public static String dateFormat(String type) {
         SimpleDateFormat sdf = new SimpleDateFormat(type, Locale.KOREA);
@@ -61,8 +52,6 @@ public class CommonUtil {
     /**
      * 2011.08.30 數據格式
      *
-     * @param type
-     * @return
      */
     public static String dateFormat(String type, Timestamp date) {
         SimpleDateFormat sdf = new SimpleDateFormat(type, Locale.KOREA);
@@ -72,8 +61,6 @@ public class CommonUtil {
     /**
      * 2011.08.31 項目結束時間
      *
-     * @param item
-     * @param minute
      */
     public static void SetTodayDeleteTime(L1ItemInstance item, int minute) {
         Timestamp deleteTime = null;
@@ -84,7 +71,6 @@ public class CommonUtil {
     /**
      * 2011.08.31 項目指定結束時間（今天剩下的時間計算）系統。
      *
-     * @param item
      */
     public static void SetTodayDeleteTime(L1ItemInstance item) {
         int hour = Integer.parseInt(dateFormat("HH"));
@@ -103,7 +89,6 @@ public class CommonUtil {
     /**
      * 2011.08.31 指定的剩餘時間
      *
-     * @param item
      */
     public static int getRestTime(int hh) {
         int hour = Integer.parseInt(dateFormat("HH"));

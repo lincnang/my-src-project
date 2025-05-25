@@ -233,10 +233,6 @@ public class L1BookMark {
     /**
      * 道具記憶座標
      *
-     * @param pc
-     * @param useItem
-     * @param obj_id
-     * @param isChange
      */
     @SuppressWarnings("resource")
     public synchronized static void Bookmarkitem(L1PcInstance pc, L1ItemInstance useItem, int obj_id, boolean isChange) {

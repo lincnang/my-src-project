@@ -51,7 +51,6 @@ public class S_CreateError extends ServerBasePacket {
     /**
      * 不給創造視窗 (點擊創造後)
      *
-     * @param s
      */
     public S_CreateError(final String s) {
         this.writeC(S_NEWS);

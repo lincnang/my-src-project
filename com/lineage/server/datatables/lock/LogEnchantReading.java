@@ -37,8 +37,6 @@ public class LogEnchantReading {
     /**
      * 衝裝贖回系統
      *
-     * @param pc
-     * @param item
      */
     public void resetEnchant(L1PcInstance pc, L1ItemInstance item) {
         _lock.lock();

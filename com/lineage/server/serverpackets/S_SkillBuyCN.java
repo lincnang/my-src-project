@@ -24,8 +24,6 @@ public class S_SkillBuyCN extends ServerBasePacket {
     /**
      * 魔法購買(金幣 / 全職技能導師)
      *
-     * @param pc
-     * @param npc
      */
     public S_SkillBuyCN(final L1PcInstance pc, final L1NpcInstance npc) {
         ArrayList<Integer> skillList = null;

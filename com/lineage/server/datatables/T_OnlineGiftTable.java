@@ -76,7 +76,6 @@ public class T_OnlineGiftTable {
     /**
      * 給予狀態
      *
-     * @param pc
      */
     public void check(final L1PcInstance pc) {
         if (pc.isOnlineGiftWiatEnd()) {
@@ -98,7 +97,6 @@ public class T_OnlineGiftTable {
     /**
      * 按鈕領取
      *
-     * @param pc
      */
     public void receive(final L1PcInstance pc) {
         if (pc.isOnlineGiftWiatEnd()) {
@@ -121,10 +119,6 @@ public class T_OnlineGiftTable {
     /**
      * 產生物件
      *
-     * @param pc
-     * @param pcInv
-     * @param itemId
-     * @param count
      */
     private void gift(final L1PcInstance pc, final L1PcInventory pcInv, final int itemId, final int count) {
         L1ItemInstance giveItemObj = null;

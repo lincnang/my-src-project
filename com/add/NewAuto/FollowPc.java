@@ -145,7 +145,6 @@ public class FollowPc extends TimerTask {
      * @param y  目前Y
      * @param tx 目標X
      * @param ty 目標Y
-     * @return
      */
     private static int _targetDirection(int h, int x, int y, int tx, int ty) {
         try {

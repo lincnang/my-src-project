@@ -232,7 +232,6 @@ public class World { // src016
     /**
      * 加入世界
      *
-     * @param object
      */
     public void storeObject(final L1Object object) {
         try {
@@ -313,7 +312,6 @@ public class World { // src016
     /**
      * 移出世界
      *
-     * @param object
      */
     public void removeObject(final L1Object object) {
         // System.out.println("移出世界");
@@ -391,8 +389,6 @@ public class World { // src016
     /**
      * 取回物件
      *
-     * @param oID
-     * @return
      */
     public L1Object findObject(final int oID) {
         if (oID == 0) {
@@ -404,7 +400,6 @@ public class World { // src016
     /**
      * 全部L1Object
      *
-     * @return
      */
     public Collection<L1Object> getObject() {
         try {
@@ -419,10 +414,6 @@ public class World { // src016
     /**
      * 座標點-遊戲世界地面背包
      *
-     * @param x
-     * @param y
-     * @param map
-     * @return
      */
     public L1GroundInventory getInventory(final int x, final int y, final short map) {
         try {
@@ -448,8 +439,6 @@ public class World { // src016
     /**
      * 座標點-遊戲世界地面背包
      *
-     * @param loc
-     * @return
      */
     public L1GroundInventory getInventory(final L1Location loc) {
         return getInventory(loc.getX(), loc.getY(), (short) loc.getMap().getId());
@@ -458,7 +447,6 @@ public class World { // src016
     /**
      * 加入MAP內物件
      *
-     * @param object
      */
     public void addVisibleObject(final L1Object object) {
         try {
@@ -475,7 +463,6 @@ public class World { // src016
     /**
      * 移除MAP內物件
      *
-     * @param object
      */
     public void removeVisibleObject(final L1Object object) {
         try {
@@ -492,8 +479,6 @@ public class World { // src016
     /**
      * 移動MAP內物件
      *
-     * @param object
-     * @param newMapId
      */
     public void moveVisibleObject(final L1Object object, final int newMapId) {// set_Mapで新しいMapにするまえに呼ぶこと
         try {
@@ -525,9 +510,6 @@ public class World { // src016
     /**
      * 直線上目標列舉
      *
-     * @param src
-     * @param target
-     * @return
      */
     private HashMap<Integer, Integer> createLineMap(final Point src, final Point target) {
         final HashMap<Integer, Integer> lineMap = new HashMap<>();
@@ -586,9 +568,6 @@ public class World { // src016
     /**
      * 直線距離目標列舉
      *
-     * @param src
-     * @param target
-     * @return
      */
     public ArrayList<L1Object> getVisibleLineObjects(final L1Object src, final L1Object target) {
         try {
@@ -624,11 +603,6 @@ public class World { // src016
     /**
      * 指定範圍目標列舉
      *
-     * @param object
-     * @param heading
-     * @param width
-     * @param height
-     * @return
      */
     public ArrayList<L1Object> getVisibleBoxObjects(final L1Object object, final int heading, final int width, final int height) {
         final int x = object.getX();
@@ -686,8 +660,6 @@ public class World { // src016
     /**
      * 畫面可見範圍Objects
      *
-     * @param object
-     * @return
      */
     public ArrayList<L1Object> getVisibleObjects(final L1Object object) {
         return getVisibleObjects(object, -1);
@@ -696,9 +668,6 @@ public class World { // src016
     /**
      * 相對物件在畫面範圍內
      *
-     * @param src
-     * @param tg
-     * @return
      */
     public boolean getVisibleObjects(final L1Object src, final L1Object tg) {
         // 副本ID不相等
@@ -718,7 +687,6 @@ public class World { // src016
      *
      * @param object 原始物件
      * @param radius 範圍 -1:全視窗 0:重疊 其他:範圍
-     * @return
      */
     public ArrayList<L1Object> getVisibleObjects(final L1Object object, final int radius) {
         final L1Map map = object.getMap();
@@ -775,7 +743,6 @@ public class World { // src016
      * @param loc    原始座標
      * @param radius 範圍
      * @param showid 副本ID
-     * @return
      */
     public ArrayList<L1Object> getVisiblePoint(final L1Location loc, final int radius, final int showid) {
         final ArrayList<L1Object> result = new ArrayList<>();
@@ -804,8 +771,6 @@ public class World { // src016
      * 可見範圍PC物件(一般召喚使用 不考慮副本ID)
      *
      * @param loc       原始座標
-     * @param //*showId
-     * @return
      */
     public ArrayList<L1PcInstance> getVisiblePc(final L1Location loc) {
         final ArrayList<L1PcInstance> result = new ArrayList<>();
@@ -830,7 +795,6 @@ public class World { // src016
      * 畫面可見人物
      *
      * @param object 原始執行物件
-     * @return
      */
     public ArrayList<L1PcInstance> getVisiblePlayer(final L1Object object) {
         return this.getVisiblePlayer(object, -1);
@@ -841,7 +805,6 @@ public class World { // src016
      *
      * @param object 原始執行物件
      * @param radius -1:19格範圍 0:座標重疊 其它:指定範圍
-     * @return
      */
     public ArrayList<L1PcInstance> getVisiblePlayer(final L1Object object, final int radius) {
         final int map = object.getMapId();
@@ -884,7 +847,6 @@ public class World { // src016
      *
      * @param object 執行者
      * @param target 指定物件
-     * @return
      */
     public ArrayList<L1PcInstance> getVisiblePlayerExceptTargetSight(final L1Object object, final L1Object target) {
         final int map = object.getMapId();
@@ -925,7 +887,6 @@ public class World { // src016
      * @param object 原始物件
      * @param target 目標物件
      * @param radius 範圍
-     * @return
      */
     public ArrayList<L1PcInstance> getVisiblePlayerExceptTargetSight(final L1Object object, final L1Object target, final int radius) {
         final int map = object.getMapId();
@@ -955,8 +916,6 @@ public class World { // src016
     /**
      * object 畫面內可見範圍物件取回
      *
-     * @param object
-     * @return
      */
     public ArrayList<L1PcInstance> getRecognizePlayer(final L1Object object) {
         return this.getVisiblePlayer(object, Config.PC_RECOGNIZE_RANGE);
@@ -969,7 +928,6 @@ public class World { // src016
     /**
      * 線上抽獎系統 -> 新增
      *
-     * @return
      */
     public L1PcInstance[] getAllPlayersToArray() {
         return _allPlayers.values().toArray(new L1PcInstance[0]);
@@ -978,7 +936,6 @@ public class World { // src016
     /**
      * 全部線上玩家
      *
-     * @return
      */
     public Collection<L1PcInstance> getAllPlayers() {
         try {
@@ -994,7 +951,6 @@ public class World { // src016
      * 以人物名稱傳回人物數據(人物在線上)
      *
      * @param name 人物名稱(不區分大小寫)
-     * @return
      */
     public L1PcInstance getPlayer(final String name) {
         if (_allPlayers.containsKey(name)) {
@@ -1012,7 +968,6 @@ public class World { // src016
      * 該人物在可見範圍內
      *
      * @param name 人物名稱(不區分大小寫)
-     * @return
      */
     public boolean get_pc(final L1PcInstance pc, final String name) {
         L1PcInstance tg = _allPlayers.get(name);
@@ -1029,7 +984,6 @@ public class World { // src016
     /**
      * 全部地圖(MAPID為KEY)世界資料
      *
-     * @return
      */
     public final HashMap<Integer, ConcurrentHashMap<Integer, L1Object>> getVisibleObjects() {
         return _visibleObjects;
@@ -1038,8 +992,6 @@ public class World { // src016
     /**
      * 指定地圖世界資料
      *
-     * @param mapId
-     * @return
      */
     public final ConcurrentHashMap<Integer, L1Object> getVisibleObjects(final int mapId) {
         return _visibleObjects.get(mapId);
@@ -1048,7 +1000,6 @@ public class World { // src016
     /**
      * 世界天氣狀況
      *
-     * @return
      */
     public int getWeather() {
         return _weather;
@@ -1057,7 +1008,6 @@ public class World { // src016
     /**
      * 世界天氣狀況
      *
-     * @param weather
      */
     public void setWeather(final int weather) {
         _weather = weather;
@@ -1066,7 +1016,6 @@ public class World { // src016
     /**
      * 允許廣播
      *
-     * @param flag
      */
     public void set_worldChatElabled(final boolean flag) {
         _worldChatEnabled = flag;
@@ -1093,7 +1042,6 @@ public class World { // src016
     /**
      * 計算貢獻度
      *
-     * @param flag
      */
     public void setProcessingContributionTotal(final boolean flag) {
         _processingContributionTotal = flag;
@@ -1102,7 +1050,6 @@ public class World { // src016
     /**
      * 送出全體封包
      *
-     * @param packet
      */
     public void broadcastPacketToAlldroplist(final ServerBasePacket packet) {
         for (final L1PcInstance pc : getAllPlayers()) {
@@ -1115,7 +1062,6 @@ public class World { // src016
     /**
      * 送出全體封包
      *
-     * @param packet
      */
     public void broadcastPacketToAllkill(final ServerBasePacket packet) {
         for (final L1PcInstance pc : getAllPlayers()) {
@@ -1128,7 +1074,6 @@ public class World { // src016
     /**
      * 送出全體封包
      *
-     * @param packet
      */
     public void broadcastPacketToAll(final ServerBasePacket packet) {
         for (final L1PcInstance pc : getAllPlayers()) {
@@ -1139,7 +1084,6 @@ public class World { // src016
     /**
      * 送出全體訊息封包
      *
-     * @param message
      */
     public void broadcastServerMessage(final String message) {
         broadcastPacketToAll(new S_SystemMessage(message));
@@ -1154,7 +1098,6 @@ public class World { // src016
      *
      * @param loc    原始座標
      * @param radius 範圍
-     * @return
      */
     public ArrayList<L1Object> getVisiblePoint(L1Location loc, int radius) {
         ArrayList<L1Object> result = new ArrayList<>();
@@ -1255,7 +1198,6 @@ public class World { // src016
      *
      * @param object 原始物件
      * @param radius 範圍 -1:全視窗 0:重疊 其他:範圍
-     * @return
      */
     public ArrayList<L1Object> getVisibleObjectsForAuto(final L1Object object, final int radius) {
         final L1Map map = object.getMap();

@@ -41,8 +41,6 @@ public class S_Paralysis extends ServerBasePacket {
     /**
      * 魔法效果:詛咒
      *
-     * @param type
-     * @param flag
      */
     public S_Paralysis(final int type, final boolean flag) {
         this.writeC(S_PARALYSE);

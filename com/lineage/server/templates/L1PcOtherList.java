@@ -152,8 +152,6 @@ public class L1PcOtherList {
     /**
      * 加入裝備交換清單(可換)
      *
-     * @param key
-     * @param value
      */
     public void add_sitemList2(final Integer key, final Integer value) {
         this._sitemList2.put(key, value);
@@ -179,8 +177,6 @@ public class L1PcOtherList {
     /**
      * 加入裝備交換清單(準備)
      *
-     * @param key
-     * @param value
      */
     public void add_sitemList(final Integer key, final L1ItemInstance value) {
         this._sitemList.put(key, value);
@@ -206,8 +202,6 @@ public class L1PcOtherList {
     /**
      * 加入帳戶人物清單
      *
-     * @param key
-     * @param value
      */
     public void add_shiftingList(final Integer key, final String[] value) {
         this._shiftingList.put(key, value);
@@ -216,7 +210,6 @@ public class L1PcOtherList {
     /**
      * 移出帳戶人物清單
      *
-     * @param key
      */
     public void remove_shiftingList(final Integer key) {
         this._shiftingList.remove(key);
@@ -271,8 +264,6 @@ public class L1PcOtherList {
     /**
      * 加入分身清單
      *
-     * @param key
-     * @param value
      */
     public void addIllusoryList(final Integer key, final L1IllusoryInstance value) {
         this._illusoryList.put(key, value);
@@ -281,7 +272,6 @@ public class L1PcOtherList {
     /**
      * 移出分身清單
      *
-     * @param key
      */
     public void removeIllusoryList(final Integer key) {
         try {
@@ -300,7 +290,6 @@ public class L1PcOtherList {
     /**
      * 傳送點緩存
      *
-     * @param teleportMap
      */
     public void teleport(final HashMap<Integer, L1TeleportLoc> teleportMap) {
         try {
@@ -323,7 +312,6 @@ public class L1PcOtherList {
     /**
      * 賣出全部物品
      *
-     * @param sellallMap
      */
     public void sellall(final Map<Integer, Integer> sellallMap) {
         try {
@@ -452,7 +440,6 @@ public class L1PcOtherList {
     /**
      * 複製賣出資料(清空舊資料)
      *
-     * @param sellList
      */
     public void set_gamSellList(final Map<Integer, L1Gambling> sellList) {
         try {
@@ -466,8 +453,6 @@ public class L1PcOtherList {
     /**
      * 賣出食人妖精競賽票
      *
-     * @param element
-     * @param index
      */
     public void get_sellGam(final int objid, final int count) {
         try {
@@ -497,8 +482,6 @@ public class L1PcOtherList {
     /**
      * 加入購買食人妖精競賽票
      *
-     * @param element
-     * @param index
      */
     public void add_gamList(final GamblingNpc element, final int index) {
         this._gamList.put(new Integer(index), element);
@@ -507,7 +490,6 @@ public class L1PcOtherList {
     /**
      * 購買食人妖精競賽票
      *
-     * @param gamMap
      */
     public void get_buyGam(final Map<Integer, Integer> gamMap) {
         try {
@@ -652,8 +634,6 @@ public class L1PcOtherList {
     /**
      * 取回商城買入的物品
      *
-     * @param element
-     * @param count
      */
     private void get_cnItem(final L1ShopItem element, final int count) {
         try {
@@ -709,8 +689,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 購買自動喝水補魔道具
      *
-     * @param shopItem
-     * @param index
      */
     public void add_autoHpList(final L1ShopAutoHp shopItem, final int index) {
         this._autoHpList.put(new Integer(index), shopItem);
@@ -719,7 +697,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 購買自動喝水補魔道具
      *
-     * @param autoHpMap
      */
     public void get_buyAutoHpList(final Map<Integer, Integer> autoHpMap) {
         try {
@@ -742,8 +719,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 購買自動喝水補魔道具
      *
-     * @param element
-     * @param count
      */
     private void get_autoHpItem(final L1ShopAutoHp element, final int count) {
         try {
@@ -789,8 +764,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 添加刪除物品
      *
-     * @param shopItem
-     * @param index
      */
     public void add_removeItemSellList(final L1ItemInstance shopItem, final int index) {
         this._removeItemSellList.put(new Integer(index), shopItem);
@@ -799,7 +772,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 添加刪除物品
      *
-     * @param autoHpMap
      */
     public void get_buyRemoveItemSellList(final Map<Integer, L1ItemInstance> removeItemSellMap) {
         try {
@@ -817,8 +789,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 添加刪除物品
      *
-     * @param element
-     * @param count
      */
     private void get_removeItemSellItem(final L1ItemInstance element) {
         try {
@@ -844,8 +814,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 取消刪除物品
      *
-     * @param item
-     * @param index
      */
     public void add_removeItemBuyList(final L1ItemInstance item, final int index) {
         this._removeItemBuyList.put(new Integer(index), item);
@@ -854,7 +822,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 取消刪除物品
      *
-     * @param autoHpMap
      */
     public void get_buyRemoveItemBuyList(final Map<Integer, Integer> removeItemBuyMap) {
         try {
@@ -877,8 +844,6 @@ public class L1PcOtherList {
     /**
      * 特殊商店 -> 取消刪除物品
      *
-     * @param element
-     * @param count
      */
     private void get_removeItemBuyItem(final L1ItemInstance element, final int count) {
         try {
@@ -898,8 +863,6 @@ public class L1PcOtherList {
     /**
      * 通知GM
      *
-     * @param itemtmp
-     * @param adenaCount
      * @param mode       true:買入 false:賣出
      */
     private void toGmMsg(final L1Item itemtmp, final int adenaCount, boolean mode) {
@@ -926,8 +889,6 @@ public class L1PcOtherList {
     /**
      * 給予物件的處理
      *
-     * @param pc
-     * @param item
      */
     private void createNewItem(final L1ItemInstance item) {
         try {
@@ -970,7 +931,6 @@ public class L1PcOtherList {
     /**
      * 屬性重置清單
      *
-     * @return
      */
     public Map<Integer, Integer> get_uplevelList() {
         return this._uplevelList;
@@ -979,8 +939,6 @@ public class L1PcOtherList {
     /**
      * 指定數值參數
      *
-     * @param key
-     * @return
      */
     public Integer get_uplevelList(int key) {
         return this._uplevelList.get(key);
@@ -996,7 +954,6 @@ public class L1PcOtherList {
     /**
      * 傳回暫存人物原始素質改變
      *
-     * @return
      */
     public int[] get_newPcOriginal() {
         return this._is;
@@ -1005,7 +962,6 @@ public class L1PcOtherList {
     /**
      * 暫存人物原始素質改變
      *
-     * @param is
      */
     public void set_newPcOriginal(final int[] is) {
         this._is = is;

@@ -76,8 +76,6 @@ public class S_Party extends ServerBasePacket {
     /**
      * 隊伍系統
      *
-     * @param type
-     * @param pc
      */
     public S_Party(int type, L1PcInstance pc) {
         switch (type) {
@@ -138,7 +136,6 @@ public class S_Party extends ServerBasePacket {
     /**
      * 新加入隊伍的玩家
      *
-     * @param pc
      */
     public void newMember(L1PcInstance pc) {
         L1PcInstance leader = pc.getParty().getLeader();
@@ -207,7 +204,6 @@ public class S_Party extends ServerBasePacket {
     /**
      * 舊的隊員
      *
-     * @param pc
      */
     //[Server] opcode = 10
     //0000: 0a 69 f5 4b 28 00 b6 57 ad ab a7 43 ad b5 00 72    .i.K(..W...C...r
@@ -229,7 +225,6 @@ public class S_Party extends ServerBasePacket {
     /**
      * 更換隊長
      *
-     * @param pc
      */
     public void changeLeader(L1PcInstance pc) {
         writeC(S_EVENT);
@@ -241,7 +236,6 @@ public class S_Party extends ServerBasePacket {
     /**
      * 更新隊伍
      *
-     * @param pc
      */
     public void refreshParty(L1PcInstance pc) {
         L1PcInstance member[] = pc.getParty().getMembers();
@@ -264,7 +258,6 @@ public class S_Party extends ServerBasePacket {
     /**
      * 更新死亡隊員名稱UI顏色
      *
-     * @param pc
      */
     //[Server] opcode = 10
     //0000: 0a 6c ba 2b 3b 00 00 96                            .l.+;...

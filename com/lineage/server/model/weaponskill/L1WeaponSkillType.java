@@ -48,7 +48,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 傳回最終魔法傷害輸出百分比
      *
-     * @return
      */
     public double get_level() {
         return _level;
@@ -57,7 +56,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 設定最終魔法傷害輸出百分比
      *
-     * @param level
      */
     public void set_level(int level) {
         _level = (level / 100.0D);
@@ -195,7 +193,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 是否對BOSS無效
      *
-     * @return
      */
     public boolean get_boss_holdout() {
         return _boss_holdout;
@@ -204,7 +201,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 設定是否對BOSS無效
      *
-     * @param boss_holdout
      */
     public void set_boss_holdout(boolean boss_holdout) {
         _boss_holdout = boss_holdout;
@@ -237,8 +233,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 計算發動機率
      *
-     * @param weapon
-     * @return
      */
     protected int random(L1ItemInstance weapon) {
         try {
@@ -257,7 +251,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 額外增加傷害
      *
-     * @return
      */
     protected int dmg1() {
         try {
@@ -273,8 +266,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 額外增加傷害%數
      *
-     * @param srcdmg
-     * @return
      */
     protected double dmg2(double srcdmg) {
         try {
@@ -290,8 +281,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 額外增加傷害%數
      *
-     * @param srcdmg
-     * @return
      */
     protected double bon() {
         try {
@@ -307,8 +296,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 人物能力值增加傷害
      *
-     * @param pc
-     * @return
      */
     protected int dmg3(L1PcInstance pc) {
         try {
@@ -357,11 +344,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 各類減傷計算(包含聖界減傷)
      *
-     * @param pc
-     * @param target
-     * @param srcdmg
-     * @param weapon
-     * @return
      */
     protected double calc_dmg(L1PcInstance pc, L1Character target, double srcdmg, L1ItemInstance weapon) {
         if (target.hasSkillEffect(IMMUNE_TO_HARM)) {// 對手身上有聖界效果
@@ -414,11 +396,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 抗魔係數
      *
-     * @param pc
-     * @param target
-     * @param srcdmg
-     * @param weapon
-     * @return
      */
     protected double calc_mr(L1PcInstance pc, L1Character target, double srcdmg, L1ItemInstance weapon) {
         try {
@@ -449,11 +426,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 屬抗參數
      *
-     * @param pc
-     * @param target
-     * @param srcdmg
-     * @param weapon
-     * @return
      */
     protected int calc_resist(L1Character target) {
         try {
@@ -550,8 +522,6 @@ public abstract class L1WeaponSkillType {
     /**
      * 顯示攻擊動畫
      *
-     * @param pc
-     * @param target
      */
     protected void show(L1PcInstance pc, L1Character target) {
         try {

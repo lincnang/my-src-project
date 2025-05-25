@@ -33,8 +33,6 @@ public class L1Magic {
     /**
      * 傷害資訊送出
      *
-     * @param damage
-     * @param drainMana
      */
     public void commit(int damage, int drainMana) {
         _magicMode.commit(damage, drainMana);
@@ -43,8 +41,6 @@ public class L1Magic {
     /**
      * 計算機率並返回是否成功
      *
-     * @param skillId
-     * @return
      */
     public boolean calcProbabilityMagic(int skillId) {
         return _magicMode.calcProbabilityMagic(skillId);
@@ -53,8 +49,6 @@ public class L1Magic {
     /**
      * 計算魔法傷害
      *
-     * @param skillId
-     * @return
      */
     public int calcMagicDamage(int skillId) {
         return _magicMode.calcMagicDamage(skillId);
@@ -63,8 +57,6 @@ public class L1Magic {
     /**
      * 計算治療量
      *
-     * @param skillId
-     * @return
      */
     public int calcHealing(int skillId) {
         return _magicMode.calcHealing(skillId);

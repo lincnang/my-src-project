@@ -27,7 +27,6 @@ public class RankingKillTimer extends TimerTask {
     /**
      * 殺手排行榜
      *
-     * @return
      */
     public static String[] killName() {
         if (!_load) {
@@ -39,7 +38,6 @@ public class RankingKillTimer extends TimerTask {
     /**
      * 死者排行榜
      *
-     * @return
      */
     public static String[] deathName() {
         if (!_load) {
@@ -112,10 +110,6 @@ public class RankingKillTimer extends TimerTask {
     }
 
     /**
-     * @param killCount
-     * @param name
-     * @param userName
-     * @return
      */
     private static String[] intTree(final int killCount, final String name, final String[] userName) {
         if (userName[0].equals(" ")) {// NO 1

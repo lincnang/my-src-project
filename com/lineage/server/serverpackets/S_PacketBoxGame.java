@@ -17,7 +17,6 @@ public class S_PacketBoxGame extends ServerBasePacket {
      * 移除比賽視窗<br>
      * 移除開始反向計時視窗<br>
      *
-     * @param subCode
      */
     public S_PacketBoxGame(int subCode) {
         writeC(S_EVENT);
@@ -35,8 +34,6 @@ public class S_PacketBoxGame extends ServerBasePacket {
      * 倒數結束0~10<br>
      * 開始反向計時0~3600<br>
      *
-     * @param subCode
-     * @param value
      */
     public S_PacketBoxGame(int subCode, int value) {
         writeC(S_EVENT);

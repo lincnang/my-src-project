@@ -11,7 +11,6 @@ public class S_Bonusstats extends ServerBasePacket {
     /**
      * 能力質選取資料
      *
-     * @param objid
      */
     public S_Bonusstats(final int objid) {
         this.buildPacket(objid);

@@ -468,7 +468,6 @@ public class L1ItemVIP {
     /**
      * 增加藥水回復量%
      *
-     * @return
      */
     public int get_up_hp_potion() {
         // 假設有相應的屬性
@@ -482,7 +481,6 @@ public class L1ItemVIP {
     /**
      * 增加PVP攻擊
      *
-     * @return
      */
     public int getPvpDmg() {
         return _add_PVP;
@@ -495,7 +493,6 @@ public class L1ItemVIP {
     /**
      * 增加PVP減免
      *
-     * @return
      */
     public int getPvpDmg_R() {
         return _add_PVP_R;
@@ -543,7 +540,6 @@ public class L1ItemVIP {
     /**
      * 移植7.6遠距離爆擊率
      *
-     * @return
      */
     public int getBowCritical() {
         return _add_BowCritical;

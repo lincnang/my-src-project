@@ -167,7 +167,6 @@ public class collectTable {
     /**
      * 傳回收集_裝備武器列表
      *
-     * @return
      */
     public ArrayList<L1Collectibles> getTypeList(final int type) {
         switch (type) {

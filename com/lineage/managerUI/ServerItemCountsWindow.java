@@ -95,7 +95,6 @@ public class ServerItemCountsWindow extends JInternalFrame {
      * @param width      寬度
      * @param height     高度
      * @param resizable  true：顯示按鈕 false：不顯示或者隱藏按鈕
-     * @param closable
      */
     public ServerItemCountsWindow(String windowName, int x, int y, int width, int height, boolean resizable, boolean closable) {
         super();

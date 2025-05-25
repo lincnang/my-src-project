@@ -26,7 +26,6 @@ public class S_OwnCharPack extends ServerBasePacket {
     /**
      * 物件封包 - 本身
      *
-     * @param pc
      */
     public S_OwnCharPack(L1PcInstance pc) {
         buildPacket(pc);

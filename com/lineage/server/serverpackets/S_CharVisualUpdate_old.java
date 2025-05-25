@@ -9,8 +9,6 @@ public class S_CharVisualUpdate_old extends ServerBasePacket {
     /**
      * 要求更新物件外型
      *
-     * @param objid
-     * @param weaponType
      */
     public S_CharVisualUpdate_old(int objid, int weaponType) {
         writeC(S_WIELD);
@@ -21,7 +19,6 @@ public class S_CharVisualUpdate_old extends ServerBasePacket {
     /**
      * 要求更新物件外型
      *
-     * @param cha
      */
     public S_CharVisualUpdate_old(L1PcInstance cha) {
         writeC(S_WIELD);
@@ -65,8 +62,6 @@ public class S_CharVisualUpdate_old extends ServerBasePacket {
     /**
      * 要求更新物件外型
      *
-     * @param cha
-     * @param status
      */
     public S_CharVisualUpdate_old(L1Character cha, int status) {
         writeC(S_WIELD);

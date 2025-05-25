@@ -34,8 +34,6 @@ public class L1SummonInstance extends L1NpcInstance {
     /**
      * 召喚獸
      *
-     * @param template
-     * @param master
      */
     public L1SummonInstance(L1Npc template, L1Character master) {
         super(template);
@@ -66,9 +64,6 @@ public class L1SummonInstance extends L1NpcInstance {
     /**
      * 造屍術
      *
-     * @param target
-     * @param master
-     * @param isCreateZombie
      */
     public L1SummonInstance(L1NpcInstance target, L1Character master, boolean isCreateZombie) {
         super(null);
@@ -517,7 +512,6 @@ public class L1SummonInstance extends L1NpcInstance {
     /**
      * 主人是否在線上
      *
-     * @return
      */
     public boolean isExsistMaster() {
         boolean isExsistMaster = true;

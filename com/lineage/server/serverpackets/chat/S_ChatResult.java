@@ -13,12 +13,6 @@ public class S_ChatResult extends ServerBasePacket {
     /**
      * 使用聊天頻道的結果
      *
-     * @param chat_index
-     * @param chat_type
-     * @param chat_text
-     * @param tell_target_name
-     * @param server_id
-     * @param result_type
      */
     public S_ChatResult(final int chat_index, final int chat_type, final String chat_text, final String tell_target_name, final int server_id, final int result_type) {
         this.writeC(S_EXTENDED_PROTOBUF);

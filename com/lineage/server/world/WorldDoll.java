@@ -33,7 +33,6 @@ public class WorldDoll {
     /**
      * 全部魔法娃娃
      *
-     * @return
      */
     public Collection<L1DollInstance> all() {
         try {
@@ -49,7 +48,6 @@ public class WorldDoll {
     /**
      * 魔法娃娃清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1DollInstance> map() {
         return _isDoll;
@@ -58,8 +56,6 @@ public class WorldDoll {
     /**
      * 指定魔法娃娃數據
      *
-     * @param key
-     * @return
      */
     public L1DollInstance get(final Integer key) {
         try {
@@ -73,8 +69,6 @@ public class WorldDoll {
     /**
      * 加入魔法娃娃清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1DollInstance value) {
         try {
@@ -87,7 +81,6 @@ public class WorldDoll {
     /**
      * 移出魔法娃娃清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {

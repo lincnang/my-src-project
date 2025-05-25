@@ -17,7 +17,6 @@ public class S_NPCPack_De extends ServerBasePacket {
     /**
      * 物件封包 - 虛擬人物
      *
-     * @param de
      */
     public S_NPCPack_De(final L1DeInstance de) {
         int status = STATUS_PC;

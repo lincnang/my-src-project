@@ -31,7 +31,6 @@ public class CharRemoveItemTable implements CharRemoveItemStorage {
     /**
      * 刪除錯誤物品資料
      *
-     * @param item_id
      */
     private static void errorItem(int item_id) {
         Connection co = null;
@@ -52,8 +51,6 @@ public class CharRemoveItemTable implements CharRemoveItemStorage {
     /**
      * 建立資料
      *
-     * @param char_id
-     * @param item
      */
     private static void addItem(final int char_id, final L1ItemInstance item) {
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(char_id);
@@ -118,7 +115,6 @@ public class CharRemoveItemTable implements CharRemoveItemStorage {
     /**
      * 傳回輔助(自動刪物)倉庫數據
      *
-     * @param char_id
      */
     public CopyOnWriteArrayList<L1ItemInstance> loadItems(final int char_id) {
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(char_id);

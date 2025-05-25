@@ -30,8 +30,6 @@ public class S_NpcChat extends ServerBasePacket {
     /**
      * 安息攻擊使用
      *
-     * @param pc
-     * @param chat
      */
     public S_NpcChat(L1NpcInstance npc, L1PcInstance pc, String chat) {
         writeC(S_SAY_CODE);

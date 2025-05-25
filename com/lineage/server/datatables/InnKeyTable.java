@@ -17,7 +17,6 @@ public class InnKeyTable {
     /**
      * 建立鑰匙資料
      *
-     * @param item
      */
     public static void StoreKey(L1ItemInstance item) {
         Connection con = null;
@@ -42,7 +41,6 @@ public class InnKeyTable {
     /**
      * 刪除鑰匙資料
      *
-     * @param item
      */
     public static void DeleteKey(L1ItemInstance item) {
         Connection con = null;
@@ -63,8 +61,6 @@ public class InnKeyTable {
     /**
      * 登入鑰匙資料並傳回是否有此筆資料
      *
-     * @param item
-     * @return
      */
     @SuppressWarnings("resource")
     public static boolean checkey(L1ItemInstance item) {

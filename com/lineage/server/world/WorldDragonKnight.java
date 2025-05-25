@@ -34,7 +34,6 @@ public class WorldDragonKnight {
     /**
      * 全部龍騎玩家
      *
-     * @return
      */
     public Collection<L1PcInstance> all() {
         try {
@@ -50,7 +49,6 @@ public class WorldDragonKnight {
     /**
      * 龍騎玩家清單
      *
-     * @return
      */
     public ConcurrentHashMap<Integer, L1PcInstance> map() {
         return _isDragonKnight;
@@ -59,8 +57,6 @@ public class WorldDragonKnight {
     /**
      * 加入龍騎玩家清單
      *
-     * @param key
-     * @param value
      */
     public void put(final Integer key, final L1PcInstance value) {
         try {
@@ -73,7 +69,6 @@ public class WorldDragonKnight {
     /**
      * 移出龍騎玩家清單
      *
-     * @param key
      */
     public void remove(final Integer key) {
         try {

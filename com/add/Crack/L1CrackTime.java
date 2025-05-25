@@ -190,12 +190,6 @@ public class L1CrackTime extends TimerTask {
     /**
      * 創造時空裂痕
      *
-     * @param x
-     * @param y
-     * @param mapId
-     * @param to_x
-     * @param to_y
-     * @param to_mapId
      */
     private void createCrack(int x, int y, short mapId, int to_x, int to_y, short to_mapId) {
         try {
@@ -226,10 +220,6 @@ public class L1CrackTime extends TimerTask {
     /**
      * 死亡玩家重新開始
      *
-     * @param pc
-     * @param locx
-     * @param locy
-     * @param mapid
      */
     public void restartPlayer(L1PcInstance pc, int locx, int locy, short mapid) {
         pc.removeAllKnownObjects();

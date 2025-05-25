@@ -16,11 +16,6 @@ public class L1ShopItem {
     /**
      * 商城物品用
      *
-     * @param id
-     * @param itemId
-     * @param price
-     * @param packCount
-     * @param enchantlevel
      */
     public L1ShopItem(int id, int itemId, int price, int packCount, int enchantlevel) {
         _id = id;
@@ -34,10 +29,6 @@ public class L1ShopItem {
     /**
      * 一般商店物品用
      *
-     * @param itemId
-     * @param price
-     * @param packCount
-     * @param enchantlevel
      */
     public L1ShopItem(int itemId, int price, int packCount, int enchantlevel) {
         _id = -1;

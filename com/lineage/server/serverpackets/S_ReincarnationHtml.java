@@ -10,7 +10,6 @@ public class S_ReincarnationHtml extends ServerBasePacket {
     /**
      * 轉生天賦
      *
-     * @param pc
      */
     public S_ReincarnationHtml(L1PcInstance pc) {
         int rei_pt = 0;

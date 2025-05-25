@@ -16,7 +16,6 @@ public class S_ChaDetails extends ServerBasePacket {
     /**
      * 魅力能力資訊
      *
-     * @param type
      */
     public S_ChaDetails(final int type) {
         this.writeC(S_EXTENDED_PROTOBUF);

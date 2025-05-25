@@ -69,8 +69,6 @@ public class ReloadMapTime extends ItemExecutor { //src022
     /**
      * 清除限時地圖時間
      *
-     * @param mapId
-     * @return
      */
     public final boolean removeMapTime(final L1PcInstance pc, final int mapId) {
         final L1MapsLimitTime mapsLimitTime = MapsGroupTable.get().findGroupMap(mapId);

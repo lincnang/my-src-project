@@ -155,8 +155,6 @@ public class CheckItemPowerTable {
     /**
      * 增加效果
      *
-     * @return
-     * @return
      */
     public void givepower(L1PcInstance pc, int item_id) {
         if (_list.isEmpty()) {

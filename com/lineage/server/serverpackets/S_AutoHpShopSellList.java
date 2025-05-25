@@ -19,7 +19,6 @@ public class S_AutoHpShopSellList extends ServerBasePacket {
     /**
      * 購買自動喝水補魔道具
      *
-     * @param pc
      * @param type 第幾組
      */
     public S_AutoHpShopSellList(final L1PcInstance pc, final int type) {

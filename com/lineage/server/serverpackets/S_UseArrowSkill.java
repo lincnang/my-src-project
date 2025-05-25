@@ -18,13 +18,6 @@ public class S_UseArrowSkill extends ServerBasePacket {
     /**
      * 物件攻擊 <font color="#ff0000">遠距離命中</font>
      *
-     * @param cha
-     * @param targetobj
-     * @param spellgfx
-     * @param x
-     * @param y
-     * @param dmg
-     * @param actId
      */
     public S_UseArrowSkill(L1Character cha, int targetobj, int spellgfx, int targetx, int targety, int dmg, int actId) {
         switch (cha.getTempCharGfx()) {
@@ -84,11 +77,6 @@ public class S_UseArrowSkill extends ServerBasePacket {
     /**
      * 物件攻擊 <font color="#ff0000">遠距離未命中</font>
      *
-     * @param cha
-     * @param spellgfx
-     * @param targetx
-     * @param targety
-     * @param actId
      */
     public S_UseArrowSkill(L1Character cha, int spellgfx, int targetx, int targety, int actId) {
         switch (cha.getTempCharGfx()) {
@@ -133,7 +121,6 @@ public class S_UseArrowSkill extends ServerBasePacket {
     /**
      * 物件攻擊 - <font color="#ff0000">遠距離空擊</font>
      *
-     * @param pc
      */
     public S_UseArrowSkill(L1Character cha) {
         switch (cha.getTempCharGfx()) {
@@ -175,8 +162,6 @@ public class S_UseArrowSkill extends ServerBasePacket {
     /**
      * 取回特定外型的特殊攻擊動作(遠攻用)
      *
-     * @param pc
-     * @return
      */
     private int SpecialActid(L1Character cha) {
         if (cha instanceof L1PcInstance) {// 執行者為PC

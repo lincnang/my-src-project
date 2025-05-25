@@ -122,7 +122,6 @@ public class DoorSpawnTable {
      * 召喚門
      *
      * @param doorId              召喚門ID
-     * @param gfx                 召喚門外形ID
      * @param locx                召喚門X坐標
      * @param locy                召喚門Y坐標
      * @param mapid               召喚門地圖ID

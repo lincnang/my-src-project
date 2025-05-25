@@ -57,7 +57,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 物品資料
      *
-     * @param pc
      */
     public static void items(L1PcInstance pc) {
         try {
@@ -128,7 +127,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 身上持有道具給予能力系統
      *
-     * @param pc
      */
     public static void CheckItemPower(L1PcInstance pc) {
         for (L1ItemInstance item : pc.getInventory().getItems()) {
@@ -155,7 +153,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 刪除屍魂副本道具
      *
-     * @param _pc
      */
     private static void deleteSoulTowerItem(L1PcInstance _pc) {
         //刪除副本道具
@@ -1556,8 +1553,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 檢查是否有未讀信件
      *
-     * @param pc
-     * @return
      */
     private int CheckMail(L1PcInstance pc) {
         int count = 0;
@@ -1586,7 +1581,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 王冠資料
      *
-     * @param pc
      */
     private void crown(L1PcInstance pc) {
         try {
@@ -1609,7 +1603,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 遊戲焦點及人物狀態更新
      *
-     * @param pc
      */
     private void getFocus(L1PcInstance pc) {//src014
         try {
@@ -1652,7 +1645,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 其他狀態更新
      *
-     * @param pc
      */
     private void getUpdate(L1PcInstance pc) {
         pc.sendPackets(new S_Mail(pc, 0));
@@ -1668,7 +1660,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 婚姻資料
      *
-     * @param pc
      */
     private void marriage(L1PcInstance pc) {
         try {
@@ -1687,8 +1678,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 其他數據
      *
-     * @param pc
-     * @throws Exception
      */
     private void getOther(L1PcInstance pc) throws Exception {
         try {
@@ -1716,7 +1705,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 升級點數獎勵
      *
-     * @param pc
      */
     private void statsReward(final L1PcInstance pc) { // 點數獎勵
         if (pc.getLevel() >= 51 && pc.getLevel() - 50 > pc.getBonusStats() || pc.getLevel() >= 51 && pc.getLevel() - 50 > pc.getBonusStats() - 49) {
@@ -1818,7 +1806,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 所在座標位置資料判斷
      *
-     * @param pc
      */
     private void backRestart(final L1PcInstance pc) {
         try {
@@ -1869,7 +1856,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 取得記憶座標資料
      *
-     * @param pc
      */
     private void bookmarks(final L1PcInstance pc) {
         /*try {
@@ -1889,7 +1875,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 人物已學習技能資料
      *
-     * @param pc
      */
     private void skills(final L1PcInstance pc) {
         try {
@@ -1918,7 +1903,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 殘留的寵物資料
      *
-     * @param pc
      */
     private void serchSummon(L1PcInstance pc) {
         try {
@@ -1975,7 +1959,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 保留的BUFF資料
      *
-     * @param pc
      */
     private void buff(L1PcInstance pc) {
         try {
@@ -1990,8 +1973,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 黑名單
      *
-     * @param pc
-     * @param exList
      */
     private void setExcludeList(L1PcInstance pc, L1ExcludingList exList) {
         Connection con = null;
@@ -2021,7 +2002,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 安全區域右下顯示死亡懲罰狀態圖示
      *
-     * @param pc
      */
     private void safetyzone(L1PcInstance pc) {
         if (pc.getZoneType() == 0) {
@@ -2040,7 +2020,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 安全防禦
      *
-     * @param pc
      */
     private void securityBuff(L1PcInstance pc) {
         pc.sendPackets(new S_PacketBox(S_PacketBox.ICON_SECURITY_SERVICES));
@@ -2051,7 +2030,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 7.6空身屬性額外獎勵
      *
-     * @param pc
      */
     private void Reward_stats(L1PcInstance pc) {
         // 7.6 空身力量額外獎勵
@@ -2105,7 +2083,6 @@ public class C_LoginToServer extends ClientBasePacket {
     /**
      * 成長果實系統(Tam幣)
      *
-     * @param pc
      */
     private void Tam_Window(L1PcInstance pc) {
         pc.sendPackets(new S_TamWindow(pc)); // 顯示TAM幣點數

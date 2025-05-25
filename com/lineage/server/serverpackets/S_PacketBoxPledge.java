@@ -33,8 +33,6 @@ public class S_PacketBoxPledge extends ServerBasePacket {
     /**
      * 初始化血盟清單(王族專用)
      *
-     * @param 0x18
-     * @param test
      * @param pc   王族 -- 階級 -- [官方棄用?] 0, none 1, none 2, 一般 3, 副君主 4, 聯盟君主 5,
      *             修習騎士 6, 守護騎士 [官方現用] 7, 一般 8, 修習騎士 9, 守護騎士 10, 聯盟君主 [Server]
      *             opcode = 100 0000: 64 18 02 00 00 00 4b 5a 4b 00 0a b6 57 ad
@@ -65,7 +63,6 @@ public class S_PacketBoxPledge extends ServerBasePacket {
     /**
      * 第二次查詢血盟清單 0x1d
      *
-     * @param test
      * @param pc   王族 -- 階級 -- [官方棄用?] 0, none 1, none 2, 一般 3, 副君主 4, 聯盟君主 5,
      *             修習騎士 6, 守護騎士 [官方現用] 7, 一般 8, 修習騎士 9, 守護騎士 10, 聯盟君主
      */
@@ -87,7 +84,6 @@ public class S_PacketBoxPledge extends ServerBasePacket {
     /**
      * 加入血盟更新列表王族專用(加入)
      *
-     * @param name
      * @param rank 加入血盟的角色id:超重音 階級:一般 0x07
      */
     private void PledgeAdd(final String name, final int rank) {
@@ -102,8 +98,6 @@ public class S_PacketBoxPledge extends ServerBasePacket {
     /**
      * 退出(驅逐)血盟更新列表
      *
-     * @param name
-     * @param rank 退出血盟的角色id:超重音
      */
     private void PledgeDel(final String name) {
         writeC(S_EVENT);
@@ -117,7 +111,6 @@ public class S_PacketBoxPledge extends ServerBasePacket {
     /**
      * 血盟成員查詢血盟清單 0x77
      *
-     * @param test
      * @param pc   血盟成員 -- 階級 -- [官方棄用?] 0, none 1, none 2, 一般 3, 副君主 4, 聯盟君主 5,
      *             修習騎士 6, 守護騎士 [官方現用] 7, 一般 8, 修習騎士 9, 守護騎士 10, 聯盟君主 [Server]
      *             opcode = 100 0000: 64 77 01 00 00 00 b6 57 ad ab ad b5 00 07

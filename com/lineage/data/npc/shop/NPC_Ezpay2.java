@@ -35,8 +35,6 @@ public class NPC_Ezpay2 extends NpcExecutor {
     /**
      * 領取贊助金額
      *
-     * @param pc
-     * @throws ParseException
      */
     private static synchronized void getSponsor(L1PcInstance pc) throws ParseException {
         Connection con = null;
@@ -178,7 +176,6 @@ public class NPC_Ezpay2 extends NpcExecutor {
     /**
      * 領取贊助
      *
-     * @param player
      */
     public static void writeSponsorlog(L1PcInstance player, int count, String s) {
         try {

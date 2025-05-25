@@ -99,11 +99,6 @@ public class L1MagicWeapon {
     /**
      * 附魔武器傷害判定
      *
-     * @param pc
-     * @param cha
-     * @param damage
-     * @param magicWeapon
-     * @return
      */
     public static final double getWeaponSkillDamage(final L1PcInstance pc, final L1Character cha, final double damage, final L1MagicWeapon magicWeapon, final boolean isLongRange) {
         if (pc == null || cha == null || magicWeapon == null) {
@@ -469,13 +464,6 @@ public class L1MagicWeapon {
     /**
      * 發送特效到指定座標
      *
-     * @param pc
-     * @param magicWeapon
-     * @param locX
-     * @param locY
-     * @param targetId
-     * @param gfxId
-     * @param isNowWar
      */
     private static final void sendGfxids(final L1PcInstance pc, final L1MagicWeapon magicWeapon, final int locX, final int locY, final int targetId, final int gfxId, final boolean isNowWar) {
         // 10格內畫面可見人物
@@ -513,7 +501,6 @@ public class L1MagicWeapon {
     /**
      * 新增額外負面技能類型(不受距離限制)
      *
-     * @return
      */
     public final int getNegativeId() {
         return _negativeId;
@@ -522,7 +509,6 @@ public class L1MagicWeapon {
     /**
      * 新增額外負面技能時間(不受距離限制)
      *
-     * @return
      */
     public final int getNegativeTime() {
         return _negativeTime;

@@ -262,8 +262,6 @@ public class L1MagicPc extends L1MagicMode {
     /**
      * 命中機率計算
      *
-     * @param skillId
-     * @return
      */
     private int calcProbability(int skillId) {
         L1Skills l1skills = SkillsTable.get().getTemplate(skillId);
@@ -610,8 +608,6 @@ public class L1MagicPc extends L1MagicMode {
     /**
      * 攻擊PC時的魔法傷害計算
      *
-     * @param skillId
-     * @return
      */
     private int calcPcMagicDamage(int skillId) {
         if (_targetPc == null) {
@@ -823,8 +819,6 @@ public class L1MagicPc extends L1MagicMode {
     /**
      * 攻擊NPC時的魔法傷害計算
      *
-     * @param skillId
-     * @return
      */
     private int calcNpcMagicDamage(int skillId) {
         if (_targetNpc == null) {
@@ -1001,8 +995,6 @@ public class L1MagicPc extends L1MagicMode {
     /**
      * 魔法基礎傷害計算
      *
-     * @param skillId
-     * @return
      */
     private int calcMagicDiceDamage(int skillId) {
         L1Skills l1skills = SkillsTable.get().getTemplate(skillId);
@@ -1165,8 +1157,6 @@ public class L1MagicPc extends L1MagicMode {
     /**
      * 魔防減傷的計算
      *
-     * @param dmg
-     * @return
      */
     private int calcMrDefense(int dmg) {
         int mr = getTargetMr();

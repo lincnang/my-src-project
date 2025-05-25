@@ -70,7 +70,6 @@ public class EffectPolymorph implements ArmorSetEffect {
     /**
      * 檢查軍馬頭盔是否具有可用次數
      *
-     * @param pc
      * @return true:有 false:沒有
      */
     private boolean isRemainderOfCharge(L1PcInstance pc) {

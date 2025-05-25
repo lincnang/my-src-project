@@ -42,7 +42,6 @@ public class CharOtherReading {
     /**
      * 取回保留額外紀錄
      *
-     * @param pc
      */
     public L1PcOther getOther(final L1PcInstance pc) {
         this._lock.lock();
@@ -58,8 +57,6 @@ public class CharOtherReading {
     /**
      * 增加 或更新保留額外紀錄
      *
-     * @param objId
-     * @param other
      */
     public void storeOther(final int objId, final L1PcOther other) {
         this._lock.lock();

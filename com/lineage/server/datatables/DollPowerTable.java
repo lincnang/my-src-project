@@ -48,8 +48,6 @@ public class DollPowerTable {
     /**
      * 比較道具製作數據的緩存校驗
      *
-     * @param check
-     * @return
      */
     public static boolean isEqual(final byte[] check) {
         if (_digest == null) {
@@ -232,8 +230,6 @@ public class DollPowerTable {
     /**
      * 加入娃娃等級群組
      *
-     * @param level
-     * @param tmp
      */
     private void addLevelMap(final int level, final L1Item tmp) {
         ArrayList<L1Item> levelList = _levelList.get(level);
@@ -330,8 +326,6 @@ public class DollPowerTable {
     /**
      * 取回魔法娃娃等級群組
      *
-     * @param level
-     * @return
      */
     public ArrayList<L1Item> getDollLevelList(final int level) {
         return _levelList.get(level);
@@ -340,8 +334,6 @@ public class DollPowerTable {
     /**
      * 是否有指定等級娃娃群組
      *
-     * @param level
-     * @return
      */
     public boolean isExistDollLevelList(final int level) {
         return _levelList.containsKey(level);
@@ -350,48 +342,6 @@ public class DollPowerTable {
     /**
      * 加入CLASS清單
      *
-     * @param powerid
-     * @param className
-     * @param int1
-     * @param int2
-     * @param int3
-     * @param note
-     * @param doll_ac
-     * @param doll_str
-     * @param doll_dex
-     * @param doll_con
-     * @param doll_intel
-     * @param doll_wis
-     * @param doll_cha
-     * @param doll_hp
-     * @param doll_mp
-     * @param doll_hpr
-     * @param doll_mpr
-     * @param doll_mr
-     * @param doll_sp
-     * @param doll_dmg
-     * @param doll_hit
-     * @param doll_bowdmg
-     * @param doll_bowhit
-     * @param doll_alldmg_r
-     * @param doll_exp
-     * @param doll_weight
-     * @param doll_weight_r
-     * @param doll_earth
-     * @param doll_wind
-     * @param doll_water
-     * @param doll_fire
-     * @param doll_stun
-     * @param doll_stone
-     * @param doll_sleep
-     * @param doll_freeze
-     * @param doll_sustain
-     * @param doll_blind
-     * @param doll_haste
-     * @param doll_stunlv
-     * @param doll_breaklv
-     * @param doll_foeslayer
-     * @param doll_titanhp
      */
     //private void addList(int powerid, String className, int int1, int int2, int int3, String note) {
     // 新增娃娃能力描述↓↓↓

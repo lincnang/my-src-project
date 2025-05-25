@@ -14,7 +14,6 @@ public class S_DoorPack extends ServerBasePacket {
     /**
      * 物件封包 - 門
      *
-     * @param door
      */
     public S_DoorPack(final L1DoorInstance door) {
         this.buildPacket(door);

@@ -17,7 +17,6 @@ public class S_Board extends ServerBasePacket {
     /**
      * 佈告欄列表
      *
-     * @param npc
      */
     public S_Board(final L1NpcInstance npc) {
         this.buildPacket(npc, 0);
@@ -26,8 +25,6 @@ public class S_Board extends ServerBasePacket {
     /**
      * 佈告欄列表
      *
-     * @param npc
-     * @param number
      */
     public S_Board(final L1NpcInstance npc, final int number) {
         this.buildPacket(npc, number);
@@ -36,7 +33,6 @@ public class S_Board extends ServerBasePacket {
     /**
      * 佈告欄列表 - 測試
      *
-     * @param objectid
      */
     public S_Board(final int objectid) {
         this.writeC(S_BOARD_LIST);

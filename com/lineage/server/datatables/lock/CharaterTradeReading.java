@@ -90,8 +90,6 @@ public class CharaterTradeReading {
     /**
      * 更新人物的綁定狀態
      *
-     * @param objId
-     * @return
      */
     public boolean updateBindChar(final int objId, final int state) {
         return this._storage.updateBindChar(objId, state);
@@ -100,8 +98,6 @@ public class CharaterTradeReading {
     /**
      * 獲取交易的簡易人物
      *
-     * @param objId
-     * @return
      */
     public L1PcInstance getPcInstance(final int objId) {
         this._lock.lock();

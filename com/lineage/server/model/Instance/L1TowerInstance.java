@@ -35,7 +35,6 @@ public class L1TowerInstance extends L1NpcInstance {
     /**
      * 守護者之塔
      *
-     * @param template
      */
     public L1TowerInstance(final L1Npc template) {
         super(template);
@@ -220,7 +219,6 @@ public class L1TowerInstance extends L1NpcInstance {
     /**
      * 是亞丁守護子塔
      *
-     * @return
      */
     public boolean isSubTower() {
         return ((getNpcTemplate().get_npcId() == 81190)// 守護塔:伊娃

@@ -185,7 +185,6 @@ public class C_CallPlayer extends ClientBasePacket {
     /**
      * 技能解除
      *
-     * @param pc
      */
     private void stopSkill(final L1PcInstance pc) {
         // 技能解除

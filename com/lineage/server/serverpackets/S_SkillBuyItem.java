@@ -21,7 +21,6 @@ public class S_SkillBuyItem extends ServerBasePacket {
     /**
      * 魔法購買清單(材料)
      *
-     * @param pc
      */
     public S_SkillBuyItem(final L1PcInstance pc, final L1NpcInstance npc) {
         // 0000: 01 01 00 17 00 00 00 ee ........

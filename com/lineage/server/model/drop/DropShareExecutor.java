@@ -14,9 +14,6 @@ public interface DropShareExecutor {
     /**
      * 掉落物品的分配
      *
-     * @param npc
-     * @param acquisitorList
-     * @param hateList
      */
     public void dropShare(L1NpcInstance npc, ArrayList<L1Character> acquisitorList, ArrayList<Integer> hateList);
 }

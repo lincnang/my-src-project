@@ -11,8 +11,6 @@ public class S_Expression extends ServerBasePacket {
     /**
      * 表情
      *
-     * @param id
-     * @param value
      */
     public S_Expression(final int id, final int value) {
         this.writeC(S_EXTENDED_PROTOBUF);

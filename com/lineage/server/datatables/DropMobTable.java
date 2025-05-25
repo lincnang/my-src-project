@@ -39,7 +39,6 @@ public class DropMobTable {
     /**
      * 刪除錯誤物品資料
      *
-     * @param objid
      */
     private static void errorItem(int itemid) {
         Connection con = null;

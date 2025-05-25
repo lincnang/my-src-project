@@ -46,10 +46,6 @@ public class S_NewCreateItem extends ServerBasePacket {
     /**
      * 新封包-釣魚
      *
-     * @param type
-     * @param i
-     * @param ck
-     * @param time
      */
     public S_NewCreateItem(int type, int i, boolean ck, long time) {
         writeC(OpcodesServer.S_EXTENDED_PROTOBUF);

@@ -34,7 +34,6 @@ public final class ExpTable {
     /**
      * 指定等級所需要的經驗直
      *
-     * @param level
      * @return 所需要的經驗直
      */
     public static long getExpByLevel(final int level) {
@@ -49,7 +48,6 @@ public final class ExpTable {
     /**
      * 下一個等級需要的經驗直
      *
-     * @param level
      * @return 所需要的經驗直
      */
     public static long getNeedExpNextLevel(final int level) {
@@ -60,7 +58,6 @@ public final class ExpTable {
      * 累積經驗直對應的等級
      *
      * @param exp 累積經驗值
-     * @return
      */
     public static int getLevelByExp(final long exp) {
         int level = 1;
@@ -82,9 +79,6 @@ public final class ExpTable {
     /**
      * 經驗直百分比(寵物等級顯示使用)
      *
-     * @param level
-     * @param exp
-     * @return
      */
     public static int getExpPercentage(final int level, final long exp) {
         return (int) (100.0 * ((double) (exp - getExpByLevel(level)) / (double) getNeedExpNextLevel(level)));
@@ -93,8 +87,6 @@ public final class ExpTable {
     /**
      * 目前等即可取回的經驗直
      *
-     * @param level
-     * @return
      */
     public static double getPenaltyRate(final int level) {
         final L1Exp l1exp = _expList.get(new Integer(level));

@@ -16,7 +16,6 @@ public class StreamUtil {
     /**
      * 關閉此流並釋放與此流關聯的所有系統資源。如果已經關閉該流，則調用此方法無效。
      *
-     * @param closeables
      */
     public static void close(final Closeable... closeables) {
         for (final Closeable c : closeables) {
@@ -33,7 +32,6 @@ public class StreamUtil {
     /**
      * 請求取消此鍵的通道到其選擇器的註冊
      *
-     * @param keys
      */
     public static void close(final SelectionKey... keys) {
         for (final SelectionKey key : keys) {
@@ -46,7 +44,6 @@ public class StreamUtil {
     /**
      * 關閉此選擇器
      *
-     * @param keys
      */
     public static void close(final Selector... selectors) {
         for (final Selector selector : selectors) {
@@ -69,7 +66,6 @@ public class StreamUtil {
      * <p>
      * 如果此套接字有一個與之關聯的通道，則關閉該通道。
      *
-     * @param csocket
      */
     public static void close(final Socket csocket) {
         try {
@@ -87,7 +83,6 @@ public class StreamUtil {
      * 關閉此套接字。 在 accept() 中所有當前阻塞的線程都將會拋出 SocketException。
      * 如果此套接字有一個與之關聯的通道，則關閉該通道。
      *
-     * @param server
      */
     public static void close(final ServerSocket server) {
         try {
@@ -117,7 +112,6 @@ public class StreamUtil {
      * <p>
      * 中斷一個不處於活動狀態的線程不需要任何作用。
      *
-     * @param serverExecutor
      */
     public static void interrupt(final Thread thread) {
         try {

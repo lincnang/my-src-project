@@ -11,8 +11,6 @@ public class S_Ability extends ServerBasePacket {
     /**
      * 戒指
      *
-     * @param type
-     * @param equipped
      */
     public S_Ability(final int type, final boolean equipped) {
         this.buildPacket(type, equipped);

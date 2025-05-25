@@ -51,10 +51,8 @@ public class Npc_LevelUp extends NpcExecutor {
     /**
      * 開始選取點數分配
      *
-     * @param pc
      * @param mode 1 力量 + 2 力量 - 3 敏捷 + 4 敏捷 - 5 體質 + 6 體質 - 7 精神 + 8 精神 - 9 智力
      *             + 10 智力 - 11 魅力 + 12 魅力 -
-     * @return
      */
     public static String[] showInfoX(final L1PcInstance pc, final int mode) {
         final int xmode = pc.get_otherList().get_uplevelList(13);
@@ -250,8 +248,6 @@ public class Npc_LevelUp extends NpcExecutor {
      * 初始化點選
      *
      * @param pc      執行人物
-     * @param isBonus 0:升級點 1:萬能藥 2:人物出生點數
-     * @return
      */
     public static String[] showInfo(final L1PcInstance pc, final int mode) {
         int elixirStats = 0;
@@ -412,8 +408,6 @@ public class Npc_LevelUp extends NpcExecutor {
     /**
      * 傳回顯示於HTML的文字
      *
-     * @param pc
-     * @return
      */
     private static String[] info(final L1PcInstance pc) {
         String[] info = null;
@@ -477,7 +471,6 @@ public class Npc_LevelUp extends NpcExecutor {
     /**
      * 技能解除/裝備解除
      *
-     * @param pc
      */
     public static void stopSkill(final L1PcInstance pc) {
         // 使用牛的代號脫除全部裝備

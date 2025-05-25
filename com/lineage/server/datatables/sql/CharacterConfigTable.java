@@ -30,7 +30,6 @@ public class CharacterConfigTable implements CharacterConfigStorage {
     /**
      * 刪除遺失資料
      *
-     * @param objid
      */
     private static void delete(final int objid) {
         Connection cn = null;

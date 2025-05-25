@@ -31,8 +31,6 @@ public class Npc_FireDis extends NpcExecutor {
     /**
      * 顯示道具製造清單
      *
-     * @param pc
-     * @param npc
      */
     private void ShowCraftList(L1PcInstance pc, L1NpcInstance npc) {
         String msg0 = "";

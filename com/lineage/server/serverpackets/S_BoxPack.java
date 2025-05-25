@@ -9,7 +9,6 @@ public class S_BoxPack extends ServerBasePacket {
     private byte[] _byte = null;
 
     /**
-     * @param egg
      */
     public S_BoxPack(final L1BoxInstance box) {
         this.buildPacket(box);

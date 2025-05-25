@@ -11,8 +11,6 @@ public class S_Teleport2 extends ServerBasePacket {
     /**
      * 傳送鎖定(座標點)
      *
-     * @param mapid
-     * @param id
      */
     public S_Teleport2(final int mapid, final int id) {
         // 0000: 4a 04 00 3a 05 15 00 cc J..:....

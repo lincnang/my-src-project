@@ -78,8 +78,6 @@ public class S_UseAttackSkill extends ServerBasePacket {
     /**
      * 取回特定外型的特殊攻擊動作(魔攻用)
      *
-     * @param pc
-     * @return
      */
     private int SpecialActid(final L1Character cha) {
         int actionId = 18;// 預設攻擊魔法動作

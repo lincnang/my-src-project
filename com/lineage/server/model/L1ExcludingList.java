@@ -32,7 +32,6 @@ public class L1ExcludingList {
     /**
      * 加入人物訊息拒絕清單
      *
-     * @param name
      */
     public void add(int type, String name) {
         switch (type) {
@@ -49,8 +48,6 @@ public class L1ExcludingList {
      * 移出人物訊息拒絕名單
      *
      * @param name 移除名稱
-     * @return 移除成功返回人物名稱<BR>
-     * 清單中無該物件返回null
      */
     public void remove(int type, String name) {
         switch (type) {

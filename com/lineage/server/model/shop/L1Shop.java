@@ -49,7 +49,6 @@ public class L1Shop {
     /**
      * 傳回商店販賣列表
      *
-     * @return
      */
     public List<L1ShopItem> getSellingItems() {
         return _sellingItems;
@@ -58,7 +57,6 @@ public class L1Shop {
     /**
      * 傳回商店購買列表
      *
-     * @return
      */
     public List<L1ShopItem> getPurchasingItems() {
         return _purchasingItems;
@@ -67,8 +65,6 @@ public class L1Shop {
     /**
      * 是否有販賣此樣物品
      *
-     * @param itemid
-     * @return
      */
     public boolean isSelling(int itemid) {
         for (L1ShopItem shopitem : _sellingItems) {
@@ -82,8 +78,6 @@ public class L1Shop {
     /**
      * 是否有收購此樣物品
      *
-     * @param itemid
-     * @return
      */
     public boolean isPurchasing(int itemid) {
         for (L1ShopItem shopitem : _purchasingItems) {
@@ -147,9 +141,6 @@ public class L1Shop {
     /**
      * 檢查販賣物品是否成功
      *
-     * @param pc
-     * @param orderList
-     * @return
      */
     private boolean ensureSell(L1PcInstance pc, L1ShopBuyOrderList orderList) {
         int price = orderList.getTotalPrice();
@@ -197,7 +188,6 @@ public class L1Shop {
     /**
      * 更新城堡寶庫稅金
      *
-     * @param orderList
      */
     private void payCastleTax(L1ShopBuyOrderList orderList) {
         L1TaxCalculator calc = orderList.getTaxCalculator();
@@ -239,7 +229,6 @@ public class L1Shop {
     /**
      * 更新迪亞德寶庫稅金
      *
-     * @param orderList
      */
     @SuppressWarnings("unused")
     private void payDiadTax(L1ShopBuyOrderList orderList) {
@@ -261,7 +250,6 @@ public class L1Shop {
     /**
      * 更新村莊稅金
      *
-     * @param orderList
      */
     @SuppressWarnings("unused")
     private void payTownTax(L1ShopBuyOrderList orderList) {
@@ -277,7 +265,6 @@ public class L1Shop {
     /**
      * 更新各區域稅金
      *
-     * @param orderList
      */
     @SuppressWarnings("unused")
     private void payTax(L1ShopBuyOrderList orderList) {
@@ -289,9 +276,6 @@ public class L1Shop {
     /**
      * 將商店出售物品轉移給玩家
      *
-     * @param inv
-     * @param orderList
-     * @param pc
      */
     private void sellItems(L1PcInventory inv, L1ShopBuyOrderList orderList, L1PcInstance pc, int npcId) {
         if (orderList == null) {
@@ -337,8 +321,6 @@ public class L1Shop {
     /**
      * 商店出售物品給玩家
      *
-     * @param pc
-     * @param orderList
      */
     public void sellItems(L1PcInstance pc, L1ShopBuyOrderList orderList, int npcId) {
         if (orderList.isEmpty()) {
@@ -363,9 +345,6 @@ public class L1Shop {
     /**
      * 成長果實系統(Tam幣)
      *
-     * @param pc
-     * @param orderList
-     * @return
      */
     private boolean TamMerchant1(L1PcInstance pc, L1ShopBuyOrderList orderList) {
         int price = orderList.getTotalPrice();
@@ -410,9 +389,6 @@ public class L1Shop {
     /**
      * 成長果實系統(Tam幣)
      *
-     * @param pc
-     * @param inv
-     * @param orderList
      */
     private void TamMerchant2(L1PcInstance pc, L1PcInventory inv, L1ShopBuyOrderList orderList) {
         if (inv.getOwner().getNetConnection().getAccount().get_tam_point() < orderList.getTotalPrice()) {
@@ -442,8 +418,6 @@ public class L1Shop {
     /**
      * 商店購買玩家物品並給予金幣
      *
-     * @param orderList
-     * @param pc
      */
     public void buyItems(L1ShopSellOrderList orderList, L1PcInstance pc) {
         L1PcInventory inv = orderList.getPc().getInventory();

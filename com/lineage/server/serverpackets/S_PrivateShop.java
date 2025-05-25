@@ -36,9 +36,6 @@ public class S_PrivateShop extends ServerBasePacket {
     /**
      * 對象是NPC
      *
-     * @param pc
-     * @param objectId
-     * @param type
      */
     private void isDe(L1PcInstance pc, int objectId, int type) {
         L1DeInstance shopDe = (L1DeInstance) World.get().findObject(objectId);
@@ -125,9 +122,6 @@ public class S_PrivateShop extends ServerBasePacket {
     /**
      * 對象是PC
      *
-     * @param pc
-     * @param objectId
-     * @param type
      */
     private void isPc(L1PcInstance pc, int objectId, int type) {
         L1PcInstance shopPc = (L1PcInstance) World.get().findObject(objectId);

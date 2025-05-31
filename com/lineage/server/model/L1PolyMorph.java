@@ -167,9 +167,8 @@ public class L1PolyMorph {
                     pc.sendPackets(new S_ServerMessage(181));
                     return;
                 }
-                if (!isQuestIdEnd(pc, polyId)) {
-                    // 181:\f1無法變成你指定的怪物。
-                    pc.sendPackets(new S_ServerMessage(181));
+                if (!pc.isGm() && !isQuestIdEnd(pc, polyId)) {
+                    pc.sendPackets(new S_ServerMessage("請您開通卡片解鎖"));
                     return;
                 }
                 boolean isPoly = true;// 是否符合變身條件

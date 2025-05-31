@@ -78,17 +78,23 @@ public class L1PcQuest {
 
     /** 取得玩家對應任務的已完成階段 */
     public int get_now_stage(int quest_id) {
-        return _nowStageMap.getOrDefault(quest_id, 0);
+        CharQuest quest = _quest.get(quest_id);
+        return (quest != null) ? quest.get_now_stage() : 0;
     }
 
-    /** 設定玩家對應任務的已完成階段 */
+
     public void set_now_stage(int quest_id, int stage) {
         CharQuest quest = _quest.get(quest_id);
-        if (quest != null) {
-            quest.set_now_stage(stage);
-            CharacterQuestReading.get().updateQuest(_owner.getId(), quest_id, quest);
+        if (quest == null) {
+            quest = new CharQuest();
+            _quest.put(quest_id, quest);
         }
+        quest.set_now_stage(stage);
+        _nowStageMap.put(quest_id, stage); // 補這一行
+        CharacterQuestReading.get().updateQuest(_owner.getId(), quest_id, quest);
     }
+
+
 
     /** 取得任務進度 */
     public int get_step(int quest_id) {

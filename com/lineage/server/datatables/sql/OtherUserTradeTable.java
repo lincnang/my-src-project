@@ -1,6 +1,7 @@
 package com.lineage.server.datatables.sql;
 
 import com.lineage.DatabaseFactory;
+import com.lineage.managerUI.Eva;
 import com.lineage.server.datatables.storage.OtherUserTradeStorage;
 import com.lineage.server.utils.SQLUtil;
 import org.apache.commons.logging.Log;
@@ -28,6 +29,7 @@ public class OtherUserTradeTable implements OtherUserTradeStorage {
             ps.setInt(++i, srcpcobjid);
             ps.setString(++i, "移出人物:" + srcpcname);
             ps.execute();
+            Eva.getInstance().addDeleteItemLog(itemname, itemobjid, itemcount, "移出人物:" + srcpcname, "移入人物:" + pcname, itemadena);
         } catch (Exception e) {
             SqlError.isError(_log, e.getLocalizedMessage(), e);
         } finally {
@@ -36,7 +38,3 @@ public class OtherUserTradeTable implements OtherUserTradeStorage {
         }
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.datatables.sql.OtherUserTradeTable JD-Core Version: 0.6.2
- */

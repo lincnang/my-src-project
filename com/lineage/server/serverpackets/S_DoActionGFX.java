@@ -21,7 +21,3 @@ public class S_DoActionGFX extends ServerBasePacket {
         return getClass().getSimpleName();
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.serverpackets.S_DoActionGFX JD-Core Version: 0.6.2
- */

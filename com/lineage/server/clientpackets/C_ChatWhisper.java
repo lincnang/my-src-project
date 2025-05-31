@@ -5,6 +5,7 @@ import com.lineage.config.Config;
 import com.lineage.config.ConfigAlt;
 import com.lineage.config.ConfigRecord;
 import com.lineage.echo.ClientExecutor;
+import com.lineage.managerUI.Eva;
 import com.lineage.server.datatables.SpamTable;
 import com.lineage.server.datatables.lock.LogChatReading;
 import com.lineage.server.model.Instance.L1DeInstance;
@@ -22,7 +23,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 public class C_ChatWhisper extends ClientBasePacket {
     private static final Log _log = LogFactory.getLog(C_ChatWhisper.class);
@@ -119,8 +119,18 @@ public class C_ChatWhisper extends ClientBasePacket {
             if (ConfigRecord.LOGGING_CHAT_WHISPER) {
                 LogChatReading.get().isTarget(whisperFrom, whisperTo, text, 9);
             }
-            if (Config.GUI) {
-                J_Main.getInstance().addPrivateChat(whisperFrom.getName(), whisperTo.getName(), text);
+            switch (Config.UI_MODE) {
+                case 0:
+                    System.out.println("UI已關閉");
+                    break;
+                case 1:
+                    J_Main.main(new String[0]);
+                    break;
+                case 2:
+                    Eva.getInstance();
+                    break;
+                default:
+                    System.out.println("未知UI模式，已自動關閉介面");
             }
         } catch (Exception localException) {
         } finally {
@@ -132,7 +142,3 @@ public class C_ChatWhisper extends ClientBasePacket {
         return getClass().getSimpleName();
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.clientpackets.C_ChatWhisper JD-Core Version: 0.6.2
- */

@@ -89,7 +89,3 @@ public class ActionCodes {
     public static final int ACTION_ChainswordDamage = 85;
     public static final int ACTION_ChainswordIdle = 86;
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.ActionCodes JD-Core Version: 0.6.2
- */

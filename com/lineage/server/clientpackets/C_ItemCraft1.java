@@ -15,6 +15,7 @@ import com.lineage.DatabaseFactory;
 import com.lineage.config.*;
 import com.lineage.data.event.BroadcastSet;
 import com.lineage.echo.ClientExecutor;
+import com.lineage.managerUI.Eva;
 import com.lineage.server.BroadcastController;
 import com.lineage.server.Manly.L1WenYang;
 import com.lineage.server.Manly.WenYangTable;
@@ -1490,8 +1491,18 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         KeyOutEnemyName(pc, chatText.trim());
                         return;
                     }
-                    if (Config.GUI) {
-                        J_Main.getInstance().addNormalChat(pc.getName(), chatText);
+                    switch (Config.UI_MODE) {
+                        case 0:
+                            System.out.println("UI已關閉");
+                            break;
+                        case 1:
+                            J_Main.main(new String[0]);
+                            break;
+                        case 2:
+                            Eva.getInstance();
+                            break;
+                        default:
+                            System.out.println("未知UI模式，已自動關閉介面");
                     }
                     if (ConfigRecord.GM_OVERHEARD0) {
                         for (L1Object visible : World.get().getAllPlayers()) {
@@ -1903,8 +1914,8 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         // 禁言成立
                     }
                     final L1PcInstance whisperTo = World.get().getPlayer(tellTargetName);
-                    boolean isNpc = false;// 判斷是否為假人npc
-                    // 如果密語對像為NULL就是沒對象
+                    boolean isNpc = false; // 判斷是否為假人npc
+
                     if (whisperTo == null) {
                         L1DeInstance de = getDe(tellTargetName);
                         if (de != null) {
@@ -1918,35 +1929,45 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     } else if (whisperTo.equals(pc)) {
                         result_type = 57;
                         // 斷絕密語
-                        // } else if (whisperTo.getExcludingList().contains(pc.getName())) {
                     } else if (SpamTable.getInstance().getExcludeTable(whisperTo.getId()).contains(0, pc.getName())) { // 黑名單
                         result_type = 23;
                         // 關閉密語
                     } else if (!whisperTo.isCanWhisper()) {
                         result_type = 56;
                     }
-                    // 輸出使用聊天頻道的結果
+                     // 輸出使用聊天頻道的結果
                     pc.sendPackets(new S_ChatResult(chatIndex, chatType, chatText, tellTargetName, severId, result_type));
-                    // 使用未成功
+
+                    // 使用未成功，直接 return
                     if (result_type != 0) {
                         return;
                     }
-                    // 建立輸出字串訊息
+
+                    // 成功密語後（只要不是 NPC 對話）
                     if (!isNpc) {
                         whisperTo.sendPackets(new S_ChatText((int) (System.currentTimeMillis() / 1000), chatType, chatText, pc.getName(), severId));
                     }
-                    if (Config.GUI) {
-                        if (whisperTo != null) {
-                            J_Main.getInstance().addPrivateChat(pc.getName(), whisperTo.getName(), chatText);
-                        }
+                    if (Config.UI_MODE == 1) {
+                        // 傳給 J_Main
+                        J_Main.getInstance().addNormalChat(pc.getName(), chatText);
                     }
+                    if (!isNpc && Config.UI_MODE == 2) {
+                        Eva.getInstance().addPrivateChat(pc.getName(), tellTargetName, chatText);
+                    }
+
+                  // 日誌記錄（原本就有的）
                     if (ConfigRecord.LOGGING_CHAT_WHISPER) {
                         LogChatReading.get().isTarget(pc, whisperTo, chatText, 9);
                     }
                     break;
+
                 case 2:
-                    if (Config.GUI) {
+                    if (Config.UI_MODE == 1) {
+                        // 傳給 J_Main
                         J_Main.getInstance().addNormalChat(pc.getName(), chatText);
+                    } else if (Config.UI_MODE == 2) {
+                        // 傳給 EVA
+                        Eva.getInstance().addNormalChat(pc.getName(), chatText);
                     }
                     if (ConfigRecord.GM_OVERHEARD2) {
                         for (L1PcInstance pca : World.get().getAllPlayers()) {
@@ -1957,6 +1978,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     }
                     chatType_2(pc, chatText);
                     break;
+
                 case 0x03: // 廣播頻道
                     // boolean isStop = false;// 停止輸出
                     // boolean errMessage = false;// 異常訊息
@@ -2010,13 +2032,15 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         pc.set_global_time(time);
                     }
                     chatType_3(pc, chatText);
-                    if (Config.GUI) {
+                    if (Config.UI_MODE == 1) {
                         J_Main.getInstance().addWorldChat(pc.getName(), chatText);
+                    } else if (Config.UI_MODE == 2) {
+                        Eva.getInstance().addWorldChat(pc.getName(), chatText);
                     }
                     break;
-                case 4:
-                    if (Config.GUI) {
-                        J_Main.getInstance().addClanChat(pc.getName(), chatText);
+                case 4: // 血盟頻道
+                     if (Config.UI_MODE == 2) {
+                        Eva.getInstance().addClanChat(pc.getName(), pc.getClanname(), chatText);
                     }
                     if (ConfigRecord.GM_OVERHEARD4) {
                         for (L1PcInstance visible : World.get().getAllPlayers()) {
@@ -2029,9 +2053,12 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     }
                     chatType_4(pc, chatText);
                     break;
-                case 11:
-                    if (Config.GUI) {
-                        J_Main.getInstance().addTeamChat(pc.getName(), chatText);
+
+                case 11:// 公會頻道
+                    if (Config.UI_MODE == 1) {
+                        J_Main.getInstance().addWorldChat(pc.getName(), chatText);
+                    } else if (Config.UI_MODE == 2) {
+                        Eva.getInstance().addPartyChat(pc.getName(), chatText);
                     }
                     if (ConfigRecord.GM_OVERHEARD11) {
                         for (L1PcInstance visible : World.get().getAllPlayers()) {
@@ -2095,13 +2122,13 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         pc.set_global_time(time);
                     }
                     chatType_12(pc, chatText);
-                    if (Config.GUI) {
-                        J_Main.getInstance().addWorldChat(pc.getName(), chatText);
+                    if (Config.UI_MODE == 2) {
+                        Eva.getInstance().addTradeChat(pc.getName(), chatText);
                     }
                     break;
-                case 13:
-                    if (Config.GUI) {
-                        J_Main.getInstance().addClanChat(pc.getName(), chatText);
+                case 13: // 公會頻道
+                    if (Config.UI_MODE == 2) {
+                        Eva.getInstance().addClanChat(pc.getName(), pc.getClanname(), chatText);
                     }
                     if (ConfigRecord.GM_OVERHEARD13) {
                         for (L1PcInstance visible : World.get().getAllPlayers()) {
@@ -2114,9 +2141,11 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     }
                     chatType_13(pc, chatText);
                     break;
-                case 14:
-                    if (Config.GUI) {
-                        J_Main.getInstance().addTeamChat(pc.getName(), chatText);
+                case 14: // GM頻道
+                    if (Config.UI_MODE == 1) {
+                        J_Main.getInstance().addWorldChat(pc.getName(), chatText);
+                    } else if (Config.UI_MODE == 2) {
+                        Eva.getInstance().addWorldChat(pc.getName(), chatText);
                     }
                     if (ConfigRecord.GM_OVERHEARD11) {
                         for (L1PcInstance visible : World.get().getAllPlayers()) {
@@ -2155,6 +2184,11 @@ public class C_ItemCraft1 extends ClientBasePacket {
                                         }
                                     }
                                 }
+                                // 推送同盟頻道到血盟分頁
+                                 if (Config.UI_MODE == 2) {
+                                    Eva.getInstance().addClanChat(pc.getName(), pc.getClanname(), chatText);
+                                }
+                                // GM 偵聽
                                 for (L1PcInstance visible : World.get().getAllPlayers()) {
                                     if ((visible != null)) {
                                         if ((visible.isGm()) && (pc.getId() != visible.getId())) {
@@ -2579,6 +2613,17 @@ public class C_ItemCraft1 extends ClientBasePacket {
                 }
             }
         }
+        // 回傳給UI介面
+        if (Config.UI_MODE == 1) {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                com.eric.gui.J_Main.getInstance().addNormalChat(pc.getName(), chatText);
+            });
+        } else if (Config.UI_MODE == 2) {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                Eva.getInstance().addNormalChat(pc.getName(), chatText);
+            });
+        }
+
 
         if (ConfigRecord.LOGGING_CHAT_NORMAL) {
             LogChatReading.get().noTarget(pc, chatText, 0);

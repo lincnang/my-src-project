@@ -60,7 +60,7 @@ public class ServerMultiChatLogWindow extends JInternalFrame {
      */
     private JTextPane enchantText = null;
     /**
-     * 丟棄物品信息
+     * 刪物物品信息
      */
     private JTextPane observeText = null;
     /**
@@ -201,7 +201,7 @@ public class ServerMultiChatLogWindow extends JInternalFrame {
             jJTabbedPane.addTab("倉庫", wareHouseScroll);
             jJTabbedPane.addTab("交易", tradeScroll);
             jJTabbedPane.addTab("強化", enchantScroll);
-            jJTabbedPane.addTab("丟棄", observeScroll);
+            jJTabbedPane.addTab("刪物", observeScroll);
             jJTabbedPane.addTab("穿牆", moveerrorScroll);
             jJTabbedPane.addTab("錯誤", bugScroll);
             jJTabbedPane.addTab("命令", commandScroll);
@@ -236,7 +236,7 @@ public class ServerMultiChatLogWindow extends JInternalFrame {
                             Eva.flush(wareHouseText, "[" + Eva.time + "] 倉庫", Eva.date);
                             Eva.flush(tradeText, "[" + Eva.time + "] 交易", Eva.date);
                             Eva.flush(enchantText, "[" + Eva.time + "] 強化", Eva.date);
-                            Eva.flush(observeText, "[" + Eva.time + "] 丟棄", Eva.date);
+                            Eva.flush(observeText, "[" + Eva.time + "] 刪物", Eva.date);
                             Eva.flush(moveerrorText, "[" + Eva.time + "] 穿牆", Eva.date);
                             Eva.flush(bugText, "[" + Eva.time + "] 錯誤", Eva.date);
                             Eva.flush(commandText, "[" + Eva.time + "] 命令", Eva.date);
@@ -485,7 +485,7 @@ public class ServerMultiChatLogWindow extends JInternalFrame {
                 Eva.flush(wareHouseText, "[" + Eva.time + "] 6.倉庫", Eva.date);
                 Eva.flush(tradeText, "[" + Eva.time + "] 7.交易", Eva.date);
                 Eva.flush(enchantText, "[" + Eva.time + "] 8.強化", Eva.date);
-                Eva.flush(observeText, "[" + Eva.time + "] 9.丟棄", Eva.date);
+                Eva.flush(observeText, "[" + Eva.time + "] 9.刪物", Eva.date);
                 Eva.flush(moveerrorText, "[" + Eva.time + "] 10.穿牆", Eva.date);
                 Eva.flush(bugText, "[" + Eva.time + "] 11.錯誤", Eva.date);
                 Eva.flush(commandText, "[" + Eva.time + "] 12.命令", Eva.date);

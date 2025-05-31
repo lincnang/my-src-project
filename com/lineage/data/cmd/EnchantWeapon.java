@@ -153,10 +153,8 @@ public class EnchantWeapon extends EnchantExecutor {
             updateEnchant(pc, item);
 
             // 寫入強化成功日誌
-            WriteLogTxt.Recording("強化武器紀錄",
-                    "IP(" + pc.getNetConnection().getIp() + ")玩家【" + pc.getName() + "】的【"
-                            + item.getRecordName(item.getCount()) + ", (ObjId: " + item.getId() + ")】強化成功.");
-
+            WriteLogTxt.Recording("強化武器紀錄", "IP(" + pc.getNetConnection().getIp() + ")玩家【" + pc.getName() + "】的【" + item.getRecordName(item.getCount()) + ", (ObjId: " + item.getId() + ")】強化成功.");
+            Eva.LogEnchantAppend("強化成功(武器)", pc.getName(), item.getRecordName(item.getCount()), item.getId());
             // 套用能力加成
             applyEffect(pc, item, i);
         }

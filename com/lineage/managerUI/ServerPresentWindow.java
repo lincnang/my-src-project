@@ -161,27 +161,30 @@ public class ServerPresentWindow extends JInternalFrame {
                     int enchant = Integer.parseInt(txt_Enchantlvl.getText());
                     int count = Integer.parseInt(txt_Count.getText());
                     L1Item temp = ItemTable.get().getTemplate(itemid);
+
+                    // 新增：判斷是否全體贈送
+                    boolean isAll = txt_UserName.getText().equalsIgnoreCase("全體用戶") || txt_UserName.getText().equalsIgnoreCase("全體人員");
+
                     for (L1PcInstance pc : World.get().getAllPlayers()) {
                         if (pc == null || pc.getNetConnection() == null || pc.isPrivateShop()) {
                             continue;
                         }
-                        if (pc.getName().equalsIgnoreCase(txt_UserName.getText()) || txt_UserName.getText().equalsIgnoreCase("全體人員")) {
+
+                        if (isAll || pc.getName().equalsIgnoreCase(txt_UserName.getText())) {
+                            // ...這裡保留你原本的發送邏輯即可...
                             if (temp != null) {
                                 if (temp.isStackable()) {
-                                    // 可以堆疊的物品
                                     final L1ItemInstance item = ItemTable.get().createItem(itemid);
-                                    item.setEnchantLevel(0);
+                                    item.setEnchantLevel(enchant); // 修正：可根據輸入設 enchant
                                     item.setCount(count);
                                     item.setIdentified(true);
                                     if (pc.getInventory().checkAddItem(item, count) == L1Inventory.OK) {
                                         pc.getInventory().storeItem(item);
-                                        // 403:獲得0%。
                                         pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
                                         pc.sendPackets(new S_ServerMessage(item.getLogName() + " 已在背包，由管理員贈送."));
-                                        Eva.LogServerAppend(txt_UserName.getText() + "[禮物 ] " + item.getItemNameEva(count) + "已發送.", "請確認.");
+                                        Eva.LogServerAppend(pc.getName() + "[禮物] " + item.getItemNameEva(count) + "已發送.", "請確認.");
                                     }
                                 } else {
-                                    // 不可以堆疊的物品
                                     if (count > 10) {
                                         Eva.LogServerAppend("送禮失敗] 不可疊加物品不可以超過10個.", "請確認");
                                         return;
@@ -199,18 +202,18 @@ public class ServerPresentWindow extends JInternalFrame {
                                         }
                                     }
                                     if (createCount > 0) {
-                                        // 403:獲得0%。
                                         pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
                                         pc.sendPackets(new S_ServerMessage(item.getLogName() + " 已在背包，由管理員贈送."));
-                                        Eva.LogServerAppend(txt_UserName.getText() + "[禮物 ] " + item.getItemNameEva(count) + "已發送.", "請確認.");
+                                        Eva.LogServerAppend(pc.getName() + "[禮物] " + item.getItemNameEva(count) + "已發送.", "請確認.");
                                     }
                                 }
-                            } else if (temp == null) {
+                            } else {
                                 Eva.LogServerAppend("送禮失敗] 系統中不存在這個物品.", "請確認");
                             }
                         }
                     }
                 } catch (Exception ex) {
+                    ex.printStackTrace(); // 不要隱藏錯誤
                 }
             } else {
                 Eva.errorMsg(Eva.NoServerStartMSG);

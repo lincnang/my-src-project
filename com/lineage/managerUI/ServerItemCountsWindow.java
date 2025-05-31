@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,11 +31,11 @@ public class ServerItemCountsWindow extends JInternalFrame {
      */
     private JTextField txt_Adena = null;
     /**
-     * 天寶標籤
+     * 藍鑽標籤
      */
     private JLabel jJLabel2 = null;
     /**
-     * 天寶監控數值
+     * 藍鑽監控數值
      */
     private JTextField txt_Feather = null;
     /**
@@ -74,7 +72,7 @@ public class ServerItemCountsWindow extends JInternalFrame {
      */
     private int ItemId1 = 40308;
     /**
-     * 天寶
+     * 藍鑽
      */
     private int ItemId2 = 44070;
     /**
@@ -118,7 +116,7 @@ public class ServerItemCountsWindow extends JInternalFrame {
         updateUI();
         // 標籤組件
         jJLabel1 = new JLabel("金幣最大數量");
-        jJLabel2 = new JLabel("天寶最大數量");
+        jJLabel2 = new JLabel("藍鑽最大數量");
         jJLabel3 = new JLabel("祝福武卷最大數量");
         jJLabel4 = new JLabel("祝福防卷最大數量");
         // 標籤數值組件
@@ -138,7 +136,7 @@ public class ServerItemCountsWindow extends JInternalFrame {
                 Eva.errorMsg(Eva.NoServerStartMSG);
             }
         });
-        String[] modelColName = {"賬號", "角色名", "連接狀態", "金幣", "天寶", "祝福武卷", "祝福防卷"};
+        String[] modelColName = {"帳號", "角色名", "連接狀態", "金幣", "藍鑽", "祝福武卷", "祝福防卷"};
         model = new DefaultTableModel(modelColName, 0);
         jJTable = new JTable(model);
         jJTable.getColumnModel().getColumn(0).setPreferredWidth(70);
@@ -150,7 +148,7 @@ public class ServerItemCountsWindow extends JInternalFrame {
         jJTable.getColumnModel().getColumn(6).setPreferredWidth(100);
         jJTable.getColumn("連接狀態").setCellRenderer(new LabelRowCellEdior("連接狀態"));
         jJTable.getColumn("金幣").setCellRenderer(new LabelRowCellEdior("金幣"));
-        jJTable.getColumn("天寶").setCellRenderer(new LabelRowCellEdior("天寶"));
+        jJTable.getColumn("藍鑽").setCellRenderer(new LabelRowCellEdior("藍鑽"));
         jJTable.getColumn("祝福武卷").setCellRenderer(new LabelRowCellEdior("祝福武卷"));
         jJTable.getColumn("祝福防卷").setCellRenderer(new LabelRowCellEdior("祝福防卷"));
         pScroll = new JScrollPane(jJTable);

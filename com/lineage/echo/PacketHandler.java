@@ -126,8 +126,6 @@ public class PacketHandler extends PacketHandlerExecutor {
             new C_TradeAddItem().start(decrypt, _client);
         } else if (i == C_ADD_BUDDY) {
             new C_AddBuddy().start(decrypt, _client);
-        } else if (i == C_SAY) {
-            new C_Chat().start(decrypt, _client);
         } else if (i == C_ACCEPT_XCHG) {
             new C_TradeOK().start(decrypt, _client);
         } else if (i == C_CHECK_PK) {
@@ -241,6 +239,10 @@ public class PacketHandler extends PacketHandlerExecutor {
             new C_Disconnect().start(decrypt, _client);
         } else if (i == C_SHUTDOWN) {
             new C_PledgeContent().start(decrypt, _client);
+
+//        } else if (i == C_SAY) {
+//            new C_ItemCraft1().start(decrypt, _client);
+
         } else if (i == C_EXTENDED_PROTOBUF) {
             new C_Craft().start(decrypt, _client);
             new C_ItemCraft1().start(decrypt, _client);

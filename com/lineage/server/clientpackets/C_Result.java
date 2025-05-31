@@ -5,6 +5,7 @@ import com.add.Mobbling.MobblingTimeList;
 import com.lineage.config.ConfigOtherSet2;
 import com.lineage.data.event.ShopXSet;
 import com.lineage.echo.ClientExecutor;
+import com.lineage.managerUI.Eva;
 import com.lineage.server.WriteLogTxt;
 import com.lineage.server.datatables.*;
 import com.lineage.server.datatables.lock.*;
@@ -793,6 +794,9 @@ public class C_Result extends ClientBasePacket {
                     WriteLogTxt.Recording("精靈倉庫取出記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】帳號:【" + pc.getAccountName() + "】精靈倉庫取出【" + "+" + item.getEnchantLevel() + " " + item.getItem().getName() + "】 物品【" + item.getCount() + "】個" + "OBJID:" + item.getId() + "】.");
                     RecordTable.get().recordeWarehouse_elf(pc.getName(), "領取", "妖倉", item.getAllName(), count, item.getId(), pc
                             .getIp());
+                    Eva.LogWareHouseAppend("精靈倉庫取出", pc.getName(), pc.getClanname(), item, count, item.getId());
+
+
                 } else {
                     pc.sendPackets(new S_ServerMessage(337, "$767")); // \f1%0不足。
                     break;
@@ -886,8 +890,8 @@ public class C_Result extends ClientBasePacket {
             // pc.turnOnOffLight();
             //精靈倉庫存入記錄
             WriteLogTxt.Recording("精靈倉庫存入記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】帳號:【" + pc.getAccountName() + "】精靈倉存入【" + "+" + item.getEnchantLevel() + " " + item.getItem().getName() + "】 物品【" + item.getCount() + "】個" + "OBJID:" + item.getId() + "】.");
-            RecordTable.get().recordeWarehouse_elf(pc.getName(), "存入", "妖倉", item.getAllName(), count, item.getId(), pc
-                    .getIp());
+            RecordTable.get().recordeWarehouse_elf(pc.getName(), "存入", "妖倉", item.getAllName(), count, item.getId(), pc.getIp());
+            Eva.LogWareHouseAppend("精靈倉庫存入", pc.getName(), pc.getClanname(), item, count, item.getId());
         }
     }
 
@@ -943,8 +947,8 @@ public class C_Result extends ClientBasePacket {
                         pc.sendPackets(new S_ServerMessage(270)); // \f1持重取引。
                         break;
                     }
-                    RecordTable.get().recordeWarehouse_clan(pc.getName(), "領取", "盟倉", item.getAllName(), count, item
-                            .getId(), pc.getIp());
+                    RecordTable.get().recordeWarehouse_clan(pc.getName(), "領取", "盟倉", item.getAllName(), count, item.getId(), pc.getIp());
+                    Eva.LogWareHouseAppend("血盟倉庫取出", pc.getName(), pc.getClanname(), item, count, item.getId());
                 }
                 clan.setWarehouseUsingChar(0); // 解除盟倉使用狀態
 
@@ -1046,6 +1050,7 @@ public class C_Result extends ClientBasePacket {
                     // pc.turnOnOffLight();
                     //血盟倉庫存入記錄
                     WriteLogTxt.Recording("血盟倉庫存入記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】帳號:【" + pc.getAccountName() + "】血盟倉庫存入【" + "+" + item.getEnchantLevel() + " " + item.getItem().getName() + "】 物品【" + item.getCount() + "】個" + "OBJID:" + item.getId() + "】.");
+                    Eva.LogWareHouseAppend("血盟倉庫入", pc.getName(), pc.getClanname(), item, count, item.getId());
                 }
                 clan.setWarehouseUsingChar(0); // 解除盟倉使用狀態
             } else {
@@ -1097,6 +1102,7 @@ public class C_Result extends ClientBasePacket {
                             .getIp());
                     //帳號倉庫取出記錄
                     WriteLogTxt.Recording("帳號倉庫取出記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】帳號:【" + pc.getAccountName() + "】帳號倉庫取出【" + "+" + item.getEnchantLevel() + " " + item.getItem().getName() + "】 物品【" + item.getCount() + "】個" + "OBJID:" + item.getId() + "】.");
+                    Eva.LogWareHouseAppend("個人倉庫取出", pc.getName(), pc.getClanname(), item, count, item.getId());
                 } else {
                     // \f1金幣不足。
                     pc.sendPackets(new S_ServerMessage(189));
@@ -1133,7 +1139,7 @@ public class C_Result extends ClientBasePacket {
                 break;
             }
             final L1ItemInstance item = (L1ItemInstance) object;
-            if (ServerGmCommandTable.tradeControl.contains(item.getId())) {// 限制轉移物品
+            if (ServerGmCommandTable.tradeControl.contains(item.getId())) {
                 pc.sendPackets(new S_ServerMessage("獎勵物品無法轉移"));
                 return;
             }
@@ -1141,12 +1147,10 @@ public class C_Result extends ClientBasePacket {
                 break;
             }
             if (!item.getItem().isTradable()) {
-                // 210 \f1%0%d是不可轉移的…
                 pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
                 break;
             }
             if (item.get_time() != null) {
-                // \f1%0%d是不可轉移的…
                 pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
                 break;
             }
@@ -1154,6 +1158,7 @@ public class C_Result extends ClientBasePacket {
                 pc.sendPackets(new S_ServerMessage("預防作弊啟動，85級以下無法做此動作"));
                 return;
             }
+            pc.getInventory().tradeItem(objectId, count, pc.getDwarfInventory());
             // 寵物
             final Object[] petlist = pc.getPetList().values().toArray();
             for (final Object petObject : petlist) {
@@ -1187,18 +1192,18 @@ public class C_Result extends ClientBasePacket {
                 }
             }
             if (pc.getDwarfInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_PERSONAL) == L1Inventory.SIZE_OVER) {
-                pc.sendPackets(new S_ServerMessage(75)); // \f1以上置場所。
+                pc.sendPackets(new S_ServerMessage(75));
                 break;
             }
             if (pc.getDwarfInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_PERSONAL) == L1Inventory.WAREHOUSE_OVER) {
-                pc.sendPackets(new S_ServerMessage(item.getName() + "此物品無法存入倉庫")); // \f1以上置場所。
+                pc.sendPackets(new S_ServerMessage(item.getName() + "此物品無法存入倉庫"));
                 break;
             }
-            //帳號倉庫存入記錄
+            // 帳號倉庫存入記錄
             WriteLogTxt.Recording("帳號倉庫存入記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】帳號:【" + pc.getAccountName() + "】帳號倉庫存入【" + "+" + item.getEnchantLevel() + " " + item.getItem().getName() + "】 物品【" + item.getCount() + "】個" + "OBJID:" + item.getId() + "】.");
-            pc.getInventory().tradeItem(objectId, count, pc.getDwarfInventory());
-            RecordTable.get().recordeWarehouse_pc(pc.getName(), "存入", "個倉", item.getAllName(), count, item.getId(), pc
-                    .getIp());
+            RecordTable.get().recordeWarehouse_pc(pc.getName(), "存入", "個倉", item.getAllName(), count, item.getId(), pc.getIp());
+            // ----推送後台EVA----
+            Eva.LogWareHouseAppend("存入", pc.getName(), pc.getClanname(), item, count, item.getId());
             // pc.turnOnOffLight();
         }
     }
@@ -1244,6 +1249,7 @@ public class C_Result extends ClientBasePacket {
                     pc.getDwarfForChaInventory().tradeItem(item, count, pc.getInventory());
                     //角色倉庫取出記錄
                     WriteLogTxt.Recording("角色倉庫取出記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】帳號:【" + pc.getAccountName() + "】角色倉庫取出【" + "+" + item.getEnchantLevel() + " " + item.getItem().getName() + "】 物品【" + item.getCount() + "】個" + "OBJID:" + item.getId() + "】.");
+                    Eva.LogWareHouseAppend("專屬倉庫取出", pc.getName(), pc.getClanname(), item, count, item.getId());
                 } else {
                     // \f1金幣不足。
                     pc.sendPackets(new S_ServerMessage(189));
@@ -1338,6 +1344,7 @@ public class C_Result extends ClientBasePacket {
             RecordTable.get().recordWarehouse_char_pc(pc.getName(), "存入", "角倉", item.getAllName(), count, item.getId(), pc
                     .getIp());
             pc.getInventory().tradeItem(objectId, count, pc.getDwarfForChaInventory());
+            Eva.LogWareHouseAppend("專屬倉庫存入", pc.getName(), pc.getClanname(), item, count, item.getId());
             // pc.turnOnOffLight();
         }
     }

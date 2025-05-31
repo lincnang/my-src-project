@@ -15,8 +15,6 @@ import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.RandomAccessFile;
@@ -74,6 +72,17 @@ public class Eva {
     /**
      * 輸入你的搜索關鍵字.
      */
+
+
+    private static Eva _instance = null;
+    public static Eva getInstance() {
+        if (_instance == null) {
+            _instance = new Eva();
+        }
+        return _instance;
+    }
+
+
     public static final String SearchNameMSG = "輸入你的搜索關鍵字.";
     private static final Log _log = LogFactory.getLog(Eva.class);
     public static int saveCount = 0;
@@ -88,6 +97,9 @@ public class Eva {
     public static int userCount;
     public static JFrame jJFrame = null;
     public static JDesktopPane jJDesktopPane = new JDesktopPane();
+    private JTextArea TA_AllChat;
+    private JTextArea TA_Normal;
+    private JTextArea TA_Private;
     /**
      * Config設置
      */
@@ -135,7 +147,8 @@ public class Eva {
     /**
      * 丟棄物品
      */
-    public static ServerLogWindow jObserveLogWindow = null;
+    public static ServerLogWindow jDeleteItemLogWindow = null; // ←用這個
+
     /**
      * 穿牆提示
      */
@@ -163,14 +176,28 @@ public class Eva {
     /**
      * 用戶信息
      */
+
     public static ServerUserInfoWindow jServerUserInfoWindow = null;
     private JMenuBar jJMenuBar = null;
     private Container jContainer = null;
+    SimpleDateFormat die = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
     private BorderLayout jBorderLayout = new BorderLayout();
 
     public Eva() {
+        System.out.println("Eva instance = " + this); // ← 加這一行
+        // 先初始化 TextArea，避免 NullPointer
+        TA_AllChat = new JTextArea();
+        TA_AllChat.setEditable(false);
+
+        TA_Normal = new JTextArea();
+        TA_Normal.setEditable(false);
+
+        TA_Private = new JTextArea();
+        TA_Private.setEditable(false);
+
         initialize();
     }
+
 
     /**
      * ** 로그 설정 부분 *****
@@ -232,9 +259,9 @@ public class Eva {
         }
         if (jSystemLogWindow != null && !jSystemLogWindow.isClosed()) {
             if (s.equals("連接")) {
-                jSystemLogWindow.append(getLogTime() + "　" + s + "賬號:" + pc.getAccountName() + "　角色名:" + pc.getName() + "　IP:" + string + "　Uid:" + userCount(i) + "\n", "Blue");
+                jSystemLogWindow.append(getLogTime() + "　" + s + "帳號:" + pc.getAccountName() + "　角色名:" + pc.getName() + "　IP:" + string + "　Uid:" + userCount(i) + "\n", "Blue");
             } else {
-                jSystemLogWindow.append(getLogTime() + "　" + s + "賬號:" + pc.getAccountName() + "　角色名:" + pc.getName() + "　IP:" + string + "　Uid:" + userCount(i) + "\n", "Red");
+                jSystemLogWindow.append(getLogTime() + "　" + s + "帳號:" + pc.getAccountName() + "　角色名:" + pc.getName() + "　IP:" + string + "　Uid:" + userCount(i) + "\n", "Red");
             }
         } else {
             jSystemLogWindow = null;
@@ -421,44 +448,37 @@ public class Eva {
      *
      */
     public static void LogEnchantAppend(String s, String pcname, String itemname, int obj) {
+        String msg = getLogTime() + "　" + s + "　" + pcname + "　" + itemname + "　OBJID:" + obj + "\n";
+        String color = s.contains("成功") ? "Blue" : "Red";
+
         if (jEnchantLogWindow != null && !jEnchantLogWindow.isClosed()) {
-            if (s.contains("成功")) {// 若s返回值包含成功則藍色字體，若沒有則紅色字體
-                jEnchantLogWindow.append(getLogTime() + "　" + s + "　" + pcname + "　" + itemname + "　OBJID:" + obj + "\n", "Blue");
-            } else {
-                jEnchantLogWindow.append(getLogTime() + "　" + s + "　" + pcname + "　" + itemname + "　OBJID:" + obj + "\n", "Red");
-            }
-        } else {
-            jEnchantLogWindow = null;
+            jEnchantLogWindow.append(msg, color);
         }
         if (jServerMultiChatLogWindow != null) {
-            if (s.contains("成功")) {// 若s返回值包含成功則藍色字體，若沒有則紅色字體
-                jServerMultiChatLogWindow.append("enchantText", getLogTime() + "　" + s + "　" + pcname + "　" + itemname + "　OBJID:" + obj + "\n", "Blue");
-            } else {
-                jServerMultiChatLogWindow.append("enchantText", getLogTime() + "　" + s + "　" + pcname + "　" + itemname + "　OBJID:" + obj + "\n", "Red");
-            }
+            jServerMultiChatLogWindow.append("enchantText", msg, color);
         }
     }
 
     /**
-     * 丟棄物品日誌
-     *
+     * 添加刪除日誌
      */
-    public static void LogObserverAppend(String s, String pcname, L1ItemInstance item, int count, int obj) {
-        if (jObserveLogWindow != null && !jObserveLogWindow.isClosed()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(getLogTime()).append("　").append(pcname).append("　").append(s);
-            sb.append("　");
-            sb.append(item.getItemNameEva(count)).append("　OBJID:").append(obj).append("\n");
-            jObserveLogWindow.append(sb.toString(), "Blue");
-        } else {
-            jObserveLogWindow = null;
-        }
+    public void addDeleteItemLog(String itemName, int itemObjId, long count, String from, String to, int adena) {
+        Calendar cal = Calendar.getInstance();
+        String msg = die.format(cal.getTime()) + "刪除「" + itemName + "」x" + count + " 物件ID:" + itemObjId + "，" + from + " → " + to + (adena > 0 ? ("，金幣：" + adena) : "") + "\r\n";
+        // 多分頁（deleteItemText 分頁）
         if (jServerMultiChatLogWindow != null) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(getLogTime()).append("　").append(pcname).append("　").append(s);
-            sb.append("　");
-            sb.append(item.getItemNameEva(count)).append("　OBJID:").append(obj).append("\n");
-            jServerMultiChatLogWindow.append("observeText", sb.toString(), "Blue");
+            jServerMultiChatLogWindow.append("deleteItemText", msg, "Red");
+            // 同步顯示到「普通」分頁（nomalChatText）
+            jServerMultiChatLogWindow.append("nomalChatText", msg, "Red");
+        }
+        // 丟棄/刪除日誌彈窗
+        if (jServerMultiChatLogWindow != null) {
+            jServerMultiChatLogWindow.append("observeText", msg, "Red");        // ← 這一行會顯示在「丟棄」分頁
+            jServerMultiChatLogWindow.append("deleteItemText", msg, "Red");     // ← 這行只有其他地方有分頁 deleteItemText 才會顯示
+        }
+
+        if (jServerMultiChatLogWindow != null) {
+            jServerMultiChatLogWindow.append("nomalChatText", msg, "Red");
         }
     }
 
@@ -552,7 +572,7 @@ public class Eva {
      * @param s 內容
      */
     public static int QMsg(String s) {
-        int result = JOptionPane.showConfirmDialog(null, s, "大陸Manly提醒你：", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(null, s, "台灣老爹技研：", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
         return result;
     }
 
@@ -561,7 +581,7 @@ public class Eva {
      *
      */
     public static void infoMsg(String s) {
-        JOptionPane.showMessageDialog(null, s, "大陸Manly提醒你：", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, s, "台灣老爹技研：", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -606,40 +626,80 @@ public class Eva {
     }
 
     private void initialize() {
+        System.out.println("Eva.initialize instance = " + this); // ← 加這一行
         try {
-            // 設置外觀
-            UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
+            // ========== 1. JTattoo主題（外觀）支援清單 ==========
+            String[][] themes = {
+                    {"HiFi", "com.jtattoo.plaf.hifi.HiFiLookAndFeel"},
+                    {"Acryl", "com.jtattoo.plaf.acryl.AcrylLookAndFeel"},
+                    {"McWin", "com.jtattoo.plaf.mcwin.McWinLookAndFeel"},
+                    {"Noire", "com.jtattoo.plaf.noire.NoireLookAndFeel"},
+                    {"Bernstein", "com.jtattoo.plaf.bernstein.BernsteinLookAndFeel"},
+                    {"Luna", "com.jtattoo.plaf.luna.LunaLookAndFeel"},
+                    {"Graphite", "com.jtattoo.plaf.graphite.GraphiteLookAndFeel"},
+                    {"Mint", "com.jtattoo.plaf.mint.MintLookAndFeel"},
+                    {"Smart", "com.jtattoo.plaf.smart.SmartLookAndFeel"},
+                    {"Texture", "com.jtattoo.plaf.texture.TextureLookAndFeel"},
+                    {"Aluminium", "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel"},
+                    {"Aero", "com.jtattoo.plaf.aero.AeroLookAndFeel"},
+                    {"Fast", "com.jtattoo.plaf.fast.FastLookAndFeel"}
+            };
+            // 預設主題
+            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
             JFrame.setDefaultLookAndFeelDecorated(true);
+
+            // ========== 2. 建立主視窗 ==========
             if (jJFrame == null) {
                 jJFrame = new JFrame();
-                // 圖片文件的名字及路徑
-                jJFrame.setIconImage(new ImageIcon("img/icon.png").getImage());
-                // 設置組件的長寬大小
-                jJFrame.setSize(1200, 800);
-                // true：顯示按鈕 false：不顯示或者隱藏按鈕
-                jJFrame.setVisible(true);
-                // 標題
-                jJFrame.setTitle(":::: 天堂 服務器控制台 作者:老爹  ::::");
-                // 關閉程序和DOS
+                jJFrame.setTitle("後台UI控制台 作者:老爹  ::::");
+                jJFrame.setIconImage(new ImageIcon("img/logo.png").getImage());
                 jJFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-                jContainer = jJFrame.getContentPane();
-                // 佈局
-                jContainer.setLayout(jBorderLayout);
-                jContainer.add("Center", jJDesktopPane);
-            }
-            if (jJMenuBar == null) {
+                jJFrame.setSize(1400, 800);
+                jJFrame.setLayout(new BorderLayout());
+
+                // ========== 3. 菜單欄 ==========
                 jJMenuBar = new JMenuBar();
-                jJFrame.setJMenuBar(jJMenuBar);
+                // 3.1 主題切換功能
+                JMenu themeMenu = new JMenu("主題切換");
+                for (String[] theme : themes) {
+                    JMenuItem item = new JMenuItem(theme[0]);
+                    item.addActionListener(e -> {
+                        try {
+                            UIManager.setLookAndFeel(theme[1]);
+                            SwingUtilities.updateComponentTreeUI(jJFrame);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(jJFrame, "無法切換主題: " + theme[0]);
+                        }
+                    });
+                    themeMenu.add(item);
+                }
+
+                jJMenuBar.add(themeMenu);
+
+                // 3.2 原有所有功能選單
                 JMenu jJMenu1 = new JMenu("服務(A)");
                 JMenu jJMenu2 = new JMenu("監控(B)");
                 JMenu jJMenu3 = new JMenu("輔助(C)");
                 JMenu jJMenu4 = new JMenu("刷新(R)");
                 JMenu jJMenu5 = new JMenu("信息(I)");
-                jJMenu1.setMnemonic(KeyEvent.VK_A); // 服務 快捷鍵ALT+A
-                jJMenu2.setMnemonic(KeyEvent.VK_B); // 監控 快捷鍵ALT+B
-                jJMenu3.setMnemonic(KeyEvent.VK_C); // 輔助 快捷鍵ALT+C
-                jJMenu4.setMnemonic(KeyEvent.VK_R); // 刷新
-                jJMenu5.setMnemonic(KeyEvent.VK_I); // 信息
+                JMenu jJMenuSys = new JMenu("系統監控(S)");
+                jJMenu1.setMnemonic(KeyEvent.VK_A);
+                jJMenu2.setMnemonic(KeyEvent.VK_B);
+                jJMenu3.setMnemonic(KeyEvent.VK_C);
+                jJMenu4.setMnemonic(KeyEvent.VK_R);
+                jJMenu5.setMnemonic(KeyEvent.VK_I);
+                jJMenuSys.setMnemonic(KeyEvent.VK_S);
+                jJMenuBar.add(jJMenu1);
+                jJMenuBar.add(jJMenu2);
+                jJMenuBar.add(jJMenu3);
+                jJMenuBar.add(jJMenu4);
+                jJMenuBar.add(jJMenu5);
+                jJMenuBar.add(jJMenuSys);
+                jJFrame.setJMenuBar(jJMenuBar);
+                // ========== 5. 加入 DesktopPane ==========
+                jJDesktopPane = new JDesktopPane();
+                jJFrame.add(jJDesktopPane, BorderLayout.CENTER);
+                jJFrame.setVisible(true);
                 // 服務(ALT+A)
                 JMenuItem serverSet = new JMenuItem("Config設置");
                 serverSet.setAccelerator(KeyStroke.getKeyStroke('O', InputEvent.CTRL_DOWN_MASK));
@@ -684,6 +744,16 @@ public class Eva {
                 jJMenu1.add(serverSave);
                 jJMenu1.add(serverExit);
                 jJMenu1.add(serverNowExit);
+
+                JMenuItem resourceMonitor = new JMenuItem("資源監控");
+                resourceMonitor.addActionListener(e -> {
+                    // 這裡彈出資源監控對話框
+                    ServerResourceDialog dialog = new ServerResourceDialog(jJFrame);
+                    dialog.setLocationRelativeTo(jJFrame);
+                    dialog.setVisible(true);
+                });
+                jJMenuSys.add(resourceMonitor);
+
                 // 監控(B)
                 JMenuItem worldChatLogWindow = new JMenuItem("世界聊天");
                 worldChatLogWindow.setAccelerator(KeyStroke.getKeyStroke('1', InputEvent.CTRL_DOWN_MASK));
@@ -784,17 +854,18 @@ public class Eva {
                         jJDesktopPane.add(jEnchantLogWindow, 0);
                     }
                 });
-                JMenuItem observeLogWindow = new JMenuItem("丟棄");
+                JMenuItem observeLogWindow = new JMenuItem("丟棄/刪除物品");
                 observeLogWindow.setAccelerator(KeyStroke.getKeyStroke('0', InputEvent.CTRL_DOWN_MASK));
                 observeLogWindow.addActionListener(e -> {
-                    if (jObserveLogWindow != null && jObserveLogWindow.isClosed()) {
-                        jObserveLogWindow = null;
+                    if (jDeleteItemLogWindow != null && jDeleteItemLogWindow.isClosed()) {
+                        jDeleteItemLogWindow = null;
                     }
-                    if (jObserveLogWindow == null) {
-                        jObserveLogWindow = new ServerLogWindow("丟棄物品信息", 20, 20, width, height, true, true);
-                        jJDesktopPane.add(jObserveLogWindow, 0);
+                    if (jDeleteItemLogWindow == null) {
+                        jDeleteItemLogWindow = new ServerLogWindow("丟棄/刪除物品日誌", 20, 20, width, height, true, true);
+                        jJDesktopPane.add(jDeleteItemLogWindow, 0);
                     }
                 });
+
                 JMenuItem moveerrorLogWindow = new JMenuItem("穿牆");
                 moveerrorLogWindow.setAccelerator(KeyStroke.getKeyStroke('M', InputEvent.CTRL_DOWN_MASK));
                 moveerrorLogWindow.addActionListener(e -> {
@@ -1158,7 +1229,7 @@ public class Eva {
                 jJMenu4.add(clanReload);
                 ;
                 JMenuItem developerInfo = new JMenuItem("關於作者");
-                developerInfo.addActionListener(e -> JOptionPane.showMessageDialog(null, "QQ263075225大陸Manly", "信息", JOptionPane.INFORMATION_MESSAGE));
+                developerInfo.addActionListener(e -> JOptionPane.showMessageDialog(null, "台灣技術老爹", "信息", JOptionPane.INFORMATION_MESSAGE));
                 jJMenu5.add(developerInfo);
                 jJMenuBar.add(jJMenu1);
                 jJMenuBar.add(jJMenu2);
@@ -1169,21 +1240,125 @@ public class Eva {
                 height = (jJFrame.getContentPane().getSize().height - 50) / 2;
                 // 管理器界面佈局
                 if (jSystemLogWindow == null) {
-                    jSystemLogWindow = new ServerLogWindow("服務器日誌", 0, 0, width, height, false, false);
+                    jSystemLogWindow = new ServerLogWindow("服務器日誌", 0, 0, width, height, true, true);
                     jJDesktopPane.add(jSystemLogWindow);
                 }
                 if (jServerMultiChatLogWindow == null) {
-                    jServerMultiChatLogWindow = new ServerMultiChatLogWindow("全體信息監控", 0, height, width, height, false, false);
+                    jServerMultiChatLogWindow = new ServerMultiChatLogWindow("全體信息監控", 0, height, width, height, true, true);
                     jJDesktopPane.add(jServerMultiChatLogWindow);
                 }
                 if (jServerUserInfoWindow == null) {
-                    jServerUserInfoWindow = new ServerUserInfoWindow("用戶信息", width, 0, width, height, false, false);
+                    jServerUserInfoWindow = new ServerUserInfoWindow("玩家資訊", width, 0, 700, 600, true, true);
                     jJDesktopPane.add(jServerUserInfoWindow);
                 }
+                jJFrame.setVisible(true);
             }
             isServerStarted = true;
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
     }
+
+    // 世界頻道訊息
+// 世界頻道訊息推送（下方分頁+上方「多個聊天監控」彈窗）
+// 世界頻道訊息
+    public void addWorldChat(String from, String text) {
+        Calendar cal = Calendar.getInstance();
+        String msg = die.format(cal.getTime()) + "世界『" + from + "』:" + text + "\r\n";
+        if (jServerMultiChatLogWindow != null) {
+            jServerMultiChatLogWindow.append("worldChatText", msg, "Blue");
+        }
+        if (jWorldChatLogWindow != null && !jWorldChatLogWindow.isClosed()) {
+            jWorldChatLogWindow.append(msg, "Blue");
+        }
+        // 新增：上方多個聊天監控
+        if (jServerChatLogWindow != null && !jServerChatLogWindow.isClosed()) {
+            jServerChatLogWindow.append(msg, "Blue");
+        }
+    }
+
+    // 血盟頻道訊息
+    public void addClanChat(String from, String clan, String text) {
+        Calendar cal = Calendar.getInstance();
+        String msg = die.format(cal.getTime()) + "血盟『" + clan + "』" + from + "：" + text + "\r\n";
+        if (jServerMultiChatLogWindow != null) {
+            jServerMultiChatLogWindow.append("clanChatText", msg, "Blue");
+        }
+        if (jClanChatLogWindow != null && !jClanChatLogWindow.isClosed()) {
+            jClanChatLogWindow.append(msg, "Blue");
+        }
+        // 新增
+        if (jServerChatLogWindow != null && !jServerChatLogWindow.isClosed()) {
+            jServerChatLogWindow.append(msg, "Blue");
+        }
+    }
+
+    // 隊伍頻道訊息
+    public void addPartyChat(String from, String text) {
+        Calendar cal = Calendar.getInstance();
+        String msg = die.format(cal.getTime()) + "隊伍『" + from + "』:" + text + "\r\n";
+        if (jServerMultiChatLogWindow != null) {
+            jServerMultiChatLogWindow.append("partyChatText", msg, "Blue");
+        }
+        if (jPartyChatLogWindow != null && !jPartyChatLogWindow.isClosed()) {
+            jPartyChatLogWindow.append(msg, "Blue");
+        }
+        // 新增
+        if (jServerChatLogWindow != null && !jServerChatLogWindow.isClosed()) {
+            jServerChatLogWindow.append(msg, "Blue");
+        }
+    }
+
+    // 買賣頻道訊息
+    public void addTradeChat(String from, String text) {
+        Calendar cal = Calendar.getInstance();
+        String msg = die.format(cal.getTime()) + "買賣『" + from + "』:" + text + "\r\n";
+        if (jServerMultiChatLogWindow != null) {
+            jServerMultiChatLogWindow.append("tradeChatText", msg, "Blue");
+        }
+        if (jTradeChatLogWindow != null && !jTradeChatLogWindow.isClosed()) {
+            jTradeChatLogWindow.append(msg, "Blue");
+        }
+        // 新增
+        if (jServerChatLogWindow != null && !jServerChatLogWindow.isClosed()) {
+            jServerChatLogWindow.append(msg, "Blue");
+        }
+    }
+
+    // 普通頻道訊息
+    public void addNormalChat(String from, String text) {
+        Calendar cal = Calendar.getInstance();
+        String msg = die.format(cal.getTime()) + "一般『" + from + "』:" + text + "\r\n";
+        if (jServerMultiChatLogWindow != null) {
+            jServerMultiChatLogWindow.append("nomalChatText", msg, "Blue");
+        }
+        if (jNomalChatLogWindow != null && !jNomalChatLogWindow.isClosed()) {
+            jNomalChatLogWindow.append(msg, "Blue");
+        }
+        // 新增
+        if (jServerChatLogWindow != null && !jServerChatLogWindow.isClosed()) {
+            jServerChatLogWindow.append(msg, "Blue");
+        }
+    }
+
+    // 密語頻道訊息
+    public void addPrivateChat(String from, String to, String text) {
+        Calendar cal = Calendar.getInstance();
+        String msg = die.format(cal.getTime()) + "密語『" + from + "→" + to + "』:" + text + "\r\n";
+        if (TA_Private != null) {
+            TA_Private.append(msg);
+            TA_Private.setCaretPosition(TA_Private.getDocument().getLength());
+        }
+        if (jServerMultiChatLogWindow != null) {
+            jServerMultiChatLogWindow.append("whisperChatText", msg, "Blue");
+        }
+        if (jWhisperChatLogWindow != null && !jWhisperChatLogWindow.isClosed()) {
+            jWhisperChatLogWindow.append(msg, "Blue");
+        }
+        // 新增
+        if (jServerChatLogWindow != null && !jServerChatLogWindow.isClosed()) {
+            jServerChatLogWindow.append(msg, "Blue");
+        }
+    }
 }
+

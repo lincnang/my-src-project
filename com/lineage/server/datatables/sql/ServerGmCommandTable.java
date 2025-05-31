@@ -1,6 +1,7 @@
 package com.lineage.server.datatables.sql;
 
 import com.lineage.DatabaseFactory;
+import com.lineage.managerUI.Eva;
 import com.lineage.server.datatables.storage.ServerGmCommandStorage;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.utils.PerformanceTimer;
@@ -44,6 +45,11 @@ public class ServerGmCommandTable implements ServerGmCommandStorage {
                 _log.info("建立GM指令使用紀錄: " + pc.getName() + " " + cmd);
             }
             ps.execute();
+            if (pc != null) {
+                Eva.LogCommandAppend(pc.getName(), cmd, "GM指令");  // null可替換成GM輸入的參數字串
+            } else {
+                Eva.LogCommandAppend("--視窗命令--", cmd, null);
+            }
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

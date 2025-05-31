@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 
 public class J_Main extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -145,24 +144,26 @@ public class J_Main extends JFrame implements ActionListener {
     private JSeparator jSeparator1;
     private JSeparator jSeparator2;
     private JSeparator jSeparator3;
-
     public J_Main() {
         iniPlayerTable();
         initComponents();
-        TA_Consol.setForeground(new Color(150, 205, 205));
-        TA_AllChat.setForeground(new Color(150, 205, 205));
-        TA_Clan.setForeground(new Color(150, 205, 205));
-        TA_Normal.setForeground(new Color(150, 205, 205));
-        TA_Private.setForeground(new Color(150, 205, 205));
-        TA_Team.setForeground(new Color(150, 205, 205));
-        TA_World.setForeground(new Color(150, 205, 205));
-        TA_Consol.setBackground(new Color(0, 0, 120));
-        TA_AllChat.setBackground(new Color(0, 0, 120));
-        TA_Clan.setBackground(new Color(0, 0, 120));
-        TA_Normal.setBackground(new Color(0, 0, 120));
-        TA_Private.setBackground(new Color(0, 0, 120));
-        TA_Team.setBackground(new Color(0, 0, 120));
-        TA_World.setBackground(new Color(0, 0, 120));
+        // 全部改成黑底白字
+        Color chatBg = Color.BLACK;
+        Color chatFg = Color.WHITE;
+        TA_Consol.setForeground(chatFg);
+        TA_AllChat.setForeground(chatFg);
+        TA_Clan.setForeground(chatFg);
+        TA_Normal.setForeground(chatFg);
+        TA_Private.setForeground(chatFg);
+        TA_Team.setForeground(chatFg);
+        TA_World.setForeground(chatFg);
+        TA_Consol.setBackground(chatBg);
+        TA_AllChat.setBackground(chatBg);
+        TA_Clan.setBackground(chatBg);
+        TA_Normal.setBackground(chatBg);
+        TA_Private.setBackground(chatBg);
+        TA_Team.setBackground(chatBg);
+        TA_World.setBackground(chatBg);
         setIconImage(img.getImage());
         iniAction();
         T_Item.setSize(300, 400);
@@ -170,7 +171,6 @@ public class J_Main extends JFrame implements ActionListener {
         String[] s = {"物品名稱", "物品數量", "物品ID"};
         DTM_Item.setColumnIdentifiers(s);
     }
-
     public static J_Main getInstance() {
         if (instance == null) {
             instance = new J_Main();

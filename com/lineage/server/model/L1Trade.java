@@ -1,5 +1,6 @@
 package com.lineage.server.model;
 
+import com.lineage.managerUI.Eva;
 import com.lineage.server.WriteLogTxt;
 import com.lineage.server.datatables.ItemTable;
 import com.lineage.server.datatables.lock.OtherUserTitleReading;
@@ -80,6 +81,9 @@ public class L1Trade {
                     OtherUserTitleReading.get().add(pcItem.getItem().getName() + "(" + pcItem.getItemId() + ")", pcItem.getId(), 0, pcItem.getCount(), tradeTarget.getId(), tradeTarget.getName(), pc.getId(), pc.getName());
                     // 交易記錄
                     WriteLogTxt.Recording("交易記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【 " + pc.getName() + " 】交易物品【" + pcItem.getRecordName(pcItem.getCount()) + ", (ObjectId: " + pcItem.getId() + ")】 給 IP(" + tradeTarget.getNetConnection().getIp() + ")玩家:【 " + tradeTarget.getName() + " 】.");
+                    // 【交易日誌視窗EVA】
+                    Eva.LogTradeAppend("交易物品", pc.getName(), tradeTarget.getName(), pcItem.getItem().getName() + " +" + pcItem.getEnchantLevel(), pcItem.getCount(), pcItem.getId()
+                    );
                 }
             }
             if (!tarTradeList.isEmpty()) {
@@ -99,6 +103,7 @@ public class L1Trade {
                     OtherUserTitleReading.get().add(tgPcItem.getItem().getName() + "(" + tgPcItem.getItemId() + ")", tgPcItem.getId(), 0, tgPcItem.getCount(), pc.getId(), pc.getName(), tradeTarget.getId(), tradeTarget.getName());
                     // 交易記錄
                     WriteLogTxt.Recording("交易記錄", "IP(" + tradeTarget.getNetConnection().getIp() + ")玩家:【 " + tradeTarget.getName() + " 】交易物品【" + tgPcItem.getRecordName(tgPcItem.getCount()) + ", (ObjectId: " + tgPcItem.getId() + ")】 給 IP(" + pc.getNetConnection().getIp() + ")玩家:【 " + pc.getName() + " 】.");
+                    Eva.LogTradeAppend("交易物品", tradeTarget.getName(), pc.getName(), tgPcItem.getItem().getName() + " +" + tgPcItem.getEnchantLevel(), tgPcItem.getCount(), tgPcItem.getId());
                 }
             }
             pc.sendPackets(new S_TradeStatus(0));

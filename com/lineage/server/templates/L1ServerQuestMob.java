@@ -18,6 +18,22 @@ public class L1ServerQuestMob {
     private int _tele_m;
     private int _tele_delay;
     private int _quest_stage = 0;
+    private int _teleport_x;
+    private int _teleport_y;
+    private int _teleport_mapid;
+    private int _itemid;   // 傳送消耗的道具ID
+    private int _price;    // 傳送消耗數量
+
+    public int get_itemid() { return _itemid; }
+    public void set_itemid(int value) { _itemid = value; }
+    public int get_price() { return _price; }
+    public void set_price(int value) { _price = value; }
+    public void set_teleport_x(int x) { _teleport_x = x; }
+    public void set_teleport_y(int y) { _teleport_y = y; }
+    public void set_teleport_mapid(int m) { _teleport_mapid = m; }
+    public int get_teleport_x() { return _teleport_x; }
+    public int get_teleport_y() { return _teleport_y; }
+    public int get_teleport_mapid() { return _teleport_mapid; }
 
     public int get_quest_id() {
         return _quest_id;

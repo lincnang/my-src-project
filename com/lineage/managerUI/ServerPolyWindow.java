@@ -1,15 +1,17 @@
 package com.lineage.managerUI;
 
 import com.lineage.DatabaseFactory;
-import com.lineage.server.command.executor.L1Poly;
 import com.lineage.server.model.Instance.L1PcInstance;
+import com.lineage.server.serverpackets.S_ChangeShape;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.utils.SQLUtil;
 import com.lineage.server.world.World;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -112,32 +114,59 @@ public class ServerPolyWindow extends JInternalFrame {
         btn_Poly.addActionListener(e -> {
             if (Eva.isServerStarted) {
                 try {
-                    if (txt_UserName.getText().equalsIgnoreCase("")) {
+                    String userName = txt_UserName.getText().trim();
+                    String idText = txt_PolyId.getText().trim();
+
+                    if (userName.isEmpty()) {
                         Eva.errorMsg(Eva.blankSetUser);
                         return;
                     }
-                    L1Poly l1poly = null;
-                    for (L1PcInstance pc : World.get().getAllPlayers()) {
-                        if (pc.getName().equalsIgnoreCase(txt_UserName.getText()) || txt_UserName.getText().equalsIgnoreCase("전체유저")) {
-                            int polyId = Integer.parseInt(txt_PolyId.getText());
-                            if (pc.isPrivateShop()) {
-                                continue;
-                            }
-                            l1poly = new L1Poly();
-                            String arg = pc.getName() + " " + polyId;
-                            if (pc.getMapId() != 5302 && pc.getMapId() != 5153 && pc.getMapId() != 511 && pc.getMapId() != 9100) {
-                                l1poly.execute(pc, pc.getName(), arg);
-                            }
-                            pc.sendPackets(new S_SystemMessage("受到GM的變身. "));
-                            Eva.LogServerAppend(pc.getName() + "已變成了指定的怪物樣貌.", "請確認");
+                    if (idText.isEmpty()) {
+                        Eva.errorMsg("請輸入變身怪物ID！");
+                        return;
+                    }
+
+                    int polyId;
+                    try {
+                        polyId = Integer.parseInt(idText);
+                    } catch (NumberFormatException ex) {
+                        Eva.errorMsg("怪物ID必須是數字！");
+                        return;
+                    }
+
+                    boolean isAll = userName.equalsIgnoreCase("全體用戶");
+                    if (isAll) {
+                        int count = 0;
+                        for (L1PcInstance pc : World.get().getAllPlayers()) {
+                            if (pc == null || pc.getNetConnection() == null || pc.isPrivateShop()) continue;
+                            pc.setTempCharGfx(polyId);
+                            pc.sendPackets(new S_ChangeShape(pc, polyId));
+                            World.get().broadcastPacketToAll(new S_ChangeShape(pc, polyId));
+                            pc.sendPackets(new S_SystemMessage("受到管理員的變身。"));
+                            count++;
+                        }
+                        Eva.LogServerAppend("已全體變身為怪物ID:" + polyId + "，共 " + count + " 人", "全體變身成功");
+                    } else {
+                        L1PcInstance pc = World.get().getPlayer(userName);
+                        if (pc != null && pc.getNetConnection() != null) {
+                            pc.setTempCharGfx(polyId);
+                            pc.sendPackets(new S_ChangeShape(pc, polyId));
+                            pc.sendPackets(new S_SystemMessage("受到管理員的變身。")); // 變身後提示訊息
+                            World.get().broadcastPacketToAll(new S_ChangeShape(pc, polyId));
+                            Eva.LogServerAppend(pc.getName() + " 變身為怪物ID:" + polyId, "變身成功");
+                        } else {
+                            Eva.errorMsg("指定角色不存在或未在線");
                         }
                     }
                 } catch (Exception ex) {
+                    Eva.errorMsg("發生未知錯誤，請檢查輸入或伺服器狀態！");
                 }
             } else {
                 Eva.errorMsg(Eva.NoServerStartMSG);
             }
         });
+
+
         String[] modelColName = {"編號", "名稱"};
         model = new DefaultTableModel(modelColName, 0);
         jJTable = new JTable(model);

@@ -1,7 +1,9 @@
 package com.lineage.data.cmd;
 
 // 匯入各類需要用到的工具、伺服器邏輯與設定
+
 import com.lineage.config.ConfigWeaponArmor;
+import com.lineage.managerUI.Eva;
 import com.lineage.server.WriteLogTxt;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
@@ -56,6 +58,8 @@ public class EnchantArmor extends EnchantExecutor {
         pc.getInventory().removeItem(item, item.getCount()); // 移除道具
         _log.info("人物:" + pc.getName() + "點爆物品" + item.getItem().getName() + " 物品OBJID:" + item.getId());
         WriteLogTxt.Recording("強化防具紀錄", "IP(" + pc.getNetConnection().getIp() + ")玩家【" + pc.getName() + "】的【" + item.getRecordName(item.getCount()) + ", (ObjId: " + item.getId() + ")】強化失敗.");
+        Eva.LogEnchantAppend("強化防具失敗", pc.getName(), item.getRecordName(item.getCount()), item.getId());
+
     }
 
     @Override
@@ -138,7 +142,7 @@ public class EnchantArmor extends EnchantExecutor {
 
         // 記錄成功強化
         WriteLogTxt.Recording("強化防具紀錄", "IP(" + pc.getNetConnection().getIp() + ")玩家【" + pc.getName() + "】的【" + item.getRecordName(item.getCount()) + ", (ObjId: " + item.getId() + ")】強化成功.");
-
+        Eva.LogEnchantAppend("防具強化成功", pc.getName(), item.getRecordName(item.getCount()), item.getId());
         // 如果裝備著就套用加成
         if (item.isEquipped()) {
             final int use_type = item.getItem().getUseType();

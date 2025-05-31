@@ -5,7 +5,6 @@ import com.lineage.list.Announcements;
 import com.lineage.server.utils.SQLUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.sql.Connection;
@@ -133,7 +132,7 @@ public final class Config {
     /**
      * 是否顯示管理視窗
      */
-    public static boolean GUI;
+    public static int UI_MODE = 0; // 0=關閉, 1=J_Main, 2=EVA，預設為關閉
 
     /**
      * 是否開啟絕對還原設定(開新服專用)
@@ -161,7 +160,16 @@ public final class Config {
             final InputStream is = Files.newInputStream(new File(SERVER_CONFIG_FILE).toPath());
             set.load(is);
             is.close();
-            GUI = Boolean.parseBoolean(set.getProperty("GUI", "true"));
+            SERVERNO = Integer.parseInt(set.getProperty("ServerNo", "1"));
+
+            // ★ 加入這裡
+            String uiModeStr = set.getProperty("UI_Mode", "0");
+            try {
+                UI_MODE = Integer.parseInt(uiModeStr);
+            } catch (NumberFormatException e) {
+                UI_MODE = 0;
+            }
+
             // 伺服器編號
             SERVERNO = Integer.parseInt(set.getProperty("ServerNo", "1"));
             // 通用

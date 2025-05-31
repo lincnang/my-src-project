@@ -61,10 +61,27 @@ public class ServerUserInfoWindow extends JInternalFrame {
     private JButton btn_AllPresent = null;
     private JButton btn_AllPoly = null;
     private JCheckBox chk_Infomation = null;
+    private javax.swing.Timer userListTimer = null;
 
     public ServerUserInfoWindow(String windowName, int x, int y, int width, int height, boolean resizable, boolean closable) {
         super();
         initialize(windowName, x, y, width, height, resizable, closable);
+    }
+
+
+    // 刷新用戶列表，把所有在線玩家名稱加到 jJTable0 表格中
+    public void refreshUserList() {
+        // 先清空原本表格內容
+        DefaultTableModel tableModel = (DefaultTableModel) jJTable0.getModel();
+        tableModel.setRowCount(0);
+
+        // 從 World 取得所有在線玩家名單
+        for (L1PcInstance pc : World.get().getAllPlayers()) {
+                String[] row = { pc.getName() };
+                tableModel.addRow(row);
+        }
+        // 更新用戶數量標籤
+        lbl_UserCount.setText("在線用戶數量 : " + tableModel.getRowCount());
     }
 
     public void initialize(String windowName, int x, int y, int width, int height, boolean resizable, boolean closable) {
@@ -94,12 +111,12 @@ public class ServerUserInfoWindow extends JInternalFrame {
             String[] model0ColName = {""};
             model0 = new DefaultTableModel(model0ColName, 0);
             jJTable0 = new JTable(model0);
-            jJTable0.setEnabled(false);
-            // jJTable0.addMouseListener(new MouseListenner());
+            jJTable0.setEnabled(true);
+            jJTable0.addMouseListener(new MouseListenner());
             pScroll = new JScrollPane(jJTable0);
             txt_UserName = new JTextField();
-            txt_UserName.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
+            txt_UserName.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent evt) {
                     chatKeyPressed(evt);
                 }
             });
@@ -256,25 +273,34 @@ public class ServerUserInfoWindow extends JInternalFrame {
             btn_AllPresent.setToolTipText("贈送禮物給所有用戶.");
             btn_AllPresent.addActionListener(e -> {
                 if (Eva.isServerStarted) {
-                    jServerPresentWindow = new ServerPresentWindow("全體贈送", 0, 0, 400, 400, false, true);
-                    Eva.jJDesktopPane.add(jServerPresentWindow, 0);
-                    jServerPresentWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPresentWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPresentWindow.getContentPane().getSize().height / 2));
-                    jServerPresentWindow.txt_UserName.setText("全體用戶");
+                    try {
+                        jServerPresentWindow = new ServerPresentWindow("全體贈送", 0, 0, 400, 400, false, true);
+                        Eva.jJDesktopPane.add(jServerPresentWindow, 0);
+                        int centerX = (Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPresentWindow.getContentPane().getSize().width / 2);
+                        int centerY = (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPresentWindow.getContentPane().getSize().height / 2);
+                        jServerPresentWindow.setLocation(centerX, centerY);
+                        jServerPresentWindow.txt_UserName.setText("全體用戶");
+                    } catch (Exception ex) {
+                        ex.printStackTrace(); // 顯示完整錯誤堆疊
+                    }
                 } else {
                     Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
+
             btn_AllPoly = new JButton("全體變身");
             btn_AllPoly.setToolTipText("遊戲在線的所有角色變身成指定的怪物樣子.");
             btn_AllPoly.addActionListener(e -> {
                 if (Eva.isServerStarted) {
-                    if (!txt_UserName.getText().equalsIgnoreCase("")) {
+                    try {
                         jServerPolyWindow = new ServerPolyWindow("全體變身", 0, 0, 400, 400, false, true);
                         Eva.jJDesktopPane.add(jServerPolyWindow, 0);
-                        jServerPolyWindow.setLocation((Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPolyWindow.getContentPane().getSize().width / 2), (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPolyWindow.getContentPane().getSize().height / 2));
-                        jServerPolyWindow.txt_UserName.setText("全體用戶");
-                    } else {
-                        Eva.errorMsg(Eva.blankSetUser);
+                        int centerX = (Eva.jJFrame.getContentPane().getSize().width / 2) - (jServerPolyWindow.getContentPane().getSize().width / 2);
+                        int centerY = (Eva.jJFrame.getContentPane().getSize().height / 2) - (jServerPolyWindow.getContentPane().getSize().height / 2);
+                        jServerPolyWindow.setLocation(centerX, centerY);
+                        jServerPolyWindow.txt_UserName.setText("全體用戶"); // 這裡預設「全體用戶」
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 } else {
                     Eva.errorMsg(Eva.NoServerStartMSG);
@@ -300,146 +326,176 @@ public class ServerUserInfoWindow extends JInternalFrame {
                     Eva.errorMsg(Eva.NoServerStartMSG);
                 }
             });
-            chk_Infomation = new JCheckBox("信息");
-            chk_Infomation.setSelected(true);
-            chk_Infomation.setToolTipText("可實時更新 信息,包裹,倉庫,裝備,賬戶信息!");
-            pScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            pScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            jJTabbedPane1.addTab("用戶列表", pScroll);
-            String[] model1ColName = {"", "", "", ""};
-            String[] model2ColName = {"編號", "名稱", "數量", "強化", "屬性", "階段"};
-            String[] model5ColName = {"賬號", "IP", "角色名", "等級", "血盟", "狀態"};
-            model1 = new DefaultTableModel(model1ColName, 0);
-            model2 = new DefaultTableModel(model2ColName, 0);
-            model3 = new DefaultTableModel(model2ColName, 0);
-            model4 = new DefaultTableModel(model2ColName, 0);
-            model5 = new DefaultTableModel(model5ColName, 0);
-            jJTable1 = new JTable(model1);
-            jJTable2 = new JTable(model2);
-            jJTable2.setAutoCreateRowSorter(true);
-            TableRowSorter sorter2 = new TableRowSorter(jJTable2.getModel());
-            jJTable2.setRowSorter(sorter2);
-            jJTable2.getColumnModel().getColumn(0).setPreferredWidth(70);
-            jJTable2.getColumnModel().getColumn(1).setPreferredWidth(180);
-            jJTable2.getColumnModel().getColumn(2).setPreferredWidth(40);
-            jJTable2.getColumnModel().getColumn(3).setPreferredWidth(40);
-            jJTable2.getColumnModel().getColumn(4).setPreferredWidth(50);
-            jJTable2.getColumnModel().getColumn(5).setPreferredWidth(100);
-            jJTable3 = new JTable(model3);
-            jJTable3.setAutoCreateRowSorter(true);
-            TableRowSorter sorter3 = new TableRowSorter(jJTable3.getModel());
-            jJTable3.setRowSorter(sorter3);
-            jJTable3.getColumnModel().getColumn(0).setPreferredWidth(70);
-            jJTable3.getColumnModel().getColumn(1).setPreferredWidth(180);
-            jJTable3.getColumnModel().getColumn(2).setPreferredWidth(40);
-            jJTable3.getColumnModel().getColumn(3).setPreferredWidth(40);
-            jJTable3.getColumnModel().getColumn(4).setPreferredWidth(50);
-            jJTable3.getColumnModel().getColumn(5).setPreferredWidth(100);
-            jJTable4 = new JTable(model4);
-            jJTable4.setAutoCreateRowSorter(true);
-            TableRowSorter sorter4 = new TableRowSorter(jJTable4.getModel());
-            jJTable4.setRowSorter(sorter4);
-            jJTable4.getColumnModel().getColumn(0).setPreferredWidth(70);
-            jJTable4.getColumnModel().getColumn(1).setPreferredWidth(180);
-            jJTable4.getColumnModel().getColumn(2).setPreferredWidth(40);
-            jJTable4.getColumnModel().getColumn(3).setPreferredWidth(40);
-            jJTable4.getColumnModel().getColumn(4).setPreferredWidth(50);
-            jJTable4.getColumnModel().getColumn(5).setPreferredWidth(100);
-            jJTable5 = new JTable(model5);
-            jJTable5.setAutoCreateRowSorter(true);
-            TableRowSorter sorter5 = new TableRowSorter(jJTable5.getModel());
-            jJTable5.setRowSorter(sorter5);
-            jJTable5.getColumnModel().getColumn(0).setPreferredWidth(100);
-            jJTable5.getColumnModel().getColumn(1).setPreferredWidth(100);
-            jJTable5.getColumnModel().getColumn(2).setPreferredWidth(90);
-            jJTable5.getColumnModel().getColumn(3).setPreferredWidth(80);
-            jJTable5.getColumnModel().getColumn(4).setPreferredWidth(70);
-            jJTable5.getColumnModel().getColumn(5).setPreferredWidth(40);
-            jJTable1.setEnabled(false);
-            jJTable2.setEnabled(false);
-            jJTable3.setEnabled(false);
-            jJTable4.setEnabled(false);
-            jJTable5.setEnabled(false);
-            jJScrollPane1 = new JScrollPane(jJTable1);
-            jJScrollPane2 = new JScrollPane(jJTable2);
-            jJScrollPane3 = new JScrollPane(jJTable3);
-            jJScrollPane4 = new JScrollPane(jJTable4);
-            jJScrollPane5 = new JScrollPane(jJTable5);
-            jJScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane4.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane4.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane5.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            jJScrollPane5.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            jJTabbedPane2.addTab("信息", jJScrollPane1);
-            jJTabbedPane2.addTab("背包", jJScrollPane2);
-            jJTabbedPane2.addTab("倉庫", jJScrollPane3);
-            jJTabbedPane2.addTab("裝備", jJScrollPane4);
-            jJTabbedPane2.addTab("賬號", jJScrollPane5);
-            GroupLayout layout = new GroupLayout(getContentPane());
-            getContentPane().setLayout(layout);
-            GroupLayout.SequentialGroup main_horizontal_grp = layout.createSequentialGroup();
-            GroupLayout.SequentialGroup horizontal_grp = layout.createSequentialGroup();
-            GroupLayout.SequentialGroup vertical_grp = layout.createSequentialGroup();
-            GroupLayout.ParallelGroup main = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col1 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col2 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col3 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col4 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col5 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col6 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col7 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col8 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            GroupLayout.ParallelGroup col9 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-            main.addGroup(horizontal_grp);
-            main_horizontal_grp.addGroup(main);
-            layout.setHorizontalGroup(main_horizontal_grp);
-            layout.setVerticalGroup(vertical_grp);
-            col1.addComponent(txt_UserName, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE).addComponent(lbl_Helper, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE).addComponent(lbl_UserCount, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE);
-            col2.addComponent(btn_Search, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE).addComponent(btn_Ban, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE);
-            // col3.addComponent(btn_Refresh, GroupLayout.PREFERRED_SIZE, 70,
-            // GroupLayout.PREFERRED_SIZE)
-            // .addComponent(btn_NoChat, GroupLayout.PREFERRED_SIZE, 70,
-            // GroupLayout.PREFERRED_SIZE);
-            // col4.addComponent(chk_Infomation, GroupLayout.PREFERRED_SIZE, 70,
-            // GroupLayout.PREFERRED_SIZE)
-            // .addComponent(btn_Present, GroupLayout.PREFERRED_SIZE, 70,
-            // GroupLayout.PREFERRED_SIZE);
-            col3.addComponent(chk_Infomation, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE).addComponent(btn_NoChat, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE);
-            col4.addComponent(btn_Present, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE);
-            col5.addComponent(btn_Poly, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE);
-            col6.addComponent(btn_AllPresent, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE);
-            col7.addComponent(btn_AllPoly, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE);
-            col9.addComponent(chk_Infomation, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE).addComponent(btn_Chat, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE);
-            horizontal_grp.addGap(5).addGroup(col1).addGap(5);
-            horizontal_grp.addGap(5).addGroup(col2).addGap(5);
-            horizontal_grp.addGap(5).addGroup(col3).addGap(5);
-            horizontal_grp.addGap(5).addGroup(col4).addGap(5);
-            horizontal_grp.addGap(5).addGroup(col5).addGap(5);
-            horizontal_grp.addGap(5).addGroup(col6).addGap(5);
-            horizontal_grp.addGap(5).addGroup(col7).addGap(5);
-            //horizontal_grp.addGap(5).addGroup(col8).addGap(5);
-            horizontal_grp.addGap(5).addGroup(col9).addGap(5);
-            main.addGroup(layout.createSequentialGroup().addComponent(jJTabbedPane1, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE).addComponent(jJTabbedPane2, GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE));
-            // vertical_grp.addGap(3).addContainerGap().addGroup(layout.createBaselineGroup(false,
-            // false).addComponent(txt_UserName)
-            // .addComponent(btn_Search)
-            // .addComponent(btn_Refresh)
-            // .addComponent(chk_Infomation));
-            vertical_grp.addGap(3).addContainerGap().addGroup(layout.createBaselineGroup(false, false).addComponent(txt_UserName).addComponent(btn_Search).addComponent(chk_Infomation));
-            vertical_grp.addGap(3).addContainerGap().addGroup(layout.createBaselineGroup(true, true).addComponent(jJTabbedPane1).addComponent(jJTabbedPane2));
-            vertical_grp.addGap(3).addContainerGap().addGroup(layout.createBaselineGroup(false, false).addComponent(lbl_Helper).addComponent(btn_Ban).addComponent(btn_NoChat).addComponent(btn_Present).addComponent(btn_Poly).addComponent(btn_AllPresent).addComponent(btn_AllPoly).addComponent(btn_Chat));
-            vertical_grp.addGap(3).addContainerGap().addGroup(layout.createBaselineGroup(false, false).addComponent(lbl_UserCount));
+            try {
+                chk_Infomation = new JCheckBox("信息");
+                chk_Infomation.setSelected(true);
+                chk_Infomation.setToolTipText("可實時更新 信息,背包,倉庫,裝備,帳號信息!");
+                JLabel infoLabel = new JLabel("可實時更新 信息,背包,倉庫,裝備,帳號信息!");
+                infoLabel.setForeground(Color.GREEN.darker());
+
+                pScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                pScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jJTabbedPane1.addTab("用戶列表", pScroll);
+                String[] model1ColName = {"", "", "", ""};
+                String[] model2ColName = {"編號", "名稱", "數量", "強化", "屬性", "階段"};
+                String[] model5ColName = {"帳號", "IP", "角色名", "等級", "血盟", "狀態"};
+                model1 = new DefaultTableModel(model1ColName, 0);
+                model2 = new DefaultTableModel(model2ColName, 0);
+                model3 = new DefaultTableModel(model2ColName, 0);
+                model4 = new DefaultTableModel(model2ColName, 0);
+                model5 = new DefaultTableModel(model5ColName, 0);
+                jJTable1 = new JTable(model1);
+                jJTable2 = new JTable(model2);
+                jJTable2.setAutoCreateRowSorter(true);
+                TableRowSorter sorter2 = new TableRowSorter(jJTable2.getModel());
+                jJTable2.setRowSorter(sorter2);
+                jJTable2.getColumnModel().getColumn(0).setPreferredWidth(70);
+                jJTable2.getColumnModel().getColumn(1).setPreferredWidth(180);
+                jJTable2.getColumnModel().getColumn(2).setPreferredWidth(40);
+                jJTable2.getColumnModel().getColumn(3).setPreferredWidth(40);
+                jJTable2.getColumnModel().getColumn(4).setPreferredWidth(50);
+                jJTable2.getColumnModel().getColumn(5).setPreferredWidth(100);
+                jJTable3 = new JTable(model3);
+                jJTable3.setAutoCreateRowSorter(true);
+                TableRowSorter sorter3 = new TableRowSorter(jJTable3.getModel());
+                jJTable3.setRowSorter(sorter3);
+                jJTable3.getColumnModel().getColumn(0).setPreferredWidth(70);
+                jJTable3.getColumnModel().getColumn(1).setPreferredWidth(180);
+                jJTable3.getColumnModel().getColumn(2).setPreferredWidth(40);
+                jJTable3.getColumnModel().getColumn(3).setPreferredWidth(40);
+                jJTable3.getColumnModel().getColumn(4).setPreferredWidth(50);
+                jJTable3.getColumnModel().getColumn(5).setPreferredWidth(100);
+                jJTable4 = new JTable(model4);
+                jJTable4.setAutoCreateRowSorter(true);
+                TableRowSorter sorter4 = new TableRowSorter(jJTable4.getModel());
+                jJTable4.setRowSorter(sorter4);
+                jJTable4.getColumnModel().getColumn(0).setPreferredWidth(70);
+                jJTable4.getColumnModel().getColumn(1).setPreferredWidth(180);
+                jJTable4.getColumnModel().getColumn(2).setPreferredWidth(40);
+                jJTable4.getColumnModel().getColumn(3).setPreferredWidth(40);
+                jJTable4.getColumnModel().getColumn(4).setPreferredWidth(50);
+                jJTable4.getColumnModel().getColumn(5).setPreferredWidth(100);
+                jJTable5 = new JTable(model5);
+                jJTable5.setAutoCreateRowSorter(true);
+                TableRowSorter sorter5 = new TableRowSorter(jJTable5.getModel());
+                jJTable5.setRowSorter(sorter5);
+                jJTable5.getColumnModel().getColumn(0).setPreferredWidth(100);
+                jJTable5.getColumnModel().getColumn(1).setPreferredWidth(100);
+                jJTable5.getColumnModel().getColumn(2).setPreferredWidth(90);
+                jJTable5.getColumnModel().getColumn(3).setPreferredWidth(80);
+                jJTable5.getColumnModel().getColumn(4).setPreferredWidth(70);
+                jJTable5.getColumnModel().getColumn(5).setPreferredWidth(40);
+                jJTable1.setEnabled(false);
+                jJTable2.setEnabled(false);
+                jJTable3.setEnabled(false);
+                jJTable4.setEnabled(false);
+                jJTable5.setEnabled(false);
+                jJScrollPane1 = new JScrollPane(jJTable1);
+                jJScrollPane2 = new JScrollPane(jJTable2);
+                jJScrollPane3 = new JScrollPane(jJTable3);
+                jJScrollPane4 = new JScrollPane(jJTable4);
+                jJScrollPane5 = new JScrollPane(jJTable5);
+                jJScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane4.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane4.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane5.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                jJScrollPane5.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jJTabbedPane2.addTab("信息", jJScrollPane1);
+                jJTabbedPane2.addTab("背包", jJScrollPane2);
+                jJTabbedPane2.addTab("倉庫", jJScrollPane3);
+                jJTabbedPane2.addTab("裝備", jJScrollPane4);
+                jJTabbedPane2.addTab("帳號", jJScrollPane5);
+
+                // ---- GroupLayout 配置 ----
+                GroupLayout layout = new GroupLayout(getContentPane());
+                getContentPane().setLayout(layout);
+                layout.setAutoCreateGaps(true);
+                layout.setAutoCreateContainerGaps(true);
+
+                // 橫向配置
+                layout.setHorizontalGroup(
+                        layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txt_UserName, 100, 120, 200)
+                                        .addComponent(btn_Search, 60, 60, 80)
+                                        .addComponent(chk_Infomation)
+                                        .addComponent(infoLabel)
+                                )
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jJTabbedPane1, 150, 200, 300)
+                                        .addComponent(jJTabbedPane2, 440, 480, 600)
+                                )
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lbl_Helper, 100, 100, 120)
+                                        .addComponent(btn_Ban, 50, 50, 70)
+                                        .addComponent(btn_NoChat, 50, 50, 70)
+                                        .addComponent(btn_Present, 50, 50, 70)
+                                        .addComponent(btn_Poly, 50, 50, 70)
+                                        .addComponent(btn_AllPresent, 70, 80, 100)
+                                        .addComponent(btn_AllPoly, 70, 80, 100)
+                                        .addComponent(btn_Chat, 70, 80, 100)
+                                )
+                                .addComponent(lbl_UserCount, 200, 220, 300)
+                );
+
+                // 垂直配置
+                layout.setVerticalGroup(
+                        layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(txt_UserName)
+                                        .addComponent(btn_Search)
+                                        .addComponent(chk_Infomation)
+                                        .addComponent(infoLabel)
+                                )
+                                .addGap(12)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(jJTabbedPane1)
+                                        .addComponent(jJTabbedPane2)
+                                )
+                                .addGap(12)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lbl_Helper)
+                                        .addComponent(btn_Ban)
+                                        .addComponent(btn_NoChat)
+                                        .addComponent(btn_Present)
+                                        .addComponent(btn_Poly)
+                                        .addComponent(btn_AllPresent)
+                                        .addComponent(btn_AllPoly)
+                                        .addComponent(btn_Chat)
+                                )
+                                .addGap(10)
+                                .addComponent(lbl_UserCount)
+                );
+                refreshUserList();
+                System.out.println("當前線上人數：" + World.get().getAllPlayers().size());
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println("UI介面故障 請檢查配置文件或重新啟動伺服器.");
+
+            }
+            if (userListTimer == null) {
+                userListTimer = new javax.swing.Timer(3000, new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        try {
+                            refreshUserList();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                userListTimer.start();
+            }
         } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
-
     private void chatKeyPressed(KeyEvent evt) {
-        // 서버 채팅
         if (Eva.isServerStarted) {
             try {
                 if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -980,12 +1036,18 @@ public class ServerUserInfoWindow extends JInternalFrame {
     }
 
     private class MouseListenner extends MouseAdapter {
+        @Override
         public void mouseClicked(MouseEvent e) {
-            if (e.getButton() == 1) {
-                int column = ((JTable) e.getSource()).getSelectedColumn();
-                int row = ((JTable) e.getSource()).getSelectedRow();
-                CharacterInfoSearch();
+            if (e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON1) {
+                int row = jJTable0.getSelectedRow();
+                if (row >= 0) {
+                    // 取得玩家名稱
+                    String playerName = (String) jJTable0.getValueAt(row, 0);
+                    txt_UserName.setText(playerName);
+                    CharacterInfoSearch();
+                }
             }
         }
     }
 }
+

@@ -16,6 +16,7 @@ import com.add.system.L1BlendTable;
 import com.add.system.L1FireSmithCrystalTable;
 import com.eric.RandomMobTable;
 import com.eric.StartCheckWarTime;
+import com.eric.gui.J_Main;
 import com.lineage.config.*;
 import com.lineage.data.event.MiniGame.MiniSiegeNpcStart;
 import com.lineage.data.event.SubItemSet;
@@ -23,6 +24,7 @@ import com.lineage.data.event.ice.IceQueenSystem;
 import com.lineage.data.item_weapon.proficiency.CharacterWeaponProficiencyTable;
 import com.lineage.data.item_weapon.proficiency.WeaponProficiencyTable;
 import com.lineage.list.BadNamesList;
+import com.lineage.managerUI.Eva;
 import com.lineage.server.Controller.*;
 import com.lineage.server.Manly.WenYangCmdTable;
 import com.lineage.server.Manly.WenYangJiLuTable;
@@ -271,6 +273,20 @@ public class GameServer {
             // 新增爵位系統每日重置邏輯
             for (L1PcInstance pc : World.get().getAllPlayers()) {
                 Honor.getInstance().resetHonorIfNotCompleted(pc, false); // 線上角色專用
+            }
+            // 管理視窗
+            switch (Config.UI_MODE) {
+                case 0:
+                    System.out.println("UI已關閉");
+                    break;
+                case 1:
+                    J_Main.main(new String[0]);
+                    break;
+                case 2:
+                    Eva.getInstance();
+                    break;
+                default:
+                    System.out.println("未知UI模式，已自動關閉介面");
             }
             _log.info("已完成爵位每日任務與地監同步重置。");
             /** 載入等級排行榜資料 */

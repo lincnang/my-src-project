@@ -51,6 +51,7 @@ public class LogEnchantTable implements LogEnchantStorage {
             StringBuilder mac = pc.getNetConnection().getMac();
             ps.setString(++i, ip + "/" + mac);
             ps.execute();
+
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

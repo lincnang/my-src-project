@@ -38,17 +38,31 @@ public class ServerQuestMobTable {  //src027
     }
 
     public boolean Cmd(L1PcInstance pc, String cmd) {
+        // 【1】evd_list：查詢主線任務內容與進度
         if (cmd.equalsIgnoreCase("evd_list")) {
-            int quest_id = 995000; // 這裡請放你「任務編號」！可參數化
-            // 取得自動對應的內容
-            String[] evdList = getEvdList(pc);
+            String[] evdList = getEvdList(pc); // 動態取得玩家當前任務內容
             pc.sendPackets(new S_NPCTalkReturn(pc, "evd_list", evdList));
+            return true;
+        }
+        String action = cmd;
+        if (action.equalsIgnoreCase("quest_goto")) {
+            int quest_id = getCurrentMainQuestId(pc);
+            L1ServerQuestMob quest = getQuestMobById(quest_id);
+            // 【B】扣除道具判斷
+            int needItemId = quest.get_itemid();
+            int needPrice = quest.get_price();
+            if (needItemId > 0 && needPrice > 0) {
+                if (!pc.getInventory().consumeItem(needItemId, needPrice)) {
+                    pc.sendPackets(new S_ServerMessage("需要 " + needPrice + " 個道具才能傳送！"));
+                    return true;
+                }
+            }
+            // 【D】傳送
+            doTeleport(pc, quest);
             return true;
         }
         return false;
     }
-
-
 
     public static ServerQuestMobTable get() {
         if (_instance == null) {
@@ -58,16 +72,18 @@ public class ServerQuestMobTable {  //src027
     }
 
     private static int[] getArray(String s) {
+        if (s == null || s.trim().isEmpty()) {
+            return new int[0];  // 回傳空陣列，不會爆炸
+        }
         StringTokenizer st = new StringTokenizer(s, ",");
         int iSize = st.countTokens();
-        String sTemp = null;
         int[] iReturn = new int[iSize];
         for (int i = 0; i < iSize; i++) {
-            sTemp = st.nextToken();
-            iReturn[i] = Integer.parseInt(sTemp);
+            iReturn[i] = Integer.parseInt(st.nextToken().trim());
         }
         return iReturn;
     }
+
 
     private void load() {
         PerformanceTimer timer = new PerformanceTimer();
@@ -78,7 +94,27 @@ public class ServerQuestMobTable {  //src027
             con = DatabaseFactory.get().getConnection();
             pstm = con.prepareStatement("SELECT * FROM `系統_主線系統`");
             rs = pstm.executeQuery();
+
             while (rs.next()) {
+                // 取得每個可能異常的欄位
+                String mobStr = rs.getString("怪物編號");
+                String mobCountStr = rs.getString("怪物數量");
+                String itemStr = rs.getString("物品獎勵");
+                String itemCountStr = rs.getString("物品獎勵數量");
+                // 只要有一個為空或null就秀出異常
+                if (mobStr == null || mobStr.trim().isEmpty()
+                        || mobCountStr == null || mobCountStr.trim().isEmpty()
+                        || itemStr == null || itemStr.trim().isEmpty()
+                        || itemCountStr == null || itemCountStr.trim().isEmpty()) {
+
+                    System.out.println("[異常] 任務編號: " + rs.getInt("任務編號")
+                            + " / 階段: " + rs.getInt("任務階段")
+                            + " / 進度: " + rs.getInt("任務進度")
+                            + " / 怪物編號: " + mobStr
+                            + " / 怪物數量: " + mobCountStr
+                            + " / 物品獎勵: " + itemStr
+                            + " / 物品獎勵數量: " + itemCountStr);
+                }
                 int quest_id = rs.getInt("任務編號");
                 int quest_stage = rs.getInt("任務階段");
                 int quest_step = rs.getInt("任務進度");
@@ -95,6 +131,11 @@ public class ServerQuestMobTable {  //src027
                 int tele_y = rs.getInt("傳出座標_Y");
                 int tele_m = rs.getInt("傳出座標編號");
                 int tele_delay = rs.getInt("tele_delay");
+                int enter_x = rs.getInt("傳入座標_X"); // 任務進入用
+                int enter_y = rs.getInt("傳入座標_Y");
+                int enter_m = rs.getInt("傳入地圖編號");
+                int itemid = rs.getInt("itemid");
+                int price = rs.getInt("price");
                 final L1ServerQuestMob serverQuestMob = new L1ServerQuestMob();
                 serverQuestMob.set_quest_id(quest_id);
                 serverQuestMob.set_quest_stage(quest_stage);
@@ -112,6 +153,11 @@ public class ServerQuestMobTable {  //src027
                 serverQuestMob.set_tele_y(tele_y);
                 serverQuestMob.set_tele_m(tele_m);
                 serverQuestMob.set_tele_delay(tele_delay);
+                serverQuestMob.set_teleport_x(enter_x);  // 新增
+                serverQuestMob.set_teleport_y(enter_y);
+                serverQuestMob.set_teleport_mapid(enter_m);
+                serverQuestMob.set_itemid(itemid);
+                serverQuestMob.set_price(price);
                 HashMap<Integer, L1ServerQuestMob> questMap = (HashMap<Integer, L1ServerQuestMob>) _questMobList.get(quest_id);
                 if (questMap == null) {
                     questMap = new HashMap<Integer, L1ServerQuestMob>();
@@ -131,34 +177,6 @@ public class ServerQuestMobTable {  //src027
         }
     }
 
-    public void getQuestMobNote(final L1PcInstance pc) {
-        if (_questMobList == null) {
-            return;
-        }
-        for (final Integer quest_id : _questMobList.keySet()) {
-            if (pc.getQuest().isStart(quest_id.intValue())) {
-                final HashMap<Integer, L1ServerQuestMob> map = (HashMap<Integer, L1ServerQuestMob>) _questMobList.get(quest_id);
-                for (Integer quest_order : map.keySet()) {
-                    if (pc.getQuest().get_step(quest_id.intValue()) == quest_order.intValue()) {
-                        final int[] mob_id = ((L1ServerQuestMob) map.get(quest_order)).get_mob_id();
-                        final int[] mob_count = ((L1ServerQuestMob) map.get(quest_order)).get_mob_count();
-                        final int[] pc_mob_count = pc.getQuest().get_mob_count(quest_id.intValue());
-                        if (mob_id.length == mob_count.length) {
-                            StringBuffer stringBuffer = new StringBuffer();
-                            stringBuffer.append(((L1ServerQuestMob) map.get(quest_order)).get_note() + "\n");
-                            for (int i = 0; i < mob_id.length; i++) {
-                                final String npc_name = NpcTable.get().getTemplate(mob_id[i]).get_name();
-                                stringBuffer.append(npc_name + "(" + pc_mob_count[i] + "/" + mob_count[i] + ")\n");
-                            }
-                            pc.sendPackets(new S_ServerMessage(stringBuffer.toString(), 11));
-                        } else if (mob_count.length == 1) {
-                            pc.sendPackets(new S_ServerMessage(((L1ServerQuestMob) map.get(quest_order)).get_note() + "\n 該區域任意怪物(" + pc_mob_count[0] + "/" + mob_count[0] + ")", 11));
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * 判定玩家所接的任務編號，並且讓怪物顯示特效
@@ -323,9 +341,15 @@ public class ServerQuestMobTable {  //src027
             pc.getQuest().set_mob_count(quest_id, pc_mob_count);
         }
         // 完成條件判斷（只要有擊殺才進入！）
+
         if (questCompleted && updated) {
+            int mainQuestBaseId = 995000;  // 或直接寫995000
+            System.out.println("[DEBUG] checkMob階段推進: mainQuestBaseId=" + mainQuestBaseId + ", currQuest.get_quest_stage()=" + currQuest.get_quest_stage());
+            System.out.println("[DEBUG] checkMob before: now_stage=" + pc.getQuest().get_now_stage(mainQuestBaseId));
             // 1. 標記 now_stage 完成本階段
-            pc.getQuest().set_now_stage(quest_id, currQuest.get_quest_stage());
+            pc.getQuest().set_now_stage(mainQuestBaseId, currQuest.get_quest_stage());
+            System.out.println("[DEBUG] checkMob after: now_stage=" + pc.getQuest().get_now_stage(mainQuestBaseId));
+
             // 2. 標記 step=255（結束）
             pc.getQuest().set_step(quest_id, L1PcQuest.QUEST_END);
             // 3. 清空 mob_count
@@ -361,6 +385,16 @@ public class ServerQuestMobTable {  //src027
             String[] evdList = ServerQuestMobTable.get().getEvdList(pc);
             pc.sendPackets(new S_NPCTalkReturn(pc, "evd_list", evdList));
 
+            // 【傳送前先消耗道具】
+            int itemid = currQuest.get_itemid();
+            int price = currQuest.get_price();
+            if (itemid > 0 && price > 0) {
+                if (!pc.getInventory().consumeItem(itemid, price)) {
+                    pc.sendPackets(new S_ServerMessage("需要 " + price + " 個傳送道具才可離開任務！"));
+                    return; // 沒扣到不傳送
+                }
+            }
+
             // 7. 傳送座標
             final int x = currQuest.get_tele_x();
             final int y = currQuest.get_tele_y();
@@ -376,6 +410,8 @@ public class ServerQuestMobTable {  //src027
             return;
         }
     }
+
+
     public int[] getMobCount(int quest_id, int quest_order) {
         if ((_questMobList.containsKey(Integer.valueOf(quest_id))) && (((HashMap<Integer, L1ServerQuestMob>) _questMobList.get(Integer.valueOf(quest_id))).containsKey(Integer.valueOf(quest_order)))) {
             int length = ((L1ServerQuestMob) ((HashMap<Integer, L1ServerQuestMob>) _questMobList.get(Integer.valueOf(quest_id))).get(Integer.valueOf(quest_order))).get_mob_count().length;
@@ -411,9 +447,8 @@ public class ServerQuestMobTable {  //src027
      * @return String[] evdList
      */
     public String[] getEvdList(L1PcInstance pc) {
-        String[] evdList = new String[10];
+        String[] evdList = new String[15]; // #0~#14
 
-        // 1. 取得目前尚未完成的 quest_id
         int quest_id = getCurrentMainQuestId(pc);
         if (quest_id == -1) {
             evdList[0] = "無主線任務進行中";
@@ -425,8 +460,7 @@ public class ServerQuestMobTable {  //src027
         int questStep = 1;
         if (questMap != null) {
             for (Integer stepKey : questMap.keySet()) {
-                L1ServerQuestMob mob = questMap.get(stepKey);
-                questStep = stepKey; // 你的主線一階段一筆，所以直接取
+                questStep = stepKey;
                 break;
             }
         }
@@ -438,33 +472,27 @@ public class ServerQuestMobTable {  //src027
             return evdList;
         }
 
-        // 以下內容同你原本，只是 quest_id 改為目前 quest_id
+        // #0 任務名稱
         evdList[0] = quest.get_note();
 
-        // ...其餘內容完全照抄你原本即可...
-        // 這段可以完全照你的寫法搬進來
-
-        // 5. 完成獲得（多重獎勵）
+        // #1~#5 完成獎勵
         int[] itemIds = quest.get_item_id();
         int[] itemCounts = quest.get_item_count();
-        StringBuilder rewardText = new StringBuilder();
-        for (int i = 0; i < itemIds.length; i++) {
-            int itemId = itemIds[i];
-            int count = (i < itemCounts.length) ? itemCounts[i] : 1;
-            String itemName = "";
-            if (ItemTable.get().getTemplate(itemId) != null) {
-                itemName = ItemTable.get().getTemplate(itemId).getName();
+        for (int i = 0; i < 5; i++) {
+            if (i < itemIds.length) {
+                int itemId = itemIds[i];
+                int count = (i < itemCounts.length) ? itemCounts[i] : 1;
+                String itemName = "未知物品(" + itemId + ")";
+                if (ItemTable.get().getTemplate(itemId) != null) {
+                    itemName = ItemTable.get().getTemplate(itemId).getName();
+                }
+                evdList[1 + i] = itemName + " x" + count;
             } else {
-                itemName = "未知物品(" + itemId + ")";
-            }
-            rewardText.append(itemName).append(" x").append(count);
-            if (i < itemIds.length - 1) {
-                rewardText.append("，");
+                evdList[1 + i] = "";
             }
         }
-        evdList[1] = rewardText.toString();
 
-        // 6. 怪物進度（最多6種）
+        // #6~#11 擊殺進度
         int[] mobIds = quest.get_mob_id();
         int[] mobCounts = quest.get_mob_count();
         int[] pcMobCounts = pc.getQuest().get_mob_count(quest_id);
@@ -478,23 +506,22 @@ public class ServerQuestMobTable {  //src027
                     mobName = NpcTable.get().getTemplate(mobIds[i]).get_name();
                 }
                 int pcCount = pcMobCounts[i];
-                evdList[2 + i] = mobName + "(" + pcCount + "/" + mobCounts[i] + ")";
+                evdList[6 + i] = mobName + "(" + pcCount + "/" + mobCounts[i] + ")";
             } else {
-                evdList[2 + i] = "";
+                evdList[6 + i] = "";
             }
         }
 
-        // 7. 總任務完成
+        // #12 總任務完成
         int totalQuest = _questMobList.size();
         int completeQuest = 0;
         for (Integer qid : _questMobList.keySet()) {
             if (pc.getQuest().isEnd(qid)) completeQuest++;
         }
-        evdList[8] = completeQuest + "/" + totalQuest;
+        evdList[12] = completeQuest + "/" + totalQuest;
 
-        // 8. 下一階段預告
+        // #13 下一階段
         int curStage = quest.get_quest_stage();
-
         String nextNote = "無";
         for (HashMap<Integer, L1ServerQuestMob> map : _questMobList.values()) {
             for (L1ServerQuestMob mob : map.values()) {
@@ -505,24 +532,50 @@ public class ServerQuestMobTable {  //src027
             }
             if (!nextNote.equals("無")) break;
         }
-        evdList[9] = nextNote;
+        evdList[13] = nextNote;
+
+        // #14 傳送消耗
+        int itemid = quest.get_itemid();
+        int price = quest.get_price();
+        String costText = "";
+        if (itemid > 0 && price > 0) {
+            String itemName = "未知物品(" + itemid + ")";
+            if (ItemTable.get().getTemplate(itemid) != null) {
+                itemName = ItemTable.get().getTemplate(itemid).getName();
+            }
+            costText = itemName + " x" + price + "個";
+        }
+        evdList[14] = costText;
 
         return evdList;
     }
 
 
+
+
     public int getCurrentMainQuestId(L1PcInstance pc) {
-        Set<Integer> mainQuestIds = _questMobList.keySet();
-        int currentQuestId = -1;
-        for (Integer questId : mainQuestIds) {
-            if (!pc.getQuest().isEnd(questId)) { // 沒完成的就用
-                if (currentQuestId == -1 || questId < currentQuestId) {
-                    currentQuestId = questId;
+        int mainQuestBaseId = 995000; // 主線任務起始ID，可視你的需求調整
+        int maxQuestIdOffset = 200;   // 支援編號 995000~995199
+        // 取得角色目前主線階段
+        int nowStage = pc.getQuest().get_now_stage(mainQuestBaseId);
+        int nextStage = nowStage + 1;
+        // 找尋 quest_stage==nextStage 的 quest_id
+        for (int offset = 0; offset < maxQuestIdOffset; offset++) {
+            int tryId = mainQuestBaseId + offset;
+            HashMap<Integer, L1ServerQuestMob> questMap = _questMobList.get(tryId);
+            if (questMap != null) {
+                for (L1ServerQuestMob mob : questMap.values()) {
+                    if (mob.get_quest_stage() == nextStage) {
+                        return tryId;
+                    }
                 }
             }
         }
-        return currentQuestId;
+        System.out.println("getCurrentMainQuestId: 找不到下一階段，全部任務已完成");
+        return -1;
     }
+
+
 
     /**
      * 依任務編號取出任務階段物件
@@ -550,7 +603,34 @@ public class ServerQuestMobTable {  //src027
         return questMap.getOrDefault(questStep, questMap.values().iterator().next());
     }
 
+    public void teleportToQuestMap(L1PcInstance pc, int quest_id) {
+        L1ServerQuestMob quest = getQuestMobById(quest_id);
+        if (quest == null) {
+            pc.sendPackets(new S_ServerMessage("查無此任務"));
+            return;
+        }
+        int x = quest.get_teleport_x();
+        int y = quest.get_teleport_y();
+        int mapid = quest.get_teleport_mapid();
+        if (x == 0 || y == 0 || mapid <= 0) {
+            pc.sendPackets(new S_ServerMessage("本任務尚未設定傳送座標"));
+            return;
+        }
+        L1Teleport.teleport(pc, x, y, (short) mapid, 5, true);
+        pc.sendPackets(new S_ServerMessage("已為您傳送到任務地圖"));
+    }
 
+    private void doTeleport(L1PcInstance pc, L1ServerQuestMob quest) {
+        int x = quest.get_teleport_x();
+        int y = quest.get_teleport_y();
+        int mapid = quest.get_teleport_mapid();
+        if (x == 0 || y == 0 || mapid <= 0) {
+            pc.sendPackets(new S_ServerMessage("本任務尚未設定傳送座標"));
+            return;
+        }
+        L1Teleport.teleport(pc, x, y, (short) mapid, 5, true);
+        pc.sendPackets(new S_ServerMessage("已為您傳送到任務地圖"));
+    }
 
     /**
      * 根據主線 base id 與目前完成階段，取得下一階段的 quest_id

@@ -1,6 +1,5 @@
 package com.lineage;
 
-import com.eric.gui.J_Main;
 import com.lineage.commons.system.LanSecurityManager;
 import com.lineage.config.*;
 import com.lineage.server.GameServer;
@@ -231,10 +230,6 @@ public class Server {
         DatabaseFactoryLogin.get();
         DatabaseFactory.get();
         Config.loadDB();
-        // 管理視窗
-        if (Config.GUI) {
-            J_Main.getInstance().setVisible(true);
-        }
         if (Config.DBClearAll) {//是否開啟絕對還原設定(開新服專用)
             DBClearAllUtil.start();
         }

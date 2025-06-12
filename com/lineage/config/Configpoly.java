@@ -5,7 +5,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -21,7 +20,7 @@ import java.util.StringTokenizer;
  */
 public final class Configpoly {
     private static final Log _log = LogFactory.getLog(Configpoly.class);
-    private static final String ALT_SETTINGS_FILE = "./config/變身卡特殊合成設定.properties";
+    private static final String ALT_SETTINGS_FILE = "./config/變身卡合成設定.properties";
     public static int[] poly_LIST_1;//給與變身卡列陣
     public static int[] poly_LIST_2;//給與變身卡列陣
     public static int[] poly_LIST_3;//給與變身卡列陣
@@ -112,7 +111,7 @@ public final class Configpoly {
             throw new ConfigErrorException("設置檔案遺失: " + ALT_SETTINGS_FILE);
         } finally {
             set.clear();
-            _log.info("Config/變身卡特殊合成設定讀取完成 (" + timer.get() + "ms)");
+            _log.info("Config/變身卡合成設定讀取完成 (" + timer.get() + "ms)");
         }
     }
 

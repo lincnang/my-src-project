@@ -60,6 +60,7 @@ public class ShopTable {
         return ids;
     }
 
+    // 在 ShopTable.java 中
     private static L1Shop loadShop(int npcId, ResultSet rs) throws SQLException {
         // 賣出清單
         final List<L1ShopItem> sellingList = new ArrayList<>();
@@ -70,8 +71,6 @@ public class ShopTable {
         L1NpcTalkData action = NPCTalkDataTable.get().getTemplate(npcId);
         if (action != null && action.getCurrencyItemId() != 0) {
             currencyItemId = action.getCurrencyItemId();
-            // System.out.println("npcid ==" + npcId + "currencyItemId ==" +
-            // currencyItemId);
         }
         while (rs.next()) {
             int itemId = rs.getInt("item_id");
@@ -85,6 +84,11 @@ public class ShopTable {
                 String note = rs.getString("note");// 物品注記
                 /** [原碼] 出售強化物品 */
                 int enchantlevel = rs.getInt("enchant_level");
+
+                // --- ▼▼▼ 【修正一】在這裡新增，從資料庫讀取限購數量 ▼▼▼ ---
+                int dailyLimit = rs.getInt("daily_limit");
+                // --- ▲▲▲ ---
+
                 Connection conI = null;
                 PreparedStatement pstmI = null;
                 ResultSet rsI = null;
@@ -110,11 +114,14 @@ public class ShopTable {
                 addSellList(itemId, sellingPrice, purchasingPrice, packCount);
                 packCount = packCount == 0 ? 1 : packCount;
                 if (sellingPrice >= 0) {
-                    L1ShopItem item = new L1ShopItem(itemId, sellingPrice, packCount, enchantlevel);
+                    // --- ▼▼▼ 【修正二】將讀取到的 dailyLimit 變數傳入建構子 ▼▼▼ ---
+                    L1ShopItem item = new L1ShopItem(itemId, sellingPrice, packCount, enchantlevel, dailyLimit);
+                    // --- ▲▲▲ ---
                     sellingList.add(item);
                 }
                 if (purchasingPrice >= 0) {
-                    L1ShopItem item = new L1ShopItem(itemId, purchasingPrice, packCount, enchantlevel);
+                    // 玩家賣給商店的物品，不需要限購，所以維持 -1
+                    L1ShopItem item = new L1ShopItem(itemId, purchasingPrice, packCount, enchantlevel, -1);
                     purchasingList.add(item);
                 }
             }

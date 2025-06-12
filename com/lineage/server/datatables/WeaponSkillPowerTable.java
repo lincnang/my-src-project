@@ -62,7 +62,7 @@ public class WeaponSkillPowerTable {
                 int power = rs.getInt("power");
                 int srcdmg = rs.getInt("srcdmg");
                 int addsrcdmg = rs.getInt("addsrcdmg");
-                int random1 = rs.getInt("random1");
+                int random1 = rs.getInt("技能發動機率");
                 int random2 = rs.getInt("random2");
                 boolean boss_holdout = rs.getBoolean("boss_holdout");
                 int gfxidIcon = rs.getInt("gfxid狀態圖編號");

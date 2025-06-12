@@ -6,6 +6,7 @@ import com.lineage.server.datatables.ItemTable;
 import com.lineage.server.datatables.ShopTable;
 import com.lineage.server.datatables.SkillsTable;
 import com.lineage.server.datatables.lock.CharSkillReading;
+import com.lineage.server.datatables.lock.ShopLimitReading;
 import com.lineage.server.model.Instance.L1ItemStatus;
 import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
@@ -22,8 +23,16 @@ import java.util.List;
 public class S_ShopSellList extends ServerBasePacket {
     private byte[] _byte = null;
 
-    public S_ShopSellList(int objId) {
+    /**
+     * 修改過的建構子
+     * @param pc 觀看商店的玩家
+     * @param objId 商店NPC的OBJID
+     */
+    public S_ShopSellList(final L1PcInstance pc, final int objId) {
+        // --- ▼▼▼【修正】將封包代碼改回您專案中原有的 S_BUY_LIST ▼▼▼ ---
         writeC(S_BUY_LIST);
+        // --- ▲▲▲ ---
+
         writeD(objId);
         L1Object npcObj = World.get().findObject(objId);
         if (!(npcObj instanceof L1NpcInstance)) {
@@ -31,48 +40,66 @@ public class S_ShopSellList extends ServerBasePacket {
             return;
         }
         int npcId = ((L1NpcInstance) npcObj).getNpcTemplate().get_npcId();
-        // L1TaxCalculator calc = new L1TaxCalculator(npcId);
         L1Shop shop = ShopTable.get().get(npcId);
+        if (shop == null) {
+            writeH(0);
+            return;
+        }
         List<L1ShopItem> shopItems = shop.getSellingItems();
-        if (shopItems.size() <= 0) {
+        if (shopItems.isEmpty()) {
             writeH(0);
             return;
         }
         writeH(shopItems.size());
         for (int i = 0; i < shopItems.size(); i++) {
-            L1ShopItem shopItem = (L1ShopItem) shopItems.get(i);
+            L1ShopItem shopItem = shopItems.get(i);
             L1Item item = shopItem.getItem();
-            int price = (int) (shopItem.getPrice() * ConfigRate.RATE_SHOP_SELLING_PRICE);// 物品單價
-            writeD(i);// 排序
-            writeH(shopItem.getItem().getGfxId());// 圖形
-            writeD(price);
-            /** [原碼] 出售強化物品 */
+            if (item == null) {
+                continue;
+            }
+            int price = (int) (shopItem.getPrice() * ConfigRate.RATE_SHOP_SELLING_PRICE);
+
+            writeD(i); // 排序
+            writeH(item.getGfxId()); // 圖形
+            writeD(price); // 價格
+
+            // --- ▼▼▼ 限購數量顯示邏輯 ▼▼▼ ---
+            String itemName = item.getNameId(); // 注意：您的版本是使用 NameId
+            final int dailyLimit = shopItem.getDailyLimit();
+
+            // 如果商品有限購
+            if (dailyLimit > 0) {
+                final int currentCount = ShopLimitReading.get().getPurchaseCount(pc.getId(), shopItem.getItemId());
+                itemName = String.format("%s (%d/%d)", itemName, currentCount, dailyLimit);
+            }
+
+            // 處理強化等級和組合包顯示
             String nameString = "";
-            if (shopItem.getEnchantLevel() > 1) {
+            if (shopItem.getEnchantLevel() > 0) { // 改為 > 0 就顯示
                 nameString = ("+" + shopItem.getEnchantLevel() + " ");
             }
+
             if (shopItem.getPackCount() > 1) {
-                writeS(item.getNameId() + " (" + shopItem.getPackCount() + ")");// 名稱
+                writeS(nameString + itemName + " (" + shopItem.getPackCount() + ")");
             } else {
-                writeS(nameString + item.getNameId());// 名稱
+                writeS(nameString + itemName);
             }
-            // writeD(0);
+            // --- ▲▲▲ ---
+
             L1Item template = ItemTable.get().getTemplate(item.getItemId());
-            this.writeD(template.getUseType());// XXX 7.6新增商品分類
+            this.writeD(template.getUseType());
             if (ConfigOther.SHOPINFO) {
                 L1ItemStatus itemInfo = new L1ItemStatus(item);
-                // 取回物品資訊
                 byte[] status = itemInfo.getStatusBytes(true).getBytes();
                 writeC(status.length);
                 for (byte b : status) {
                     writeC(b);
                 }
             } else {
-                // 降低封包量 不傳送詳細資訊
                 writeC(0);
             }
         }
-        writeH(0x0007); // 7 = 金幣為單位 顯示總金額
+        writeH(0x0007);
     }
 
     public S_ShopSellList(L1NpcInstance npc) {

@@ -1,6 +1,7 @@
 package com.lineage.server.templates;
 
 public class L1AttrWeapon {
+    private final int _attrId;
     private final String _name;
     private final int _stage;
     private final int _chance;
@@ -22,8 +23,13 @@ public class L1AttrWeapon {
     private final int _type_remove_armor;
     private final int _extradmg;
     private final int _extrabowdmg;
+    private final int _gfixd;
+    private int _attrDmg;
+    private int _arrtDmgCritical;
+    private int _arrtDmgCriticalPro;
 
-    public L1AttrWeapon(String name, int stage, int chance, int probability, double type_bind, double type_drain_hp, int type_drain_mp, double type_dmgup, int type_range, int type_range_dmg, int type_light_dmg, boolean type_skill_1, boolean type_skill_2, boolean type_skill_3, double type_skill_time, String[] type_poly_list, boolean type_remove_weapon, boolean type_remove_doll, int type_remove_armor, int extrabowdmg, int extradmg) {
+    public L1AttrWeapon( int attrId,String name, int stage, int chance, int probability, double type_bind, double type_drain_hp, int type_drain_mp, double type_dmgup, int type_range, int type_range_dmg, int type_light_dmg, boolean type_skill_1, boolean type_skill_2, boolean type_skill_3, double type_skill_time, String[] type_poly_list, boolean type_remove_weapon, boolean type_remove_doll, int type_remove_armor, int extrabowdmg, int extradmg, int gfixd, int attrDmg, int arrtDmgCritical, int arrtDmgCriticalPro) {
+        _attrId = attrId;
         _name = name;
         _stage = stage;
         _chance = chance;
@@ -45,8 +51,14 @@ public class L1AttrWeapon {
         _type_remove_armor = type_remove_armor;
         _extradmg = extradmg;
         _extrabowdmg = extrabowdmg;
+        _gfixd = gfixd;
+        _attrDmg = attrDmg;
+        _arrtDmgCritical = arrtDmgCritical;
+        _arrtDmgCriticalPro = arrtDmgCriticalPro;
     }
-
+    public int getAttrId() {
+        return _attrId;
+    }
     public final String getName() {
         return _name;
     }
@@ -120,18 +132,31 @@ public class L1AttrWeapon {
     }
 
     public final int getExtraDmg() {
+
         return _extradmg;
     }
 
     public final int getExtraBowDmg() {
+
         return _extrabowdmg;
     }
 
     public final int getTypeRemoveArmor() {
         return _type_remove_armor;
     }
+
+    public final int getGfxId() {
+        return _gfixd;
+    }
+
+    public int getAttrDmg() {
+        return _attrDmg;
+    }
+    public int getArrtDmgCritical() {
+        return _arrtDmgCritical;
+    }
+    public int getArrtDmgCriticalPro() {
+        return _arrtDmgCriticalPro;
+    }
+
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.templates.L1AttrWeapon JD-Core Version: 0.6.2
- */

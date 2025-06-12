@@ -232,7 +232,7 @@ public class C_NPCAction extends ClientBasePacket {
                     L1Mobble.getInstance().buytickets(npc, pc);
                 } else {
                     // 商店販賣的物品清單
-                    pc.sendPackets(new S_ShopSellList(objid));
+                    pc.sendPackets(new S_ShopSellList(pc,objid));
                 }
             } else if (cmd.equalsIgnoreCase("sell")) {
                 int npcid = npctemp.get_npcId();

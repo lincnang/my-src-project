@@ -936,47 +936,27 @@ public class C_ItemUSe extends ClientBasePacket {
     				}
     				}
     		} */
-            // 已經帶了 3個戒指
-    	/*	if ((type == 9) && pcInventory.getTypeEquipped(2, 9) == 3) {
-    				L1ItemInstance ring[] = new L1ItemInstance[3];
-    				ring = pcInventory.getRingEquipped();// 裝備中界指陣列
-    				//永恆戒指判斷
-    				if( armor.getItem().getName().contains("永恆")){
-    				if (ring[0].getItem().getName().contains("永恆")
-    						&& ring[1].getItem().getName().contains("永恆")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				if (ring[0].getItem().getName().contains("永恆")
-    						&& ring[2].getItem().getName().contains("永恆")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				if (ring[1].getItem().getName().contains("永恆")
-    						&& ring[2].getItem().getName().contains("永恆")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				}
-    				//活動戒指判斷
-    				if( armor.getItem().getName().contains("活動戒指")){
-    				if (ring[0].getItem().getName().contains("活動戒指")
-    						&& ring[1].getItem().getName().contains("活動戒指")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				if (ring[0].getItem().getName().contains("活動戒指")
-    						&& ring[2].getItem().getName().contains("活動戒指")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				if (ring[1].getItem().getName().contains("活動戒指")
-    						&& ring[2].getItem().getName().contains("活動戒指")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				}
-    		}*/
+            if (type == 9) {
+                L1ItemInstance[] rings = pcInventory.getRingEquipped();
+                int count = 0;
+                // 取得「純淨名稱」，去掉強化符號
+                String thisPureName = armor.getItem().getName().replaceAll("^\\+\\d+\\s*", "");
+
+                // 統計身上已裝備同一種純名稱的戒指
+                for (L1ItemInstance r : rings) {
+                    if (r != null) {
+                        String ringPureName = r.getItem().getName().replaceAll("^\\+\\d+\\s*", "");
+                        if (ringPureName.equals(thisPureName)) {
+                            count++;
+                        }
+                    }
+                }
+                // 準備再裝這顆，也要算進去
+                if (count >= 2) {
+                    pc.sendPackets(new S_ServerMessage(thisPureName + " 最多只能佩戴兩顆。"));
+                    return;
+                }
+            }
             // 耳環59級欄位判斷
 			/*if ((type == 12) && pcInventory.getTypeEquipped(2, 12) == 1) {
 				if (pc.getLevel() < 59) {
@@ -991,73 +971,79 @@ public class C_ItemUSe extends ClientBasePacket {
 				return;
 			}*/
             // 已經帶了 1個耳環
-    		/*if ((type == 12) && pcInventory.getTypeEquipped(2, 12) == 1) {
+    		if ((type == 12) && pcInventory.getTypeEquipped(2, 12) == 1) {
     				L1ItemInstance earing[] = new L1ItemInstance[1];
     				earing = pcInventory.getEaringEquipped();// 裝備中耳環陣列
     				//星星力量
-    				if( armor.getItem().getName().contains("星星力量")){
-    				if (earing[0].getItem().getName().contains("星星力量")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
+//    				if( armor.getItem().getName().contains("星星力量")){
+//    				if (earing[0].getItem().getName().contains("星星力量")) {
+//    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
+//    					return;
+//    				}
+//    				}
+//    				//'星星敏捷
+//    				if( armor.getItem().getName().contains("星星敏捷")){
+//    				if (earing[0].getItem().getName().contains("星星敏捷")) {
+//    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
+//    					return;
+//    				}
+//    				}
+//    				//星星智力
+//    				if( armor.getItem().getName().contains("星星智力")){
+//    				if (earing[0].getItem().getName().contains("星星智力")) {
+//    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
+//    					return;
+//    				}
+//    				}
+//    				//天堂紀念判斷
+//    				if( armor.getItem().getName().contains("天堂紀念耳環")){
+//    				if (earing[0].getItem().getName().contains("天堂紀念耳環")) {
+//    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
+//    					return;
+//    				}
+//    				}
+    				//倫提斯判斷
+    				if( armor.getItem().getName().contains("倫提斯的紅光耳環")){
+    				if (earing[0].getItem().getName().contains("倫提斯的紅光耳環")) {
+    					pc.sendPackets(new S_ServerMessage("無法重複配戴"));// 同種類的道具不可再裝備。
     					return;
     				}
     				}
-    				/'星星敏捷
-    				if( armor.getItem().getName().contains("星星敏捷")){
-    				if (earing[0].getItem().getName().contains("星星敏捷")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
+    				//倫提斯判斷
+    				if( armor.getItem().getName().contains("倫提斯的藍光耳環")){
+    				if (earing[0].getItem().getName().contains("倫提斯的藍光耳環")) {
+                        pc.sendPackets(new S_ServerMessage("無法重複配戴"));// 同種類的道具不可再裝備。
     					return;
     				}
     				}
-    				//星星智力
-    				if( armor.getItem().getName().contains("星星智力")){
-    				if (earing[0].getItem().getName().contains("星星智力")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
+    				//倫提斯判斷
+    				if( armor.getItem().getName().contains("倫提斯的紫光耳環")){
+    				if (earing[0].getItem().getName().contains("倫提斯的紫光耳環")) {
+                        pc.sendPackets(new S_ServerMessage("無法重複配戴"));// 同種類的道具不可再裝備。
     					return;
     				}
     				}
-    				//天堂紀念判斷
-    				if( armor.getItem().getName().contains("天堂紀念耳環")){
-    				if (earing[0].getItem().getName().contains("天堂紀念耳環")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				}
-    				//麥斯特判斷
-    				if( armor.getItem().getName().contains("麥斯特的紅光耳環")){
-    				if (earing[0].getItem().getName().contains("麥斯特的紅光耳環")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				}
-    				//麥斯特判斷
-    				if( armor.getItem().getName().contains("麥斯特的藍光耳環")){
-    				if (earing[0].getItem().getName().contains("麥斯特的藍光耳環")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				}
-    				//麥斯特判斷
-    				if( armor.getItem().getName().contains("麥斯特的紫光耳環")){
-    				if (earing[0].getItem().getName().contains("麥斯特的紫光耳環")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				}
+                    if( armor.getItem().getName().contains("倫提斯的黑光耳環")){
+                    if (earing[0].getItem().getName().contains("倫提斯的黑光耳環")) {
+                        pc.sendPackets(new S_ServerMessage("無法重複配戴"));// 同種類的道具不可再裝備。
+                        return;
+                    }
+                }
     				//冰之女王的耳環判斷
-    				if( armor.getItem().getName().contains("冰之女王的耳環")){
-    				if (earing[0].getItem().getName().contains("冰之女王的耳環")) {
-    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
-    					return;
-    				}
-    				}
-    				//活動耳環判斷
-    				if( armor.getItem().getName().contains("活動耳環")){
-    				if (earing[0].getItem().getName().contains("活動耳環")) {
-    					pc.sendPackets(new S_ServerMessage("你已配戴相同耳環"));
-    					return;
-    				}
-    				}
-    		}*/
+//    				if( armor.getItem().getName().contains("冰之女王的耳環")){
+//    				if (earing[0].getItem().getName().contains("冰之女王的耳環")) {
+//    					pc.sendPackets(new S_ServerMessage(3278));// 同種類的道具不可再裝備。
+//    					return;
+//    				}
+//    				}
+//    				//活動耳環判斷
+//    				if( armor.getItem().getName().contains("活動耳環")){
+//    				if (earing[0].getItem().getName().contains("活動耳環")) {
+//    					pc.sendPackets(new S_ServerMessage("你已配戴相同耳環"));
+//    					return;
+//    				}
+//    				}
+    		}
             if (type == 23 && pc.getEquipmentIndexAmulet() != 1) { // 14上左 23上右
                 pc.sendPackets(new S_ServerMessage("請解鎖道具解鎖該手環欄位！"));
                 // \f1すでに何かを装備しています。

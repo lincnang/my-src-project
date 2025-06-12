@@ -162,7 +162,8 @@ public class ShopCnTable {
                 final int sellingPrice = rs.getInt("selling_price");
                 final int purchasingPrice = rs.getInt("purchasing_price");
                 final int packCount = rs.getInt("pack_count");
-                L1ShopItem item = new L1ShopItem(id, itemId, sellingPrice, packCount, enchantlevel);
+                int dailyLimit = rs.getInt("daily_limit");
+                L1ShopItem item = new L1ShopItem(id, itemId, sellingPrice, packCount, enchantlevel,dailyLimit);
                 this.addShopItem(npcId, item);
                 // 加入出售物品價格查詢清單
                 addSellList(itemId, sellingPrice, purchasingPrice, packCount);

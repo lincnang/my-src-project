@@ -1496,7 +1496,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                             System.out.println("UI已關閉");
                             break;
                         case 1:
-                            J_Main.main(new String[0]);
+                            J_Main.getInstance();
                             break;
                         case 2:
                             Eva.getInstance();

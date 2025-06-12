@@ -147,6 +147,7 @@ public class DollSolution extends ItemExecutor {
                             pc.getInventory().removeItem(tgItem, 1);
                         }
                         break;
+
                 }
             }
         } catch (final Exception e) {

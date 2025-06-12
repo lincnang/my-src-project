@@ -472,12 +472,9 @@ public class ServerUserInfoWindow extends JInternalFrame {
                                 .addComponent(lbl_UserCount)
                 );
                 refreshUserList();
-                System.out.println("當前線上人數：" + World.get().getAllPlayers().size());
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                System.out.println("UI介面故障 請檢查配置文件或重新啟動伺服器.");
-
             }
             if (userListTimer == null) {
                 userListTimer = new javax.swing.Timer(3000, new ActionListener() {

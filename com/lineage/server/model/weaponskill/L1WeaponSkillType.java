@@ -240,7 +240,7 @@ public abstract class L1WeaponSkillType {
             if ((_random2 != 0) && (weapon.getEnchantLevel() > 0)) {
                 return (int1 + weapon.getEnchantLevel()) * _random2;
             } else {
-                return int1 * 10;
+                return int1;
             }
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);

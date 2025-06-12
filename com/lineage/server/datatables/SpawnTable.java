@@ -162,4 +162,9 @@ public class SpawnTable {
     public L1Spawn getTemplate(int Id) {
         return _spawntable.get(Id);
     }
+
+    public void restSpawn() {
+        _spawntable.clear();
+        load();
+    }
 }

@@ -142,51 +142,16 @@ public class AstrologyCmd {
                         pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getName() + "已激活！", 1));
                         return true;
                     }
-                    /* 根據代碼描述,一次僅可以啓動一個技能,因此對該方法進行簡化
-                    switch (data.get_skillId()) {
-                        case 1: // 處理技能1：檢查玩家是否已激活技能1
-                            if (skill1ActiveMap.containsKey(pc.getId()) && skill1ActiveMap.get(pc.getId())) {
-                                // 已激活技能1，重覆點選則只顯示星盤已完成
-                                pc.sendPackets(new S_SystemMessage("星盤已完成"));
-                                UpdateInfo(pc, "t_zeus");
-                                return false;
-                            } else {
-                                // 第一次激活技能1：激活技能1並關閉技能2
-                                pc.sendPackets(new S_SystemMessage("技能：大地炸彈開啟！"));
-                                skill1ActiveMap.put(pc.getId(), true);
-                                skill2ActiveMap.remove(pc.getId());
-                                return true;
-                            }
-                        case 2: // 處理技能2：檢查玩家是否已激活技能2
-                            if (skill2ActiveMap.containsKey(pc.getId()) && skill2ActiveMap.get(pc.getId())) {
-                                pc.sendPackets(new S_SystemMessage("星盤已完成"));
-                                UpdateInfo(pc, "t_zeus");
-                                return false;
-                            } else {
-                                // 第一次激活技能2：激活技能2並關閉技能1
-                                pc.sendPackets(new S_SystemMessage("技能：降低迴避率開啟！"));
-                                skill2ActiveMap.put(pc.getId(), true);
-                                skill1ActiveMap.remove(pc.getId());
-                                return true;
-                            }
-                        case 0: // 若技能欄位為0則直接顯示任務已完成
-                        default: // 或其他尚未寫完的編號
-                            pc.sendPackets(new S_SystemMessage("星盤已完成"));
-                            UpdateInfo(pc, "t_zeus");
-                            return false;
-                    }*/
                 }
 
                 // 若任務尚未解鎖（未完成），則設定星盤參數，進入抽卡解鎖流程（由 "abu" 指令處理）
                 pc.setAstrologyType(id);
-                //pc.setAstrologyId(1);
                 pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
             }
 
             // 指令 "abu"：抽卡解鎖流程
             if (cmd.startsWith("abu")) {
                 int astrologyType = pc.getAstrologyType();
-                //int astrologyId = pc.getAstrologyId();
                 AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), astrologyType);
                 if (quest == null) {
                     return false;
@@ -206,7 +171,7 @@ public class AstrologyCmd {
                 if (quest.getNum() == 1) {
                     rnd = 100;
                 }
-                if (rnd < 50) {
+                if (rnd < 5) {
                     pc.sendPackets(new S_SystemMessage("開啟守護星，失敗"));
                     AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, quest.getNum() - 1);
                     pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + (quest.getNum() - 1), msg));

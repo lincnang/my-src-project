@@ -61,4 +61,7 @@ public class SQLUtil {
         close(ps);
         close(cn);
     }
+
+    public static void close(PreparedStatement pstm, Connection con) {
+    }
 }

@@ -80,7 +80,7 @@ public class L1ItemSpecialAttribute {
         _colour = colour;
     }
 
-    /**
+    /** 正確的武器類型 2025.06.08 Honglin
      * 傳回特殊屬性所屬類型<br>
      * 1:sword   劍(單手)<br>
      * 2:dagger   匕首(單手)<br>

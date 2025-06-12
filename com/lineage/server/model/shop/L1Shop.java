@@ -2,10 +2,7 @@ package com.lineage.server.model.shop;
 
 import com.lineage.config.ConfigRate;
 import com.lineage.server.datatables.ItemTable;
-import com.lineage.server.datatables.lock.AccountReading;
-import com.lineage.server.datatables.lock.CastleReading;
-import com.lineage.server.datatables.lock.CharItemsTimeReading;
-import com.lineage.server.datatables.lock.TownReading;
+import com.lineage.server.datatables.lock.*;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1CastleLocation;
@@ -317,28 +314,93 @@ public class L1Shop {
             }
         }
     }
-
     /**
      * 商店出售物品給玩家
-     *
      */
     public void sellItems(L1PcInstance pc, L1ShopBuyOrderList orderList, int npcId) {
         if (orderList.isEmpty()) {
             return;
         }
-        // 成長果實系統(Tam幣)
-        if (getNpcId() == 7200002 || getNpcId() == 7200003) { // Tam幣商人增加
+        // 成長果實系統(Tam幣) - 這部分是特殊商店邏輯，保持不變
+        if (getNpcId() == 7200002 || getNpcId() == 7200003) {
             if (!TamMerchant1(pc, orderList)) {
                 return;
             }
             TamMerchant2(pc, pc.getInventory(), orderList);
             return;
         }
+
+        // --- ▼▼▼ 【修改一】購買前的限購檢查 ▼▼▼ ---
+        for (final L1ShopBuyOrder order : orderList.getList()) {
+            final L1ShopItem shopItem = order.getItem();
+            // 檢查該物品是否有每日限購 (dailyLimit > 0)
+            if (shopItem.getDailyLimit() > 0) {
+                final int itemId = shopItem.getItemId();
+                final int purchaseCount = order.getCount();
+                final int currentCount = ShopLimitReading.get().getPurchaseCount(pc.getId(), itemId);
+
+                // 檢查 "已購買數量 + 本次想買數量" 是否超過上限
+                if (currentCount + purchaseCount > shopItem.getDailyLimit()) {
+                    final String itemName = ItemTable.get().getTemplate(itemId).getName();
+                    // 如果超過上限，發送提示訊息給玩家並中斷整個交易
+                    pc.sendPackets(new S_ServerMessage(166, "【" + itemName + "】今日已達購買上限。"));
+                    return;
+                }
+            }
+        }
+        // --- ▲▲▲ 限購檢查結束 ▲▲▲ ---
+
+        // 進行原有的購買條件檢查 (金錢、負重、空間等)
         if (!ensureSell(pc, orderList)) {
             return;
         }
-        sellItems(pc.getInventory(), orderList, pc, npcId);
-        //稅收
+
+        // 扣除玩家金錢
+        final L1PcInventory inv = pc.getInventory();
+        final int price = orderList.getTotalPrice();
+        if (price <= 0 || !inv.consumeItem(_currencyItemId, price)) {
+            // 這邊理論上 ensureSell 會擋掉，但做個保險
+            return;
+        }
+
+        final boolean rent = npcId == 94005; // 租借NPC
+
+        // 給予物品並更新購買紀錄
+        for (final L1ShopBuyOrder order : orderList.getList()) {
+            final int itemId = order.getItem().getItemId();
+            final long amount = order.getCount();
+            final int enchantlevel = order.getItem().getEnchantLevel();
+            final L1ShopItem shopItem = order.getItem();
+
+            if (amount > 0L) {
+                L1ItemInstance item = ItemTable.get().createItem(itemId);
+                item.setCount(amount);
+                item.setEnchantLevel(enchantlevel);
+                server_lv.forIntensifyArmor(pc, item);
+                item.setIdentified(true);
+
+                if (rent) {
+                    long time = System.currentTimeMillis();
+                    long x1 = 10800L;
+                    long x2 = x1 * 1000L;
+                    long upTime = x2 + time;
+                    Timestamp ts = new Timestamp(upTime);
+                    item.set_time(ts);
+                    CharItemsTimeReading.get().addTime(item.getId(), ts);
+                }
+
+                inv.storeItem(item);
+                pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
+
+                // --- ▼▼▼ 【修改二】購買成功後，更新紀錄 ▼▼▼ ---
+                if (shopItem.getDailyLimit() > 0) {
+                    ShopLimitReading.get().updatePurchaseCount(pc.getId(), itemId, (int) amount);
+                }
+                // --- ▲▲▲ 更新紀錄結束 ▲▲▲ ---
+            }
+        }
+
+        // 稅收
         payTax(orderList);
     }
 

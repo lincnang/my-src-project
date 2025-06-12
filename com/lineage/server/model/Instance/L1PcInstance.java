@@ -1136,6 +1136,19 @@ public class L1PcInstance extends L1Character { // src015
     private int _polyrun3 = 0;//變身卡合成幾率3階段
     private int _polyrun4 = 0;//變身卡合成幾率4階段
     private int _polyrun5 = 0;//變身卡合成幾率5階段
+    /////////////////////////////////////聖物卡合成///////////////////////////////////////
+    // 聖物合成進度屬性
+    private int _holyCount = 0;    // 二階合成次數
+    private int _holyCount2 = 0;   // 三階合成次數
+    private int _holyCount3 = 0;   // 四階合成次數
+    private int _holyCount4 = 0;   // 五階合成次數
+
+    private int _holyRun2 = 0;     // 二階合成累積機率
+    private int _holyRun3 = 0;     // 三階合成累積機率
+    private int _holyRun4 = 0;     // 四階合成累積機率
+    private int _holyRun5 = 0;     // 五階合成累積機率
+
+
     private long _autoSkillDelay = 0;
     /**
      * 星盤系統
@@ -2430,7 +2443,7 @@ public class L1PcInstance extends L1Character { // src015
                 System.out.println("UI已關閉");
                 break;
             case 1:
-                J_Main.main(new String[0]);
+                J_Main.getInstance();
                 break;
             case 2:
                 Eva.getInstance();
@@ -3342,48 +3355,64 @@ public class L1PcInstance extends L1Character { // src015
                             attackNpc.receiveDamage(this, dmg);
                         }
                     }
+                    // 「黑暗之盾」效果）
                     if (hasSkillEffect(GREATER_RESURRECTION)) { // 黑暗之盾
+                        // 受到的傷害必須大於10，才會觸發分攤與反射機制（避免小傷害浪費資源）
                         if (damage > 10) { // 受到傷害 > 10 才可觸發 因為要考慮 % 的計算結果
+                            // 如果角色目前在隊伍中
                             if (isInParty()) { // 在隊伍中
+                                // 建立一個 List 來收集同畫面中的隊伍成員
                                 final List<L1PcInstance> members = new ArrayList<>();
+                                // 遍歷隊伍所有成員
                                 for (L1PcInstance player : getParty().getMembers()) {
+                                    // 判斷該成員是否與自己在同一畫面
                                     if (player.getLocation().isInScreen(this.getLocation())) {
-                                        members.add(player); // 獲取同畫面中隊伍成員
+                                        members.add(player); // 加入同畫面的隊友
                                     }
                                 }
                                 try {
+                                    // 如果同畫面內有其他隊員
                                     if (!members.isEmpty()) {
                                         final int num = members.size();
-                                        final double party_dmg = Math.max(1, damage * 0.40D / num); // 由同畫面中隊友分攤剩餘40%傷害 最低也要 1點傷害
+                                        // 傷害分攤：剩餘的 40% 傷害，均分給所有同畫面隊友，每人最少 1 點
+                                        final double party_dmg = Math.max(1, damage * 0.40D / num);
                                         for (L1PcInstance member : members) {
                                             if (member != null) {
+                                                // 讓隊友分攤這 40% 傷害（不觸發死亡、也不反擊）
                                                 member.receiveDamage(attacker, party_dmg, false, false);
-                                                member.sendPacketsAll(new S_EffectLocation(member.getLocation(), 762)); // 隕石特效
+                                                // 給隊友播放分攤傷害的特效（762：隕石特效）
+                                                member.sendPacketsAll(new S_EffectLocation(member.getLocation(), 21449));
                                             }
                                         }
                                     }
                                 } finally {
+                                    // 清空清單，釋放資源
                                     members.clear();
                                 }
-                            } else { // 不在隊伍中 對攻擊者進行傷害反射
-                                if (attackPc != null) {
+                            } else { // 不在隊伍中，直接反射給攻擊者
+                                if (attackPc != null) { // 攻擊者是玩家
+                                    // 攻擊者自身播放受擊特效
                                     attackPc.sendPacketsAll(new S_DoActionGFX(attackPc.getId(), 2));
-                                    this.sendPacketsAll(new S_EffectLocation(this.getLocation(), 10419)); // 魔法盾反射特效(遠程)
+                                    // 自己顯示反射特效（10419：魔法盾遠程特效）
+                                    this.sendPacketsAll(new S_EffectLocation(this.getLocation(), 10419));
+                                    // 把 40% 傷害直接反彈給攻擊者
                                     attackPc.receiveDamage(this, damage * 0.4D, false, false);
                                 }
-                                if (attackNpc != null) {
+                                if (attackNpc != null) { // 攻擊者是 NPC 怪物
                                     attackNpc.broadcastPacketAll(new S_DoActionGFX(attackNpc.getId(), 2));
-                                    this.sendPacketsAll(new S_EffectLocation(this.getLocation(), 10419)); // 魔法盾反射特效(遠程)
+                                    this.sendPacketsAll(new S_EffectLocation(this.getLocation(), 10419));
                                     attackNpc.receiveDamage(this, (int) (damage * 0.4D));
                                 }
                             }
-                            this.sendPacketsAll(new S_EffectLocation(this.getLocation(), 762)); // 魔法盾反射特效
-                            damage *= 0.60D; // 自身受到的傷害減少60%
+                            // 不論分攤或反射，自己都播放受擊特效（762：魔法盾反射特效）
+                            this.sendPacketsAll(new S_EffectLocation(this.getLocation(), 21449));
+                            // 自己受到的傷害減少 60%（只承受原本傷害的 60%）
+                            damage *= 0.60D;
                         }
                     }
                 }
             }
-            if (getInventory().checkEquipped(145) || getInventory().checkEquipped(149)) {// 狂斧、牛人斧
+                    if (getInventory().checkEquipped(145) || getInventory().checkEquipped(149)) {// 狂斧、牛人斧
                 damage *= 1.5D;
             }
             if (this.hasSkillEffect(219)) {// 化身
@@ -3483,6 +3512,10 @@ public class L1PcInstance extends L1Character { // src015
                 // this.sendPackets(new S_SkillSound(this.getId(), 9800));
                 // this.broadcastPacketAll(new S_SkillSound(this.getId(), 9800));
             }
+            if (isGm()) {
+                sendPackets(new S_SystemMessage("你受到 " + ((int)damage) + " 點傷害！"));
+            }
+
         } else if (!isDead()) {
             _log.error("人物hp減少處理失敗 可能原因: 初始hp為0");
             death(attacker);
@@ -12577,6 +12610,62 @@ public class L1PcInstance extends L1Character { // src015
 
     public void setpolyrun5(int i) {
         _polyrun5 = i;
+    }
+//----------------------------聖物合成----------------------------------------------//
+public int getHolyCount() {
+    return _holyCount;
+}
+    public void setHolyCount(int count) {
+        _holyCount = count;
+    }
+
+    public int getHolyCount2() {
+        return _holyCount2;
+    }
+    public void setHolyCount2(int count) {
+        _holyCount2 = count;
+    }
+
+    public int getHolyCount3() {
+        return _holyCount3;
+    }
+    public void setHolyCount3(int count) {
+        _holyCount3 = count;
+    }
+
+    public int getHolyCount4() {
+        return _holyCount4;
+    }
+    public void setHolyCount4(int count) {
+        _holyCount4 = count;
+    }
+
+    public int getHolyRun2() {
+        return _holyRun2;
+    }
+    public void setHolyRun2(int run) {
+        _holyRun2 = run;
+    }
+
+    public int getHolyRun3() {
+        return _holyRun3;
+    }
+    public void setHolyRun3(int run) {
+        _holyRun3 = run;
+    }
+
+    public int getHolyRun4() {
+        return _holyRun4;
+    }
+    public void setHolyRun4(int run) {
+        _holyRun4 = run;
+    }
+
+    public int getHolyRun5() {
+        return _holyRun5;
+    }
+    public void setHolyRun5(int run) {
+        _holyRun5 = run;
     }
 
     /**

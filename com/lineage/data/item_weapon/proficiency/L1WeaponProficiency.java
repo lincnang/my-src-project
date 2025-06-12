@@ -219,10 +219,11 @@ public class L1WeaponProficiency {
         if (_owner.getWeapon() == null) {
             return;
         }
+//        System.out.println("裝備武器type: " + _owner.getWeapon().getItem().getType());
         int originalType = _owner.getWeapon().getItem().getType();
-        int type = normalizeWeaponType(originalType); // ← ✅ 核心修改：轉換武器類型
+        int type = normalizeWeaponType(originalType); //   核心修改：轉換武器類型
 
-        // ✅ 檢查是否有熟練度資料
+        //  檢查是否有熟練度資料
         if (WeaponProficiencyTable.getProficiency(type, 1) == null) {
             _owner.sendPackets(new S_SystemMessage("該武器尚未設定熟練度資料，請通知管理員"));
             return;
@@ -257,6 +258,7 @@ public class L1WeaponProficiency {
             case 37: return 9;
             case 38: return 11;
             case 39: return 10;
+            case 13: return 4;
             default: return type;
         }
     }

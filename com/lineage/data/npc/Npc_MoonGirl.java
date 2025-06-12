@@ -48,7 +48,7 @@ public class Npc_MoonGirl extends NpcExecutor {
             }
         } else if (cmd.equalsIgnoreCase("buy")) {
             // 商店販賣的物品清單
-            pc.sendPackets(new S_ShopSellList(npc.getId()));
+            pc.sendPackets(new S_ShopSellList(pc,npc.getId()));
         } else if (cmd.equalsIgnoreCase("makeItem")) {
             try {
                 String msg0 = "";

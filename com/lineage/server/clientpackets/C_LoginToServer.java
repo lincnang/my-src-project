@@ -1187,7 +1187,7 @@ public class C_LoginToServer extends ClientBasePacket {
                     System.out.println("UI已關閉");
                     break;
                 case 1:
-                    J_Main.main(new String[0]);
+                    J_Main.getInstance();;
                     break;
                 case 2:
                     Eva.getInstance();
@@ -2140,59 +2140,72 @@ public class C_LoginToServer extends ClientBasePacket {
         public LoadDelayTime(L1PcInstance pc) {
             _pc = pc;
         }
-
         @Override
         public void run() {
             if (_pc.isOutGame()) {
                 return;
             }
             try {
-                // 取回快速鍵紀錄
+                // 1. 加載玩家的快捷鍵設定
                 final L1Config config = CharacterConfigReading.get().get(_pc.getId());
                 Optional.ofNullable(config).ifPresent(u -> _pc.sendPackets(new S_PacketBoxConfig(config)));
                 _pc.sendPackets(new S_SystemMessage("快捷欄資料加載完成", 3));
-
-                // ===== 排行榜名次查詢與能力獎勵開始 =====
-                try {
-                    String name = _pc.getName();
-                    int realRank = com.lineage.server.datatables.T_RankTable.get().getRankOfPlayer(name);
-                    _pc.setRanking(realRank);
-                    com.lineage.system.RankingAbilityBonus.AbilityBonus bonus = com.lineage.system.RankingAbilityBonus.getBonusByRank(realRank);
-                    _pc.addStr(bonus.str);
-                    _pc.addDex(bonus.dex);
-                    _pc.addCon(bonus.con);
-                    _pc.addWis(bonus.wis);
-                    _pc.addCha(bonus.cha);
-                    _pc.addInt(bonus.intel);
-                    _pc.setPvpDmg(bonus.pvpDamageIncrease);
-                    _pc.setPvpDmg_R(bonus.pvpDamageReduction);
-                    _pc.addMaxHp(bonus.hp);
-                    _pc.addMaxMp(bonus.mp);
-                    _pc.sendPackets(new S_SystemMessage("你獲得了排行榜第 " + realRank + " 名的能力獎勵！", 4));
-                    // 狀態圖示顯示設定（登入時或效果套用時出現）
-                    if (bonus != null && bonus._buff_iconid != 0 && bonus._buff_stringid != 0) {
-                        if (bonus._time_string == 0) {
-                            _pc.sendPackets(new S_InventoryIcon(bonus._buff_iconid, true, bonus._buff_stringid, -1));
-                        } else {
-                            _pc.sendPackets(new S_InventoryIcon(bonus._buff_iconid, true, bonus._buff_stringid, bonus._buff_stringid));
-                        }
-                    }
-
-                } catch (Exception e) {
-                    System.out.println("[ERROR] 排行榜能力加載錯誤: " + e.getMessage());
-                    e.printStackTrace();
-                }
-                // ===== 排行榜名次查詢與能力獎勵結束 =====
-            } catch (Exception e) {
-                _log.error(e.getLocalizedMessage(), e);
+                // 2. 處理排行榜名次與能力獎勵（呼叫新方法）
+                this.loadRankingBonus(_pc);
+            } catch (final Exception e) {
+                // 統一由外層的 try-catch 處理所有預期外的錯誤，並寫入日誌
+                _log.error("玩家 " + _pc.getName() + " 登入後加載初始設定時發生錯誤", e);
             } finally {
+                // 3. 準備加載後續的狀態（無論前面是否成功，這一步都會執行）
                 _pc.sendPackets(new S_SystemMessage("準備加載其他框架屬性點加成", 17));
                 LoadOtherStatus status = new LoadOtherStatus(_pc);
                 GeneralThreadPool.get().schedule(status, 2000);
             }
         }
 
-
+        /**
+         * 為指定玩家加載排行榜名次與對應的能力獎勵。
+         *
+         * @param pc 玩家實體物件
+         */
+        private void loadRankingBonus(final L1PcInstance pc) {
+            try {
+                final String name = pc.getName();
+                final int realRank = com.lineage.server.datatables.T_RankTable.get().getRankOfPlayer(name);
+                pc.setRanking(realRank); // 設定玩家的排名資訊
+                // 如果排名無效（<=0），則直接返回，不執行後續操作
+                if (realRank <= 0) {
+                    return;
+                }
+                // 根據排名獲取獎勵物件
+                final com.lineage.system.RankingAbilityBonus.AbilityBonus bonus = com.lineage.system.RankingAbilityBonus.getBonusByRank(realRank);
+                // 確保獎勵物件存在才執行能力賦予
+                if (bonus != null) {
+                    pc.addStr(bonus.str);
+                    pc.addDex(bonus.dex);
+                    pc.addCon(bonus.con);
+                    pc.addWis(bonus.wis);
+                    pc.addCha(bonus.cha);
+                    pc.addInt(bonus.intel);
+                    pc.setPvpDmg(bonus.pvpDamageIncrease);
+                    pc.setPvpDmg_R(bonus.pvpDamageReduction);
+                    pc.addMaxHp(bonus.hp);
+                    pc.addMaxMp(bonus.mp);
+                    pc.sendPackets(new S_SystemMessage("你獲得了排行榜第 " + realRank + " 名的能力獎勵！", 4));
+                    // 處理狀態圖示顯示
+                    if (bonus._buff_iconid != 0 && bonus._buff_stringid != 0) {
+                        if (bonus._time_string == 0) {
+                            pc.sendPackets(new S_InventoryIcon(bonus._buff_iconid, true, bonus._buff_stringid, -1));
+                        } else {
+                            pc.sendPackets(new S_InventoryIcon(bonus._buff_iconid, true, bonus._buff_stringid, bonus._buff_stringid));
+                        }
+                    }
+                }
+            } catch (final Exception e) {
+                // 使用 _log 記錄錯誤，更符合伺服器開發規範
+                _log.error("為玩家 " + pc.getName() + " 加載排行榜獎勵時發生錯誤", e);
+            }
+        }
         /**
          * 延遲順序加載千奇百怪的屬性點加成資料
          */

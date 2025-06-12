@@ -58,15 +58,15 @@ public class W_SK0018 extends L1WeaponSkillType {
     public double start_weapon_skill(final L1PcInstance pc, final L1Character target,
                                      final L1ItemInstance weapon, final double srcdmg) {
         try {
-            // 基本檢查
-            if (pc == null || target == null || !(target instanceof L1PcInstance)) {
-                return 0;
+            // === 1. 機率判斷（直接用SQL欄位 random1, random2） ===
+            int activationChance = random(weapon); // L1WeaponSkillType 的 random(weapon)
+            int chance = _random.nextInt(1000);
+            if (chance >= activationChance) {
+                return srcdmg; // 未觸發，直接回傳原傷害
             }
 
-            // 機率判斷
-            if (_random.nextDouble() > TRIGGER_CHANCE) {
-                pc.sendPackets(new S_SystemMessage("技能未觸發！"));
-                return srcdmg; // 技能未觸發，返回原始傷害
+            if (pc == null || target == null || !(target instanceof L1PcInstance)) {
+                return 0;
             }
 
             L1PcInstance targetPc = (L1PcInstance) target;
@@ -86,23 +86,25 @@ public class W_SK0018 extends L1WeaponSkillType {
             applySkillEffects(targetPc, currentStacks);
 
             // 排程移除效果
-            final int stacks = currentStacks; // 必須是 final 或有效 final
-            boolean isLastStack = stacks == MAX_STACK; // 判斷是否為最後一層
+            final int stacks = currentStacks;
+            boolean isLastStack = stacks == MAX_STACK;
             scheduler.schedule(() -> removeSkillEffects(targetPc, stacks, isLastStack),
                     SKILL_DURATION_MS, TimeUnit.MILLISECONDS);
 
-            // 播放技能音效
-            //            target.broadcastPacketAll(new S_SkillSound(target.getId(), 2177));
-            //            pc.sendPacketsX8(new S_SkillSound(pc.getId(), 2177));
-            pc.sendPacketsAll(new S_SkillSound(target.getId(), 19991));
+            // 播放動畫，可用SQL欄位設定
+            int animId = get_gfxid2(); // 建議統一和W_SK0017，資料庫填18856
+            if (animId > 0) {
+                pc.sendPacketsAll(new S_SkillSound(target.getId(), animId));
+            }
             targetPc.sendPackets(new S_InventoryIcon(10017, true, 3215, 8));
 
-            return srcdmg; // 返回原始傷害值
+            return srcdmg;
         } catch (Exception e) {
             _log.error("技能執行時發生錯誤: " + e.getLocalizedMessage(), e);
             return 0;
         }
     }
+
 
     /**
      * 套用技能效果（PVP 傷害減免 + 昏迷抗性減少）

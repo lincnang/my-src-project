@@ -36,7 +36,7 @@ public class Npc_Margaret extends NpcExecutor {
 
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
         if (cmd.equalsIgnoreCase("buy")) {
-            pc.sendPackets(new S_ShopSellList(npc.getId()));
+            pc.sendPackets(new S_ShopSellList(pc,npc.getId()));
         } else if (cmd.equalsIgnoreCase("sell")) {
             pc.sendPackets(new S_ShopBuyList(npc.getId(), pc));
         } else {

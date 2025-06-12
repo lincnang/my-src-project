@@ -5,6 +5,7 @@ import com.lineage.server.datatables.ActivityNoticeTable;
 import com.lineage.server.datatables.MapsGroupTable;
 import com.lineage.server.datatables.NpcTeleportOutTable;
 import com.lineage.server.datatables.lock.CharMapTimeReading;
+import com.lineage.server.datatables.lock.ShopLimitReading;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Teleport;
 import com.lineage.server.serverpackets.S_ServerMessage;
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class ServerTimerController implements Runnable {
     private static final Log _log = LogFactory.getLog(ServerTimerController.class);
     private static ServerTimerController _instance;
-
+    private boolean _isShopResetDone = false; // <-- 【修改二】新增執行旗標
     public ServerTimerController() {
         GeneralThreadPool.get().execute(this);
     }
@@ -45,6 +46,7 @@ public class ServerTimerController implements Runnable {
         while (true) {
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
+                shopLimitResetCheck();
                 TeleportOutChack(); // 指定地圖指定時間傳走玩家
                 MapRestartChack(); // 重置地圖使用時間
                 ActivityNoticeBossChack(); // 活動召喚BOSS
@@ -53,7 +55,32 @@ public class ServerTimerController implements Runnable {
             }
         }
     }
+    /**
+     * 每日商店限購重置檢查
+     */
+    private void shopLimitResetCheck() { // <-- 【修改四】新增這個完整的方法
+        try {
+            final Calendar cal = Calendar.getInstance();
+            final int hour = cal.get(Calendar.HOUR_OF_DAY);
+            final int minute = cal.get(Calendar.MINUTE);
 
+            // 在每日凌晨 5 點整，並且當日尚未執行過重置時，執行任務
+            // 您可以修改下方的數字 5 來改變重置時間 (0=凌晨0點, 1=凌晨1點, etc.)
+            if (hour == 23 && minute == 30 && !this._isShopResetDone) {
+                ShopLimitReading.get().resetDailyPurchases();
+                _log.info("每日商店限購紀錄已成功重置。");
+                this._isShopResetDone = true; // 標記今日已執行
+            }
+
+            // 當時間經過重置點（例如來到5點01分），將旗標重置，為隔天的任務做準備
+            if (hour == 23 && minute == 31 && this._isShopResetDone) {
+                this._isShopResetDone = false;
+            }
+
+        } catch (final Exception e) {
+            _log.error("執行每日商店限購重置時發生錯誤", e);
+        }
+    }
     /**
      * 指定地圖指定時間傳走玩家
      */

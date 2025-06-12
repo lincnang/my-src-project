@@ -18,16 +18,16 @@ public class Poly2UserSet extends ItemExecutor {
     public void execute(int[] data, L1PcInstance pc, L1ItemInstance item) {
         if (_polyid == 0) {
             if (pc.isElf()) {
-                _polyid = 12314;
+                _polyid = 22319;
             }
             if (pc.isDarkelf()) {
-                _polyid = 12280;
+                _polyid = 22319;
             }
             if (pc.isKnight() || pc.isCrown() || pc.isWarrior() || pc.isDragonKnight()) {
-                _polyid = 12283;
+                _polyid = 22319;
             }
             if (pc.isWizard() || pc.isIllusionist()) {
-                _polyid = 12286;
+                _polyid = 22319;
             }
         }
         if (pc.cL == 0) {

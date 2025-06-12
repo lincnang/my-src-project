@@ -1,11 +1,8 @@
 package com.lineage.server.clientpackets;
 
-import com.eric.gui.J_Main;
-import com.lineage.config.Config;
 import com.lineage.config.ConfigAlt;
 import com.lineage.config.ConfigRecord;
 import com.lineage.echo.ClientExecutor;
-import com.lineage.managerUI.Eva;
 import com.lineage.server.datatables.SpamTable;
 import com.lineage.server.datatables.lock.LogChatReading;
 import com.lineage.server.model.Instance.L1DeInstance;
@@ -118,19 +115,6 @@ public class C_ChatWhisper extends ClientBasePacket {
             whisperTo.sendPackets(new S_ChatWhisperFrom(whisperFrom, text));
             if (ConfigRecord.LOGGING_CHAT_WHISPER) {
                 LogChatReading.get().isTarget(whisperFrom, whisperTo, text, 9);
-            }
-            switch (Config.UI_MODE) {
-                case 0:
-                    System.out.println("UI已關閉");
-                    break;
-                case 1:
-                    J_Main.main(new String[0]);
-                    break;
-                case 2:
-                    Eva.getInstance();
-                    break;
-                default:
-                    System.out.println("未知UI模式，已自動關閉介面");
             }
         } catch (Exception localException) {
         } finally {

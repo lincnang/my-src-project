@@ -228,7 +228,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
         try {
             int i = 0;
             con = DatabaseFactory.get().getConnection();
-            pstm = con.prepareStatement("INSERT INTO characters SET account_name=?,objid=?,char_name=?,level=?,HighLevel=?,Exp=?,MaxHp=?,CurHp=?,MaxMp=?,CurMp=?,Ac=?,Str=?,Con=?,Dex=?,Cha=?,Intel=?,Wis=?,Status=?,Class=?,Sex=?,Type=?,Heading=?,LocX=?,LocY=?,MapID=?,Food=?,Lawful=?,Title=?,ClanID=?,Clanname=?,ClanRank=?,rejoin_clan_time=?,BonusStatus=?,ElixirStatus=?,ElfAttr=?,PKcount=?,PkCountForElf=?,ExpRes=?,PartnerID=?,AccessLevel=?,OnlineStatus=?,HomeTownID=?,Contribution=?,Pay=?,HellTime=?,Banned=?,Karma=?,LastPk=?,LastPkForElf=?,DeleteTime=?,CreateTime=?,ClanMemberNotes=?,MeteLevel=?,ReincarnationSkillCount=?,PunishTime=?,BanError=?,InputBanError=?,SpeedError=?,RocksPrisonTime=?,IvorytowerTime=?,LastabardTime=?,DragonValleyTime=?,MazuTime=?,AI_TIMES=?,TamEndTime=?,Mark_Count=?,pacha=?,pacon=?,padex=?,paint=?,pastr=?,pawis=?,紋樣類型1=?,紋樣等級1=?,紋樣類型2=?,紋樣等級2=?,紋樣類型3=?,紋樣等級3=?,紋樣類型4=?,紋樣等級4=?,紋樣類型5=?,紋樣等級5=?,紋樣類型6=?,紋樣等級6=?,紋樣積分=?,娃娃召喚紀錄=?,聖物召喚紀錄=?,簽到紀錄=?,簽到日期紀錄=?AI_TIMES=?,Honor=?,HonorLevel=?");
+            pstm = con.prepareStatement("INSERT INTO characters SET " + "account_name=?,objid=?,char_name=?,level=?,HighLevel=?,Exp=?,MaxHp=?,CurHp=?,MaxMp=?,CurMp=?,Ac=?,Str=?,Con=?,Dex=?,Cha=?,Intel=?,Wis=?,Status=?,Class=?,Sex=?,Type=?,Heading=?,LocX=?,LocY=?,MapID=?,Food=?,Lawful=?,Title=?,ClanID=?,Clanname=?,ClanRank=?,rejoin_clan_time=?,BonusStatus=?,ElixirStatus=?,ElfAttr=?,PKcount=?,PkCountForElf=?,ExpRes=?,PartnerID=?,AccessLevel=?,OnlineStatus=?,HomeTownID=?,Contribution=?,Pay=?,HellTime=?,Banned=?,Karma=?,LastPk=?,LastPkForElf=?,DeleteTime=?,CreateTime=?,ClanMemberNotes=?,MeteLevel=?,ReincarnationSkillCount=?,PunishTime=?,BanError=?,InputBanError=?,SpeedError=?,RocksPrisonTime=?,IvorytowerTime=?,LastabardTime=?,DragonValleyTime=?,MazuTime=?,AI_TIMES=?,TamEndTime=?,Mark_Count=?,pacha=?,pacon=?,padex=?,paint=?,pastr=?,pawis=?,紋樣類型1=?,紋樣等級1=?,紋樣類型2=?,紋樣等級2=?,紋樣類型3=?,紋樣等級3=?,紋樣類型4=?,紋樣等級4=?,紋樣類型5=?,紋樣等級5=?,紋樣類型6=?,紋樣等級6=?,紋樣積分=?,娃娃召喚紀錄=?,聖物召喚紀錄=?,簽到紀錄=?,簽到日期紀錄=?,Honor=?,HonorLevel=?");
             pstm.setString(++i, pc.getAccountName());
             pstm.setInt(++i, pc.getId());
             pstm.setString(++i, pc.getName());
@@ -287,10 +287,12 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setTimestamp(++i, pc.getLastPk());
             pstm.setTimestamp(++i, pc.getLastPkForElf());
             pstm.setTimestamp(++i, pc.getDeleteTime());
+
             final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             final String times = sdf.format(System.currentTimeMillis());
             int time = Integer.parseInt(times.replace("-", ""));
             pstm.setInt(++i, time);
+
             pstm.setString(++i, pc.getClanMemberNotes());// 7.6血盟個人備註
             pstm.setInt(++i, pc.getMeteLevel());
             pstm.setInt(++i, pc.getTurnLifeSkillCount()); // 轉生天賦
@@ -306,14 +308,16 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setInt(++i, pc.getAITimer()); // 特效驗證系統
             pstm.setTimestamp(++i, pc.getTamTime()); // 成長果實系統(Tam幣)
             pstm.setInt(++i, pc.getMark_count()); // 日版記憶座標
-            //*	pstm.setInt(++i, pc.getHonor());
-            //*	pstm.setInt(++i, pc.getHonorLevel());
+
+            // 新增屬性
             pstm.setInt(++i, pc.getPaCha());
             pstm.setInt(++i, pc.getPaCon());
             pstm.setInt(++i, pc.getPaDex());
             pstm.setInt(++i, pc.getPaInt());
             pstm.setInt(++i, pc.getPaStr());
             pstm.setInt(++i, pc.getPaWis());
+
+            // 紋樣
             pstm.setInt(++i, pc.getWyType1());
             pstm.setInt(++i, pc.getWyLevel1());
             pstm.setInt(++i, pc.getWyType2());
@@ -326,6 +330,8 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setInt(++i, pc.getWyLevel5());
             pstm.setInt(++i, pc.getWyType6());
             pstm.setInt(++i, pc.getWyLevel6());
+
+            // 其餘
             pstm.setInt(++i, pc.getWenyangJiFen());
             pstm.setInt(++i, pc.getLastDollId());
             pstm.setInt(++i, pc.getLastHolyId2());
@@ -422,15 +428,30 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
         try {
             int i = 0;
             con = DatabaseFactory.get().getConnection();
-            pstm = con.prepareStatement("UPDATE characters SET level=?,HighLevel=?,Exp=?,MaxHp=?,CurHp=?,MaxMp=?,CurMp=?,Ac=?,Str=?,Con=?,Dex=?,Cha=?,Intel=?,Wis=?,Status=?,Class=?,Sex=?,Type=?,Heading=?,LocX=?,LocY=?,MapID=?,Food=?,Lawful=?,Title=?,ClanID=?,Clanname=?,ClanRank=?,rejoin_clan_time=?,BonusStatus=?,ElixirStatus=?,ElfAttr=?,PKcount=?,PkCountForElf=?,ExpRes=?,PartnerID=?,AccessLevel=?,OnlineStatus=?,HomeTownID=?,Contribution=?,HellTime=?,Banned=?,Karma=?,LastPk=?,LastPkForElf=?,DeleteTime=?,ClanMemberNotes=?,MeteLevel=?,ReincarnationSkillCount=?,PunishTime=?,BanError=?,InputBanError=?,SpeedError=?,RocksPrisonTime=?,IvorytowerTime=?,LastabardTime=?,DragonValleyTime=?,MazuTime=?,AI_TIMES=?,TamEndTime=?,Mark_Count=?,OnlineGiftIndex=?,OnlineGiftWiatEnd=?,OtherStatus=?,AddPoint=?,DelPoint=?,pacha=?,pacon=?,padex=?,paint=?,pastr=?,pawis=?,紋樣類型1=?,紋樣等級1=?,紋樣類型2=?,紋樣等級2=?,紋樣類型3=?,紋樣等級3=?,紋樣類型4=?,紋樣等級4=?,紋樣類型5=?,紋樣等級5=?,紋樣類型6=?,紋樣等級6=?,紋樣積分=?,娃娃召喚紀錄=?,聖物召喚紀錄=?,簽到紀錄=?,簽到日期紀錄=? ,Honor=?, HonorLevel=? WHERE objid=?");
+
+            // ⚡ 1. 這裡逗號記得改掉！（WHERE前不可以有逗號）
+            String sql = "UPDATE characters SET "
+                    + "level=?,HighLevel=?,Exp=?,MaxHp=?,CurHp=?,MaxMp=?,CurMp=?,Ac=?,Str=?,Con=?,Dex=?,Cha=?,Intel=?,Wis=?,"
+                    + "Status=?,Class=?,Sex=?,Type=?,Heading=?,LocX=?,LocY=?,MapID=?,Food=?,Lawful=?,Title=?,ClanID=?,Clanname=?,ClanRank=?,"
+                    + "rejoin_clan_time=?,BonusStatus=?,ElixirStatus=?,ElfAttr=?,PKcount=?,PkCountForElf=?,ExpRes=?,PartnerID=?,AccessLevel=?,"
+                    + "OnlineStatus=?,HomeTownID=?,Contribution=?,HellTime=?,Banned=?,Karma=?,LastPk=?,LastPkForElf=?,DeleteTime=?,"
+                    + "ClanMemberNotes=?,MeteLevel=?,ReincarnationSkillCount=?,PunishTime=?,BanError=?,InputBanError=?,SpeedError=?,"
+                    + "RocksPrisonTime=?,IvorytowerTime=?,LastabardTime=?,DragonValleyTime=?,MazuTime=?,AI_TIMES=?,TamEndTime=?,Mark_Count=?,"
+                    + "OnlineGiftIndex=?,OnlineGiftWiatEnd=?,OtherStatus=?,AddPoint=?,DelPoint=?,pacha=?,pacon=?,padex=?,paint=?,pastr=?,pawis=?,"
+                    + "紋樣類型1=?,紋樣等級1=?,紋樣類型2=?,紋樣等級2=?,紋樣類型3=?,紋樣等級3=?,紋樣類型4=?,紋樣等級4=?,"
+                    + "紋樣類型5=?,紋樣等級5=?,紋樣類型6=?,紋樣等級6=?,紋樣積分=?,娃娃召喚紀錄=?,聖物召喚紀錄=?,"
+                    + "簽到紀錄=?,簽到日期紀錄=?,Honor=?,HonorLevel=? "
+                    + "WHERE objid=?"; // <-- 這裡前面逗號必須去除
+
+            pstm = con.prepareStatement(sql);
+
+            // ⚡ 2. 依序塞參數
             pstm.setInt(++i, pc.getLevel());
             pstm.setInt(++i, pc.getHighLevel());
             pstm.setLong(++i, pc.getExp());
             pstm.setInt(++i, pc.getBaseMaxHp());
             int hp = pc.getCurrentHp();
-            if (hp < 1) {
-                hp = 1;
-            }
+            if (hp < 1) hp = 1;
             pstm.setInt(++i, hp);
             pstm.setInt(++i, pc.getBaseMaxMp());
             pstm.setInt(++i, pc.getCurrentMp());
@@ -464,9 +485,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setInt(++i, pc.getExpRes());
             pstm.setInt(++i, pc.getPartnerId());
             short accesslevel = pc.getAccessLevel();
-            if (accesslevel > 200) {
-                accesslevel = 0;
-            }
+            if (accesslevel > 200) accesslevel = 0;
             pstm.setShort(++i, accesslevel);
             pstm.setInt(++i, pc.getOnlineStatus());
             pstm.setInt(++i, pc.getHomeTownId());
@@ -477,10 +496,9 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setTimestamp(++i, pc.getLastPk());
             pstm.setTimestamp(++i, pc.getLastPkForElf());
             pstm.setTimestamp(++i, pc.getDeleteTime());
-            // System.out.println("存儲備註：" + pc.getClanMemberNotes());
-            pstm.setString(++i, pc.getClanMemberNotes());// 7.6血盟個人備註
+            pstm.setString(++i, pc.getClanMemberNotes());
             pstm.setInt(++i, pc.getMeteLevel());
-            pstm.setInt(++i, pc.getTurnLifeSkillCount()); // 轉生天賦
+            pstm.setInt(++i, pc.getTurnLifeSkillCount());
             pstm.setTimestamp(++i, pc.getPunishTime());
             pstm.setInt(++i, pc.getBanError());
             pstm.setInt(++i, pc.getInputBanError());
@@ -490,16 +508,16 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setInt(++i, pc.getLastabardTime());
             pstm.setInt(++i, pc.getDragonValleyTime());
             pstm.setInt(++i, pc.getMazuTime());
-            pstm.setInt(++i, pc.getAITimer()); // 特效驗證系統
-            pstm.setTimestamp(++i, pc.getTamTime()); // 成長果實系統(Tam幣)
-            pstm.setInt(++i, pc.getMark_count()); // 日版記憶座標
+            pstm.setInt(++i, pc.getAITimer());
+            pstm.setTimestamp(++i, pc.getTamTime());
+            pstm.setInt(++i, pc.getMark_count());
             pstm.setInt(++i, pc.getOnlineGiftIndex());
             pstm.setBoolean(++i, pc.isOnlineGiftWiatEnd());
             pstm.setInt(++i, pc.getOtherStats());
             pstm.setInt(++i, pc.getAddPoint());
             pstm.setInt(++i, pc.getDelPoint());
-            //*	pstm.setInt(++i, pc.getHonor());//轉生系統
-            //*	pstm.setInt(++i, pc.getHonorLevel());
+            // *pstm.setInt(++i, pc.getHonor());
+            // *pstm.setInt(++i, pc.getHonorLevel());
             pstm.setInt(++i, pc.getPaCha());
             pstm.setInt(++i, pc.getPaCon());
             pstm.setInt(++i, pc.getPaDex());
@@ -525,8 +543,11 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setTimestamp(++i, pc.get_day_signature_time());
             pstm.setInt(++i, pc.getHonor());
             pstm.setInt(++i, pc.getHonorLevel());
+
+            // 最後一個 objid 為 WHERE objid=?
             pstm.setInt(++i, pc.getId());
             pstm.execute();
+
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
@@ -534,6 +555,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             SQLUtil.close(con);
         }
     }
+
 
     @Override
     public L1PcInstance loadCharacter(final int objid) {

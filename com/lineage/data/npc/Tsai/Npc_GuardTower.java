@@ -54,7 +54,7 @@ public class Npc_GuardTower extends NpcExecutor {
                 pc.sendPackets(new S_SystemMessage("\\fR等級不足。"));
             }
         } else if (cmd.equalsIgnoreCase("buy")) {
-            pc.sendPackets(new S_ShopSellList(npc.getId()));
+            pc.sendPackets(new S_ShopSellList(pc,npc.getId()));
         }
     }
 }

@@ -12,31 +12,33 @@ public class L1ShopItem {
      * [原碼] 出售強化物品
      */
     private final int _EnchantLevel;
-
+    private int _dailyLimit = -1; // 新增每日限購數量屬性 (-1為不限制)
     /**
      * 商城物品用
      *
      */
-    public L1ShopItem(int id, int itemId, int price, int packCount, int enchantlevel) {
+    public L1ShopItem(int id, int itemId, int price, int packCount, int enchantlevel,int dailyLimit) {
         _id = id;
         _itemId = itemId;
         _item = ItemTable.get().getTemplate(itemId);
         _price = price;
         _packCount = packCount;
         _EnchantLevel = enchantlevel;
+        _dailyLimit = dailyLimit; // 新增對應的賦值
     }
 
     /**
      * 一般商店物品用
      *
      */
-    public L1ShopItem(int itemId, int price, int packCount, int enchantlevel) {
+    public L1ShopItem(int itemId, int price, int packCount, int enchantlevel, int dailyLimit) {
         _id = -1;
         _itemId = itemId;
         _item = ItemTable.get().getTemplate(itemId);
         _price = price;
         _packCount = packCount;
         _EnchantLevel = enchantlevel;
+        _dailyLimit = dailyLimit; // 新增對應的賦值
     }
 
     public int getId() {
@@ -59,13 +61,19 @@ public class L1ShopItem {
         return _packCount;
     }
 
+    public int getDailyLimit() { // 新增對應的 getter 方法
+        return this._dailyLimit;
+    }
+
     /**
      * [原碼] 出售強化物品
      */
     public int getEnchantLevel() {
         return _EnchantLevel;
     }
+
 }
+
 /*
  * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
  * com.lineage.server.templates.L1ShopItem JD-Core Version: 0.6.2

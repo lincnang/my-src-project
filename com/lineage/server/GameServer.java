@@ -280,7 +280,7 @@ public class GameServer {
                     System.out.println("UI已關閉");
                     break;
                 case 1:
-                    J_Main.main(new String[0]);
+                    J_Main.getInstance();
                     break;
                 case 2:
                     Eva.getInstance();
@@ -305,6 +305,7 @@ public class GameServer {
             CharItemPowerReading.get().load();
             CharItemBlessReading.get().load();
             CharItemPowerTable.get().load(); // 強化擴充能力
+            ItemPowerTable.get().load();
             /** [原碼] 底比斯大戰遊戲 */
             if (ConfigThebes.Mini_Siege) {
                 MiniSiegeNpcStart.getInstance();

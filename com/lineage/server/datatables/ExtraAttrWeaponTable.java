@@ -71,7 +71,11 @@ public final class ExtraAttrWeaponTable {
                 int type_remove_armor = rs.getInt("卸除對方防具");//卸除對方防具
                 int extradmg = rs.getInt("額外近距離傷害");
                 int extrabowdmg = rs.getInt("額外遠距離傷害");
-                L1AttrWeapon attrWeapon = new L1AttrWeapon(name, stage, chance, probability, type_bind, type_drain_hp, type_drain_mp, type_dmgup, type_range, type_range_dmg, type_light_dmg, type_skill_1, type_skill_2, type_skill_3, type_skill_time, type_poly_list, type_remove_weapon, type_remove_doll, type_remove_armor, extradmg, extrabowdmg);
+                int gfixd = rs.getInt("特效顯示");
+                int attrDmg = rs.getInt("屬性傷害");
+                int arrtDmgCritical = rs.getInt("屬性爆擊");
+                int arrtDmgCriticalPro = rs.getInt("屬性爆擊機率");
+                L1AttrWeapon attrWeapon = new L1AttrWeapon(id,name, stage, chance, probability, type_bind, type_drain_hp, type_drain_mp, type_dmgup, type_range, type_range_dmg, type_light_dmg, type_skill_1, type_skill_2, type_skill_3, type_skill_time, type_poly_list, type_remove_weapon, type_remove_doll, type_remove_armor, extradmg, extrabowdmg, gfixd, attrDmg, arrtDmgCritical, arrtDmgCriticalPro);
                 int index = id * 100 + stage;
                 _attrList.put(index, attrWeapon);
             }
@@ -90,7 +94,3 @@ public final class ExtraAttrWeaponTable {
         return (L1AttrWeapon) _attrList.get(index);
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.datatables.ExtraAttrWeaponTable JD-Core Version: 0.6.2
- */

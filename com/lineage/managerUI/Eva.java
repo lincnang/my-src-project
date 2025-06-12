@@ -181,26 +181,20 @@ public class Eva {
     private JMenuBar jJMenuBar = null;
     private Container jContainer = null;
     SimpleDateFormat die = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-    private BorderLayout jBorderLayout = new BorderLayout();
 
     public Eva() {
-        System.out.println("Eva instance = " + this); // ← 加這一行
         // 先初始化 TextArea，避免 NullPointer
         TA_AllChat = new JTextArea();
         TA_AllChat.setEditable(false);
-
         TA_Normal = new JTextArea();
         TA_Normal.setEditable(false);
-
         TA_Private = new JTextArea();
         TA_Private.setEditable(false);
-
         initialize();
     }
 
-
     /**
-     * ** 로그 설정 부분 *****
+     * **  增加用戶數量
      */
     public static int userCount(int i) {
         userCount += i;
@@ -626,7 +620,6 @@ public class Eva {
     }
 
     private void initialize() {
-        System.out.println("Eva.initialize instance = " + this); // ← 加這一行
         try {
             // ========== 1. JTattoo主題（外觀）支援清單 ==========
             String[][] themes = {
@@ -1027,7 +1020,6 @@ public class Eva {
                 itemEnchantListReload.addActionListener(e -> {
                     if (QMsg("道具強化表 " + ReloadMSG) == 0) {
                         // ItemEnchantList.reload();
-                        System.out.println("道具強化表沒開啟");
                         jSystemLogWindow.append(getLogTime() + "　管理器執行：道具強化表刷新完成..." + "\n", "Red");
                     }
                 });
@@ -1136,6 +1128,15 @@ public class Eva {
                         jSystemLogWindow.append(getLogTime() + "　管理器執行：boss循環週期刷新完成..." + "\n", "Red");
                     }
                 });
+                JMenuItem spawnReload = new JMenuItem("重置放怪");
+                spawnReload.setAccelerator(KeyStroke.getKeyStroke('M', InputEvent.SHIFT_DOWN_MASK)); // Shift+M 快捷鍵
+                spawnReload.addActionListener(e -> {
+                    if (QMsg("重置放怪 " + ReloadMSG) == 0) {
+                        com.lineage.server.datatables.SpawnTable.get().restSpawn();
+                        jSystemLogWindow.append(getLogTime() + "　管理器執行：放怪重載完成..." + "\n", "Red");
+                    }
+                });
+
                 /*
                  * JMenuItem weaponSkillReload = new JMenuItem("WeaponSkill");
                  * weaponSkillReload.setAccelerator(KeyStroke.getKeyStroke('Z',
@@ -1220,6 +1221,7 @@ public class Eva {
                 jJMenu4.add(autoLootReload);
                 jJMenu4.add(npcReload);
                 jJMenu4.add(bossCycleReload);
+                jJMenu4.add(spawnReload);
                 // jJMenu4.add(weaponSkillReload);
                 // jJMenu4.add(itemExplanationReload);
                 // jJMenu4.add(autoShopReload);

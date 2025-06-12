@@ -1,12 +1,9 @@
 package com.lineage.server.clientpackets;
 
-import com.eric.gui.J_Main;
-import com.lineage.config.Config;
 import com.lineage.config.ConfigAlt;
 import com.lineage.config.ConfigOther;
 import com.lineage.config.ConfigRecord;
 import com.lineage.echo.ClientExecutor;
-import com.lineage.managerUI.Eva;
 import com.lineage.server.datatables.ItemTable;
 import com.lineage.server.datatables.SpamTable;
 import com.lineage.server.datatables.lock.LogChatReading;
@@ -110,35 +107,9 @@ public class C_ChatGlobal extends ClientBasePacket {
             switch (chatType) {
                 case 0x03: // 廣播頻道
                     chatType_3(pc, chatText);
-                    switch (Config.UI_MODE) {
-                        case 0:
-                            System.out.println("UI已關閉");
-                            break;
-                        case 1:
-                            J_Main.main(new String[0]);
-                            break;
-                        case 2:
-                            Eva.getInstance();
-                            break;
-                        default:
-                            System.out.println("未知UI模式，已自動關閉介面");
-                    }
                     break;
                 case 0x0c: // 交易頻道
                     chatType_12(pc, chatText);
-                    switch (Config.UI_MODE) {
-                        case 0:
-                            System.out.println("UI已關閉");
-                            break;
-                        case 1:
-                            J_Main.main(new String[0]);
-                            break;
-                        case 2:
-                            Eva.getInstance();
-                            break;
-                        default:
-                            System.out.println("未知UI模式，已自動關閉介面");
-                    }
                     break;
             }
             if (!pc.isGm()) {

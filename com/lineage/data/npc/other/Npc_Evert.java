@@ -38,7 +38,7 @@ public class Npc_Evert extends NpcExecutor {
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
         boolean isCloseList = false;
         if (cmd.equalsIgnoreCase("buy")) {
-            pc.sendPackets(new S_ShopSellList(npc.getId()));
+            pc.sendPackets(new S_ShopSellList(pc,npc.getId()));
         } else if (cmd.equalsIgnoreCase("sell")) {
             pc.sendPackets(new S_ShopBuyList(npc.getId(), pc));
         }

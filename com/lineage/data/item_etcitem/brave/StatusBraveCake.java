@@ -10,6 +10,8 @@ import com.lineage.server.serverpackets.S_SkillSound;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import static com.lineage.server.model.skill.L1SkillId.HIT_BUFF;
+
 public class StatusBraveCake extends ItemExecutor {
     private static final Log _log = LogFactory.getLog(StatusBraveCake.class);
     private int _time = 600;
@@ -35,6 +37,12 @@ public class StatusBraveCake extends ItemExecutor {
         if (pc == null) {
             return;
         }
+        // === 重點: 判斷 HIT_BUFF 狀態 ===
+        if (pc.hasSkillEffect(HIT_BUFF)) {
+            pc.sendPackets(new S_ServerMessage("你受到混沌影響，無法獲得龍之珍珠效果！"));
+            return;
+        }
+
         if (L1BuffUtil.stopPotion(pc)) {
             if (check(pc)) {
                 if (pc.hasSkillEffect(998)) {

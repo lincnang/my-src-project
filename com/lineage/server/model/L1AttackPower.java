@@ -48,6 +48,57 @@ public class L1AttackPower {//src016
                 if (attrWeapon == null) {
                     return damage;
                 }
+                // 1. 物理倍率加乘
+                double dmgUp = attrWeapon.getTypeDmgup();
+                if (dmgUp > 0.0 && dmgUp != 1.0) {
+                    reset_dmg = (int) (reset_dmg * dmgUp);
+                }
+                // 2. 取屬性傷害
+                int attrDmg = attrWeapon.getAttrDmg();
+                // 3. 先爆擊（對屬性傷害加倍）
+                int attrCriticalPro = attrWeapon.getArrtDmgCriticalPro();
+                double attrCriticalRate = attrWeapon.getArrtDmgCritical();
+                int criticalAttrDmg = attrDmg;
+                boolean isCritical = false;
+                if (attrCriticalPro > 0 && attrCriticalRate > 1.0) {
+                    int rnd = _random.nextInt(1000);
+                    if (rnd < attrCriticalPro) {
+                        criticalAttrDmg = (int)(attrDmg * attrCriticalRate);
+                        isCritical = true;
+                        if (_pc != null) {
+                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), 14495));
+                        }
+                    }
+                }
+                // 4. 再扣抗性
+                int defenderResist = 0;
+                if (_targetPc != null) {
+                    switch (attrWeapon.getAttrId()) {
+                        case 1: defenderResist = _targetPc.getEarth(); break;
+                        case 2: defenderResist = _targetPc.getFire(); break;
+                        case 4: defenderResist = _targetPc.getWater(); break;
+                        case 8: defenderResist = _targetPc.getWind(); break;
+                        default: defenderResist = 0;
+                    }
+                }
+                int effectiveAttrDmg = criticalAttrDmg - defenderResist;
+                if (effectiveAttrDmg < 0) effectiveAttrDmg = 0;
+
+                int counterAttrResist = 0;
+                if (_targetPc != null) {
+                    switch (attrWeapon.getAttrId()) {
+                        case 1: counterAttrResist = _targetPc.getWater(); break; // 地剋水
+                        case 2: counterAttrResist = _targetPc.getWind(); break;  // 火剋風
+                        case 4: counterAttrResist = _targetPc.getFire(); break;  // 水剋火
+                        case 8: counterAttrResist = _targetPc.getEarth(); break; // 風剋地
+                    }
+                }
+                double counterRate = 1.0 + (counterAttrResist / 10.0) * 0.1;
+                effectiveAttrDmg = (int)(effectiveAttrDmg * counterRate);
+                reset_dmg = reset_dmg + effectiveAttrDmg;
+
+
+
                 int Propertyprobability = 0;
                 // 增加娃娃屬性卷機率
                 if (_pc.getPropertyprobability() != 0) {
@@ -65,10 +116,20 @@ public class L1AttackPower {//src016
                         _targetPc.sendPackets(new S_SystemMessage("成功抵抗屬性能力的發動"));
                         return damage;
                     }
-                    if (attrWeapon.getTypeBind() > 0) {
+
+                    // 這裡寫吸血、束縛、光屬傷、變形…等原本要機率觸發的效果
+                    if (attrWeapon.getTypeBind() > 0) { //束縛
                         if (!L1WeaponSkill.isFreeze(_target)) {
                             final int time = (int) (attrWeapon.getTypeBind() * 1000);
-                            final ServerBasePacket packet = new S_SkillSound(_target.getId(), 4184);
+
+                            int gfxId = attrWeapon.getGfxId();
+                            final ServerBasePacket packet;
+                            if (gfxId == 0) {
+                                packet = new S_SkillSound(_target.getId(), 4184); // 預設動畫
+                            } else {
+                                packet = new S_SkillSound(_target.getId(), gfxId); // 讀表動畫
+                            }
+
                             _target.broadcastPacketX8(packet);
                             if (_targetPc != null) {
                                 _targetPc.sendPackets(packet);
@@ -80,14 +141,27 @@ public class L1AttackPower {//src016
                             }
                         }
                     }
-                    if (attrWeapon.getTypeDrainHp() > 0) {
+                    if (attrWeapon.getTypeDrainHp() > 0) { //吸血
                         final int drainHp = 1 + _random.nextInt((int) attrWeapon.getTypeDrainHp());
-                        _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 7749));
+                        int gfxId = attrWeapon.getGfxId();
+                        if (gfxId == 0) {
+                            // 沒有設定動畫時，只播預設動畫
+                            _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 7749));
+                        } else {
+                            // 有設定動畫時，只播設定動畫
+                            _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), gfxId));
+                        }
                         _pc.setCurrentHp((short) (_pc.getCurrentHp() + drainHp));
                     }
-                    if (attrWeapon.getTypeDrainMp() > 0) {
+
+                    if (attrWeapon.getTypeDrainMp() > 0) {  //吸魔
                         final int drainMp = 1 + _random.nextInt(attrWeapon.getTypeDrainMp());
-                        _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 7749));
+                        int gfxId = attrWeapon.getGfxId();
+                        if (gfxId == 0) {
+                            _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 7749));
+                        } else {
+                            _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), gfxId));
+                        }
                         _pc.setCurrentMp((short) (_pc.getCurrentMp() + drainMp));
                         if (_targetPc != null) {
                             _targetPc.setCurrentMp(Math.max(_targetPc.getCurrentMp() - drainMp, 0));
@@ -95,12 +169,24 @@ public class L1AttackPower {//src016
                             _targetNpc.setCurrentMp(Math.max(_targetNpc.getCurrentMp() - drainMp, 0));
                         }
                     }
-                    if (attrWeapon.getTypeDmgup() > 0.0D) {
-                        _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), 7752));
+
+                    if (attrWeapon.getTypeDmgup() > 0.0D) { // 屬性傷害提升
+                        int gfxId = attrWeapon.getGfxId();
+                        if (gfxId == 0) {
+                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), 7752));
+                        } else {
+                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), gfxId));
+                        }
                         reset_dmg = (int) (reset_dmg * attrWeapon.getTypeDmgup());
                     }
-                    if (attrWeapon.getTypeRange() > 0 && attrWeapon.getTypeRangeDmg() > 0) {
-                        _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), 7749));
+
+                    if (attrWeapon.getTypeRange() > 0 && attrWeapon.getTypeRangeDmg() > 0) { // 遠程攻擊
+                        int gfxId = attrWeapon.getGfxId();
+                        if (gfxId == 0) {
+                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), 7749));
+                        } else {
+                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), gfxId));
+                        }
                         int dmg = attrWeapon.getTypeRangeDmg();
                         Iterator<?> localIterator1;
                         if (_targetPc != null) {
@@ -135,17 +221,23 @@ public class L1AttackPower {//src016
                             }
                         }
                     }
-                    if (attrWeapon.getTypeLightDmg() > 0) {
+
+                    if (attrWeapon.getTypeLightDmg() > 0) { // 光屬性傷害
                         int dmg = attrWeapon.getTypeLightDmg();
-                        _target.broadcastPacketAll(new S_SkillSound(_target.getId(), 11746));
+                        int gfxId = attrWeapon.getGfxId();
+                        if (gfxId == 0) {
+                            gfxId = 11746;
+                        }
+                        _target.broadcastPacketAll(new S_SkillSound(_target.getId(), gfxId));
                         if (_targetPc != null) {
-                            _targetPc.sendPackets(new S_SkillSound(_target.getId(), 11746));
+                            _targetPc.sendPackets(new S_SkillSound(_target.getId(), gfxId));
                             _targetPc.receiveDamage(_pc, dmg, false, false);
                         } else if (_targetNpc != null) {
                             _targetNpc.receiveDamage(_pc, dmg);
                         }
                     }
-                    if (attrWeapon.getTypeSkill1() && attrWeapon.getTypeSkillTime() > 0.0D) {
+
+                    if (attrWeapon.getTypeSkill1() && attrWeapon.getTypeSkillTime() > 0.0D) { //技能1
                         int timeSec = (int) attrWeapon.getTypeSkillTime();
                         if (_targetPc != null && !_target.hasSkillEffect(40)) {
                             _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), 10703, timeSec));
@@ -234,55 +326,6 @@ public class L1AttackPower {//src016
                     }
                 }
             }
-            /* 一次只能激活一個技能 簡化代碼
-            //TODO 技能1效果整合
-            //假設攻擊者為 L1PcInstance，且已經啟用了技能1 (透過 AstrologyCmd.get().isSkill1Active(_pc) 判斷)
-            if (_pc != null && AstrologyCmd.get().isSkill1Active(_pc)) {
-                // 設定觸發機率，例如30%
-                int triggerChance = _random.nextInt(100) + 1;
-                if (triggerChance <= 70) {
-                    // 將傷害乘以20
-                    reset_dmg *= 20;
-
-                    // 發送技能1專屬特效封包，讓攻擊對象呈現特效（技能1效果的特效ID 18846）
-                    int skillEffectId = 18846;
-
-                    if (_targetPc != null) {
-                        _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), skillEffectId));
-                        _targetPc.sendPackets(new S_SystemMessage("你被技能1效果命中，傷害加倍！"));
-                    } else if (_targetNpc != null) {
-                        _targetNpc.broadcastPacketAll(new S_SkillSound(_targetNpc.getId(), skillEffectId));
-                    } else {
-                        _target.broadcastPacketAll(new S_SkillSound(_target.getId(), skillEffectId));
-                    }
-                }
-            }
-            //TODO 技能1效果結束
-
-            //TODO 技能2效果整合
-            // 假設攻擊者為 L1PcInstance，且已經啟用了技能2 (透過 AstrologyCmd.get().isSkill2Active(_pc) 判斷)
-            if (_pc != null && AstrologyCmd.get().isSkill2Active(_pc)) {
-                // 設定觸發機率，例如30%
-                int triggerChanceSkill2 = _random.nextInt(100) + 1;
-                if (triggerChanceSkill2 <= 70) {
-                    // 將傷害乘以30
-                    reset_dmg *= 30;
-
-                    // 發送技能2專屬特效封包，讓攻擊對象呈現技能2的特效（假設特效ID 為 18847）
-                    int skill2EffectId = 24069;
-
-                    if (_targetPc != null) {
-                        _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), skill2EffectId));
-                        _targetPc.sendPackets(new S_SystemMessage("你被技能2效果命中，傷害極大提升！"));
-                    } else if (_targetNpc != null) {
-                        _targetNpc.broadcastPacketAll(new S_SkillSound(_targetNpc.getId(), skill2EffectId));
-                    } else {
-                        _target.broadcastPacketAll(new S_SkillSound(_target.getId(), skill2EffectId));
-                    }
-                }
-            }
-            //TODO 技能2效果結合結束
-            */
             //TODO 星盤技能激活效果簡化
             if (AstrologyCmd.get().getAstrologySkillActive(_pc) > 0) {
                 reset_dmg += getAstrologyDamage(reset_dmg);
@@ -293,7 +336,26 @@ public class L1AttackPower {//src016
         }
         return reset_dmg;
     }
-
+    /**
+     * 計算8方向heading，0=左, 2=上, 4=右, 6=下
+     */
+    private int calcheading(int x1, int y1, int x2, int y2) {
+        int dx = x2 - x1;
+        int dy = y2 - y1;
+        if (dx > 0) {
+            if (dy > 0) return 3;  // 右下
+            else if (dy < 0) return 5; // 右上
+            else return 4; // 右
+        } else if (dx < 0) {
+            if (dy > 0) return 1; // 左下
+            else if (dy < 0) return 7; // 左上
+            else return 0; // 左
+        } else {
+            if (dy > 0) return 2; // 下
+            else if (dy < 0) return 6; // 上
+            else return -1; // 同點
+        }
+    }
     /**
      * 使用 skills 資料庫設定簡化守護星盤特效攻擊力計算
      *
@@ -307,28 +369,83 @@ public class L1AttackPower {//src016
         if (skill == null) {
             return 0;
         }
-        int random = _random.nextInt(1000);// 概率亂數
-        int chance = skill.getProbabilityValue();// 概率
+        int area = skill.getArea();
+
+        int random = _random.nextInt(1000);// 機率亂數
+        int chance = skill.getProbabilityValue();// 機率
         if (random > chance) {
             return 0;
         }
 
-        int castGfx = skill.getCastGfx2();// 出現在自己身上的特效編號
+        // 播放自己身上特效
+        int castGfx = skill.getCastGfx2();
         if (castGfx > 0) {
             _pc.sendPacketsAll(new S_EffectLocation(_pc.getLocation(), castGfx));
         }
 
-        int effectId = skill.getCastGfx();// 出現在目標身上的特效編號
+        String skillName = skill.getName();
+        int dg = skill.getDamageDiceCount();// 降低目標近戰回避率
+        int er = skill.getProbabilityDice();// 降低目標遠程閃避率
+        int buffTime = skill.getBuffDuration();
+
+        // ============ 範圍技能（area > 0）===========
+        if (area > 0) {
+            for (L1Object obj : World.get().getVisibleObjects(_target, area)) {
+                if (!(obj instanceof L1PcInstance || obj instanceof L1NpcInstance)) continue;
+                L1Character ch = (L1Character) obj;
+                if (ch == _pc) continue; // 不攻擊自己
+
+                // 計算從 ch 指向 _target 的 heading
+                int heading = calcheading(ch.getX(), ch.getY(), _target.getX(), _target.getY());
+                if (!ch.getMap().isArrowPassable(ch.getLocation(), heading)) {
+                    continue; // 隔牆不觸發
+                }
+
+                // 播放目標身上特效
+                int effectId = skill.getCastGfx();
+                if (effectId > 0) {
+                    if (ch instanceof L1PcInstance) {
+                        ((L1PcInstance) ch).sendPacketsAll(new S_EffectLocation(ch.getLocation(), effectId));
+                    } else if (ch instanceof L1NpcInstance) {
+                        ((L1NpcInstance) ch).broadcastPacketAll(new S_EffectLocation(ch.getLocation(), effectId));
+                    }
+                }
+
+                // DeBuff判斷（DG/ER，只對玩家）
+                if (ch instanceof L1PcInstance && (dg > 0 || er > 0) && buffTime > 0) {
+                    L1PcInstance tgtPc = (L1PcInstance) ch;
+                    if (!tgtPc.hasSkillEffect(ASTROLOGY_DG_ER)) {
+                        L1BuffUtil.effect(tgtPc, ASTROLOGY_DG_ER, buffTime, dg, er);
+                        if (skillName != null) {
+                            tgtPc.sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊,DG-" + dg * 10 + ",ER-" + er));
+                        }
+                    }
+                    continue; // Debuff 不傷害
+                }
+
+                // 計算傷害
+                double dice = skill.getDamageDice() / 100D;
+                int skillDamage = skill.getDamageValue();
+                int areaDamage = Math.max((int) (dice * reset_dmg), skillDamage);
+
+                if (ch instanceof L1PcInstance && skillName != null) {
+                    ((L1PcInstance) ch).sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊,受到額外傷害 \\f3" + areaDamage, 15));
+                    ((L1PcInstance) ch).receiveDamage(_pc, areaDamage, false, false);
+                } else if (ch instanceof L1NpcInstance) {
+                    ((L1NpcInstance) ch).receiveDamage(_pc, areaDamage);
+                }
+            }
+            return 0; // 範圍處理完了，主程式不用再+damage
+        }
+
+        // ============ 單體技能 ============
+        // 播放目標身上特效
+        int effectId = skill.getCastGfx();
         if (effectId > 0) {
             Optional.ofNullable(_targetNpc).ifPresent(npc -> _targetNpc.broadcastPacketAll(new S_EffectLocation(_targetNpc.getLocation(), effectId)));
             Optional.ofNullable(_targetPc).ifPresent(pc -> _targetPc.sendPacketsAll(new S_EffectLocation(_targetPc.getLocation(), effectId)));
         }
 
-        String skillName = skill.getName();// 技能名稱
-
-        int dg = skill.getDamageDiceCount();// 降低目標近戰回避率 該效果僅對玩家生效
-        int er = skill.getProbabilityDice();// 降低目標遠程閃避率 該效果僅對玩家生效
-        int buffTime = skill.getBuffDuration();
         if (_targetPc != null && (dg > 0 || er > 0) && buffTime > 0) {
             if (_targetPc.hasSkillEffect(ASTROLOGY_DG_ER)) {
                 return 0;
@@ -337,21 +454,20 @@ public class L1AttackPower {//src016
             if (skillName != null) {
                 _targetPc.sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊,DG-" + dg * 10 + ",ER-" + er));
             }
-            return 0; // 給予目標DeBuff時不會產生傷害
+            return 0; // Debuff 不傷害
         }
 
-        double dice = skill.getDamageDice() / 100D;// 增加傷害的倍率
+        double dice = skill.getDamageDice() / 100D;
         String damageMsg = "";
         if (dice > 0.0D) {
             int skillDamage = skill.getDamageValue();
-            damage = Math.max((int) (dice * reset_dmg), skillDamage);// 最低傷害
+            damage = Math.max((int) (dice * reset_dmg), skillDamage);
             damageMsg = ",受到額外傷害 \\f3" + damage;
         }
 
         if (_targetPc != null && skillName != null) {
             _targetPc.sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊" + damageMsg, 15));
         }
-
         return damage;
     }
 }

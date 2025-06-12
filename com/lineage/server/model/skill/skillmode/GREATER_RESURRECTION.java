@@ -61,8 +61,3 @@ public class GREATER_RESURRECTION extends SkillMode {
     public void stop(L1Character cha) throws Exception {
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.model.skill.skillmode.GREATER_RESURRECTION JD-Core
- * Version: 0.6.2
- */

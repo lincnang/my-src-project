@@ -163,6 +163,7 @@ public class Server {
             //ConfigRevision.load(null);// 授權開通 //src004
             ConfigDescs.load();
             Configpoly.load();
+            ConfigHoly.load();//聖物
             ConfigBad.load();
             ConfigKill.load();
             ConfigIpCheck.load();
@@ -277,9 +278,8 @@ public class Server {
             ThreadPoolSet.load();
             ThreadPoolSetNew.load();
             //			ConfigSkill.load();
-            Configpoly.load();
             //			Config_Reply.load();
-            ConfigGuardTower.load();
+            ConfigGuardTower.load();//防衛塔
             //			ConfigWenyang.load();
         } catch (Exception e) {
             System.out.println("CONFIG 資料加載異常!" + e);

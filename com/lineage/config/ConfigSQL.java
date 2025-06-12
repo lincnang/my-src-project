@@ -1,8 +1,10 @@
 package com.lineage.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Properties;
 
@@ -29,8 +31,9 @@ public final class ConfigSQL {
         Properties set = new Properties();
         try {
             InputStream is = Files.newInputStream(new File(SQL_CONFIG).toPath());
-            set.load(is);
-            is.close();
+            Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
+            set.load(reader);
+            reader.close();
             DB_DRIVER = set.getProperty("Driver", "com.mysql.jdbc.Driver");
             DB_URL1_LOGIN = set.getProperty("URL1_LOGIN", "jdbc:mysql://localhost/");
             DB_URL2_LOGIN = set.getProperty("URL2_LOGIN", "l1jsrc");

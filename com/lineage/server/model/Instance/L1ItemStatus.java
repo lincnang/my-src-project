@@ -4842,19 +4842,6 @@ public class L1ItemStatus {
             _os.writeC(59); // 增加PVP傷害 ？
             _os.writeC(_itemInstance.getItemAttack() + _itemInstance.getItemBowAttack());
         }
-        // terry770106
-        int dr = _itemInstance.getItemprobability();
-        L1WeaponSkill weaponSkill = WeaponSkillTable.get().getTemplate(_itemInstance.getItemId());
-        if (weaponSkill != null) {
-            // 魔法武器發動的技能名稱
-            if (weaponSkill.getSkillName() != null && !weaponSkill.getSkillName().isEmpty()) {
-                _os.writeC(74); // 74 觸發:+ S
-                _os.writeS(weaponSkill.getSkillName());
-            }
-            _os.writeC(39);
-            //_os.writeS("魔法發動率:" + Math.min(weaponSkill.getProbability() + dr, 100) + "%");
-            _os.writeS("$20274:" + Math.min(weaponSkill.getProbability() + dr, 100) + "%"); // $20274=發動機率
-        }
         /**
          * 2025/04/04 老爹
          * 昇華顯示（獨立顯示，不影響其他擴充能力邏輯）
@@ -5303,11 +5290,24 @@ public class L1ItemStatus {
         //				_os.writeS("破除聖結界機率+"+ AE_List.getsjjjilv());
         //			}
         //		}
+
+        // 顯示屬性傷害資訊
+        L1AttrWeapon attrWeapon = ExtraAttrWeaponTable.getInstance().get(_itemInstance.getAttrEnchantKind(), _itemInstance.getAttrEnchantLevel());
+        if (attrWeapon != null) {
+            if (attrWeapon.getAttrDmg() > 0) {
+                _os.writeC(0x27);
+                _os.writeS("屬性傷害+" + attrWeapon.getAttrDmg());
+            }
+            if (attrWeapon.getArrtDmgCritical() > 0) {
+                _os.writeC(0x27);
+                _os.writeS("屬性爆擊+" + attrWeapon.getArrtDmgCritical()+ "%");
+            }
+        }
         NewEnchantSystem AE_List2 = NewEnchantSystem.get().get2(_itemInstance.getSafeEnchantLevel(), _itemInstance.getEnchantLevel(), _item.getType());
         //ArmorEnchantSystem AE_List2 = ArmorEnchantSystem.get().get2(es);
         if (/*AE_List == null && */AE_List2 != null) {
-            _os.writeC(0x27);
-            _os.writeS("武器強化加成:");
+//            _os.writeC(0x27);
+//            _os.writeS("武器強化加成:");
             if (AE_List2.getHp() != 0) {
                 _os.writeC(0x27);
                 _os.writeS("HP+" + AE_List2.getHp());
@@ -5322,7 +5322,7 @@ public class L1ItemStatus {
             }
             if (AE_List2.getCritDmg() != 0) {
                 _os.writeC(0x27);
-                _os.writeS("暴擊傷害倍率+" + AE_List2.getCritDmg());
+                _os.writeS("傷害增加+" + AE_List2.getCritDmg() + "%");
             }
             if (AE_List2.getExtraMagicDmg() != 0) {
                 _os.writeC(0x27);
@@ -5330,11 +5330,11 @@ public class L1ItemStatus {
             }
             if (AE_List2.getExtraDmg() != 0) {
                 _os.writeC(0x27);
-                _os.writeS("物理傷害+" + AE_List2.getExtraDmg());
+                _os.writeS("額外攻擊+" + AE_List2.getExtraDmg());
             }
             if (AE_List2.getHit() != 0) {
                 _os.writeC(0x27);
-                _os.writeS("物理命中+" + AE_List2.getHit());
+                _os.writeS("武器命中+" + AE_List2.getHit());
             }
             if (AE_List2.getsjj()) {
                 _os.writeC(0x27);
@@ -5343,6 +5343,19 @@ public class L1ItemStatus {
             if (AE_List2.getsjjjilv() != 0) {
                 _os.writeC(0x27);
                 _os.writeS("破除聖結界機率+" + AE_List2.getsjjjilv() + "%");
+            }
+        }
+
+        // terry770106
+        int dr = _itemInstance.getItemprobability();
+        L1WeaponSkill weaponSkill = WeaponSkillTable.get().getTemplate(_itemInstance.getItemId());
+        if (weaponSkill != null) {
+            // 魔法武器發動的技能名稱
+            if (weaponSkill.getSkillName() != null && !weaponSkill.getSkillName().isEmpty()) {
+                int probability = Math.min(weaponSkill.getProbability() + dr, 100);
+                String skillDisplay = weaponSkill.getSkillName() + " " + probability + "%";
+                _os.writeC(74); // 74 觸發:+ S
+                _os.writeS(skillDisplay);
             }
         }
         // 2017/04/21

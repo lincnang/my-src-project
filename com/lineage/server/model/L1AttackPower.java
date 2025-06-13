@@ -18,7 +18,7 @@ import java.util.Random;
 
 import static com.lineage.server.model.skill.L1SkillId.ASTROLOGY_DG_ER;
 
-public class L1AttackPower {//src016
+public class L1AttackPower {
     private static final Log _log = LogFactory.getLog(L1AttackPower.class);
     private static final Random _random = new Random();
     private final L1PcInstance _pc;
@@ -96,8 +96,20 @@ public class L1AttackPower {//src016
                 double counterRate = 1.0 + (counterAttrResist / 10.0) * 0.1;
                 effectiveAttrDmg = (int)(effectiveAttrDmg * counterRate);
                 reset_dmg = reset_dmg + effectiveAttrDmg;
-
-
+                // 7. 有屬性傷害且命中機率才播放特效
+                if (_pc != null && effectiveAttrDmg > 0) {
+                    int attrEffectChance = attrWeapon.getProbability(); // 從資料庫撈
+                    if (attrEffectChance <= 0) attrEffectChance = 1000; // 如果沒設，預設100%
+                    int rand = _random.nextInt(1000); // 0~999
+                    if (rand < attrEffectChance) {
+                        int gfxId = attrWeapon.getGfxId();
+                        if (gfxId > 0) {
+                            _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), gfxId));
+                        } else {
+                            _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 7749)); // 預設屬性特效
+                        }
+                    }
+                }
 
                 int Propertyprobability = 0;
                 // 增加娃娃屬性卷機率

@@ -275,13 +275,12 @@ public class L1ItemStatus {
         int add_DiceDmg = vip.getDiceDmg(); // 爆擊機率
         if (add_DiceDmg != 0) {
             _os.writeC(39);
-            _os.writeS("決勝打擊: +" + add_DiceDmg + "%");
-            //  \\f2 (綠色)
+            _os.writeS("決勝打擊: +" + (add_DiceDmg/10) + "%");
         }
         int add_DiceDmg_dmherm = vip.getDmg(); // 爆擊質數
         if (add_DiceDmg_dmherm != 0) {
             _os.writeC(39);
-            _os.writeS("決勝打擊增幅 +" + add_DiceDmg_dmherm + "%");
+            _os.writeS("決勝打擊增幅 +" + (add_DiceDmg_dmherm/10) + "%");
         }
 
         int add_DamageReductionPVE = vip.get_DamageReductionPVE(); //PVE

@@ -229,6 +229,15 @@ public class L1PcInstance extends L1Character { // src015
     int _venom_resist = 0;
     private L1PcOther1 _other1;
     private int _polyarrow;  // 箭矢特效的管理類
+
+    private int _vipDiceChance = 0;
+    private int _vipDiceDamage = 0;
+
+    public int getVipDiceChance() { return _vipDiceChance; }
+    public int getVipDiceDamage() { return _vipDiceDamage; }
+    public void setVipDiceChance(int value) { _vipDiceChance = value; }
+    public void setVipDiceDamage(int value) { _vipDiceDamage = value; }
+
     private int _arrowId;
     private int _stingId;
     /**
@@ -13606,7 +13615,6 @@ public int getHolyCount() {
             }
         }
     }
-
     private class DeathReturnTime extends TimerTask {
         private final L1PcInstance _pc = null;
         private int _startTime = 0;

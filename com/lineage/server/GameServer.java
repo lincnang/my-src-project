@@ -12,6 +12,7 @@ import com.add.Mobbling.MobblingLock;
 import com.add.Mobbling.T_Mobbling;
 import com.add.Tsai.*;
 import com.add.Tsai.Astrology.Astrology1Table;
+import com.add.Tsai.Astrology.AttonAstrologyTable;
 import com.add.system.L1BlendTable;
 import com.add.system.L1FireSmithCrystalTable;
 import com.eric.RandomMobTable;
@@ -238,7 +239,6 @@ public class GameServer {
             CharSkillReading.get().load();
             CharOtherReading.get().load();
             CharacterQuestReading.get().load();
-            AstrologyQuestReading.get().load();//星盤任務
             DollQuestReading.get().load();
             CardQuestReading.get().load();
             BadNamesList.get().load();
@@ -385,6 +385,8 @@ public class GameServer {
             MonsterEnhanceTable.getInstance().load(); // 怪物強化系統
             JiezEnchant.get().load();//戒指強化加成系統 2023 12 17
             Astrology1Table.get().load();//守護星盤
+            AttonAstrologyTable.get().load();  // 阿頓星盤資料
+            AstrologyQuestReading.get().load();//星盤任務
             //TODO 玩家武器熟練度
             WeaponProficiencyTable.getInstance().loadProficiency();
             CharacterWeaponProficiencyTable.getInstance().load();

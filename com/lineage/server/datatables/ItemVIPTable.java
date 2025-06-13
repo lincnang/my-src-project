@@ -520,7 +520,8 @@ public class ItemVIPTable {
         int add_dice_mp = vip.get_dice_mp(); //  吸魔
         int _sucking_mp = vip.get_sucking_mp(); // 機率
         pc.add_dice_mp(add_dice_mp, _sucking_mp);
-
+        pc.setVipDiceChance(vip.getDiceDmg());
+        pc.setVipDiceDamage(vip.getDmg());
         // 根據修改的狀態發送相應的封包給玩家
         if (status) {
             pc.sendPackets(new S_OwnCharStatus(pc));
@@ -821,6 +822,10 @@ public class ItemVIPTable {
         int add_dice_mp = vip.get_dice_mp(); //  吸魔
         int _sucking_mp = vip.get_sucking_mp(); // 機率
         pc.add_dice_mp(-add_dice_mp, -_sucking_mp);
+        // 解除VIP時，要歸零 VIP 決勝打擊欄位
+        pc.setVipDiceChance(0);
+        pc.setVipDiceDamage(0);
+
         // 根據修改的狀態發送相應的封包給玩家
         if (status) {
             pc.sendPackets(new S_OwnCharStatus(pc));

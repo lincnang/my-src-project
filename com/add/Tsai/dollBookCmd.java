@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -139,125 +140,97 @@ public class dollBookCmd {
         }
     }
 
-    private void DOLLAllSet(final L1PcInstance pc) {
+    public void DOLLAllSet(final L1PcInstance pc) {
         try {
-            int str = 0;
-            int dex = 0;
-            int con = 0;
-            int Int = 0;
-            int wis = 0;
-            int cha = 0;
-            int ac = 0;
-            int hp = 0;
-            int mp = 0;
-            int hpr = 0;
-            int mpr = 0;
-            int dmg = 0;
-            int bdmg = 0;
-            int hit = 0;
-            int bhit = 0;
-            int dr = 0;
-            int mdr = 0;
-            int sp = 0;
-            int mhit = 0;
-            int mr = 0;
-            int f = 0;
-            int wind = 0;
-            int w = 0;
-            int e = 0;
-            for (int i = 0; i <= dollTable.get().dollSize(); i++) {
-                final doll doll = dollTable.get().getDoll(i);
-                if (doll != null) {
-                    if (dollQuestTable.get().IsQuest(pc, doll.getQuestId())) {
-                        str += doll.getAddStr();
-                        dex += doll.getAddDex();
-                        con += doll.getAddCon();
-                        Int += doll.getAddInt();
-                        wis += doll.getAddWis();
-                        cha += doll.getAddCha();
-                        ac += doll.getAddAc();
-                        hp += doll.getAddHp();
-                        mp += doll.getAddMp();
-                        hpr += doll.getAddHpr();
-                        mpr += doll.getAddMpr();
-                        dmg += doll.getAddDmg();
-                        bdmg += doll.getAddBowDmg();
-                        hit += doll.getAddHit();
-                        bhit += doll.getAddBowHit();
-                        dr += doll.getAddDmgR();
-                        mdr += doll.getAddMagicDmgR();
-                        sp += doll.getAddSp();
-                        mhit += doll.getAddMagicHit();
-                        mr += doll.getAddMr();
-                        f += doll.getAddFire();
-                        wind += doll.getAddWind();
-                        e += doll.getAddEarth();
-                        w += doll.getAddWater();
-                    }
+            // 屬性名稱
+            String[] attributes = { "力量", "敏捷", "體質", "智力", "精神", "魅力", "防禦提升", "HP", "MP", "血量回復", "魔力回復", "近距離傷害", "遠距離傷害", "近距離命中", "遠距離命中", "物理傷害減免", "魔法傷害減免", "魔攻", "魔法命中", "魔法防禦", "火屬性防禦", "風屬性防禦", "地屬性防禦", "水屬性防禦" };
+
+            // 統計最大值與玩家目前已獲得值
+            Map<String, Integer> maxMap = new LinkedHashMap<>();
+            Map<String, Integer> playerMap = new LinkedHashMap<>();
+            for (String attr : attributes) {
+                maxMap.put(attr, 0);
+                playerMap.put(attr, 0);
+            }
+
+            int setCount = dollSetTable.get().CardDollSize();
+            for (int i = 0; i <= setCount; i++) {
+                final dollPolySet set = dollSetTable.get().getDoll(i);
+                if (set == null) continue;
+
+                // 計算最大值
+                maxMap.put("力量", maxMap.get("力量") + set.getAddStr());
+                maxMap.put("敏捷", maxMap.get("敏捷") + set.getAddDex());
+                maxMap.put("體質", maxMap.get("體質") + set.getAddCon());
+                maxMap.put("智力", maxMap.get("智力") + set.getAddInt());
+                maxMap.put("精神", maxMap.get("精神") + set.getAddWis());
+                maxMap.put("魅力", maxMap.get("魅力") + set.getAddCha());
+                maxMap.put("防禦提升", maxMap.get("防禦提升") + set.getAddAc());
+                maxMap.put("HP", maxMap.get("HP") + set.getAddHp());
+                maxMap.put("MP", maxMap.get("MP") + set.getAddMp());
+                maxMap.put("血量回復", maxMap.get("血量回復") + set.getAddHpr());
+                maxMap.put("魔力回復", maxMap.get("魔力回復") + set.getAddMpr());
+                maxMap.put("近距離傷害", maxMap.get("近距離傷害") + set.getAddDmg());
+                maxMap.put("遠距離傷害", maxMap.get("遠距離傷害") + set.getAddBowDmg());
+                maxMap.put("近距離命中", maxMap.get("近距離命中") + set.getAddHit());
+                maxMap.put("遠距離命中", maxMap.get("遠距離命中") + set.getAddBowHit());
+                maxMap.put("物理傷害減免", maxMap.get("物理傷害減免") + set.getAddDmgR());
+                maxMap.put("魔法傷害減免", maxMap.get("魔法傷害減免") + set.getAddMagicDmgR());
+                maxMap.put("魔攻", maxMap.get("魔攻") + set.getAddSp());
+                maxMap.put("魔法命中", maxMap.get("魔法命中") + set.getAddMagicHit());
+                maxMap.put("魔法防禦", maxMap.get("魔法防禦") + set.getAddMr());
+                maxMap.put("火屬性防禦", maxMap.get("火屬性防禦") + set.getAddFire());
+                maxMap.put("風屬性防禦", maxMap.get("風屬性防禦") + set.getAddWind());
+                maxMap.put("地屬性防禦", maxMap.get("地屬性防禦") + set.getAddEarth());
+                maxMap.put("水屬性防禦", maxMap.get("水屬性防禦") + set.getAddWater());
+
+                // 計算玩家目前已獲得（有解鎖才加）
+                if (dollQuestTable.get().IsQuest(pc, set.getQuestId())) {
+                    playerMap.put("力量", playerMap.get("力量") + set.getAddStr());
+                    playerMap.put("敏捷", playerMap.get("敏捷") + set.getAddDex());
+                    playerMap.put("體質", playerMap.get("體質") + set.getAddCon());
+                    playerMap.put("智力", playerMap.get("智力") + set.getAddInt());
+                    playerMap.put("精神", playerMap.get("精神") + set.getAddWis());
+                    playerMap.put("魅力", playerMap.get("魅力") + set.getAddCha());
+                    playerMap.put("防禦提升", playerMap.get("防禦提升") + set.getAddAc());
+                    playerMap.put("HP", playerMap.get("HP") + set.getAddHp());
+                    playerMap.put("MP", playerMap.get("MP") + set.getAddMp());
+                    playerMap.put("血量回復", playerMap.get("血量回復") + set.getAddHpr());
+                    playerMap.put("魔力回復", playerMap.get("魔力回復") + set.getAddMpr());
+                    playerMap.put("近距離傷害", playerMap.get("近距離傷害") + set.getAddDmg());
+                    playerMap.put("遠距離傷害", playerMap.get("遠距離傷害") + set.getAddBowDmg());
+                    playerMap.put("近距離命中", playerMap.get("近距離命中") + set.getAddHit());
+                    playerMap.put("遠距離命中", playerMap.get("遠距離命中") + set.getAddBowHit());
+                    playerMap.put("物理傷害減免", playerMap.get("物理傷害減免") + set.getAddDmgR());
+                    playerMap.put("魔法傷害減免", playerMap.get("魔法傷害減免") + set.getAddMagicDmgR());
+                    playerMap.put("魔攻", playerMap.get("魔攻") + set.getAddSp());
+                    playerMap.put("魔法命中", playerMap.get("魔法命中") + set.getAddMagicHit());
+                    playerMap.put("魔法防禦", playerMap.get("魔法防禦") + set.getAddMr());
+                    playerMap.put("火屬性防禦", playerMap.get("火屬性防禦") + set.getAddFire());
+                    playerMap.put("風屬性防禦", playerMap.get("風屬性防禦") + set.getAddWind());
+                    playerMap.put("地屬性防禦", playerMap.get("地屬性防禦") + set.getAddEarth());
+                    playerMap.put("水屬性防禦", playerMap.get("水屬性防禦") + set.getAddWater());
                 }
             }
-            for (int i = 0; i <= dollSetTable.get().CardDollSize(); i++) {//檢查變身組合DB資料
-                final dollPolySet dolls = dollSetTable.get().getDoll(i);
-                if (dolls != null) {
-                    if (dollQuestTable.get().IsQuest(pc, dolls.getQuestId())) {
-                        str += dolls.getAddStr();
-                        dex += dolls.getAddDex();
-                        con += dolls.getAddCon();
-                        Int += dolls.getAddInt();
-                        wis += dolls.getAddWis();
-                        cha += dolls.getAddCha();
-                        ac += dolls.getAddAc();
-                        hp += dolls.getAddHp();
-                        mp += dolls.getAddMp();
-                        hpr += dolls.getAddHpr();
-                        mpr += dolls.getAddMpr();
-                        dmg += dolls.getAddDmg();
-                        bdmg += dolls.getAddBowDmg();
-                        hit += dolls.getAddHit();
-                        bhit += dolls.getAddBowHit();
-                        dr += dolls.getAddDmgR();
-                        mdr += dolls.getAddMagicDmgR();
-                        sp += dolls.getAddSp();
-                        mhit += dolls.getAddMagicHit();
-                        mr += dolls.getAddMr();
-                        f += dolls.getAddFire();
-                        wind += dolls.getAddWind();
-                        e += dolls.getAddEarth();
-                        w += dolls.getAddWater();
-                    }
-                }
+
+            // 組合前端顯示
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String attr : attributes) {
+                int now = playerMap.get(attr);
+                int max = maxMap.get(attr);
+                if (max == 0) continue; // 這個能力在所有組合都沒有
+                stringBuilder.append(attr)
+                        .append(" +").append(now)
+                        .append(" (").append(now).append("/").append(max).append("),");
             }
-            final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("力量 +").append(str).append(",");
-            stringBuilder.append("敏捷 +").append(dex).append(",");
-            stringBuilder.append("體質 +").append(con).append(",");
-            stringBuilder.append("智力 +").append(Int).append(",");
-            stringBuilder.append("精神 +").append(wis).append(",");
-            stringBuilder.append("魅力 +").append(cha).append(",");
-            stringBuilder.append("防禦提升 +").append(ac).append(",");
-            stringBuilder.append("HP +").append(hp).append(",");
-            stringBuilder.append("MP +").append(mp).append(",");
-            stringBuilder.append("血量回復 +").append(hpr).append(",");
-            stringBuilder.append("魔力回復 +").append(mpr).append(",");
-            stringBuilder.append("近距離傷害 +").append(dmg).append(",");
-            stringBuilder.append("遠距離傷害 +").append(bdmg).append(",");
-            stringBuilder.append("近距離命中 +").append(hit).append(",");
-            stringBuilder.append("遠距離命中 +").append(bhit).append(",");
-            stringBuilder.append("物理傷害減免 +").append(dr).append(",");
-            stringBuilder.append("魔法傷害減免 +").append(mdr).append(",");
-            stringBuilder.append("魔攻 +").append(sp).append(",");
-            stringBuilder.append("魔法命中 +").append(mhit).append(",");
-            stringBuilder.append("魔法防禦 +").append(mr).append(",");
-            stringBuilder.append("火屬性防禦 +").append(f).append(",");
-            stringBuilder.append("風屬性防禦 +").append(wind).append(",");
-            stringBuilder.append("地屬性防禦 +").append(e).append(",");
-            stringBuilder.append("水屬性防禦 +").append(w).append(",");
             final String[] clientStrAry = stringBuilder.toString().split(",");
             pc.sendPackets(new S_NPCTalkReturn(pc, "Book_D11", clientStrAry));
         } catch (final Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
+            e.printStackTrace();
         }
     }
+
+
 
 
     private void DollSet(final L1PcInstance pc, final int questId) {

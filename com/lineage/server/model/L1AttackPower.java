@@ -13,7 +13,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Random;
 
 import static com.lineage.server.model.skill.L1SkillId.ASTROLOGY_DG_ER;
@@ -378,68 +377,72 @@ public class L1AttackPower {
         int damage = 0;
         final int skillId = AstrologyCmd.get().getAstrologySkillActive(_pc);
         L1Skills skill = SkillsTable.get().getTemplate(skillId);
-        if (skill == null) {
-            return 0;
-        }
+        if (skill == null) return 0;
         int area = skill.getArea();
 
-        int random = _random.nextInt(1000);// 機率亂數
-        int chance = skill.getProbabilityValue();// 機率
-        if (random > chance) {
-            return 0;
-        }
+        int random = _random.nextInt(1000);
+        int chance = skill.getProbabilityValue();
+        if (random > chance) return 0;
 
-        // 播放自己身上特效
+        // 播放自己身上特效（BUFF、附加特效，不影響目標）
         int castGfx = skill.getCastGfx2();
         if (castGfx > 0) {
             _pc.sendPacketsAll(new S_EffectLocation(_pc.getLocation(), castGfx));
         }
 
         String skillName = skill.getName();
-        int dg = skill.getDamageDiceCount();// 降低目標近戰回避率
-        int er = skill.getProbabilityDice();// 降低目標遠程閃避率
+        int dg = skill.getDamageDiceCount();
+        int er = skill.getProbabilityDice();
         int buffTime = skill.getBuffDuration();
 
-        // ============ 範圍技能（area > 0）===========
+        // 處理主目標(A)
+        int effectId = skill.getCastGfx();
+        if (effectId > 0) {
+            // 只對主目標顯示特效
+            if (_targetPc != null) {
+                _targetPc.sendPacketsAll(new S_EffectLocation(_targetPc.getLocation(), effectId));
+            }
+            if (_targetNpc != null) {
+                _targetNpc.broadcastPacketAll(new S_EffectLocation(_targetNpc.getLocation(), effectId));
+            }
+        }
+
+        // Debuff判斷（DG/ER，只對主目標且是玩家）
+        if (_targetPc != null && (dg > 0 || er > 0) && buffTime > 0) {
+            if (!_targetPc.hasSkillEffect(ASTROLOGY_DG_ER)) {
+                L1BuffUtil.effect(_targetPc, ASTROLOGY_DG_ER, buffTime, dg, er);
+                if (skillName != null) {
+                    _targetPc.sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊,DG-" + dg * 10 + ",ER-" + er));
+                }
+            }
+            return 0; // Debuff不扣血
+        }
+        // 計算傷害
+        double dice = skill.getDamageDice() / 100D;
+        int skillDamage = skill.getDamageValue();
+        damage = Math.max((int) (dice * reset_dmg), skillDamage);
+        if (_targetPc != null && skillName != null) {
+            _targetPc.sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊,受到額外傷害 \\f3" + damage, 15));
+        }
+        if (_targetPc != null) {
+            _targetPc.receiveDamage(_pc, damage, false, false);
+        } else if (_targetNpc != null) {
+            _targetNpc.receiveDamage(_pc, damage);
+        }
+
+        // 範圍副目標，只扣血不播特效
         if (area > 0) {
             for (L1Object obj : World.get().getVisibleObjects(_target, area)) {
                 if (!(obj instanceof L1PcInstance || obj instanceof L1NpcInstance)) continue;
                 L1Character ch = (L1Character) obj;
                 if (ch == _pc) continue; // 不攻擊自己
-
-                // 計算從 ch 指向 _target 的 heading
+                if (ch == _targetPc || ch == _targetNpc) continue; // 不重複打主目標
+                // 判斷有無隔牆
                 int heading = calcheading(ch.getX(), ch.getY(), _target.getX(), _target.getY());
-                if (!ch.getMap().isArrowPassable(ch.getLocation(), heading)) {
-                    continue; // 隔牆不觸發
-                }
+                if (!ch.getMap().isArrowPassable(ch.getLocation(), heading)) continue;
 
-                // 播放目標身上特效
-                int effectId = skill.getCastGfx();
-                if (effectId > 0) {
-                    if (ch instanceof L1PcInstance) {
-                        ((L1PcInstance) ch).sendPacketsAll(new S_EffectLocation(ch.getLocation(), effectId));
-                    } else if (ch instanceof L1NpcInstance) {
-                        ((L1NpcInstance) ch).broadcastPacketAll(new S_EffectLocation(ch.getLocation(), effectId));
-                    }
-                }
-
-                // DeBuff判斷（DG/ER，只對玩家）
-                if (ch instanceof L1PcInstance && (dg > 0 || er > 0) && buffTime > 0) {
-                    L1PcInstance tgtPc = (L1PcInstance) ch;
-                    if (!tgtPc.hasSkillEffect(ASTROLOGY_DG_ER)) {
-                        L1BuffUtil.effect(tgtPc, ASTROLOGY_DG_ER, buffTime, dg, er);
-                        if (skillName != null) {
-                            tgtPc.sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊,DG-" + dg * 10 + ",ER-" + er));
-                        }
-                    }
-                    continue; // Debuff 不傷害
-                }
-
-                // 計算傷害
-                double dice = skill.getDamageDice() / 100D;
-                int skillDamage = skill.getDamageValue();
+                // 只傷害，不播特效
                 int areaDamage = Math.max((int) (dice * reset_dmg), skillDamage);
-
                 if (ch instanceof L1PcInstance && skillName != null) {
                     ((L1PcInstance) ch).sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊,受到額外傷害 \\f3" + areaDamage, 15));
                     ((L1PcInstance) ch).receiveDamage(_pc, areaDamage, false, false);
@@ -447,39 +450,7 @@ public class L1AttackPower {
                     ((L1NpcInstance) ch).receiveDamage(_pc, areaDamage);
                 }
             }
-            return 0; // 範圍處理完了，主程式不用再+damage
         }
-
-        // ============ 單體技能 ============
-        // 播放目標身上特效
-        int effectId = skill.getCastGfx();
-        if (effectId > 0) {
-            Optional.ofNullable(_targetNpc).ifPresent(npc -> _targetNpc.broadcastPacketAll(new S_EffectLocation(_targetNpc.getLocation(), effectId)));
-            Optional.ofNullable(_targetPc).ifPresent(pc -> _targetPc.sendPacketsAll(new S_EffectLocation(_targetPc.getLocation(), effectId)));
-        }
-
-        if (_targetPc != null && (dg > 0 || er > 0) && buffTime > 0) {
-            if (_targetPc.hasSkillEffect(ASTROLOGY_DG_ER)) {
-                return 0;
-            }
-            L1BuffUtil.effect(_targetPc, ASTROLOGY_DG_ER, buffTime, dg, er);
-            if (skillName != null) {
-                _targetPc.sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊,DG-" + dg * 10 + ",ER-" + er));
-            }
-            return 0; // Debuff 不傷害
-        }
-
-        double dice = skill.getDamageDice() / 100D;
-        String damageMsg = "";
-        if (dice > 0.0D) {
-            int skillDamage = skill.getDamageValue();
-            damage = Math.max((int) (dice * reset_dmg), skillDamage);
-            damageMsg = ",受到額外傷害 \\f3" + damage;
-        }
-
-        if (_targetPc != null && skillName != null) {
-            _targetPc.sendPackets(new S_SystemMessage("你遭受到技能:" + skillName + "的攻擊" + damageMsg, 15));
-        }
-        return damage;
+        return 0;
     }
 }

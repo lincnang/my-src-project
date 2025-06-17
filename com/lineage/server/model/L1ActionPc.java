@@ -2,14 +2,17 @@ package com.lineage.server.model;
 
 import com.add.NewAuto.AutoAttackUpdate;
 import com.add.Tsai.Astrology.AstrologyCmd;
+import com.add.Tsai.Astrology.AttonAstrologyCmd;
 import com.add.Tsai.*;
 import com.lineage.config.Config;
 import com.lineage.config.ConfigAutoAll;
 import com.lineage.config.ConfigOther;
 import com.lineage.config.ConfigTurn;
 import com.lineage.data.QuestClass;
-import william.Npc_Honor;
 import com.lineage.data.item_weapon.proficiency.L1WeaponProficiency;
+import com.lineage.data.npc.Npc_DollCombind;
+import com.lineage.data.npc.Npc_HolyCombind;
+import com.lineage.data.npc.Npc_PolyCombind;
 import com.lineage.data.npc.other2.Npc_Bao1;
 import com.lineage.server.command.executor.L1ToPC;
 import com.lineage.server.datatables.*;
@@ -28,6 +31,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import william.Honor;
 import william.L1WilliamHonor;
+import william.Npc_Honor;
 import william.ReincarnationSkill;
 
 import java.text.SimpleDateFormat;
@@ -1149,8 +1153,15 @@ public class L1ActionPc {
             if (CardBookCmd.get().PolyCmd(_pc, cmd)) {
                 return;
             }
+            if (Npc_PolyCombind.get().Cmd(_pc, cmd)) {
+                return;
+            }
             // 娃娃卡冊
             if (dollBookCmd.get().Cmd(_pc, cmd)) {
+                return;
+            }
+           // 娃娃隨身呼叫
+            if (Npc_DollCombind.Cmd(_pc, cmd)) {
                 return;
             }
             // 成就
@@ -1165,6 +1176,9 @@ public class L1ActionPc {
                 return;
             }
             if (holyBookCmd.get().PolyCmd(_pc, cmd)) {
+                return;
+            }
+            if (Npc_HolyCombind.get().Cmd(_pc, cmd)) {
                 return;
             }
             // 簽到
@@ -1188,8 +1202,15 @@ public class L1ActionPc {
             }
             // 守護星盤
             if (AstrologyCmd.get().Cmd(_pc, cmd)) {
+
                 return;
             }
+
+            if (AttonAstrologyCmd.get().Cmd(_pc, cmd)) {
+
+                return;
+            }
+
             // 武器熟練度
             if (L1WeaponProficiency.Cmd(_pc, cmd)) {
                 return;

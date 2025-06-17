@@ -859,8 +859,8 @@ public class L1MonsterInstance extends L1NpcInstance {
                                 Honor.getInstance().checkHonor(pc, true, true); // 加入強制傳送參數
                             }
                         }
-                     }
-                 }
+                    }
+                }
             }
             int score = NpcScoreTable.get().get_score(getNpcId());  //src041
             if (score > 0 && !isResurrect()) {

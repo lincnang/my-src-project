@@ -82,106 +82,81 @@ public class AstrologyCmd {
     }
 
     public boolean Cmd(final L1PcInstance pc, final String cmd) {
+        if (!"astr1".equals(cmd) && pc.getAstrologyPlateType() != 0) return false;
         try {
-            // 這裡建立一個空字串陣列 msg，依需求可填入其他資料
             final String[] msg = "".split(",");
-            boolean ok = false;
-
-            // 指令 "astr1"：更新星盤介面
+            // 只要有命中指令，最後都return true
             if (cmd.equals("astr1")) {
-                ok = true;
+                pc.setAstrologyPlateType(0);
                 UpdateInfo(pc, "t_zeus");
+                return true;
             }
 
-            // 指令 "tza_"：點選星盤按鈕
             if (cmd.startsWith("tza_")) {
-                // 解析按鈕排序編號
                 int id = Integer.parseInt(cmd.substring(4));
                 AstrologyData data = Astrology1Table.get().getAstrology(id);
                 if (data == null) {
                     pc.sendPackets(new S_SystemMessage("星盤編號異常:" + id + ",請通知管理員"));
-                    _log.warn("星盤編號異常:" + id);
-                    return false;
+                    return true; // 攔截
                 }
-
-                // 上一編號的卡牌解鎖檢測
                 if (checkEndAstrologyQuest(pc, id)) {
-                    return false;
+                    return true; // 攔截
                 }
-
-                // 取得或建立該星盤任務記錄
                 AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), id);
                 if (quest == null) {
                     quest = new AstrologyQuest(pc.getId(), id, data.get_cards());
                     AstrologyQuestReading.get().storeQuest(pc.getId(), id, data.get_cards());
                 }
-
-                // 檢查玩家是否持有道具 11618（守護石）
                 if (!pc.getInventory().checkItem(11618, 1)) {
-                    // 沒有守護石則必須檢查前置任務是否完成
                     if (data.get_questId() > 0 && !pc.getQuest().isEnd(data.get_needQuestId())) {
                         pc.sendPackets(new S_SystemMessage("前置任務未完成"));
                         UpdateInfo(pc, "t_zeus");
-                        return false;
+                        return true; // 攔截
                     }
                 }
-
                 if (pc.getQuest().isEnd(data.get_questId())) {
-                    // 增加對應星盤屬性點 無需重登遊戲 直接激活能力值
                     pc.addAstrologyPower(data, id);
-                    // 任務已解鎖完成，根據資料庫中的技能設定處理
                     if (data.get_skillId() > 0 && getAstrologySkillActive(pc) == data.get_skillId()) {
-                        // 已激活技能1，重覆點選則只顯示星盤已完成
                         pc.sendPackets(new S_SystemMessage("星盤已完成"));
                         UpdateInfo(pc, "t_zeus");
-                        return false;
+                        return true; // 攔截
                     } else {
                         _ASTROLOGY_SKILLS.put(pc.getId(), data.get_skillId());
                         _ASTROLOGY_SKILLS2.put(pc.getId(), data.getName());
-                        // 第一次激活技能1：激活技能1並關閉技能2
                         pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getName() + "已激活！", 1));
-                        return true;
+                        return true; // 攔截
                     }
                 }
-
-                // 若任務尚未解鎖（未完成），則設定星盤參數，進入抽卡解鎖流程（由 "abu" 指令處理）
                 pc.setAstrologyType(id);
                 pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
+                return true; // 攔截
             }
 
-            // 指令 "abu"：抽卡解鎖流程
             if (cmd.startsWith("abu")) {
                 int astrologyType = pc.getAstrologyType();
                 AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), astrologyType);
                 if (quest == null) {
-                    return false;
+                    return true; // 攔截
                 }
-
-                // 檢查玩家是否持有道具 11618，若缺少則提示
                 if (!pc.getInventory().checkItem(11618, 1)) {
                     pc.sendPackets(new S_SystemMessage("缺少守護石，無法啟用！"));
                     pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
-                    return false;
+                    return true; // 攔截
                 }
-                // 消耗守護石
                 pc.getInventory().consumeItem(11618, 1);
-
-                // 隨機判定：產生1~100之隨機數，若為最後一張牌則100%成功
                 int rnd = ThreadLocalRandom.current().nextInt(100) + 1;
                 if (quest.getNum() == 1) {
                     rnd = 100;
                 }
-                if (rnd < 5) {
+                if (rnd < 85) {
                     pc.sendPackets(new S_SystemMessage("開啟守護星，失敗"));
                     AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, quest.getNum() - 1);
                     pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + (quest.getNum() - 1), msg));
-                    return false;
+                    return true; // 攔截
                 }
-
                 AstrologyData data = Astrology1Table.get().getAstrology(astrologyType);
                 if (data != null) {
                     boolean unlockSuccess = false;
-                    // 若任務需要額外道具才能解鎖，則進行檢查與消耗
                     if (data.getNeedItemID() != 0) {
                         if (pc.getInventory().checkItem(data.getNeedItemID(), data.getNeedItemNum())) {
                             pc.getInventory().consumeItem(data.getNeedItemID(), data.getNeedItemNum());
@@ -193,7 +168,6 @@ public class AstrologyCmd {
                         unlockSuccess = true;
                     }
                     if (unlockSuccess) {
-                        //pc.getQuest().set_step(data.get_questId(), 1);
                         pc.getQuest().set_step(data.get_questId(), 255);
                         AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
                         AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
@@ -201,16 +175,16 @@ public class AstrologyCmd {
                     UpdateInfo(pc, "t_zeus");
                     pc.sendPackets(new S_PacketBoxGree(1));
                 }
+                return true; // 攔截
             }
 
-            if (ok) {
-                return true;
-            }
+            // 其他未處理才走這裡
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
         return false;
     }
+
 
     /**
      * 判斷當前任務卡牌是否已經解锁 by 聖子默默
@@ -273,7 +247,6 @@ public class AstrologyCmd {
                 break;
             default:
                 pc.sendPackets(new S_SystemMessage("玩家星盤已解鎖編號檢測異常:" + key + ",請通知管理員"));
-                _log.warn("玩家星盤已解鎖編號異常:" + key);
                 return true;
 
         }

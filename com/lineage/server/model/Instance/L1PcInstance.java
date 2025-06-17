@@ -9,6 +9,8 @@ import com.add.MJBookQuestSystem.UserWeekQuest;
 import com.add.Mobbling.L1MobSpList;
 import com.add.Tsai.Astrology.Astrology1Table;
 import com.add.Tsai.Astrology.AstrologyData;
+import com.add.Tsai.Astrology.AttonAstrologyData;
+import com.add.Tsai.Astrology.AttonAstrologyTable;
 import com.add.Tsai.collect;
 import com.eric.gui.J_Main;
 import com.lineage.DatabaseFactory;
@@ -138,6 +140,8 @@ public class L1PcInstance extends L1Character { // src015
      * 宙斯·守護星盤能力值加載記錄
      */
     private static final ConcurrentHashMap<Integer, AstrologyData> ASTROLOGY_DATA_MAP = Maps.newConcurrentHashMap();
+    private final Map<Integer, AttonAstrologyData> ATTON_ASTROLOGY_DATA_MAP = new ConcurrentHashMap<>();
+
     private static BufferedWriter out;
     // 日版記憶座標
     public final ArrayList<L1BookMark> _bookmarks;
@@ -1439,6 +1443,11 @@ public class L1PcInstance extends L1Character { // src015
     public int hpRegenType() {
         return _hpRegenType;
     }
+
+
+    private int _expComboCount = 0;
+    public int getExpComboCount() { return _expComboCount; }
+    public void setExpComboCount(int count) { _expComboCount = count; }
 
     private int regenMax() {
         int[] lvlTable = {30, 25, 20, 16, 14, 12, 11, 10, 9, 3, 2};
@@ -5922,7 +5931,11 @@ public class L1PcInstance extends L1Character { // src015
         if (_int2 == 0) {
             return 0;
         }
-        if (_random.nextInt(100) + 1 <= _int2) {
+        if (_random.nextInt(1000) + 1 <= _int2) {
+            // 爆擊觸發，所有玩家都看到特效
+            this.sendPacketsAll(new S_SkillSound(this.getId(), 16117));
+
+            // 娃娃動作
             if (!getDolls().isEmpty()) {
                 for (L1DollInstance doll : getDolls().values()) {
                     doll.show_action(1);
@@ -5937,6 +5950,7 @@ public class L1PcInstance extends L1Character { // src015
         }
         return 0;
     }
+
 
     /**
      * 取回完全閃避率 亂數1000
@@ -9287,6 +9301,15 @@ public class L1PcInstance extends L1Character { // src015
         }
         Astrology1Table.effectBuff(this, data, 1);
         ASTROLOGY_DATA_MAP.put(key, data);
+    }
+
+    // 新星盤 Atton
+    public final void addAstrologyPower(AttonAstrologyData data, int key) {
+        if (ASTROLOGY_DATA_MAP.containsKey(key)) {
+            return;
+        }
+        AttonAstrologyTable.effectBuff(this, data, 1);  // 你要有 AttonAstrologyTable.effectBuff 方法
+        ATTON_ASTROLOGY_DATA_MAP.put(key, data); // 如果新星盤要另外存資料，可以分另一個 MAP
     }
 
     public int getprobability() {
@@ -12935,6 +12958,13 @@ public int getHolyCount() {
     public void setHonorSkillApplied(boolean flag) {
         _honorSkillApplied = flag;
     }
+
+    // 分類星盤
+    private int astrologyPlateType = 0; // 0=舊星盤, 1=新星盤（Atton）
+
+    public void setAstrologyPlateType(int type) { astrologyPlateType = type; }
+
+    public int getAstrologyPlateType() { return astrologyPlateType; }
 
     //END
     //--------------------------------------------------------------------

@@ -77,7 +77,7 @@ public class CharItemSublimationTable implements CharItemSublimationStorage {
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         }
-        _log.info("全部角色昇華物品數量: " + i + "(" + timer.get() + "ms)");
+        _log.info("載入->[全部角色昇華物品數量]: " + i + "(" + timer.get() + "ms)");
     }
 
     @Override

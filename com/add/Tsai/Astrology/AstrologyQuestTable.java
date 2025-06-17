@@ -1,9 +1,7 @@
 package com.add.Tsai.Astrology;
 
 import com.lineage.DatabaseFactory;
-import com.lineage.server.datatables.sql.CharacterTable;
 import com.lineage.server.datatables.storage.AstrologyQuestStorage;
-import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.utils.PerformanceTimer;
 import com.lineage.server.utils.SQLUtil;
 import org.apache.commons.logging.Log;
@@ -74,7 +72,7 @@ public class AstrologyQuestTable implements AstrologyQuestStorage {
         } finally {
             SQLUtil.close(rs, ps, cn);
         }
-        _log.info("讀取->character_星盤: " + t + "(" + timer.get() + "ms)");
+        _log.info("讀取->[character_星盤]紀錄: " + t + "(" + timer.get() + "ms)");
     }
 
     /**

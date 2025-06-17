@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -120,125 +121,92 @@ public class CardBookCmd {
         return false;
     }
 
-    private void CardAllSet(final L1PcInstance pc) { //顯示變身卡組合
+    public void CardAllSet(final L1PcInstance pc) { //顯示變身卡組合
         try {
-            int str = 0; //力量
-            int dex = 0;
-            int con = 0;
-            int Int = 0;
-            int wis = 0;
-            int cha = 0;
-            int ac = 0;
-            int hp = 0;
-            int mp = 0;
-            int hpr = 0;
-            int mpr = 0;
-            int dmg = 0;
-            int bdmg = 0;
-            int hit = 0;
-            int bhit = 0;
-            int dr = 0;
-            int mdr = 0;
-            int sp = 0;
-            int mhit = 0;
-            int mr = 0;
-            int f = 0;
-            int wind = 0;
-            int w = 0;
-            int e = 0;
-            for (int i = 0; i <= ACardTable.get().ACardSize(); i++) { //檢查變身卡DB資料
-                final ACard card = ACardTable.get().getCard(i); //檢查變身卡DB資料
-                if (card != null) { //檢查變身卡DB資料
-                    if (CardQuestTable.get().IsQuest(pc, card.getQuestId())) {
-                        str += card.getAddStr();
-                        dex += card.getAddDex();
-                        con += card.getAddCon();
-                        Int += card.getAddInt();
-                        wis += card.getAddWis();
-                        cha += card.getAddCha();
-                        ac += card.getAddAc();
-                        hp += card.getAddHp();
-                        mp += card.getAddMp();
-                        hpr += card.getAddHpr();
-                        mpr += card.getAddMpr();
-                        dmg += card.getAddDmg();
-                        bdmg += card.getAddBowDmg();
-                        hit += card.getAddHit();
-                        bhit += card.getAddBowHit();
-                        dr += card.getAddDmgR();
-                        mdr += card.getAddMagicDmgR();
-                        sp += card.getAddSp();
-                        mhit += card.getAddMagicHit();
-                        mr += card.getAddMr();
-                        f += card.getAddFire();
-                        wind += card.getAddWind();
-                        e += card.getAddEarth();
-                        w += card.getAddWater();
-                    }
-                }
+            // 屬性名稱陣列
+            String[] attrs = { "力量", "敏捷", "體質", "智力", "精神", "魅力", "防禦提升", "HP", "MP", "血量回復", "魔力回復", "近距離傷害", "遠距離傷害", "近距離命中", "遠距離命中", "物理傷害減免", "魔法傷害減免", "魔攻", "魔法命中", "魔法防禦", "火屬性防禦", "風屬性防禦", "地屬性防禦", "水屬性防禦" };
+            // 紀錄最大值/已解鎖值
+            Map<String, Integer> maxMap = new LinkedHashMap<>();
+            Map<String, Integer> playerMap = new LinkedHashMap<>();
+            for (String attr : attrs) {
+                maxMap.put(attr, 0);
+                playerMap.put(attr, 0);
             }
-            for (int i = 0; i <= CardSetTable.get().CardCardSize(); i++) {//檢查變身組合DB資料
+
+            // 1. 計算所有組合卡最大值
+            for (int i = 0; i <= CardSetTable.get().CardCardSize(); i++) {
                 final CardPolySet cards = CardSetTable.get().getCard(i);
-                if (cards != null) {
-                    if (CardQuestTable.get().IsQuest(pc, cards.getQuestId())) {
-                        str += cards.getAddStr();
-                        dex += cards.getAddDex();
-                        con += cards.getAddCon();
-                        Int += cards.getAddInt();
-                        wis += cards.getAddWis();
-                        cha += cards.getAddCha();
-                        ac += cards.getAddAc();
-                        hp += cards.getAddHp();
-                        mp += cards.getAddMp();
-                        hpr += cards.getAddHpr();
-                        mpr += cards.getAddMpr();
-                        dmg += cards.getAddDmg();
-                        bdmg += cards.getAddBowDmg();
-                        hit += cards.getAddHit();
-                        bhit += cards.getAddBowHit();
-                        dr += cards.getAddDmgR();
-                        mdr += cards.getAddMagicDmgR();
-                        sp += cards.getAddSp();
-                        mhit += cards.getAddMagicHit();
-                        mr += cards.getAddMr();
-                        f += cards.getAddFire();
-                        wind += cards.getAddWind();
-                        e += cards.getAddEarth();
-                        w += cards.getAddWater();
-                    }
+                if (cards == null) continue;
+                maxMap.put("力量", maxMap.get("力量") + cards.getAddStr());
+                maxMap.put("敏捷", maxMap.get("敏捷") + cards.getAddDex());
+                maxMap.put("體質", maxMap.get("體質") + cards.getAddCon());
+                maxMap.put("智力", maxMap.get("智力") + cards.getAddInt());
+                maxMap.put("精神", maxMap.get("精神") + cards.getAddWis());
+                maxMap.put("魅力", maxMap.get("魅力") + cards.getAddCha());
+                maxMap.put("防禦提升", maxMap.get("防禦提升") + cards.getAddAc());
+                maxMap.put("HP", maxMap.get("HP") + cards.getAddHp());
+                maxMap.put("MP", maxMap.get("MP") + cards.getAddMp());
+                maxMap.put("血量回復", maxMap.get("血量回復") + cards.getAddHpr());
+                maxMap.put("魔力回復", maxMap.get("魔力回復") + cards.getAddMpr());
+                maxMap.put("近距離傷害", maxMap.get("近距離傷害") + cards.getAddDmg());
+                maxMap.put("遠距離傷害", maxMap.get("遠距離傷害") + cards.getAddBowDmg());
+                maxMap.put("近距離命中", maxMap.get("近距離命中") + cards.getAddHit());
+                maxMap.put("遠距離命中", maxMap.get("遠距離命中") + cards.getAddBowHit());
+                maxMap.put("物理傷害減免", maxMap.get("物理傷害減免") + cards.getAddDmgR());
+                maxMap.put("魔法傷害減免", maxMap.get("魔法傷害減免") + cards.getAddMagicDmgR());
+                maxMap.put("魔攻", maxMap.get("魔攻") + cards.getAddSp());
+                maxMap.put("魔法命中", maxMap.get("魔法命中") + cards.getAddMagicHit());
+                maxMap.put("魔法防禦", maxMap.get("魔法防禦") + cards.getAddMr());
+                maxMap.put("火屬性防禦", maxMap.get("火屬性防禦") + cards.getAddFire());
+                maxMap.put("風屬性防禦", maxMap.get("風屬性防禦") + cards.getAddWind());
+                maxMap.put("地屬性防禦", maxMap.get("地屬性防禦") + cards.getAddEarth());
+                maxMap.put("水屬性防禦", maxMap.get("水屬性防禦") + cards.getAddWater());
+
+                // 已解鎖的才加到玩家
+                if (CardQuestTable.get().IsQuest(pc, cards.getQuestId())) {
+                    playerMap.put("力量", playerMap.get("力量") + cards.getAddStr());
+                    playerMap.put("敏捷", playerMap.get("敏捷") + cards.getAddDex());
+                    playerMap.put("體質", playerMap.get("體質") + cards.getAddCon());
+                    playerMap.put("智力", playerMap.get("智力") + cards.getAddInt());
+                    playerMap.put("精神", playerMap.get("精神") + cards.getAddWis());
+                    playerMap.put("魅力", playerMap.get("魅力") + cards.getAddCha());
+                    playerMap.put("防禦提升", playerMap.get("防禦提升") + cards.getAddAc());
+                    playerMap.put("HP", playerMap.get("HP") + cards.getAddHp());
+                    playerMap.put("MP", playerMap.get("MP") + cards.getAddMp());
+                    playerMap.put("血量回復", playerMap.get("血量回復") + cards.getAddHpr());
+                    playerMap.put("魔力回復", playerMap.get("魔力回復") + cards.getAddMpr());
+                    playerMap.put("近距離傷害", playerMap.get("近距離傷害") + cards.getAddDmg());
+                    playerMap.put("遠距離傷害", playerMap.get("遠距離傷害") + cards.getAddBowDmg());
+                    playerMap.put("近距離命中", playerMap.get("近距離命中") + cards.getAddHit());
+                    playerMap.put("遠距離命中", playerMap.get("遠距離命中") + cards.getAddBowHit());
+                    playerMap.put("物理傷害減免", playerMap.get("物理傷害減免") + cards.getAddDmgR());
+                    playerMap.put("魔法傷害減免", playerMap.get("魔法傷害減免") + cards.getAddMagicDmgR());
+                    playerMap.put("魔攻", playerMap.get("魔攻") + cards.getAddSp());
+                    playerMap.put("魔法命中", playerMap.get("魔法命中") + cards.getAddMagicHit());
+                    playerMap.put("魔法防禦", playerMap.get("魔法防禦") + cards.getAddMr());
+                    playerMap.put("火屬性防禦", playerMap.get("火屬性防禦") + cards.getAddFire());
+                    playerMap.put("風屬性防禦", playerMap.get("風屬性防禦") + cards.getAddWind());
+                    playerMap.put("地屬性防禦", playerMap.get("地屬性防禦") + cards.getAddEarth());
+                    playerMap.put("水屬性防禦", playerMap.get("水屬性防禦") + cards.getAddWater());
                 }
             }
-            final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("力量 +").append(str).append(",");
-            stringBuilder.append("敏捷 +").append(dex).append(",");
-            stringBuilder.append("體質 +").append(con).append(",");
-            stringBuilder.append("智力 +").append(Int).append(",");
-            stringBuilder.append("精神 +").append(wis).append(",");
-            stringBuilder.append("魅力 +").append(cha).append(",");
-            stringBuilder.append("防禦提升 +").append(ac).append(",");
-            stringBuilder.append("HP +").append(hp).append(",");
-            stringBuilder.append("MP +").append(mp).append(",");
-            stringBuilder.append("血量回復 +").append(hpr).append(",");
-            stringBuilder.append("魔力回復 +").append(mpr).append(",");
-            stringBuilder.append("近距離傷害 +").append(dmg).append(",");
-            stringBuilder.append("遠距離傷害 +").append(bdmg).append(",");
-            stringBuilder.append("近距離命中 +").append(hit).append(",");
-            stringBuilder.append("遠距離命中 +").append(bhit).append(",");
-            stringBuilder.append("物理傷害減免 +").append(dr).append(",");
-            stringBuilder.append("魔法傷害減免 +").append(mdr).append(",");
-            stringBuilder.append("魔攻 +").append(sp).append(",");
-            stringBuilder.append("魔法命中 +").append(mhit).append(",");
-            stringBuilder.append("魔法防禦 +").append(mr).append(",");
-            stringBuilder.append("火屬性防禦 +").append(f).append(",");
-            stringBuilder.append("風屬性防禦 +").append(wind).append(",");
-            stringBuilder.append("地屬性防禦 +").append(e).append(",");
-            stringBuilder.append("水屬性防禦 +").append(w).append(",");
-            final String[] clientStrAry = stringBuilder.toString().split(",");
+
+            // 2. 組合顯示
+            StringBuilder sb = new StringBuilder();
+            for (String attr : attrs) {
+                int now = playerMap.get(attr);
+                int max = maxMap.get(attr);
+                if (max == 0) continue;
+                sb.append(attr).append(" +").append(now)
+                        .append(" (").append(now).append("/").append(max).append("),");
+            }
+            final String[] clientStrAry = sb.toString().split(",");
             pc.sendPackets(new S_NPCTalkReturn(pc, "card_11", clientStrAry));
         } catch (final Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
+            e.printStackTrace();
         }
     }
+
 
     private void CardSet(final L1PcInstance pc, final int questId) {
         try {

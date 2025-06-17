@@ -280,7 +280,7 @@ public class L1ItemStatus {
         int add_DiceDmg_dmherm = vip.getDmg(); // 爆擊質數
         if (add_DiceDmg_dmherm != 0) {
             _os.writeC(39);
-            _os.writeS("決勝打擊增幅 +" + (add_DiceDmg_dmherm/10) + "%");
+            _os.writeS("決勝打擊增幅 +" + (add_DiceDmg_dmherm) + "%");
         }
 
         int add_DamageReductionPVE = vip.get_DamageReductionPVE(); //PVE

@@ -2987,9 +2987,6 @@ public class L1AttackPc extends L1AttackMode {
      */
     public void commit() {
         if (_isHit) {// 命中
-            // --- 決勝判斷與特效專用變數 ---
-            Random rand = new Random();
-            boolean hasVipCrit = false; // 判斷本次攻擊有沒有VIP決勝爆擊
             if (_pc.dice_hp() != 0 && _random.nextInt(100) + 1 <= _pc.dice_hp()) {// 附魔系統
                 // 機率吸取體力
                 _drainHp = _pc.sucking_hp();
@@ -3010,16 +3007,6 @@ public class L1AttackPc extends L1AttackMode {
             }
             switch (_calcType) {
                 case PC_PC:
-                    // --- VIP決勝打擊（PC對PC）---
-                    if (_pc.getVipDiceChance() > 0 && _pc.getVipDiceDamage() > 0) {
-                        int rnd = rand.nextInt(100) + 1;
-                        if (rnd <= _pc.getVipDiceChance()) {
-                            _damage += _pc.getVipDiceDamage();
-                            hasVipCrit = true;
-                            // 播放VIP專屬決勝特效（只目標看到）
-                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), 16117));
-                        }
-                    }
                     if (_pc.lift() != 0) {// 附魔系統 機率卸除對方裝備
                         int counter = _random.nextInt(_pc.lift()) + 1;
                         StringBuilder sbr = new StringBuilder();
@@ -3042,18 +3029,8 @@ public class L1AttackPc extends L1AttackMode {
                     //				_targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), 13418));// MISS特效編號
                     break;
                 case PC_NPC:
-                    // --- VIP決勝打擊（PC對NPC）---
-                    if (_pc.getVipDiceChance() > 0 && _pc.getVipDiceDamage() > 0) {
-                        int rnd = rand.nextInt(100) + 1;
-                        if (rnd <= _pc.getVipDiceChance()) {
-                            _damage += _pc.getVipDiceDamage();
-                            hasVipCrit = true;
-                            // 播放VIP專屬決勝特效（只目標看到）
-                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), 16117));
-                        }
-                    }
                     commitNpc();
-
+                    Random rand = new Random();
                     int chance = rand.nextInt(100); // 生成0到99之間的隨機數
 
                     // 傷害攻擊特效顯示 2023.12.23

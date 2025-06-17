@@ -501,8 +501,8 @@ public class ItemVIPTable {
             pc.addBowCritical(add_BowCritical); // 遠距離爆擊率
         }
 
-        int add_DiceDmg = vip.getDiceDmg(); //  決勝
-        int add_DiceDmg_dmherm = vip.getDmg(); //
+        int add_DiceDmg = vip.getDiceDmg(); //  決勝打擊_機率
+        int add_DiceDmg_dmherm = vip.getDmg(); //決勝打擊_傷害
         pc.set_dmgAdd(add_DiceDmg_dmherm, add_DiceDmg);
 
         int add_DamageReductionPVE = vip.get_DamageReductionPVE();

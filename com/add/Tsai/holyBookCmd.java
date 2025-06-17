@@ -139,125 +139,159 @@ public class holyBookCmd {
         }
     }
 
-    private void HolyAllSet(final L1PcInstance pc) {
+    public void HolyAllSet(final L1PcInstance pc) {
         try {
-            int str = 0;
-            int dex = 0;
-            int con = 0;
-            int Int = 0;
-            int wis = 0;
-            int cha = 0;
-            int ac = 0;
-            int hp = 0;
-            int mp = 0;
-            int hpr = 0;
-            int mpr = 0;
-            int dmg = 0;
-            int bdmg = 0;
-            int hit = 0;
-            int bhit = 0;
-            int dr = 0;
-            int mdr = 0;
-            int sp = 0;
-            int mhit = 0;
-            int mr = 0;
-            int f = 0;
-            int wind = 0;
-            int w = 0;
-            int e = 0;
+            // 用 Map 來存能力名稱→[已獲得, 可獲得最大值]
+            String[] names = {
+                    "力量", "敏捷", "體質", "智力", "精神", "魅力",
+                    "防禦提升", "HP", "MP", "血量回復", "魔力回復",
+                    "近距離傷害", "遠距離傷害", "近距離命中", "遠距離命中",
+                    "物理傷害減免", "魔法傷害減免", "魔攻", "魔法命中", "魔法防禦",
+                    "火屬性防禦", "風屬性防禦", "地屬性防禦", "水屬性防禦"
+            };
+            // 索引順序與上方一致
+            int N = names.length;
+            int[] current = new int[N];
+            int[] max = new int[N];
+
+            // 索引表，方便寫入
+            final int IDX_STR = 0, IDX_DEX = 1, IDX_CON = 2, IDX_INT = 3, IDX_WIS = 4, IDX_CHA = 5,
+                    IDX_AC = 6, IDX_HP = 7, IDX_MP = 8, IDX_HPR = 9, IDX_MPR = 10,
+                    IDX_DMG = 11, IDX_BDMG = 12, IDX_HIT = 13, IDX_BHIT = 14,
+                    IDX_DR = 15, IDX_MDR = 16, IDX_SP = 17, IDX_MHIT = 18, IDX_MR = 19,
+                    IDX_FIRE = 20, IDX_WIND = 21, IDX_EARTH = 22, IDX_WATER = 23;
+
+            // 1. 先統計最大能力
             for (int i = 0; i <= holyTable.get().holySize(); i++) {
                 final holy holy = holyTable.get().getHoly(i);
                 if (holy != null) {
-                    if (dollQuestTable.get().IsQuest(pc, holy.getQuestId())) {
-                        str += holy.getAddStr();
-                        dex += holy.getAddDex();
-                        con += holy.getAddCon();
-                        Int += holy.getAddInt();
-                        wis += holy.getAddWis();
-                        cha += holy.getAddCha();
-                        ac += holy.getAddAc();
-                        hp += holy.getAddHp();
-                        mp += holy.getAddMp();
-                        hpr += holy.getAddHpr();
-                        mpr += holy.getAddMpr();
-                        dmg += holy.getAddDmg();
-                        bdmg += holy.getAddBowDmg();
-                        hit += holy.getAddHit();
-                        bhit += holy.getAddBowHit();
-                        dr += holy.getAddDmgR();
-                        mdr += holy.getAddMagicDmgR();
-                        sp += holy.getAddSp();
-                        mhit += holy.getAddMagicHit();
-                        mr += holy.getAddMr();
-                        f += holy.getAddFire();
-                        wind += holy.getAddWind();
-                        e += holy.getAddEarth();
-                        w += holy.getAddWater();
-                    }
+                    max[IDX_STR] += holy.getAddStr();
+                    max[IDX_DEX] += holy.getAddDex();
+                    max[IDX_CON] += holy.getAddCon();
+                    max[IDX_INT] += holy.getAddInt();
+                    max[IDX_WIS] += holy.getAddWis();
+                    max[IDX_CHA] += holy.getAddCha();
+                    max[IDX_AC] += holy.getAddAc();
+                    max[IDX_HP] += holy.getAddHp();
+                    max[IDX_MP] += holy.getAddMp();
+                    max[IDX_HPR] += holy.getAddHpr();
+                    max[IDX_MPR] += holy.getAddMpr();
+                    max[IDX_DMG] += holy.getAddDmg();
+                    max[IDX_BDMG] += holy.getAddBowDmg();
+                    max[IDX_HIT] += holy.getAddHit();
+                    max[IDX_BHIT] += holy.getAddBowHit();
+                    max[IDX_DR] += holy.getAddDmgR();
+                    max[IDX_MDR] += holy.getAddMagicDmgR();
+                    max[IDX_SP] += holy.getAddSp();
+                    max[IDX_MHIT] += holy.getAddMagicHit();
+                    max[IDX_MR] += holy.getAddMr();
+                    max[IDX_FIRE] += holy.getAddFire();
+                    max[IDX_WIND] += holy.getAddWind();
+                    max[IDX_EARTH] += holy.getAddEarth();
+                    max[IDX_WATER] += holy.getAddWater();
                 }
             }
-            for (int i = 0; i <= holySetTable.get().HolySize(); i++) {//檢查變身組合DB資料
+            for (int i = 0; i <= holySetTable.get().HolySize(); i++) {
                 final holyPolySet holys = holySetTable.get().getHoly(i);
                 if (holys != null) {
-                    if (dollQuestTable.get().IsQuest(pc, holys.getQuestId())) {
-                        str += holys.getAddStr();
-                        dex += holys.getAddDex();
-                        con += holys.getAddCon();
-                        Int += holys.getAddInt();
-                        wis += holys.getAddWis();
-                        cha += holys.getAddCha();
-                        ac += holys.getAddAc();
-                        hp += holys.getAddHp();
-                        mp += holys.getAddMp();
-                        hpr += holys.getAddHpr();
-                        mpr += holys.getAddMpr();
-                        dmg += holys.getAddDmg();
-                        bdmg += holys.getAddBowDmg();
-                        hit += holys.getAddHit();
-                        bhit += holys.getAddBowHit();
-                        dr += holys.getAddDmgR();
-                        mdr += holys.getAddMagicDmgR();
-                        sp += holys.getAddSp();
-                        mhit += holys.getAddMagicHit();
-                        mr += holys.getAddMr();
-                        f += holys.getAddFire();
-                        wind += holys.getAddWind();
-                        e += holys.getAddEarth();
-                        w += holys.getAddWater();
-                    }
+                    max[IDX_STR] += holys.getAddStr();
+                    max[IDX_DEX] += holys.getAddDex();
+                    max[IDX_CON] += holys.getAddCon();
+                    max[IDX_INT] += holys.getAddInt();
+                    max[IDX_WIS] += holys.getAddWis();
+                    max[IDX_CHA] += holys.getAddCha();
+                    max[IDX_AC] += holys.getAddAc();
+                    max[IDX_HP] += holys.getAddHp();
+                    max[IDX_MP] += holys.getAddMp();
+                    max[IDX_HPR] += holys.getAddHpr();
+                    max[IDX_MPR] += holys.getAddMpr();
+                    max[IDX_DMG] += holys.getAddDmg();
+                    max[IDX_BDMG] += holys.getAddBowDmg();
+                    max[IDX_HIT] += holys.getAddHit();
+                    max[IDX_BHIT] += holys.getAddBowHit();
+                    max[IDX_DR] += holys.getAddDmgR();
+                    max[IDX_MDR] += holys.getAddMagicDmgR();
+                    max[IDX_SP] += holys.getAddSp();
+                    max[IDX_MHIT] += holys.getAddMagicHit();
+                    max[IDX_MR] += holys.getAddMr();
+                    max[IDX_FIRE] += holys.getAddFire();
+                    max[IDX_WIND] += holys.getAddWind();
+                    max[IDX_EARTH] += holys.getAddEarth();
+                    max[IDX_WATER] += holys.getAddWater();
                 }
             }
-            final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("力量 +").append(str).append(",");
-            stringBuilder.append("敏捷 +").append(dex).append(",");
-            stringBuilder.append("體質 +").append(con).append(",");
-            stringBuilder.append("智力 +").append(Int).append(",");
-            stringBuilder.append("精神 +").append(wis).append(",");
-            stringBuilder.append("魅力 +").append(cha).append(",");
-            stringBuilder.append("防禦提升 +").append(ac).append(",");
-            stringBuilder.append("HP +").append(hp).append(",");
-            stringBuilder.append("MP +").append(mp).append(",");
-            stringBuilder.append("血量回復 +").append(hpr).append(",");
-            stringBuilder.append("魔力回復 +").append(mpr).append(",");
-            stringBuilder.append("近距離傷害 +").append(dmg).append(",");
-            stringBuilder.append("遠距離傷害 +").append(bdmg).append(",");
-            stringBuilder.append("近距離命中 +").append(hit).append(",");
-            stringBuilder.append("遠距離命中 +").append(bhit).append(",");
-            stringBuilder.append("物理傷害減免 +").append(dr).append(",");
-            stringBuilder.append("魔法傷害減免 +").append(mdr).append(",");
-            stringBuilder.append("魔攻 +").append(sp).append(",");
-            stringBuilder.append("魔法命中 +").append(mhit).append(",");
-            stringBuilder.append("魔法防禦 +").append(mr).append(",");
-            stringBuilder.append("火屬性防禦 +").append(f).append(",");
-            stringBuilder.append("風屬性防禦 +").append(wind).append(",");
-            stringBuilder.append("地屬性防禦 +").append(e).append(",");
-            stringBuilder.append("水屬性防禦 +").append(w).append(",");
-            final String[] clientStrAry = stringBuilder.toString().split(",");
+            // 2. 統計玩家已獲得（有解鎖的）
+            for (int i = 0; i <= holyTable.get().holySize(); i++) {
+                final holy holy = holyTable.get().getHoly(i);
+                if (holy != null && dollQuestTable.get().IsQuest(pc, holy.getQuestId())) {
+                    current[IDX_STR] += holy.getAddStr();
+                    current[IDX_DEX] += holy.getAddDex();
+                    current[IDX_CON] += holy.getAddCon();
+                    current[IDX_INT] += holy.getAddInt();
+                    current[IDX_WIS] += holy.getAddWis();
+                    current[IDX_CHA] += holy.getAddCha();
+                    current[IDX_AC] += holy.getAddAc();
+                    current[IDX_HP] += holy.getAddHp();
+                    current[IDX_MP] += holy.getAddMp();
+                    current[IDX_HPR] += holy.getAddHpr();
+                    current[IDX_MPR] += holy.getAddMpr();
+                    current[IDX_DMG] += holy.getAddDmg();
+                    current[IDX_BDMG] += holy.getAddBowDmg();
+                    current[IDX_HIT] += holy.getAddHit();
+                    current[IDX_BHIT] += holy.getAddBowHit();
+                    current[IDX_DR] += holy.getAddDmgR();
+                    current[IDX_MDR] += holy.getAddMagicDmgR();
+                    current[IDX_SP] += holy.getAddSp();
+                    current[IDX_MHIT] += holy.getAddMagicHit();
+                    current[IDX_MR] += holy.getAddMr();
+                    current[IDX_FIRE] += holy.getAddFire();
+                    current[IDX_WIND] += holy.getAddWind();
+                    current[IDX_EARTH] += holy.getAddEarth();
+                    current[IDX_WATER] += holy.getAddWater();
+                }
+            }
+            for (int i = 0; i <= holySetTable.get().HolySize(); i++) {
+                final holyPolySet holys = holySetTable.get().getHoly(i);
+                if (holys != null && dollQuestTable.get().IsQuest(pc, holys.getQuestId())) {
+                    current[IDX_STR] += holys.getAddStr();
+                    current[IDX_DEX] += holys.getAddDex();
+                    current[IDX_CON] += holys.getAddCon();
+                    current[IDX_INT] += holys.getAddInt();
+                    current[IDX_WIS] += holys.getAddWis();
+                    current[IDX_CHA] += holys.getAddCha();
+                    current[IDX_AC] += holys.getAddAc();
+                    current[IDX_HP] += holys.getAddHp();
+                    current[IDX_MP] += holys.getAddMp();
+                    current[IDX_HPR] += holys.getAddHpr();
+                    current[IDX_MPR] += holys.getAddMpr();
+                    current[IDX_DMG] += holys.getAddDmg();
+                    current[IDX_BDMG] += holys.getAddBowDmg();
+                    current[IDX_HIT] += holys.getAddHit();
+                    current[IDX_BHIT] += holys.getAddBowHit();
+                    current[IDX_DR] += holys.getAddDmgR();
+                    current[IDX_MDR] += holys.getAddMagicDmgR();
+                    current[IDX_SP] += holys.getAddSp();
+                    current[IDX_MHIT] += holys.getAddMagicHit();
+                    current[IDX_MR] += holys.getAddMr();
+                    current[IDX_FIRE] += holys.getAddFire();
+                    current[IDX_WIND] += holys.getAddWind();
+                    current[IDX_EARTH] += holys.getAddEarth();
+                    current[IDX_WATER] += holys.getAddWater();
+                }
+            }
+            // 3. 輸出 (已獲得/最大)
+            final StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < N; i++) {
+                sb.append(names[i]).append(" +").append(current[i]);
+                sb.append(" (").append(current[i]).append("/").append(max[i]).append("),");
+            }
+            final String[] clientStrAry = sb.toString().split(",");
             pc.sendPackets(new S_NPCTalkReturn(pc, "Holy_D11", clientStrAry));
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
     }
+
 
     private void HolySet(final L1PcInstance pc, final int questId) {
         try {

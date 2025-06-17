@@ -232,6 +232,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                                 }
                             }
                         }
+
                         // 如果 done為false 一律不執行
                         if (var2 == 1) {
                             final StringBuilder stringBuilder = new StringBuilder();
@@ -1935,7 +1936,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     } else if (!whisperTo.isCanWhisper()) {
                         result_type = 56;
                     }
-                     // 輸出使用聊天頻道的結果
+                    // 輸出使用聊天頻道的結果
                     pc.sendPackets(new S_ChatResult(chatIndex, chatType, chatText, tellTargetName, severId, result_type));
 
                     // 使用未成功，直接 return
@@ -1955,7 +1956,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         Eva.getInstance().addPrivateChat(pc.getName(), tellTargetName, chatText);
                     }
 
-                  // 日誌記錄（原本就有的）
+                    // 日誌記錄（原本就有的）
                     if (ConfigRecord.LOGGING_CHAT_WHISPER) {
                         LogChatReading.get().isTarget(pc, whisperTo, chatText, 9);
                     }
@@ -2039,7 +2040,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     }
                     break;
                 case 4: // 血盟頻道
-                     if (Config.UI_MODE == 2) {
+                    if (Config.UI_MODE == 2) {
                         Eva.getInstance().addClanChat(pc.getName(), pc.getClanname(), chatText);
                     }
                     if (ConfigRecord.GM_OVERHEARD4) {
@@ -2185,7 +2186,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                                     }
                                 }
                                 // 推送同盟頻道到血盟分頁
-                                 if (Config.UI_MODE == 2) {
+                                if (Config.UI_MODE == 2) {
                                     Eva.getInstance().addClanChat(pc.getName(), pc.getClanname(), chatText);
                                 }
                                 // GM 偵聽

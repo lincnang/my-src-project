@@ -1,5 +1,7 @@
 package com.lineage.data.npc;
 
+import com.add.Tsai.ACardTable;
+import com.add.Tsai.CardBookCmd;
 import com.lineage.config.Configpoly;
 import com.lineage.data.executor.NpcExecutor;
 import com.lineage.server.datatables.ItemTable;
@@ -15,275 +17,268 @@ import com.lineage.server.templates.L1polyHeCheng;
 import com.lineage.server.world.World;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 變身卡合成系統
- * 後續由 技術老爹 製作
- *
- * @author Administrator
- */
 public class Npc_PolyCombind extends NpcExecutor {
-    private final Random _random = new Random();
     private final int[] poly1 = Configpoly.poly_LIST_1;
     private final int[] poly2 = Configpoly.poly_LIST_2;
     private final int[] poly3 = Configpoly.poly_LIST_3;
     private final int[] poly4 = Configpoly.poly_LIST_4;
     private final int[] poly5 = Configpoly.poly_LIST_5;
 
-    public static NpcExecutor get() {
+    public static Npc_PolyCombind get() {
         return new Npc_PolyCombind();
     }
+    public int type() { return 3; }
 
-    public int type() {
-        return 3;
-    }
-
+    // NPC 點擊進入主畫面
     public void talk(L1PcInstance pc, L1NpcInstance npc) {
         pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind1"));
     }
 
+    // ========================= 支援 CMD 直接進入入口 =========================
+    public static boolean Cmd(L1PcInstance pc, String cmd) {
+        if ("cardset2".equalsIgnoreCase(cmd)) {
+            // 呼叫 dollBookCmd 的 DOLLAllSet (直接調用現有功能)
+            CardBookCmd.get().CardAllSet(pc); // 你要import com.add.Tsai.dollBookCmd
+            return true;
+        }
+
+        if ("card_01".equalsIgnoreCase(cmd)) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            stringBuilder.append(ACardTable.get().getCardHaveGroup(pc, i + 1)).append(",");
+            stringBuilder.append(ACardTable.get().getCardGroupSize(i + 1)).append(",");
+        }
+
+        final String[] clientStrAry = stringBuilder.toString().split(",");
+        pc.sendPackets(new S_NPCTalkReturn(pc, "card_01", clientStrAry));
+            return true;
+        }
+
+        if ("polycombind1".equalsIgnoreCase(cmd)) {
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind1"));
+            return true;
+        }
+        // 分頁
+        if ("poly_A1".equalsIgnoreCase(cmd)) {
+            String[] data = { String.valueOf(Configpoly.CONSUME2 + pc.getpolyrun2()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind2", data));
+            return true;
+        }
+        if ("poly_B1".equalsIgnoreCase(cmd)) {
+            String[] data = { String.valueOf(Configpoly.CONSUME3 + pc.getpolyrun3()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind3", data));
+            return true;
+        }
+        if ("poly_C1".equalsIgnoreCase(cmd)) {
+            String[] data = { String.valueOf(Configpoly.CONSUME4 + pc.getpolyrun4()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind4", data));
+            return true;
+        }
+        if ("poly_D1".equalsIgnoreCase(cmd)) {
+            String[] data = { String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind5", data));
+            return true;
+        }
+
+        // 機率調整
+        if ("poly_A11".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME2 + pc.getpolyrun2() < Configpoly.ZUIDAJILV2)
+                pc.setpolyrun2(pc.getpolyrun2() + Configpoly.ZENGJIAJILV2);
+            String[] data = { String.valueOf(Configpoly.CONSUME2 + pc.getpolyrun2()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind2", data));
+            return true;
+        }
+        if ("poly_A12".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME2 + pc.getpolyrun2() > Configpoly.ZUIXIAOJILV2)
+                pc.setpolyrun2(pc.getpolyrun2() - Configpoly.ZENGJIAJILV2);
+            String[] data = { String.valueOf(Configpoly.CONSUME2 + pc.getpolyrun2()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind2", data));
+            return true;
+        }
+        if ("poly_B11".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME3 + pc.getpolyrun3() < Configpoly.ZUIDAJILV3)
+                pc.setpolyrun3(pc.getpolyrun3() + Configpoly.ZENGJIAJILV3);
+            String[] data = { String.valueOf(Configpoly.CONSUME3 + pc.getpolyrun3()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind3", data));
+            return true;
+        }
+        if ("poly_B12".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME3 + pc.getpolyrun3() > Configpoly.ZUIXIAOJILV3)
+                pc.setpolyrun3(pc.getpolyrun3() - Configpoly.ZENGJIAJILV3);
+            String[] data = { String.valueOf(Configpoly.CONSUME3 + pc.getpolyrun3()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind3", data));
+            return true;
+        }
+        if ("poly_C11".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME4 + pc.getpolyrun4() < Configpoly.ZUIDAJILV4)
+                pc.setpolyrun4(pc.getpolyrun4() + Configpoly.ZENGJIAJILV4);
+            String[] data = { String.valueOf(Configpoly.CONSUME4 + pc.getpolyrun4()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind4", data));
+            return true;
+        }
+        if ("poly_C12".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME4 + pc.getpolyrun4() > Configpoly.ZUIXIAOJILV4)
+                pc.setpolyrun4(pc.getpolyrun4() - Configpoly.ZENGJIAJILV4);
+            String[] data = { String.valueOf(Configpoly.CONSUME4 + pc.getpolyrun4()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind4", data));
+            return true;
+        }
+        if ("poly_D11".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME5 + pc.getpolyrun5() < Configpoly.ZUIDAJILV5)
+                pc.setpolyrun5(pc.getpolyrun5() + Configpoly.ZENGJIAJILV5);
+            String[] data = { String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind5", data));
+            return true;
+        }
+        if ("poly_D12".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME5 + pc.getpolyrun5() > Configpoly.ZUIXIAOJILV5)
+                pc.setpolyrun5(pc.getpolyrun5() - Configpoly.ZENGJIAJILV5);
+            String[] data = { String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind5", data));
+            return true;
+        }
+
+        // 合成主流程直接呼叫 action
+        if (cmd.equalsIgnoreCase("poly_A") || cmd.equalsIgnoreCase("poly_A_total") ||
+                cmd.equalsIgnoreCase("poly_B") || cmd.equalsIgnoreCase("poly_B_total") ||
+                cmd.equalsIgnoreCase("poly_C") || cmd.equalsIgnoreCase("poly_C_total") ||
+                cmd.equalsIgnoreCase("poly_D") || cmd.equalsIgnoreCase("poly_D_total")) {
+            new Npc_PolyCombind().action(pc, null, cmd, 0);
+            return true;
+        }
+        return false;
+    }
+
+    // ======================== 主合成流程 ========================
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
-        //////////////////////////////////////////////////////////////////////////////////////////
-        if (cmd.equalsIgnoreCase("A1")) {
-            String[] data = new String[3];
-            data[0] = String.valueOf(Configpoly.CONSUME2 + pc.getpolyrun2());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind2", data));
-        }
-        if (cmd.equalsIgnoreCase("A11")) {
-            if (Configpoly.CONSUME2 + pc.getpolyrun2() >= Configpoly.ZUIDAJILV2) {
-                pc.sendPackets(new S_SystemMessage("合成二階段變身卡最高機率" + Configpoly.ZUIDAJILV2 + "%"));
-                return;
-            }
-            String[] data = new String[3];
-            pc.setpolyCount(pc.getpolyCount() + 1);
-            pc.setpolyrun2(pc.getpolyrun2() + Configpoly.ZENGJIAJILV2);
-            data[0] = String.valueOf(Configpoly.CONSUME2 + pc.getpolyrun2());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind2", data));
-        }
-        if (cmd.equalsIgnoreCase("A12")) {
-            if (Configpoly.CONSUME2 + pc.getpolyrun2() <= Configpoly.ZUIXIAOJILV2) {
-                pc.sendPackets(new S_SystemMessage("合成二階段變身卡最低機率" + Configpoly.ZUIXIAOJILV2 + "%"));
-                return;
-            }
-            String[] data = new String[3];
-            pc.setpolyCount(pc.getpolyCount() - 1);
-            pc.setpolyrun2(pc.getpolyrun2() - Configpoly.ZENGJIAJILV2);
-            data[0] = String.valueOf(Configpoly.CONSUME2 + pc.getpolyrun2());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind2", data));
-        }
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        if (cmd.equalsIgnoreCase("B1")) {
-            String[] data = new String[3];
-            data[0] = String.valueOf(Configpoly.CONSUME3 + pc.getpolyrun3());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind3", data));
-        }
-        if (cmd.equalsIgnoreCase("B11")) {
-            if (Configpoly.CONSUME3 + pc.getpolyrun3() >= Configpoly.ZUIDAJILV3) {
-                pc.sendPackets(new S_SystemMessage("合成三階段變身卡最高機率" + Configpoly.ZUIDAJILV3 + "%"));
-                return;
-            }
-            String[] data = new String[3];
-            pc.setpolyCount2(pc.getpolyCount2() + 1);
-            pc.setpolyrun3(pc.getpolyrun3() + Configpoly.ZENGJIAJILV3);
-            data[0] = String.valueOf(Configpoly.CONSUME3 + pc.getpolyrun3());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind3", data));
-        }
-        if (cmd.equalsIgnoreCase("B12")) {
-            if (Configpoly.CONSUME3 + pc.getpolyrun3() <= Configpoly.ZUIXIAOJILV3) {
-                pc.sendPackets(new S_SystemMessage("合成三階段變身卡最低機率" + Configpoly.ZUIXIAOJILV3 + "%"));
-                return;
-            }
-            String[] data = new String[3];
-            pc.setpolyCount2(pc.getpolyCount2() - 1);
-            pc.setpolyrun3(pc.getpolyrun3() - Configpoly.ZENGJIAJILV3);
-            data[0] = String.valueOf(Configpoly.CONSUME3 + pc.getpolyrun3());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind3", data));
-        }
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        if (cmd.equalsIgnoreCase("C1")) {
-            String[] data = new String[3];
-            data[0] = String.valueOf(Configpoly.CONSUME4 + pc.getpolyrun4());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind4", data));
-        }
-        if (cmd.equalsIgnoreCase("C11")) {
-            if (Configpoly.CONSUME4 + pc.getpolyrun4() >= Configpoly.ZUIDAJILV4) {
-                pc.sendPackets(new S_SystemMessage("合成四階段變身卡最高機率" + Configpoly.ZUIDAJILV4 + "%"));
-                return;
-            }
-            String[] data = new String[3];
-            pc.setpolyCount3(pc.getpolyCount3() + 1);
-            pc.setpolyrun4(pc.getpolyrun4() + Configpoly.ZENGJIAJILV4);
-            data[0] = String.valueOf(Configpoly.CONSUME4 + pc.getpolyrun4());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind4", data));
-        }
-        if (cmd.equalsIgnoreCase("C12")) {
-            if (Configpoly.CONSUME4 + pc.getpolyrun4() <= Configpoly.ZUIXIAOJILV4) {
-                pc.sendPackets(new S_SystemMessage("合成四階段變身卡最低機率" + Configpoly.ZUIXIAOJILV4 + "%"));
-                return;
-            }
-            String[] data = new String[3];
-            pc.setpolyCount3(pc.getpolyCount3() - 1);
-            pc.setpolyrun4(pc.getpolyrun4() - Configpoly.ZENGJIAJILV4);
-            data[0] = String.valueOf(Configpoly.CONSUME4 + pc.getpolyrun4());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind4", data));
-        }
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        if (cmd.equalsIgnoreCase("D1")) {
-            String[] data = new String[3];
-            data[0] = String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind5", data));
-        }
-        if (cmd.equalsIgnoreCase("D11")) {
-            if (Configpoly.CONSUME5 + pc.getpolyrun5() >= Configpoly.ZUIDAJILV5) {
-                pc.sendPackets(new S_SystemMessage("合成五階段變身卡最高機率" + Configpoly.ZUIDAJILV5 + "%"));
-                return;
-            }
-            String[] data = new String[3];
-            pc.setpolyCount4(pc.getpolyCount4() + 1);
-            pc.setpolyrun5(pc.getpolyrun5() + Configpoly.ZENGJIAJILV5);
-            data[0] = String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind5", data));
-        }
-        if (cmd.equalsIgnoreCase("D12")) {
-            if (Configpoly.CONSUME5 + pc.getpolyrun5() <= Configpoly.ZUIXIAOJILV5) {
-                pc.sendPackets(new S_SystemMessage("合成五階段變身卡最低機率" + Configpoly.ZUIXIAOJILV5 + "%"));
-                return;
-            }
-            String[] data = new String[3];
-            pc.setpolyCount4(pc.getpolyCount4() - 1);
-            pc.setpolyrun5(pc.getpolyrun5() - Configpoly.ZENGJIAJILV5);
-            data[0] = String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5());
-            pc.sendPackets(new S_NPCTalkReturn(npc.getId(), "polycombind5", data));
-        }
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        boolean enough = false;// 材料是否足夠
-        ArrayList<Integer> cousumepolys = new ArrayList<Integer>();// 預備消耗的變身卡道具ID列表
-        int chance = 0;// 合成機率
-        int needcount = 0;// 需要數量
-        int[] oldpolys = null;// 上一階段的變身卡
-        int newpoly = 0;// 給予的新變身卡
-        final String[] data = new String[3];
+        int[] oldpolys = null;
+        int newpoly = 0;
+        int chance = 0;
+        int needcount = 0;
         switch (cmd) {
-            case "A":
-            case "A_Total":
+            case "poly_A":
+            case "poly_A_total":
                 chance = Configpoly.CONSUME2 + pc.getpolyrun2();
                 needcount = Configpoly.SHULIANG2 + pc.getpolyCount();
                 oldpolys = poly1;
-                newpoly = poly2[ThreadLocalRandom.current().nextInt(poly2.length)];// 隨機2階段變身卡
+                newpoly = poly2[ThreadLocalRandom.current().nextInt(poly2.length)];
                 break;
-            case "B":
-            case "B_Total":
+            case "poly_B":
+            case "poly_B_total":
                 chance = Configpoly.CONSUME3 + pc.getpolyrun3();
                 needcount = Configpoly.SHULIANG3 + pc.getpolyCount2();
                 oldpolys = poly2;
-                newpoly = poly3[ThreadLocalRandom.current().nextInt(poly3.length)];// 隨機3階段變身卡
+                newpoly = poly3[ThreadLocalRandom.current().nextInt(poly3.length)];
                 break;
-            case "C":
-            case "C_Total":
+            case "poly_C":
+            case "poly_C_total":
                 chance = Configpoly.CONSUME4 + pc.getpolyrun4();
                 needcount = Configpoly.SHULIANG4 + pc.getpolyCount3();
                 oldpolys = poly3;
-                newpoly = poly4[ThreadLocalRandom.current().nextInt(poly4.length)];// 隨機4階段變身卡
+                newpoly = poly4[ThreadLocalRandom.current().nextInt(poly4.length)];
                 break;
-            case "D":
-            case "D_Total":
+            case "poly_D":
+            case "poly_D_total":
                 chance = Configpoly.CONSUME5 + pc.getpolyrun5();
                 needcount = Configpoly.SHULIANG5 + pc.getpolyCount4();
                 oldpolys = poly4;
-                newpoly = poly5[ThreadLocalRandom.current().nextInt(poly5.length)];// 隨機5階段變身卡fPoly2UserSet
+                newpoly = poly5[ThreadLocalRandom.current().nextInt(poly5.length)];
                 break;
+            default:
+                pc.sendPackets(new S_SystemMessage("指令錯誤!"));
+                return;
         }
 
-        boolean isPlayAnimation = true;
-        if (cmd.contains("_Total"))
-            isPlayAnimation = false;
-
+        // 消耗卡片統計
+        class ItemConsume {
+            L1ItemInstance itemInstance;
+            int count;
+            ItemConsume(L1ItemInstance itemInstance, int count) {
+                this.itemInstance = itemInstance;
+                this.count = count;
+            }
+        }
+        boolean enough = false;
+        ArrayList<ItemConsume> consumeList = new ArrayList<>();
         if (oldpolys != null) {
+            int totalCount = 0;
+            outer:
             for (int oldpoly : oldpolys) {
-                L1ItemInstance[] polys = pc.getInventory().findItemsId(oldpoly);// 取回此變身卡陣列
+                L1ItemInstance[] polys = pc.getInventory().findItemsId(oldpoly);
                 if (polys != null) {
                     for (L1ItemInstance poly : polys) {
-                        int itemid = poly.getItemId();
-                        cousumepolys.add(itemid);
-                        if (cousumepolys.size() == needcount) {// 足夠數量 終止迴圈
-                            break;
-                        }
+                        int remain = needcount - totalCount;
+                        int stackCount = (int) poly.getCount();
+                        int consumeCount = Math.min(remain, stackCount);
+                        consumeList.add(new ItemConsume(poly, consumeCount));
+                        totalCount += consumeCount;
+                        if (totalCount >= needcount) break outer;
                     }
-                }
-                if (cousumepolys.size() == needcount) {// 足夠數量 終止迴圈
-                    break;
                 }
             }
+            enough = (totalCount >= needcount);
         }
-        if (cousumepolys.size() == needcount) {// 足夠數量
-            enough = true;// 設定材料足夠
-            if (pc.getInventory().consumeItemsIdArray(cousumepolys)) {// 消耗列表道具各1個
-                try {
-                    if (isPlayAnimation) {
-                        pc.sendHtmlCastGfx(data);
 
-                        TimeUnit.MILLISECONDS.sleep(2100);
-                    }
-
-                    pc.setpolyCount(0);
-                    pc.setpolyCount2(0);
-                    pc.setpolyCount3(0);
-                    pc.setpolyCount4(0);
-                    pc.setpolyrun2(0);
-                    pc.setpolyrun3(0);
-                    pc.setpolyrun4(0);
-                    pc.setpolyrun5(0);
-                    if (ThreadLocalRandom.current().nextInt(100) < chance) {// 合成成功
-                        final L1ItemInstance item = ItemTable.get().createItem(newpoly);
-                        int itemId = item.getItem().getItemId();
-                        final StringBuilder stringBuilder = new StringBuilder();
-                        final L1polyHeCheng card1 = polyHeChengTable.getInstance().getTemplate(itemId);
-                        //獲取列表id
-                        if (card1 != null) {//列表ID空白不啟動
-                            stringBuilder.append(card1.getGfxid()).append(",");
-                            if (card1.getNot() != 0) {
-                                World.get().broadcastPacketToAll(new S_BlueMessage(166, "\\f=恭喜玩家\\fN【" + pc.getName() + "】\\f=合成了變身卡\\fN【" + item.getLogName() + "】"));
-                            }
-                        }
-                        final String[] msg = stringBuilder.toString().split(",");//從0開始分裂以逗號為單位
-                        item.setIdentified(true);
-                        pc.getInventory().storeItem(item);
-                        pc.sendPacketsX8(new S_Sound(20360)); // 音效
-                        if (isPlayAnimation)
-                            pc.sendPackets(new S_NPCTalkReturn(pc, "wwhccg", msg));//對話當調用IMG
-                        pc.sendPackets(new S_SystemMessage("恭喜你合成了" + item.getLogName()));
-                    } else {// 合成失敗
-                        pc.sendPackets(new S_SystemMessage("合成變身卡失敗了。"));
-                        final L1ItemInstance item = ItemTable.get().createItem(cousumepolys.get(ThreadLocalRandom.current().nextInt(cousumepolys.size())));
-                        int itemId = item.getItem().getItemId();
-                        final StringBuilder stringBuilder = new StringBuilder();
-                        final L1polyHeCheng card1 = polyHeChengTable.getInstance().getTemplate(itemId);
-                        //獲取列表id
-                        if (card1 != null) {//列表ID空白不啟動
-                            stringBuilder.append(card1.getGfxid()).append(",");
-                        }
-                        final String[] msg = stringBuilder.toString().split(",");//從0開始分裂以逗號為單位
-                        item.setIdentified(true);
-                        pc.getInventory().storeItem(item);
-                        pc.sendPacketsX8(new S_Sound(20468)); // 音效
-                        if (isPlayAnimation)
-                            pc.sendPackets(new S_NPCTalkReturn(pc, "wwhcsb", msg));//對話當調用IMG
-                        pc.sendPackets(new S_SystemMessage("很遺憾合成失敗返還" + item.getLogName()));
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                /*catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                */
-            }
-        }
-        if (!enough) {// 材料不足
+        if (!enough) {
             pc.sendPackets(new S_SystemMessage("你的變身卡不足【" + needcount + "】個"));
+            return;
+        }
+
+        // 扣除材料
+        for (ItemConsume ic : consumeList) {
+            pc.getInventory().removeItem(ic.itemInstance, ic.count);
+        }
+
+        // 重置全部階段加成
+        pc.setpolyCount(0); pc.setpolyCount2(0); pc.setpolyCount3(0); pc.setpolyCount4(0);
+        pc.setpolyrun2(0); pc.setpolyrun3(0); pc.setpolyrun4(0); pc.setpolyrun5(0);
+
+        boolean isPlayAnimation = !cmd.contains("_total");
+        try {
+            if (isPlayAnimation) {
+                pc.sendHtmlCastGfx(new String[3]);
+                TimeUnit.MILLISECONDS.sleep(2100);
+            }
+        } catch (Exception ignored) {}
+
+        // 合成結果
+        if (ThreadLocalRandom.current().nextInt(100) < chance) {
+            // 成功
+            final L1ItemInstance item = ItemTable.get().createItem(newpoly);
+            final StringBuilder stringBuilder = new StringBuilder();
+            final L1polyHeCheng card1 = polyHeChengTable.getInstance().getTemplate(item.getItem().getItemId());
+            if (card1 != null) {
+                stringBuilder.append(card1.getGfxid()).append(",");
+                if (card1.getNot() != 0) {
+                    World.get().broadcastPacketToAll(
+                            new S_BlueMessage(166, "\\f=恭喜玩家\\fN【" + pc.getName() + "】\\f=合成了變身卡\\fN【" + item.getLogName() + "】"));
+                }
+            }
+            final String[] msg = stringBuilder.toString().split(",");
+            item.setIdentified(true);
+            pc.getInventory().storeItem(item);
+            pc.sendPacketsX8(new S_Sound(20360));
+            if (isPlayAnimation)
+                pc.sendPackets(new S_NPCTalkReturn(pc, "wwhccg", msg));
+            pc.sendPackets(new S_SystemMessage("恭喜你合成了" + item.getLogName()));
+        } else {
+            // 失敗返還隨機卡
+            pc.sendPackets(new S_SystemMessage("合成變身卡失敗了。"));
+            final ItemConsume ic = consumeList.get(ThreadLocalRandom.current().nextInt(consumeList.size()));
+            final L1ItemInstance item = ItemTable.get().createItem(ic.itemInstance.getItemId());
+            final StringBuilder stringBuilder = new StringBuilder();
+            final L1polyHeCheng card1 = polyHeChengTable.getInstance().getTemplate(item.getItem().getItemId());
+            if (card1 != null) stringBuilder.append(card1.getGfxid()).append(",");
+            final String[] msg = stringBuilder.toString().split(",");
+            item.setIdentified(true);
+            pc.getInventory().storeItem(item);
+            pc.sendPacketsX8(new S_Sound(20468));
+            if (isPlayAnimation)
+                pc.sendPackets(new S_NPCTalkReturn(pc, "wwhcsb", msg));
+            pc.sendPackets(new S_SystemMessage("很遺憾合成失敗返還" + item.getLogName()));
         }
     }
 }

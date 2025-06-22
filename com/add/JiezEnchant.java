@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 強化戒指加成系統
  *
- * @author Manly
+
  */
 public class JiezEnchant {
     private static final Log _log = LogFactory.getLog(JiezEnchant.class);

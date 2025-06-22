@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 紋樣系統
- * 大陸Manly製作
  *
  * @author Administrator
  */

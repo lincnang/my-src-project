@@ -13,7 +13,9 @@ public class L1SkillEnhance {
     private int _setting2;
     private int _setting3;
     private double _setting4;
-
+    private String _icon; // 新增這一行
+    private String msg1; // 額外能力訊息
+    private String cmd;  // 對話檔指令
     public int getId() {
         return _id;
     }
@@ -76,5 +78,25 @@ public class L1SkillEnhance {
 
     public void setSetting4(double setting4) {
         this._setting4 = setting4;
+    }
+    public String getIcon() {
+        return _icon;
+    }
+
+    public void setIcon(String icon) {
+        this._icon = icon;
+    }
+    public String getMsg1() {
+        return msg1;
+    }
+    public void setMsg1(String msg1) {
+        this.msg1 = msg1;
+    }
+
+    public String getCmd() {
+        return cmd;
+    }
+    public void setCmd(String cmd) {
+        this.cmd = cmd;
     }
 }

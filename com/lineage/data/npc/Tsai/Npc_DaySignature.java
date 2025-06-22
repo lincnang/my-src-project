@@ -24,7 +24,6 @@ import java.util.Random;
 /**
  * 簽到獎勵
  *
- * @author Manly
  * by 2019 / 8 / 2
  */
 public class Npc_DaySignature extends NpcExecutor {

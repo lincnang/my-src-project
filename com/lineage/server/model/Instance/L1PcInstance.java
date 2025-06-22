@@ -1103,7 +1103,7 @@ public class L1PcInstance extends L1Character { // src015
     private int _DollId = 0;//娃娃編號
     private int _HolyId = 0;//聖物編號
     private int _FireDisId = 0;//火神編號
-    // 魔法傷害增加+% by Manly
+    // 魔法傷害增加+%
     private int _magicDmgUp;
     ///////////////////////////////紋樣系統開始///////////////////////////////////////
     private int _wenyangjifen;//紋樣積分

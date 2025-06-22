@@ -14,7 +14,6 @@ import java.util.StringTokenizer;
 /**
  * 類名稱：ServerMultiChatLogWindow<br>
  * 類描述：多個聊天監控組件<br>
- * 創建人:Manly<br>
  * 修改時間：2022年4月27日 上午1:52:44<br>
  * 修改人:QQ:263075225<br>
  * 修改備註:<br>

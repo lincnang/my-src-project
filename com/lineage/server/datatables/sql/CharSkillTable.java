@@ -28,6 +28,7 @@ public class CharSkillTable implements CharSkillStorage {
     private static final Map<Integer, ArrayList<L1UserSkillTmp>> _skillMap = new HashMap<>();
     private static CharSkillTable _instance;
 
+
     public static CharSkillTable get() {
         if (_instance == null) {
             _instance = new CharSkillTable();

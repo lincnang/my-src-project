@@ -5156,7 +5156,7 @@ public class L1ItemStatus {
                 }
             }
         }
-        /* 祝福化說明系統 大陸Manly製作 QQ263075225 */
+        /* 祝福化說明系統  */
         L1ItemSpecialAttributeChar attr_char = _itemInstance.get_ItemAttrName();
         if (attr_char != null) {
             L1ItemSpecialAttribute attr = ItemSpecialAttributeTable.get().getAttrId(attr_char.get_attr_id());

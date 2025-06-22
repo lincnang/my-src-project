@@ -25,7 +25,6 @@ import java.util.Locale;
 
 /**
  * 管理器 類名稱：Eva<br>
- * 創建人:Manly<br>
  * 修改時間：2022年4月26日 下午5:09:41<br>
  * 修改人:QQ:263075225<br>
  *

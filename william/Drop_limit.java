@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 
 /**
  * 掉寶限制控制
- * 此功能由大陸Manly巨作
  * 如有模仿純屬雷同
  *
  * @author Administrator

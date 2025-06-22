@@ -15,7 +15,6 @@ import java.util.HashMap;
 
 /**
  * 變身卡合成調用圖片系統
- * By Manly
  *
  * @author Administrator
  */

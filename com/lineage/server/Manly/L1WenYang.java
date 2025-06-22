@@ -20,7 +20,6 @@ package com.lineage.server.Manly;
 
 /**
  * 裝備溶解系統
- * BY Manly
  *
  * @author Administrator
  */

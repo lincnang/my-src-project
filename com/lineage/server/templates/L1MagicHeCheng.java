@@ -20,7 +20,6 @@ package com.lineage.server.templates;
 
 /**
  * 魔法合成調用圖片系統
- * Manly by
  *
  * @author Administrator
  */

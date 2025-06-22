@@ -5,9 +5,6 @@ import java.sql.Timestamp;
 /**
  * 人物物品特殊屬性資料表<br>
  * 類名稱：L1ItemSpecialAttributeChar<br>
- * 創建人:Manly<br>
- * 修改時間：2018年4月26日 下午8:41:00<br>
- * 修改人:QQ:263075225<br>
  * 修改備註:<br>
  *
  * @version Rev:3.2 Bin:81222<br>

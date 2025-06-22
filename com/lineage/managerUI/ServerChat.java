@@ -6,7 +6,6 @@ import com.lineage.server.world.World;
 
 /**
  * 管理器聊天控制 類名稱：ServerChat<br>
- * 創建人:Manly<br>
  * 修改時間：2022年4月26日 下午5:10:11<br>
  * 修改人:QQ:263075225<br>
  *

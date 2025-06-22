@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 紋樣系統 BY Manly
+ * 紋樣系統
  *
  * @author Administrator
  */

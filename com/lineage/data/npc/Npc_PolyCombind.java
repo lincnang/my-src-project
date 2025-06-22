@@ -224,8 +224,29 @@ public class Npc_PolyCombind extends NpcExecutor {
 
         if (!enough) {
             pc.sendPackets(new S_SystemMessage("你的變身卡不足【" + needcount + "】個"));
+            String htmlPage = "";
+            String[] data = new String[3];
+
+            // 判斷回到哪一個階段畫面
+            if (cmd.equalsIgnoreCase("A") || cmd.equalsIgnoreCase("A_Total")) {
+                htmlPage = "polycombind2";
+                data[0] = String.valueOf(Configpoly.CONSUME2 + pc.getpolyrun2());
+            } else if (cmd.equalsIgnoreCase("B") || cmd.equalsIgnoreCase("B_Total")) {
+                htmlPage = "polycombind3";
+                data[0] = String.valueOf(Configpoly.CONSUME3 + pc.getpolyrun3());
+            } else if (cmd.equalsIgnoreCase("C") || cmd.equalsIgnoreCase("C_Total")) {
+                htmlPage = "polycombind4";
+                data[0] = String.valueOf(Configpoly.CONSUME4 + pc.getpolyrun4());
+            } else if (cmd.equalsIgnoreCase("D") || cmd.equalsIgnoreCase("D_Total")) {
+                htmlPage = "polycombind5";
+                data[0] = String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5());
+            }
+
+            if (!htmlPage.isEmpty())
+                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), htmlPage, data));
             return;
         }
+
 
         // 扣除材料
         for (ItemConsume ic : consumeList) {

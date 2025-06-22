@@ -20,8 +20,6 @@ package com.lineage.server.templates;
 
 /**
  * 娃娃合成調用圖片系統
- * Manly by
- *
  * @author Administrator
  */
 public class L1DollHeCheng {

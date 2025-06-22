@@ -14,7 +14,6 @@ import java.sql.ResultSet;
 /**
  * 類名稱：ServerItemCountsWindow<br>
  * 類描述：物品數量監控<br>
- * 創建人:Manly<br>
  * 修改時間：2022年4月27日 下午5:37:48<br>
  * 修改備註:<br>
  *

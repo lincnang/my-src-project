@@ -328,7 +328,26 @@ public class Npc_DollCombind extends NpcExecutor {
             }
         } else {
             pc.sendPackets(new S_SystemMessage("你的娃娃不足【" + needcount + "】個"));
+            // 保持在當前合成頁面
+            String htmlPage = "";
+            String[] pageData = new String[3];
+            if (cmd.equalsIgnoreCase("doll_A") || cmd.equalsIgnoreCase("doll_A_total")) {
+                htmlPage = "dollcombind2";
+                pageData[0] = String.valueOf(ConfigDoll.CONSUME2 + pc.getDollrun2());
+            } else if (cmd.equalsIgnoreCase("doll_B") || cmd.equalsIgnoreCase("doll_B_total")) {
+                htmlPage = "dollcombind3";
+                pageData[0] = String.valueOf(ConfigDoll.CONSUME3 + pc.getDollrun3());
+            } else if (cmd.equalsIgnoreCase("doll_C") || cmd.equalsIgnoreCase("doll_C_total")) {
+                htmlPage = "dollcombind4";
+                pageData[0] = String.valueOf(ConfigDoll.CONSUME4 + pc.getDollrun4());
+            } else if (cmd.equalsIgnoreCase("doll_D") || cmd.equalsIgnoreCase("doll_D_total")) {
+                htmlPage = "dollcombind5";
+                pageData[0] = String.valueOf(ConfigDoll.CONSUME5 + pc.getDollrun5());
+            }
+            if (!htmlPage.isEmpty())
+                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), htmlPage, pageData));
         }
+
     }
 
     private static class ItemConsume {

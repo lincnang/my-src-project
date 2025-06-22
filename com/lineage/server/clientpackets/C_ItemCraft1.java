@@ -404,6 +404,11 @@ public class C_ItemCraft1 extends ClientBasePacket {
 //                           pc.sendPackets(new S_SystemMessage("\\f3未開放此功能。"));
                             pc.sendPackets(new S_NPCTalkReturn(pc, "die_title"));
                         }
+                        //技能卡
+                        if (var2 == 21) {
+//                           pc.sendPackets(new S_SystemMessage("\\f3未開放此功能。"));
+                            pc.sendPackets(new S_NPCTalkReturn(pc, "magicchang1"));
+                        }
                         //表情符號修改
                         if (var2 == 12) { // 武器劍靈系統 用表情召喚武器劍靈
                             if (pc.getWeapon() == null) {

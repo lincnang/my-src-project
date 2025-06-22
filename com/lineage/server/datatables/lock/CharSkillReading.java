@@ -24,6 +24,22 @@ public class CharSkillReading {
         }
         return _instance;
     }
+    public int getSkillLevel(int playerobjid, int skillid) {
+        _lock.lock();
+        try {
+            ArrayList<L1UserSkillTmp> list = _storage.skills(playerobjid);
+            if (list != null) {
+                for (L1UserSkillTmp skill : list) {
+                    if (skill.get_skill_id() == skillid) {
+                        return skill.get_skill_level();
+                    }
+                }
+            }
+        } finally {
+            _lock.unlock();
+        }
+        return 0; // 沒學會技能時可視需求回傳0或-1
+    }
 
     public void load() {
         _lock.lock();

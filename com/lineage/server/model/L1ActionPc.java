@@ -12,6 +12,7 @@ import com.lineage.data.QuestClass;
 import com.lineage.data.item_weapon.proficiency.L1WeaponProficiency;
 import com.lineage.data.npc.Npc_DollCombind;
 import com.lineage.data.npc.Npc_HolyCombind;
+import com.lineage.data.npc.Npc_MagicCombind;
 import com.lineage.data.npc.Npc_PolyCombind;
 import com.lineage.data.npc.other2.Npc_Bao1;
 import com.lineage.server.command.executor.L1ToPC;
@@ -1211,6 +1212,10 @@ public class L1ActionPc {
                 return;
             }
 
+            if(Npc_MagicCombind.Cmd(_pc, cmd)) {
+                return;
+            }
+
             // 武器熟練度
             if (L1WeaponProficiency.Cmd(_pc, cmd)) {
                 return;
@@ -1221,6 +1226,10 @@ public class L1ActionPc {
             }
             // 主線任務進度查詢
             if (ServerQuestMobTable.get().Cmd(_pc, cmd)) {
+                return;
+            }
+            // 技能強化
+            if (SkillEnhanceTable.Cmd(_pc, cmd)) {
                 return;
             }
 

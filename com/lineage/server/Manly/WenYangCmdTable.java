@@ -15,7 +15,6 @@ import java.util.Map;
 
 /**
  * 紋樣系統
- * By Manly
  *
  * @author Administrator
  */

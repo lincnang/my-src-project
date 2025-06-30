@@ -12,6 +12,7 @@ import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.classes.L1ClassFeature;
 import com.lineage.server.model.skill.skillmode.SkillMode;
 import com.lineage.server.serverpackets.*;
+import com.lineage.server.serverpackets.ability.S_WeightStatus;
 import com.lineage.server.templates.L1Npc;
 import com.lineage.server.templates.L1SkillEnhance;
 import com.lineage.server.templates.L1Skills;
@@ -62,7 +63,7 @@ public class L1SkillUse {
     private static final int NPC_PC = 3;
     private static final int NPC_NPC = 4;
     // 隱身狀態不能施法
-    private static final int[] CAST_WITH_INVIS = {1, 2, 3, 5, 8, 9, 12, 13, 14, 19, 21, 26, 31, 32, 35, 37, 42, 43, 44, 48, 49, 52, 54, 55, 57, 60, 61, 63, 67, 68, 69, 72, 73, 75, 78, 79, REDUCTION_ARMOR, BOUNCE_ATTACK, SOLID_CARRIAGE, Counter_attack, COUNTER_BARRIER, 97, 98, 99, 100, 101, 102, 104, 105, 106, 107, 109, 110, 111, 113, 114, 115, 116, 117, 118, 129, 130, 131, 133, 134, 137, 138, 146, 147, 148, 149, 150, 151, 155, 156, 158, 159, 163, 164, 165, 166, 168, 169, 170, 171, SOUL_OF_FLAME, ADDITIONAL_FIRE, DRAGON_SKIN, AWAKEN_ANTHARAS, AWAKEN_FAFURION, AWAKEN_VALAKAS, MIRROR_IMAGE, ILLUSION_OGRE, ILLUSION_LICH, PATIENCE, ILLUSION_DIA_GOLEM, INSIGHT, ILLUSION_AVATAR};
+    private static final int[] CAST_WITH_INVIS = {1, 2, 3, 5, 8, 9, 12, 13, 14, 19,DETECTION, CALL_LIGHTNING,SUNBURST,21, 26, 31, 32, 35, 37, 44, 48, 49, 52, 54, 55, 57, 60, 61, 63, 67, 68, 69, 72, 73, 75, 78, 79, REDUCTION_ARMOR, BOUNCE_ATTACK, SOLID_CARRIAGE, Counter_attack, COUNTER_BARRIER, 97, 98, 99, 100, 101, 102, 104, 105, 106, 107, 109, 110, 111, 113, 114, 115, 116, 117, 118, 129, 130, 131, 133, 134, 137, 138, 146, 147, 148, 149, 150, 151, 155, 156, 158, 159, 163, 164, 165, 166, 168, 169, 170, 171, SOUL_OF_FLAME, ADDITIONAL_FIRE, DRAGON_SKIN, AWAKEN_ANTHARAS, AWAKEN_FAFURION, AWAKEN_VALAKAS, MIRROR_IMAGE, ILLUSION_OGRE, ILLUSION_LICH, PATIENCE, ILLUSION_DIA_GOLEM, INSIGHT, ILLUSION_AVATAR};
 
     // 設定魔法屏障不可抵擋的魔法
     private static final int[] EXCEPT_COUNTER_MAGIC = {1, 2, 3, 5, 8, 9, 12,
@@ -1708,6 +1709,22 @@ public class L1SkillUse {
                     L1PcInstance pc = (L1PcInstance) _user;
                     removeNewIcon(pc, _skillId);
                 }
+                //>> 修正: 強制「負重強化」效果應用與UI更新 (新增)
+                if (this._skillId == DECREASE_WEIGHT) {
+                    // 檢查目標是否已存在此效果，如果沒有則施加
+                    if (!cha.hasSkillEffect(this._skillId)) {
+                        // 設定技能效果的持續時間
+                        cha.setSkillEffect(this._skillId, this._skill.getBuffDuration() * 1000);
+                    }
+                    // 發送負重狀態更新封包，確保客戶端UI正確顯示
+                    if (cha instanceof L1PcInstance) {
+                        L1PcInstance pc = (L1PcInstance) cha;
+                        pc.sendPackets(new S_WeightStatus(pc.getInventory().getWeight() * 100 / (int) pc.getMaxWeight(), pc.getInventory().getWeight(), (int) pc.getMaxWeight()));
+                    }
+                    // 為了不影響其他邏輯，直接跳到下一個目標
+                    continue;
+                }
+
                 if (_target instanceof L1PcInstance) {
                     L1PcInstance pc = (L1PcInstance) _target;
                     removeNewIcon(pc, _skillId);
@@ -1730,6 +1747,9 @@ public class L1SkillUse {
                     case L1Skills.TYPE_CURSE:
                     case L1Skills.TYPE_PROBABILITY: // 確率系スキル
                         isSuccess = magic.calcProbabilityMagic(this._skillId);
+                        if (this._skillId == DECREASE_WEIGHT) {
+                            isSuccess = true;
+                        }
                         if (_type == TYPE_GMBUFF) {
                             isSuccess = true;
                         }
@@ -2987,7 +3007,7 @@ public class L1SkillUse {
         // カウンターマジック有效なスキルでカウンターマジック中
         if (this._isCounterMagic && cha.hasSkillEffect(COUNTER_MAGIC)) {
             cha.removeSkillEffect(COUNTER_MAGIC);
-            final int castgfx2 = SkillsTable.get().getTemplate(31).getCastGfx2();
+            final int castgfx2 = SkillsTable.get().getTemplate(COUNTER_MAGIC).getCastGfx2();
             cha.broadcastPacketAll(new S_SkillSound(cha.getId(), castgfx2));
             if (cha instanceof L1PcInstance) {
                 final L1PcInstance pc = (L1PcInstance) cha;

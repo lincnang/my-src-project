@@ -57,7 +57,3 @@ public class MagicReel_Buff extends ItemExecutor {
         }
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.data.item_etcitem.magicreel.MagicReel_Buff JD-Core Version: 0.6.2
- */

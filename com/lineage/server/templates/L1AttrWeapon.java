@@ -28,7 +28,7 @@ public class L1AttrWeapon {
     private int _arrtDmgCritical;
     private int _arrtDmgCriticalPro;
 
-    public L1AttrWeapon( int attrId,String name, int stage, int chance, int probability, double type_bind, double type_drain_hp, int type_drain_mp, double type_dmgup, int type_range, int type_range_dmg, int type_light_dmg, boolean type_skill_1, boolean type_skill_2, boolean type_skill_3, double type_skill_time, String[] type_poly_list, boolean type_remove_weapon, boolean type_remove_doll, int type_remove_armor, int extrabowdmg, int extradmg, int gfixd, int attrDmg, int arrtDmgCritical, int arrtDmgCriticalPro) {
+    public L1AttrWeapon(int attrId, String name, int stage, int chance, int probability, double type_bind, double type_drain_hp, int type_drain_mp, double type_dmgup, int type_range, int type_range_dmg, int type_light_dmg, boolean type_skill_1, boolean type_skill_2, boolean type_skill_3, double type_skill_time, String[] type_poly_list, boolean type_remove_weapon, boolean type_remove_doll, int type_remove_armor, int extrabowdmg, int extradmg, int gfixd, int attrDmg, int arrtDmgCritical, int arrtDmgCriticalPro) {
         _attrId = attrId;
         _name = name;
         _stage = stage;
@@ -56,9 +56,11 @@ public class L1AttrWeapon {
         _arrtDmgCritical = arrtDmgCritical;
         _arrtDmgCriticalPro = arrtDmgCriticalPro;
     }
+
     public int getAttrId() {
         return _attrId;
     }
+
     public final String getName() {
         return _name;
     }
@@ -152,9 +154,11 @@ public class L1AttrWeapon {
     public int getAttrDmg() {
         return _attrDmg;
     }
+
     public int getArrtDmgCritical() {
         return _arrtDmgCritical;
     }
+
     public int getArrtDmgCriticalPro() {
         return _arrtDmgCriticalPro;
     }

@@ -25,7 +25,7 @@ public class MagicReel_Spell extends ItemExecutor {
         L1BuffUtil.cancelAbsoluteBarrier(pc);
         L1SkillUse l1skilluse = new L1SkillUse();
         l1skilluse.handleCommands(pc, _skillid, pc.getId(), 0, 0, 0, 2);
-    }
+        }
 
     public void set_set(String[] set) {
         try {
@@ -38,8 +38,3 @@ public class MagicReel_Spell extends ItemExecutor {
         }
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.data.item_etcitem.magicreel.MagicReel_Spell JD-Core Version:
- * 0.6.2
- */

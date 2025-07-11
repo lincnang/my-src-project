@@ -7876,7 +7876,13 @@ public class L1PcInstance extends L1Character { // src015
     public boolean isHeavyStrikeArrow() {
         return CharSkillReading.get().spellCheck(this.getId(), HeavyStrikeArrow);
     }
-
+    /**
+     * 妖精-鷹眼(精神)
+     *
+     */
+    public boolean isEagle() {
+        return CharSkillReading.get().spellCheck(this.getId(), Eagle_Eye);
+    }
     /**
      * 檢查玩家是否擁有妖精被動 - 重擊之矢技能
      *

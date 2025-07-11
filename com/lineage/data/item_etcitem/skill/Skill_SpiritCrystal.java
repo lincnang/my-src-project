@@ -78,7 +78,9 @@ public class Skill_SpiritCrystal extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("精靈水晶(重擊之矢)")) {
                 skillid = 136;
                 magicLv = 15;
-
+            } else if (nameId.equalsIgnoreCase("精靈水晶(鷹眼(精神))")) {
+                skillid = 139;
+                magicLv = 15;
             }
 
             Skill_Check.check(pc, item, skillid, magicLv, 3);

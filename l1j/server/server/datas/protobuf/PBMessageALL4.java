@@ -1083,7 +1083,7 @@ public final class PBMessageALL4 {
             return defaultInstance;
         }
 
-        public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
             return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type11_descriptor;
         }
 
@@ -1141,7 +1141,7 @@ public final class PBMessageALL4 {
         }
 
         @java.lang.Override
-        public com.google.protobuf.UnknownFieldSet getUnknownFields() {
+        public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
             return this.unknownFields;
         }
 
@@ -1414,7 +1414,7 @@ public final class PBMessageALL4 {
         }
 
         @Override
-        public boolean isInitialized() {
+        public final boolean isInitialized() {
             final byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) {
                 return isInitialized == 1;
@@ -1598,7 +1598,7 @@ public final class PBMessageALL4 {
                 maybeForceBuilderInitialization();
             }
 
-            public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type11_descriptor;
             }
 
@@ -1809,7 +1809,7 @@ public final class PBMessageALL4 {
             }
 
             @Override
-            public boolean isInitialized() {
+            public final boolean isInitialized() {
                 return true;
             }
 
@@ -2559,7 +2559,7 @@ public final class PBMessageALL4 {
             return defaultInstance;
         }
 
-        public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
             return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type12_descriptor;
         }
 
@@ -2617,7 +2617,7 @@ public final class PBMessageALL4 {
         }
 
         @java.lang.Override
-        public com.google.protobuf.UnknownFieldSet getUnknownFields() {
+        public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
             return this.unknownFields;
         }
 
@@ -2890,7 +2890,7 @@ public final class PBMessageALL4 {
         }
 
         @Override
-        public boolean isInitialized() {
+        public final boolean isInitialized() {
             final byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) {
                 return isInitialized == 1;
@@ -3074,7 +3074,7 @@ public final class PBMessageALL4 {
                 maybeForceBuilderInitialization();
             }
 
-            public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type12_descriptor;
             }
 
@@ -3285,7 +3285,7 @@ public final class PBMessageALL4 {
             }
 
             @Override
-            public boolean isInitialized() {
+            public final boolean isInitialized() {
                 return true;
             }
 
@@ -4041,7 +4041,7 @@ public final class PBMessageALL4 {
             return defaultInstance;
         }
 
-        public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
             return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type13_descriptor;
         }
 
@@ -4099,7 +4099,7 @@ public final class PBMessageALL4 {
         }
 
         @java.lang.Override
-        public com.google.protobuf.UnknownFieldSet getUnknownFields() {
+        public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
             return this.unknownFields;
         }
 
@@ -4372,7 +4372,7 @@ public final class PBMessageALL4 {
         }
 
         @Override
-        public boolean isInitialized() {
+        public final boolean isInitialized() {
             final byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) {
                 return isInitialized == 1;
@@ -4556,7 +4556,7 @@ public final class PBMessageALL4 {
                 maybeForceBuilderInitialization();
             }
 
-            public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type13_descriptor;
             }
 
@@ -4767,7 +4767,7 @@ public final class PBMessageALL4 {
             }
 
             @Override
-            public boolean isInitialized() {
+            public final boolean isInitialized() {
                 return true;
             }
 
@@ -5520,7 +5520,7 @@ public final class PBMessageALL4 {
             return defaultInstance;
         }
 
-        public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
             return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type14_descriptor;
         }
 
@@ -5578,7 +5578,7 @@ public final class PBMessageALL4 {
         }
 
         @java.lang.Override
-        public com.google.protobuf.UnknownFieldSet getUnknownFields() {
+        public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
             return this.unknownFields;
         }
 
@@ -5851,7 +5851,7 @@ public final class PBMessageALL4 {
         }
 
         @Override
-        public boolean isInitialized() {
+        public final boolean isInitialized() {
             final byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) {
                 return isInitialized == 1;
@@ -6035,7 +6035,7 @@ public final class PBMessageALL4 {
                 maybeForceBuilderInitialization();
             }
 
-            public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type14_descriptor;
             }
 
@@ -6246,7 +6246,7 @@ public final class PBMessageALL4 {
             }
 
             @Override
-            public boolean isInitialized() {
+            public final boolean isInitialized() {
                 return true;
             }
 
@@ -7018,7 +7018,7 @@ public final class PBMessageALL4 {
             return defaultInstance;
         }
 
-        public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
             return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type15_descriptor;
         }
 
@@ -7076,7 +7076,7 @@ public final class PBMessageALL4 {
         }
 
         @java.lang.Override
-        public com.google.protobuf.UnknownFieldSet getUnknownFields() {
+        public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
             return this.unknownFields;
         }
 
@@ -7365,7 +7365,7 @@ public final class PBMessageALL4 {
         }
 
         @Override
-        public boolean isInitialized() {
+        public final boolean isInitialized() {
             final byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) {
                 return isInitialized == 1;
@@ -7377,11 +7377,11 @@ public final class PBMessageALL4 {
         @Override
         public void writeTo(final com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
             getSerializedSize();
-            for (com.google.protobuf.ByteString byteString : array1_) {
-                output.writeBytes(1, byteString);
+            for (int i = 0; i < array1_.size(); i++) {
+                output.writeBytes(1, array1_.get(i));
             }
-            for (com.google.protobuf.ByteString bytes : array2_) {
-                output.writeBytes(2, bytes);
+            for (int i = 0; i < array2_.size(); i++) {
+                output.writeBytes(2, array2_.get(i));
             }
             if (((bitField0_ & 0x00000001) == 0x00000001)) {
                 output.writeInt32(3, value3_);
@@ -7434,19 +7434,19 @@ public final class PBMessageALL4 {
             size = 0;
             {
                 int dataSize = 0;
-                for (com.google.protobuf.ByteString bytes : array1_) {
-                    dataSize += com.google.protobuf.CodedOutputStream.computeBytesSizeNoTag(bytes);
+                for (int i = 0; i < array1_.size(); i++) {
+                    dataSize += com.google.protobuf.CodedOutputStream.computeBytesSizeNoTag(array1_.get(i));
                 }
                 size += dataSize;
-                size += getArray1List().size();
+                size += 1 * getArray1List().size();
             }
             {
                 int dataSize = 0;
-                for (com.google.protobuf.ByteString bytes : array2_) {
-                    dataSize += com.google.protobuf.CodedOutputStream.computeBytesSizeNoTag(bytes);
+                for (int i = 0; i < array2_.size(); i++) {
+                    dataSize += com.google.protobuf.CodedOutputStream.computeBytesSizeNoTag(array2_.get(i));
                 }
                 size += dataSize;
-                size += getArray2List().size();
+                size += 1 * getArray2List().size();
             }
             if (((bitField0_ & 0x00000001) == 0x00000001)) {
                 size += com.google.protobuf.CodedOutputStream.computeInt32Size(3, value3_);
@@ -7559,7 +7559,7 @@ public final class PBMessageALL4 {
                 maybeForceBuilderInitialization();
             }
 
-            public static com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return l1j.server.server.datas.protobuf.PBMessageALL4.internal_static_l1j_server_server_datas_protobuf_type15_descriptor;
             }
 
@@ -7786,7 +7786,7 @@ public final class PBMessageALL4 {
             }
 
             @Override
-            public boolean isInitialized() {
+            public final boolean isInitialized() {
                 return true;
             }
 

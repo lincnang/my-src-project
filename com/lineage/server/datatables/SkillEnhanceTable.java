@@ -88,6 +88,7 @@ public final class SkillEnhanceTable {
         if (lvMap == null) {
             return null;
         }
+
         return lvMap.get(bookLevel);
     }
     /**
@@ -113,7 +114,12 @@ public final class SkillEnhanceTable {
     public static String[] getPlayerSkillIconsMix(L1PcInstance pc) {
         List<String> resultList = new ArrayList<>();
         int objId = pc.getId();
-        for (int skillId : getAllSkillIds()) {
+
+        // 先取出所有技能ID，並排序
+        List<Integer> skillIdList = new ArrayList<>(getAllSkillIds());
+        Collections.sort(skillIdList); // 由小到大排序
+
+        for (int skillId : skillIdList) {
             if (CharSkillReading.get().spellCheck(objId, skillId)) {
                 int skillLevel = CharSkillReading.get().getSkillLevel(objId, skillId);
 
@@ -126,8 +132,7 @@ public final class SkillEnhanceTable {
                     resultList.add(enhance.getIcon());
                     L1Skills skillTemplate = SkillsTable.get().getTemplate(skillId);
                     String skillName = (skillTemplate != null) ? skillTemplate.getName() : String.valueOf(skillId);
-                    resultList.add("　　"+skillName);
-                    // 3. 技能等級（數字）
+                    resultList.add("　　" + skillName);
                     resultList.add(String.valueOf("Lv." + skillLevel));
                 }
             }
@@ -135,6 +140,7 @@ public final class SkillEnhanceTable {
         System.out.println("【DEBUG】icon+名稱+等級陣列：" + resultList);
         return resultList.toArray(new String[0]);
     }
+
 
     /**
      * CMD action: magic_cardv1 - 多技能同時顯示

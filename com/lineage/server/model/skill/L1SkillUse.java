@@ -2635,7 +2635,6 @@ public class L1SkillUse {
                         pc.stopHpRegeneration();
                         // 準備提示訊息
                         String msg = "技能等級：lv." + bookLevel + "，額外增加：AC +" + addAc + "，傷害加成 +" + addDmgup;
-
                         // 提示玩家：送出系統訊息與/或提示音效
                         pc.sendPackets(new S_SystemMessage(msg));
 

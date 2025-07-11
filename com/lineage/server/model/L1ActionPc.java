@@ -1631,7 +1631,6 @@ public class L1ActionPc {
                     int next_lv_honor1 = Honor1.getHonorMax() - _pc.getHonor();//升到下級所需聲望
                     if (next_lv_honor1 <= 0) {
                         _pc.setHonor(_pc.getHonor());
-//                        _pc.setHonorLevel(_pc.getHonorLevel() + 1);
                         _pc.sendPackets(new S_SystemMessage("你的聲望階級升級了，請重新登入獲取新的能力。"));
                         _pc.sendPackets(new S_SystemMessage("重登前切記把寵物收回唷。"));
                         _pc.save();
@@ -1643,11 +1642,7 @@ public class L1ActionPc {
                 }
                 _pc.sendPackets(new S_CloseList(_pc.getId()));
             } else if (cmd.equalsIgnoreCase("Honor_Q")) {
-                //String score = "0";
-                //score = String.valueOf(_pc.get_other().get_score());
                 _pc.sendPackets(new S_ServerMessage("目前威望為：" + _pc.getHonor() + " 。"));//"\\fV目前累積儲值金額"+_pc.getpaycount()+"元"20170122
-
-
                 _pc.sendPackets(new S_SystemMessage("屏幕組隊邀請已發送!等待入隊..."));
                 for (final L1Object obj : World.get().getVisibleObjects(_pc)) {
                     if (obj instanceof L1PcInstance) {

@@ -5,6 +5,7 @@ import com.lineage.config.*;
 import com.lineage.data.event.SubItemSet;
 import com.lineage.server.datatables.SkillEnhanceTable;
 import com.lineage.server.datatables.SkillsTable;
+import com.lineage.server.datatables.lock.CharSkillReading;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.model.skill.L1SkillUse;
@@ -541,6 +542,17 @@ public class L1MagicPc extends L1MagicMode {
                 probability += pc_intprobability;
             }
         }
+        // --- 新增：從 SkillEnhanceTable 獲取技能強化加成 ---
+        // 對於所有可以被「吃書」強化的技能，都應該套用這個邏輯
+        // 我們假設 `CharSkillReading.get().getSkillLevel(pc.getId(), skillId)`
+        // 能夠正確返回玩家透過吃書得到的「技能吃書等級」
+        int playerSkillEnhanceLevel = CharSkillReading.get().getSkillLevel(_pc.getId(), skillId);
+        L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(skillId, playerSkillEnhanceLevel);
+        if (enhanceData != null) {
+            probability += enhanceData.getSetting1();
+
+        }
+
         switch (_calcType) {
             case PC_PC:
                 switch (skillId) {
@@ -993,46 +1005,52 @@ public class L1MagicPc extends L1MagicMode {
     }
 
     /**
-     * 魔法基礎傷害計算
-     *
+     * 魔法基礎傷害計算（支援BUFF加成，設定1控制傷害加乘%）
      */
     private int calcMagicDiceDamage(int skillId) {
         L1Skills l1skills = SkillsTable.get().getTemplate(skillId);
-        int dice = l1skills.getDamageDice();// 骰面
-        int diceCount = l1skills.getDamageDiceCount();// 骰數
-        int value = l1skills.getDamageValue();// 固定增加傷害
+        int dice = l1skills.getDamageDice();            // 骰面
+        int diceCount = l1skills.getDamageDiceCount();  // 骰數
+        int value = l1skills.getDamageValue();          // 固定增加傷害
         int magicDamage = 0;
-        int charaIntelligence = 0;
+        // 1. 骰子傷害
         for (int i = 0; i < diceCount; i++) {
             magicDamage += _random.nextInt(dice) + 1;
         }
         magicDamage += value;
+
+        // 2. 血盟魔法增傷
         if (_pc.getClanid() != 0) {
-            magicDamage = (int) (magicDamage + getDamageUpByClan(_pc));// 血盟魔法增傷
+            magicDamage = (int) (magicDamage + getDamageUpByClan(_pc));
         }
-        int spByItem = getTargetSp();// 計算施展者額外增加魔攻
-        charaIntelligence = Math.max(_pc.getInt() + spByItem - 12, 1);
+
+        // 3. 魔攻加成計算
+        int spByItem = getTargetSp();
+        int charaIntelligence = Math.max(_pc.getInt() + spByItem - 12, 1);
         double attrDeffence = calcAttrResistance(l1skills.getAttr());
         double coefficient = Math.max(1.0D - attrDeffence + charaIntelligence * 3.0D / 32.0D, 0.0D);
         magicDamage = (int) (magicDamage * coefficient);
+
+        // 4. 爆擊計算
+        int totalCriticalChance = 5 + _pc.getOriginalMagicCritical();
         int rnd = _random.nextInt(100) + 1;
-        double criticalCoefficient; // 默認值
         boolean fear = false;
         final boolean critical = skillId == DISINTEGRATE || l1skills.getSkillLevel() <= 6;
-        final boolean random_crit = rnd <= 100 + _pc.getOriginalMagicCritical();
+        final boolean random_crit = rnd <= totalCriticalChance;
+
+        double criticalCoefficient;
         if (critical && random_crit) {
             if (skillId == DISINTEGRATE && _pc.isDISINTEGRATE_2()) {
-                criticalCoefficient = 10.0; // 如果有 DISINTEGRATE_2 技能效果，將傷害增加到 10 倍
+                criticalCoefficient = 10.0;
                 fear = true;
             } else {
                 criticalCoefficient = 1.5;
             }
-            if (_pc.hasSkillEffect(ICE_LANCE)) { // 古代啟示 額外增加50%暴擊傷害
-                criticalCoefficient += 0.5;
-            }
             magicDamage = (int) (magicDamage * criticalCoefficient);
-            _pc.setMagicCritical(true); // 魔法爆擊
+            _pc.setMagicCritical(true);
         }
+
+        // 5. DISINTEGRATE帶debuff
         if (fear) {
             if (_targetPc != null) {
                 if (_targetPc.hasSkillEffect(RESIST_FEAR)) {
@@ -1044,19 +1062,23 @@ public class L1MagicPc extends L1MagicMode {
                 _targetPc.sendPackets(new S_InventoryIcon(13008, true, 2747, 15));
             }
         }
+        // 6. 魔攻來源加成
         magicDamage += _pc.getOriginalMagicDamage() + _pc.getMagicDmgModifier();
-
-        // 如果是 FREEZING_BLIZZARD 技能，檢查強化資料並增加額外傷害
-        if (skillId == FREEZING_BLIZZARD) {  // FREEZING_BLIZZARD 為該技能的常數定義
-            // 取得玩家 FREEZING_BLIZZARD 技能等級
-            int bookLevel = _pc.getSkillLevel(FREEZING_BLIZZARD);
-            // 從 SkillEnhanceTable 讀取強化資料
-            L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(FREEZING_BLIZZARD, bookLevel);
-            if (enhanceData != null) {
-                // 假設 getSetting1 代表額外增加的傷害百分比，例如 10 代表增加 10% 傷害
-                double extraDamagePercent = enhanceData.getSetting4();
-                // 依據額外百分比增加魔法傷害
-                magicDamage += (int) (magicDamage * (extraDamagePercent / 10.0));
+        // 7. 吃書傷害加成（設定4）
+        int bookLevelForDmg = _pc.getSkillLevel(skillId);
+        L1SkillEnhance enhanceDataForDmg = SkillEnhanceTable.get().getEnhanceData(skillId, bookLevelForDmg);
+        if (enhanceDataForDmg != null && enhanceDataForDmg.getSetting4() != 0.0) {
+            double extraDamagePercent = enhanceDataForDmg.getSetting4();
+            magicDamage += (int) (magicDamage * (extraDamagePercent / 100.0));
+        } else {
+        }
+        // === 8. BUFF加成（只要身上有古代啟示BUFF，所有魔法都受益，幅度依設定1）===
+        if (_pc.hasSkillEffect(ICE_LANCE)) {
+            int level = _pc.getSkillLevel(ICE_LANCE);
+            L1SkillEnhance enhance = SkillEnhanceTable.get().getEnhanceData(ICE_LANCE, level);
+            if (enhance != null) {
+                double dmgBonus = enhance.getSetting1(); // 設定1作為傷害加成%
+                magicDamage = (int)(magicDamage * (1.0 + dmgBonus / 100.0));
             }
         }
         return magicDamage;

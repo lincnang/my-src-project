@@ -4,6 +4,7 @@ import com.lineage.config.ConfigAlt;
 import com.lineage.config.ConfigSkillKnight;
 import com.lineage.config.Config_Occupational_Damage;
 import com.lineage.data.event.SubItemSet;
+import com.lineage.server.datatables.SkillEnhanceTable;
 import com.lineage.server.datatables.SkillsTable;
 import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
@@ -12,6 +13,7 @@ import com.lineage.server.model.Instance.L1SummonInstance;
 import com.lineage.server.serverpackets.S_DoActionGFX;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
+import com.lineage.server.templates.L1SkillEnhance;
 import com.lineage.server.templates.L1Skills;
 import com.lineage.server.timecontroller.server.ServerWarExecutor;
 import com.lineage.server.utils.Random;
@@ -63,13 +65,13 @@ public class L1MagicNpc extends L1MagicMode {
         boolean isSuccess = false;
         switch (_calcType) {
             case NPC_PC:
-                /*
-                if (_targetPc.hasSkillEffect(ICE_LANCE)) {
-                    if (skillId != CANCELLATION) {
-                        return false;
-                    }
+            /*
+            if (_targetPc.hasSkillEffect(ICE_LANCE)) {
+                if (skillId != CANCELLATION) {
+                    return false;
                 }
-                */
+            }
+            */
                 if (_targetPc.hasSkillEffect(EARTH_BIND)) {
                     if (skillId != CANCELLATION) {
                         return false;
@@ -80,13 +82,13 @@ public class L1MagicNpc extends L1MagicMode {
                 }
                 break;
             case NPC_NPC:
-                /*
-                if (_targetNpc.hasSkillEffect(ICE_LANCE)) {
-                    if (skillId != CANCELLATION) {
-                        return false;
-                    }
+            /*
+            if (_targetNpc.hasSkillEffect(ICE_LANCE)) {
+                if (skillId != CANCELLATION) {
+                    return false;
                 }
-                */
+            }
+            */
                 if (_targetNpc.hasSkillEffect(EARTH_BIND)) {
                     if (skillId != CANCELLATION) {
                         return false;
@@ -94,15 +96,29 @@ public class L1MagicNpc extends L1MagicMode {
                 }
                 break;
         }
-        probability = calcProbability(skillId);
+
+        // 這裡命中率如果是CANCELLATION就從資料庫撈
+        if (skillId == CANCELLATION) {
+            int skillLevel = 1;
+            L1SkillEnhance enhance = SkillEnhanceTable.get().getEnhanceData(skillId, skillLevel);
+            if (enhance != null) {
+                probability = enhance.getSetting1();
+            } else {
+                probability = 100;
+            }
+        } else {
+            probability = calcProbability(skillId);
+        }
         int rnd = _random.nextInt(100) + 1;
-        probability = Math.min(probability, 90);
+        probability = Math.min(probability, 90); // 或 100，依你的需求
         isSuccess = probability >= rnd;
+
         if (calcEvasion()) {
             return false;
         }
         return isSuccess;
     }
+
 
     private int calcProbability(int skillId) {
         L1Skills l1skills = SkillsTable.get().getTemplate(skillId);

@@ -568,6 +568,12 @@ public class L1SkillId {
      * 屬性防禦138
      */
     public static final int RESIST_ELEMENTAL = 138;
+
+    /**
+     * 鷹眼(精神)
+     */
+    public static final int Eagle_Eye = 139;
+
     /**
      * 釋放元素145
      */

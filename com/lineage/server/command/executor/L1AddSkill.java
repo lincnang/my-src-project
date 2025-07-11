@@ -74,11 +74,19 @@ public class L1AddSkill implements L1CommandExecutor {
                 }
             } else if (pc.isElf()) {// 精靈
                 pc.sendPackets(new S_AddSkill(pc, 255, 255, 127, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 3, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0));
-                for (cnt = 1; cnt <= 48; cnt++) {// LV1~6魔法
-                    final L1Skills l1skills = SkillsTable.get().getTemplate(cnt); // スキル情報を取得
+                // 不學習的技能清單
+                Set<Integer> excludedSkills = new HashSet<>(Arrays.asList(5, 6, 7, 8, 13, 14, 15, 16, 21, 22, 23, 24, 30, 31, 32, 37, 38, 39, 40, 46, 47, 48));
+                // 角色只學習未排除的技能
+                cnt = 1;
+                for (; cnt <= 48; cnt++) {
+                    if (excludedSkills.contains(cnt)) {
+                        continue; // 跳過不學習的技能
+                    }
+                    final L1Skills l1skills = SkillsTable.get().getTemplate(cnt); // 取得技能資料
                     skill_name = l1skills.getName();
                     skill_id = l1skills.getSkillId();
-                    CharSkillReading.get().spellMastery(object_id, skill_id, skill_name, 0, 0); // DBに登錄
+                    // 寫入資料庫，角色學會這個技能
+                    CharSkillReading.get().spellMastery(object_id, skill_id, skill_name, 0, 0);
                 }
                 for (cnt = 129; cnt <= 176; cnt++) {// エルフ魔法
                     final L1Skills l1skills = SkillsTable.get().getTemplate(cnt); // スキル情報を取得

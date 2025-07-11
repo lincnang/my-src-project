@@ -45,6 +45,10 @@ public class Npc_MagicCombind extends NpcExecutor {
             pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang1"));
             return true;
         }
+        if ("magicchang1".equalsIgnoreCase(cmd)) {
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang1"));
+            return true;
+        }
         // 分頁刷新
         if ("magic_A1".equalsIgnoreCase(cmd)) {
             String[] data = { String.valueOf(ConfigMagic.CONSUME2 + pc.getMagicrun2()), "", "" };

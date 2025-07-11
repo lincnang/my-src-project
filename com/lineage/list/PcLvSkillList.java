@@ -333,6 +333,7 @@ public class PcLvSkillList {
             skillList.add(AREA_OF_SILENCE - 1);
             skillList.add(GREATER_ELEMENTAL - 1);
             skillList.add(HeavyStrikeArrow - 1);
+            skillList.add(Eagle_Eye - 1);
             switch (pc.getElfAttr()) {
                 case 1:// 地屬性
                     skillList.add(IRON_SKIN - 1);

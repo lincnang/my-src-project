@@ -332,6 +332,7 @@ public class L1AttackPc extends L1AttackMode {
         }
         return defenderDice;
     }
+
     /**
      * 玩家攻擊NPC命中計算
      */
@@ -446,7 +447,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 鏡像 暗影閃避
-     *
      */
     private int calcSkillAdd() {
         int value = 0;
@@ -510,7 +510,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 料理追加命中
-     *
      */
     private int hitUp() {
         int hitUp = 0;
@@ -851,7 +850,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 武器亂數傷害計算
-     *
      */
     private int weaponDamage1(int weaponMaxDamage) {
         int weaponDamage;
@@ -938,7 +936,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 屬性加成、道具加成、力量加成、初始加成計算
-     *
      */
     private double weaponDamage2(double weaponTotalDamage) {
         double dmg = 0.0D;
@@ -1112,7 +1109,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 其它增傷計算
-     *
      */
     private double pcDmgMode(double dmg) {
         dmg = calcBuffDamage(dmg);// 近戰BUFF增傷
@@ -1214,7 +1210,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 攻擊PC時的傷害計算
-     *
      */
     public int calcPcDamage() {
         if (_targetPc == null) {
@@ -1258,9 +1253,33 @@ public class L1AttackPc extends L1AttackMode {
         }
         _weaponTotalDamage = _weaponDamage + _weaponAddDmg + _weaponEnchant;
         double dmg = weaponDamage2(_weaponTotalDamage); // 屬性加成、道具加成、力量加成、初始加成計算
-
         dmg = pcDmgMode(dmg);// 其他增傷計算
-
+            //妖精被動鷹眼
+            if (_pc.isElf() && _pc.isEagle()) {
+            int baseChance = 10; // 基礎發動率為 10%
+            int bonusChance = 0;
+            int skillId = L1SkillId.Eagle_Eye;
+            int skillLevel = CharSkillReading.get().getSkillLevel(_pc.getId(), skillId);
+            L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(skillId, skillLevel);
+            if (enhanceData != null) {
+                bonusChance = enhanceData.getSetting1();
+            }
+            int finalChance = baseChance + bonusChance;
+            if (ThreadLocalRandom.current().nextInt(100) < finalChance) {
+                // 增加傷害
+                dmg *= 2.0;
+                // 播放特效與音效
+                if (_target != null) {
+                    _pc.sendPacketsAll(new S_SkillSound(_target.getId(), 16516));
+                    _pc.sendPackets(new S_SystemMessage("【鷹眼(精神)】被動傷害攻擊2倍發動！"));
+                }
+            }
+        }
+        if (_targetPc.hasSkillEffect(TRUE_TARGET)) {// 精準目標增傷
+            double attackerlv = _pc.getLevel();
+            double adddmg = attackerlv / 15 / 100 + 1.01D;
+            dmg *= adddmg;
+        }
         if (_targetPc.hasSkillEffect(TRUE_TARGET)) {// 精準目標增傷
             double attackerlv = _pc.getLevel();
             double adddmg = attackerlv / 15 / 100 + 1.01D;
@@ -1957,7 +1976,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 攻擊NPC時的傷害計算
-     *
      */
     private int calcNpcDamage() {
         if (_targetNpc == null) {
@@ -1995,10 +2013,25 @@ public class L1AttackPc extends L1AttackMode {
         _weaponTotalDamage += calcMaterialBlessDmg();// 武器材質、祝福狀態增傷計算
         double dmg = weaponDamage2(_weaponTotalDamage);// 屬性加成、道具加成、力量加成、初始加成計算
         dmg = pcDmgMode(dmg);// 其他增傷計算
-
         dmg += _pc.getDamageIncreasePVE(); // PVE打怪攻擊力加成
-
-
+        if (_pc.isElf() && _pc.isEagle()) {
+            int baseChance = 10; // 基礎發動率為 10%
+            int bonusChance = 0;
+            int skillId = L1SkillId.Eagle_Eye;
+            int skillLevel = CharSkillReading.get().getSkillLevel(_pc.getId(), skillId);
+            L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(skillId, skillLevel);
+            if (enhanceData != null) {
+                bonusChance = enhanceData.getSetting1();
+            }
+            int finalChance = baseChance + bonusChance;
+            if (ThreadLocalRandom.current().nextInt(100) < finalChance) {
+                dmg *= 2.0;
+                if (_target != null) {
+                    _pc.sendPacketsAll(new S_SkillSound(_target.getId(), 16516));
+                    _pc.sendPackets(new S_SystemMessage("【鷹眼(精神)】被動傷害攻擊2倍發動！"));
+                }
+            }
+        }
         //System.out.println("TEST first:"+dmg);
         //2017/04/19 修正
         if (_weapon != null) {
@@ -2218,7 +2251,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 料裡增傷
-     *
      */
     private double dmgUp() {
         double dmg = 0.0D;
@@ -2254,7 +2286,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 魔法武器傷害計算
-     *
      */
     private double weaponSkill(L1PcInstance pcInstance, L1Character character, double weaponTotalDamage) {
         double dmg;
@@ -2293,7 +2324,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 近戰武器輔助魔法增傷
-     *
      */
     private double calcBuffDamage(double dmg) {
         if (_weaponType == 20) {// 弓
@@ -2344,7 +2374,6 @@ public class L1AttackPc extends L1AttackMode {
     /**
      * 祝福武器 銀/米索莉/奧裡哈魯根材質武器<BR>
      * 其他屬性定義
-     *
      */
     private int calcMaterialBlessDmg() {
         int damage = 0;
@@ -2667,7 +2696,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 附加劇毒機率計算
-     *
      */
     private void addPcPoisonAttack(L1Character target) {
         if (_weaponId != 0 && _pc.hasSkillEffect(ENCHANT_VENOM)) {
@@ -2686,7 +2714,6 @@ public class L1AttackPc extends L1AttackMode {
 
     /**
      * 屬火、燃斗、勇猛意志增傷計算
-     *
      */
     private double BuffDmgUp(double dmg) {
         int random = _random.nextInt(100) + 1;

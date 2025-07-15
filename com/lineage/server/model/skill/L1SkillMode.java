@@ -69,6 +69,9 @@ public class L1SkillMode {
             _skillMode.put(Counter_attack, new Counter_attack()); //反制攻擊
 
 
+            _skillMode.put(Star_Arrow, new Skill_MeteorArrow()); // 流星之箭 範圍傷害
+            _skillMode.put(Elf_Boots, new Elf_Boots());// 精靈之靴
+
             _skillMode.put(165, new CALL_OF_NATURE()); //大地召喚
             _skillMode.put(133, new ELEMENTAL_FALL_DOWN());
             _skillMode.put(130, new BODY_TO_MIND());
@@ -77,7 +80,8 @@ public class L1SkillMode {
             _skillMode.put(131, new TELEPORT_TO_MATHER());
             _skillMode.put(AQUA_PROTECTER, new AQUA_PROTECTER()); //水之防護
             _skillMode.put(162, new GREATER_ELEMENTAL());
-            _skillMode.put(154, new LESSER_ELEMENTAL());
+//            _skillMode.put(154, new LESSER_ELEMENTAL());//招喚小精靈
+            _skillMode.put(EIF_EMPIRE, new EIF_EMPIRE()); // 精靈之暈
             _skillMode.put(167, new WIND_SHACKLE());
             _skillMode.put(155, new FIRE_BLESS());
             _skillMode.put(157, new EARTH_BIND());

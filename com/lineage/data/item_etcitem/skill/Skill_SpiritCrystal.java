@@ -63,7 +63,7 @@ public class Skill_SpiritCrystal extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("$1842")) {
                 skillid = 153;
                 magicLv = 14;
-            } else if (nameId.equalsIgnoreCase("$1843")) {
+            } else if (nameId.equalsIgnoreCase("精靈水晶(精靈之暈)")) {
                 skillid = 154;
                 magicLv = 14;
             } else if (nameId.equalsIgnoreCase("$3263")) {
@@ -72,7 +72,7 @@ public class Skill_SpiritCrystal extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("$1849")) {
                 skillid = 161;
                 magicLv = 15;
-            } else if (nameId.equalsIgnoreCase("$1850")) {
+            } else if (nameId.equalsIgnoreCase("神話技能卡(精靈守護者)")) {
                 skillid = 162;
                 magicLv = 15;
             } else if (nameId.equalsIgnoreCase("精靈水晶(重擊之矢)")) {
@@ -81,7 +81,15 @@ public class Skill_SpiritCrystal extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("精靈水晶(鷹眼(精神))")) {
                 skillid = 139;
                 magicLv = 15;
+            } else if (nameId.equalsIgnoreCase("精靈水晶(流星之箭)")) {
+                skillid = 140;
+                magicLv = 15;
+            } else if (nameId.equalsIgnoreCase("精靈水晶(精靈之翼靴)")) {
+                skillid = 141;
+                magicLv = 15;
             }
+
+
 
             Skill_Check.check(pc, item, skillid, magicLv, 3);
         }

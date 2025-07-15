@@ -40,45 +40,52 @@ public class L1WeaponSkill {
     private int _attr;
 
     public static double getWeaponSkillDamage(L1PcInstance pc, L1Character cha, int weaponId) {
+        L1ItemInstance weapon = pc.getWeapon();
         L1WeaponSkill weaponSkill = WeaponSkillTable.get().getTemplate(weaponId);
-        if ((pc == null) || (cha == null) || (weaponSkill == null)) {
+
+        if (pc == null || cha == null || weaponSkill == null || weapon == null) {
             return 0.0D;
         }
+
         int chance = _random.nextInt(100) + 1;
-        int id = 0;
-        int dollchance = 0;
+        int enchantBonus = Math.max(weapon.getEnchantLevel(), 1); // 這行關鍵
+        int dollChance = pc.getWeaponsprobability();
+        int itemChance = 0;
+        if (weapon.getItem().getType2() == 1 && weapon.getItemprobability() > 0) {
+            itemChance = weapon.getItemprobability();
+        }
         int weaponMDC = pc.getweaponMDC();
+        int baseProb = weaponSkill.getProbability();
+
         if (weaponId == 47) {
             chance = _random.nextInt(200) + 1;
         }
-        // 增加娃娃魔法武器發動機率
-        if (pc.getWeaponsprobability() != 0) {
-            dollchance += pc.getWeaponsprobability();
-        }
-        if (pc.getWeapon().getItem().getType2() == 1 && pc.getWeapon().getItemprobability() > 0) {
-            id = pc.getWeapon().getItemprobability();
-        }
-        //if (weaponSkill.getProbability() + dollchance + id < chance) {
-        if (weaponSkill.getProbability() + dollchance + id + weaponMDC < chance) {
+
+        int totalChance = baseProb + dollChance + itemChance + weaponMDC + enchantBonus;
+
+        // DEBUG訊息，可移除
+        // pc.sendPackets(new S_SystemMessage("發動率: " + totalChance + "% (強化加成:" + enchantBonus + ")"));
+
+        if (totalChance < chance) {
             return 0.0D;
         }
+
         int skillId = weaponSkill.getSkillId();
         if (skillId != 0) {
             L1Skills skill = SkillsTable.get().getTemplate(skillId);
-            if ((skill != null) && (skill.getTarget().equals("buff")) && (!isFreeze(cha))) {
+            if ((skill != null) && ("buff".equals(skill.getTarget())) && (!isFreeze(cha))) {
                 cha.setSkillEffect(skillId, weaponSkill.getSkillTime() * 1000);
             } else if (skillId == 4000) {
                 cha.setSkillEffect(4000, weaponSkill.getSkillTime() * 1000);
-                if ((cha instanceof L1PcInstance)) {
-                    L1PcInstance tgpc = (L1PcInstance) cha;
-                    tgpc.sendPackets(new S_Paralysis(6, true));
-                } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1PetInstance))) {
+                if (cha instanceof L1PcInstance) {
+                    ((L1PcInstance) cha).sendPackets(new S_Paralysis(6, true));
+                } else if (cha instanceof L1MonsterInstance || cha instanceof L1SummonInstance || cha instanceof L1PetInstance) {
                     L1NpcInstance tgnpc = (L1NpcInstance) cha;
-                    // tgnpc.setParalyzed(true);
                     tgnpc.setPassispeed(0);
                 }
             }
         }
+
         final int effectId = weaponSkill.getEffectId();
         // 具有動畫
         if (effectId > 0) {
@@ -90,10 +97,10 @@ public class L1WeaponSkill {
             }
             final boolean isArrowType = weaponSkill.isArrowType();
             if (!isArrowType) {
-                pc.sendPacketsYN(new S_SkillSound(chaId, effectId));
+                pc.sendPacketsAll(new S_SkillSound(chaId, effectId));
             } else {
                 final S_UseAttackSkill packet = new S_UseAttackSkill(pc, cha.getId(), effectId, cha.getX(), cha.getY(), ActionCodes.ACTION_Attack, false);
-                pc.sendPacketsYN(packet);
+                pc.sendPacketsAll(packet);
             }
         }
         final int effectId1 = weaponSkill.getEffectId1();
@@ -274,7 +281,6 @@ public class L1WeaponSkill {
 
     /**
      * 奇古獸傷害計算
-     *
      */
     public static double getKiringkuDamage(L1PcInstance pc, L1Character cha) {
         int dmg = 0;
@@ -514,7 +520,6 @@ public class L1WeaponSkill {
 
     /**
      * 魔防及屬性減傷計算
-     *
      */
     public static double calcDamageReduction(L1PcInstance pc, L1Character cha, double dmg, int attr) {
         if (isFreeze(cha)) {

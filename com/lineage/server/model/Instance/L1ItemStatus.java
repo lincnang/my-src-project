@@ -5347,16 +5347,21 @@ public class L1ItemStatus {
 
         // terry770106
         int dr = _itemInstance.getItemprobability();
+
         L1WeaponSkill weaponSkill = WeaponSkillTable.get().getTemplate(_itemInstance.getItemId());
         if (weaponSkill != null) {
-            // 魔法武器發動的技能名稱
-            if (weaponSkill.getSkillName() != null && !weaponSkill.getSkillName().isEmpty()) {
-                int probability = Math.min(weaponSkill.getProbability() + dr, 100);
-                String skillDisplay = weaponSkill.getSkillName() + " " + probability + "%";
-                _os.writeC(74); // 74 觸發:+ S
-                _os.writeS(skillDisplay);
-            }
+            // 技能名稱
+            String skillName = weaponSkill.getSkillName(); // 例如：衝擊之暈眩、寒冰風暴等
+            // 計算強化加成：+0/+1→1，+2以上照強化值
+            int enchantBonus = Math.max(_itemInstance.getEnchantLevel(), 1);
+            // 最終發動機率
+            int baseProbability = weaponSkill.getProbability();
+            int probability = baseProbability + enchantBonus;
+            // 顯示
+            _os.writeC(74); // 這行你原本就有
+            _os.writeS(skillName + probability + "%");
         }
+
         // 2017/04/21
         ArrayList<String> as = new ArrayList<>();
         try {

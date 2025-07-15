@@ -2045,6 +2045,13 @@ public class L1ItemInstance extends L1Object {
         this._returnChanceMp = returnChanceMp;
     }
 
+    public int getEnchantLevelDiff() {
+        if (getEnchantLevel() <= getSafeEnchantLevel())
+            return 0;
+
+        return getEnchantLevel() - getSafeEnchantLevel();
+    }
+
     class EnchantTimer extends TimerTask {
         public EnchantTimer() {
         }

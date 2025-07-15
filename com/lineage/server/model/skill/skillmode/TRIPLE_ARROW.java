@@ -36,8 +36,8 @@ public class TRIPLE_ARROW extends SkillMode {
         }
         // 播放三重矢動畫效果
         srcpc.sendPacketsAll(new S_SkillSound(srcpc.getId(), 4394));
-        srcpc.sendPacketsAll(new S_SkillSound(srcpc.getId(), 11764));
-
+//        srcpc.sendPacketsAll(new S_SkillSound(srcpc.getId(), 11764));
+        srcpc.sendPacketsAll(new S_SkillSound(srcpc.getId(), 11782));
         return dmg;
     }
 
@@ -62,7 +62,7 @@ public class TRIPLE_ARROW extends SkillMode {
             npc.attackTarget(cha);
         }
         npc.broadcastPacketAll(new S_SkillSound(npc.getId(), 4394));// 加速封包
-        npc.broadcastPacketAll(new S_SkillSound(npc.getId(), 11764));// 特效動畫
+        npc.broadcastPacketAll(new S_SkillSound(npc.getId(), 11782));// 特效動畫
         return dmg;
     }
 

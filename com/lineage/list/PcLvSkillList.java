@@ -310,7 +310,7 @@ public class PcLvSkillList {
         if (pc.getLevel() >= 40) {
             skillList.add(ELEMENTAL_FALL_DOWN - 1);
             skillList.add(ERASE_MAGIC - 1);
-            skillList.add(LESSER_ELEMENTAL - 1);
+//            skillList.add(LESSER_ELEMENTAL - 1);
             switch (pc.getElfAttr()) {
                 case 1:// 地屬性
                     skillList.add(EARTH_BIND - 1);

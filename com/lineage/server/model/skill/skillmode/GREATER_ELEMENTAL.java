@@ -6,6 +6,7 @@ import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.Instance.L1SummonInstance;
 import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
+import com.lineage.server.serverpackets.S_InventoryIcon;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.templates.L1Npc;
 
@@ -46,6 +47,7 @@ public class GREATER_ELEMENTAL extends SkillMode {
                     L1Npc npcTemp = NpcTable.get().getTemplate(summonid);
                     L1SummonInstance summon = new L1SummonInstance(npcTemp, pc);
                     summon.setPetcost(pc.getCha() + 7);
+                    pc.sendPackets(new S_InventoryIcon(10433, true, 5121, 3600));
                 }
             }
         }

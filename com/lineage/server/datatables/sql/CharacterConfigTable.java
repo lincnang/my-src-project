@@ -90,7 +90,7 @@ public class CharacterConfigTable implements CharacterConfigStorage {
             SQLUtil.close(pstm);
             SQLUtil.close(con);
         }
-        _log.info("載入人物快速鍵紀錄資料數量: " + _configList.size() + "(" + timer.get() + "ms)");
+        _log.info("載入->人物快速鍵紀錄資料數量: " + _configList.size() + "(" + timer.get() + "ms)");
     }
 
     /**

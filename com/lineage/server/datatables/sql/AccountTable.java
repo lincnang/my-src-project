@@ -66,7 +66,7 @@ public class AccountTable implements AccountStorage {
             SQLUtil.close(co);
             SQLUtil.close(rs);
         }
-        _log.info("讀取=>已有帳戶名稱資料數量: " + _loginNameList.size() + "(" + timer.get() + "ms)");
+        _log.info("讀取->已有帳戶名稱資料數量: " + _loginNameList.size() + "(" + timer.get() + "ms)");
     }
 
     public boolean isAccountUT(String loginName) {

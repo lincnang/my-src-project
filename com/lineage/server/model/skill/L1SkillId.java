@@ -391,7 +391,7 @@ public class L1SkillId {
     public static final int Counter_attack = 94;
 
     /**
-     * 換位術
+     * 換位術(衝刺)
      */
     public static final int LICH_CHANGE_LOCATION = 95;
 
@@ -526,6 +526,7 @@ public class L1SkillId {
      * 王族新技能 恩典庇護
      **/
     //修改操控靈氣
+
     public static final int GRACE_AVATAR = 122;
     /**
      * 魔法防禦129
@@ -575,6 +576,16 @@ public class L1SkillId {
     public static final int Eagle_Eye = 139;
 
     /**
+     * 流星之箭
+     */
+    public static final int Star_Arrow = 140;
+    /**
+     * 精靈之翼靴
+     */
+    public static final int Elf_Boots = 141;
+
+
+    /**
      * 釋放元素145
      */
     public static final int RETURN_TO_NATURE = 145;
@@ -610,10 +621,18 @@ public class L1SkillId {
      * 魔法消除153
      */
     public static final int ERASE_MAGIC = 153;
+//    /**
+//     * 召喚屬性精靈154
+//     */
+//    public static final int LESSER_ELEMENTAL = 154;
+
+
     /**
-     * 召喚屬性精靈154
+     * 精靈之暈
      */
-    public static final int LESSER_ELEMENTAL = 154;
+
+    public static final int EIF_EMPIRE = 154;
+
     /**
      * 舞躍之火155
      */
@@ -643,7 +662,7 @@ public class L1SkillId {
      */
     public static final int AREA_OF_SILENCE = 161;
     /**
-     * 召喚強力屬性精靈162
+     * 召喚強力屬性精靈162 改 精靈守護者
      */
     public static final int GREATER_ELEMENTAL = 162;
     /**

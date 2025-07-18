@@ -79,7 +79,7 @@ public class L1SkillMode {
             _skillMode.put(132, new TRIPLE_ARROW());
             _skillMode.put(131, new TELEPORT_TO_MATHER());
             _skillMode.put(AQUA_PROTECTER, new AQUA_PROTECTER()); //水之防護
-            _skillMode.put(162, new GREATER_ELEMENTAL());
+            _skillMode.put(162, new GREATER_ELEMENTAL()); //精靈守護者
 //            _skillMode.put(154, new LESSER_ELEMENTAL());//招喚小精靈
             _skillMode.put(EIF_EMPIRE, new EIF_EMPIRE()); // 精靈之暈
             _skillMode.put(167, new WIND_SHACKLE());
@@ -107,7 +107,6 @@ public class L1SkillMode {
             _skillMode.put(209, new ILLUSION_LICH());
             _skillMode.put(201, new MIRROR_IMAGE());
             _skillMode.put(GIGANTIC, new GIGANTIC());
-            _skillMode.put(Blood_strength, new Blood_strength());
             _skillMode.put(61, new IMMUNE_TO_HARM()); //SRC0808
             _skillMode.put(79, new IMMUNE_TO_HARM2()); //集體聖結界
             _skillMode.put(174, new STRIKER_GALE()); //SRC0808
@@ -212,7 +211,11 @@ public class L1SkillMode {
             _skillMode.put(POWERGRIP, new POWERGRIP());
             _skillMode.put(DESPERADO, new DESPERADO());
             _skillMode.put(TOMAHAWK, new TOMAHAWK());
-            _skillMode.put(ARMOR_BREAK, new ARMOR_BREAK());
+            _skillMode.put(TITAN_STUN, new TITAN_STUN());// 泰坦之暈
+            _skillMode.put(Warrior_Charge, new Warrior_Charge());// 佔據
+            _skillMode.put(GAIA, new GAIA());// 蓋亞
+            _skillMode.put(Blood_strength, new Blood_strength());// 力量之血
+            _skillMode.put(ARMOR_BREAK, new ARMOR_BREAK());// 裝甲破壞
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

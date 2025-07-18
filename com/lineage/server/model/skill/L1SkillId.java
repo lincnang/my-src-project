@@ -873,80 +873,7 @@ public class L1SkillId {
      * 幻術師新技能 衝突強化
      */
     public static final int IMPACT = 222;
-    /* 狀態效果 */
-    public static final int STATUS_BEGIN = 998;
-    /**
-     * 三段加速
-     */
-    public static final int STATUS_BRAVE3 = 998;
-    /**
-     * 勇敢藥水效果
-     */
-    public static final int STATUS_BRAVE = 1000;
-    /**
-     * 加速藥水效果
-     */
-    public static final int STATUS_HASTE = 1001;
-    /**
-     * 魔力回覆藥水效果
-     */
-    public static final int STATUS_BLUE_POTION = 1002;
-    /**
-     * 伊娃的祝福藥水效果
-     */
-    public static final int STATUS_UNDERWATER_BREATH = 1003;
-    /**
-     * 慎重藥水效果
-     */
-    public static final int STATUS_WISDOM_POTION = 1004;
-    /**
-     * 毒素效果
-     */
-    public static final int STATUS_POISON = 1006;
-    /**
-     * 沈默毒素效果
-     */
-    public static final int STATUS_POISON_SILENCE = 1007;
-    /**
-     * 麻痺毒素效果
-     */
-    public static final int STATUS_POISON_PARALYZING = 1008;
-    /**
-     * 麻痺毒素效果開始
-     */
-    public static final int STATUS_POISON_PARALYZED = 1009;
-    /**
-     * 詛咒型麻痺效果
-     */
-    public static final int STATUS_CURSE_PARALYZING = 1010;
-    /**
-     * 詛咒型麻痺效果開始
-     */
-    public static final int STATUS_CURSE_PARALYZED = 1011;
-    /**
-     * 漂浮之眼肉效果
-     */
-    public static final int STATUS_FLOATING_EYE = 1012;
-    /**
-     * 聖水效果
-     */
-    public static final int STATUS_HOLY_WATER = 1013;
-    /**
-     * 神聖的米索莉粉效果
-     */
-    public static final int STATUS_HOLY_MITHRIL_POWDER = 1014;
-    /**
-     * 伊娃的聖水效果
-     */
-    public static final int STATUS_HOLY_WATER_OF_EVA = 1015;
-    /**
-     * 精靈餅乾效果
-     */
-    public static final int STATUS_ELFBRAVE = 1016;
-    /**
-     * 生命之樹果實效果
-     */
-    public static final int STATUS_RIBRAVE = 1017;
+
     /**
      * 幻術師技能(立方：燃燒)
      */
@@ -1013,7 +940,14 @@ public class L1SkillId {
      * M版狂戰士新技能 力量之血
      */
     public static final int Blood_strength = 232; // 力量之血
+    /**
+     * M版狂戰士新技能 泰坦之暈
+     */
+    public static final int TITAN_STUN = 234; // 泰坦之暈
+    public static final int TITAN_STUN_HEAL = 2343; // 泰坦之暈回血
 
+    public static final int Warrior_Charge = 235; // 佔據
+    public static final int GAIA = 236; // 蓋亞
     /**常駐技能群**/
     /**
      * 狂戰士 粉碎
@@ -1104,6 +1038,80 @@ public class L1SkillId {
     public static final int COOKING_3_5_S = 3045;
     public static final int COOKING_3_6_S = 3046;
     public static final int COOKING_3_7_S = 3047;
+    /* 狀態效果 */
+    public static final int STATUS_BEGIN = 998;
+    /**
+     * 三段加速
+     */
+    public static final int STATUS_BRAVE3 = 998;
+    /**
+     * 勇敢藥水效果
+     */
+    public static final int STATUS_BRAVE = 1000;
+    /**
+     * 加速藥水效果
+     */
+    public static final int STATUS_HASTE = 1001;
+    /**
+     * 魔力回覆藥水效果
+     */
+    public static final int STATUS_BLUE_POTION = 1002;
+    /**
+     * 伊娃的祝福藥水效果
+     */
+    public static final int STATUS_UNDERWATER_BREATH = 1003;
+    /**
+     * 慎重藥水效果
+     */
+    public static final int STATUS_WISDOM_POTION = 1004;
+    /**
+     * 毒素效果
+     */
+    public static final int STATUS_POISON = 1006;
+    /**
+     * 沈默毒素效果
+     */
+    public static final int STATUS_POISON_SILENCE = 1007;
+    /**
+     * 麻痺毒素效果
+     */
+    public static final int STATUS_POISON_PARALYZING = 1008;
+    /**
+     * 麻痺毒素效果開始
+     */
+    public static final int STATUS_POISON_PARALYZED = 1009;
+    /**
+     * 詛咒型麻痺效果
+     */
+    public static final int STATUS_CURSE_PARALYZING = 1010;
+    /**
+     * 詛咒型麻痺效果開始
+     */
+    public static final int STATUS_CURSE_PARALYZED = 1011;
+    /**
+     * 漂浮之眼肉效果
+     */
+    public static final int STATUS_FLOATING_EYE = 1012;
+    /**
+     * 聖水效果
+     */
+    public static final int STATUS_HOLY_WATER = 1013;
+    /**
+     * 神聖的米索莉粉效果
+     */
+    public static final int STATUS_HOLY_MITHRIL_POWDER = 1014;
+    /**
+     * 伊娃的聖水效果
+     */
+    public static final int STATUS_HOLY_WATER_OF_EVA = 1015;
+    /**
+     * 精靈餅乾效果
+     */
+    public static final int STATUS_ELFBRAVE = 1016;
+    /**
+     * 生命之樹果實效果
+     */
+    public static final int STATUS_RIBRAVE = 1017;
     /**
      * 強壯的牛排
      */

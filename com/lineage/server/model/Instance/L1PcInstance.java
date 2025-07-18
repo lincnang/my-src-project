@@ -904,27 +904,6 @@ public class L1PcInstance extends L1Character { // src015
     private boolean _AutoSkill_17 = false; // 輔助狀態(魔法) -> 全職通用
     private boolean _AutoSkill_18 = false; // 輔助狀態(魔法) -> 全職通用
     private boolean _AutoSkill_19 = false; // 輔助狀態(魔法) -> 全職通用
-    // 使用 set_dmgAdd
-    // 使用 set_dmgAdd
-    // 使用 set_dmgAdd
-    //	public void addDiceDmg(int i)	// 機率給予爆擊
-    //	{
-    //		_diceDmg += i;
-    //	}
-    //
-    //	public int getDiceDmg()
-    //	{
-    //		return _diceDmg;
-    //	}
-    //	public void addDmg(int i)	// 機率給予爆擊質
-    //	{
-    //		_dmg += i;
-    //	}
-    //
-    //	public int getDmg()
-    //	{
-    //		return _dmg;
-    //	}
     private boolean _AutoSkill_20 = false; // 輔助狀態(魔法) -> 全職通用
     private boolean _AutoSkill_21 = false; // 輔助狀態(魔法) -> 全職通用
     private boolean _AutoSkill_22 = false; // 輔助狀態(魔法) -> 全職通用
@@ -1668,10 +1647,6 @@ public class L1PcInstance extends L1Character { // src015
         // ListMapUtil.clear(_trade_items);
         ListMapUtil.clear(_allpowers);
         ListMapUtil.clear(ASTROLOGY_DATA_MAP);
-    }
-
-    public int getLawfulo() {
-        return _old_lawful;
     }
 
     public void onChangeLawful() {
@@ -12971,6 +12946,21 @@ public int getHolyCount() {
     public void setAstrologyPlateType(int type) { astrologyPlateType = type; }
 
     public int getAstrologyPlateType() { return astrologyPlateType; }
+
+
+    /**
+     * 蓋亞冷卻處理
+     */
+    private final Map<Integer, Long> _skillReuse = new HashMap<>();
+    public long getSkillReuse(int skillId) {
+        return _skillReuse.getOrDefault(skillId, 0L);
+    }
+    public void setSkillReuse(int skillId, long endTime) {
+        _skillReuse.put(skillId, endTime);
+    }
+
+
+
 
     //END
     //--------------------------------------------------------------------

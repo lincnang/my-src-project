@@ -1182,6 +1182,17 @@ public class C_LoginToServer extends ClientBasePacket {
                 client.kick();
                 return;
             }
+            try {
+                java.sql.Timestamp gaiaNextTime = com.lineage.server.datatables.sql.CharSkillTable.get()
+                        .getSkillCooldown(pc.getId(), com.lineage.server.model.skill.L1SkillId.GAIA);
+                if (gaiaNextTime != null && gaiaNextTime.getTime() > System.currentTimeMillis()) {
+                    // 資料庫記錄的冷卻時間尚未過
+                    pc.setSkillReuse(com.lineage.server.model.skill.L1SkillId.GAIA, gaiaNextTime.getTime());
+                }
+            } catch (Exception e) {
+                _log.error("恢復GAIA技能冷卻時發生錯誤", e);
+            }
+
             switch (Config.UI_MODE) {
                 case 0:
                     System.out.println("UI已關閉");

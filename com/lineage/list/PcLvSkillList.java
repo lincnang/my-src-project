@@ -445,6 +445,8 @@ public class PcLvSkillList {
         if (pc.getLevel() >= 45) {
             skillList.add(PASSIVE_CRASH - 1);
             skillList.add(TOMAHAWK - 1);
+            skillList.add(Warrior_Charge - 1);
+            skillList.add(GAIA - 1);
         }
         if (pc.getLevel() >= 50) {
             skillList.add(PASSIVE_ARMORGARDE - 1);
@@ -458,14 +460,17 @@ public class PcLvSkillList {
             skillList.add(PASSIVE_FURY - 1);
             skillList.add(PASSIVE_TITANROCK - 1);
         }
-        if (pc.getLevel() >= 70) {
+        if (pc.getLevel() >= 60) {
             skillList.add(POWERGRIP - 1);
         }
-        if (pc.getLevel() >= 75) {
+        if (pc.getLevel() >= 60) {
             skillList.add(PASSIVE_TITANMAGIC - 1);
         }
-        if (pc.getLevel() >= 82) {
+        if (pc.getLevel() >= 60) {
             skillList.add(PASSIVE_TITANBULLET - 1);
+        }
+        if (pc.getLevel() >= 60) {
+            skillList.add(TITAN_STUN - 1);
         }
         return skillList;
     }

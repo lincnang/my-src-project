@@ -1,7 +1,6 @@
 package com.lineage.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
@@ -38,6 +37,11 @@ public final class ConfigSkillWarrior {
      */
     public static int isPassive_Tatin_FURY;
     /**
+     * 蓋亞技能
+     */
+    public static int Gaia_HotTime;    // 蓋亞技能HOT秒數
+    public static int Gaia_Cooldown;   // 蓋亞技能冷卻（秒）
+    /**
      * 粉碎 狂暴 發動率提升為20%(原本10%)
      */
     public static int WHYW2;
@@ -66,6 +70,9 @@ public final class ConfigSkillWarrior {
             isPassive_Tatin_FURY = Integer.parseInt(set.getProperty("isPassive_Tatin_FURY", "19"));
             WHYW2 = Integer.parseInt(set.getProperty("WarriorTurn_Tatin_CRASH", "15"));
             WHYW4 = Integer.parseInt(set.getProperty("WarriorTurn_Tatin_Magic", "15"));
+            Gaia_HotTime = Integer.parseInt(set.getProperty("Gaia_HotTime", "5")); // 預設5秒
+            Gaia_Cooldown = Integer.parseInt(set.getProperty("Gaia_Cooldown", "1200"));
+
         } catch (final Exception e) {
             throw new ConfigErrorException("設置檔案遺失: " + ConfigSkillWarrior);
         } finally {

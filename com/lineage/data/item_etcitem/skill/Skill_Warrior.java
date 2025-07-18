@@ -76,7 +76,17 @@ public class Skill_Warrior extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("\\aE戰士的印記(泰坦狂暴)")) { // 泰坦狂暴
                 skillid = TITANL_RISING;
                 magicLv = 76;
+            } else if (nameId.equalsIgnoreCase("戰士的印記(泰坦之暈)")) { // 泰坦狂暴
+                skillid = TITAN_STUN;
+                magicLv = 76;
+            } else if (nameId.equalsIgnoreCase("戰士的印記(佔據)")) { // 泰坦狂暴
+                skillid = Warrior_Charge;
+                magicLv = 76;
+            } else if (nameId.equalsIgnoreCase("戰士的印記(蓋亞)")) { // 泰坦狂暴
+                skillid = GAIA;
+                magicLv = 76;
             }
+
             Skill_Check.check(pc, item, skillid, magicLv, attribute);
         }
     }

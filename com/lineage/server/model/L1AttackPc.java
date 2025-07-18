@@ -2146,9 +2146,13 @@ public class L1AttackPc extends L1AttackMode {
         }
         if (_pc.hasSkillEffect(Blood_strength) && RandomArrayList.getInc(100, 1) <= 10) {
             int drainHp2 = _random.nextInt(20) + 1;
-            if (_pc.getCurrentHp() < _pc.getMaxHp() * 0.97) {
-                this._pc.setCurrentHp((short) (this._pc.getCurrentHp() + drainHp2));
-                _pc.sendPackets(new S_ServerMessage("狂戰士[吸血效果]"));
+            int nowHp = _pc.getCurrentHp();
+            int maxHp = _pc.getMaxHp();
+            int realHeal = Math.min(drainHp2, maxHp - nowHp);
+
+            if (realHeal > 0 && nowHp < maxHp * 0.97) {
+                _pc.setCurrentHp(nowHp + realHeal);
+//                _pc.sendPackets(new S_ServerMessage("力量之血吸收了 " + realHeal + " 點HP！(原吸血量:" + drainHp2 + ")"));
             }
         }
         // 判斷人物等級已大於 使用武器最大等級

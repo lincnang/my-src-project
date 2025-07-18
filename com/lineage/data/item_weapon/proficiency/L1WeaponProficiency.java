@@ -246,7 +246,7 @@ public class L1WeaponProficiency {
      * 將特殊武器類型轉換為主類型（例如 type=18 → 11）
      * 可擴充其他對應
      */
-    private static int normalizeWeaponType(int type) {
+    public  static int normalizeWeaponType(int type) {
         switch (type) {
             case 18: return 11;
             case 19: return 7;
@@ -255,10 +255,12 @@ public class L1WeaponProficiency {
             case 34: return 4;
             case 35: return 3;
             case 36: return 8;
+            case 15: return 6;
             case 37: return 9;
             case 38: return 11;
             case 39: return 10;
             case 13: return 4;
+            case 17: return 10;
             default: return type;
         }
     }

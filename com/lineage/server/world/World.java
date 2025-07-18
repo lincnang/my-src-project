@@ -1220,6 +1220,44 @@ public class World { // src016
         }
         return result;
     }
+    /**
+     * 判斷兩個物件之間是否有完整視線（不可穿牆）
+     */
+    public boolean isCanSee(L1Object from, L1Object to) {
+        if (from == null || to == null) return false;
+        if (from.getMapId() != to.getMapId()) return false;
+        if (from.get_showId() != to.get_showId()) return false;
+        int fx = from.getX();
+        int fy = from.getY();
+        int tx = to.getX();
+        int ty = to.getY();
+        L1Map map = from.getMap();
+        int dx = Math.abs(tx - fx);
+        int dy = Math.abs(ty - fy);
+        int sx = fx < tx ? 1 : -1;
+        int sy = fy < ty ? 1 : -1;
+        int err = dx - dy;
+
+        while (true) {
+            // 跳過起點與終點本身
+            if (!(fx == from.getX() && fy == from.getY()) && !(fx == tx && fy == ty)) {
+                if (!map.isArrowPassable(fx, fy)) {
+                    return false;
+                }
+            }
+            if (fx == tx && fy == ty) break;
+            int e2 = 2 * err;
+            if (e2 > -dy) {
+                err -= dy;
+                fx += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                fy += sy;
+            }
+        }
+        return true;
+    }
 
     public List<String> getHtmlString() {
         return _htmlString;

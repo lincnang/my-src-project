@@ -39,7 +39,7 @@ public class CharacterWeaponProficiencyTable {
         ResultSet rs = null;
         try {
             co = DatabaseFactory.get().getConnection();
-            pm = co.prepareStatement("SELECT * FROM `character_proficiency`");
+            pm = co.prepareStatement("SELECT * FROM `character_武器經驗`");
             rs = pm.executeQuery();
             while (rs.next()) {
                 final int char_id = rs.getInt("char_id");
@@ -80,24 +80,30 @@ public class CharacterWeaponProficiencyTable {
      * @param proficiency 熟練度設定
      */
     public void storeProficiency(final int char_id, final int type, final PlayerWeaponProficiency proficiency) {
+        int realType = L1WeaponProficiency.normalizeWeaponType(type);
+        proficiency.setType(realType);
         HashMap<Integer, PlayerWeaponProficiency> dateMap = PROFICIENCY_MAP.get(char_id);
         if (dateMap == null) {
             dateMap = Maps.newHashMap();
-            dateMap.put(type, proficiency);
             PROFICIENCY_MAP.put(char_id, dateMap);
-        } else {
-            dateMap.put(type, proficiency);
         }
+        dateMap.put(realType, proficiency);
+
         Connection co = null;
         PreparedStatement pm = null;
         try {
             co = DatabaseFactory.get().getConnection();
-            pm = co.prepareStatement("INSERT INTO `character_proficiency` SET `char_id`=?,`type`=?,`level`=?,`exp`=?");
+            pm = co.prepareStatement(
+                    "INSERT INTO `character_武器經驗` (`char_id`, `type`, `level`, `exp`) VALUES (?, ?, ?, ?) " +
+                            "ON DUPLICATE KEY UPDATE `level`=?, `exp`=?"
+            );
             int i = 0;
             pm.setInt(++i, char_id);
-            pm.setInt(++i, type);
-            pm.setInt(++i, 0);
-            pm.setInt(++i, 0);
+            pm.setInt(++i, realType);
+            pm.setInt(++i, proficiency.getLevel());
+            pm.setInt(++i, proficiency.getExp());
+            pm.setInt(++i, proficiency.getLevel());
+            pm.setInt(++i, proficiency.getExp());
             pm.execute();
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -106,6 +112,8 @@ public class CharacterWeaponProficiencyTable {
             SQLUtil.close(co);
         }
     }
+
+
 
     /**
      * 更新記錄
@@ -115,24 +123,25 @@ public class CharacterWeaponProficiencyTable {
      * @param proficiency 熟練度設定
      */
     public void updateProficiency(final int char_id, final int type, final PlayerWeaponProficiency proficiency) {
+        int realType = L1WeaponProficiency.normalizeWeaponType(type);
         HashMap<Integer, PlayerWeaponProficiency> dateMap = PROFICIENCY_MAP.get(char_id);
         if (dateMap == null) {
             dateMap = Maps.newHashMap();
-            dateMap.put(type, proficiency);
+            dateMap.put(realType, proficiency);
             PROFICIENCY_MAP.put(char_id, dateMap);
         } else {
-            dateMap.put(type, proficiency);
+            dateMap.put(realType, proficiency);
         }
         Connection co = null;
         PreparedStatement pm = null;
         try {
             co = DatabaseFactory.get().getConnection();
-            pm = co.prepareStatement("UPDATE `character_proficiency` SET `level`=?,`exp`=? WHERE `char_id`=? AND `type`=?");
+            pm = co.prepareStatement("UPDATE `character_武器經驗` SET `level`=?,`exp`=? WHERE `char_id`=? AND `type`=?");
             int i = 0;
             pm.setInt(++i, proficiency.getLevel());
             pm.setInt(++i, proficiency.getExp());
             pm.setInt(++i, char_id);
-            pm.setInt(++i, type);
+            pm.setInt(++i, realType);
             pm.execute();
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -142,13 +151,14 @@ public class CharacterWeaponProficiencyTable {
         }
     }
 
+
     private static void deleteProficiency(final int objectId) {
         PROFICIENCY_MAP.remove(objectId);
         Connection co = null;
         PreparedStatement pm = null;
         try {
             co = DatabaseFactory.get().getConnection();
-            pm = co.prepareStatement("DELETE FROM `character_proficiency` WHERE `char_id`=?");
+            pm = co.prepareStatement("DELETE FROM `character_武器經驗` WHERE `char_id`=?");
             pm.setInt(1, objectId);
             pm.execute();
         } catch (final SQLException e) {

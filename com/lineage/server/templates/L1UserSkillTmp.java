@@ -1,6 +1,8 @@
 package com.lineage.server.templates;
 
 import com.lineage.server.datatables.lock.CharSkillReading;
+import java.sql.Timestamp;
+
 
 public class L1UserSkillTmp {
     private int _char_obj_id;
@@ -63,8 +65,9 @@ public class L1UserSkillTmp {
     public void set_activetimeleft(int activetimeleft) {
         _activetimeleft = activetimeleft;
     }
+
+    private Timestamp next_time;
+    public Timestamp get_next_time() { return next_time; }
+    public void set_next_time(Timestamp next_time) { this.next_time = next_time; }
+
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.templates.L1UserSkillTmp JD-Core Version: 0.6.2
- */

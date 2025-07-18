@@ -14,7 +14,11 @@ import com.lineage.server.templates.L1Skills;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 流星之箭
+ *
+ * @author 老爹
+ */
 public class Skill_MeteorArrow extends SkillMode {
 
     private static final int METEOR_ANIMATION = 19095;

@@ -18,54 +18,6 @@ public class Elf_Boots extends SkillMode {
     public Elf_Boots() {
     }
 
-    // _targetDirection 方法在此邏輯下已不再需要，但可以保留。
-    private static int _targetDirection(int h, int x, int y, int tx, int ty) {
-        // ... (此方法內容不變，但不會被呼叫到)
-        try {
-            float dis_x = Math.abs(x - tx);
-            float dis_y = Math.abs(y - ty);
-            float dis = Math.max(dis_x, dis_y);
-            if (dis == 0) {
-                return h;
-            }
-            int avg_x = (int) Math.floor((dis_x / dis) + 0.59f);
-            int avg_y = (int) Math.floor((dis_y / dis) + 0.59f);
-            int dir_x = 0;
-            int dir_y = 0;
-            if (x < tx) dir_x = 1;
-            if (x > tx) dir_x = -1;
-            if (y < ty) dir_y = 1;
-            if (y > ty) dir_y = -1;
-            if (avg_x == 0) dir_x = 0;
-            if (avg_y == 0) dir_y = 0;
-            switch (dir_x) {
-                case -1:
-                    switch (dir_y) {
-                        case -1: return 7;
-                        case 0:  return 6;
-                        case 1:  return 5;
-                    }
-                    break;
-                case 0:
-                    switch (dir_y) {
-                        case -1: return 0;
-                        case 1:  return 4;
-                    }
-                    break;
-                case 1:
-                    switch (dir_y) {
-                        case -1: return 1;
-                        case 0:  return 2;
-                        case 1:  return 3;
-                    }
-                    break;
-            }
-        } catch (final Exception e) {
-            // _log.error(e.getLocalizedMessage(), e);
-        }
-        return h;
-    }
-
     /**
      * 技能施放主邏輯
      */

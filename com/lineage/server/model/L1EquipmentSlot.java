@@ -5,6 +5,7 @@ import com.add.JiezEnchant;
 import com.add.Tsai.NewEnchantSystem;
 import com.lineage.data.ItemClass;
 import com.lineage.data.item_armor.set.ArmorSet;
+import com.lineage.data.item_weapon.proficiency.L1WeaponProficiency;
 import com.lineage.server.datatables.*;
 import com.lineage.server.datatables.lock.CharItemsTimeReading;
 import com.lineage.server.datatables.lock.CharSkillReading;
@@ -44,24 +45,27 @@ public class L1EquipmentSlot {  //src039
      * @param weapon 要穿上的武器
      */
     private void setWeapon(L1ItemInstance weapon) {
+        // 處理祝福符（依照原本設計）
         L1Zhufu zhufu = Zhufu.getInstance().getTemplate(weapon.getItem().getItemId(), 1);
         if (zhufu != null && weapon.getBless() == 0) {
             L1Zhufu.getAddZhufu(_owner, weapon.getItem().getItemId(), 1);
         }
-        // 戰士主手已有武器
-        // 其他情況
-        // 使用的武器設為非第2把武器
-        weapon._isSecond = _owner.isWarrior() && _owner.getWeapon() != null;// 使用的武器設為第2把武器
-        boolean SecondWeapon = weapon._isSecond;// 是否為第2把武器
+
+        // 判斷是否為戰士副手武器
+        weapon._isSecond = _owner.isWarrior() && _owner.getWeapon() != null;
+        boolean SecondWeapon = weapon._isSecond;
         if (SecondWeapon) {
             _owner.setSecondWeapon(weapon);
-            _owner.setCurrentWeapon(4);// 單手劍 （實際應該是88才對 by 聖子默默）
+            _owner.setCurrentWeapon(4); // 單手劍 （實際應該是88才對 by 聖子默默）
         } else {
             _owner.setWeapon(weapon);
             _owner.setCurrentWeapon(weapon.getItem().getType1());
         }
-        // System.out.println("setCurrentWeapon =" + _owner.getCurrentWeapon());
+
+        // 啟動裝備計時器
         weapon.startEquipmentTimer(_owner);
+
+        // 各種屬性加成
         L1Item item = weapon.getItem();
         int magicdmg = item.getMagicDmgModifier();
         _owner.addMagicDmgModifier(magicdmg);
@@ -86,37 +90,13 @@ public class L1EquipmentSlot {  //src039
         int addRegistSustain = item.get_regist_sustain();
         _owner.addRegistSustain(addRegistSustain);
 
-        //		NewEnchantSystem NE_List = NewEnchantSystem.get().get(weapon.getItemId(), _owner.getWeapon().getEnchantLevel());
-        //		if (NE_List != null) {
-        //			_owner.setNERan(NE_List.getRan());
-        //			_owner.setNEHit(NE_List.getHit());
-        //			_owner.setNEExtraDmg(NE_List.getExtraDmg());
-        //			_owner.setNEExtraMagicDmg(NE_List.getExtraMagicDmg());
-        //			_owner.setNECritDmg(NE_List.getCritDmg());
-        //			_owner.setNECritRate(NE_List.getCritRate());
-        //			_owner.setNECritGfx(NE_List.getCritGfx());
-        //			_owner.setNEExpUp(NE_List.getExpUp());
-        //			_owner.setNESkillId(NE_List.getSkillId());
-        //			_owner.setNEGfx(NE_List.getGfx());
-        //			_owner.setNETimeGfx(NE_List.getTimeGfx());
-        //			if (NE_List.getHp() > 0) {
-        //				_owner.addMaxHp(NE_List.getHp());
-        //			}
-        //			if (NE_List.getMp() > 0) {
-        //				_owner.addMaxMp(NE_List.getMp());
-        //			}
-        //			if (NE_List.getSkillId() > 0) {
-        //				final L1SkillUse skillUse = new L1SkillUse();
-        //				final L1Skills skill = SkillsTable.get().getTemplate(NE_List.getSkillId());
-        //				skillUse.handleCommands(_owner, NE_List.getSkillId(), _owner.getId(), _owner.getX(), _owner.getY(),
-        //						skill.getBuffDuration(), L1SkillUse.TYPE_GMBUFF);
-        //			}
-        //			if (NE_List.getTimeGfx() != 0) {
-        //				_owner.startSkillSound();
-        //			}
-        //		}
-        NewEnchantSystem NE_List2 = NewEnchantSystem.get().get2(_owner.getWeapon().getSafeEnchantLevel(), _owner.getWeapon().getEnchantLevel(), _owner.getWeapon().getItem().getType());
-        if (/*NE_List == null &&*/ NE_List2 != null) {
+        // 新附魔系統（你原本的邏輯）
+        NewEnchantSystem NE_List2 = NewEnchantSystem.get().get2(
+                _owner.getWeapon().getSafeEnchantLevel(),
+                _owner.getWeapon().getEnchantLevel(),
+                _owner.getWeapon().getItem().getType()
+        );
+        if (NE_List2 != null) {
             _owner.setNERan(NE_List2.getRan());
             _owner.setNEHit(NE_List2.getHit());
             _owner.setNEExtraDmg(NE_List2.getExtraDmg());
@@ -142,10 +122,15 @@ public class L1EquipmentSlot {  //src039
             if (NE_List2.getTimeGfx() != 0 && !_owner.getSkillSound()) {
                 _owner.startSkillSound();
             }
-            //TODO 玩家武器熟練度
-            _owner.getProficiency().setProficiencyType(weapon.getItem().getType());
+        }
+
+        // ⚡️[重點] 武器熟練度初始化（這裡每次裝備都會做，不會漏掉！）
+        if (weapon != null) {
+            int type = weapon.getItem().getType();
+            _owner.getProficiency().setProficiencyType(L1WeaponProficiency.normalizeWeaponType(type));
         }
     }
+
 
     public ArrayList<L1ItemInstance> getArmors() {
         return _armors;
@@ -204,32 +189,33 @@ public class L1EquipmentSlot {  //src039
             }
             _owner.setNETimeGfx2(0);
         }
-        boolean Secondweapon = weapon._isSecond;// 是否為副武器
-        if (Secondweapon) {// 副武器
-            _owner.setSecondWeapon(null);// 將副武器欄位設為空
-            _owner.setCurrentWeapon(_owner.getWeapon().getItem().getType1());// 更新武器動作外型
-        } else {// 要脫下的是主武器
-            if (_owner.getSecondWeapon() != null) {// 副手仍有武器
-                _owner.getSecondWeapon()._isSecond = false;// 將副武器變更為非第2把武器
-                _owner.sendPackets(new S_EquipmentWindow(_owner.getWeapon().getId(), 8, false));// 將主武器脫下封包
-                _owner.setWeapon(_owner.getSecondWeapon());// 將副武器指派為主武器
-                _owner.setSecondWeapon(null);// 將副武器欄位設為空
-                _owner.sendPackets(new S_EquipmentWindow(_owner.getWeapon().getId(), 8, true));// 轉移到主手封包
-                _owner.setCurrentWeapon(_owner.getWeapon().getItem().getType1());// 更新武器動作外型
-            } else {// 副手沒有武器
-                _owner.setWeapon(null);//// 將主武器欄位設為空
-                _owner.setCurrentWeapon(0);// 設定為空手外型
-                if (_owner.hasSkillEffect(COUNTER_BARRIER)) {// 解除反擊屏障
+        boolean Secondweapon = weapon._isSecond; // 是否為副武器
+        if (Secondweapon) { // 副武器
+            _owner.setSecondWeapon(null); // 副武器欄位設為空
+            _owner.setCurrentWeapon(_owner.getWeapon().getItem().getType1()); // 更新主手外型
+        } else { // 主武器
+            if (_owner.getSecondWeapon() != null) { // 副手仍有武器
+                _owner.getSecondWeapon()._isSecond = false;
+                _owner.sendPackets(new S_EquipmentWindow(_owner.getWeapon().getId(), 8, false));
+                _owner.setWeapon(_owner.getSecondWeapon());
+                _owner.setSecondWeapon(null);
+                _owner.sendPackets(new S_EquipmentWindow(_owner.getWeapon().getId(), 8, true));
+                _owner.setCurrentWeapon(_owner.getWeapon().getItem().getType1());
+            } else { // 副手沒有武器
+                _owner.setWeapon(null);
+                _owner.setCurrentWeapon(0); // 設定為空手
+                if (_owner.hasSkillEffect(COUNTER_BARRIER)) {
                     _owner.removeSkillEffect(COUNTER_BARRIER);
                 }
-                if (_owner.hasSkillEffect(FIRE_BLESS)) {// 解除舞躍之火
+                if (_owner.hasSkillEffect(FIRE_BLESS)) {
                     _owner.removeSkillEffect(FIRE_BLESS);
                 }
             }
         }
-        // System.out.println("setCurrentWeapon =" + _owner.getCurrentWeapon());
-        weapon._isSecond = false;// 要脫下的武器也設為非第2把武器
+        weapon._isSecond = false;
         weapon.stopEquipmentTimer(_owner);
+
+        // 移除所有加成屬性
         L1Item item = weapon.getItem();
         int magicdmg = item.getMagicDmgModifier();
         _owner.addMagicDmgModifier(-magicdmg);
@@ -253,13 +239,16 @@ public class L1EquipmentSlot {  //src039
         _owner.addRegistStun(-addRegistStun);
         int addRegistSustain = item.get_regist_sustain();
         _owner.addRegistSustain(-addRegistSustain);
+
         int itemId = weapon.getItem().getItemId();
         L1Zhufu zhufu = Zhufu.getInstance().getTemplate(itemId, 1);
         if (zhufu != null && weapon.getBless() == 0) {
             L1Zhufu.getRedzhufuhua(_owner, itemId, 1);
         }
-        //TODO 玩家武器熟練度
-        _owner.getProficiency().removeProficiency(weapon.getItem().getType());
+
+        // ⚡️【重點】移除武器熟練度加成，一定要經過 normalizeWeaponType，否則有些特殊type資料會殘留
+        int type = weapon.getItem().getType();
+        _owner.getProficiency().removeProficiency(L1WeaponProficiency.normalizeWeaponType(type));
     }
 
     private void setArmor(L1ItemInstance armor) {

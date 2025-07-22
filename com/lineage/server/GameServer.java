@@ -417,6 +417,10 @@ public class GameServer {
             petTimer.start();
             StartTimer_Skill skillTimer = new StartTimer_Skill();
             skillTimer.start();
+
+            // 新增：黑妖暗隱術MP消耗Timer
+            new com.lineage.server.timecontroller.pc.BlindHidingMpTimer().start();
+
             // 活動專用時間軸
             final StartTimer_Event eventTimer = new StartTimer_Event();
             eventTimer.start();

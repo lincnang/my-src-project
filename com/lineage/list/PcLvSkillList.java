@@ -176,6 +176,8 @@ public class PcLvSkillList {
                 skillList.add(skillid);
             }
             skillList.add(DRESS_EVASION - 1);
+            skillList.add(Shadow_Dash - 1);
+            skillList.add(M_ASSASSIN - 1);
         }
         return skillList;
     }
@@ -410,20 +412,21 @@ public class PcLvSkillList {
         //		if (pc.getLevel() >= 30) {// Crown magic lv2
         //			skillList.add(new Integer(CALL_CLAN - 1));
         //		}
-        if (pc.getLevel() >= 70) {// Crown magic lv3
+        if (pc.getLevel() >= 50) {// Crown magic lv3
             skillList.add(GLOWING_AURA_2 - 1);
         }
         if (pc.getLevel() >= 40) {// Crown magic lv3
             skillList.add(GLOWING_AURA - 1);
         }
-        if (pc.getLevel() >= 70) {// Crown magic lv4
+        if (pc.getLevel() >= 50) {// Crown magic lv4
             skillList.add(Armor_Valor - 1);
         }
         if (pc.getLevel() >= 50) {// Crown magic lv5
             skillList.add(BRAVE_AURA - 1);
             skillList.add(KINGDOM_STUN - 1);
+            skillList.add(GRACE_AVATAR - 1);
         }
-        if (pc.getLevel() >= 55) {// Crown magic lv6
+        if (pc.getLevel() >= 50) {// Crown magic lv6
             skillList.add(SHINING_AURA - 1);
         }
         return skillList;

@@ -11,6 +11,7 @@ import com.lineage.server.datatables.lock.CharSkillReading;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.poison.L1DamagePoison;
 import com.lineage.server.model.skill.L1SkillId;
+import com.lineage.server.model.skill.skillmode.SHADOW_IMPACT;
 import com.lineage.server.model.weaponskill.WeaponSkillStart;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.*;
@@ -21,7 +22,10 @@ import com.lineage.server.utils.RandomArrayList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.ConcurrentModificationException;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.lineage.server.model.skill.L1SkillId.*;
@@ -33,7 +37,7 @@ public class L1AttackPc extends L1AttackMode {
     private int _weaponTotalDamage;// 武器總傷害
     private int hit_rnd;// 攻擊命中機率
     private int pcHitValue;// 玩家攻擊命中值
-
+    private boolean _wasHidingOnAttackStart = false; // 新增變數
 
     public L1AttackPc(L1PcInstance attacker, L1Character target) {
         if (target == null) {
@@ -43,6 +47,9 @@ public class L1AttackPc extends L1AttackMode {
             return;
         }
         _pc = attacker;
+        if (_pc.hasSkillEffect(L1SkillId.INVISIBILITY) || _pc.hasSkillEffect(L1SkillId.BLIND_HIDING)) {
+            _wasHidingOnAttackStart = true;
+        }
         if (_pc.hasSkillEffect(L1SkillId.ReiSkill_2)) { // 戰士天賦技能冰封心智
             // _pc.sendPackets(new S_SystemMessage(L1SystemMessage.ShowMessage(8040))); // 受到戰士天賦技能冰封心智效果影響，暫無法攻擊。
             return;
@@ -548,6 +555,16 @@ public class L1AttackPc extends L1AttackMode {
         switch (_calcType) {
             case PC_PC:
                 _damage = calcPcDamage();
+                if (_pc.isDarkelf() && _pc.hasPassiveAssassin() && _wasHidingOnAttackStart) {
+                    _damage *= 3.0;
+                    _pc.sendPackets(new S_SkillSound(_pc.getId(), 14547));
+                    _pc.broadcastPacketX8(new S_SkillSound(_pc.getId(), 14547));
+                    _pc.sendPackets(new S_SystemMessage("【被動刺客】隱身造成三倍傷害！"));
+                    if (_pc.hasSkillEffect(L1SkillId.BLIND_HIDING)) _pc.removeSkillEffect(L1SkillId.BLIND_HIDING);
+                    if (_pc.hasSkillEffect(L1SkillId.INVISIBILITY)) _pc.removeSkillEffect(L1SkillId.INVISIBILITY);
+                    _pc.sendPackets(new S_Invis(_pc.getId(), 0));
+                    _pc.broadcastPacketAll(new S_OtherCharPacks(_pc));
+                }
                 if (_pc.getNECritRate() > 0) {
                     Random random = new Random();
                     if (ThreadLocalRandom.current().nextInt(100) + 1 < _pc.getNECritRate()) {
@@ -613,10 +630,6 @@ public class L1AttackPc extends L1AttackMode {
                 }
             }
         }
-        //if ((this._pc.hasSkillEffect(SOUL_OF_FLAME)) && (this._weaponType != 20)  //SRC0808
-        //&& (this._weaponType != 62)) {
-        //this._damage = ((int) (this._damage * (ConfigSkill.SOUL_OF_FLAME_DAMAGE)+(ConfigSkill.E4SOUL_OF_FLAME)));
-        //}
         if (this._pc.hasSkillEffect(SOUL_OF_FLAME) && this._weaponType != 20 // SRC0808
                 && this._weaponType != 62) {
             if (_pc.getMeteLevel() >= 4) {
@@ -625,19 +638,6 @@ public class L1AttackPc extends L1AttackMode {
                 this._damage = (int) (this._damage * ConfigSkillElf.SOUL_OF_FLAME_DAMAGE);
             }
         }
-		/*2017/04/19取消
-		int outcount = 0;
-		if (this._weapon != null) {
-			if (FeatureItemSet.POWER_START) {
-				L1AttackPower attackPower = new L1AttackPower(this._pc,
-						this._target, this._weaponAttrEnchantKind,
-						this._weaponAttrEnchantLevel);
-				int add = attackPower.set_item_power(this._damage);
-				if (add > 0) {
-					this._damage += add;
-					outcount++;
-				}
-			}*/
         if (this._weapon != null) {
             if (this._weapon.get_power_name() != null && this._weapon.get_power_name().get_boss_weapon() != null) {
                 boolean isLongRange;
@@ -679,20 +679,7 @@ public class L1AttackPc extends L1AttackMode {
                 this._damage += ConfigWeaponryHurt.WEAPON_POWER_LIST[Math.min(this._weaponEnchant - 9, ConfigWeaponryHurt.WEAPON_POWER_LIST.length - 1)];
             }
         }
-		/*2017/04/19取消
-		if (outcount > 1) {
-			{
-			this._damage /= outcount;
-		}*/
         /** 觸發機率區 START */
-		/*2017/04/19取消
-		if (_weapon != null) {
-			if (FeatureItemSet.POWER_START) {// 特殊屬性武器
-				final L1AttackPower attackPower = new L1AttackPower(_pc, _target, _weaponAttrEnchantKind,
-						_weaponAttrEnchantLevel);
-				_damage = attackPower.set_item_power(_damage);
-			}
-		}*/
         if (_pc.isWarrior() && _pc.getReincarnationSkill()[2] > 0) { // 戰士天賦技能殺氣擊斃
             if (_target.getCurrentHp() < _target.getMaxHp() / 100 * 45) {
                 _damage += (int) (_damage / 100.0) * _pc.getReincarnationSkill()[2] * 3;
@@ -786,9 +773,20 @@ public class L1AttackPc extends L1AttackMode {
         if (_damage > 0) {
             soulHp();
         }
+        // ====== 路西法被動減傷處理 START ======
+        if (_target instanceof L1PcInstance) {
+            L1PcInstance targetPc = (L1PcInstance) _target;
+            if (targetPc.hasPassiveLucifer()) {
+                // 用設定檔控制減傷
+                int reduce = ConfigSkillDarkElf.LUCIFER_PASSIVE_BASE_REDUCE
+                        + (targetPc.getLevel() / ConfigSkillDarkElf.LUCIFER_PASSIVE_LV_STEP) * ConfigSkillDarkElf.LUCIFER_PASSIVE_LV_BONUS;
+                _damage -= reduce;
+                if (_damage < 0) _damage = 0;
+            }
+        }
+        SHADOW_IMPACT.tryStun(_pc, _target);
         return _damage;
     }
-
     // 武器爆擊特效
     private void bonGfx() {
         if (_isHit) {// 命中
@@ -956,33 +954,78 @@ public class L1AttackPc extends L1AttackMode {
                 weaponTotalDamage += calcAmuletAttrDmg();// 屬性項鏈增傷計算
                 dmg = weaponTotalDamage + _statusDamage + _pc.getDmgup() + _pc.getOriginalDmgup();
                 break;
-            case 11:// 鋼爪
-                weaponTotalDamage += calcAttrEnchantDmg();// 屬性武器增傷計算
-                weaponTotalDamage += calcAmuletAttrDmg();// 屬性項鏈增傷計算
+            case 11: // 鋼爪
+                weaponTotalDamage += calcAttrEnchantDmg();   // 屬性武器增傷計算
+                weaponTotalDamage += calcAmuletAttrDmg();    // 屬性項鏈增傷計算
+
                 int addchance = 0;
-                if (_pc.getLevel() > 45) {// 等級超過45級之後每5級增加1%發動機率
+                if (_pc.getLevel() > 45) { // 等級超過45級之後每5級增加1%發動機率
                     addchance = (_pc.getLevel() - 45) / 5;
                 }
-                int totalchance = 20 + addchance;// 總發動機率
-                if (_pc.hasSkillEffect(DOUBLE_BREAK) && ThreadLocalRandom.current().nextInt(100) < totalchance) {// 觸發雙重破壞
+                int totalchance = 20 + addchance; // 總發動機率
+                // 狂暴：雙重破壞再+5%
+                if (_pc.hasDoubleBreakMaster()) {
+                    totalchance += 5;
+                }
+                if (_pc.hasSkillEffect(DOUBLE_BREAK) && ThreadLocalRandom.current().nextInt(100) < totalchance) {
                     weaponTotalDamage *= 2.0D;
+                    // 狂暴：1%機率吸血
+                    if (_pc.hasDoubleBreakMaster()) {
+                        if (ThreadLocalRandom.current().nextInt(100) < 1) {
+                            int drain = (int)(weaponTotalDamage * 0.01); // 吸血量1%
+                            if (drain < 1) drain = 1;
+                            _pc.setCurrentHp(_pc.getCurrentHp() + drain);
+                            _pc.sendPackets(new S_SystemMessage("你啟動了雙重破壞吸血！恢復HP " + drain + " 點！"));
+                        }
+                    }
+                }
+                // 你的爆擊區段（請將這段放在正確的爆擊判斷處）
+                int criticalChance = 10; // 假設原本有10%爆擊，請改成你自己的計算方式
+                // 其他爆擊加成...
+                if (_pc.hasDoubleBreakMaster()) {
+                    criticalChance += 5; // 狂暴：爆擊率再+5%
+                }
+                if (ThreadLocalRandom.current().nextInt(100) < criticalChance) {
+                    // 爆擊處理程式碼...
                 }
                 dmg = weaponTotalDamage + _statusDamage + _pc.getDmgup() + _pc.getOriginalDmgup();
                 break;
-            case 12:// 雙刀
+            case 12: // 雙刀
                 if (ThreadLocalRandom.current().nextInt(100) + 1 <= _weaponDoubleDmgChance) {
-                    weaponTotalDamage *= 2;// 雙擊
+                    weaponTotalDamage *= 2; // 雙擊
                     _attackType = 4;
                 }
-                weaponTotalDamage += calcAttrEnchantDmg();// 屬性武器增傷計算
-                weaponTotalDamage += calcAmuletAttrDmg();// 屬性項鏈增傷計算
+                weaponTotalDamage += calcAttrEnchantDmg();   // 屬性武器增傷計算
+                weaponTotalDamage += calcAmuletAttrDmg();    // 屬性項鏈增傷計算
                 int addchance2 = 0;
-                if (_pc.getLevel() > 45) {// 等級超過45級之後每5級增加1%發動機率
+                if (_pc.getLevel() > 45) { // 等級超過45級之後每5級增加1%發動機率
                     addchance2 = (_pc.getLevel() - 45) / 5;
                 }
-                int totalchance2 = 20 + addchance2;// 總發動機率
-                if (_pc.hasSkillEffect(DOUBLE_BREAK) && ThreadLocalRandom.current().nextInt(100) < totalchance2) {// 觸發雙重破壞
+                int totalchance2 = 20 + addchance2; // 總發動機率
+                // 狂暴：雙重破壞再+5%
+                if (_pc.hasDoubleBreakMaster()) {
+                    totalchance2 += 5;
+                }
+                if (_pc.hasSkillEffect(DOUBLE_BREAK) && ThreadLocalRandom.current().nextInt(100) < totalchance2) {
                     weaponTotalDamage *= 2.0D;
+                    // 狂暴：1%機率吸血
+                    if (_pc.hasDoubleBreakMaster()) {
+                        if (ThreadLocalRandom.current().nextInt(100) < 1) {
+                            int drain = (int)(weaponTotalDamage * 0.01); // 吸血量1%
+                            if (drain < 1) drain = 1;
+                            _pc.setCurrentHp(_pc.getCurrentHp() + drain);
+                            _pc.sendPackets(new S_SystemMessage("你啟動了雙重破壞吸血！恢復HP " + drain + " 點！"));
+                        }
+                    }
+                }
+                // 你的爆擊區段（請將這段放在正確的爆擊判斷處）
+                int criticalChance2 = 10; // 假設原本有10%爆擊，請改成你自己的計算方式
+                // 其他爆擊加成...
+                if (_pc.hasDoubleBreakMaster()) {
+                    criticalChance2 += 5; // 狂暴：爆擊率再+5%
+                }
+                if (ThreadLocalRandom.current().nextInt(100) < criticalChance2) {
+                    // 爆擊處理程式碼...
                 }
                 dmg = weaponTotalDamage + _statusDamage + _pc.getDmgup() + _pc.getOriginalDmgup();
                 break;
@@ -1288,39 +1331,43 @@ public class L1AttackPc extends L1AttackMode {
         if (_targetPc.hasSkillEffect(ARMOR_BREAK) && isShortDistance()) { // 破壞盔甲
             dmg *= 1.58D;
         }
-        if (_pc.hasSkillEffect(L1SkillId.ASSASSIN)) { // 黑妖新技能 暗殺者
-            if (!_pc.getInventory().checkEquipped(20077) && !_pc.getInventory().checkEquipped(120077) && !_pc.getInventory().checkEquipped(20062)) {
-                if (ThreadLocalRandom.current().nextInt(100) + 1 <= 60) {
-                    dmg *= 2.5D;
-                    _pc.sendPackets(new S_SkillSound(_pc.getId(), 14547));
-                    _pc.broadcastPacketX8(new S_SkillSound(_pc.getId(), 14547));
-                    if (CharSkillReading.get().spellCheck(_pc.getId(), L1SkillId.BLAZING_SPIRITS)) {
-                        int time = 3 + _pc.getLevel() - 85;
-                        if (time > 8) {
-                            time = 8;
-                        }
-                        _pc.setSkillEffect(L1SkillId.BLAZING_SPIRITS, time * 1000);
-                        _pc.sendPackets(new S_NewSkillIcon(L1SkillId.BLAZING_SPIRITS, true, time));
-                    }
-                }
-            } else {
-                _pc.sendPackets(new S_SystemMessage("現在，透明狀態下，這個技能發動無效。"));
-            }
-            _pc.removeSkillEffect(L1SkillId.ASSASSIN);
-        }
-        if (_pc.isDarkelf()) { // 黑妖新技能 暗殺者
-            if (_pc.hasSkillEffect(L1SkillId.BLAZING_SPIRITS)) {
-                dmg *= 2.5D;
-                _targetPc.sendPackets(new S_SkillSound(_targetPc.getId(), 14547));
-                _targetPc.broadcastPacketX8(new S_SkillSound(_targetPc.getId(), 14547));
-                //_pc.sendPackets(new S_AttackCritical(_pc, _targetId, 54));
-                // Broadcaster.broadcastPacket(_pc, new S_AttackCritical(_pc, _targetId, 54));
-                //} else if ((_random.nextInt(100) + 1) <= (_weaponDoubleDmgChance - weapon.get_durability())) {
-            } else if (ThreadLocalRandom.current().nextInt(100) + 1 <= 50) {
-                dmg *= 2.5D;
-                _pc.sendPackets(new S_SkillSound(_pc.getId(), 3398));
-                _pc.broadcastPacketX8(new S_SkillSound(_pc.getId(), 3398));
-            }
+//        if (_pc.hasSkillEffect(L1SkillId.ASSASSIN)) { // 黑妖新技能 暗殺者
+//            if (!_pc.getInventory().checkEquipped(20077) && !_pc.getInventory().checkEquipped(120077) && !_pc.getInventory().checkEquipped(20062)) {
+//                if (ThreadLocalRandom.current().nextInt(100) + 1 <= 60) {
+//                    dmg *= 2.5D;
+//                    _pc.sendPackets(new S_SkillSound(_pc.getId(), 14547));
+//                    _pc.broadcastPacketX8(new S_SkillSound(_pc.getId(), 14547));
+//                    if (CharSkillReading.get().spellCheck(_pc.getId(), L1SkillId.BLAZING_SPIRITS)) {
+//                        int time = 3 + _pc.getLevel() - 85;
+//                        if (time > 8) {
+//                            time = 8;
+//                        }
+//                        _pc.setSkillEffect(L1SkillId.BLAZING_SPIRITS, time * 1000);
+//                        _pc.sendPackets(new S_NewSkillIcon(L1SkillId.BLAZING_SPIRITS, true, time));
+//                    }
+//                }
+//            } else {
+//                _pc.sendPackets(new S_SystemMessage("現在，透明狀態下，這個技能發動無效。"));
+//            }
+//            _pc.removeSkillEffect(L1SkillId.ASSASSIN);
+//        }
+//        if (_pc.isDarkelf()) { // 黑妖新技能 暗殺者
+//            if (_pc.hasSkillEffect(L1SkillId.BLAZING_SPIRITS)) {
+//                dmg *= 2.5D;
+//                _targetPc.sendPackets(new S_SkillSound(_targetPc.getId(), 14547));
+//                _targetPc.broadcastPacketX8(new S_SkillSound(_targetPc.getId(), 14547));
+//                //_pc.sendPackets(new S_AttackCritical(_pc, _targetId, 54));
+//                // Broadcaster.broadcastPacket(_pc, new S_AttackCritical(_pc, _targetId, 54));
+//                //} else if ((_random.nextInt(100) + 1) <= (_weaponDoubleDmgChance - weapon.get_durability())) {
+//            } else if (ThreadLocalRandom.current().nextInt(100) + 1 <= 50) {
+//                dmg *= 2.5D;
+////                _pc.sendPackets(new S_SkillSound(_pc.getId(), 3398));
+////                _pc.broadcastPacketX8(new S_SkillSound(_pc.getId(), 3398));
+//            }
+//        }
+        // ★ 黑妖學會被動技能傷害+5（暗影之牙(被動)）
+        if (_pc.isDarkelf() && _pc.hasPassiveDmgPlus5()) {
+            dmg += 5;
         }
         int DmgR = _targetPc.getDmgR() // 物理傷害減免
                 + _targetPc.getDamageReductionByArmor(); // 被攻擊者防具增加全部傷害減免
@@ -1790,7 +1837,6 @@ public class L1AttackPc extends L1AttackMode {
                 }
             }
         }
-
         //判斷人物等級已大於 使用武器最大等級
         //		if(_weaponType2!=0 && _pc.getWeapon()!=null){
         //		if(_pc.getLevel()>_pc.getWeapon().getItem().getMaxLevel()){
@@ -2031,6 +2077,10 @@ public class L1AttackPc extends L1AttackMode {
                     _pc.sendPackets(new S_SystemMessage("【鷹眼(精神)】被動傷害攻擊2倍發動！"));
                 }
             }
+        }
+        // ★ 黑妖學會被動技能傷害+5（暗影之牙(被動)）
+        if (_pc.isDarkelf() && _pc.hasPassiveDmgPlus5()) {
+            dmg += 5;
         }
         //System.out.println("TEST first:"+dmg);
         //2017/04/19 修正
@@ -2819,23 +2869,10 @@ public class L1AttackPc extends L1AttackMode {
                         if (_pc.getTempCharGfx() != 13731 && _pc.getTempCharGfx() != 13733) { // 不是真黑妖外型
                             if (_random.nextInt(100) < 20) {// 20%機率出現特效
                                 _pc.sendFollowEffect(_target, attackgfx);
-                                /*
-                                 * R版Top10暴擊特效處理
-                                L1Location loc = _target.getLocation();
-                                L1NpcInstance dummy = L1SpawnUtil.spawnS(loc, 86132, _pc.get_showId(), 1, _pc.getHeading());
-                                dummy.broadcastPacketAll(new S_NPCPack(dummy));
-                                dummy.broadcastPacketAll(new S_SkillSound(dummy.getId(), attackgfx));
-                                */
                             }
                         } else if (_attackType == 2 || _attackType == 4) {// 真黑妖重擊或雙擊
                             _pc.sendFollowEffect(_target, attackgfx);
-                            /*
-                             * R版Top10暴擊特效處理
-                            L1Location loc = _target.getLocation();
-                            L1NpcInstance dummy = L1SpawnUtil.spawnS(loc, 86132, _pc.get_showId(), 1, _pc.getHeading());
-                            dummy.broadcastPacketAll(new S_NPCPack(dummy));
-                            dummy.broadcastPacketAll(new S_SkillSound(dummy.getId(), attackgfx));
-                            */
+
                         }
                     }
                     _pc.sendPacketsAll(new S_AttackPacketPc(_pc, _target, 0, _damage));
@@ -2897,10 +2934,6 @@ public class L1AttackPc extends L1AttackMode {
                     default:
                         break;
                 }
-			/*if (_pc.getTempCharGfx() >= 13715 && _pc.getTempCharGfx() <= 13745) {// TOP10變身
-				_arrowGfxid = 11762;
-				_stingGfxid = 11762;
-			}*/
             if (_isHit) {// 命中
                 int attackgfx;
                 switch (_weaponType) {
@@ -2910,13 +2943,6 @@ public class L1AttackPc extends L1AttackMode {
                                 attackgfx = 13392;
                                 if (_random.nextInt(100) < 20) {// 20%機率出現特效
                                     _pc.sendFollowEffect(_target, attackgfx);
-                                    /*
-                                     * R版Top10暴擊特效處理
-                                    L1Location loc = _target.getLocation();
-                                    L1NpcInstance dummy = L1SpawnUtil.spawnS(loc, 86132, _pc.get_showId(), 1, _pc.getHeading());
-                                    dummy.broadcastPacketAll(new S_NPCPack(dummy));
-                                    dummy.broadcastPacketAll(new S_SkillSound(dummy.getId(), attackgfx));
-                                    */
                                 }
                             }
                             _pc.sendPacketsAll(new S_UseArrowSkill(_pc, _targetId, _arrowGfxid, _targetX, _targetY, _damage, 1));

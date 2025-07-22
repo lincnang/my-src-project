@@ -82,11 +82,16 @@ public class L1SkillMode {
             _skillMode.put(162, new GREATER_ELEMENTAL()); //精靈守護者
 //            _skillMode.put(154, new LESSER_ELEMENTAL());//招喚小精靈
             _skillMode.put(EIF_EMPIRE, new EIF_EMPIRE()); // 精靈之暈
+            _skillMode.put(PASSIVE_SHADOW_IMPACT, new SHADOW_IMPACT ());
             _skillMode.put(167, new WIND_SHACKLE());
             _skillMode.put(155, new FIRE_BLESS());
             _skillMode.put(157, new EARTH_BIND());
             _skillMode.put(DRESS_EVASION, new DRESS_EVASION());
-            _skillMode.put(UNCANNY_DODGE, new UNCANNY_DODGE());
+            _skillMode.put(UNCANNY_DODGE, new UNCANNY_DODGE());//暗影閃避
+            _skillMode.put(Shadow_Dash, new Shadow_Dash());//暗影閃避
+            _skillMode.put(SHADOW_RECOVERY, new SHADOW_RECOVERY());//暗隱恢復
+            _skillMode.put(Shadow_Daze, new Shadow_Daze());//暗隱暈眩
+
             _skillMode.put(103, new DARK_BLIND());
             _skillMode.put(SHADOW_ARMOR, new SHADOW_ARMOR());
             _skillMode.put(AWAKEN_ANTHARAS, new AWAKEN_ANTHARAS());

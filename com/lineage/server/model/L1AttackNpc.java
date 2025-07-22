@@ -1,9 +1,6 @@
 package com.lineage.server.model;
 
-import com.lineage.config.ConfigAlt;
-import com.lineage.config.ConfigSkillDragon;
-import com.lineage.config.ConfigSkillWarrior;
-import com.lineage.config.Config_Occupational_Damage;
+import com.lineage.config.*;
 import com.lineage.data.event.SubItemSet;
 import com.lineage.server.datatables.SkillEnhanceTable;
 import com.lineage.server.model.Instance.*;
@@ -472,6 +469,13 @@ public class L1AttackNpc extends L1AttackMode {
         addNpcPoisonAttack(_targetPc);
         if (!_isHit) {
             dmg = 0.0D;
+        }
+        // ====== 路西法被動減傷處理 START ======
+        if (_targetPc != null && _targetPc.hasPassiveLucifer()) {
+            int reduce = ConfigSkillDarkElf.LUCIFER_PASSIVE_BASE_REDUCE
+                    + (_targetPc.getLevel() / ConfigSkillDarkElf.LUCIFER_PASSIVE_LV_STEP) * ConfigSkillDarkElf.LUCIFER_PASSIVE_LV_BONUS;
+            dmg -= reduce;
+            if (dmg < 0) dmg = 0;
         }
         return (int) dmg;
     }

@@ -161,9 +161,9 @@ public class L1WeaponProficiency {
             case 4: return "弓";
             case 5: return "單手矛";
             case 6: return "斧";
-            case 7: return "雙刀";
-            case 8: return "魔杖";
-            case 9: return "鋼爪";
+            case 7: return "魔仗";
+            case 8: return "鋼爪";
+            case 9: return "雙刀";
             case 10: return "奇古獸";
             case 11: return "鎖鏈劍";
             default: return "未知";
@@ -179,18 +179,19 @@ public class L1WeaponProficiency {
      */
     public void setProficiencyType(int type) {
         PlayerWeaponProficiency proficiency = _weaponProficiency.get(type);
-        if (proficiency != null) {// 若存在記錄 則直接給予對應等級的屬性加成
-            //_owner.sendPackets(new S_SystemMessage("當前武器類型熟練度等級為" + proficiency.getLevel() + " 熟練度經驗為" + proficiency.getExp()));
+        if (proficiency != null) {
             WeaponProficiency.addWeaponProficiencyStatus(_owner, proficiency.getType(), proficiency.getLevel(), 1);
             return;
         }
         proficiency = new PlayerWeaponProficiency();
         proficiency.setType(type);
-        // 寫入資料庫記錄 CharacterWeaponProficiencyTable
+        proficiency.setCharId(_owner.getId());
+        proficiency.setLevel(0);
+        proficiency.setExp(0);
         CharacterWeaponProficiencyTable.getInstance().storeProficiency(_owner.getId(), type, proficiency);
-        //_owner.sendPackets(new S_SystemMessage("創建武器熟練度記錄資料"));
-        _weaponProficiency.put(type, proficiency);
+        _weaponProficiency.put(type, proficiency); // ←**多補這一行，避免map永遠查不到**
     }
+
 
     /**
      * 移除武器熟練度等級加成
@@ -261,6 +262,7 @@ public class L1WeaponProficiency {
             case 39: return 10;
             case 13: return 4;
             case 17: return 10;
+            case 12: return 9;
             default: return type;
         }
     }
@@ -322,11 +324,14 @@ public class L1WeaponProficiency {
         PlayerWeaponProficiency proficiency = _weaponProficiency.get(type);
         if (proficiency != null) {
             proficiency.addExp(exp);
-        } else {// 防意外 若沒有則新增一條資料 嚴格意義上其實沒有意義
+        } else {
             proficiency = new PlayerWeaponProficiency();
-            setProficiencyType(type);
+            proficiency.setCharId(_owner.getId());
+            proficiency.setType(type);
+            proficiency.setLevel(0);
+            proficiency.setExp(exp); // 首次就給這次的經驗
+            _weaponProficiency.put(type, proficiency); // 及時 put
         }
-        // 更新資料庫記錄
         CharacterWeaponProficiencyTable.getInstance().updateProficiency(_owner.getId(), type, proficiency);
     }
 

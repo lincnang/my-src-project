@@ -48,9 +48,9 @@ public class Skill_SpellbookCrown extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("魔法書(王者加護)")) { // 王者加護
                 skillid = BRAVE_AVATAR;
                 magicLv = 27;
-            } else if (nameId.equalsIgnoreCase("$23457")) { // 恩典庇護
+            } else if (nameId.equalsIgnoreCase("魔法書(灼熱靈氣：3階段)")) { // 王者加護
                 skillid = GRACE_AVATAR;
-                magicLv = 28;
+                magicLv = 26;
             } else if (nameId.equalsIgnoreCase("魔法書(王者之劍)")) { // 王者之劍
                 skillid = KINGDOM_STUN;
                 magicLv = 26;

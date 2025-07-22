@@ -401,8 +401,11 @@ public class L1SkillId {
     public static final int PRIDE = 96;
 
 
+
+
+
     /**
-     * 暗隱術97
+     * 暗隱躲藏97
      */
     public static final int BLIND_HIDING = 97;
     /**
@@ -414,9 +417,16 @@ public class L1SkillId {
      */
     public static final int SHADOW_ARMOR = 99;
     /**
-     * 提煉魔石100
+     * 提煉魔石9100
+     * 廢除
      */
-    public static final int BRING_STONE = 100;
+    public static final int BRING_STONE = 9100;
+
+    /**
+     * 暗影衝刺100
+     */
+    public static final int Shadow_Dash = 100;
+
     /**
      * 行走加速101
      */
@@ -447,36 +457,100 @@ public class L1SkillId {
     public static final int UNCANNY_DODGE = 106;
     /**
      * 暗影之牙
+     * 移除
      */
-    public static final int SHADOW_FANG = 107;
+    public static final int SHADOW_FANG = 10700;
+
+    /**
+     * 暗影之牙(被動)
+     *
+     */
+    public static final int DMG_PLUS5_PASSIVE = 107;
     /**
      * 會心一擊108
      */
     public static final int FINAL_BURN = 108;
     /**
      * 力量提升109
+     * 移除
      */
-    public static final int DRESS_MIGHTY = 109;
+    public static final int DRESS_MIGHTY = 10900;
+    /**
+     * 暗黑組合(被動) 109
+     */
+    public static final int STR_PLUS3_PASSIVE = 109; // 力量提升3
     /**
      * 敏捷提升110
+     * 移除
      */
-    public static final int DRESS_DEXTERITY = 110;
+    public static final int DRESS_DEXTERITY = 11000;
+
+    /**
+     * 暗影恢復 110
+     */
+    public static final int SHADOW_RECOVERY = 110; // 暗影恢復
+
     /**
      * 閃避提升111
+     * 移除
      */
-    public static final int DRESS_EVASION = 111;
+    public static final int DRESS_EVASION = 11100;
+
+    /**
+     * 神秘提升(被動)
+     *
+     */
+    public static final int ER_PLUS18_PASSIVE = 111;
+
+
     /**
      * 破壞盔甲112
      */
     public static final int ARMOR_BREAK = 112;
+
     /**
-     * 黑妖新技能 暗殺者
+     * 黑妖新技能 路西法 221
+     *
      **/
-    public static final int ASSASSIN = 233; // 242
+    public static final int PASSIVE_LUCIFER = 221;
+
+
+    /**
+     * 黑妖新技能 暗影衝擊 222
+     *
+     **/
+    public static final int PASSIVE_SHADOW_IMPACT  = 222;
+
+
+    /**
+     * 黑妖新技能 暗影暈眩 223
+     *
+     **/
+    public static final int Shadow_Daze  = 223;
+
+    /**
+     * 刺客233
+     */
+    public static final int M_ASSASSIN = 233;
+
+    /**
+     * 黑妖技能 暗殺者
+     * 移除
+     **/
+    public static final int ASSASSIN = 23300; // 242
     /**
      * 黑妖新技能 熾烈鬥志
+     * 移除
      **/
-    public static final int BLAZING_SPIRITS = 241;
+    public static final int BLAZING_SPIRITS = 24100;
+
+    /**
+     * 黑妖新技能 狂暴
+     *
+     **/
+    public static final int DARKELF_BERSERK = 227;
+
+
     /**
      * 精準目標
      **/
@@ -489,8 +563,9 @@ public class L1SkillId {
      * 閃亮之盾
      **/
     public static final int SHINING_AURA = 115;//(灼熱靈氣：2階段)
-    //	/** 呼喚盟友 **/
-    //	public static final int CALL_CLAN = 116;
+    /**
+     * 勇猛武器
+     **/
     public static final int GLOWING_AURA_2 = 116; //勇猛武器
     /**
      * 勇猛意志
@@ -506,6 +581,15 @@ public class L1SkillId {
      * 王者之劍 119
      */
     public static final int KINGDOM_STUN = 119;
+
+    /**
+     * 王族新技能 恩典庇護    //修改操控 灼熱靈氣：3階段
+     **/
+
+    public static final int GRACE_AVATAR = 120;
+
+
+
     /**
      * 王族新技能 王者加護
      **/
@@ -522,12 +606,8 @@ public class L1SkillId {
      * 王族新技能 王者加護 3階段
      **/
     public static final int BRAVE_AVATAR_3RD = 7102;
-    /**
-     * 王族新技能 恩典庇護
-     **/
-    //修改操控靈氣
 
-    public static final int GRACE_AVATAR = 122;
+
     /**
      * 魔法防禦129
      */
@@ -948,6 +1028,7 @@ public class L1SkillId {
 
     public static final int Warrior_Charge = 235; // 佔據
     public static final int GAIA = 236; // 蓋亞
+
     /**常駐技能群**/
     /**
      * 狂戰士 粉碎

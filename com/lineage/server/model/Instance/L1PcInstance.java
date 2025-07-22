@@ -570,6 +570,7 @@ public class L1PcInstance extends L1Character { // src015
     private int _DamageReductionPVE = 0; // PVE被怪打減傷
     private int tripleArrowCount = 0; // 記錄三重矢施放次數
     private L1Character lastTripleArrowTarget = null; // 新增，用來記錄上次攻擊的目標
+    private int _tempMeleeEvasion = 0;
     //========================================================================================================
     //等級排行榜
     private int _groupId;  // 排行榜組別
@@ -1668,16 +1669,22 @@ public class L1PcInstance extends L1Character { // src015
         }
     }
 
+    /**
+     * 根據角色的正義值(Lawful)等級，決定各種保護狀態與資料更新
+     */
     public void lawfulUpdate() {
-        int l = getLawful();
+        int l = getLawful(); // 取得目前的正義值 Lawful
+
+        // 正義值介於 10000~19999，第一階段光明騎士
         if (l >= 10000 && l <= 19999) {
-            if (!_jl1) {
-                overUpdate();
-                _jl1 = true;
-                sendPackets(new S_PacketBoxProtection(0, 1));
-                sendPackets(new S_OwnCharAttrDef(this));
-                sendPackets(new S_SPMR(this));
+            if (!_jl1) { // 只會進來一次，避免重複
+                overUpdate(); // 進行通用的更新處理
+                _jl1 = true;  // 標記這個區間已經處理過
+                sendPackets(new S_PacketBoxProtection(0, 1)); // 發送保護狀態封包
+                sendPackets(new S_OwnCharAttrDef(this));      // 更新角色屬性防禦
+                sendPackets(new S_SPMR(this));                // 更新SP/MR資訊
             }
+            // 正義值介於 20000~29999，第二階段光明騎士
         } else if (l >= 20000 && l <= 29999) {
             if (!_jl2) {
                 overUpdate();
@@ -1686,6 +1693,7 @@ public class L1PcInstance extends L1Character { // src015
                 sendPackets(new S_OwnCharAttrDef(this));
                 sendPackets(new S_SPMR(this));
             }
+            // 正義值介於 30000~39999，第三階段光明騎士
         } else if (l >= 30000 && l <= 39999) {
             if (!_jl3) {
                 overUpdate();
@@ -1694,6 +1702,7 @@ public class L1PcInstance extends L1Character { // src015
                 sendPackets(new S_OwnCharAttrDef(this));
                 sendPackets(new S_SPMR(this));
             }
+            // 正義值介於 -10000~-19999，第一階段邪惡騎士
         } else if (l >= -19999 && l <= -10000) {
             if (!_el1) {
                 overUpdate();
@@ -1701,6 +1710,7 @@ public class L1PcInstance extends L1Character { // src015
                 sendPackets(new S_PacketBoxProtection(3, 1));
                 sendPackets(new S_SPMR(this));
             }
+            // 正義值介於 -20000~-29999，第二階段邪惡騎士
         } else if (l >= -29999 && l <= -20000) {
             if (!_el2) {
                 overUpdate();
@@ -1708,6 +1718,7 @@ public class L1PcInstance extends L1Character { // src015
                 sendPackets(new S_PacketBoxProtection(4, 1));
                 sendPackets(new S_SPMR(this));
             }
+            // 正義值介於 -30000~-39999，第三階段邪惡騎士
         } else if (l >= -39999 && l <= -30000) {
             if (!_el3) {
                 overUpdate();
@@ -1715,11 +1726,22 @@ public class L1PcInstance extends L1Character { // src015
                 sendPackets(new S_PacketBoxProtection(5, 1));
                 sendPackets(new S_SPMR(this));
             }
+            // 其他情況，只要有overUpdate就發屬性更新
         } else if (overUpdate()) {
             sendPackets(new S_OwnCharAttrDef(this));
             sendPackets(new S_SPMR(this));
         }
     }
+    /**
+     * 更新保護狀態
+     * 0: 光明騎士第一階段
+     * 1: 光明騎士第二階段
+     * 2: 光明騎士第三階段
+     * 3: 邪惡騎士第一階段
+     * 4: 邪惡騎士第二階段
+     * 5: 邪惡騎士第三階段
+     * 6: 遇敵狀態
+     */
 
     private boolean overUpdate() {
         if (_jl1) {
@@ -2589,6 +2611,7 @@ public class L1PcInstance extends L1Character { // src015
         _out = out;
     }
 
+    // 限制：如果交易清單已經有 16 個物品，就不再新增。
     /*
      * public void add_trade_item(L1TradeItem info) { if (_trade_items.size() == 16)
      * { return; } _trade_items.add(info); }
@@ -2934,8 +2957,8 @@ public class L1PcInstance extends L1Character { // src015
                     int newHp = Math.min(currentHp + healingAmount, maxHp);
                     // 更新當前血量
                     this.setCurrentHp(newHp);
-                    // 打印日誌（可選）
-                    System.out.println("反擊屏障:專家 觸發，吸收傷害 " + incomingDamage + " 點，轉化回血 " + healingAmount + " 點。");
+//                    // 打印日誌（可選）
+//                    System.out.println("反擊屏障:專家 觸發，吸收傷害 " + incomingDamage + " 點，轉化回血 " + healingAmount + " 點。");
                 }
             } else {
                 // 否則執行常規的攻擊動作
@@ -3051,11 +3074,26 @@ public class L1PcInstance extends L1Character { // src015
             }
         }
     }
-
     /**
-     * 解除隱身
+     * 刺客增加判斷
      */
+
+     private boolean _assassinAttackNow = false;
+
+     public void setAssassinAttackNow(boolean value) {
+     _assassinAttackNow = value;
+     }
+
+     public boolean isAssassinAttackNow() {
+     return _assassinAttackNow;
+     }
+
     public void delInvis() {
+        if (isDarkelf() && hasPassiveAssassin() && isAssassinAttackNow()) {
+            // 黑妖刺客正在攻擊流程時，不在這裡解除隱身
+            return;
+        }
+        // 其餘職業 或 非攻擊流程呼叫，一律立即解除
         if (hasSkillEffect(INVISIBILITY)) {
             killSkillEffectTimer(INVISIBILITY);
             sendPackets(new S_Invis(getId(), 0));
@@ -3067,6 +3105,7 @@ public class L1PcInstance extends L1Character { // src015
             broadcastPacketAll(new S_OtherCharPacks(this));
         }
     }
+
 
     public void delBlindHiding() {
         killSkillEffectTimer(BLIND_HIDING);
@@ -3875,6 +3914,33 @@ public class L1PcInstance extends L1Character { // src015
         return _originalEr;
     }
 
+    /**
+     * 神秘提升ER +18
+     *
+     */
+    public boolean hasPassiveErPlus18() {
+        return com.lineage.server.datatables.lock.CharSkillReading.get()
+                .spellCheck(this.getId(), L1SkillId.ER_PLUS18_PASSIVE);
+    }
+
+    /**
+     * 暗隱恢復
+     *
+     */
+    // 增加近戰閃避
+    public void addTempMeleeEvasion(int value) {
+        _tempMeleeEvasion += value;
+    }
+
+    // 取得近戰閃避
+    public int getTempMeleeEvasion() {
+        return _tempMeleeEvasion;
+    }
+
+    // 清除（BUFF結束時用）
+    public void clearTempEvasion() {
+        _tempMeleeEvasion = 0;
+    }
     public int getEr() {
         if (hasSkillEffect(174)) {// 精準射擊
             return 0;
@@ -3907,7 +3973,12 @@ public class L1PcInstance extends L1Character { // src015
         if (this.hasSkillEffect(Counter_attack)) {// 反制攻擊
             er += 15;
         }
+        if (this.hasPassiveErPlus18()) {
+            er += 18;
+        }
         er += _er;
+
+        er += getTempMeleeEvasion();
         return er;
     }
 
@@ -4032,6 +4103,28 @@ public class L1PcInstance extends L1Character { // src015
         _baseStr = i;
     }
 
+    public short getStr() {
+        short str = (short) _baseStr; // 先以 baseStr 當 short
+        if (hasPassiveStrPlus3()) {
+            str += 3;
+        }
+        return str;
+    }
+    public short getDex() {
+        short dex = (short) _baseDex;
+        if (hasPassiveStrPlus3()) { // 同理，敏捷也+3
+            dex += 3;
+        }
+        return dex;
+    }
+    /**
+     * 黑妖技能 (暗黑組合) 被動技能 STR+3 Dex+3
+     */
+
+    public boolean hasPassiveStrPlus3() {
+        return com.lineage.server.datatables.lock.CharSkillReading.get()
+                .spellCheck(this.getId(), L1SkillId.STR_PLUS3_PASSIVE);
+    }
     public int getBaseCon() {
         return _baseCon;
     }
@@ -4105,6 +4198,43 @@ public class L1PcInstance extends L1Character { // src015
         }
         addWis(i - _baseWis);
         _baseWis = i;
+    }
+    /**
+     * 暗影之牙(被動)
+     */
+    public boolean hasPassiveDmgPlus5() {
+        return com.lineage.server.datatables.lock.CharSkillReading.get()
+                .spellCheck(this.getId(), L1SkillId.DMG_PLUS5_PASSIVE);
+    }
+    /**
+     * 刺客(被動)
+     */
+    public boolean hasPassiveAssassin() {
+        return com.lineage.server.datatables.lock.CharSkillReading.get()
+                .spellCheck(this.getId(), L1SkillId.M_ASSASSIN);
+    }
+
+    /**
+     * 狂暴(被動)
+     */
+    public boolean hasDoubleBreakMaster() {
+        return this.isSkillMastery(L1SkillId.DARKELF_BERSERK);
+    }
+
+    /**
+     * 路西法(被動)
+     */
+    public boolean hasPassiveLucifer() {
+        return com.lineage.server.datatables.lock.CharSkillReading.get()
+                .spellCheck(this.getId(), L1SkillId.PASSIVE_LUCIFER);
+    }
+
+    /**
+     * 暗影衝擊(被動)
+     */
+    public boolean hasPassiveShadowImpact() {
+        return com.lineage.server.datatables.lock.CharSkillReading.get()
+                .spellCheck(this.getId(), L1SkillId.PASSIVE_SHADOW_IMPACT);
     }
 
     public int getOriginalStr() {
@@ -4220,21 +4350,6 @@ public class L1PcInstance extends L1Character { // src015
         return _originalMpup;
     }
 
-    public int getBaseDmgup() {
-        return _baseDmgup;
-    }
-
-    public int getBaseBowDmgup() {
-        return _baseBowDmgup;
-    }
-
-    public int getBaseHitup() {
-        return _baseHitup;
-    }
-
-    public int getBaseBowHitup() {
-        return _baseBowHitup;
-    }
 
     public int getBaseMr() {
         return _baseMr;
@@ -4344,17 +4459,6 @@ public class L1PcInstance extends L1Character { // src015
         _homeTownId = i;
     }
 
-    public int getForgetElfAttrCount() {
-        return _forgetElfAttrCount;
-    }
-
-    public void setForgetElfAttrCount(int i) {
-        _forgetElfAttrCount = i;
-    }
-
-    public void addForgetElfAttrCount(int i) {
-        _forgetElfAttrCount += i;
-    }
 
     // 村莊貢獻度
     public int getContribution() {
@@ -4730,23 +4834,6 @@ public class L1PcInstance extends L1Character { // src015
         }
         return false;
     }
-
-    // 角色生日
-    /*
-     * private Timestamp _CreateTime;
-     *
-     * public Timestamp getCreateTime() { return _CreateTime; }
-     *
-     * public int getSimpleCreateTime() { if (_CreateTime != null) {
-     * SimpleDateFormat SimpleDate = new SimpleDateFormat("yyyyMMdd"); int BornTime
-     * = Integer.parseInt(SimpleDate.format(_CreateTime.getTime())); return
-     * BornTime; } else { return 0; } }
-     *
-     * public void setCreateTime(Timestamp time) { _CreateTime = time; }
-     *
-     * public void setCreateTime() { _CreateTime = new
-     * Timestamp(System.currentTimeMillis()); }
-     */
     private void levelDown(int gap) {
         resetLevel();
         for (int i = 0; i > gap; i--) {
@@ -7715,22 +7802,6 @@ public class L1PcInstance extends L1Character { // src015
         _range = range;
     }
 
-    public int[] get_armorsets_gfx() {
-        return _gfxids;
-    }
-
-    public void set_armorsets_gfx(final int[] _gfxids) {
-        this._gfxids = _gfxids;
-    }
-
-    public int get_gfx_times() {
-        return _times;
-    }
-
-    public void set_gfx_times(final int _times) {
-        this._times = _times;
-    }
-
     public L1ItemInstance getWeaponWarrior() {
         return _weaponWarrior;
     }
@@ -7739,22 +7810,31 @@ public class L1PcInstance extends L1Character { // src015
         _weaponWarrior = weapon;
     }
 
+    /**
+     * 計算泰坦技能的武器傷害加成
+     * @return 傷害值
+     */
     public int colcTitanDmg() {
+        // 如果沒有裝備武器，傷害就是0，空手道泰坦不太猛
         if (getWeapon() == null) {
             return 0;
         }
-        L1ItemInstance weapon = getWeapon();
-        // 7.0 warrior slayer
+        L1ItemInstance weapon = getWeapon(); // 取得當前裝備的武器
+        // 如果有戰士專用武器，且正在切換武器，就用戰士武器
+        // 這段是為了支援7.0版本的戰士斬殺者
         if (getWeaponWarrior() != null && is_change_weapon()) {
             weapon = getWeaponWarrior();
         }
+        // 基礎大目標傷害
         int dmg = weapon.getItem().getDmgLarge();
+        // 加上武器的額外傷害修正值
         dmg += weapon.getItem().getDmgModifier();
+        // 再加上武器強化(+n)的等級
         dmg += weapon.getEnchantLevel();
+        // 傷害×2，因為泰坦出手不是兩倍速，是兩倍猛
         dmg *= 2;
-        return dmg;
+        return dmg; // 回傳最終傷害值
     }
-
     public boolean isCrystal() {
         if (isSkillMastery(PASSIVE_TITANROCK) || isSkillMastery(PASSIVE_TITANBULLET) || isSkillMastery(PASSIVE_TITANMAGIC)) {
             return getInventory().consumeItem(41246, 10);

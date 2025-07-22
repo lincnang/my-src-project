@@ -447,13 +447,6 @@ public class SkillSoundSkillAll extends TimerTask {
                                             TimeUnit.MILLISECONDS.sleep(sleep);
                                         }
                                     }
-                                    //					// 自動毒性抵抗
-                                    //					if (_pc.isAutoSkill_14()) {
-                                    //						if (_pc.isSkillMastery(VENOM_RESIST) && !_pc.hasSkillEffect(VENOM_RESIST)) {
-                                    //							SkillScroll.DoMySkill1(_pc, VENOM_RESIST);
-                                    //							TimeUnit.MILLISECONDS.sleep(sleep);
-                                    //						}
-                                    //					}
                                     // 自動力量提升
                                     if (_pc.isAutoSkill_15()) {
                                         if (_pc.isSkillMastery(DRESS_MIGHTY) && !_pc.hasSkillEffect(DRESS_MIGHTY) && !_pc.hasSkillEffect(PHYSICAL_ENCHANT_STR)) {

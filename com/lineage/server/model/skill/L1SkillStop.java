@@ -491,8 +491,8 @@ public class L1SkillStop {
                     case GRACE_AVATAR: // 王族新技能 恩典庇護
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            //pc.addRegistSustain(-10 + (pc.getGraceLv() * -1)); // 支撐耐性
-                            //pc.addRegistStun(-10 + (pc.getGraceLv() * -1)); // 暈眩耐性
+                            pc.addRegistSustain(-10 + (pc.getGraceLv() * -1)); // 支撐耐性
+                            pc.addRegistStun(-10 + (pc.getGraceLv() * -1)); // 暈眩耐性
                             //pc.getResistance().addDESPERADO(-10 + (pc.getGraceLv() * -1)); // 恐怖耐性
                             pc.removeSkillEffect(GRACE_AVATAR);
                             pc.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, false, -1));

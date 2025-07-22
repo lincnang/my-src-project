@@ -1,7 +1,6 @@
 package com.lineage.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
@@ -44,6 +43,26 @@ public final class ConfigSkillDarkElf {
      */
     public static double D4;
 
+    // 技能冷卻時間（單位：秒）
+    public static int ShadowRecovery_Cooldown;
+
+    // 持續HOT時間（單位：秒）
+    public static int ShadowRecovery_HotTime;
+
+    // 近戰閃避加成
+    public static int ShadowRecovery_EvasionMelee;
+
+    // 遠距閃避加成
+    public static int ShadowRecovery_EvasionRanged;
+
+    // 路西法被動：基礎減傷
+    public static int LUCIFER_PASSIVE_BASE_REDUCE;
+    // 路西法被動：每幾級增加一點減傷
+    public static int LUCIFER_PASSIVE_LV_STEP;
+    // 路西法被動：每次等級加成的減傷數值
+    public static int LUCIFER_PASSIVE_LV_BONUS;
+
+
     public static void load() throws ConfigErrorException {
         final Properties set = new Properties();
         try {
@@ -61,6 +80,17 @@ public final class ConfigSkillDarkElf {
             Armor_Break_Dmg = Double.parseDouble(set.getProperty("Armor_Break_Dmg", "0.58"));
             D2 = Integer.parseInt(set.getProperty("Burning_dmg_Turn2", "1"));
             D4 = Double.parseDouble(set.getProperty("Double_Brake_Turn4", "1.0"));
+            // 取得並轉型各設定項目，如果檔案沒有會帶入預設值
+            ShadowRecovery_Cooldown = Integer.parseInt(set.getProperty("ShadowRecovery_Cooldown", "1200")); // 預設1200秒
+            ShadowRecovery_HotTime = Integer.parseInt(set.getProperty("ShadowRecovery_HotTime", "5"));       // 預設5秒
+            ShadowRecovery_EvasionMelee = Integer.parseInt(set.getProperty("ShadowRecovery_EvasionMelee", "15")); // 預設+15
+            ShadowRecovery_EvasionRanged = Integer.parseInt(set.getProperty("ShadowRecovery_EvasionRanged", "15")); // 預設+15
+            // 路西法被動技能設定
+            LUCIFER_PASSIVE_BASE_REDUCE = Integer.parseInt(set.getProperty("Lucifer_BaseReduce", "5")); // 預設5
+            LUCIFER_PASSIVE_LV_STEP = Integer.parseInt(set.getProperty("Lucifer_LvStep", "10")); // 預設每10級加成
+            LUCIFER_PASSIVE_LV_BONUS = Integer.parseInt(set.getProperty("Lucifer_LvBonus", "1")); // 預設每次+1
+
+
         } catch (final Exception e) {
             throw new ConfigErrorException("設置檔案遺失: " + ConfigSkillDarkElf);
         } finally {

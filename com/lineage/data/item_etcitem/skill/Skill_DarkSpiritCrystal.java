@@ -6,8 +6,7 @@ import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_ServerMessage;
 
-import static com.lineage.server.model.skill.L1SkillId.ASSASSIN;
-import static com.lineage.server.model.skill.L1SkillId.BLAZING_SPIRITS;
+import static com.lineage.server.model.skill.L1SkillId.*;
 
 public class Skill_DarkSpiritCrystal extends ItemExecutor {
     public static ItemExecutor get() {
@@ -38,8 +37,8 @@ public class Skill_DarkSpiritCrystal extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("$2520")) {
                 skillid = 99;
                 magicLv = 41;
-            } else if (nameId.equalsIgnoreCase("$2521")) {
-                skillid = 100;
+            } else if (nameId.equalsIgnoreCase("英雄技能卡(暗影衝刺)")) {
+                skillid = Shadow_Dash;
                 magicLv = 41;
             } else if (nameId.equalsIgnoreCase("$3172")) {
                 skillid = 109;
@@ -53,10 +52,10 @@ public class Skill_DarkSpiritCrystal extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("$2524")) {
                 skillid = 103;
                 magicLv = 42;
-            } else if (nameId.equalsIgnoreCase("$2525")) {
+            } else if (nameId.equalsIgnoreCase("英雄技能卡(暗影加速)")) {
                 skillid = 104;
                 magicLv = 42;
-            } else if (nameId.equalsIgnoreCase("$3173")) {
+            } else if (nameId.equalsIgnoreCase("傳說技能卡(暗影恢復)")) {
                 skillid = 110;
                 magicLv = 42;
             } else if (nameId.equalsIgnoreCase("$2526")) {
@@ -77,19 +76,23 @@ public class Skill_DarkSpiritCrystal extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("黑暗精靈水晶(破壞盔甲)")) {
                 skillid = 112;
                 magicLv = 44;
-            } else if (nameId.equalsIgnoreCase("$23461")) { // 黑妖新技能 暗殺者
-                skillid = ASSASSIN;
-                magicLv = 44;
-            } else if (nameId.equalsIgnoreCase("$23464")) { // 黑妖新技能 熾烈鬥志
-                skillid = BLAZING_SPIRITS;
-                magicLv = 44;
+            } else if (nameId.equalsIgnoreCase("黑暗精靈水晶(刺客)")) {
+                skillid = M_ASSASSIN;
+                magicLv = 41;
+            } else if (nameId.equalsIgnoreCase("黑暗精靈水晶(狂暴)")) {
+                skillid = DARKELF_BERSERK;
+                magicLv = 42;
+            } else if (nameId.equalsIgnoreCase("黑暗精靈水晶(路西法)")) {
+                skillid = PASSIVE_LUCIFER;
+                magicLv = 42;
+            } else if (nameId.equalsIgnoreCase("黑暗精靈水晶(暗影衝擊)")) {
+                skillid = PASSIVE_SHADOW_IMPACT;
+                magicLv = 42;
+            } else if (nameId.equalsIgnoreCase("黑暗精靈水晶(暗影暈眩)")) {
+                skillid = Shadow_Daze;
+                magicLv = 42;
             }
             Skill_Check.check(pc, item, skillid, magicLv, attribute);
         }
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.data.item_etcitem.skill.Skill_DarkSpiritCrystal JD-Core Version:
- * 0.6.2
- */

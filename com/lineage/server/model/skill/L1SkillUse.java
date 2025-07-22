@@ -2391,8 +2391,8 @@ public class L1SkillUse {
                                 pc.removeSkillEffect(GRACE_AVATAR);
                             }
                             pc.setGraceLv(pc.getLevel());
-                            //pc.addRegistSustain(10 + pc.getGraceLv()); // 支撐耐性（自分）
-                            //pc.addRegistStun(10 + pc.getGraceLv()); // 暈眩耐性（自分）
+                            pc.addRegistSustain(10 + pc.getGraceLv()); // 支撐耐性（自分）
+                            pc.addRegistStun(10 + pc.getGraceLv()); // 暈眩耐性（自分）
                             //pc.getResistance().addDESPERADO(10 + pc.getGraceLv()); // 恐怖耐性（自分）
                             pc.setSkillEffect(GRACE_AVATAR, 15 * 1000);
                             pc.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
@@ -2406,8 +2406,8 @@ public class L1SkillUse {
                                             player.removeSkillEffect(GRACE_AVATAR);
                                         }
                                         player.setGraceLv(pc.getLevel());
-                                        //player.addRegistSustain(10 + player.getGraceLv()); // 支撐耐性（隊友）
-                                        //player.addRegistStun(10 + player.getGraceLv()); // 暈眩耐性（隊友）
+                                        player.addRegistSustain(10 + player.getGraceLv()); // 支撐耐性（隊友）
+                                        player.addRegistStun(10 + player.getGraceLv()); // 暈眩耐性（隊友）
                                         //player.getResistance().addDESPERADO(10 + player.getGraceLv()); // 恐怖耐性（隊友）
                                         player.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
                                         player.setSkillEffect(GRACE_AVATAR, 15 * 1000);
@@ -2563,6 +2563,9 @@ public class L1SkillUse {
                         final L1PcInstance pc = (L1PcInstance) cha;
                         pc.sendPackets(new S_Invis(pc.getId(), 1));
                         pc.broadcastPacketAll(new S_RemoveObject(pc));
+                        if (this._skillId == BLIND_HIDING) {
+                            pc.setSkillEffect(L1SkillId.BLIND_HIDING, 18000); // 60秒
+                        }
                     } else if (this._skillId == IRON_SKIN) { // 鋼鐵防護
                         final L1PcInstance pc = (L1PcInstance) cha;
                         pc.addAc(-10);

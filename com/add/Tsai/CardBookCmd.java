@@ -2,8 +2,10 @@ package com.add.Tsai;
 
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1PolyMorph;
+import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.serverpackets.S_NPCTalkReturn;
 import com.lineage.server.serverpackets.S_SystemMessage;
+import com.lineage.server.thread.GeneralThreadPool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -80,20 +82,65 @@ public class CardBookCmd {
                     ok = true;
                     pc.setCarId(-pc.getCardId());
                     break;
-                case "polycard": //變身
-                    ACard card = ACardTable.get().getCard(pc.getCardId()); //檢查變身卡DB資料
-                    if (card != null) { //檢查變身卡DB資料
+                case "polycard": // 變身
+                    final ACard card = ACardTable.get().getCard(pc.getCardId());
+                    if (card != null) {
                         if (CardQuestTable.get().IsQuest(pc, card.getQuestId())) {
                             if (card.getPolyId() != 0) {
-                                if (card.getPolyItemId() != 0) {
+                                boolean doPoly = false;
+                                // 需要消耗道具
+                                if (card.getPolyItemId() != 0 && card.getPolyItemCount() > 0) {
                                     if (pc.getInventory().checkItem(card.getPolyItemId(), card.getPolyItemCount())) {
                                         L1PolyMorph.doPoly(pc, card.getPolyId(), card.getPolyTime(), L1PolyMorph.MORPH_BY_ITEMMAGIC);
                                         pc.getInventory().consumeItem(card.getPolyItemId(), card.getPolyItemCount());
+                                        doPoly = true;
                                     } else {
                                         pc.sendPackets(new S_SystemMessage("變身需求道具不足"));
                                     }
                                 } else {
+                                    // 不需要道具，直接變身
                                     L1PolyMorph.doPoly(pc, card.getPolyId(), card.getPolyTime(), L1PolyMorph.MORPH_BY_ITEMMAGIC);
+                                    doPoly = true;
+                                }
+                                if (doPoly) {
+                                    pc.setLastPolyCardId(card.getPolyId());
+                                    new com.lineage.server.storage.mysql.MySqlCharacterStorage().storeCharacter(pc);
+                                    pc.sendPackets(new S_SystemMessage("已自動記錄此變身卡為自動變身卡！"));
+
+                                    // === 啟動自動續變身排程 ===
+                                    final L1PcInstance refPc = pc;
+                                    GeneralThreadPool.get().schedule(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // 續變身也要檢查條件與道具
+                                            if (refPc != null && !refPc.isDead() && !refPc.hasSkillEffect(L1SkillId.SHAPE_CHANGE)) {
+                                                // 這裡再次取得自動變身卡（支援切換、升級）
+                                                int lastPolyId = refPc.getLastPolyCardId();
+                                                ACard autoCard = ACardTable.get().getCardByPolyId(lastPolyId);
+                                                if (autoCard != null && CardQuestTable.get().IsQuest(refPc, autoCard.getQuestId())) {
+                                                    boolean canPoly = false;
+                                                    if (autoCard.getPolyItemId() != 0 && autoCard.getPolyItemCount() > 0) {
+                                                        if (refPc.getInventory().checkItem(autoCard.getPolyItemId(), autoCard.getPolyItemCount())) {
+                                                            L1PolyMorph.doPoly(refPc, autoCard.getPolyId(), autoCard.getPolyTime(), L1PolyMorph.MORPH_BY_ITEMMAGIC);
+                                                            refPc.getInventory().consumeItem(autoCard.getPolyItemId(), autoCard.getPolyItemCount());
+                                                            canPoly = true;
+                                                            refPc.sendPackets(new S_SystemMessage("自動續變身完成(消耗道具)"));
+                                                        } else {
+                                                            refPc.sendPackets(new S_SystemMessage("自動續變身失敗，背包道具不足"));
+                                                        }
+                                                    } else {
+                                                        L1PolyMorph.doPoly(refPc, autoCard.getPolyId(), autoCard.getPolyTime(), L1PolyMorph.MORPH_BY_ITEMMAGIC);
+                                                        canPoly = true;
+                                                        refPc.sendPackets(new S_SystemMessage("自動續變身完成"));
+                                                    }
+                                                    // 再次成功才再排下一次
+                                                    if (canPoly) {
+                                                        GeneralThreadPool.get().schedule(this, autoCard.getPolyTime() * 1000);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }, card.getPolyTime() * 1000);
                                 }
                             } else {
                                 pc.sendPackets(new S_SystemMessage("無法變身"));
@@ -102,6 +149,9 @@ public class CardBookCmd {
                     }
                     ok = true;
                     break;
+
+
+
                 case "cardset":
                     int questId = ACardTable.get().getQuestIdByCardId(pc.getCardId());
                     CardSet(pc, questId);//組合變身卡

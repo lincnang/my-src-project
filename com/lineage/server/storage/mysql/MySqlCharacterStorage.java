@@ -186,6 +186,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pc.set_day_signature_time(rs.getTimestamp("簽到日期紀錄"));
             pc.setHonor(rs.getInt("Honor"));//聲望
             pc.setHonorLevel(rs.getInt("HonorLevel"));//聲望
+            pc.setLastPolyCardId(rs.getInt("自動變身紀錄"));
             // 🔥 新增防呆
             if (pc.getHonorLevel() < 0) {
                 pc.setHonorLevel(0);
@@ -228,7 +229,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
         try {
             int i = 0;
             con = DatabaseFactory.get().getConnection();
-            pstm = con.prepareStatement("INSERT INTO characters SET " + "account_name=?,objid=?,char_name=?,level=?,HighLevel=?,Exp=?,MaxHp=?,CurHp=?,MaxMp=?,CurMp=?,Ac=?,Str=?,Con=?,Dex=?,Cha=?,Intel=?,Wis=?,Status=?,Class=?,Sex=?,Type=?,Heading=?,LocX=?,LocY=?,MapID=?,Food=?,Lawful=?,Title=?,ClanID=?,Clanname=?,ClanRank=?,rejoin_clan_time=?,BonusStatus=?,ElixirStatus=?,ElfAttr=?,PKcount=?,PkCountForElf=?,ExpRes=?,PartnerID=?,AccessLevel=?,OnlineStatus=?,HomeTownID=?,Contribution=?,Pay=?,HellTime=?,Banned=?,Karma=?,LastPk=?,LastPkForElf=?,DeleteTime=?,CreateTime=?,ClanMemberNotes=?,MeteLevel=?,ReincarnationSkillCount=?,PunishTime=?,BanError=?,InputBanError=?,SpeedError=?,RocksPrisonTime=?,IvorytowerTime=?,LastabardTime=?,DragonValleyTime=?,MazuTime=?,AI_TIMES=?,TamEndTime=?,Mark_Count=?,pacha=?,pacon=?,padex=?,paint=?,pastr=?,pawis=?,紋樣類型1=?,紋樣等級1=?,紋樣類型2=?,紋樣等級2=?,紋樣類型3=?,紋樣等級3=?,紋樣類型4=?,紋樣等級4=?,紋樣類型5=?,紋樣等級5=?,紋樣類型6=?,紋樣等級6=?,紋樣積分=?,娃娃召喚紀錄=?,聖物召喚紀錄=?,簽到紀錄=?,簽到日期紀錄=?,Honor=?,HonorLevel=?");
+            pstm = con.prepareStatement("INSERT INTO characters SET " + "account_name=?,objid=?,char_name=?,level=?,HighLevel=?,Exp=?,MaxHp=?,CurHp=?,MaxMp=?,CurMp=?,Ac=?,Str=?,Con=?,Dex=?,Cha=?,Intel=?,Wis=?,Status=?,Class=?,Sex=?,Type=?,Heading=?,LocX=?,LocY=?,MapID=?,Food=?,Lawful=?,Title=?,ClanID=?,Clanname=?,ClanRank=?,rejoin_clan_time=?,BonusStatus=?,ElixirStatus=?,ElfAttr=?,PKcount=?,PkCountForElf=?,ExpRes=?,PartnerID=?,AccessLevel=?,OnlineStatus=?,HomeTownID=?,Contribution=?,Pay=?,HellTime=?,Banned=?,Karma=?,LastPk=?,LastPkForElf=?,DeleteTime=?,CreateTime=?,ClanMemberNotes=?,MeteLevel=?,ReincarnationSkillCount=?,PunishTime=?,BanError=?,InputBanError=?,SpeedError=?,RocksPrisonTime=?,IvorytowerTime=?,LastabardTime=?,DragonValleyTime=?,MazuTime=?,AI_TIMES=?,TamEndTime=?,Mark_Count=?,pacha=?,pacon=?,padex=?,paint=?,pastr=?,pawis=?,紋樣類型1=?,紋樣等級1=?,紋樣類型2=?,紋樣等級2=?,紋樣類型3=?,紋樣等級3=?,紋樣類型4=?,紋樣等級4=?,紋樣類型5=?,紋樣等級5=?,紋樣類型6=?,紋樣等級6=?,紋樣積分=?,娃娃召喚紀錄=?,聖物召喚紀錄=?,簽到紀錄=?,簽到日期紀錄=?,Honor=?,HonorLevel=?,自動變身紀錄=?");
             pstm.setString(++i, pc.getAccountName());
             pstm.setInt(++i, pc.getId());
             pstm.setString(++i, pc.getName());
@@ -339,7 +340,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setTimestamp(++i, pc.get_day_signature_time());
             pstm.setInt(++i, pc.getHonor());
             pstm.setInt(++i, pc.getHonorLevel());
-
+            pstm.setInt(++i, pc.getLastPolyCardId()); // ← 新增
             pstm.execute();
         } catch (SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -440,7 +441,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
                     + "OnlineGiftIndex=?,OnlineGiftWiatEnd=?,OtherStatus=?,AddPoint=?,DelPoint=?,pacha=?,pacon=?,padex=?,paint=?,pastr=?,pawis=?,"
                     + "紋樣類型1=?,紋樣等級1=?,紋樣類型2=?,紋樣等級2=?,紋樣類型3=?,紋樣等級3=?,紋樣類型4=?,紋樣等級4=?,"
                     + "紋樣類型5=?,紋樣等級5=?,紋樣類型6=?,紋樣等級6=?,紋樣積分=?,娃娃召喚紀錄=?,聖物召喚紀錄=?,"
-                    + "簽到紀錄=?,簽到日期紀錄=?,Honor=?,HonorLevel=? "
+                    + "簽到紀錄=?,簽到日期紀錄=?,Honor=?,HonorLevel=?,自動變身紀錄=?  "
                     + "WHERE objid=?"; // <-- 這裡前面逗號必須去除
 
             pstm = con.prepareStatement(sql);
@@ -543,7 +544,7 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
             pstm.setTimestamp(++i, pc.get_day_signature_time());
             pstm.setInt(++i, pc.getHonor());
             pstm.setInt(++i, pc.getHonorLevel());
-
+            pstm.setInt(++i, pc.getLastPolyCardId()); // 新增
             // 最後一個 objid 為 WHERE objid=?
             pstm.setInt(++i, pc.getId());
             pstm.execute();

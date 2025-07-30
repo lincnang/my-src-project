@@ -1444,12 +1444,19 @@ public class C_LoginToServer extends ClientBasePacket {
             CheckItemPower(pc); // 身上持有道具給予能力系統
             // 取消商店變身
             L1PolyMorph.undoPolyPrivateShop(pc);
-            // 刪除20000
-            pc.removeAICheck(20000, pc.getAICheck());
-
-            login_Artiface.forIntensifyArmor(pc);
-
-            if (ConfigFreeKill.FREE_FIGHT_SWITCH) { // src015
+            try {
+                // 只有 polyId > 0 才自動變身
+                if (pc.getLastPolyCardId() > 0) {
+                    int polyId = pc.getLastPolyCardId();
+                    int polyTime = 1800;
+                    L1PolyMorph.doPoly(pc, polyId, polyTime, L1PolyMorph.MORPH_BY_LOGIN);
+                }
+            } catch (Exception e) {
+                _log.error("登入時自動變身失敗", e);
+            }
+            pc.removeAICheck(20000, pc.getAICheck());// 刪除AI檢測
+            login_Artiface.forIntensifyArmor(pc);// 登入時裝備強化
+            if (ConfigFreeKill.FREE_FIGHT_SWITCH) { //隨機掃街啟動開關
                 StringBuilder sbr = CheckFightTimeController.getInstance().getMapList2();
                 if (sbr != null) {
                     pc.sendPackets(new S_ServerMessage(sbr.toString()));
@@ -1531,7 +1538,7 @@ public class C_LoginToServer extends ClientBasePacket {
                 pc.sendPackets(new S_MatizCloudia(1, 0));
             }
             if (pc.getMapId() == 7783) {
-              pc.sendPackets(new S_TestPacket(S_TestPacket.a, 7072, 3810, "00 ff ff"));// 屏幕顯示歡迎來到天堂世界
+                pc.sendPackets(new S_TestPacket(S_TestPacket.a, 7072, 3810, "00 ff ff"));// 屏幕顯示歡迎來到天堂世界
             }
 //            pc.sendPackets(new S_SystemMessage("歡迎來到【" + Config.SERVERNAME + "】遊戲世界", 19));
 

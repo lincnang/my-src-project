@@ -27,8 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.lineage.server.model.skill.L1SkillId.*;
@@ -42,6 +41,10 @@ public class L1SkillStop {
     private static final Log _log = LogFactory.getLog(L1SkillStop.class);
     // 強制踢除
     private static ClientExecutor _client;
+    private static final Set<Integer> UI_REFRESH_SKILL_IDS = new HashSet<>(Arrays.asList(
+            SHAPE_CHANGE, POLYBOOKBUFF, TOP10BUFF, LV90BUFF
+    ));
+
 
     public static void broadcastPacketWorld(final ServerBasePacket packet) { // 特效驗證系統
         try {
@@ -1613,11 +1616,18 @@ public class L1SkillStop {
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
+
+        //變身卷軸UI一直跳動的問題
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
             sendStopMessage(pc, skillId);
-            pc.sendPackets(new S_OwnCharStatus(pc));
+
+            // 只針對「變身buff」這類才刷新UI
+            if (UI_REFRESH_SKILL_IDS.contains(skillId)) {
+                pc.sendPackets(new S_OwnCharStatus(pc));
+            }
         }
+
     }
 
     private static void sendStopMessage(L1PcInstance charaPc, int skillid) {

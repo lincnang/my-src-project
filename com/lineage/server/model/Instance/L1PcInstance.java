@@ -1117,6 +1117,7 @@ public class L1PcInstance extends L1Character { // src015
     /////////////////////////////////////娃娃招喚紀錄//////////////////////////////////////
     private int _lastDollId = 0;
     private int _lastHolyId2 = 0;
+    private int _lastPolyCardId = 0;
     /////////////////////////////////////簽到紀錄//////////////////////////////////////
     private int _day_signature = 0;
     private Timestamp _day_signature_time;
@@ -3078,15 +3079,15 @@ public class L1PcInstance extends L1Character { // src015
      * 刺客增加判斷
      */
 
-     private boolean _assassinAttackNow = false;
+    private boolean _assassinAttackNow = false;
 
-     public void setAssassinAttackNow(boolean value) {
-     _assassinAttackNow = value;
-     }
+    public void setAssassinAttackNow(boolean value) {
+        _assassinAttackNow = value;
+    }
 
-     public boolean isAssassinAttackNow() {
-     return _assassinAttackNow;
-     }
+    public boolean isAssassinAttackNow() {
+        return _assassinAttackNow;
+    }
 
     public void delInvis() {
         if (isDarkelf() && hasPassiveAssassin() && isAssassinAttackNow()) {
@@ -3444,7 +3445,7 @@ public class L1PcInstance extends L1Character { // src015
                     }
                 }
             }
-                    if (getInventory().checkEquipped(145) || getInventory().checkEquipped(149)) {// 狂斧、牛人斧
+            if (getInventory().checkEquipped(145) || getInventory().checkEquipped(149)) {// 狂斧、牛人斧
                 damage *= 1.5D;
             }
             if (this.hasSkillEffect(219)) {// 化身
@@ -12592,21 +12593,7 @@ public class L1PcInstance extends L1Character { // src015
     }
 
     /////////////////////////////////////娃娃招喚紀錄結束//////////////////////////////////
-    public int getWyjilvjia() {
-        return _wyjiajilv;
-    }
 
-    public void setWyjilvjia(int i) {
-        _wyjiajilv = i;
-    }
-
-    public int getWyjilvjian() {
-        return _wyjianjilv;
-    }
-
-    public void setWyjilvjian(int i) {
-        _wyjianjilv = i;
-    }
 
     public int getLastDollId() {
         return _lastDollId;
@@ -12615,7 +12602,12 @@ public class L1PcInstance extends L1Character { // src015
     public void setLastDollId(int i) {
         _lastDollId = i;
     }
-
+    public int getLastPolyCardId() {
+        return _lastPolyCardId;
+    }
+    public void setLastPolyCardId(int lastPolyCardId) {
+        _lastPolyCardId = lastPolyCardId;
+    }
     /////////////////////////////////////簽到紀錄結束//////////////////////////////////
     public int getLastHolyId2() {
         return _lastHolyId2;
@@ -12704,10 +12696,10 @@ public class L1PcInstance extends L1Character { // src015
     public void setpolyrun5(int i) {
         _polyrun5 = i;
     }
-//----------------------------聖物合成----------------------------------------------//
-public int getHolyCount() {
-    return _holyCount;
-}
+    //----------------------------聖物合成----------------------------------------------//
+    public int getHolyCount() {
+        return _holyCount;
+    }
     public void setHolyCount(int count) {
         _holyCount = count;
     }

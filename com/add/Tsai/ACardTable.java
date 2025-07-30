@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 卡片能力鑲嵌
@@ -136,6 +135,14 @@ public class ACardTable {
         return count;
     }
 
+    public ACard getCardByPolyId(int polyId) {
+        for (ACard card : _cardIndex.values()) {
+            if (card.getPolyId() == polyId) {
+                return card;
+            }
+        }
+        return null;
+    }
 
     public ACard getCard(final int id) {
         return _cardIndex.get(id);

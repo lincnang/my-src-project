@@ -186,7 +186,7 @@ public class SkillSoundItemAll extends TimerTask {
                                 _pc.getInventory().consumeItem(49138, 1);
                                 _pc.sendPacketsAll(new S_Liquor(_pc.getId(), 0x08));// 巧克力蛋糕效果(速度增加1.15)
                                 _pc.sendPackets(new S_ServerMessage(1065));// 將發生神秘的奇跡力量。
-                                _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 8031));
+                                _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 751));
                                 _pc.setSkillEffect(STATUS_BRAVE3, 600 * 1000);
                             }
                         }

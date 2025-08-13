@@ -199,7 +199,6 @@ public class Server {
             CherOpen.load();//讀取職業開放
             ConfigDoll.load();
             ConfigMagic.load();
-            //			ConfigWenyang.load();
         } catch (final Exception e) {
             System.out.println("CONFIG 資料加載異常!" + e);
             error = true;
@@ -280,7 +279,6 @@ public class Server {
             //			ConfigSkill.load();
             //			Config_Reply.load();
             ConfigGuardTower.load();//防衛塔
-            //			ConfigWenyang.load();
         } catch (Exception e) {
             System.out.println("CONFIG 資料加載異常!" + e);
         }

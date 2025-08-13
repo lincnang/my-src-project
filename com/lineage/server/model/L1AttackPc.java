@@ -2864,6 +2864,11 @@ public class L1AttackPc extends L1AttackMode {
                         attackgfx = 13396;
                         break;
                 }
+                if (_weaponType2 == 11 && _attackType == 2) {
+                    // 送攻擊動作封包，type=2代表暴擊
+                    _pc.sendPacketsAll(new S_AttackPacketPc(_pc, _target, 4, _damage));
+                    return;
+                }
                 if (_pc.getTempCharGfx() >= 13715 && _pc.getTempCharGfx() <= 13745) {// TOP10變身
                     if (attackgfx > 0 && attackgfx != 13396) {// 空手以及奇古獸以外的攻擊特效
                         if (_pc.getTempCharGfx() != 13731 && _pc.getTempCharGfx() != 13733) { // 不是真黑妖外型

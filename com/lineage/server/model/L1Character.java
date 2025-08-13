@@ -1264,7 +1264,14 @@ public class L1Character extends L1Object {
     }
 
     public short getStr() {
-        return _str;
+        short str = _str; // 先以 baseStr 當 short
+        if (this instanceof L1PcInstance) {
+            L1PcInstance pc = (L1PcInstance) this;
+            if (pc.hasPassiveStrPlus3()) {
+                str += 3; // 黑妖技能 (暗黑組合) 被動技能 STR+3 Dex+3
+            }
+        }
+        return str;
     }
 
     public void setStr(final int i) {
@@ -1319,7 +1326,14 @@ public class L1Character extends L1Object {
     }
 
     public short getDex() {
-        return _dex;
+        short dex = _dex; // 先以 baseStr 當 short
+        if (this instanceof L1PcInstance) {
+            L1PcInstance pc = (L1PcInstance) this;
+            if (pc.hasPassiveStrPlus3()) {
+                dex += 3; // 黑妖技能 (暗黑組合) 被動技能 STR+3 Dex+3
+            }
+        }
+        return dex;
     }
 
     public void setDex(int i) {

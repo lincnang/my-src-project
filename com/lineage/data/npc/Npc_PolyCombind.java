@@ -9,10 +9,7 @@ import com.lineage.server.datatables.polyHeChengTable;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.serverpackets.S_BlueMessage;
-import com.lineage.server.serverpackets.S_NPCTalkReturn;
-import com.lineage.server.serverpackets.S_Sound;
-import com.lineage.server.serverpackets.S_SystemMessage;
+import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1polyHeCheng;
 import com.lineage.server.world.World;
 
@@ -265,40 +262,72 @@ public class Npc_PolyCombind extends NpcExecutor {
             }
         } catch (Exception ignored) {}
 
-        // 合成結果
+        // ===== 合成結果 =====
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             // 成功
             final L1ItemInstance item = ItemTable.get().createItem(newpoly);
+            if (item == null || item.getItem() == null) {
+                pc.sendPackets(new S_SystemMessage("合成成功，但道具模板不存在（itemId=" + newpoly + "）。請聯絡管理員。"));
+                return;
+            }
+            final int itemId = item.getItem().getItemId();
+            final String newName = item.getLogName();
             final StringBuilder stringBuilder = new StringBuilder();
-            final L1polyHeCheng card1 = polyHeChengTable.getInstance().getTemplate(item.getItem().getItemId());
+            // 安全組 msg（給成功 HTML 用）
+            final L1polyHeCheng card1 = polyHeChengTable.getInstance().getTemplate(itemId);
             if (card1 != null) {
                 stringBuilder.append(card1.getGfxid()).append(",");
                 if (card1.getNot() != 0) {
                     World.get().broadcastPacketToAll(
-                            new S_BlueMessage(166, "\\f=恭喜玩家\\fN【" + pc.getName() + "】\\f=合成了變身卡\\fN【" + item.getLogName() + "】"));
+                            new S_SystemMessage("【公告】玩家 " + pc.getName() + " 成功合成了變身卡「" + newName + "」!")
+                    );
                 }
             }
             final String[] msg = stringBuilder.toString().split(",");
             item.setIdentified(true);
             pc.getInventory().storeItem(item);
             pc.sendPacketsX8(new S_Sound(20360));
-            if (isPlayAnimation)
+            if (isPlayAnimation) {
                 pc.sendPackets(new S_NPCTalkReturn(pc, "wwhccg", msg));
-            pc.sendPackets(new S_SystemMessage("恭喜你合成了" + item.getLogName()));
+            }
+            pc.sendPackets(new S_SystemMessage("恭喜你合成了" + newName));
+            pc.sendPackets(new S_PacketBoxGree(15));
         } else {
             // 失敗返還隨機卡
             pc.sendPackets(new S_SystemMessage("合成變身卡失敗了。"));
+            pc.sendPackets(new S_PacketBoxGree(16));
+            if (consumeList.isEmpty()) {
+                return;
+            }
             final ItemConsume ic = consumeList.get(ThreadLocalRandom.current().nextInt(consumeList.size()));
-            final L1ItemInstance item = ItemTable.get().createItem(ic.itemInstance.getItemId());
-            final StringBuilder stringBuilder = new StringBuilder();
+            if (ic == null || ic.itemInstance == null) {
+                return;
+            }
+
+            final int backId = ic.itemInstance.getItemId();
+            final L1ItemInstance item = ItemTable.get().createItem(backId);
+            if (item == null || item.getItem() == null) {
+                pc.sendPackets(new S_SystemMessage("返還物品模板不存在（itemId=" + backId + "）。"));
+                return;
+            }
+
+            // 安全組 msg（給失敗 HTML 用）
+            String[] msg;
             final L1polyHeCheng card1 = polyHeChengTable.getInstance().getTemplate(item.getItem().getItemId());
-            if (card1 != null) stringBuilder.append(card1.getGfxid()).append(",");
-            final String[] msg = stringBuilder.toString().split(",");
+            if (card1 != null) {
+                String gfxStr = String.valueOf(card1.getGfxid());
+                msg = (gfxStr != null && !gfxStr.isEmpty() && !"0".equals(gfxStr)) ? new String[]{ gfxStr } : new String[0];
+            } else {
+                msg = new String[0];
+            }
+
             item.setIdentified(true);
             pc.getInventory().storeItem(item);
+
             pc.sendPacketsX8(new S_Sound(20468));
-            if (isPlayAnimation)
+            if (isPlayAnimation) {
                 pc.sendPackets(new S_NPCTalkReturn(pc, "wwhcsb", msg));
+            }
             pc.sendPackets(new S_SystemMessage("很遺憾合成失敗返還" + item.getLogName()));
         }
     }

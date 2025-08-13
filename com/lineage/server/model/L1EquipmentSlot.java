@@ -24,9 +24,9 @@ import static com.lineage.server.model.skill.L1SkillId.*;
 
 public class L1EquipmentSlot {  //src039
     public static final Log _log = LogFactory.getLog(L1EquipmentSlot.class);
-    private L1PcInstance _owner;
-    private ArrayList<ArmorSet> _currentArmorSet;
-    private ArrayList<L1ItemInstance> _armors;
+    private final L1PcInstance _owner;
+    private final ArrayList<ArmorSet> _currentArmorSet;
+    private final ArrayList<L1ItemInstance> _armors;
     private L1ItemInstance _weapon;
 
     public L1EquipmentSlot(L1PcInstance owner) {
@@ -278,7 +278,7 @@ public class L1EquipmentSlot {  //src039
                     armor.greater(_owner, true);
                 }
                 JiezEnchant AE_List = JiezEnchant.get().get(item.getItemId(), armor.getEnchantLevel() - item.get_safeenchant());
-                if (AE_List != null && item.get_safeenchant() >= 0/**安定值-1 沒效果*/) {
+                if (AE_List != null && item.get_safeenchant() >= 0/*安定值-1 沒效果*/) {
                     _owner.addStr(AE_List.getStr());
                     _owner.addDex(AE_List.getDex());
                     _owner.addCon(AE_List.getCon());
@@ -298,7 +298,7 @@ public class L1EquipmentSlot {  //src039
 				}*/
                 }
                 JiezEnchant AE_List2 = JiezEnchant.get().get2(armor.getEnchantLevel() - item.get_safeenchant());
-                if (AE_List2 != null && item.get_safeenchant() >= 0/**安定值-1 沒效果*/) {
+                if (AE_List2 != null && item.get_safeenchant() >= 0/*安定值-1 沒效果*/) {
                     _owner.addStr(AE_List2.getStr());
                     _owner.addDex(AE_List2.getDex());
                     _owner.addCon(AE_List2.getCon());
@@ -549,7 +549,7 @@ public class L1EquipmentSlot {  //src039
                     armor.greater(_owner, false);
                 }
                 JiezEnchant AE_List = JiezEnchant.get().get(item.getItemId(), armor.getEnchantLevel() - item.get_safeenchant());
-                if (AE_List != null && item.get_safeenchant() >= 0/**安定值-1 沒效果*/) {
+                if (AE_List != null && item.get_safeenchant() >= 0/*安定值-1 沒效果*/) {
                     _owner.addStr(-AE_List.getStr());
                     _owner.addDex(-AE_List.getDex());
                     _owner.addCon(-AE_List.getCon());
@@ -562,7 +562,7 @@ public class L1EquipmentSlot {  //src039
                     _owner.addDamageReductionByArmor(-AE_List.getDmgR());
                 }
                 JiezEnchant AE_List2 = JiezEnchant.get().get2(armor.getEnchantLevel() - item.get_safeenchant());
-                if (AE_List2 != null && item.get_safeenchant() >= 0/**安定值-1 沒效果*/) {
+                if (AE_List2 != null && item.get_safeenchant() >= 0/*安定值-1 沒效果*/) {
                     _owner.addStr(-AE_List2.getStr());
                     _owner.addDex(-AE_List2.getDex());
                     _owner.addCon(-AE_List2.getCon());

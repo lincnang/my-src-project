@@ -7,6 +7,7 @@ import com.lineage.data.executor.NpcExecutor;
 import com.lineage.server.datatables.ItemTable;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.serverpackets.*;
+import com.lineage.server.world.World;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -277,22 +278,23 @@ public class Npc_DollCombind extends NpcExecutor {
                 pc.setDollCount2(0);
                 pc.setDollCount3(0);
                 pc.setDollCount4(0);
-                pc.setDollrun2(0);
-                pc.setDollrun3(0);
-                pc.setDollrun4(0);
-                pc.setDollrun5(0);
+//                pc.setDollrun2(0);
+//                pc.setDollrun3(0);
+//                pc.setDollrun4(0);
+//                pc.setDollrun5(0);
 
                 if (ThreadLocalRandom.current().nextInt(100) < chance) { // 合成成功
                     final L1ItemInstance item = ItemTable.get().createItem(newdoll);
                     int itemId = item.getItem().getItemId();
+                    final String newName = item.getLogName();
                     final StringBuilder stringBuilder = new StringBuilder();
                     final com.lineage.server.templates.L1DollHeCheng card1 =
                             com.lineage.server.datatables.DollHeChengTable.getInstance().getTemplate(itemId);
                     if (card1 != null) {
                         stringBuilder.append(card1.getGfxid()).append(",");
                         if (card1.getNot() != 0) {
-                            com.lineage.server.world.World.get().broadcastPacketToAll(
-                                    new S_BlueMessage(166, "\\f=恭喜玩家\\fN【" + pc.getName() + "】\\f=合成了娃娃\\fN【" + item.getLogName() + "】")
+                            World.get().broadcastPacketToAll(
+                                    new S_SystemMessage("【公告】玩家 " + pc.getName() + " 成功合成了娃娃卡「" + newName + "」!")
                             );
                         }
                     }

@@ -4104,24 +4104,9 @@ public class L1PcInstance extends L1Character { // src015
         _baseStr = i;
     }
 
-    public short getStr() {
-        short str = (short) _baseStr; // 先以 baseStr 當 short
-        if (hasPassiveStrPlus3()) {
-            str += 3;
-        }
-        return str;
-    }
-    public short getDex() {
-        short dex = (short) _baseDex;
-        if (hasPassiveStrPlus3()) { // 同理，敏捷也+3
-            dex += 3;
-        }
-        return dex;
-    }
     /**
      * 黑妖技能 (暗黑組合) 被動技能 STR+3 Dex+3
      */
-
     public boolean hasPassiveStrPlus3() {
         return com.lineage.server.datatables.lock.CharSkillReading.get()
                 .spellCheck(this.getId(), L1SkillId.STR_PLUS3_PASSIVE);

@@ -1157,100 +1157,103 @@ public class L1PcInventory extends L1Inventory {
     public void CheckType(final L1PcInstance pc, final L1ItemInstance item, final boolean isEq) {
         final L1Item temp = item.getItem();
         int type = 0;
-        if (temp.getType2() == 1) {
-            type = 9;
-        } else if (temp.getType2() == 2) {
-            if (temp.getType() >= 1 && temp.getType() <= 4) {
-                type = temp.getType();
-            } else if (temp.getType() == 5 || temp.getType() == 6) {
-                type = temp.getType() == 5 ? 7 : 6;
-            } else if (temp.getType() == 7 || temp.getType() == 13) {
-                type = 8;
-            } else if (temp.getType() == 8 || temp.getType() == 10) {
-                type = temp.getType() == 8 ? 11 : 12;
-            } else if (temp.getType() == 15) {
-                type = 15;
-            } else if (temp.getType() == 17) {
-                type = 16;
-            } else if (temp.getType() == 18) {
-                type = 18;
-            } else if (temp.getType() == 23) {
-                type = 27;
-            } else if (temp.getType() == 16) {
-                type = 5;
-            } else if (temp.getType() == 9) {
-                if (!isEq) {
-                    for (int i = 0; i < 4; i++) {
-                        if (_RingList.get(i) != null && _RingList.get(i) == item) {
-                            _RingList.remove(i);
-                            type = 19 + i;
-                            break;
+        switch (temp.getType2()) {
+            case 1:
+                type = 9;
+                break;
+            case 2:
+                if (temp.getType() >= 1 && temp.getType() <= 4) {
+                    type = temp.getType();
+                } else if (temp.getType() == 5 || temp.getType() == 6) {
+                    type = temp.getType() == 5 ? 7 : 6;
+                } else if (temp.getType() == 7 || temp.getType() == 13) {
+                    type = 8;
+                } else if (temp.getType() == 8 || temp.getType() == 10) {
+                    type = temp.getType() == 8 ? 11 : 12;
+                } else if (temp.getType() == 15) {
+                    type = 15;
+                } else if (temp.getType() == 17) {
+                    type = 16;
+                } else if (temp.getType() == 18) {
+                    type = 18;
+                } else if (temp.getType() == 23) {
+                    type = 27;
+                } else if (temp.getType() == 16) {
+                    type = 5;
+                } else if (temp.getType() == 9) {
+                    if (!isEq) {
+                        for (int i = 0; i < 4; i++) {
+                            if (_RingList.get(i) != null && _RingList.get(i) == item) {
+                                _RingList.remove(i);
+                                type = 19 + i;
+                                break;
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < 4; i++) {
+                            if (_RingList.get(i) == null) {
+                                _RingList.put(i, item);
+                                type = 19 + i;
+                                break;
+                            }
+                        }
+                        for (int i = 0; i < 4; i++) {
+                            if (_RingList.get(i) != null && _RingList.get(i) == item) {
+                                type = 19 + i;
+                                break;
+                            }
                         }
                     }
-                } else {
-                    for (int i = 0; i < 4; i++) {
-                        if (_RingList.get(i) == null) {
-                            _RingList.put(i, item);
-                            type = 19 + i;
-                            break;
+                } else if (temp.getType() == 12) {
+                    if (isEq) {
+                        for (int i = 0; i < 2; i++) {
+                            if (_EarringList.get(i) == null) {
+                                _EarringList.put(i, item);
+                                type = 13;
+                                if (i == 1) {
+                                    type += 13;
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < 2; i++) {
+                            if (_EarringList.get(i) != null && _EarringList.get(i) == item) {
+                                _EarringList.remove(i);
+                                type = 13;
+                                if (i == 1) {
+                                    type += 13;
+                                }
+                                break;
+                            }
                         }
                     }
-                    for (int i = 0; i < 4; i++) {
-                        if (_RingList.get(i) != null && _RingList.get(i) == item) {
-                            type = 19 + i;
-                            break;
+                } else if (temp.getType() == 14) {
+                    if (isEq) {
+                        for (int i = 0; i < 2; i++) {
+                            if (_RuneList.get(i) == null) {
+                                _RuneList.put(i, item);
+                                type = 23;
+                                if (i == 1) {
+                                    type += 4;
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < 2; i++) {
+                            if (_RuneList.get(i) != null && _RuneList.get(i) == item) {
+                                _RuneList.remove(i);
+                                type = 23;
+                                if (i == 1) {
+                                    type += 4;
+                                }
+                                break;
+                            }
                         }
                     }
                 }
-            } else if (temp.getType() == 12) {
-                if (isEq) {
-                    for (int i = 0; i < 2; i++) {
-                        if (_EarringList.get(i) == null) {
-                            _EarringList.put(i, item);
-                            type = 13;
-                            if (i == 1) {
-                                type += 13;
-                            }
-                            break;
-                        }
-                    }
-                } else {
-                    for (int i = 0; i < 2; i++) {
-                        if (_EarringList.get(i) != null && _EarringList.get(i) == item) {
-                            _EarringList.remove(i);
-                            type = 13;
-                            if (i == 1) {
-                                type += 13;
-                            }
-                            break;
-                        }
-                    }
-                }
-            } else if (temp.getType() == 14) {
-                if (isEq) {
-                    for (int i = 0; i < 2; i++) {
-                        if (_RuneList.get(i) == null) {
-                            _RuneList.put(i, item);
-                            type = 23;
-                            if (i == 1) {
-                                type += 4;
-                            }
-                            break;
-                        }
-                    }
-                } else {
-                    for (int i = 0; i < 2; i++) {
-                        if (_RuneList.get(i) != null && _RuneList.get(i) == item) {
-                            _RuneList.remove(i);
-                            type = 23;
-                            if (i == 1) {
-                                type += 4;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
+                break;
         }
         pc.sendPackets(new S_EquipmentSlot(item.getId(), type, isEq));
     }

@@ -78,7 +78,7 @@ public class AncientSecretPotion extends ItemExecutor {
             pc.sendPackets(new S_SPMR(pc)); // 魔攻魔防更新
             pc.sendPacketsAll(new S_Liquor(pc.getId(), 0x08)); // 巧克力蛋糕效果(速度增加1.15)
             pc.sendPackets(new S_ServerMessage(1065)); // 1065:將發生神秘的奇跡力量。
-            pc.sendPacketsX8(new S_SkillSound(pc.getId(), 8031));
+            pc.sendPacketsX8(new S_SkillSound(pc.getId(), 751));
             pc.setSkillEffect(Ancient_Secretn, 600 * 1000);
             pc.setSkillEffect(STATUS_BRAVE3, 600 * 1000);
         }

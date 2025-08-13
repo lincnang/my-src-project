@@ -18,16 +18,11 @@ public class S_OwnCharStatus extends ServerBasePacket {
     public S_OwnCharStatus(final L1PcInstance pc) {
         int time = L1GameTimeClock.getInstance().currentTime().getSeconds();
         time = time - (time % 300);
-        // _log.warning((new
-        // StringBuilder()).append("送信時間:").append(i).toString());
+        // _log.warning((new StringBuilder()).append("送信時間:").append(i).toString());
         writeC(S_STATUS);
         writeD(pc.getId());
         //src039
-        if (pc.getLevel() < 1) {
-            writeC(1);
-        } else {
-            writeC(Math.min(pc.getLevel(), 200));
-        }
+        writeC(pc.getLevel() < 1 ? 1 : Math.min(pc.getLevel(), 200));
         writeExp(pc.getExp());
         writeC(pc.getStr());
         writeC(pc.getInt());

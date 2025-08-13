@@ -8,8 +8,8 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 public class L1GameTime {
-    // 2003年7月3日 12:00(UTC)が1月1日00:00
-    private static final long BASE_TIME_IN_MILLIS_REAL = 1720231200000L;
+    // 2025年01月01日 12:00(UTC)が1月1日00:00
+    private static final long BASE_TIME_IN_MILLIS_REAL = 1735657200000L;// 1720231200000L
     private final int _time;
     private final Calendar _calendar;
 

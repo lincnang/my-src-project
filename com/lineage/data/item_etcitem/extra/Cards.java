@@ -4,7 +4,6 @@ import com.add.Tsai.*;
 import com.lineage.data.executor.ItemExecutor;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.serverpackets.S_NPCTalkReturn;
 import com.lineage.server.serverpackets.S_SkillSound;
 import com.lineage.server.serverpackets.S_SystemMessage;
 
@@ -81,10 +80,12 @@ public class Cards extends ItemExecutor {
                 }
             }
         }
-        final String[] msg = stringBuilder.toString().split(",");//從0開始分裂以逗號為單位
-        if (group > 0) {
-            pc.sendPackets(new S_NPCTalkReturn(pc, getBookHtml(group), msg));
-        }
+
+        //自動開吃卡後開啟卡冊邏輯
+//        final String[] msg = stringBuilder.toString().split(",");//從0開始分裂以逗號為單位
+////        if (group > 0) {
+////            pc.sendPackets(new S_NPCTalkReturn(pc, getBookHtml(group), msg));
+////        }
         if (ok) {
             for (int i = 0; i <= CardSetTable.get().CardCardSize(); i++) {//檢查變身組合DB資料
                 final CardPolySet cards = CardSetTable.get().getCard(i);

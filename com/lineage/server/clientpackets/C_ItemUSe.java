@@ -36,8 +36,26 @@ import static com.lineage.server.model.skill.L1SkillId.*;
 public class C_ItemUSe extends ClientBasePacket {
     public static final int[] hextable = {0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f, 0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3, 0xb4, 0xb5, 0xb6, 0xb7, 0xb8, 0xb9, 0xba, 0xbb, 0xbc, 0xbd, 0xbe, 0xbf, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7, 0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd, 0xde, 0xdf, 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xef, 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff};
     private static final Log _log = LogFactory.getLog(C_ItemUSe.class);
+    private int readHU() { return this.readH() & 0xFFFF; }
 
-    public void start(byte[] decrypt, ClientExecutor client) {//src029
+    /** 粗略判斷座標是否合理 */
+    private boolean plausibleXY(int v) { return v > 0 && v < 60000; }
+
+    /** 從 a,b,c 三個 ushort 中，找出「同圖可用的 (x,y)」，回傳 null 表示找不到 */
+    private int[] pickSameMapXY(L1PcInstance pc, int a, int b, int c) {
+        final com.lineage.server.model.map.L1Map map = pc.getMap();
+        if (map == null) return null;
+        int[][] pairs = { {a,b}, {a,c}, {b,c} };
+        for (int[] p : pairs) {
+            int x = p[0], y = p[1];
+            if (plausibleXY(x) && plausibleXY(y) && map.isInMap(x, y)) {
+                // （可選）若有 isPassable(x,y) 可再加一層
+                return new int[]{ x, y };
+            }
+        }
+        return null;
+    }
+        public void start(byte[] decrypt, ClientExecutor client) {//src029
         try {
             read(decrypt);
             L1PcInstance pc = client.getActiveChar();
@@ -431,39 +449,41 @@ public class C_ItemUSe extends ClientBasePacket {
                         }
                         break;
                     case 6:// 瞬間移動卷軸
+                        // === 瞬間移動卷軸（一般） ===
                         if (!L1BuffUtil.getUseItemTeleport(pc)) {
                             pc.setTeleport(false);
                             pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
                             pc.sendPackets(new S_SystemMessage("雙腳被捆綁的狀態下無法瞬間移動。"));
                             return;
                         }
-                        if (!CheckUtil.getUseItem(pc)) {
+                        if (!CheckUtil.getUseItem(pc)) return;
+
+                        try {
+                            // 讀三個無號 short（DLL 的順序不可靠）
+                            int a = readHU(), b = readHU(), c = readHU();
+
+                            // 只做「同圖」判斷：從 a,b,c 中挑一對作為 (x,y)
+                            int[] xy = pickSameMapXY(pc, a, b, c);
+
+                            final int[] newData = new int[3];
+                            if (xy != null) {
+                                // 同圖瞬移：map = 當前圖、x=xy[0]、y=xy[1]
+                                newData[0] = pc.getMapId();
+                                newData[1] = xy[0];
+                                newData[2] = xy[1];
+                            } else {
+                                // 拿不到合理 XY => 交由伺服端「本圖隨機傳」
+                                newData[0] = -1; // 這三個值會讓 Move_Reel 走隨機分支
+                                newData[1] = -1;
+                                newData[2] = -1;
+                            }
+
+                            ItemClass.get().item(newData, pc, useItem);
+                            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
+                        } catch (final Exception e) {
                             return;
                         }
-                        if (isClass) {
-                            try {
-                                // 日版記憶座標
-                                int[] newData = new int[3];
-                                newData[0] = readH();
-                                newData[1] = readH();
-                                newData[2] = readH();
-                                ItemClass.get().item(newData, pc, useItem);
-                                pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
-                            } catch (final Exception e) {
-                                return;
-                            }
-                        }
-                        break;
-                    case 7:// 鑒定卷軸
-                        if (isClass) {
-                            try {
-                                final int[] newData = new int[1];
-                                newData[0] = this.readD();// 選取物件的OBJID
-                                ItemClass.get().item(newData, pc, useItem);
-                            } catch (final Exception e) {
-                                return;
-                            }
-                        }
+
                         break;
                     case 8:// 復活卷軸
                         if (isClass) {

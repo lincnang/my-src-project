@@ -1,6 +1,7 @@
 package com.lineage.server.model;
 
 import com.lineage.config.ConfigOther;
+import com.lineage.server.Controller.StrBonusManager;
 import com.lineage.server.IdFactoryNpc;
 import com.lineage.server.datatables.RewardAcTable;
 import com.lineage.server.model.Instance.*;
@@ -1277,6 +1278,11 @@ public class L1Character extends L1Object {
     public void setStr(final int i) {
         this._trueStr = (short) i;
         this._str = (short) RangeInt.ensure(i, 1, 254);
+        // ★ 力量最終值寫入後 → 只在玩家身上重套《能力力量設置》
+        if (this instanceof L1PcInstance) {
+            L1PcInstance pc = (L1PcInstance) this;
+            StrBonusManager.get().reapply(pc);
+        }
     }
 
     public void setS(final int i) {

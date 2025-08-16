@@ -29,7 +29,7 @@ public class AutoAttackUpdate {
     private static final int[] _auto_buy_item = {0,     // 尚未設定
             40010, // 治癒藥水
             40011, // 強力治癒藥水
-            40012, // 終極治癒藥水
+//            40012, // 終極治癒藥水
 
     };
     private static final int[] _auto_buy_item_adena = {0,     // 尚未設定
@@ -238,35 +238,6 @@ public class AutoAttackUpdate {
                         _pc.startPcAI();
                         _pc.sendPackets(new S_CloseList(_pc.getId()));
                     }
-                    /*
-                     * 变更AI线程
-                    if (_pc.getWeapon() == null) {
-                        _pc.sendPackets(new S_ServerMessage("\\fU手上並未裝備任何武器無法開始自動練功。"));
-                    } else {
-                        if (_pc.IsAuto()) {
-                            _pc.setIsAuto(false);
-                            _pc.setRestartAuto(0);
-                            _pc.setRestartAutoStartSec(0);
-                            if (_pc.IsDeathReturn()) {
-                                _pc.setDeathReturn(false);
-                            }
-                            L1Teleport.teleport(_pc, _pc.getX(), _pc.getY(), _pc.getMapId(), 5, true);
-                        } else {
-                            if (_pc.getLsRange() > 0) {
-                                _pc.setLsLocX(_pc.getX());
-                                _pc.setLsLocY(_pc.getY());
-                                _pc.setLsOpen(true);
-                            }
-                            _pc.setHH((int) ((_pc.getMaxHp() * _pc.getH()) * 0.01));
-                            _pc.setMM((int) ((_pc.getMaxMp() * _pc.getM()) * 0.01));
-                            _pc.setIsAuto(true);
-                            _pc.setRestartAuto(ThreadPoolSetNew.RESTART_AUTO);
-                            AutoAttack2020_1 auto = new AutoAttack2020_1(_pc);
-                            auto.begin();
-                        }
-                        _pc.sendPackets(new S_CloseList(_pc.getId()));
-                    }
-                    */
                     break;
                 case "Au_18":
                     MsgUpdate(_pc);

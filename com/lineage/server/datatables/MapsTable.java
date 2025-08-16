@@ -28,52 +28,67 @@ public final class MapsTable {
     }
 
     public void load() {
-        PerformanceTimer timer = new PerformanceTimer();
-        Connection con = null;
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
+        PerformanceTimer timer = new PerformanceTimer(); // 建立計時器，用來記錄讀取時間
+        Connection con = null; // 資料庫連線物件
+        PreparedStatement pstm = null; // 預處理 SQL 的物件
+        ResultSet rs = null; // 查詢結果集物件
         try {
-            con = DatabaseFactory.get().getConnection();
-            pstm = con.prepareStatement("SELECT * FROM `mapids`");
-            for (rs = pstm.executeQuery(); rs.next(); ) {//src015
-                MapData data = new MapData();
-                int mapId = rs.getInt("mapid");
+            con = DatabaseFactory.get().getConnection(); // 取得資料庫連線
+            pstm = con.prepareStatement("SELECT * FROM `mapids`"); // 準備 SQL 查詢，讀取 mapids 資料表
+            for (rs = pstm.executeQuery(); rs.next(); ) { // 執行查詢並逐筆讀取結果
+                MapData data = new MapData(); // 建立一個新的 MapData 物件，用來存放每一筆資料
+
+                // 從資料表中讀取各欄位並存入 data 物件
+                int mapId = rs.getInt("mapid");        // 地圖 ID
                 data.mapId = mapId;
-                data.locationname = rs.getString("locationname");
-                data.startX = rs.getInt("startX");
-                data.endX = rs.getInt("endX");
-                data.startY = rs.getInt("startY");
-                data.endY = rs.getInt("endY");
-                data.monster_amount = rs.getDouble("monster_amount");
-                data.dropRate = rs.getDouble("drop_rate");
-                data.isUnderwater = rs.getBoolean("underwater");
-                data.markable = rs.getBoolean("markable");
-                data.teleportable = rs.getBoolean("teleportable");
-                data.escapable = rs.getBoolean("escapable");
-                data.isUseResurrection = rs.getBoolean("resurrection");
-                data.isUsePainwand = rs.getBoolean("painwand");
-                data.isEnabledDeathPenalty = rs.getBoolean("penalty");
-                data.isTakePets = rs.getBoolean("take_pets");
-                data.isRecallPets = rs.getBoolean("recall_pets");
-                data.isUsableItem = rs.getBoolean("usable_item");
-                data.isUsableSkill = rs.getBoolean("usable_skill");
-                data.maptime = rs.getInt("maptime");
-                // 該地圖是否可擺設商店 by terry0412
-                data.isUsableShop = rs.getInt("usable_shop");
-                data.isAutoBot = rs.getBoolean("是否掛機");// 此地圖是否允許掛機
+                data.locationname = rs.getString("locationname"); // 地圖名稱
+                data.startX = rs.getInt("startX");     // X 起始座標
+                data.endX = rs.getInt("endX");         // X 結束座標
+                data.startY = rs.getInt("startY");     // Y 起始座標
+                data.endY = rs.getInt("endY");         // Y 結束座標
+                data.monster_amount = rs.getDouble("monster_amount"); // 怪物數量倍率
+                data.dropRate = rs.getDouble("drop_rate");           // 掉寶率倍率
+                data.isUnderwater = rs.getBoolean("underwater");     // 是否為水下地圖
+                data.markable = rs.getBoolean("markable");           // 是否允許記憶傳送點
+                data.teleportable = rs.getBoolean("teleportable");   // 是否允許使用傳送
+                data.escapable = rs.getBoolean("escapable");         // 是否允許使用回卷 (ESC)
+                data.isUseResurrection = rs.getBoolean("resurrection"); // 是否允許復活
+                data.isUsePainwand = rs.getBoolean("painwand");         // 是否允許使用痛苦魔杖
+                data.isEnabledDeathPenalty = rs.getBoolean("penalty");  // 是否啟用死亡懲罰
+                data.isTakePets = rs.getBoolean("take_pets");           // 是否允許帶寵物
+                data.isRecallPets = rs.getBoolean("recall_pets");       // 是否允許召回寵物
+                data.isUsableItem = rs.getBoolean("usable_item");       // 是否允許使用道具
+                data.isUsableSkill = rs.getBoolean("usable_skill");     // 是否允許使用技能
+                data.maptime = rs.getInt("maptime");                    // 地圖限制時間 (秒數)
+
+                // 自訂欄位：可否開商店
+                data.isUsableShop = rs.getInt("usable_shop"); // 是否允許開設商店 (int，可能代表不同模式)
+
+                // 自訂欄位：是否允許掛機
+                data.isAutoBot = rs.getBoolean("是否掛機"); // TRUE=允許掛機
+
+                // 自訂欄位：副本地圖 ID
                 data.CopyMapId = rs.getInt("CopyMapId");
+
+                // 自訂欄位：是否允許「穿雲劍」技能
                 data.chuanyunjian = rs.getBoolean("是否穿雲");
+
+                // 最後把讀取到的這筆地圖資料存入 _maps 集合
                 _maps.put(mapId, data);
             }
         } catch (SQLException e) {
+            // 發生 SQL 錯誤就記錄錯誤訊息
             _log.error(e.getLocalizedMessage(), e);
         } finally {
+            // 關閉資源，避免記憶體/連線洩漏
             SQLUtil.close(rs);
             SQLUtil.close(pstm);
             SQLUtil.close(con);
         }
+        // 印出載入完成訊息：地圖數量 + 耗時
         _log.info("讀取->地圖設置資料數量: " + _maps.size() + "(" + timer.get() + "ms)");
     }
+
 
     /**
      * 取回計時地圖最大可用時間(分)

@@ -6,7 +6,9 @@ import com.lineage.data.event.FeatureItemSet;
 import com.lineage.data.event.RedBlueSet;
 import com.lineage.data.event.SubItemSet;
 import com.lineage.server.ActionCodes;
+import com.lineage.server.Controller.PcCritRepo;
 import com.lineage.server.datatables.SkillEnhanceTable;
+import com.lineage.server.datatables.StrSettingTable;
 import com.lineage.server.datatables.lock.CharSkillReading;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.poison.L1DamagePoison;
@@ -231,6 +233,7 @@ public class L1AttackPc extends L1AttackMode {
         if (calcEvasion()) {
             return false;
         }
+        _hitRate += _pc.getHitup();
         if (_pc.hasSkillEffect(L1SkillId.ABSOLUTE_BLADE)) { // 騎士新技能 絕禦之刃
             if (_target.hasSkillEffect(L1SkillId.ABSOLUTE_BARRIER)) {
                 int chance = _pc.getLevel() - 79;
@@ -393,7 +396,7 @@ public class L1AttackPc extends L1AttackMode {
 
         hitRateFunc(); // 計算命中率（7.6新版公式）
         int pcHit = _hitRate; // 玩家命中率
-
+        _hitRate += _pc.getHitup();
         // 根據職業調整命中率（自定義倍率設定）
         if (_pc.isCrown()) {
             pcHit *= Config_Occupational_Damage.Other_To_isCrownnpc_Hit;
@@ -1297,6 +1300,7 @@ public class L1AttackPc extends L1AttackMode {
         _weaponTotalDamage = _weaponDamage + _weaponAddDmg + _weaponEnchant;
         double dmg = weaponDamage2(_weaponTotalDamage); // 屬性加成、道具加成、力量加成、初始加成計算
         dmg = pcDmgMode(dmg);// 其他增傷計算
+        dmg += _pc.getDmgup();
             //妖精被動鷹眼
             if (_pc.isElf() && _pc.isEagle()) {
             int baseChance = 10; // 基礎發動率為 10%
@@ -1889,11 +1893,20 @@ public class L1AttackPc extends L1AttackMode {
             //_targetPc.broadcastPacketAll(new S_SkillSound(_targetPc.getId(), 240));
             dmg = 0.0D;
         }
+        // 若各種減免後為 0 或以下 → 直接結束（維持原行為）
         if (dmg <= 0.0D) {
             _isHit = false;
             _drainHp = 0;
+            return 0;
         }
-        return (int) dmg;
+
+       // 先把 double → int（四捨五入），後續用整數避免 double→int 精度/編譯問題
+        int dmgInt = Math.max(0, (int) Math.round(dmg));
+
+        // ★ 最終一步：依《能力力量設置》判定爆擊（PcCritRepo 優先，查表後備）
+        dmgInt = applyStrengthTableCritForPcFinal(dmgInt);
+
+        return dmgInt;
     }
 
     private int c3_power() {
@@ -2059,6 +2072,7 @@ public class L1AttackPc extends L1AttackMode {
         _weaponTotalDamage += calcMaterialBlessDmg();// 武器材質、祝福狀態增傷計算
         double dmg = weaponDamage2(_weaponTotalDamage);// 屬性加成、道具加成、力量加成、初始加成計算
         dmg = pcDmgMode(dmg);// 其他增傷計算
+        dmg += _pc.getDmgup();
         dmg += _pc.getDamageIncreasePVE(); // PVE打怪攻擊力加成
         if (_pc.isElf() && _pc.isEagle()) {
             int baseChance = 10; // 基礎發動率為 10%
@@ -2217,12 +2231,19 @@ public class L1AttackPc extends L1AttackMode {
                 && _pc.getReincarnationSkill()[0] > 0 && _pc.isFoeSlayer() && RandomArrayList.getInc(100, 1) > 100 - _pc.getReincarnationSkill()[0]) { // 龍騎天賦技能屠宰擊殺
             dmg += 200;
         }
-        if (dmg <= 0.0D) {
+        if (dmg <= 0.0D) { // 維持原行為
             _isHit = false;
             _drainHp = 0;
+            return 0;
         }
-        //System.out.println("TEST final:"+dmg);
-        return (int) dmg;
+
+// double → int 收口（四捨五入）
+        int dmgInt = Math.max(0, (int) Math.round(dmg));
+
+// ★ 最終套用《能力力量設置》的爆擊（PcCritRepo 優先，查表後備）
+        dmgInt = applyStrengthTableCritForPcFinal(dmgInt);
+
+        return dmgInt;
     }
 
     /**
@@ -2337,7 +2358,44 @@ public class L1AttackPc extends L1AttackMode {
         }
         return dmg;
     }
+    /**
+     * 依《能力力量設置》處理「PC端最終爆擊」。
+     * 優先使用 PcCritRepo（StrBonusManager 設定），沒有就後備直接查表。
+     * @param dmgInt 目前整數傷害
+     * @return 套用爆擊後的整數傷害
+     */
+    private int applyStrengthTableCritForPcFinal(int dmgInt) {
+        int chance = 0, percent = 0, fx = 0;
 
+        // 1) 先從暫存倉拿（登入/裝備/洗點/BUFF 變動後，StrBonusManager 已經寫進來）
+        PcCritRepo.Crit c = PcCritRepo.get(_pc.getId());
+        if (c != null) {
+            chance  = c.chance;
+            percent = c.percent;
+            fx      = c.fx;
+        } else {
+            // 2) 後備：直接依當前 STR 查表（避免極端情況沒 reapply 也能吃到）
+            final StrSetting st = StrSettingTable.getInstance().findByStr(_pc.getStr());
+
+            if (st != null) {
+                chance  = st.critChance;
+                percent = st.critPercent;
+                fx      = st.critFx;
+            }
+        }
+
+        if (chance > 0 && ThreadLocalRandom.current().nextInt(100) < chance) {
+            // 用整數算法避免 double→int 的精度/編譯問題：dmg += dmg * percent / 100
+            dmgInt = dmgInt + (dmgInt * percent) / 100;
+
+            // 特效：預設播在攻擊者身上（要改播在目標就把 _pc.getId() 換成 _target.getId()）
+            if (fx > 0) {
+                _pc.sendPackets(new S_SkillSound(_pc.getId(), fx));
+                _pc.broadcastPacketX8(new S_SkillSound(_pc.getId(), fx));
+            }
+        }
+        return dmgInt;
+    }
     /**
      * 魔法武器傷害計算
      */

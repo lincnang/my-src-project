@@ -61,29 +61,12 @@ public class Dissolution_weapon extends ItemExecutor {
                 login_Artiface1.forIntensifyArmor(pc, 1);
                 pc.sendPackets(new S_SystemMessage("目前武器煉化階級 : " + pc.get_other().getLv_Artifact()));
                 pc.sendPackets(new S_SystemMessage("目前武器煉化值 : " + pc.get_other().getArtifact()));
-			/*煉化武器(""
-					//+ "(" + pc.getNetConnection().getIp() + ")"
-					+"玩家"
-					+ ":【 " + pc.getName() + " 】 "
-					+ "煉化分解" 
-					+ "【 + " + item.getEnchantLevel()
-					+ " " + item.getName()
-					+ "】- 階級:[" + pc.get_other().getLv_Artifact()
-					+ "】- 分解值:[" + pc.get_other().getArtifact()
-					+ "]時間:" + "(" + new Timestamp(System.currentTimeMillis()) + ")。");*/
+
                 WriteLogTxt.Recording("煉化武器紀錄", "玩家" + ":【 " + pc.getName() + " 】 " + "煉化分解" + "【 + " + item.getEnchantLevel() + " " + item.getName() + "】- 階級:[" + pc.get_other().getLv_Artifact() + "】- 分解值:[" + pc.get_other().getArtifact() + "].");
             }
             pc.getInventory().removeItem(item, 1);
             pc.getInventory().removeItem(resolvent, 1);
         }
     }
-/*public static void 煉化武器(String info) {
-	try {
-		BufferedWriter out = new BufferedWriter(new FileWriter("./物品操作日誌/[記錄]-煉化武器.txt", true));
-		out.write(info + "\r\n");
-		out.close();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-}*/
+
 }

@@ -1869,42 +1869,65 @@ public class L1SkillUse {
                         continue;// 略過以下處理
                     }
                 }
-                if (_skillId == TELEPORT) { // 指定傳送
-                    final L1PcInstance pc = (L1PcInstance) cha;
-                    boolean isTeleport = pc.getMap().isTeleportable();// 地圖設定是否可順移
-                    int mapid = pc.getMapId();
-                    if (pc.getInventory().checkItem(84041, 1) && mapid == 3301) {// 傲慢之塔支配傳送符(1樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84042, 1) && mapid == 3302) {// 傲慢之塔支配傳送符(2樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84043, 1) && mapid == 3303) {// 傲慢之塔支配傳送符(3樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84044, 1) && mapid == 3304) {// 傲慢之塔支配傳送符(4樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84045, 1) && mapid == 3305) {// 傲慢之塔支配傳送符(5樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84046, 1) && mapid == 3306) {// 傲慢之塔支配傳送符(6樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84047, 1) && mapid == 3307) {// 傲慢之塔支配傳送符(7樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84048, 1) && mapid == 3308) {// 傲慢之塔支配傳送符(8樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84049, 1) && mapid == 3309) {// 傲慢之塔支配傳送符(9樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84050, 1) && mapid == 3310) {// 傲慢之塔支配傳送符(10樓)
-                        isTeleport = true;
-                    } else if (pc.getInventory().checkItem(84071, 1) && mapid >= 3301 && mapid <= 3310) {// 幻象的傲慢之塔移動傳送符
-                        isTeleport = true;
-                    }
-                    //if (bookm != null) {// 有記憶座標資料
-                    if (_bookmarkX > 0 && _bookmarkY > 0) {
-                        if (isTeleport) {
-                            //int newX = bookm.getLocX();
-                            //int newY = bookm.getLocY();
-                            //short mapId = bookm.getMapId();
-                            int newX = _bookmarkX;
-                            int newY = _bookmarkY;
-                            short mapId = (short) _bookmarkId;
+
+                // ==== 指定傳送（玩家限定，獨立 if，避免 else-without-if） ====
+                if (_skillId == TELEPORT) {
+                    // 施術者或目標不是玩家 → 不處理此技能（避免 ClassCast）
+                    if (!(_user instanceof L1PcInstance) || !(cha instanceof L1PcInstance)) {
+                        // no-op：留空，讓其它技能分支照常判斷
+                    } else {
+                        final L1PcInstance pc = (L1PcInstance) cha;
+
+                        boolean isTeleport = pc.getMap().isTeleportable();// 地圖設定是否可順移
+                        int mapid = pc.getMapId();
+
+                        // 傲慢之塔支配傳送符 / 幻象的傲慢之塔移動傳送符：例外放行
+                        if ((pc.getInventory().checkItem(84041, 1) && mapid == 3301) ||
+                                (pc.getInventory().checkItem(84042, 1) && mapid == 3302) ||
+                                (pc.getInventory().checkItem(84043, 1) && mapid == 3303) ||
+                                (pc.getInventory().checkItem(84044, 1) && mapid == 3304) ||
+                                (pc.getInventory().checkItem(84045, 1) && mapid == 3305) ||
+                                (pc.getInventory().checkItem(84046, 1) && mapid == 3306) ||
+                                (pc.getInventory().checkItem(84047, 1) && mapid == 3307) ||
+                                (pc.getInventory().checkItem(84048, 1) && mapid == 3308) ||
+                                (pc.getInventory().checkItem(84049, 1) && mapid == 3309) ||
+                                (pc.getInventory().checkItem(84050, 1) && mapid == 3310) ||
+                                (pc.getInventory().checkItem(84071, 1) && mapid >= 3301 && mapid <= 3310)) {
+                            isTeleport = true;
+                        }
+
+                        // 有記憶座標 → 指定點
+                        if (_bookmarkX > 0 && _bookmarkY > 0) {
+                            if (isTeleport) {
+                                if (pc.getTradeID() != 0) {
+                                    L1Trade trade = new L1Trade();
+                                    trade.tradeCancel(pc);
+                                }
+                                pc.setTeleportX(_bookmarkX);
+                                pc.setTeleportY(_bookmarkY);
+                                pc.setTeleportMapId((short) _bookmarkId);
+                                pc.setTeleportHeading(5);
+                                pc.sendPacketsAll(new S_SkillSound(pc.getId(), 169));
+                                Teleportation.teleportation(pc);
+                            } else {
+                                pc.sendPackets(new S_ServerMessage(647));
+                                pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false)); // 原本 7 改常數更穩
+                            }
+                        }
+                        // 沒書籤 → 隨機
+                        else if (isTeleport) {
+                            L1Location newLocation;
+                            int newX = pc.getX();
+                            int newY = pc.getY();
+                            short mapId = pc.getMapId();
+                            boolean right = false;
+                            while (!right) {
+                                newLocation = pc.getLocation().randomLocation(200, true);
+                                newX = newLocation.getX();
+                                newY = newLocation.getY();
+                                mapId = (short) newLocation.getMapId();
+                                right = !(newX == pc.getX() && newY == pc.getY());
+                            }
                             if (pc.getTradeID() != 0) {
                                 L1Trade trade = new L1Trade();
                                 trade.tradeCancel(pc);
@@ -1915,106 +1938,73 @@ public class L1SkillUse {
                             pc.setTeleportHeading(5);
                             pc.sendPacketsAll(new S_SkillSound(pc.getId(), 169));
                             Teleportation.teleportation(pc);
-                        } else {
+                        }
+                        // 不允許傳送
+                        else {
                             pc.sendPackets(new S_ServerMessage(647));
-                            pc.sendPackets(new S_Paralysis(7, false));
-                        }
-                    } else if (isTeleport) {// 沒有記憶座標資料 隨機移動
-                        L1Location newLocation;
-                        int newX = pc.getX();
-                        int newY = pc.getY();
-                        short mapId = pc.getMapId();
-                        boolean right = false;
-                        while (!right) {
-                            newLocation = pc.getLocation().randomLocation(200, true);
-                            newX = newLocation.getX();
-                            newY = newLocation.getY();
-                            mapId = (short) newLocation.getMapId();
-                            if (newX == pc.getX() && newY == pc.getY()) {
-                                right = false;
-                            } else {
-                                right = true;
-                            }
-                        }
-                        if (pc.getTradeID() != 0) {
-                            L1Trade trade = new L1Trade();
-                            trade.tradeCancel(pc);
-                        }
-                        pc.setTeleportX(newX);
-                        pc.setTeleportY(newY);
-                        pc.setTeleportMapId(mapId);
-                        pc.setTeleportHeading(5);
-                        pc.sendPacketsAll(new S_SkillSound(pc.getId(), 169));
-                        Teleportation.teleportation(pc);
-                    } else {
-                        pc.sendPackets(new S_ServerMessage(647));
-                        pc.sendPackets(new S_Paralysis(7, false));
-                    }
-                } else if (_skillId == MASS_TELEPORT) { // 集體傳送
-                    final L1PcInstance pc = (L1PcInstance) cha;
-                    //if (bookm != null) { // 記憶座標取出
-                    if (_bookmarkX > 0 && _bookmarkY > 0) {
-                        if (pc.getMap().isEscapable() || pc.isGm()) {
-                            //final int newX = bookm.getLocX();
-                            //final int newY = bookm.getLocY();
-                            //final short mapId = bookm.getMapId();
-                            int newX = _bookmarkX;
-                            int newY = _bookmarkY;
-                            short mapId = (short) _bookmarkId;
-                            final List<L1PcInstance> clanMember = World.get().getVisiblePlayer(pc);
-                            for (final L1PcInstance member : clanMember) {
-                                if ((pc.getLocation().getTileLineDistance(member.getLocation()) <= 3) && (member.getClanid() == pc.getClanid()) && (pc.getClanid() != 0) && (member.getId() != pc.getId())) {
-                                    // 商店村模式
-                                    if (!member.isPrivateShop()) {
-                                        member.setTeleportX(newX);
-                                        member.setTeleportY(newY);
-                                        member.setTeleportMapId(mapId);
-                                        // 你的血盟成員想要傳送你。你答應嗎？(Y/N)
-                                        member.sendPackets(new S_Message_YN(748));
-                                        // L1Teleport.teleport(member, newX, newY, mapId, 5,
-                                        // true);
-                                    }
-                                }
-                            }
-                            L1Teleport.teleport(pc, newX, newY, mapId, 5, true);
-                        } else {
-                            // 276 \f1在此無法使用傳送。
-                            pc.sendPackets(new S_ServerMessage(276));
-                            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
-                        }
-                    } else { // 任意地點
-                        if (pc.getMap().isTeleportable() || pc.isGm()) {
-                            final L1Location newLocation = pc.getLocation().randomLocation(200, true);
-                            final int newX = newLocation.getX();
-                            final int newY = newLocation.getY();
-                            final short mapId = (short) newLocation.getMapId();
-                            final List<L1PcInstance> clanMember = World.get().getVisiblePlayer(pc);
-                            for (final L1PcInstance member : clanMember) {
-                                if ((pc.getLocation().getTileLineDistance(member.getLocation()) <= 3) && (member.getClanid() == pc.getClanid()) && (pc.getClanid() != 0) && (member.getId() != pc.getId())) {
-                                    // 商店村模式
-                                    if (!member.isPrivateShop()) {
-                                        member.setTeleportX(newX);
-                                        member.setTeleportY(newY);
-                                        member.setTeleportMapId(mapId);
-                                        // 你的血盟成員想要傳送你。你答應嗎？(Y/N)
-                                        member.sendPackets(new S_Message_YN(748));
-                                        // L1Teleport.teleport(member, newX, newY, mapId, 5, true);
-                                    }
-                                }
-                            }
-                            L1Teleport.teleport(pc, newX, newY, mapId, 5, true);
-                        } else {
-                            // 276 \f1在此無法使用傳送。
-                            pc.sendPackets(new S_ServerMessage(276));
                             pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
                         }
                     }
-                } else if ((this._skillId == DETECTION) || (_skillId == 194) || (_skillId == 213)) { // 無所遁形術
-                    if (cha instanceof L1NpcInstance) {
-                        final L1NpcInstance npc = (L1NpcInstance) cha;
-                        final int hiddenStatus = npc.getHiddenStatus();
-                        if (hiddenStatus == L1NpcInstance.HIDDEN_STATUS_SINK) {
-                            npc.appearOnGround(this._player);
+
+                    if (_skillId == MASS_TELEPORT) {
+                        if (!(_user instanceof L1PcInstance) || !(cha instanceof L1PcInstance)) {
+                            // no-op
+                        } else {
+                            final L1PcInstance pc = (L1PcInstance) cha;
+
+                            // 有書籤 → 指定點
+                            if (_bookmarkX > 0 && _bookmarkY > 0) {
+                                if (pc.getMap().isEscapable() || pc.isGm()) {
+                                    final int newX = _bookmarkX;
+                                    final int newY = _bookmarkY;
+                                    final short mapId = (short) _bookmarkId;
+
+                                    final List<L1PcInstance> clanMember = World.get().getVisiblePlayer(pc);
+                                    for (final L1PcInstance member : clanMember) {
+                                        if ((pc.getLocation().getTileLineDistance(member.getLocation()) <= 3)
+                                                && (member.getClanid() == pc.getClanid())
+                                                && (pc.getClanid() != 0)
+                                                && (member.getId() != pc.getId())
+                                                && !member.isPrivateShop()) {
+                                            member.setTeleportX(newX);
+                                            member.setTeleportY(newY);
+                                            member.setTeleportMapId(mapId);
+                                            member.sendPackets(new S_Message_YN(748)); // 你的血盟成員想要傳送你。你答應嗎？
+                                        }
+                                    }
+                                    L1Teleport.teleport(pc, newX, newY, mapId, 5, true);
+                                } else {
+                                    pc.sendPackets(new S_ServerMessage(276)); // 在此無法使用傳送
+                                    pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
+                                }
+                            }
+                            // 無書籤 → 任意點
+                            else {
+                                if (pc.getMap().isTeleportable() || pc.isGm()) {
+                                    final L1Location newLocation = pc.getLocation().randomLocation(200, true);
+                                    final int newX = newLocation.getX();
+                                    final int newY = newLocation.getY();
+                                    final short mapId = (short) newLocation.getMapId();
+
+                                    final List<L1PcInstance> clanMember = World.get().getVisiblePlayer(pc);
+                                    for (final L1PcInstance member : clanMember) {
+                                        if ((pc.getLocation().getTileLineDistance(member.getLocation()) <= 3)
+                                                && (member.getClanid() == pc.getClanid())
+                                                && (pc.getClanid() != 0)
+                                                && (member.getId() != pc.getId())
+                                                && !member.isPrivateShop()) {
+                                            member.setTeleportX(newX);
+                                            member.setTeleportY(newY);
+                                            member.setTeleportMapId(mapId);
+                                            member.sendPackets(new S_Message_YN(748));
+                                        }
+                                    }
+                                    L1Teleport.teleport(pc, newX, newY, mapId, 5, true);
+                                } else {
+                                    pc.sendPackets(new S_ServerMessage(276));
+                                    pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
+                                }
+                            }
                         }
                     }
                 } else if (this._skillId == COUNTER_DETECTION) { // 強力無所遁形術
@@ -2142,24 +2132,24 @@ public class L1SkillUse {
                     if (cha.getCurrentMp() < drainMana) {
                         drainMana = cha.getCurrentMp();
                     }
-                } else if (this._skillId == WEAPON_BREAK) { // 壞物術
-                    /*
-                     * 對NPCの場合、L1Magicのダメージ算出でダメージ1/2としているので
-                     * こちらには、對PCの場合しか記入しない。 損傷量は1~(int/3)まで
-                     */
-                    if ((this._calcType == PC_PC) || (this._calcType == NPC_PC)) {
-                        if (cha instanceof L1PcInstance) {
-                            final L1PcInstance pc = (L1PcInstance) cha;
-                            final L1ItemInstance weapon = pc.getWeapon();
-                            if (weapon != null) {
-                                final Random random = new Random();
-                                final int weaponDamage = random.nextInt(this._user.getInt() / 3) + 1;
-                                // \f1あなたの%0が損傷しました。
-                                pc.sendPackets(new S_ServerMessage(268, weapon.getLogName()));
-                                pc.getInventory().receiveDamage(weapon, weaponDamage);
-                            }
+
+                } else if (this._skillId == WEAPON_BREAK) { // 壞物術技能判斷
+                    // 如果目標是玩家
+                    if (cha instanceof L1PcInstance) {
+                        final L1PcInstance pc = (L1PcInstance) cha;  // 把目標安全轉型為玩家
+                        final L1ItemInstance weapon = pc.getWeapon(); // 取得玩家目前裝備的武器
+                        if (weapon != null) { // 確認玩家手上有武器
+                            final int max = Math.max(1, this._user.getInt() / 3);
+                            // 計算實際損傷值，範圍 1 ~ max
+                            final int weaponDamage = java.util.concurrent.ThreadLocalRandom.current().nextInt(max) + 1;
+                            // 發送系統訊息：你的 %0 損傷了
+                            pc.sendPackets(new S_ServerMessage(268, weapon.getLogName()));
+                            // 對玩家武器套用耐久損傷
+                            pc.getInventory().receiveDamage(weapon, weaponDamage);
                         }
-                    } else {
+                        // 如果目標不是玩家，而是 NPC
+                    } else if (cha instanceof L1NpcInstance) {
+                        // 設定 NPC 進入「武器壞掉」的狀態（對 NPC 的特殊標記）
                         ((L1NpcInstance) cha).setWeaponBreaked(true);
                     }
                 }/* else if (this._skillId == FOG_OF_SLEEPING) {

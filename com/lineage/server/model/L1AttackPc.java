@@ -6,9 +6,7 @@ import com.lineage.data.event.FeatureItemSet;
 import com.lineage.data.event.RedBlueSet;
 import com.lineage.data.event.SubItemSet;
 import com.lineage.server.ActionCodes;
-import com.lineage.server.Controller.PcCritRepo;
 import com.lineage.server.datatables.SkillEnhanceTable;
-import com.lineage.server.datatables.StrSettingTable;
 import com.lineage.server.datatables.lock.CharSkillReading;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.poison.L1DamagePoison;
@@ -184,128 +182,170 @@ public class L1AttackPc extends L1AttackMode {
         return _isHit;
     }
 
+    /**
+     * 計算角色的命中率 (_hitRate)
+     */
     private void hitRateFunc() {
         final int pclv = _pc.getLevel();
-        // 等級命中加乘
+        // 基礎命中值 = 玩家等級
         _hitRate = pclv;
-        // 近戰命中加成 7.6變更
+        // ===============================
+        // 判斷武器類型 → 決定用近戰還是遠攻公式
+        // ===============================
+        // 近戰武器：武器型別不是 20 (弓) 也不是 62 (十字弓)
         if (_weaponType != 20 && _weaponType != 62) {
+            // 依據力量計算近戰命中加成
             _hitRate += CalcStat.calcStrHit(_pc.getStr(), _pc.getBaseStr());
+            // 武器附加命中 + 玩家命中加成 + 武器強化影響 (每強化 +0.5，取整數)
             _hitRate += (int) (_weaponAddHit + _pc.getHitup() + /* _pc.getOriginalHitup() + */ _weaponEnchant * 0.5D);
+            // 防具對近戰命中的額外修正
             _hitRate += _pc.getHitModifierByArmor();
-            // 遠攻命中加成 7.6變更
+            // 遠程武器：弓或十字弓
         } else {
+            // 依據敏捷計算遠攻命中加成
             _hitRate += CalcStat.calcDexHit(_pc.getDex(), _pc.getBaseDex());
+            // 武器附加命中 + 玩家遠攻加成 + 武器強化影響 (每強化 +0.5，取整數)
             _hitRate += (int) (_weaponAddHit + _pc.getBowHitup() + /* _pc.getOriginalBowHitup() + */ _weaponEnchant * 0.5D);
+            // 防具對遠攻命中的額外修正
             _hitRate += _pc.getBowHitModifierByArmor();
         }
-        // 負重影響命中結果
+        // ===============================
+        // 負重懲罰：負重過高會降低命中率
+        // ===============================
         int weight240 = _pc.getInventory().getWeight240();
-        if (weight240 > 80) {
+        if (weight240 > 80) { // 超過 80% 才會懲罰
             if (80 < weight240 && 120 >= weight240) {
-                _hitRate -= 1;
+                _hitRate -= 1; // 81% ~ 120% → 命中 -1
             } else if (121 <= weight240 && 160 >= weight240) {
-                _hitRate -= 3;
+                _hitRate -= 3; // 121% ~ 160% → 命中 -3
             } else if (161 <= weight240 && 200 >= weight240) {
-                _hitRate -= 5;
+                _hitRate -= 5; // 161% ~ 200% → 命中 -5
             }
         }
-        // 料理追加命中
+        // ===============================
+        // 額外加成效果
+        // ===============================
+        // 食物料理提供的命中加成
         _hitRate += hitUp();
-        // 媽祖祝福攻擊命中+5
+        // 媽祖祝福：固定命中 +5
         if (_pc.is_mazu()) {
             _hitRate += 5;
         }
+        // 其他特殊命中加成 (例如新手系統、任務 BUFF 等)
         _hitRate += _pc.getNEHit();
     }
 
-    // 對PC命中計算
+
+    /**
+     * 對玩家 (PC) 的攻擊命中判定
+     * @return true = 命中；false = 沒有命中
+     */
     private boolean calcPcHit() {
-        // 玩家為空
+        // 1. 目標玩家不存在
         if (_targetPc == null) {
             return false;
         }
-        // 身上有特定法術效果 傷害為0
+        // 2. 目標處於特殊狀態 (例如無敵、隱身、特殊技能) → 傷害為 0
         if (dmg0(_targetPc)) {
             return false;
         }
-        // 完全閃避率
+        // 3. 判斷是否觸發完全閃避 (例如「迴避技能」、「幸運效果」等)
         if (calcEvasion()) {
             return false;
         }
-        _hitRate += _pc.getHitup();
-        if (_pc.hasSkillEffect(L1SkillId.ABSOLUTE_BLADE)) { // 騎士新技能 絕禦之刃
-            if (_target.hasSkillEffect(L1SkillId.ABSOLUTE_BARRIER)) {
+        // 特殊技能判斷：騎士技能「絕禦之刃」 vs 法師技能「絕對屏障」
+        if (_pc.hasSkillEffect(L1SkillId.ABSOLUTE_BLADE)) { // 攻擊者有「絕禦之刃」
+            if (_target.hasSkillEffect(L1SkillId.ABSOLUTE_BARRIER)) { // 防禦者有「絕對屏障」
+                // 計算突破「絕對屏障」的機率 = 攻擊者等級 - 79，最高 10%
                 int chance = _pc.getLevel() - 79;
                 if (chance >= 10) {
                     chance = 10;
                 }
+                // 隨機擲骰，若成功 → 移除對方的「絕對屏障」
                 if (chance >= ThreadLocalRandom.current().nextInt(100) + 1) {
                     _targetPc.removeSkillEffect(L1SkillId.ABSOLUTE_BARRIER);
-                    _targetPc.sendPackets(new S_SkillSound(_targetPc.getId(), 14539));
-                    _targetPc.broadcastPacketX8(new S_SkillSound(_targetPc.getId(), 14539));
+                    _targetPc.sendPackets(new S_SkillSound(_targetPc.getId(), 14539)); // 自身顯示特效
+                    _targetPc.broadcastPacketX8(new S_SkillSound(_targetPc.getId(), 14539)); // 廣播特效
                 }
             }
         }
+        // 若防禦者依然有「絕對屏障」，攻擊完全無效
         if (_targetPc.hasSkillEffect(L1SkillId.ABSOLUTE_BARRIER)) {
             return false;
         }
-        // 奇古獸命中100%
+        // 奇古獸攻擊 (寵物/召喚獸特殊類型) → 必定命中
         if (_weaponType2 == 17) {
             return true;
         }
-        // 沉睡之霧 改 魔法大師
+        // 當武器為魔杖 (40)，且攻擊者有「沉睡之霧」狀態 → 必定命中
         if (_weaponType == 40 && _pc.hasSkillEffect(FOG_OF_SLEEPING)) {
             return true;
         }
-        hitRateFunc();// 7.6新寫法
+        // 基礎命中計算
+        hitRateFunc(); // 使用前面定義的命中率計算方法 (等級 + 力敏加成 + 武器強化 + 防具 + BUFF)
+        // 額外命中加成
+        _hitRate += _pc.getHitup();  // 玩家本身命中加成
+        _hitRate += com.lineage.server.model.AbilityBonus.hitBonus(_pc); // 能力加成 (例如職業加成)
+        // 攻擊者骰子值 = 1~20 + 命中率 - 10
         int attackerDice = ThreadLocalRandom.current().nextInt(20) + 1 + _hitRate - 10;
-        // 被攻擊者防禦
-        int defenderAc = _targetPc.getAc();
-        if (_targetPc.hasSkillEffect(188)) {// 恐懼無助
+        // ===============================
+        // 防禦者 (被攻擊方) 的防禦計算
+        // ===============================
+        int defenderAc = _targetPc.getAc(); // 目標 AC
+        if (_targetPc.hasSkillEffect(188)) { // 若防禦者中「恐懼無助」狀態 → 攻擊者骰子 +5
             attackerDice += 5;
         }
+        // 防禦值轉換公式：AC * 1.6 取反
         int defenderValue = (int) (defenderAc * 1.6) * -1;
+        // 防禦骰子 = 防禦值 + 額外防禦修正 (calcDefenderDice)
         int defenderDice = defenderValue + calcDefenderDice(defenderAc);
+        // 遠程攻擊 (弓、十字弓) → 額外增加迴避值 ER * 3
         if (_weaponType == 20 || _weaponType == 62) {
             defenderDice += _targetPc.getEr() * 3;
         }
-        int otherValue = 5 + calcSkillAdd();
+        // 其他修正值
+        int otherValue = 5 + calcSkillAdd(); // 初始修正值 (5 + 技能附加值)
         hit_rnd = 0;
+        // 若防禦者是法師職業 → 防禦骰子 -20 (法師比較脆弱)
         if (_targetPc.isWizard()) {
             defenderDice -= 20;
         }
+        // 若攻擊者骰子不如防禦者骰子 → 增加失敗機率
         if (attackerDice <= defenderDice) {
-            double temp = (defenderDice - attackerDice) * 0.1;
+            double temp = (defenderDice - attackerDice) * 0.1; // 差距越大 → 懲罰越多
             if (temp < 1) {
-                temp = 1;
+                temp = 1; // 最少懲罰 1
             }
             otherValue += temp;
         }
-        //		 if (_targetPc.hasSkillEffect( L1SkillId.ANTA_MAAN) // ??? ?? - ?? ???? ??
-        //				 || _targetPc.hasSkillEffect(L1SkillId.BIRTH_MAAN) // ??? ?? - ?? ???? ??
-        //						 || _targetPc.hasSkillEffect(L1SkillId.SHAPE_MAAN) // ??? ?? - ?? ???? ??
-        //								 || _targetPc.hasSkillEffect(L1SkillId.LIFE_MAAN)) { // ??? ?? - ?? ???? ??
-        //			 int MaanHitRnd = _random.nextInt(100) + 1;
-        //			 if (MaanHitRnd <= 10) { // ??
-        //				 otherValue += 10;
-        //			 }
-        //		 }
-        hit_rnd = 100 - otherValue;
+        // 最終命中判定
+        hit_rnd = 100 - otherValue; // 最終命中率 (越高越容易命中)
+        // 再擲一次隨機 → 機率判斷
         if (ThreadLocalRandom.current().nextInt(100) + 1 < otherValue) {
-            hit_rnd = 0;
+            hit_rnd = 0; // 命中率被壓到 0 (強制 MISS)
         }
+        // 最終隨機擲骰 1~100
         int rnd = ThreadLocalRandom.current().nextInt(100) + 1;
+        // 判斷是否命中 → 命中率 >= 隨機值
         return hit_rnd >= rnd;
     }
-
+    /**
+     * 計算防禦者的「骰子數值」(defenderDice)
+     * defenderAc = 防禦者的 AC（護甲值，Armor Class）
+     */
     private int calcDefenderDice(int defenderAc) {
-        int defenderDice = 0;
+        int defenderDice = 0; // 初始骰子值為 0
+
         if (defenderAc >= 0) {
+            // 如果 AC 大於等於 0（代表防禦很差，數字越高代表越容易被打中）
+            // 則骰子值 = 10 - AC
+            // 例如 defenderAc = 5 → defenderDice = 5
             defenderDice = 10 - defenderAc;
         } else if (defenderAc < 0) {
+            // 如果 AC 小於 0（代表防禦很好）
+            // 依照 AC 的區間給予額外骰子加成
             if (defenderAc <= -170) {
-                defenderDice += 10;
+                defenderDice += 10; // 超級高防禦，額外加 10
             } else if (defenderAc <= -160) {
                 defenderDice += 7;
             } else if (defenderAc <= -150) {
@@ -319,7 +359,7 @@ public class L1AttackPc extends L1AttackMode {
             } else if (defenderAc <= -110) {
                 defenderDice += 1;
             } else if (defenderAc <= -100) {
-                defenderDice += 0;
+                defenderDice += 0; // AC 到 -100 以上時，不再給加成
             } else if (defenderAc <= -90) {
                 defenderDice += 0;
             } else if (defenderAc <= -80) {
@@ -340,8 +380,9 @@ public class L1AttackPc extends L1AttackMode {
                 defenderDice += 0;
             }
         }
-        return defenderDice;
+        return defenderDice; // 回傳計算好的骰子值
     }
+
 
     /**
      * 玩家攻擊NPC命中計算
@@ -393,10 +434,10 @@ public class L1AttackPc extends L1AttackMode {
             commitCounterBarrier(); // 觸發反擊效果
             return false;
         }
-
         hitRateFunc(); // 計算命中率（7.6新版公式）
-        int pcHit = _hitRate; // 玩家命中率
         _hitRate += _pc.getHitup();
+        _hitRate += com.lineage.server.model.AbilityBonus.hitBonus(_pc);
+        int pcHit = _hitRate; // 玩家命中率
         // 根據職業調整命中率（自定義倍率設定）
         if (_pc.isCrown()) {
             pcHit *= Config_Occupational_Damage.Other_To_isCrownnpc_Hit;
@@ -1301,6 +1342,25 @@ public class L1AttackPc extends L1AttackMode {
         double dmg = weaponDamage2(_weaponTotalDamage); // 屬性加成、道具加成、力量加成、初始加成計算
         dmg = pcDmgMode(dmg);// 其他增傷計算
         dmg += _pc.getDmgup();
+        // ===【能力表整合】力量 vs 敏捷：取較高一邊套用 ===
+        // 這三個局部變數用來「延後」到最終階段再做爆擊（避免被後續減傷稀釋）
+        int abilCritChance = 0;    // 爆擊率（%）
+        int abilCritPercent = 0;   // 爆擊傷害倍率（%）
+        int abilCritFx = 0;        // 爆擊特效ID（若有）
+
+        {
+            // 從 AbilityBonus 取回依照 Str/Dex 較高者的加成
+            com.lineage.server.model.AbilityBonus.Sum sum =
+                    com.lineage.server.model.AbilityBonus.from(_pc);
+
+            // 1) 先把「固定攻擊加成」加到當前 dmg（這是固定加值，不等爆擊）
+            dmg += sum.atk;
+
+            // 2) 爆擊參數留到最終套用（避免被後面一大串減傷稀釋）
+            abilCritChance  = sum.critChance;
+            abilCritPercent = sum.critPercent;
+            abilCritFx      = sum.critFx;
+        }
             //妖精被動鷹眼
             if (_pc.isElf() && _pc.isEagle()) {
             int baseChance = 10; // 基礎發動率為 10%
@@ -1893,18 +1953,23 @@ public class L1AttackPc extends L1AttackMode {
             //_targetPc.broadcastPacketAll(new S_SkillSound(_targetPc.getId(), 240));
             dmg = 0.0D;
         }
-        // 若各種減免後為 0 或以下 → 直接結束（維持原行為）
-        if (dmg <= 0.0D) {
-            _isHit = false;
-            _drainHp = 0;
-            return 0;
-        }
-
-       // 先把 double → int（四捨五入），後續用整數避免 double→int 精度/編譯問題
+        // 先把 double → int（四捨五入）
         int dmgInt = Math.max(0, (int) Math.round(dmg));
 
-        // ★ 最終一步：依《能力力量設置》判定爆擊（PcCritRepo 優先，查表後備）
-        dmgInt = applyStrengthTableCritForPcFinal(dmgInt);
+        // ===【能力表整合】最終爆擊：只依較高屬性表（Str≥Dex→力量；Dex>Str→敏捷）===
+        if (abilCritChance > 0 && abilCritPercent > 0) {
+            int roll = java.util.concurrent.ThreadLocalRandom.current().nextInt(100) + 1; // 1~100
+            if (roll <= abilCritChance) {
+                double factor = 1.0 + (abilCritPercent / 100.0);
+                dmgInt = (int) Math.round(dmgInt * factor);
+
+                // 有設定爆擊特效才播；避免噪音
+                if (abilCritFx > 0) {
+                    // 你專案常用的是 sendPacketsAll/broadcastX8，所以沿用
+                    _pc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), abilCritFx));
+                }
+            }
+        }
 
         return dmgInt;
     }
@@ -2074,6 +2139,25 @@ public class L1AttackPc extends L1AttackMode {
         dmg = pcDmgMode(dmg);// 其他增傷計算
         dmg += _pc.getDmgup();
         dmg += _pc.getDamageIncreasePVE(); // PVE打怪攻擊力加成
+        // ===【能力表整合】力量 vs 敏捷：取較高一邊套用（只加攻擊；爆擊留到最後統一判定）===
+        int abilCritChance = 0;   // 爆擊率（%）
+        int abilCritPercent = 0;  // 爆擊倍率（%）
+        int abilCritFx = 0;       // 爆擊特效ID
+        {
+            // 依 Str>=Dex→用力量表；Dex>Str→用敏捷表
+            com.lineage.server.model.AbilityBonus.Sum sum =
+                    com.lineage.server.model.AbilityBonus.from(_pc);
+
+            // 固定攻擊加成先加進 dmg（這是加法，不用等到最後）
+            dmg += sum.atk;
+
+            // 命中屬於命中流程，不在這裡動，以免影響你原本的 _isHit 判定
+
+            // 爆擊參數先存，等所有減免都跑完再一次套用（確保是最終爆擊）
+            abilCritChance  = sum.critChance;
+            abilCritPercent = sum.critPercent;
+            abilCritFx      = sum.critFx;
+        }
         if (_pc.isElf() && _pc.isEagle()) {
             int baseChance = 10; // 基礎發動率為 10%
             int bonusChance = 0;
@@ -2236,16 +2320,23 @@ public class L1AttackPc extends L1AttackMode {
             _drainHp = 0;
             return 0;
         }
-
-// double → int 收口（四捨五入）
+        // double → int 收口（四捨五入）
         int dmgInt = Math.max(0, (int) Math.round(dmg));
 
-// ★ 最終套用《能力力量設置》的爆擊（PcCritRepo 優先，查表後備）
-        dmgInt = applyStrengthTableCritForPcFinal(dmgInt);
-
+        // ===【能力表整合】最終爆擊（Str≥Dex→力量；Dex>Str→敏捷）===
+        if (abilCritChance > 0 && abilCritPercent > 0) {
+            int roll = java.util.concurrent.ThreadLocalRandom.current().nextInt(100) + 1; // 1~100
+            if (roll <= abilCritChance) {
+                double factor = 1.0 + (abilCritPercent / 100.0);
+                dmgInt = (int) Math.round(dmgInt * factor);
+                // 有設定爆擊特效才播
+                if (abilCritFx > 0) {
+                    _pc.sendPacketsAll(new S_SkillSound(_targetNpc.getId(), abilCritFx));
+                }
+            }
+        }
         return dmgInt;
     }
-
     /**
      * 弱點曝光機率計算
      */
@@ -2358,44 +2449,7 @@ public class L1AttackPc extends L1AttackMode {
         }
         return dmg;
     }
-    /**
-     * 依《能力力量設置》處理「PC端最終爆擊」。
-     * 優先使用 PcCritRepo（StrBonusManager 設定），沒有就後備直接查表。
-     * @param dmgInt 目前整數傷害
-     * @return 套用爆擊後的整數傷害
-     */
-    private int applyStrengthTableCritForPcFinal(int dmgInt) {
-        int chance = 0, percent = 0, fx = 0;
 
-        // 1) 先從暫存倉拿（登入/裝備/洗點/BUFF 變動後，StrBonusManager 已經寫進來）
-        PcCritRepo.Crit c = PcCritRepo.get(_pc.getId());
-        if (c != null) {
-            chance  = c.chance;
-            percent = c.percent;
-            fx      = c.fx;
-        } else {
-            // 2) 後備：直接依當前 STR 查表（避免極端情況沒 reapply 也能吃到）
-            final StrSetting st = StrSettingTable.getInstance().findByStr(_pc.getStr());
-
-            if (st != null) {
-                chance  = st.critChance;
-                percent = st.critPercent;
-                fx      = st.critFx;
-            }
-        }
-
-        if (chance > 0 && ThreadLocalRandom.current().nextInt(100) < chance) {
-            // 用整數算法避免 double→int 的精度/編譯問題：dmg += dmg * percent / 100
-            dmgInt = dmgInt + (dmgInt * percent) / 100;
-
-            // 特效：預設播在攻擊者身上（要改播在目標就把 _pc.getId() 換成 _target.getId()）
-            if (fx > 0) {
-                _pc.sendPackets(new S_SkillSound(_pc.getId(), fx));
-                _pc.broadcastPacketX8(new S_SkillSound(_pc.getId(), fx));
-            }
-        }
-        return dmgInt;
-    }
     /**
      * 魔法武器傷害計算
      */

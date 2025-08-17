@@ -1,6 +1,9 @@
 package com.lineage.server.model;
 
+import com.add.Tsai.ACard;
+import com.add.Tsai.ACardTable;
 import com.add.Tsai.CardQuestTable;
+import com.lineage.server.datatables.ItemTable;
 import com.lineage.server.datatables.PolyTable;
 import com.lineage.server.model.Instance.L1DeInstance;
 import com.lineage.server.model.Instance.L1ItemInstance;
@@ -8,13 +11,17 @@ import com.lineage.server.model.Instance.L1MonsterInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.serverpackets.*;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.timecontroller.event.ranking.RankingHeroTimer;
+import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import william.ArrowGfxid;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
 
 import static com.lineage.server.model.skill.L1SkillId.*;
 
@@ -24,6 +31,7 @@ import static com.lineage.server.model.skill.L1SkillId.*;
  * @author daien
  */
 public class L1PolyMorph {
+    private static final ConcurrentHashMap<Integer, ScheduledFuture<?>> LOGIN_POLY_TASKS = new ConcurrentHashMap<>();
     // 變身原因示bit
     public static final int MORPH_BY_ITEMMAGIC = 1;
     public static final int MORPH_BY_GM = 2;
@@ -487,6 +495,116 @@ public class L1PolyMorph {
         }
     }
 
+    /**
+     * 啟動「登入自動變身循環」
+     * - 會先執行一次 doPoly，再在 polyTime 秒後持續循環
+     * - 若同一玩家已有任務，會先取消舊任務再啟動
+     */
+    public static void startLoginPolyLoop(final L1PcInstance pc, final int polyTimeSec) {
+        if (pc == null || pc.isDead() || !isPcOnline(pc)) return;
+        final int pcId = pc.getId();
+        final int firstPolyId = pc.getLastPolyCardId();
+        if (firstPolyId <= 0) { stopLoginPolyLoop(pc); return; }
+
+        stopLoginPolyLoop(pc); // 先取消舊任務
+
+        // ★ 首次登入立即變一次：先檢查並扣除耗材
+        if (ensureAndConsumePolyCost(pc, firstPolyId)) {
+            L1PolyMorph.doPoly(pc, firstPolyId, polyTimeSec, L1PolyMorph.MORPH_BY_LOGIN);
+        } else {
+            // 耗材不足，直接不啟動循環
+            return;
+        }
+
+        Runnable refresher = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!isPcOnline(pc) || pc.isDead()) { stopLoginPolyLoop(pc); return; }
+                    final int currentPolyId = pc.getLastPolyCardId();
+                    if (currentPolyId <= 0) { stopLoginPolyLoop(pc); return; }
+
+                    // ★ 每一輪循環：再次檢查並扣除耗材
+                    if (!ensureAndConsumePolyCost(pc, currentPolyId)) {
+                        pc.sendPackets(new S_SystemMessage("變身耗材不足，自動變身已停止。"));
+                        stopLoginPolyLoop(pc);
+                        return;
+                    }
+
+                    L1PolyMorph.doPoly(pc, currentPolyId, polyTimeSec, L1PolyMorph.MORPH_BY_LOGIN);
+
+                    ScheduledFuture<?> next = GeneralThreadPool.get()
+                            .schedule(this, (polyTimeSec + 1) * 1000);
+                    LOGIN_POLY_TASKS.put(pcId, next);
+
+                } catch (Exception ex) {
+                    _log.error("LoginPoly 循環任務失敗", ex);
+                    stopLoginPolyLoop(pc);
+                }
+            }
+        };
+
+        ScheduledFuture<?> f = GeneralThreadPool.get()
+                .schedule(refresher, (polyTimeSec + 1) * 1000);
+        LOGIN_POLY_TASKS.put(pcId, f);
+    }
+
+
+    /**
+     * 停止「登入自動變身循環」
+     * - 登出、玩家主動清除卡片ID、或不需要時請呼叫
+     */
+    public static void stopLoginPolyLoop(final L1PcInstance pc) {
+        if (pc == null) return;
+        final int pcId = pc.getId();
+        ScheduledFuture<?> f = LOGIN_POLY_TASKS.remove(pcId);
+        if (f != null) {
+            try { f.cancel(false); } catch (Exception ignored) {}
+        }
+    }
+    private static boolean isPcOnline(final L1PcInstance pc) {
+        try {
+            return pc != null && World.get().getPlayer(pc.getName()) != null;
+        } catch (Exception ignore) {
+            return false;
+        }
+    }
+
+    // 檢查並扣除耗材：成功回傳 true；不足則提示玩家並回傳 false
+    private static boolean ensureAndConsumePolyCost(final L1PcInstance pc, final int polyId) {
+        try {
+            final ACard card = ACardTable.get().getCardByPolyId(polyId);
+            if (card == null) {
+                return true; // 卡片資料查不到，視為無耗材
+            }
+            final int needItemId = card.getPolyItemId();      // 變身消耗道具編號
+            final int needCount  = card.getPolyItemCount();   // 變身消耗道具數量
+            if (needItemId <= 0 || needCount <= 0) {
+                return true; // 沒設定耗材
+            }
+
+            // 背包是否足夠
+            if (!pc.getInventory().checkItem(needItemId, needCount)) {
+                String needName = String.valueOf(needItemId);
+                try {
+                    L1ItemInstance tmpl = ItemTable.get().createItem(needItemId);
+                    if (tmpl != null) needName = tmpl.getName();
+                } catch (Exception ignore) {}
+
+                // 你可以換成你習慣的訊息封包
+                pc.sendPackets(new S_SystemMessage("變身需要道具：" + needName + " x" + needCount + "，數量不足。"));
+                return false;
+            }
+
+            // 扣除
+            pc.getInventory().consumeItem(needItemId, needCount);
+            return true;
+
+        } catch (Exception e) {
+            _log.error("ensureAndConsumePolyCost error, pc=" + pc.getName() + ", polyId=" + polyId, e);
+            return false;
+        }
+    }
     /**
      * 是否為可裝備的武器
      *

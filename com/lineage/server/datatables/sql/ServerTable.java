@@ -128,7 +128,3 @@ public class ServerTable implements ServerStorage {
         return _maxId;
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.datatables.sql.ServerTable JD-Core Version: 0.6.2
- */

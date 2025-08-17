@@ -1446,14 +1446,17 @@ public class C_LoginToServer extends ClientBasePacket {
             // 取消商店變身
             L1PolyMorph.undoPolyPrivateShop(pc);
             try {
-                // 只有 polyId > 0 才自動變身
+                // 只有 polyId > 0 才啟動循環自動變身
                 if (pc.getLastPolyCardId() > 0) {
-                    int polyId = pc.getLastPolyCardId();
-                    int polyTime = 1800;
-                    L1PolyMorph.doPoly(pc, polyId, polyTime, L1PolyMorph.MORPH_BY_LOGIN);
+                    int polyTime = 1800; // 秒
+                    // 若先前已啟動過，startLoginPolyLoop 內部會先 stop 再重啟（依你實作）
+                    L1PolyMorph.startLoginPolyLoop(pc, polyTime);
+                } else {
+                    // 沒卡片就保險停一下
+                    L1PolyMorph.stopLoginPolyLoop(pc);
                 }
             } catch (Exception e) {
-                _log.error("登入時自動變身失敗", e);
+                _log.error("登入時自動變身循環啟動失敗", e);
             }
             pc.removeAICheck(20000, pc.getAICheck());// 刪除AI檢測
             login_Artiface.forIntensifyArmor(pc);// 登入時裝備強化

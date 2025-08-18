@@ -103,7 +103,7 @@ public final class SkillEnhanceTable {
      */
     public static Set<Integer> getAllSkillIds() {
         Set<Integer> ids = _enhanceMap.keySet();
-        System.out.println("【DEBUG】SkillEnhanceTable 載入的技能ID列表: " + ids);
+//        System.out.println("【DEBUG】SkillEnhanceTable 載入的技能ID列表: " + ids);
         return ids;
     }
 
@@ -137,7 +137,7 @@ public final class SkillEnhanceTable {
                 }
             }
         }
-        System.out.println("【DEBUG】icon+名稱+等級陣列：" + resultList);
+//        System.out.println("【DEBUG】icon+名稱+等級陣列：" + resultList);
         return resultList.toArray(new String[0]);
     }
 

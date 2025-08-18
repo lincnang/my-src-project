@@ -1227,6 +1227,12 @@ public class C_LoginToServer extends ClientBasePacket {
             backRestart(pc);// 判斷回村座標資料
             getFocus(pc);// 遊戲焦點及人物狀態更新
             getOther(pc);// 額外紀錄資料
+            // 【龍之祝福】登入回灌（避免重啟後 DragonExp 變 0）
+            try {
+                com.add.Tsai.DragonExp.get().restoreToPcOnLogin(pc);
+            } catch (Exception e) {
+                _log.error("DragonExp restore error: " + pc.getName(), e);
+            }
             pc.sendVisualEffectAtLogin();// 人物中毒、麻痺狀態顯示
             skills(pc);// 取得角色魔法技能資料
             buff(pc);// 人物保留的BUFF資料

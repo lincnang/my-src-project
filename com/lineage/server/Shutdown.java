@@ -215,6 +215,18 @@ public class Shutdown extends Thread {
             for (ClientExecutor client : list) {
                 L1PcInstance tgpc = client.getActiveChar();
                 if (tgpc != null) {
+                    try {
+                        // [ADD] 1) 龍之祝福：把 pc.getDragonExp() 立即寫回 DB（UPSERT）
+                        com.add.Tsai.DragonExp.get().flushFromPc(tgpc); // 或 addStoreExp(tgpc) 也可，建議 flushFromPc
+
+                        // [ADD] 2) 樹葉/其他：把 character_other 立即寫回 DB（會連同 logintime 的反推一起存）
+                        if (tgpc.get_other() != null) {
+                            new com.lineage.server.datatables.sql.CharOtherTable()
+                                    .storeOther(tgpc.getId(), tgpc.get_other());
+                        }
+                    } catch (Exception ex) {
+                        _log.error("Shutdown flush failed for " + tgpc.getName(), ex);
+                    }
                     QuitGame.quitGame(tgpc);
                     client.setActiveChar(null);
                     client.kick();

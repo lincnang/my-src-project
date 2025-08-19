@@ -557,7 +557,91 @@ public class MySqlCharacterStorage implements CharacterStorage {//src013
         }
     }
 
+    // === 紋樣重置：單一類型 ===
+// 依「紋樣類型」比對 6 組欄位，命中就把該組的 類型/等級 歸 0。
+// 紋樣積分(紋樣積分)不變；如果你想清零可以一併處理（見重置全部的版本）
+    public void resetWenYangByType(final L1PcInstance pc, final int type) {
+        if (pc == null) return;
 
+        Connection con = null;
+        PreparedStatement pstm = null;
+        try {
+            con = DatabaseFactory.get().getConnection();
+            String sql =
+                    "UPDATE characters SET " +
+                            "`紋樣等級1` = IF(`紋樣類型1` = ?, 0, `紋樣等級1`), `紋樣類型1` = IF(`紋樣類型1` = ?, 0, `紋樣類型1`), " +
+                            "`紋樣等級2` = IF(`紋樣類型2` = ?, 0, `紋樣等級2`), `紋樣類型2` = IF(`紋樣類型2` = ?, 0, `紋樣類型2`), " +
+                            "`紋樣等級3` = IF(`紋樣類型3` = ?, 0, `紋樣等級3`), `紋樣類型3` = IF(`紋樣類型3` = ?, 0, `紋樣類型3`), " +
+                            "`紋樣等級4` = IF(`紋樣類型4` = ?, 0, `紋樣等級4`), `紋樣類型4` = IF(`紋樣類型4` = ?, 0, `紋樣類型4`), " +
+                            "`紋樣等級5` = IF(`紋樣類型5` = ?, 0, `紋樣等級5`), `紋樣類型5` = IF(`紋樣類型5` = ?, 0, `紋樣類型5`), " +
+                            "`紋樣等級6` = IF(`紋樣類型6` = ?, 0, `紋樣等級6`), `紋樣類型6` = IF(`紋樣類型6` = ?, 0, `紋樣類型6`) " +
+                            "WHERE objid = ?";
+
+            pstm = con.prepareStatement(sql);
+            int i = 0;
+            // 6 組欄位，各帶兩次同一個 type
+            pstm.setInt(++i, type); pstm.setInt(++i, type);
+            pstm.setInt(++i, type); pstm.setInt(++i, type);
+            pstm.setInt(++i, type); pstm.setInt(++i, type);
+            pstm.setInt(++i, type); pstm.setInt(++i, type);
+            pstm.setInt(++i, type); pstm.setInt(++i, type);
+            pstm.setInt(++i, type); pstm.setInt(++i, type);
+            pstm.setInt(++i, pc.getId());
+            pstm.executeUpdate();
+
+            // 記憶體同步（避免玩家要重登才更新顯示）
+            if (pc.getWyType1() == type) { pc.setWyType1(0); pc.setWyLevel1(0); }
+            if (pc.getWyType2() == type) { pc.setWyType2(0); pc.setWyLevel2(0); }
+            if (pc.getWyType3() == type) { pc.setWyType3(0); pc.setWyLevel3(0); }
+            if (pc.getWyType4() == type) { pc.setWyType4(0); pc.setWyLevel4(0); }
+            if (pc.getWyType5() == type) { pc.setWyType5(0); pc.setWyLevel5(0); }
+            if (pc.getWyType6() == type) { pc.setWyType6(0); pc.setWyLevel6(0); }
+
+        } catch (SQLException e) {
+            _log.error("[resetWenYangByType] objid=" + pc.getId() + " type=" + type + " 失敗: " + e.getLocalizedMessage(), e);
+        } finally {
+            SQLUtil.close(pstm);
+            SQLUtil.close(con);
+        }
+    }
+
+    // === 紋樣重置：全部 ===
+// 全部 6 組 類型/等級 歸 0；同時把 紋樣積分 也清 0（你要保留就把該行註解掉）
+    public void resetWenYangAll(final L1PcInstance pc) {
+        if (pc == null) return;
+
+        Connection con = null;
+        PreparedStatement pstm = null;
+        try {
+            con = DatabaseFactory.get().getConnection();
+            String sql =
+                    "UPDATE characters SET " +
+                            "`紋樣類型1`=0,`紋樣等級1`=0, `紋樣類型2`=0,`紋樣等級2`=0, " +
+                            "`紋樣類型3`=0,`紋樣等級3`=0, `紋樣類型4`=0,`紋樣等級4`=0, " +
+                            "`紋樣類型5`=0,`紋樣等級5`=0, `紋樣類型6`=0,`紋樣等級6`=0, " +
+                            "`紋樣積分`=0 " +      // ← 若想保留積分，把這行拿掉
+                            "WHERE objid = ?";
+
+            pstm = con.prepareStatement(sql);
+            pstm.setInt(1, pc.getId());
+            pstm.executeUpdate();
+
+            // 記憶體同步
+            pc.setWyType1(0); pc.setWyLevel1(0);
+            pc.setWyType2(0); pc.setWyLevel2(0);
+            pc.setWyType3(0); pc.setWyLevel3(0);
+            pc.setWyType4(0); pc.setWyLevel4(0);
+            pc.setWyType5(0); pc.setWyLevel5(0);
+            pc.setWyType6(0); pc.setWyLevel6(0);
+            pc.setWenyangJiFen(0); // 若上面的 SQL 有清積分，這裡也同步
+
+        } catch (SQLException e) {
+            _log.error("[resetWenYangAll] objid=" + pc.getId() + " 失敗: " + e.getLocalizedMessage(), e);
+        } finally {
+            SQLUtil.close(pstm);
+            SQLUtil.close(con);
+        }
+    }
     @Override
     public L1PcInstance loadCharacter(final int objid) {
         L1PcInstance pc = null;

@@ -94,7 +94,17 @@ public class WenYangTable {
             int adddmg = rs.getInt("機率給予爆擊質"); //0122
             int addpvpdmg = rs.getInt("PVP傷害"); //0122
             int addpvpdmg_r = rs.getInt("PVP減免"); //0122
-            L1WenYang MagicCrystal_Item = new L1WenYang(type, Level, rate, not, cost, costup, maxRate, liliang, minjie, zhili, jingshen, tizhi, meili, xue, mo, huixue, huimo, ewai, chenggong, mogong, mofang, feng, shui, tu, huo, jianmian, jingyan, buff_iconid, buff_stringid, addshanbi, huibi, yaoshui, fuzhong, add_Ac, adddice_dmg, adddmg, addpvpdmg, addpvpdmg_r);
+            int plus2 = safeGetInt(rs, "一次加二機率", 10);
+            int plus3 = safeGetInt(rs, "一次加三機率", 3);
+            L1WenYang MagicCrystal_Item = new L1WenYang(
+                    type, Level, rate, not, cost, costup, maxRate,
+                    liliang, minjie, zhili, jingshen, tizhi, meili, xue, mo,
+                    huixue, huimo, ewai, chenggong, mogong, mofang, feng, shui,
+                    tu, huo, jianmian, jingyan, buff_iconid, buff_stringid,
+                    addshanbi, huibi, yaoshui, fuzhong, add_Ac, adddice_dmg, adddmg,
+                    addpvpdmg, addpvpdmg_r,
+                    plus2, plus3 // ★ 新增：放在最後兩個參數
+            );
             if (_checkMaxEnchantLevelmaps.containsKey(type)) {
                 final Integer checkMaxEnchanrLevel = _checkMaxEnchantLevelmaps.get(type);
                 if (Level > checkMaxEnchanrLevel) {
@@ -106,7 +116,20 @@ public class WenYangTable {
             _itemIdIndex.put(String.valueOf(type) + Level, MagicCrystal_Item);
         }
     }
-
+    /**
+     * 從 ResultSet 安全讀取 int，若欄位不存在或為 NULL，回傳預設值
+     */
+    private int safeGetInt(ResultSet rs, String col, int def) {
+        try {
+            int v = rs.getInt(col);
+            if (rs.wasNull()) {
+                return def;
+            }
+            return v;
+        } catch (SQLException e) {
+            return def;
+        }
+    }
     public L1WenYang getTemplate(int type, int enchantLevel) {
         if (_checkMaxEnchantLevelmaps.containsKey(type)) {
             final Integer checkMaxEnchantLevel = _checkMaxEnchantLevelmaps.get(type);

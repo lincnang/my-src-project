@@ -62,8 +62,20 @@ public class L1WenYang {
     private int _addpvpdmg_r; // 增加PVP減傷
     private int _buff_iconid;
     private int _buff_stringid;
+    // === 新增：由 DB 控制的 +2 / +3 機率(%) ===
+    private int _plus2Rate;   // 單次成功 +2 的機率(%)：對應「一次加二機率」
+    private int _plus3Rate;   // 單次成功 +3 的機率(%)：對應「一次加三機率」
 
-    public L1WenYang(int type, int level, int rate, String not, int cost, int costup, int maxRate, int liliang, int minjie, int zhili, int jingshen, int tizhi, int meili, int xue, int mo, int huixue, int huimo, int ewai, int chenggong, int mogong, int mofang, int feng, int shui, int tu, int huo, int jianmian, int jingyan, int buff_buff_iconid, int buff_stringid, int shanbi, int huibi, int yaoshui, int fuzhong, int add_Ac, int adddice_dmg, int adddmg, int addpvpdmg, int addpvpdmg_r) {
+    // === 調整建構子：在原參數尾端「追加」plus2/plus3，避免影響既有呼叫點順序 ===
+    public L1WenYang(
+            int type, int level, int rate, String not, int cost, int costup, int maxRate,
+            int liliang, int minjie, int zhili, int jingshen, int tizhi, int meili, int xue, int mo,
+            int huixue, int huimo, int ewai, int chenggong, int mogong, int mofang, int feng, int shui,
+            int tu, int huo, int jianmian, int jingyan, int buff_buff_iconid, int buff_stringid,
+            int shanbi, int huibi, int yaoshui, int fuzhong, int add_Ac, int adddice_dmg, int adddmg,
+            int addpvpdmg, int addpvpdmg_r,
+            int plus2Rate, int plus3Rate   // ★ 新增：由 DB 帶入
+    ) {
         _type = type;
         _level = level;
         _not = not;
@@ -102,7 +114,14 @@ public class L1WenYang {
         _adddmg = adddmg;
         _addpvpdmg = addpvpdmg;
         _addpvpdmg_r = addpvpdmg_r;
+        // ★ 新增
+        _plus2Rate = plus2Rate;
+        _plus3Rate = plus3Rate;
     }
+    public int getPlus2Rate() { return _plus2Rate; }
+
+    /** 單次成功 +3 機率(%)（DB 控制） */
+    public int getPlus3Rate() { return _plus3Rate; }
 
     public int get_buff_iconid() {
         return this._buff_iconid;

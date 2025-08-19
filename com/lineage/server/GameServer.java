@@ -27,7 +27,6 @@ import com.lineage.data.item_weapon.proficiency.WeaponProficiencyTable;
 import com.lineage.list.BadNamesList;
 import com.lineage.managerUI.Eva;
 import com.lineage.server.Controller.*;
-import com.lineage.server.Manly.WenYangCmdTable;
 import com.lineage.server.Manly.WenYangJiLuTable;
 import com.lineage.server.Manly.WenYangTable;
 import com.lineage.server.datatables.*;
@@ -372,7 +371,6 @@ public class GameServer {
             holySetTable.get().load();//聖物套組
             NewAutoPractice.get().load();//掛機仇人名單
             NewAutoPractice.get().load2();//掛機被殺名單
-            WenYangCmdTable.getInstance().loadWenYangTable();// 紋樣系統
             WenYangJiLuTable.getInstance().loadWenYangTable();// 紋樣系統
             WenYangTable.getInstance(); // 紋樣系統
             CharacterAdenaTradeReading.get().load();//金幣交易系統

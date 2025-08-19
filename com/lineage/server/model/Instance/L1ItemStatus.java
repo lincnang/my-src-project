@@ -1524,6 +1524,18 @@ public class L1ItemStatus {
      *
      */
     private BinaryOutputStream armor() {
+        // TODO 查修
+        // 【最佳實踐】在方法的開頭進行 Null 檢查
+        if (this._item == null) {
+            // 記錄錯誤日誌，指出是哪個 L1ItemInstance 物件的模板為 null
+            System.err.println(
+                    "NullPointerException prevented: L1Item template is null for item instance objid: " +
+                            _itemInstance.getId()
+            );
+            // 回傳一個空的或預設的資料流，避免伺服器崩潰
+            return _os;
+        }
+
         _os.writeC(19);
         int ac = _item.get_ac();
         if (ac < 0) {

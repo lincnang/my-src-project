@@ -18,35 +18,24 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 紋樣指令（重整版）
- * - 成功次數上限=20（每個 type 獨立計次）
- * - 成功時有機率+2或+3 等級（仍只算 1 次成功）
- * - 逐玩家動畫鎖（不會全域卡住）
- * - 統一成本與成功率計算（UI顯示與實扣一致）
- * - 修正原碼多處 typos（a3/a4/a5/a6 分支）
- *
- * @author hero
+ * 紋樣指令（精簡重整版）
+ * - 不再使用 rate / maxRate / costup / cost
+ * - a*-1-up：只重抽 +1/+2/+3 分布（可一直按）
+ * - a*-1：開始強化（成本=0），成功依當前分布決定 +1/+2/+3
+ * - 面板 #2 顯示 1(XX.x%) 2(YY.x%) 3(ZZ.x%)（0.1% 精度）
+ * - 強化完成後自動刷新下一輪分布
  */
 public class WenYangCmd {
 
-    /** DB 沒填或填 0 時的保底預設值（單位：%）*/
-    private static final int PLUS2_DEFAULT = 10;
-    private static final int PLUS3_DEFAULT = 3;
-
-    /** 面板上下按鈕每次調整的百分比（UI步進用） */
-    private static final int STEP_RATE = 2;
+    /** 依玩家/格位暫存當前分布：key="pcId:slot" → int[]{p1,p2,p3}；單位：0.1%，總和=1000 */
+    private static final Map<String, int[]> _distCache = new ConcurrentHashMap<>();
+    private static String k(int pid, int slot) { return pid + ":" + slot; }
 
     /** 伺服器紋樣等級硬上限 */
     private static final int LEVEL_CAP = 30;
 
     /** 成功次數上限（每個 type 各計） */
     private static final int SUCCESS_CAP = 20;
-
-    /** 一次+2 機率(%)（可依需求調整） */
-    private static final int PLUS2_RATE = 10;
-
-    /** 一次+3 機率(%)（可依需求調整；建議 < PLUS2_RATE） */
-    private static final int PLUS3_RATE = 3;
 
     private static final Log _log = LogFactory.getLog(WenYangCmd.class);
     private static WenYangCmd _instance;
@@ -60,78 +49,47 @@ public class WenYangCmd {
         }
         return _instance;
     }
-
-    /**
-     * 入口：處理 NPC 指令
-     */
+    /** 依槽位抓「下一階」的模板；等級0視為抓第1階 */
+    private L1WenYang getNextStageTemplate(final L1PcInstance pc, final int slot) {
+        final int type = getWyType(pc, slot);
+        final int level = getWyLevelBySlot(pc, slot);
+        final int queryLevel = (level <= 0) ? 1 : level + 1; // ★ 關鍵：用下一階
+        return WenYangTable.getInstance().getTemplate(type, queryLevel);
+    }
+    /** 入口：處理 NPC 指令 */
     public boolean Cmd(final L1PcInstance pc, final String cmd) {
         try {
-            // 讀表（若玩家等級==0 => 視為要顯示第1頁）
-            final L1WenYang wenYang1 = WenYangTable.getInstance().getTemplate(pc.getWyType1(), pc.getWyLevel1() == 0 ? 1 : pc.getWyLevel1());
-            if (wenYang1 == null) return false;
-            final L1WenYang wenYang2 = WenYangTable.getInstance().getTemplate(pc.getWyType2(), pc.getWyLevel2() == 0 ? 1 : pc.getWyLevel2());
-            if (wenYang2 == null) return false;
-            final L1WenYang wenYang3 = WenYangTable.getInstance().getTemplate(pc.getWyType3(), pc.getWyLevel3() == 0 ? 1 : pc.getWyLevel3());
-            if (wenYang3 == null) return false;
-            final L1WenYang wenYang4 = WenYangTable.getInstance().getTemplate(pc.getWyType4(), pc.getWyLevel4() == 0 ? 1 : pc.getWyLevel4());
-            if (wenYang4 == null) return false;
-            final L1WenYang wenYang5 = WenYangTable.getInstance().getTemplate(pc.getWyType5(), pc.getWyLevel5() == 0 ? 1 : pc.getWyLevel5());
-            if (wenYang5 == null) return false;
-            final L1WenYang wenYang6 = WenYangTable.getInstance().getTemplate(pc.getWyType6(), pc.getWyLevel6() == 0 ? 1 : pc.getWyLevel6());
-            if (wenYang6 == null) return false;
+            // ★ 每格位都抓「下一階」模板
+            final L1WenYang wy1 = getNextStageTemplate(pc, 1); if (wy1 == null) return false;
+            final L1WenYang wy2 = getNextStageTemplate(pc, 2); if (wy2 == null) return false;
+            final L1WenYang wy3 = getNextStageTemplate(pc, 3); if (wy3 == null) return false;
+            final L1WenYang wy4 = getNextStageTemplate(pc, 4); if (wy4 == null) return false;
+            final L1WenYang wy5 = getNextStageTemplate(pc, 5); if (wy5 == null) return false;
+            final L1WenYang wy6 = getNextStageTemplate(pc, 6); if (wy6 == null) return false;
 
-            // ===== 顯示面板 =====
-            if (cmd.equals("wenyang01_01")) {
-                showPanel(pc, pc.getWyType1(), wenYang1, pc.getWenyangRate1(), pc.getWyLevel1());
-                return true;
-            }
-            if (cmd.equals("wenyang02_01")) {
-                showPanel(pc, pc.getWyType2(), wenYang2, pc.getWenyangRate2(), pc.getWyLevel2());
-                return true;
-            }
-            if (cmd.equals("wenyang03_01")) {
-                showPanel(pc, pc.getWyType3(), wenYang3, pc.getWenyangRate3(), pc.getWyLevel3());
-                return true;
-            }
-            if (cmd.equals("wenyang04_01")) { // 修：原碼誤用 wenYang1
-                showPanel(pc, pc.getWyType4(), wenYang4, pc.getWenyangRate4(), pc.getWyLevel4());
-                return true;
-            }
-            if (cmd.equals("wenyang05_01")) {
-                showPanel(pc, pc.getWyType5(), wenYang5, pc.getWenyangRate5(), pc.getWyLevel5());
-                return true;
-            }
-            if (cmd.equals("wenyang06_01")) {
-                showPanel(pc, pc.getWyType6(), wenYang6, pc.getWenyangRate6(), pc.getWyLevel6());
-                return true;
-            }
+            // ===== 顯示面板（保留你的分路；面板內 #3/#4 會用 wy 的 costup/cost）=====
+            if (cmd.equals("wenyang01_01")) { showPanel(pc, pc.getWyType1(), wy1, pc.getWyLevel1()); return true; }
+            if (cmd.equals("wenyang02_01")) { showPanel(pc, pc.getWyType2(), wy2, pc.getWyLevel2()); return true; }
+            if (cmd.equals("wenyang03_01")) { showPanel(pc, pc.getWyType3(), wy3, pc.getWyLevel3()); return true; }
+            if (cmd.equals("wenyang04_01")) { showPanel(pc, pc.getWyType4(), wy4, pc.getWyLevel4()); return true; }
+            if (cmd.equals("wenyang05_01")) { showPanel(pc, pc.getWyType5(), wy5, pc.getWyLevel5()); return true; }
+            if (cmd.equals("wenyang06_01")) { showPanel(pc, pc.getWyType6(), wy6, pc.getWyLevel6()); return true; }
 
-            // ===== Rate 調整按鈕 =====
-            if (cmd.equals("a1-1-up")) { stepRateUp(pc, wenYang1, 1); return true; }
-            if (cmd.equals("a1-1-dn")) { stepRateDn(pc, wenYang1, 1); return true; }
+            // ===== 變更機率（扣 wy.getCostUp()，重抽分布）=====
+            if (cmd.equals("a1-1-up")) { stepChange(pc, wy1, 1); return true; }
+            if (cmd.equals("a2-1-up")) { stepChange(pc, wy2, 2); return true; }
+            if (cmd.equals("a3-1-up")) { stepChange(pc, wy3, 3); return true; }
+            if (cmd.equals("a4-1-up")) { stepChange(pc, wy4, 4); return true; }
+            if (cmd.equals("a5-1-up")) { stepChange(pc, wy5, 5); return true; }
+            if (cmd.equals("a6-1-up")) { stepChange(pc, wy6, 6); return true; }
 
-            if (cmd.equals("a2-1-up")) { stepRateUp(pc, wenYang2, 2); return true; }
-            if (cmd.equals("a2-1-dn")) { stepRateDn(pc, wenYang2, 2); return true; }
-
-            if (cmd.equals("a3-1-up")) { stepRateUp(pc, wenYang3, 3); return true; }
-            if (cmd.equals("a3-1-dn")) { stepRateDn(pc, wenYang3, 3); return true; } // 修：原碼誤用 wenYang1/rate1
-
-            if (cmd.equals("a4-1-up")) { stepRateUp(pc, wenYang4, 4); return true; }
-            if (cmd.equals("a4-1-dn")) { stepRateDn(pc, wenYang4, 4); return true; }
-
-            if (cmd.equals("a5-1-up")) { stepRateUp(pc, wenYang5, 5); return true; }
-            if (cmd.equals("a5-1-dn")) { stepRateDn(pc, wenYang5, 5); return true; }
-
-            if (cmd.equals("a6-1-up")) { stepRateUp(pc, wenYang6, 6); return true; }
-            if (cmd.equals("a6-1-dn")) { stepRateDn(pc, wenYang6, 6); return true; } // 修：原碼誤用 wenYang1/rate1
-
-            // ===== 開始強化 =====
-            if (cmd.equals("a1-1")) { tryEnhance(pc, 1, wenYang1, pc.getWenyangRate1()); return true; }
-            if (cmd.equals("a2-1")) { tryEnhance(pc, 2, wenYang2, pc.getWenyangRate2()); return true; }
-            if (cmd.equals("a3-1")) { tryEnhance(pc, 3, wenYang3, pc.getWenyangRate3()); return true; }
-            if (cmd.equals("a4-1")) { tryEnhance(pc, 4, wenYang4, pc.getWenyangRate4()); return true; }
-            if (cmd.equals("a5-1")) { tryEnhance(pc, 5, wenYang5, pc.getWenyangRate5()); return true; }
-            if (cmd.equals("a6-1")) { tryEnhance(pc, 6, wenYang6, pc.getWenyangRate6()); return true; }
+            // ===== 開始強化（扣 wy.getCost()）=====
+            if (cmd.equals("a1-1")) { tryEnhance(pc, 1, wy1, pc.getWenyangRate1()); return true; }
+            if (cmd.equals("a2-1")) { tryEnhance(pc, 2, wy2, pc.getWenyangRate2()); return true; }
+            if (cmd.equals("a3-1")) { tryEnhance(pc, 3, wy3, pc.getWenyangRate3()); return true; }
+            if (cmd.equals("a4-1")) { tryEnhance(pc, 4, wy4, pc.getWenyangRate4()); return true; }
+            if (cmd.equals("a5-1")) { tryEnhance(pc, 5, wy5, pc.getWenyangRate5()); return true; }
+            if (cmd.equals("a6-1")) { tryEnhance(pc, 6, wy6, pc.getWenyangRate6()); return true; }
 
             return false;
         } catch (Exception e) {
@@ -140,66 +98,99 @@ public class WenYangCmd {
         return false;
     }
 
+
     // =========================================================
-    // 基本工具：面板資料、動畫、收尾、記錄
+    // 面板資料 / 動畫 / 記錄
     // =========================================================
 
     /** 顯示面板 */
-    private void showPanel(final L1PcInstance pc, final int type, final L1WenYang wy, final int rateSel, final int level) {
-        String[] data = buildPanelData(pc, wy, rateSel, level);
+    private void showPanel(final L1PcInstance pc, final int type, final L1WenYang wy, final int level) {
+        String[] data = buildPanelData(pc, type, wy, level);
         pc.sendPackets(new S_NPCTalkReturn(pc, getHtmlId(type, level), data));
     }
+    /** 面板資料：
+     *  #0 等級
+     *  #1 玩家現有積分
+     *  #2 +1/+2/+3 機率（顯示一位小數）
+     *  #3 變更機率扣點（costup：每按一次 a*-1-up 扣）
+     *  #4 強化消耗點數（cost：按 a*-1 時扣）
+     */
+    private String[] buildPanelData(final L1PcInstance pc, final int type, final L1WenYang wy, final int level) {
+        int slot = getSlotByType(pc, type);
+        int[] dist = ensureDist(pc, slot, wy); // 單位：0.1%，總和=1000
 
-    /** 組面板資料：等級/積分/顯示成功率/成本 */
-    private String[] buildPanelData(final L1PcInstance pc, final L1WenYang wy, final int rateSel, final int level) {
-        int effectiveRate = Math.max(rateSel, wy.getRate());          // UI選擇與最低率取大
-        effectiveRate = Math.min(effectiveRate, wy.getMaxRate());     // 夾上限
-        int cost = calcCost(wy, effectiveRate);
+        String distStr = String.format("1(%.1f%%)  2(%.1f%%)  3(%.1f%%)",
+                dist[0] / 10.0, dist[1] / 10.0, dist[2] / 10.0);
 
-        String[] data = new String[4];
+        String[] data = new String[5];
         data[0] = String.valueOf(level);
         data[1] = String.valueOf(pc.getWenyangJiFen());
-        data[2] = String.valueOf(effectiveRate);
-        data[3] = String.valueOf(cost);
+        data[2] = distStr;
+        data[3] = String.valueOf(wy.getCostUp()); // 變更機率扣點
+        data[4] = String.valueOf(wy.getCost());   // ★ 強化消耗點數
         return data;
     }
 
-    /** 成本計算：高於表定率，每多 10% 加一次 costUp */
-    private int calcCost(final L1WenYang wy, final int effectiveRate) {
-        int base = wy.getCost();
-        int minRate = wy.getRate();
-        if (effectiveRate > minRate) {
-            int extraSteps = (effectiveRate - minRate) / 2;
-            base += extraSteps * wy.getCostUp();
-        }
-        return base;
+
+
+    /** 重抽分布（總和=1000；受 +2/+3 cap 影響） */
+    private void randomizeDist(final L1PcInstance pc, final int slot, final L1WenYang wy) {
+        final String key = k(pc.getId(), slot);
+
+        int cap2 = (wy.getPlus2Cap() > 0) ? Math.min(wy.getPlus2Cap(), 100) : 100;
+        int cap3 = (wy.getPlus3Cap() > 0) ? Math.min(wy.getPlus3Cap(), 100) : 100;
+
+        int cap2x = cap2 * 10; // 0.1% 精度
+        int cap3x = cap3 * 10;
+
+        int p2 = ThreadLocalRandom.current().nextInt(cap2x + 1);                                  // 0..cap2x
+        int p3 = ThreadLocalRandom.current().nextInt(Math.min(cap3x, 1000 - p2) + 1);             // 0..min(cap3x,1000-p2)
+        int p1 = Math.max(0, 1000 - p2 - p3);
+
+        _distCache.put(key, new int[]{p1, p2, p3});
     }
 
+    /** 讀取當前分布（若沒有就先建一組） */
+    private int[] ensureDist(final L1PcInstance pc, final int slot, final L1WenYang wy) {
+        final String key = k(pc.getId(), slot);
+        int[] d = _distCache.get(key);
+        if (d == null || d.length != 3 || d[0] + d[1] + d[2] != 1000) {
+            randomizeDist(pc, slot, wy);
+            d = _distCache.get(key);
+        }
+        return new int[]{d[0], d[1], d[2]};
+    }
+
+    private int getSlotByType(final L1PcInstance pc, final int type) {
+        if (type == pc.getWyType1()) return 1;
+        if (type == pc.getWyType2()) return 2;
+        if (type == pc.getWyType3()) return 3;
+        if (type == pc.getWyType4()) return 4;
+        if (type == pc.getWyType5()) return 5;
+        if (type == pc.getWyType6()) return 6;
+        return 0;
+    }
 
     /** 播放動畫（逐玩家鎖） */
-    public void playAnimation(final L1PcInstance pc, final L1NpcInstance npc, int type, L1WenYang wy, int effectiveRate) {
+    public void playAnimation(final L1PcInstance pc, final L1NpcInstance npc, int type, L1WenYang wy, int ignored) {
         final int pid = pc.getId();
         _animating.put(pid, true);
         try {
-            // 動畫期間不需顯示真實等級，用 0 當作面板上的等級展示（或保留 getWyLevel(pc,type) 也行）
-            String[] data = buildPanelData(pc, wy, effectiveRate, 0);
-
-            // 逐幀播放：01..31
-            for (int i = 1; i <= 30; i++) {
+            String[] data = buildPanelData(pc, type, wy, /*level*/0);
+            for (int i = 1; i <= 31; i++) {
                 String htmlId = String.format("wenyang%02d_%02d", type, i);
                 pc.sendPackets(new S_NPCTalkReturn(pc, htmlId, data));
                 TimeUnit.MILLISECONDS.sleep(50);
             }
-        } catch (InterruptedException ignored) {
-            // 忽略中斷，finishAnimation 會做解鎖
+        } catch (InterruptedException ignoredEx) {
+            // 忽略中斷
         }
     }
 
-
     /** 動畫結束顯示 + 解鎖 */
-    public void finishAnimation(final L1PcInstance pc, final L1NpcInstance npc, int type, L1WenYang wy, int effectiveRate, int level) {
+    public void finishAnimation(final L1PcInstance pc, final L1NpcInstance npc, int type, L1WenYang wy, int ignored, int level) {
         try {
-            String[] data = buildPanelData(pc, wy, effectiveRate, level);
+            String[] data = buildPanelData(pc, type, wy, level);
             pc.sendPackets(new S_NPCTalkReturn(pc, getHtmlId(type, level), data));
         } finally {
             _animating.remove(pc.getId());
@@ -211,84 +202,73 @@ public class WenYangCmd {
         return String.format("wenyang%02d_%02d", type, Math.min(LEVEL_CAP, level + 1));
     }
 
-    /** 寫入成功紀錄（路線B：單筆覆蓋＋成功次數自增） */
+    /** 寫入成功紀錄 */
     private void addLog(final L1PcInstance pc, final int type, final int level) {
         final L1WenYangJiLu row = new L1WenYangJiLu();
         row.setPcid(pc.getId());
         row.setType(type);
         row.setLevel(level);
-        // 若 storeItem 已改成 UPSERT，就保持 storeItem(...)
-        // 若你另做了新方法，請改呼叫：
         WenYangJiLuTable.getInstance().storeOrUpdateSuccess(pc, row);
     }
 
-
     // =========================================================
-    // Rate 上下調整
+    // 變更（原 stepRateUp）：只重抽分布並重畫
     // =========================================================
+    /** 變更機率：每按一次扣 costup，然後重抽 +1/+2/+3 分布（可無限按） */
+    private void stepChange(final L1PcInstance pc, final L1WenYang wy, final int slot) throws Exception {
+        int stepCost = wy.getCostUp();
+        if (stepCost > 0) {
+            if (pc.getWenyangJiFen() < stepCost) {
+                pc.sendPackets(new S_SystemMessage("您的紋樣積分不足，無法變更機率"));
+                return;
+            }
+            pc.setWenyangJiFen(pc.getWenyangJiFen() - stepCost);
+            if (pc.getWenyangJiFen() < 0) pc.setWenyangJiFen(0);
+            pc.save();
+        }
 
-    private void stepRateUp(final L1PcInstance pc, final L1WenYang wy, final int slot) {
-        int cur = getUiRate(pc, slot);
-        if (cur < wy.getRate()) cur = wy.getRate();
-        int next = cur + STEP_RATE;
-        if (next > wy.getMaxRate()) return; // 超過最大顯示率，忽略
-        setUiRate(pc, slot, next);
-        showPanel(pc, getWyType(pc, slot), wy, next, getWyLevelBySlot(pc, slot));
+        // 重抽分布（受 +2/+3 上限限制；0.1% 精度）
+        randomizeDist(pc, slot, wy);
+
+        // 重畫面板（注意 showPanel 這版不需要 rateSel 參數）
+        showPanel(pc, getWyType(pc, slot), wy, getWyLevelBySlot(pc, slot));
     }
 
-    private void stepRateDn(final L1PcInstance pc, final L1WenYang wy, final int slot) {
-        int cur = getUiRate(pc, slot);
-        if (cur <= wy.getRate()) cur = wy.getRate();
-        int next = cur - STEP_RATE;
-        if (next < wy.getRate()) return; // 低於最低顯示率，忽略
-        setUiRate(pc, slot, next);
-        showPanel(pc, getWyType(pc, slot), wy, next, getWyLevelBySlot(pc, slot));
-    }
-
-    // =========================================================
-    // 開始強化
-    // =========================================================
 
     /** 開始強化（入口檢查 + 丟動畫執行緒） */
-    private void tryEnhance(final L1PcInstance pc, final int slot, final L1WenYang wy, final int rateSel) {
-        // 目前這格的類型與等級
+    private void tryEnhance(final L1PcInstance pc, final int slot, final L1WenYang wy, final int ignoredRateSel) {
         final int type  = getWyType(pc, slot);
         final int level = getWyLevelBySlot(pc, slot);
 
-        // 成功率夾上下限 + 成本
-        int effectiveRate = Math.max(rateSel, wy.getRate());
-        effectiveRate = Math.min(effectiveRate, wy.getMaxRate());
-        final int cost = calcCost(wy, effectiveRate);
-
-        // 以 DB 為準檢查 20 次上限（避免快取/併發偏差）
-        int successCount = WenYangJiLuTable.getInstance()
-                .getSuccessCountFromDB(pc.getId(), type);
+        // 成功次數上限
+        int successCount = WenYangJiLuTable.getInstance().getSuccessCountFromDB(pc.getId(), type);
         if (successCount >= SUCCESS_CAP) {
             pc.sendPackets(new S_SystemMessage("該紋樣強化成功次數已達 " + SUCCESS_CAP + " 次上限，無法再強化。"));
             return;
         }
 
-        // 積分檢查
-        if (pc.getWenyangJiFen() < cost) {
-            pc.sendPackets(new S_SystemMessage("您的紋樣積分不足"));
-            return;
-        }
-
-        // 等級上限檢查
+        // 等級上限
         if (level >= LEVEL_CAP) {
             pc.sendPackets(new S_SystemMessage("伺服器最高紋樣等級為 " + LEVEL_CAP + " 等"));
             return;
         }
 
-        // 動畫鎖（逐玩家）
+        // ★ 恢復：強化消耗點數
+        final int cost = Math.max(0, wy.getCost());
+        if (pc.getWenyangJiFen() < cost) {
+            pc.sendPackets(new S_SystemMessage("您的紋樣積分不足，無法進行強化"));
+            return;
+        }
+
+        // 動畫鎖
         if (_animating.containsKey(pc.getId())) {
             pc.sendPackets(new S_SystemMessage("請稍後再試"));
             return;
         }
 
-        // 進入動畫流程（真正的扣點/判定/收尾在執行緒內進行）
+        // 傳遞 cost 進動畫執行緒
         GeneralThreadPool.get().execute(
-                new WenYangAnimation(pc, type, wy, effectiveRate, cost, slot)
+                new WenYangAnimation(pc, type, wy, /*effectiveRateIgnored*/0, /*cost*/cost, slot)
         );
     }
 
@@ -296,7 +276,6 @@ public class WenYangCmd {
     // =========================================================
     // 內部工具：存取玩家的六組資料（type / level / rate）
     // =========================================================
-
     private int getWyType(final L1PcInstance pc, final int slot) {
         switch (slot) {
             case 1: return pc.getWyType1();
@@ -310,7 +289,6 @@ public class WenYangCmd {
     }
 
     private int getWyLevel(final L1PcInstance pc, final int type) {
-        // 若你的 type 與 slot 一致可直接用 slot；這裡保留舊版 getWyLevel(type) 的查法：
         if (type == pc.getWyType1()) return pc.getWyLevel1();
         if (type == pc.getWyType2()) return pc.getWyLevel2();
         if (type == pc.getWyType3()) return pc.getWyLevel3();
@@ -331,30 +309,7 @@ public class WenYangCmd {
             default: return 0;
         }
     }
-
-    private int getUiRate(final L1PcInstance pc, final int slot) {
-        switch (slot) {
-            case 1: return pc.getWenyangRate1();
-            case 2: return pc.getWenyangRate2();
-            case 3: return pc.getWenyangRate3();
-            case 4: return pc.getWenyangRate4();
-            case 5: return pc.getWenyangRate5();
-            case 6: return pc.getWenyangRate6();
-            default: return 0;
-        }
-    }
-
-    private void setUiRate(final L1PcInstance pc, final int slot, final int v) {
-        switch (slot) {
-            case 1: pc.setWenyangRate1(v); break;
-            case 2: pc.setWenyangRate2(v); break;
-            case 3: pc.setWenyangRate3(v); break;
-            case 4: pc.setWenyangRate4(v); break;
-            case 5: pc.setWenyangRate5(v); break;
-            case 6: pc.setWenyangRate6(v); break;
-        }
-    }
-
+    /** 依槽位把玩家紋樣等級 +delta（至少 +1；封頂 LEVEL_CAP） */
     private void addWyLevelBySlot(final L1PcInstance pc, final int slot, final int delta) {
         int cur = getWyLevelBySlot(pc, slot);
         int next = Math.min(LEVEL_CAP, Math.max(0, cur + Math.max(1, delta)));
@@ -369,82 +324,77 @@ public class WenYangCmd {
     }
 
     // =========================================================
-    // 動畫執行緒：含成功+2/+3 與成功次數上限二次防呆
+    // 動畫執行緒
     // =========================================================
     class WenYangAnimation implements Runnable {
         private final L1PcInstance _pc;
-        private final int _type;      // HTML 用的 type（ex: 01, 02...）
+        private final int _type;
         private final L1WenYang _wy;
-        private final int _effectiveRate;
-        private final int _cost;
-        private final int _slot;      // 1..6，用於直接存取該組 level/rate
+        private final int _effectiveRateIgnored;
+        private final int _cost;   // ★ 這裡改名成 _cost
+        private final int _slot;
 
-        public WenYangAnimation(final L1PcInstance pc, int type, L1WenYang wy, int effectiveRate, int cost, int slot) {
+        public WenYangAnimation(final L1PcInstance pc, int type, L1WenYang wy, int effectiveRateIgnored, int cost, int slot) {
             _pc = pc;
             _type = type;
             _wy = wy;
-            _effectiveRate = effectiveRate;
-            _cost = cost;
+            _effectiveRateIgnored = effectiveRateIgnored;
+            _cost = cost; // ★
             _slot = slot;
         }
 
         @Override
         public void run() {
             try {
-                // 播動畫（加鎖在內）
-                playAnimation(_pc, null, _type, _wy, _effectiveRate);
+                // 播動畫（加鎖）
+                playAnimation(_pc, null, _type, _wy, 0);
 
-                // 二次防呆：成功次數上限（避免競態）
+                // 二次防呆：成功次數上限
                 int successCountNow = WenYangJiLuTable.getInstance().getSuccessCount(_pc.getId(), _type);
                 if (successCountNow >= SUCCESS_CAP) {
                     _pc.sendPackets(new S_SystemMessage("該紋樣強化成功次數已達 " + SUCCESS_CAP + " 次上限，無法再強化。"));
-                    finishAnimation(_pc, null, _type, _wy, _effectiveRate, getWyLevel(_pc, _type));
+                    finishAnimation(_pc, null, _type, _wy, 0, getWyLevel(_pc, _type));
                     return;
                 }
 
-                // 先扣積分（無論成功/失敗）
-                _pc.setWenyangJiFen(_pc.getWenyangJiFen() - _cost);
-                if (_pc.getWenyangJiFen() < 0) { // 保底：不為負
-                    _pc.setWenyangJiFen(0);
-                }
-
-                // 成功判定
-                boolean success = ThreadLocalRandom.current().nextInt(100) < _effectiveRate;
-
-                if (success) {
-                    // ★ 改成讀取 DB 裡的數值，若 DB 沒設定（=0）就用全域預設
-                    int p3 = _wy.getPlus3Rate() > 0 ? _wy.getPlus3Rate() : PLUS3_DEFAULT;
-                    int p2 = _wy.getPlus2Rate() > 0 ? _wy.getPlus2Rate() : PLUS2_DEFAULT;
-
-                    // 避免總和超過 100%
-                    int total = Math.min(100, p3 + p2);
-
-                    int add = 1;
-                    int roll = ThreadLocalRandom.current().nextInt(100); // 0..99
-                    if (roll < p3) {
-                        add = 3;
-                    } else if (roll < total) {
-                        add = 2;
-                    }
-
-                    addWyLevelBySlot(_pc, _slot, add);
-                    _pc.sendPackets(new S_SystemMessage("恭喜升級成功 (+" + add + ")，重登後獲得紋樣屬性"));
-                    _pc.save();
-
-                    addLog(_pc, _type, getWyLevel(_pc, _type));
-
-                } else {
-                    _pc.sendPackets(new S_SystemMessage("很遺憾升級失敗"));
+                // 扣強化消耗點數（下一階的 cost）
+                if (_cost > 0) {
+                    _pc.setWenyangJiFen(_pc.getWenyangJiFen() - _cost);
+                    if (_pc.getWenyangJiFen() < 0) _pc.setWenyangJiFen(0);
                     _pc.save();
                 }
 
-                // UI 收尾顯示
-                finishAnimation(_pc, null, _type, _wy, _effectiveRate, getWyLevel(_pc, _type));
+                // 依分布決定 +1 / +2 / +3（0.1% 精度）
+                int[] dist = ensureDist(_pc, _slot, _wy);
+                int p1 = dist[0], p2 = dist[1], p3 = dist[2];
+                int roll = ThreadLocalRandom.current().nextInt(1000);
+                int add = (roll < p3) ? 3 : (roll < p3 + p2) ? 2 : 1;
+
+                // 實際升級
+                addWyLevelBySlot(_pc, _slot, add);
+                _pc.sendPackets(new S_SystemMessage("恭喜升級成功 (+" + add + ")，重登後獲得紋樣屬性"));
+                _pc.save();
+
+                // 記錄一次成功
+                addLog(_pc, _type, getWyLevel(_pc, _type));
+
+                // ★ 升級後重新抓「新下一階模板」用於顯示與分布上限
+                L1WenYang wyNext = getNextStageTemplate(_pc, _slot);
+                if (wyNext == null) {
+                    // 已達上限：用目前這階的 wy 作為顯示基底，或你也可以顯示 cost=0
+                    wyNext = _wy;
+                }
+
+                // 強化完成後：刷新下一輪分布（用新下一階的 cap）
+                randomizeDist(_pc, _slot, wyNext);
+
+                // 收尾顯示（用新下一階 wyNext）
+                finishAnimation(_pc, null, _type, wyNext, 0, getWyLevel(_pc, _type));
 
             } catch (Exception e) {
                 _log.error(e.getLocalizedMessage(), e);
                 try {
-                    finishAnimation(_pc, null, _type, _wy, _effectiveRate, getWyLevel(_pc, _type));
+                    finishAnimation(_pc, null, _type, _wy, 0, getWyLevel(_pc, _type));
                 } catch (Exception ignore) {}
             }
         }

@@ -19,70 +19,77 @@
 package com.lineage.server.Manly;
 
 /**
- * 裝備溶解系統
- *
- * @author Administrator
+ * 紋樣資料模型
  */
 public class L1WenYang {
-    private int _type;//類型
-    private int _level;//等級
-    private int _rate; //機率
-    private String _not;//說明
-    private int _cost; //強化消耗點數
-    private int _costup; //機率提升損耗點數
-    private int _maxRate; //最大機率
-    private int _liliang;//力量
-    private int _minjie;//敏捷
-    private int _zhili;//智力
-    private int _jingshen;//精神
-    private int _tizhi;//體質
-    private int _meili;//魅力
-    private int _xue;//HP
-    private int _mo;//MP
-    private int _huixue;//HPR
-    private int _huimo;//MPR
-    private int _ewai;//攻擊額外
-    private int _chenggong;//攻擊成功
-    private int _mogong;//SP
-    private int _mofang;//MR
-    private int _feng;//風屬性防禦
-    private int _shui;//水屬性防禦
-    private int _tu;//地屬性防禦
-    private int _huo;//火屬性防禦
-    private int _jianmian;//傷害減免
-    private int _jingyan;//經驗
-    private int _addshanbi;//閃避提高
-    private int _addhuibi;//迴避提高
-    private int _addyaoshui;//藥水增加
-    private int _addfuzhong;//負重
-    private int _add_Ac;//防禦
-    private int _adddice_dmg;// 機率給予爆擊率
-    private int _adddmg; //機率給予傷害值
-    private int _addpvpdmg; // 增加PVP傷害
-    private int _addpvpdmg_r; // 增加PVP減傷
+
+    private int _type;              // 類型
+    private int _level;             // 等級
+    private String _not;            // 說明(名稱)
+
+    private int _cost = 0;          // ★ 強化消耗點數
+    private int _costup = 0;        // ★ 機率提升損耗點數(變更機率用)
+
+    // 屬性
+    private int _liliang;           // 力量
+    private int _minjie;            // 敏捷
+    private int _zhili;             // 智力
+    private int _jingshen;          // 精神
+    private int _tizhi;             // 體質
+    private int _meili;             // 魅力
+    private int _xue;               // HP
+    private int _mo;                // MP
+    private int _huixue;            // HPR
+    private int _huimo;             // MPR
+    private int _ewai;              // 額外傷害
+    private int _chenggong;         // 攻擊成功
+    private int _mogong;            // SP
+    private int _mofang;            // MR
+    private int _feng;              // 風屬性防禦
+    private int _shui;              // 水屬性防禦
+    private int _tu;                // 地屬性防禦
+    private int _huo;               // 火屬性防禦
+    private int _jianmian;          // 傷害減免
+    private int _jingyan;           // 經驗加成
+
+    // 額外加成
+    private int _addshanbi;         // 閃避提高
+    private int _addhuibi;          // 迴避提高
+    private int _addyaoshui;        // 藥水增加
+    private int _addfuzhong;        // 負重
+    private int _add_Ac;            // 防禦
+    private int _adddice_dmg;       // 機率給予爆擊率
+    private int _adddmg;            // 機率給予爆擊質
+    private int _addpvpdmg;         // 增加PVP傷害
+    private int _addpvpdmg_r;       // 增加PVP減傷
+
+    // Buff 顯示
     private int _buff_iconid;
     private int _buff_stringid;
-    // === 新增：由 DB 控制的 +2 / +3 機率(%) ===
-    private int _plus2Rate;   // 單次成功 +2 的機率(%)：對應「一次加二機率」
-    private int _plus3Rate;   // 單次成功 +3 的機率(%)：對應「一次加三機率」
 
-    // === 調整建構子：在原參數尾端「追加」plus2/plus3，避免影響既有呼叫點順序 ===
+    // 由 DB 控制的單次成功 +2/+3 上限(%)（實際隨機分布會受此約束）
+    private int _plus2Cap = 100;
+    private int _plus3Cap = 100;
+
+    /**
+     * 建構子（含 cost 與 costup；最後兩參為 +2/+3 上限）
+     */
     public L1WenYang(
-            int type, int level, int rate, String not, int cost, int costup, int maxRate,
+            int type, int level, String not, int cost, int costup,
             int liliang, int minjie, int zhili, int jingshen, int tizhi, int meili, int xue, int mo,
             int huixue, int huimo, int ewai, int chenggong, int mogong, int mofang, int feng, int shui,
-            int tu, int huo, int jianmian, int jingyan, int buff_buff_iconid, int buff_stringid,
+            int tu, int huo, int jianmian, int jingyan, int buff_iconid, int buff_stringid,
             int shanbi, int huibi, int yaoshui, int fuzhong, int add_Ac, int adddice_dmg, int adddmg,
             int addpvpdmg, int addpvpdmg_r,
-            int plus2Rate, int plus3Rate   // ★ 新增：由 DB 帶入
+            int plus2Cap, int plus3Cap
     ) {
         _type = type;
         _level = level;
         _not = not;
-        _rate = rate;
-        _cost = cost;
-        _costup = costup;
-        _maxRate = maxRate;
+
+        _cost = Math.max(0, cost);
+        _costup = Math.max(0, costup);
+
         _liliang = liliang;
         _minjie = minjie;
         _zhili = zhili;
@@ -103,210 +110,77 @@ public class L1WenYang {
         _huo = huo;
         _jianmian = jianmian;
         _jingyan = jingyan;
-        _buff_iconid = buff_buff_iconid;
+
+        _buff_iconid = buff_iconid;
         _buff_stringid = buff_stringid;
-        _addshanbi = shanbi; //0115
+
+        _addshanbi = shanbi;
         _addhuibi = huibi;
         _addyaoshui = yaoshui;
         _addfuzhong = fuzhong;
-        _add_Ac = add_Ac; //0122
+        _add_Ac = add_Ac;
         _adddice_dmg = adddice_dmg;
         _adddmg = adddmg;
         _addpvpdmg = addpvpdmg;
         _addpvpdmg_r = addpvpdmg_r;
-        // ★ 新增
-        _plus2Rate = plus2Rate;
-        _plus3Rate = plus3Rate;
-    }
-    public int getPlus2Rate() { return _plus2Rate; }
 
-    /** 單次成功 +3 機率(%)（DB 控制） */
-    public int getPlus3Rate() { return _plus3Rate; }
-
-    public int get_buff_iconid() {
-        return this._buff_iconid;
-    }   //*圖檔tbl編號
-
-    public void set_buff_iconid(final int i) {
-        this._buff_iconid = i;
-    } //*圖檔tbl編號
-
-    public int get_buff_stringid() {
-        return this._buff_stringid;
-    } //*偵測圖檔string編號
-
-    public void set_buff_stringid(final int i) {
-        this._buff_stringid = i;
-    } //*偵測圖檔string編號
-
-    /**
-     * 閃避
-     */
-    public int getaddshanbi() {
-        return _addshanbi;
+        _plus2Cap = Math.max(0, Math.min(plus2Cap, 100));
+        _plus3Cap = Math.max(0, Math.min(plus3Cap, 100));
     }
 
-    /**
-     * 迴避
-     */
-    public int getHuibi() {
-        return _addhuibi;
-    }
+    // ====== 基本存取器 ======
+    public int getType() { return _type; }
+    public int getLevel() { return _level; }
+    public String getNot() { return _not; }
 
-    /**
-     * 藥水增加
-     */
-    public int getYaoshui() {
-        return _addyaoshui;
-    }
+    // cost / costup
+    public int getCost() { return _cost; }                 // 強化消耗點數
+    public void setCost(int v) { _cost = Math.max(0, v); }
+    public int getCostUp() { return _costup; }             // 變更機率扣點
+    public void setCostUp(int v) { _costup = Math.max(0, v); }
 
-    /**
-     * 負重
-     */
-    public int getFuzhong() {
-        return _addfuzhong;
-    }
+    // +2/+3 cap（百分比 0..100）
+    public int getPlus2Cap() { return _plus2Cap; }
+    public void setPlus2Cap(int v) { _plus2Cap = Math.max(0, Math.min(v, 100)); }
+    public int getPlus3Cap() { return _plus3Cap; }
+    public void setPlus3Cap(int v) { _plus3Cap = Math.max(0, Math.min(v, 100)); }
 
-    /**
-     * 防禦
-     */
-    public int getAc() {
-        return _add_Ac;
-    }
+    // Buff 顯示
+    public int get_buff_iconid() { return _buff_iconid; }
+    public void set_buff_iconid(final int i) { _buff_iconid = i; }
+    public int get_buff_stringid() { return _buff_stringid; }
+    public void set_buff_stringid(final int i) { _buff_stringid = i; }
 
-    /**
-     * 機率給予爆擊
-     */
-    public int gatDiceDmg() {
-        return _adddice_dmg;
-    }
+    // ====== 屬性存取器 ======
+    public int getliliang() { return _liliang; }
+    public int getminjie() { return _minjie; }
+    public int getzhili() { return _zhili; }
+    public int getjingshen() { return _jingshen; }
+    public int gettizhi() { return _tizhi; }
+    public int getmeili() { return _meili; }
+    public int getxue() { return _xue; }
+    public int getmo() { return _mo; }
+    public int gethuixue() { return _huixue; }
+    public int gethuimo() { return _huimo; }
+    public int getewai() { return _ewai; }
+    public int getchenggong() { return _chenggong; }
+    public int getmogong() { return _mogong; }
+    public int getmofang() { return _mofang; }
+    public int getfeng() { return _feng; }
+    public int getshui() { return _shui; }
+    public int gettu() { return _tu; }
+    public int gethuo() { return _huo; }
+    public int getjianmian() { return _jianmian; }
+    public int getjingyan() { return _jingyan; }
 
-    /**
-     * 機率給予爆擊質
-     */
-    public int getDmg() {
-        return _adddmg;
-    }
-
-    /**
-     * 增加PVP傷害
-     */
-    public int getpvpdmg() {
-        return _addpvpdmg;
-    }
-
-    /**
-     * 增加PVP減傷
-     */
-    public int getpvpdmg_r() {
-        return _addpvpdmg_r;
-    }
-
-    public int getType() {
-        return _type;
-    }
-
-    public int getRate() {
-        return _rate;
-    }
-
-    public int getLevel() {
-        return _level;
-    }
-
-    public String getNot() {
-        return _not;
-    }
-
-    public int getCost() {
-        return _cost;
-    }
-
-    public int getCostUp() {
-        return _costup;
-    }
-
-    public int getMaxRate() {
-        return _maxRate;
-    }
-
-    public int getliliang() {
-        return _liliang;
-    }
-
-    public int getminjie() {
-        return _minjie;
-    }
-
-    public int getzhili() {
-        return _zhili;
-    }
-
-    public int getjingshen() {
-        return _jingshen;
-    }
-
-    public int gettizhi() {
-        return _tizhi;
-    }
-
-    public int getmeili() {
-        return _meili;
-    }
-
-    public int getxue() {
-        return _xue;
-    }
-
-    public int getmo() {
-        return _mo;
-    }
-
-    public int gethuixue() {
-        return _huixue;
-    }
-
-    public int gethuimo() {
-        return _huimo;
-    }
-
-    public int getewai() {
-        return _ewai;
-    }
-
-    public int getchenggong() {
-        return _chenggong;
-    }
-
-    public int getmogong() {
-        return _mogong;
-    }
-
-    public int getmofang() {
-        return _mofang;
-    }
-
-    public int getfeng() {
-        return _feng;
-    }
-
-    public int getshui() {
-        return _shui;
-    }
-
-    public int gettu() {
-        return _tu;
-    }
-
-    public int gethuo() {
-        return _huo;
-    }
-
-    public int getjianmian() {
-        return _jianmian;
-    }
-
-    public int getjingyan() {
-        return _jingyan;
-    }
+    // 額外加成
+    public int getaddshanbi() { return _addshanbi; }   // 閃避提高
+    public int getHuibi() { return _addhuibi; }        // 迴避提高
+    public int getYaoshui() { return _addyaoshui; }    // 藥水增加
+    public int getFuzhong() { return _addfuzhong; }    // 負重
+    public int getAc() { return _add_Ac; }             // 防禦
+    public int gatDiceDmg() { return _adddice_dmg; }   // 機率給予爆擊率 (沿用舊命名)
+    public int getDmg() { return _adddmg; }            // 機率給予爆擊質
+    public int getpvpdmg() { return _addpvpdmg; }      // PVP 傷害
+    public int getpvpdmg_r() { return _addpvpdmg_r; }  // PVP 減傷
 }

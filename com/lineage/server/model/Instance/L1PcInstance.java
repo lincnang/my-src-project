@@ -12513,6 +12513,15 @@ public class L1PcInstance extends L1Character { // src015
         _wylevel3 = i;
     }
 
+    private int[][] _wyDist = new int[6][3]; // [slot][分布], slot=0..5, 分布= {p1,p2,p3}
+
+    public int[] getWyDist(int slot) {
+        return _wyDist[slot - 1]; // slot=1..6
+    }
+
+    public void setWyDist(int slot, int[] dist) {
+        _wyDist[slot - 1] = dist;
+    }
     ////////////////////////////////////紋樣系統結束//////////////////////////////////////
     public int getWyLevel4() {
         return _wylevel4;

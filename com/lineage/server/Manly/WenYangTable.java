@@ -58,11 +58,9 @@ public class WenYangTable {
         while (rs.next()) {
             int type = rs.getInt("分類");
             int Level = rs.getInt("強化等級");
-            int rate = rs.getInt("機率");
             String not = rs.getString("紋樣名稱");
             int cost = rs.getInt("強化消耗點數");
             int costup = rs.getInt("機率提升損耗點數");
-            int maxRate = rs.getInt("最高機率");
             int liliang = rs.getInt("力量");
             int minjie = rs.getInt("敏捷");
             int zhili = rs.getInt("智力");
@@ -94,16 +92,16 @@ public class WenYangTable {
             int adddmg = rs.getInt("機率給予爆擊質"); //0122
             int addpvpdmg = rs.getInt("PVP傷害"); //0122
             int addpvpdmg_r = rs.getInt("PVP減免"); //0122
-            int plus2 = safeGetInt(rs, "一次加二機率", 10);
-            int plus3 = safeGetInt(rs, "一次加三機率", 3);
+            int plus2Cap = safeGetInt(rs, "一次加二上限", 100);
+            int plus3Cap = safeGetInt(rs, "一次加三上限", 100);
             L1WenYang MagicCrystal_Item = new L1WenYang(
-                    type, Level, rate, not, cost, costup, maxRate,
+                    type, Level, not, cost, costup,
                     liliang, minjie, zhili, jingshen, tizhi, meili, xue, mo,
                     huixue, huimo, ewai, chenggong, mogong, mofang, feng, shui,
                     tu, huo, jianmian, jingyan, buff_iconid, buff_stringid,
                     addshanbi, huibi, yaoshui, fuzhong, add_Ac, adddice_dmg, adddmg,
                     addpvpdmg, addpvpdmg_r,
-                    plus2, plus3 // ★ 新增：放在最後兩個參數
+                    plus2Cap, plus3Cap // ★ 新增：放在最後兩個參數
             );
             if (_checkMaxEnchantLevelmaps.containsKey(type)) {
                 final Integer checkMaxEnchanrLevel = _checkMaxEnchantLevelmaps.get(type);

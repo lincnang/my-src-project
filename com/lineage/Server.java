@@ -242,7 +242,31 @@ public class Server {
             Config.ISUBUNTU = true;
         }
         GameServer.getInstance().initialize();
-    }
+        // 啟動數據庫連接監控
+        try {
+            com.lineage.server.database.DatabaseMonitor.getInstance().startMonitoring();
+            log.info("數據庫連接監控已啟動");
+        } catch (Exception e) {
+            log.error("啟動數據庫連接監控失敗，但服務器將繼續啟動: " + e.getMessage());
+            // 不拋出異常，讓服務器繼續啟動
+        }
+        
+        // 啟動斷線診斷監控
+        try {
+            com.lineage.server.utils.DisconnectionDiagnostics.getInstance().startMonitoring();
+            log.info("斷線診斷監控已啟動");
+        } catch (Exception e) {
+            log.error("啟動斷線診斷監控失敗: " + e.getMessage());
+        }
+        
+        // 啟動玩家活動監控
+        try {
+            com.lineage.server.utils.ActivityMonitor.getInstance();
+            log.info("玩家活動監控已啟動");
+        } catch (Exception e) {
+            log.error("啟動玩家活動監控失敗: " + e.getMessage());
+        }
+    }           
 
     /**
      * 加載全部config配置

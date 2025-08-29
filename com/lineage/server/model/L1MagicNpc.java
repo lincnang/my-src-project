@@ -102,7 +102,10 @@ public class L1MagicNpc extends L1MagicMode {
             int skillLevel = 1;
             L1SkillEnhance enhance = SkillEnhanceTable.get().getEnhanceData(skillId, skillLevel);
             if (enhance != null) {
-                probability = enhance.getSetting1();
+                int val = enhance.getSetting1();
+                if (val < 0) val = 0;
+                if (val > 100) val = 100;
+                probability = val;
             } else {
                 probability = 100;
             }

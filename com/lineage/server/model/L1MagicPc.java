@@ -547,10 +547,14 @@ public class L1MagicPc extends L1MagicMode {
         // 我們假設 `CharSkillReading.get().getSkillLevel(pc.getId(), skillId)`
         // 能夠正確返回玩家透過吃書得到的「技能吃書等級」
         int playerSkillEnhanceLevel = CharSkillReading.get().getSkillLevel(_pc.getId(), skillId);
+        // 只有吃書後才取強化
         L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(skillId, playerSkillEnhanceLevel);
         if (enhanceData != null) {
-            probability += enhanceData.getSetting1();
-
+            // clamp 數值，避免 DB 異常
+            int addProb = enhanceData.getSetting1();
+            if (addProb < -1000) addProb = -1000; // 下限
+            if (addProb > 1000) addProb = 1000;   // 上限
+            probability += addProb;
         }
 
         switch (_calcType) {
@@ -1067,10 +1071,11 @@ public class L1MagicPc extends L1MagicMode {
         // 7. 吃書傷害加成（設定4）
         int bookLevelForDmg = _pc.getSkillLevel(skillId);
         L1SkillEnhance enhanceDataForDmg = SkillEnhanceTable.get().getEnhanceData(skillId, bookLevelForDmg);
-        if (enhanceDataForDmg != null && enhanceDataForDmg.getSetting4() != 0.0) {
+        if (enhanceDataForDmg != null) {
             double extraDamagePercent = enhanceDataForDmg.getSetting4();
+            if (extraDamagePercent < 0) extraDamagePercent = 0; // 下限
+            if (extraDamagePercent > 500) extraDamagePercent = 500; // 上限（可調）
             magicDamage += (int) (magicDamage * (extraDamagePercent / 100.0));
-        } else {
         }
         // === 8. BUFF加成（只要身上有古代啟示BUFF，所有魔法都受益，幅度依設定1）===
         if (_pc.hasSkillEffect(ICE_LANCE)) {
@@ -1078,6 +1083,8 @@ public class L1MagicPc extends L1MagicMode {
             L1SkillEnhance enhance = SkillEnhanceTable.get().getEnhanceData(ICE_LANCE, level);
             if (enhance != null) {
                 double dmgBonus = enhance.getSetting1(); // 設定1作為傷害加成%
+                if (dmgBonus < -100) dmgBonus = -100;
+                if (dmgBonus > 500) dmgBonus = 500;
                 magicDamage = (int)(magicDamage * (1.0 + dmgBonus / 100.0));
             }
         }

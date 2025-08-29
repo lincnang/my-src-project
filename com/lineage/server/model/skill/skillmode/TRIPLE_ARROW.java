@@ -48,6 +48,10 @@ public class TRIPLE_ARROW extends SkillMode {
         if (enhanceData != null) {
             int fixedBonus = enhanceData.getSetting1();
             int randomBonus = enhanceData.getSetting2();
+            if (fixedBonus < 0) fixedBonus = 0;
+            if (fixedBonus > 5000) fixedBonus = 5000;
+            if (randomBonus < 0) randomBonus = 0;
+            if (randomBonus > 5000) randomBonus = 5000;
             bonusDamage = fixedBonus;
             if (randomBonus > 0) {
                 bonusDamage += _random.nextInt(randomBonus + 1);

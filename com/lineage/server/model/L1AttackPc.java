@@ -996,6 +996,7 @@ public class L1AttackPc extends L1AttackMode {
             case 18:// 鎖鏈劍
                 weaponTotalDamage += calcAttrEnchantDmg();// 屬性武器增傷計算
                 weaponTotalDamage += calcAmuletAttrDmg();// 屬性項鏈增傷計算
+
                 dmg = weaponTotalDamage + _statusDamage + _pc.getDmgup() + _pc.getOriginalDmgup();
                 break;
             case 11: // 鋼爪

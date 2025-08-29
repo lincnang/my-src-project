@@ -60,6 +60,7 @@ public class Item_SkillBook extends ItemExecutor {
         // 2) 取得玩家目前「skillId」的等級，並計算下一級
         int currentLv = pc.getSkillLevel(skillId); // 先從 pc 取目前等級
         int newLv = currentLv + 1;                 // 要升到的新等級
+        if (newLv < 1) newLv = 1;
 
         // 3) 檢查「skills_技能強化」表中，skillId + bookLevel= newLv 是否存在
         L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(skillId, newLv);

@@ -3,7 +3,6 @@ package com.lineage.server.clientpackets;
 import com.add.MJBookQuestSystem.Loader.UserMonsterBookLoader;
 import com.add.MJBookQuestSystem.Loader.UserWeekQuestLoader;
 import com.add.Tsai.*;
-import com.eric.gui.J_Main;
 import com.lineage.DatabaseFactory;
 import com.lineage.config.*;
 import com.lineage.data.event.*;
@@ -12,7 +11,6 @@ import com.lineage.data.event.ValakasRoom.ValakasRoomSystem;
 import com.lineage.data.event.ice.IceQueenThread;
 import com.lineage.data.npc.Npc_clan;
 import com.lineage.echo.ClientExecutor;
-import com.lineage.managerUI.Eva;
 import com.lineage.server.CheckFightTimeController;
 import com.lineage.server.Controller.StrBonusManager;
 import com.lineage.server.Manly.L1WenYang;
@@ -1192,20 +1190,6 @@ public class C_LoginToServer extends ClientBasePacket {
                 }
             } catch (Exception e) {
                 _log.error("恢復GAIA技能冷卻時發生錯誤", e);
-            }
-
-            switch (Config.UI_MODE) {
-                case 0:
-                    System.out.println("UI已關閉");
-                    break;
-                case 1:
-                    J_Main.getInstance();;
-                    break;
-                case 2:
-                    Eva.getInstance();
-                    break;
-                default:
-                    System.out.println("未知UI模式，已自動關閉介面");
             }
             int currentHpAtLoad = pc.getCurrentHp();
             int currentMpAtLoad = pc.getCurrentMp();

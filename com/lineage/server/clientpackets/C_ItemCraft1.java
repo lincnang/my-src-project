@@ -1497,19 +1497,6 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         KeyOutEnemyName(pc, chatText.trim());
                         return;
                     }
-                    switch (Config.UI_MODE) {
-                        case 0:
-                            System.out.println("UI已關閉");
-                            break;
-                        case 1:
-                            J_Main.getInstance();
-                            break;
-                        case 2:
-                            Eva.getInstance();
-                            break;
-                        default:
-                            System.out.println("未知UI模式，已自動關閉介面");
-                    }
                     if (ConfigRecord.GM_OVERHEARD0) {
                         for (L1Object visible : World.get().getAllPlayers()) {
                             if ((visible instanceof L1PcInstance)) {

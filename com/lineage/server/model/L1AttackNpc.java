@@ -506,6 +506,7 @@ public class L1AttackNpc extends L1AttackMode {
             final Integer dmgStr = L1AttackList.STRD.get((int) _npc.getStr());
             dmg = _random.nextInt(lvl) + (_npc.getStr() / 2) + dmgStr;
         }
+
         dmg = npcDmgMode(dmg);
         dmg -= calcNpcDamageReduction();
         addNpcPoisonAttack(_targetNpc);

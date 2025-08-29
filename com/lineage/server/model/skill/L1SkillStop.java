@@ -718,9 +718,9 @@ public class L1SkillStop {
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
                             // 取得玩家狂暴術技能等級
-                            int bookLevel = pc.getSkillLevel(BERSERKERS);
-                            // 從 SkillEnhanceTable 讀取強化資料
-                            L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(BERSERKERS, bookLevel);
+                            int rawLv = pc.getSkillLevel(BERSERKERS);
+                            // 只有吃書後才取強化
+                            L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(BERSERKERS, rawLv);
                             // 預設移除數值
                             int removeAc = 10;
                             int removeDmgup = 5;
@@ -728,6 +728,11 @@ public class L1SkillStop {
                             if (enhanceData != null) {
                                 removeAc = enhanceData.getSetting1();
                                 removeDmgup = enhanceData.getSetting2();
+                                // 值域保護，避免DB異常
+                                if (removeAc < -100) removeAc = -100;
+                                if (removeAc > 100) removeAc = 100;
+                                if (removeDmgup < -200) removeDmgup = -200;
+                                if (removeDmgup > 200) removeDmgup = 200;
                             }
                             // 用負值扣除加成效果
                             cha.addAc(-removeAc);

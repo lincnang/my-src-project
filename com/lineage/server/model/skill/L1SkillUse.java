@@ -1624,13 +1624,17 @@ public class L1SkillUse {
             // 把 _user 轉成玩家
             L1PcInstance pc = (L1PcInstance) _user;
             // (A) 讀取衝暈技能等級 (若 L1PcInstance 有 getShockStunLevel)
-            int bookLevel = pc.getShockStunLevel();
-            // (B) 從 "SkillEnhanceTable" 查強化秒數
+            int bookLevel = Math.max(1, pc.getShockStunLevel());
+            // (B) 從 "SkillEnhanceTable" 查強化秒數（含向下回退）
             L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(_skillId, bookLevel);
             int stunSec = 4; // 預設
             if (enhanceData != null) {
                 int fixedSec = enhanceData.getSetting1();
                 int randomSec = enhanceData.getSetting2();
+                if (fixedSec < 0) fixedSec = 0;
+                if (fixedSec > 30) fixedSec = 30; // 上限可調
+                if (randomSec < 0) randomSec = 0;
+                if (randomSec > 10) randomSec = 10;
                 if (randomSec > 0) {
                     int randVal = _random.nextInt(randomSec + 1);
                     stunSec = fixedSec + randVal;
@@ -1791,7 +1795,7 @@ public class L1SkillUse {
                         int healEnhanceBookLevel = 0;
                         if (_user instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) _user;
-                            healEnhanceBookLevel = pc.getSkillLevel(HEAL_ALL);
+                            healEnhanceBookLevel = Math.max(1, pc.getSkillLevel(HEAL_ALL));
                         }
                         // 2. 從 SkillEnhanceTable 取得該技能等級的強化資料
                         L1SkillEnhance healEnhanceData = SkillEnhanceTable.get().getEnhanceData(HEAL_ALL, healEnhanceBookLevel);
@@ -1799,6 +1803,8 @@ public class L1SkillUse {
                         int enhanceLevel = 0;
                         if (healEnhanceData != null) {
                             enhanceLevel = healEnhanceData.getSetting1();
+                            if (enhanceLevel < 0) enhanceLevel = 0;
+                            if (enhanceLevel > 50) enhanceLevel = 50; // 每級10%，上限50級=+500%
                         }
                         // 4. 計算額外加成：每級強化增加 10%
                         _heal += _heal * (enhanceLevel * 0.1);

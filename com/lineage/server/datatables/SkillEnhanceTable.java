@@ -23,8 +23,9 @@ import java.util.*;
  */
 public final class SkillEnhanceTable {
     private static final Log _log = LogFactory.getLog(SkillEnhanceTable.class);
-    private static final Map<Integer, Map<Integer, L1SkillEnhance>> _enhanceMap = new HashMap<>();
-    private static final Map<String, L1SkillEnhance> _cmdMap = new HashMap<>();
+    // 使用 volatile 參考，確保一次性替換的可見性
+    private static volatile Map<Integer, Map<Integer, L1SkillEnhance>> _enhanceMap = Collections.emptyMap();
+    private static volatile Map<String, L1SkillEnhance> _cmdMap = Collections.emptyMap();
 
     private static SkillEnhanceTable _instance;
 
@@ -37,8 +38,9 @@ public final class SkillEnhanceTable {
     }
     /** 載入資料（啟動時調用） */
     public static void load() {
-        _enhanceMap.clear();
-        _cmdMap.clear();  // <-- 新增這行，重新載入時要清空cmdMap
+        // 使用本地快照，避免讀取執行緒遇到半載入狀態
+        Map<Integer, Map<Integer, L1SkillEnhance>> newEnhanceMap = new HashMap<>();
+        Map<String, L1SkillEnhance> newCmdMap = new HashMap<>();
         final PerformanceTimer timer = new PerformanceTimer();
         Connection con = null;
         PreparedStatement pstm = null;
@@ -64,10 +66,15 @@ public final class SkillEnhanceTable {
                 data.setCmd(rs.getString("對話檔指令"));   // 新增這一行
                 int skillId = data.getSkillId();
                 int bookLevel = data.getBookLevel();
-                Map<Integer, L1SkillEnhance> lvMap = _enhanceMap.computeIfAbsent(skillId, k -> new HashMap<>());
+                // 值域/容錯保護
+                if (data.getSetting4() <= 0) {
+                    // 避免除以0或負數
+                    data.setSetting4(1.0);
+                }
+                Map<Integer, L1SkillEnhance> lvMap = newEnhanceMap.computeIfAbsent(skillId, k -> new HashMap<>());
                 lvMap.put(bookLevel, data);
                 if (data.getCmd() != null && !data.getCmd().isEmpty()) {
-                    _cmdMap.put(data.getCmd().toLowerCase(), data);
+                    newCmdMap.put(data.getCmd().toLowerCase(), data);
                 }
                 count++;
             }
@@ -78,6 +85,13 @@ public final class SkillEnhanceTable {
             SQLUtil.close(pstm);
             SQLUtil.close(con);
         }
+        // 轉為不可變後一次性替換
+        for (Map.Entry<Integer, Map<Integer, L1SkillEnhance>> e : newEnhanceMap.entrySet()) {
+            e.setValue(Collections.unmodifiableMap(e.getValue()));
+        }
+        // 一次性替換引用（不可變）
+        _enhanceMap = Collections.unmodifiableMap(newEnhanceMap);
+        _cmdMap = Collections.unmodifiableMap(newCmdMap);
         _log.info("讀取->[skills_技能強化] 總筆數: " + count + " (" + timer.get() + "ms)");
     }
     /**
@@ -88,8 +102,17 @@ public final class SkillEnhanceTable {
         if (lvMap == null) {
             return null;
         }
-
-        return lvMap.get(bookLevel);
+        if (bookLevel <= 0) {
+            return null; // 未吃書不取強化
+        }
+        L1SkillEnhance v = lvMap.get(bookLevel);
+        if (v != null) return v;
+        // fallback：向下找直到1級
+        for (int lv = bookLevel - 1; lv >= 1; lv--) {
+            v = lvMap.get(lv);
+            if (v != null) return v;
+        }
+        return null;
     }
     /**
      * 取得某個 skillId 下所有等級的強化資料

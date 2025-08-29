@@ -49,7 +49,11 @@ public class DatabaseFactory {
      */
     public static DatabaseFactory getInstance() throws SQLException {
         if (_instance == null) {
-            _instance = new DatabaseFactory();
+            synchronized (DatabaseFactory.class) {
+                if (_instance == null) {
+                    _instance = new DatabaseFactory();
+                }
+            }
         }
         return _instance;
     }
@@ -68,14 +72,37 @@ public class DatabaseFactory {
     }
 
     public Connection getConnection() {
-        Connection con = null;
-        while (con == null) {
+        int retryCount = 0;
+        final int MAX_RETRY = 5;
+        final int BASE_DELAY_MS = 1000;
+        
+        while (retryCount < MAX_RETRY) {
             try {
-                con = _source.getConnection();
+                Connection con = _source.getConnection();
+                if (con != null && !con.isClosed()) {
+                    return con;
+                }
             } catch (SQLException e) {
-                _log.error(e.getLocalizedMessage(), e);
+                retryCount++;
+                _log.error("獲取數據庫連接失敗，重試第 " + retryCount + " 次", e);
+                
+                if (retryCount >= MAX_RETRY) {
+                    _log.fatal("無法獲取數據庫連接，重試次數已達上限 " + MAX_RETRY + " 次");
+                    throw new RuntimeException("數據庫連接池耗盡，無法獲取連接", e);
+                }
+                
+                try {
+                    // 指數退避策略：每次重試延遲時間翻倍
+                    long delayMs = BASE_DELAY_MS * (long) Math.pow(2, retryCount - 1);
+                    Thread.sleep(Math.min(delayMs, 30000)); // 最大延遲30秒
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    _log.error("獲取連接時被中斷", ie);
+                    throw new RuntimeException("獲取數據庫連接時被中斷", ie);
+                }
             }
         }
-        return con;
+        
+        throw new RuntimeException("無法獲取數據庫連接，已達最大重試次數");
     }
 }

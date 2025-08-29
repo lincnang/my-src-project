@@ -80,6 +80,13 @@ public class Eva {
         }
         return _instance;
     }
+    
+    /**
+     * 檢查是否應該顯示UI
+     */
+    public static boolean shouldShowUI() {
+        return com.lineage.config.Config.UI_MODE != 0;
+    }
 
 
     public static final String SearchNameMSG = "輸入你的搜索關鍵字.";
@@ -189,7 +196,11 @@ public class Eva {
         TA_Normal.setEditable(false);
         TA_Private = new JTextArea();
         TA_Private.setEditable(false);
-        initialize();
+        
+        // 只有在UI模式不為0時才初始化UI
+        if (com.lineage.config.Config.UI_MODE != 0) {
+            initialize();
+        }
     }
 
     /**
@@ -619,6 +630,11 @@ public class Eva {
     }
 
     private void initialize() {
+        // 如果UI模式為0，直接返回，不執行UI初始化
+        if (com.lineage.config.Config.UI_MODE == 0) {
+            return;
+        }
+        
         try {
             // ========== 1. JTattoo主題（外觀）支援清單 ==========
             String[][] themes = {
@@ -636,8 +652,33 @@ public class Eva {
                     {"Aero", "com.jtattoo.plaf.aero.AeroLookAndFeel"},
                     {"Fast", "com.jtattoo.plaf.fast.FastLookAndFeel"}
             };
-            // 預設主題
-            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+            
+            // 預設主題 - 優先使用HiFi主題
+            try {
+                // 優先使用HiFi主題
+                UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+                System.out.println("使用HiFi主題: com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+            } catch (Exception e) {
+                try {
+                    // 如果HiFi主題失敗，嘗試其他JTattoo主題
+                    UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+                    System.out.println("使用Acryl主題: com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+                } catch (Exception ex) {
+                    try {
+                        // 如果JTattoo主題都失敗，使用系統默認主題
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                        System.out.println("使用系統默認主題: " + UIManager.getSystemLookAndFeelClassName());
+                    } catch (Exception sysEx) {
+                        try {
+                            // 最後嘗試跨平台主題
+                            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                            System.out.println("使用跨平台主題: " + UIManager.getCrossPlatformLookAndFeelClassName());
+                        } catch (Exception finalEx) {
+                            System.err.println("無法設置任何主題，使用默認: " + finalEx.getMessage());
+                        }
+                    }
+                }
+            }
             JFrame.setDefaultLookAndFeelDecorated(true);
 
             // ========== 2. 建立主視窗 ==========

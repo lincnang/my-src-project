@@ -21,51 +21,43 @@ public class AccountTable implements AccountStorage {
     private final Map<String, String> _loginNameList = new HashMap<>();
 
     private static int getPlayers(String loginName) {
-        Connection co = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        int i = 0;
-        try {
-            co = DatabaseFactory.get().getConnection();
-            String sqlstr = "SELECT * FROM `characters` WHERE `account_name`=?";
-            ps = co.prepareStatement(sqlstr);
+        String sqlstr = "SELECT COUNT(*) FROM `characters` WHERE `account_name`=?";
+        
+        try (Connection co = DatabaseFactory.get().getConnection();
+             PreparedStatement ps = co.prepareStatement(sqlstr)) {
+            
             ps.setString(1, loginName.toLowerCase());
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                i++;
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
-            return i;
         } catch (Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } finally {
-            SQLUtil.close(ps);
-            SQLUtil.close(co);
-            SQLUtil.close(rs);
+            _log.error("查詢帳戶角色數量失敗: " + loginName, e);
         }
         return 0;
     }
 
     public void load() {
         PerformanceTimer timer = new PerformanceTimer();
-        Connection co = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            co = DatabaseFactoryLogin.get().getConnection();
-            String sqlstr = "SELECT * FROM `accounts`";
-            ps = co.prepareStatement(sqlstr);
-            rs = ps.executeQuery();
+        String sqlstr = "SELECT `login` FROM `accounts`";
+        
+        try (Connection co = DatabaseFactoryLogin.get().getConnection();
+             PreparedStatement ps = co.prepareStatement(sqlstr);
+             ResultSet rs = ps.executeQuery()) {
+            
+            _loginNameList.clear(); // 清空舊數據
+            
             while (rs.next()) {
                 String login = rs.getString("login").toLowerCase();
                 _loginNameList.put(login, login);
             }
+            
         } catch (Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } finally {
-            SQLUtil.close(ps);
-            SQLUtil.close(co);
-            SQLUtil.close(rs);
+            _log.error("載入帳戶數據失敗", e);
         }
+        
         _log.info("讀取->已有帳戶名稱資料數量: " + _loginNameList.size() + "(" + timer.get() + "ms)");
     }
 
@@ -231,20 +223,53 @@ public class AccountTable implements AccountStorage {
             account.set_lastactive(lastactive);
             Connection con = null;
             PreparedStatement pstm = null;
-            try {
-                con = DatabaseFactoryLogin.get().getConnection();
-                String sqlstr = "UPDATE `accounts` SET `lastactive`=?,`ip`=?,`host`=? WHERE `login`=?";
-                pstm = con.prepareStatement(sqlstr);
-                pstm.setTimestamp(1, lastactive);
-                pstm.setString(2, account.get_ip());
-                pstm.setString(3, account.get_mac());
-                pstm.setString(4, account.get_login());
-                pstm.execute();
-            } catch (Exception e) {
-                _log.error(e.getLocalizedMessage(), e);
-            } finally {
-                SQLUtil.close(pstm);
-                SQLUtil.close(con);
+            int retryCount = 0;
+            final int maxRetries = 3;
+            
+            while (retryCount < maxRetries) {
+                try {
+                    con = DatabaseFactoryLogin.get().getConnection();
+                    String sqlstr = "UPDATE `accounts` SET `lastactive`=?,`ip`=?,`host`=? WHERE `login`=?";
+                    pstm = con.prepareStatement(sqlstr);
+                    pstm.setTimestamp(1, lastactive);
+                    pstm.setString(2, account.get_ip());
+                    pstm.setString(3, account.get_mac());
+                    pstm.setString(4, account.get_login());
+                    pstm.execute();
+                    break; // 成功執行，跳出重試循環
+                } catch (Exception e) {
+                    retryCount++;
+                    String errorMsg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+                    
+                    if (errorMsg.contains("communications link failure") || 
+                        errorMsg.contains("connection reset") ||
+                        errorMsg.contains("broken pipe")) {
+                        
+                        _log.warn("updateLastActive 連接失敗，重試第 " + retryCount + "/" + maxRetries + " 次，帳號: " + account.get_login() + ", 錯誤: " + e.getMessage());
+                        
+                        if (retryCount < maxRetries) {
+                            try {
+                                Thread.sleep(500 * retryCount); // 較短的等待時間，因為這個方法調用頻繁
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                                _log.error("updateLastActive 重試時被中斷", ie);
+                                break;
+                            }
+                        }
+                    } else {
+                        _log.error("updateLastActive 執行失敗，帳號: " + account.get_login() + ", 錯誤: " + e.getLocalizedMessage(), e);
+                        break; // 非連接問題，直接跳出
+                    }
+                } finally {
+                    SQLUtil.close(pstm);
+                    SQLUtil.close(con);
+                    pstm = null;
+                    con = null;
+                }
+            }
+            
+            if (retryCount >= maxRetries) {
+                _log.error("updateLastActive 重試 " + maxRetries + " 次後仍然失敗，帳號: " + account.get_login());
             }
         }
     }
@@ -288,38 +313,95 @@ public class AccountTable implements AccountStorage {
     public void updateLan(String loginName, boolean islan) {
         Connection con = null;
         PreparedStatement pstm = null;
-        try {
-            con = DatabaseFactoryLogin.get().getConnection();
-            String sqlstr = "UPDATE `accounts` SET `server_no`=? WHERE `login`=?";
-            pstm = con.prepareStatement(sqlstr);
-            if (islan) {
-                pstm.setInt(1, Config.SERVERNO);
-            } else {
-                pstm.setInt(1, 0);
+        int retryCount = 0;
+        final int maxRetries = 3;
+        
+        while (retryCount < maxRetries) {
+            try {
+                con = DatabaseFactoryLogin.get().getConnection();
+                String sqlstr = "UPDATE `accounts` SET `server_no`=? WHERE `login`=?";
+                pstm = con.prepareStatement(sqlstr);
+                if (islan) {
+                    pstm.setInt(1, Config.SERVERNO);
+                } else {
+                    pstm.setInt(1, 0);
+                }
+                pstm.setString(2, loginName);
+                pstm.execute();
+                break; // 成功執行，跳出重試循環
+            } catch (Exception e) {
+                retryCount++;
+                String errorMsg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+                
+                if (errorMsg.contains("communications link failure") || 
+                    errorMsg.contains("connection reset") ||
+                    errorMsg.contains("broken pipe")) {
+                    
+                    _log.warn("updateLan 連接失敗，重試第 " + retryCount + "/" + maxRetries + " 次，帳號: " + loginName + ", 錯誤: " + e.getMessage());
+                    
+                    if (retryCount < maxRetries) {
+                        try {
+                            Thread.sleep(1000 * retryCount); // 遞增等待時間
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            _log.error("updateLan 重試時被中斷", ie);
+                            break;
+                        }
+                    }
+                } else {
+                    _log.error("updateLan 執行失敗，帳號: " + loginName + ", 錯誤: " + e.getLocalizedMessage(), e);
+                    break; // 非連接問題，直接跳出
+                }
+            } finally {
+                SQLUtil.close(pstm);
+                SQLUtil.close(con);
+                pstm = null;
+                con = null;
             }
-            pstm.setString(2, loginName);
-            pstm.execute();
-        } catch (Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } finally {
-            SQLUtil.close(pstm);
-            SQLUtil.close(con);
+        }
+        
+        if (retryCount >= maxRetries) {
+            _log.error("updateLan 重試 " + maxRetries + " 次後仍然失敗，帳號: " + loginName);
         }
     }
 
     public void updateLan() {
         Connection con = null;
         PreparedStatement pstm = null;
-        try {
-            con = DatabaseFactoryLogin.get().getConnection();
-            String sqlstr = "UPDATE `accounts` SET `server_no`=0";
-            pstm = con.prepareStatement(sqlstr);
-            pstm.execute();
-        } catch (Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
-        } finally {
-            SQLUtil.close(pstm);
-            SQLUtil.close(con);
+        int retryCount = 0;
+        final int maxRetries = 3;
+        
+        while (retryCount < maxRetries) {
+            try {
+                con = DatabaseFactoryLogin.get().getConnection();
+                String sqlstr = "UPDATE `accounts` SET `server_no`=0";
+                pstm = con.prepareStatement(sqlstr);
+                pstm.execute();
+                break; // 成功執行，跳出重試循環
+            } catch (Exception e) {
+                retryCount++;
+                _log.error("updateLan 執行失敗，重試次數: " + retryCount + "/" + maxRetries + ", 錯誤: " + e.getLocalizedMessage(), e);
+                
+                // 如果是連接問題，等待後重試
+                if (e.getMessage() != null && e.getMessage().contains("Communications link failure")) {
+                    try {
+                        Thread.sleep(2000 * retryCount); // 遞增等待時間
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                } else {
+                    // 非連接問題，直接跳出
+                    break;
+                }
+            } finally {
+                SQLUtil.close(pstm);
+                SQLUtil.close(con);
+            }
+        }
+        
+        if (retryCount >= maxRetries) {
+            _log.error("updateLan 重試 " + maxRetries + " 次後仍然失敗");
         }
     }
 

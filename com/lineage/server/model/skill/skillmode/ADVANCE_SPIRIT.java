@@ -24,14 +24,14 @@ public class ADVANCE_SPIRIT extends SkillMode {
             int bonusMp = baseBonusMp;
 
             // 取得該技能的技能等級，假設技能 ID 與效果代號 57 相同
-            int bookLevel = pc.getSkillLevel(57);
+            int bookLevel = Math.max(1, pc.getSkillLevel(57));
 
             // 從 SkillEnhanceTable 讀取 ADVANCE_SPIRIT 的增強資料
             L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(57, bookLevel);
             if (enhanceData != null) {
                 // 將設定值除以 100 得到百分比比例
-                double extraHpRatio = enhanceData.getSetting1() / 100.0;
-                double extraMpRatio = enhanceData.getSetting2() / 100.0;
+                double extraHpRatio = Math.max(0, Math.min(500, enhanceData.getSetting1())) / 100.0;
+                double extraMpRatio = Math.max(0, Math.min(500, enhanceData.getSetting2())) / 100.0;
                 bonusHp += (int) (baseBonusHp * extraHpRatio);
                 bonusMp += (int) (baseBonusMp * extraMpRatio);
 
@@ -64,11 +64,11 @@ public class ADVANCE_SPIRIT extends SkillMode {
             int bonusHp = baseBonusHp;
             int bonusMp = baseBonusMp;
 
-            int bookLevel = pc.getSkillLevel(57);
+            int bookLevel = Math.max(1, pc.getSkillLevel(57));
             L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(57, bookLevel);
             if (enhanceData != null) {
-                double extraHpRatio = enhanceData.getSetting1() / 100.0;
-                double extraMpRatio = enhanceData.getSetting2() / 100.0;
+                double extraHpRatio = Math.max(0, Math.min(500, enhanceData.getSetting1())) / 100.0;
+                double extraMpRatio = Math.max(0, Math.min(500, enhanceData.getSetting2())) / 100.0;
                 bonusHp += (int) (baseBonusHp * extraHpRatio);
                 bonusMp += (int) (baseBonusMp * extraMpRatio);
 

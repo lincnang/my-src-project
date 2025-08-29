@@ -29,7 +29,9 @@ public class OtherUserTradeTable implements OtherUserTradeStorage {
             ps.setInt(++i, srcpcobjid);
             ps.setString(++i, "移出人物:" + srcpcname);
             ps.execute();
-            Eva.getInstance().addDeleteItemLog(itemname, itemobjid, itemcount, "移出人物:" + srcpcname, "移入人物:" + pcname, itemadena);
+            if (com.lineage.config.Config.UI_MODE == 2) {
+                Eva.getInstance().addDeleteItemLog(itemname, itemobjid, itemcount, "移出人物:" + srcpcname, "移入人物:" + pcname, itemadena);
+            }
         } catch (Exception e) {
             SqlError.isError(_log, e.getLocalizedMessage(), e);
         } finally {

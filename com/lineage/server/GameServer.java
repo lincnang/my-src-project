@@ -328,6 +328,13 @@ public class GameServer {
             _log.info("       老爹系列");
             _log.info("------------------------------------------------------------");
 
+            /** [新增] 系統_強化智力/精神/體質 設置 */
+            com.lineage.server.datatables.IntSettingTable.getInstance();
+            com.lineage.server.datatables.WisSettingTable.getInstance();
+            com.lineage.server.datatables.ConSettingTable.getInstance();
+
+            // 可選：登入後或定時計畫觸發 reapply 由屬性setter保證動態回收/套用
+
             ExtraCriticalHitStoneTable.getInstance().load();// 爆擊
             ItemIntegrationTable.get();
             ExtraMeteAbilityTable.getInstance().load();
@@ -391,7 +398,6 @@ public class GameServer {
             if (SubItemSet.START) {
                 CharItemSublimationReading.get().load(true);
             }
-
             // 物品特殊屬性設定資料表(炫色)
             //ItemSpecialAttributeTable.get().load();
             // 人物物品特殊屬性資料表(炫色)

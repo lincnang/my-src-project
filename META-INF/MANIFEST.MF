@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Main-Class: com.lineage.Server
+Class-Path: .
+
+Name: com/lineage/
+Implementation-Title: Lineage 815M Server
+Implementation-Version: 1.0
+Implementation-Vendor: Lineage Team
+
+

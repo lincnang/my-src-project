@@ -12,7 +12,6 @@ import com.add.Tsai.Astrology.AstrologyData;
 import com.add.Tsai.Astrology.AttonAstrologyData;
 import com.add.Tsai.Astrology.AttonAstrologyTable;
 import com.add.Tsai.collect;
-import com.eric.gui.J_Main;
 import com.lineage.DatabaseFactory;
 import com.lineage.config.*;
 import com.lineage.data.cmd.CreateNewItem;
@@ -24,7 +23,6 @@ import com.lineage.data.item_weapon.proficiency.L1WeaponProficiency;
 import com.lineage.data.quest.Chapter01R;
 import com.lineage.echo.ClientExecutor;
 import com.lineage.echo.EncryptExecutor;
-import com.lineage.managerUI.Eva;
 import com.lineage.server.ActionCodes;
 import com.lineage.server.CheckFightTimeController;
 import com.lineage.server.Controller.L1DarknessMonitor;
@@ -2454,19 +2452,6 @@ public class L1PcInstance extends L1Character { // src015
         setDead(true);
         setNetConnection(null);
         setPacketOutput(null);
-        switch (Config.UI_MODE) {
-            case 0:
-                System.out.println("UI已關閉");
-                break;
-            case 1:
-                J_Main.getInstance();
-                break;
-            case 2:
-                Eva.getInstance();
-                break;
-            default:
-                System.out.println("未知UI模式，已自動關閉介面");
-        }
     }
 
     public ClientExecutor getNetConnection() {

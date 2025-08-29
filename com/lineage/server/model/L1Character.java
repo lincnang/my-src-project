@@ -1325,6 +1325,11 @@ public class L1Character extends L1Object {
     public void setCon(int i) {
         _trueCon = ((short) i);
         _con = ((short) RangeInt.ensure(i, 1, 254));
+        // ★ 體質最終值寫入後 → 只在玩家身上重套《系統_強化體質設置》
+        if (this instanceof L1PcInstance) {
+            L1PcInstance pc = (L1PcInstance) this;
+            com.lineage.server.Controller.ConBonusManager.get().reapply(pc);
+        }
     }
 
     public void addCon(int i) {
@@ -1384,6 +1389,11 @@ public class L1Character extends L1Object {
     public void setWis(int i) {
         _trueWis = ((short) i);
         _wis = ((short) RangeInt.ensure(i, 1, 254));
+        // ★ 精神最終值寫入後 → 只在玩家身上重套《系統_強化精神設置》
+        if (this instanceof L1PcInstance) {
+            L1PcInstance pc = (L1PcInstance) this;
+            com.lineage.server.Controller.WisBonusManager.get().reapply(pc);
+        }
     }
 
     public void addWis(int i) {

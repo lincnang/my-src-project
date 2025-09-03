@@ -151,6 +151,17 @@ public class C_AttackBow extends ClientBasePacket {
                                         arrowGfxid = 13656;
                                         break;
                                 }
+                                // 屬性箭矢覆蓋：妖精職 → 土25001 火25003 水25005 風25007
+                                if (pc.isElf()) {
+                                    int attr = pc.getElfAttr();
+                                    switch (attr) {
+                                        case 1: arrowGfxid = 25001; break; // 地
+                                        case 2: arrowGfxid = 25003; break; // 火
+                                        case 4: arrowGfxid = 25005; break; // 水
+                                        case 8: arrowGfxid = 25007; break; // 風
+                                        default: break;
+                                    }
+                                }
 							/*if (pc.getTempCharGfx() >= 13715 && pc.getTempCharGfx() <= 13745) {// TOP10變身
 								arrowGfxid = 11762;
 							}*/

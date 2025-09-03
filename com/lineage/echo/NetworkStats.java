@@ -160,16 +160,16 @@ public class NetworkStats {
      */
     public String generateReport() {
         StringBuilder report = new StringBuilder();
-        report.append("\n=== 网络连接统计报告 ===\n");
-        report.append("总连接数: ").append(totalConnectionCount.get()).append("\n");
-        report.append("成功连接数: ").append(successfulConnectionCount.get()).append("\n");
-        report.append("连接成功率: ").append(String.format("%.2f%%", getConnectionSuccessRate())).append("\n");
+        report.append("\n=== 網路連接統計 ===\n");
+        report.append("總數連接: ").append(totalConnectionCount.get()).append("\n");
+        report.append("成功連接數: ").append(successfulConnectionCount.get()).append("\n");
+        report.append("連接成功率: ").append(String.format("%.2f%%", getConnectionSuccessRate())).append("\n");
         report.append("Connection Reset: ").append(connectionResetCount.get()).append("\n");
         report.append("Connection Abort: ").append(connectionAbortCount.get()).append("\n");
         report.append("Broken Pipe: ").append(brokenPipeCount.get()).append("\n");
         
         // 显示断线最多的前5个IP
-        report.append("\n断线最多的IP (前5名):\n");
+        report.append("\n斷線最多的IP (前5名):\n");
         disconnectionsByIP.entrySet().stream()
             .sorted(Map.Entry.<String, AtomicLong>comparingByValue((a, b) -> Long.compare(b.get(), a.get())))
             .limit(5)

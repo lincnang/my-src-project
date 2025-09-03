@@ -8917,6 +8917,17 @@ public class L1PcInstance extends L1Character { // src015
                 if (!isSkillMastery(skillId)) { // 未学习
                     return;
                 }
+                // 三重矢僅能在持遠距武器(弓)時施放：避免妖精切換近戰武器時自動施放
+                if (skillId == TRIPLE_ARROW) {
+                    final L1ItemInstance weapon = getWeapon();
+                    if (weapon == null) {
+                        return;
+                    }
+                    // bow 的 type1 通常為 20；非 20 視為非弓（近距 or 其他）
+                    if (weapon.getItem().getType1() != 20) {
+                        return;
+                    }
+                }
                 final L1Skills skill = SkillsTable.get().getTemplate(skillId);
                 if (skill == null) {
                     return;

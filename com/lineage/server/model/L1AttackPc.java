@@ -3052,6 +3052,26 @@ public class L1AttackPc extends L1AttackMode {
                     default:
                         break;
                 }
+            // 屬性箭矢覆蓋（妖精、弓、持有箭時）：土25001 火25003 水25005 風25007
+            if (_pc.isElf() && _weaponType == 20 && _arrow != null) {
+                int attr = _pc.getElfAttr();
+                switch (attr) {
+                    case 1: // 地
+                        _arrowGfxid = 25001;
+                        break;
+                    case 2: // 火
+                        _arrowGfxid = 25003;
+                        break;
+                    case 4: // 水
+                        _arrowGfxid = 25005;
+                        break;
+                    case 8: // 風
+                        _arrowGfxid = 25007;
+                        break;
+                    default:
+                        break;
+                }
+            }
             if (_isHit) {// 命中
                 int attackgfx;
                 switch (_weaponType) {
@@ -3063,7 +3083,19 @@ public class L1AttackPc extends L1AttackMode {
                                     _pc.sendFollowEffect(_target, attackgfx);
                                 }
                             }
-                            _pc.sendPacketsAll(new S_UseArrowSkill(_pc, _targetId, _arrowGfxid, _targetX, _targetY, _damage, 1));
+                            // 參考沙哈之弓作法：在送出封包前強制覆蓋箭矢特效
+                            int spellGfx = _arrowGfxid;
+                            if (_pc.isElf()) {
+                                int attr = _pc.getElfAttr();
+                                switch (attr) {
+                                    case 1: spellGfx = 25001; break; // 地
+                                    case 2: spellGfx = 25003; break; // 火
+                                    case 4: spellGfx = 25005; break; // 水
+                                    case 8: spellGfx = 25007; break; // 風
+                                    default: break;
+                                }
+                            }
+                            _pc.sendPacketsAll(new S_UseArrowSkill(_pc, _targetId, spellGfx, _targetX, _targetY, _damage, 1));
                             _pc.getInventory().removeItem(_arrow, 1L);
                         } else {// 沒有箭
                             /*
@@ -3117,7 +3149,19 @@ public class L1AttackPc extends L1AttackMode {
                 switch (_weaponType) {
                     case 20:// 弓
                         if (_arrow != null) {// 具有箭
-                            _pc.sendPacketsAll(new S_UseArrowSkill(_pc, _arrowGfxid, _targetX, _targetY, 1));
+                            // 參考沙哈之弓作法：在送出封包前強制覆蓋箭矢特效（空擊）
+                            int spellGfx = _arrowGfxid;
+                            if (_pc.isElf()) {
+                                int attr = _pc.getElfAttr();
+                                switch (attr) {
+                                    case 1: spellGfx = 25001; break; // 地
+                                    case 2: spellGfx = 25003; break; // 火
+                                    case 4: spellGfx = 25005; break; // 水
+                                    case 8: spellGfx = 25007; break; // 風
+                                    default: break;
+                                }
+                            }
+                            _pc.sendPacketsAll(new S_UseArrowSkill(_pc, spellGfx, _targetX, _targetY, 1));
                             _pc.getInventory().removeItem(_arrow, 1L);
                         } else {// 沒有箭
 

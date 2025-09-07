@@ -2,6 +2,7 @@ package com.lineage.data.cmd;
 
 // 匯入各種需要使用的類別
 import com.lineage.config.ConfigWeaponArmor;
+import com.lineage.config.ConfigRecord;
 import com.lineage.managerUI.Eva;
 import com.lineage.server.WriteLogTxt;
 import com.lineage.server.model.Instance.L1ItemInstance;
@@ -12,6 +13,7 @@ import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import william.GiveBack;
+import com.lineage.server.datatables.lock.LogEnchantReading;
 import william.server_lv;
 
 // EnchantWeapon 繼承自 EnchantExecutor，負責武器強化的實作邏輯
@@ -58,6 +60,9 @@ public class EnchantWeapon extends EnchantExecutor {
 
         // 沒有保護效果，直接失敗
         pc.sendPackets(new S_ServerMessage(164, name, "$252")); // 顯示：強化失敗訊息
+        if (ConfigRecord.LOGGING_BAN_ENCHANT) {
+            LogEnchantReading.get().failureEnchant(pc, item);
+        }
         GiveBack.addRecord(pc, item); // 加入可贖回物品記錄
         pc.getInventory().removeItem(item, item.getCount()); // 移除該裝備
 

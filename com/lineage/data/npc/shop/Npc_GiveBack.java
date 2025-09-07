@@ -54,10 +54,16 @@ public class Npc_GiveBack extends NpcExecutor {
                 }
             }
 
-            // 準備送出前三筆裝備資訊
+            // 準備送出前三筆裝備資訊（含顯示贖回費用：道具名稱與數量）
             List<String> items = new ArrayList<>();
             for (int index : indices) {
-                items.add(GiveBack.savename.get(index));
+                String baseName = GiveBack.savename.get(index);
+                L1ItemInstance olditem = GiveBack.saveweapon.get(index);
+                william.GiveBack.Price price = GiveBack.getPriceForItem(olditem, npc.getNpcId());
+                L1Item payItem = ItemTable.get().getTemplate(price.itemId);
+                String payName = (payItem != null) ? payItem.getName() : ("item:" + price.itemId);
+                String line = baseName + " (費用: " + payName + " x " + price.count + ")";
+                items.add(line);
             }
 
             String[] msg = new String[3];
@@ -87,11 +93,13 @@ public class Npc_GiveBack extends NpcExecutor {
                 for (int i = 0; i < GiveBack.savepcid.size(); i++) {
                     if (GiveBack.savepcid.get(i) == pc.getId()) {
                         if (count == selectedIndex) {
-                            int itemid = GiveBack.npc_itemid.getOrDefault(npc.getNpcId(), 40308);
-                            int itemcount = GiveBack.npc_itemcount.getOrDefault(npc.getNpcId(), 30);
+                            // 依類型與強化值查詢價格（無規則則回退用 NPC 既有設定）
+                            L1ItemInstance olditem = GiveBack.saveweapon.get(i);
+                            william.GiveBack.Price price = GiveBack.getPriceForItem(olditem, npc.getNpcId());
+                            int itemid = price.itemId;
+                            int itemcount = price.count;
                             if (pc.getInventory().checkItem(itemid, itemcount)) {
                                 pc.getInventory().consumeItem(itemid, itemcount);
-                                L1ItemInstance olditem = GiveBack.saveweapon.get(i);
 
                                 GiveBack.savepcid.remove(i);
                                 GiveBack.saveweapon.remove(i);
@@ -101,7 +109,8 @@ public class Npc_GiveBack extends NpcExecutor {
                                     LogEnchantReading.get().resetEnchant(pc, olditem);
                                 }
                                 pc.getInventory().storeItem(olditem, 1);
-                                pc.sendPackets(new S_ServerMessage("\fV 您的 \fV " + olditem.getNumberedViewName(1L) + "\fV  已贖回。"));
+                                String msg = "\\fY[贖回成功] \\fT您的 \\fB" + olditem.getNumberedViewName(1L) + " \\fT已贖回。";
+                                pc.sendPackets(new S_ServerMessage(msg));
                                 pc.set_backpage(1);
                                 pc.sendPackets(new S_CloseList(pc.getId()));
                             } else {

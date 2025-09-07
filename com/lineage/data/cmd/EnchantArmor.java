@@ -5,6 +5,7 @@ package com.lineage.data.cmd;
 import com.lineage.config.ConfigWeaponArmor;
 import com.lineage.managerUI.Eva;
 import com.lineage.server.WriteLogTxt;
+import com.lineage.config.ConfigRecord;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1PcInventory;
@@ -13,6 +14,7 @@ import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import william.GiveBack;
+import com.lineage.server.datatables.lock.LogEnchantReading;
 import william.server_lv;
 
 // 防具強化邏輯類別，繼承自 EnchantExecutor
@@ -54,6 +56,9 @@ public class EnchantArmor extends EnchantExecutor {
 
         // 沒有保護時就會直接損毀
         pc.sendPackets(new S_ServerMessage(164, name, "$252")); // 164 表示：強化失敗物品損毀
+        if (ConfigRecord.LOGGING_BAN_ENCHANT) {
+            LogEnchantReading.get().failureEnchant(pc, item);
+        }
         GiveBack.addRecord(pc, item); // 加入贖回清單
         pc.getInventory().removeItem(item, item.getCount()); // 移除道具
         _log.info("人物:" + pc.getName() + "點爆物品" + item.getItem().getName() + " 物品OBJID:" + item.getId());

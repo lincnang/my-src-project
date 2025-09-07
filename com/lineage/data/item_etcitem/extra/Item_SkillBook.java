@@ -59,6 +59,13 @@ public class Item_SkillBook extends ItemExecutor {
 
         // 2) 取得玩家目前「skillId」的等級，並計算下一級
         int currentLv = pc.getSkillLevel(skillId); // 先從 pc 取目前等級
+
+        // 2-1) 檢查是否已學會該技能，若未學會(等級=0)則不可升級
+        if (currentLv <= 0) {
+            pc.sendPackets(new S_SystemMessage("你尚未學會此技能，無法升級。"));
+            return;
+        }
+
         int newLv = currentLv + 1;                 // 要升到的新等級
         if (newLv < 1) newLv = 1;
 

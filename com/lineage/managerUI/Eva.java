@@ -1010,10 +1010,10 @@ public class Eva {
                                 jSystemLogWindow.append(getLogTime() + "　管理器執行：世界聊天 禁用." + "\n", "Red");
                             }
                         } else {
-                            if (QMsg("世界聊天當前是被禁用的。你確定要激活嗎？") == 0) {
+                            if (QMsg("世界聊天當前是被禁用的。你確定要開啟嗎？") == 0) {
                                 // SpecialEventHandler.getInstance().doChatEveryone();
                                 World.get().set_worldChatElabled(true);
-                                jSystemLogWindow.append(getLogTime() + "　管理器執行：世界聊天 激活." + "\n", "Blue");
+                                jSystemLogWindow.append(getLogTime() + "　管理器執行：世界聊天 開啟." + "\n", "Blue");
                             }
                         }
                     } else {

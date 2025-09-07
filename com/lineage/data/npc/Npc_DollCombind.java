@@ -8,6 +8,8 @@ import com.lineage.server.datatables.ItemTable;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.world.World;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  * 技術老爹製作
  */
 public class Npc_DollCombind extends NpcExecutor {
+    private static final Log _log = LogFactory.getLog(Npc_DollCombind.class);
     private final int[] doll1 = ConfigDoll.DOLL_LIST_1;
     private final int[] doll2 = ConfigDoll.DOLL_LIST_2;
     private final int[] doll3 = ConfigDoll.DOLL_LIST_3;
@@ -26,6 +29,12 @@ public class Npc_DollCombind extends NpcExecutor {
 
     // 建議所有娃娃指令都加 doll_ 前綴
     public static boolean Cmd(L1PcInstance pc, String cmd) {
+        try {
+        } catch (Exception ignored) {
+        }
+        if (cmd != null) {
+            cmd = cmd.trim();
+        }
         if ("doolset2".equalsIgnoreCase(cmd)) {
             // 呼叫 dollBookCmd 的 DOLLAllSet (直接調用現有功能)
             dollBookCmd.get().DOLLAllSet(pc); // 你要import com.add.Tsai.dollBookCmd
@@ -54,6 +63,7 @@ public class Npc_DollCombind extends NpcExecutor {
             return true;
         }
         if ("doll_B1".equalsIgnoreCase(cmd)) {
+
             String[] data = new String[3];
             data[0] = String.valueOf(ConfigDoll.CONSUME3 + pc.getDollrun3());
             pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "dollcombind3", data));
@@ -151,7 +161,8 @@ public class Npc_DollCombind extends NpcExecutor {
                 cmd.equalsIgnoreCase("doll_B") || cmd.equalsIgnoreCase("doll_B_total") ||
                 cmd.equalsIgnoreCase("doll_C") || cmd.equalsIgnoreCase("doll_C_total") ||
                 cmd.equalsIgnoreCase("doll_D") || cmd.equalsIgnoreCase("doll_D_total")) {
-
+            if (cmd.equalsIgnoreCase("doll_B") || cmd.equalsIgnoreCase("doll_B_total")) {
+            }
             new Npc_DollCombind().action(pc, null, cmd, 0);
 
             // 合成完刷新頁面

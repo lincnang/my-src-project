@@ -599,6 +599,32 @@ public class L1AttackPc extends L1AttackMode {
         switch (_calcType) {
             case PC_PC:
                 _damage = calcPcDamage();
+                // 阿頓星盤：兩種技能擇一
+                if (_targetPc != null) {
+                    boolean didEffect = false;
+                    // 1) 回血技能（優先）
+                    if (_isHit && _targetPc.getLeechChance() > 0 && _targetPc.getLeechAmount() > 0) {
+                        if (ThreadLocalRandom.current().nextInt(100) + 1 <= _targetPc.getLeechChance()) {
+                            _targetPc.setCurrentHp(Math.min(_targetPc.getMaxHp(), _targetPc.getCurrentHp() + _targetPc.getLeechAmount()));
+                            int selfGfx = _targetPc.getLeechGfx2() > 0 ? _targetPc.getLeechGfx2() : 7789;
+                            _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), selfGfx));
+                            int tgtGfx = _targetPc.getLeechGfx1();
+                            if (tgtGfx > 0) _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), tgtGfx));
+                            didEffect = true;
+                        }
+                    }
+                    // 2) 機率減免傷害（僅在未配置回血或本次未觸發回血時才檢查）
+                    if (!didEffect && _targetPc.getAttonProcChance() > 0 && _targetPc.getAttonProcReduce() > 0) {
+                        if (ThreadLocalRandom.current().nextInt(100) + 1 <= _targetPc.getAttonProcChance()) {
+                            _damage -= _targetPc.getAttonProcReduce();
+                            if (_damage < 0) _damage = 0;
+                            int tgtGfx = _targetPc.getLeechGfx1();
+                            if (tgtGfx > 0) _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), tgtGfx));
+                            int selfGfx = _targetPc.getLeechGfx2();
+                            if (selfGfx > 0) _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), selfGfx));
+                        }
+                    }
+                }
                 if (_pc.isDarkelf() && _pc.hasPassiveAssassin() && _wasHidingOnAttackStart) {
                     _damage *= 3.0;
                     _pc.sendPackets(new S_SkillSound(_pc.getId(), 14547));
@@ -610,7 +636,7 @@ public class L1AttackPc extends L1AttackMode {
                     _pc.broadcastPacketAll(new S_OtherCharPacks(_pc));
                 }
                 if (_pc.getNECritRate() > 0) {
-                    Random random = new Random();
+                    // removed unused local Random
                     if (ThreadLocalRandom.current().nextInt(100) + 1 < _pc.getNECritRate()) {
                         _damage *= _pc.getNECritDmg();
                         if (_pc.getNECritGfx() > 0) {
@@ -621,8 +647,10 @@ public class L1AttackPc extends L1AttackMode {
                 break;
             case PC_NPC:
                 _damage = calcNpcDamage();
+                // PC 攻擊 NPC 不適用玩家被擊減免
+                // 阿頓星盤：被攻擊方回血（PC 攻擊 NPC 不觸發；此段留空）
                 if (_pc.getNECritRate() > 0) {
-                    Random random = new Random();
+                    // removed unused local Random
                     if (ThreadLocalRandom.current().nextInt(100) + 1 < _pc.getNECritRate()) {
                         _damage *= _pc.getNECritDmg();
                         if (_pc.getNECritGfx() > 0) {
@@ -1471,7 +1499,7 @@ public class L1AttackPc extends L1AttackMode {
             }
         }
         //占卜 2017/04/25
-        Random random = new Random();
+        // removed unused local Random
         if (_pc.hasSkillEffect(9971) && ThreadLocalRandom.current().nextInt(100) + 1 <= 3) {
             dmg *= 1.2;
             _pc.sendPackets(new S_ServerMessage("發動-魔法占卜[3%發動爆擊]"));
@@ -2269,8 +2297,7 @@ public class L1AttackPc extends L1AttackMode {
             }
         }
         // 2017/04/25
-        Random random = new Random();
-        if (_pc.hasSkillEffect(9971) && random.nextInt(100) + 1 <= 3) {
+        if (_pc.hasSkillEffect(9971) && _random.nextInt(100) + 1 <= 3) {
             dmg *= 1.2;
             _pc.sendPackets(new S_ServerMessage("發動-魔法占卜[3%發動爆擊]"));
         }

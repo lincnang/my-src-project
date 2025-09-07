@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -52,15 +53,12 @@ public class AttonAstrologyCmd {
         if (!"astr2".equals(cmd) && pc.getAstrologyPlateType() != 1) return false;
         try {
             final String[] msg = "".split(",");
-            // 主畫面
+            // 主畫面（開啟阿頓星盤功能）
             if ("astr2".equals(cmd)) {
-//                pc.setAstrologyPlateType(1);  // ★★★★★
-//                _log.warn("[AttonAstrologyCmd] astr2設型態: plateType=" + pc.getAstrologyPlateType());
-//                updateUI(pc, "t_atton");
-                pc.sendPackets(new S_SystemMessage("阿頓星盤功能 尚未開啟",1)); // 直接給訊息
+                pc.setAstrologyPlateType(1);
+                updateUI(pc, "t_atton");
                 return true;
             }
-            _log.warn("[AttonAstrologyCmd] 收到指令: " + cmd + ", plateType=" + pc.getAstrologyPlateType());
 
             // 點擊星盤節點
             if (cmd.startsWith("tat_")) {
@@ -88,17 +86,25 @@ public class AttonAstrologyCmd {
                 }
                 // 已完成
                 if (pc.getQuest().isEnd(data.getQuestId())) {
-                    pc.addAstrologyPower(data, id);
-                    if (data.getSkillId() > 0 && getAstrologySkillActive(pc) == data.getSkillId()) {
-                        pc.sendPackets(new S_SystemMessage("星盤已完成"));
-                        updateUI(pc, "t_atton");
-                        return true;
-                    } else {
+                    if (data.getSkillId() > 0) {
+                        int prev = getAstrologySkillActive(pc);
+                        if (prev > 0 && prev != data.getSkillId()) {
+                            // 切換：先清舊，再套新，單點即生效
+                            pc.clearAttonAstrologyPower();
+                            _ASTROLOGY_SKILLS.remove(pc.getId());
+                            _ASTROLOGY_SKILLS2.remove(pc.getId());
+                        }
+                        // 確保現選的效果立即套用
+                        pc.addAstrologyPower(data, id);
                         _ASTROLOGY_SKILLS.put(pc.getId(), data.getSkillId());
                         _ASTROLOGY_SKILLS2.put(pc.getId(), data.getNote());
-                        pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getNote() + "已激活！", 1));
-                        return true;
+                        pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getNote() + "已開啟！", 1));
+                    } else {
+                        // 技能編號=0 一律不激活，只提示完成
+                        pc.sendPackets(new S_SystemMessage("星盤已完成"));
                     }
+                    updateUI(pc, "t_atton");
+                    return true;
                 }
                 pc.setAstrologyType(id);
                 pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
@@ -165,11 +171,18 @@ public class AttonAstrologyCmd {
      * 判斷前置星盤是否解鎖
      */
     public boolean checkEndAstrologyQuest(L1PcInstance pc, int key) {
-        int prevType = calcPrevType(key);
+        // 以資料表『前置編號』優先；若未設定則退回舊的 calcPrevType 規則
+        AttonAstrologyData cur = AttonAstrologyTable.get().getData(key);
+        int prevType = -1;
+        if (cur != null && cur.getNeedQuestId() > 0) {
+            prevType = cur.getNeedQuestId();
+        } else {
+            prevType = calcPrevType(key);
+        }
         if (prevType < 0) return false;
-        AttonAstrologyData data = AttonAstrologyTable.get().getData(prevType);
-        if (data != null && !pc.getQuest().isEnd(data.getQuestId())) {
-            pc.sendPackets(new S_SystemMessage("請先解鎖[" + data.getNote() + "]"));
+        AttonAstrologyData prev = AttonAstrologyTable.get().getData(prevType);
+        if (prev != null && !pc.getQuest().isEnd(prev.getQuestId())) {
+            pc.sendPackets(new S_SystemMessage("請先解鎖[" + prev.getNote() + "]"));
             return true;
         }
         return false;
@@ -180,16 +193,39 @@ public class AttonAstrologyCmd {
      */
     private int calcPrevType(int key) {
         switch (key) {
+            case 8: return 3;
+            case 9: return 7;
             case 0: return -1;
             case 1: return 0;
             case 2: return 1;
             case 5: return 2;
-            case 4: case 6: case 9: return 5;
+            case 4: case 6: return 5;
             case 3: return 4;
             case 7: return 6;
-            case 8: return 3;
+
+            case 10:return 8;
+            case 12:return 10;
+            case 16:return 12;
+            case 19:return 16;
+            case 22:return 19;
+            case 25:return 22;
+            case 27:return 25;
+
+            case 11:return 9;
+            case 15:return 11;
+            case 14: case 18: return 15;
+            case 13:return 14;
+            case 17:return 13;
+            case 20:return 17;
+            case 23:return 20;
+
+            case 21:return 18;
+            case 24:return 21;
+            case 26:return 24;
+            case 28:return 26;
+
             default:
-                if (key >= 10 && key <= 28) return key - 3;
+                if (key >= 10 && key <= 28) return key - 1;
         }
         return -1;
     }
@@ -200,16 +236,15 @@ public class AttonAstrologyCmd {
     public void updateUI(L1PcInstance pc, String htmlId) {
         try {
             StringBuilder builder = new StringBuilder();
-            int size = AttonAstrologyTable.get().size();
-            for (int i = 0; i < size; i++) {
-                AttonAstrologyData data = AttonAstrologyTable.get().getData(i);
-                if (data != null) {
-                    builder.append(
-                            pc.getQuest().isEnd(data.getQuestId())
-                                    ? data.getCompleteGfxId()
-                                    : data.getIncompleteGfxId()
-                    ).append(",");
-                }
+            Integer[] orders = AttonAstrologyTable.get().getIndexArray();
+            Arrays.sort(orders);
+            for (Integer order : orders) {
+                AttonAstrologyData data = AttonAstrologyTable.get().getData(order);
+                if (data == null) continue;
+                int img = pc.getQuest().isEnd(data.getQuestId())
+                        ? data.getCompleteGfxId()
+                        : data.getIncompleteGfxId(); // 尚未開啟/未完成 → 顯示未完成IMG
+                builder.append(img).append(",");
             }
             String skillName = _ASTROLOGY_SKILLS2.getOrDefault(pc.getId(), "");
             builder.append(skillName);

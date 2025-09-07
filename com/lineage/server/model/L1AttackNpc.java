@@ -712,7 +712,34 @@ public class L1AttackNpc extends L1AttackMode {
     }
 
     private void commitPc() {
-        _targetPc.receiveDamage(_npc, _damage, false, false);
+        int finalDmg = _damage;
+        // 阿頓星盤：兩種技能擇一（先檢查回血，再檢查減傷）
+        if (_targetPc != null) {
+            boolean didEffect = false;
+            // 1) 被攻擊回復
+            if (_targetPc.getLeechChance() > 0 && _targetPc.getLeechAmount() > 0) {
+                if (java.util.concurrent.ThreadLocalRandom.current().nextInt(100) + 1 <= _targetPc.getLeechChance()) {
+                    _targetPc.setCurrentHp(Math.min(_targetPc.getMaxHp(), _targetPc.getCurrentHp() + _targetPc.getLeechAmount()));
+                    int selfGfx = _targetPc.getLeechGfx2() > 0 ? _targetPc.getLeechGfx2() : 7789;
+                    _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), selfGfx));
+                    int tgtGfx = _targetPc.getLeechGfx1();
+                    if (tgtGfx > 0) _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), tgtGfx));
+                    didEffect = true;
+                }
+            }
+            // 2) 機率減傷（若未觸發回血）
+            if (!didEffect && _targetPc.getAttonProcChance() > 0 && _targetPc.getAttonProcReduce() > 0) {
+                if (java.util.concurrent.ThreadLocalRandom.current().nextInt(100) + 1 <= _targetPc.getAttonProcChance()) {
+                    finalDmg -= _targetPc.getAttonProcReduce();
+                    if (finalDmg < 0) finalDmg = 0;
+                    int tgtGfx = _targetPc.getLeechGfx1();
+                    if (tgtGfx > 0) _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), tgtGfx));
+                    int selfGfx = _targetPc.getLeechGfx2();
+                    if (selfGfx > 0) _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), selfGfx));
+                }
+            }
+        }
+        _targetPc.receiveDamage(_npc, finalDmg, false, false);
     }
 
     private void commitNpc() {

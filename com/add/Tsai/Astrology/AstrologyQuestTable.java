@@ -179,7 +179,6 @@ public class AstrologyQuestTable implements AstrologyQuestStorage {
             pm.setInt(++i, objId);
             pm.setInt(++i, key);
             pm.execute();
-            _log.info("刪除玩家星盤記錄: " + objId + "-" + key);
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {

@@ -47,6 +47,14 @@ public class AttonAstrologyData {
     private final int _ignoreMissileDmgReduction;
     private final int _critDmgReduction;
     private final int _critDmgUp;
+    // 隨機減傷：機率、減免數值
+    private final int _procChance;
+    private final int _procReduce;
+    // 攻擊吸血：機率、吸血數值（直接回復 HP）
+    private final int _leechChance;
+    private final int _leechAmount;
+    private final int _gfxid1;
+    private final int _gfxid2;
 
     public AttonAstrologyData(int buttonOrder, String note, int needQuestId, int questId, int cards, int skillId,
                               int incompleteGfxId, int completeGfxId, String needItemId, String needItemCount,
@@ -56,7 +64,8 @@ public class AttonAstrologyData {
                               int stunLevel, int stunHit, int addMagicDmg, int pvpDamageUp, int pveDmgReduction,
                               int ignoreDmgReductionPercent, int tripleArrowReduction, int critResistPercent,
                               int critChancePercent, int critAbsorbMp, int critAbsorbHp, int missileDmgReductionPercent,
-                              int stunDmgReduction, int ignoreMissileDmgReduction, int critDmgReduction, int critDmgUp) {
+                              int stunDmgReduction, int ignoreMissileDmgReduction, int critDmgReduction, int critDmgUp,
+                              int procChance, int procReduce, int leechChance, int leechAmount, int gfxid1, int gfxid2) {
         _buttonOrder = buttonOrder;
         _note = note;
         _needQuestId = needQuestId;
@@ -100,6 +109,91 @@ public class AttonAstrologyData {
         _ignoreMissileDmgReduction = ignoreMissileDmgReduction;
         _critDmgReduction = critDmgReduction;
         _critDmgUp = critDmgUp;
+        _procChance = procChance;
+        _procReduce = procReduce;
+        _leechChance = leechChance;
+        _leechAmount = leechAmount;
+        _gfxid1 = gfxid1;
+        _gfxid2 = gfxid2;
+    }
+
+    // 簡化建構子：只保留至 PvE/PvP 欄位，其餘預設 0（方便精簡欄位使用）
+    public AttonAstrologyData(int buttonOrder, String note, int needQuestId, int questId, int cards, int skillId,
+                              int incompleteGfxId, int completeGfxId, String needItemId, String needItemCount,
+                              int addStr, int addDex, int addCon, int addInt, int addWis, int addCha, int addAc,
+                              int addSp, int addHp, int addMp, int addMeleeDmg, int addMissileDmg, int addMeleeHit,
+                              int addMissileHit, int addDmgReduction, int addMagicDmgReduction, int addWeightLimit,
+                              int stunLevel, int stunHit, int addMagicDmg, int pvpDamageUp, int pveDmgReduction) {
+        this(buttonOrder, note, needQuestId, questId, cards, skillId,
+                incompleteGfxId, completeGfxId, needItemId, needItemCount,
+                addStr, addDex, addCon, addInt, addWis, addCha, addAc,
+                addSp, addHp, addMp, addMeleeDmg, addMissileDmg, addMeleeHit,
+                addMissileHit, addDmgReduction, addMagicDmgReduction, addWeightLimit,
+                stunLevel, stunHit, addMagicDmg, pvpDamageUp, pveDmgReduction,
+                // 11 個進階欄位歸零
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0,
+                // procChance, procReduce, leechChance, leechAmount, gfx1, gfx2 皆 0
+                0, 0, 0, 0, 0, 0);
+    }
+
+    // Overload：到 PvE + 機率/機率減免傷害
+    public AttonAstrologyData(int buttonOrder, String note, int needQuestId, int questId, int cards, int skillId,
+                              int incompleteGfxId, int completeGfxId, String needItemId, String needItemCount,
+                              int addStr, int addDex, int addCon, int addInt, int addWis, int addCha, int addAc,
+                              int addSp, int addHp, int addMp, int addMeleeDmg, int addMissileDmg, int addMeleeHit,
+                              int addMissileHit, int addDmgReduction, int addMagicDmgReduction, int addWeightLimit,
+                              int stunLevel, int stunHit, int addMagicDmg, int pvpDamageUp, int pveDmgReduction,
+                              int procChance, int procReduce) {
+        this(buttonOrder, note, needQuestId, questId, cards, skillId,
+                incompleteGfxId, completeGfxId, needItemId, needItemCount,
+                addStr, addDex, addCon, addInt, addWis, addCha, addAc,
+                addSp, addHp, addMp, addMeleeDmg, addMissileDmg, addMeleeHit,
+                addMissileHit, addDmgReduction, addMagicDmgReduction, addWeightLimit,
+                stunLevel, stunHit, addMagicDmg, pvpDamageUp, pveDmgReduction,
+                // 11 個進階欄位歸零
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0,
+                // 帶入機率與減免，吸血/特效 0
+                procChance, procReduce, 0, 0, 0, 0);
+    }
+
+    // Overload：到 PvE + 機率/機率減免傷害 + 吸血（簡化：其餘進階欄位預設 0）
+    public AttonAstrologyData(int buttonOrder, String note, int needQuestId, int questId, int cards, int skillId,
+                              int incompleteGfxId, int completeGfxId, String needItemId, String needItemCount,
+                              int addStr, int addDex, int addCon, int addInt, int addWis, int addCha, int addAc,
+                              int addSp, int addHp, int addMp, int addMeleeDmg, int addMissileDmg, int addMeleeHit,
+                              int addMissileHit, int addDmgReduction, int addMagicDmgReduction, int addWeightLimit,
+                              int stunLevel, int stunHit, int addMagicDmg, int pvpDamageUp, int pveDmgReduction,
+                              int procChance, int procReduce, int leechChance, int leechAmount) {
+        this(buttonOrder, note, needQuestId, questId, cards, skillId,
+                incompleteGfxId, completeGfxId, needItemId, needItemCount,
+                addStr, addDex, addCon, addInt, addWis, addCha, addAc,
+                addSp, addHp, addMp, addMeleeDmg, addMissileDmg, addMeleeHit,
+                addMissileHit, addDmgReduction, addMagicDmgReduction, addWeightLimit,
+                stunLevel, stunHit, addMagicDmg, pvpDamageUp, pveDmgReduction,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0,
+                procChance, procReduce, leechChance, leechAmount, 0, 0);
+    }
+
+    // Overload：到 PvE + 機率/機率減免傷害 + 吸血 + 特效（簡化：其餘進階欄位預設 0）
+    public AttonAstrologyData(int buttonOrder, String note, int needQuestId, int questId, int cards, int skillId,
+                              int incompleteGfxId, int completeGfxId, String needItemId, String needItemCount,
+                              int addStr, int addDex, int addCon, int addInt, int addWis, int addCha, int addAc,
+                              int addSp, int addHp, int addMp, int addMeleeDmg, int addMissileDmg, int addMeleeHit,
+                              int addMissileHit, int addDmgReduction, int addMagicDmgReduction, int addWeightLimit,
+                              int stunLevel, int stunHit, int addMagicDmg, int pvpDamageUp, int pveDmgReduction,
+                              int procChance, int procReduce, int leechChance, int leechAmount, int gfxid1, int gfxid2) {
+        this(buttonOrder, note, needQuestId, questId, cards, skillId,
+                incompleteGfxId, completeGfxId, needItemId, needItemCount,
+                addStr, addDex, addCon, addInt, addWis, addCha, addAc,
+                addSp, addHp, addMp, addMeleeDmg, addMissileDmg, addMeleeHit,
+                addMissileHit, addDmgReduction, addMagicDmgReduction, addWeightLimit,
+                stunLevel, stunHit, addMagicDmg, pvpDamageUp, pveDmgReduction,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0,
+                procChance, procReduce, leechChance, leechAmount, gfxid1, gfxid2);
     }
 
     public int getButtonOrder() { return _buttonOrder; }
@@ -145,4 +239,10 @@ public class AttonAstrologyData {
     public int getIgnoreMissileDmgReduction() { return _ignoreMissileDmgReduction; }
     public int getCritDmgReduction() { return _critDmgReduction; }
     public int getCritDmgUp() { return _critDmgUp; }
+    public int getProcChance() { return _procChance; }
+    public int getProcReduce() { return _procReduce; }
+    public int getLeechChance() { return _leechChance; }
+    public int getLeechAmount() { return _leechAmount; }
+    public int getGfxid1() { return _gfxid1; }
+    public int getGfxid2() { return _gfxid2; }
 }

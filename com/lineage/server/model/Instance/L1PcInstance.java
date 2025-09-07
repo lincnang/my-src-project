@@ -818,6 +818,14 @@ public class L1PcInstance extends L1Character { // src015
     private int _PvpDmg = 0;
     // 减免PVP傷害
     private int _PvpDmg_R = 0;
+    // 阿頓星盤：隨機減傷（機率/數值）
+    private int _attonProcChance = 0;
+    private int _attonProcReduce = 0;
+    // 阿頓星盤：攻擊吸血參數
+    private int _leechChance = 0;
+    private int _leechAmount = 0;
+    private int _leechGfx1 = 0;
+    private int _leechGfx2 = 0;
     // 正義滿角色名稱變黃
     private boolean _LawfulName = false;
     private L1ArmorKitPower _armorKitPower;
@@ -8917,17 +8925,6 @@ public class L1PcInstance extends L1Character { // src015
                 if (!isSkillMastery(skillId)) { // 未学习
                     return;
                 }
-                // 三重矢僅能在持遠距武器(弓)時施放：避免妖精切換近戰武器時自動施放
-                if (skillId == TRIPLE_ARROW) {
-                    final L1ItemInstance weapon = getWeapon();
-                    if (weapon == null) {
-                        return;
-                    }
-                    // bow 的 type1 通常為 20；非 20 視為非弓（近距 or 其他）
-                    if (weapon.getItem().getType1() != 20) {
-                        return;
-                    }
-                }
                 final L1Skills skill = SkillsTable.get().getTemplate(skillId);
                 if (skill == null) {
                     return;
@@ -9348,11 +9345,30 @@ public class L1PcInstance extends L1Character { // src015
 
     // 新星盤 Atton
     public final void addAstrologyPower(AttonAstrologyData data, int key) {
-        if (ASTROLOGY_DATA_MAP.containsKey(key)) {
+        if (ATTON_ASTROLOGY_DATA_MAP.containsKey(key)) {
             return;
         }
-        AttonAstrologyTable.effectBuff(this, data, 1);  // 你要有 AttonAstrologyTable.effectBuff 方法
-        ATTON_ASTROLOGY_DATA_MAP.put(key, data); // 如果新星盤要另外存資料，可以分另一個 MAP
+        AttonAstrologyTable.effectBuff(this, data, 1);
+        ATTON_ASTROLOGY_DATA_MAP.put(key, data);
+    }
+
+    // 移除所有阿頓星盤效果（確保同時僅一組技能生效）
+    public final void clearAttonAstrologyPower() {
+        try {
+            for (AttonAstrologyData v : ATTON_ASTROLOGY_DATA_MAP.values()) {
+                AttonAstrologyTable.effectBuff(this, v, -1);
+            }
+        } catch (Exception ignore) {
+        } finally {
+            ATTON_ASTROLOGY_DATA_MAP.clear();
+            // 保險重置阿頓專屬參數
+            setAttonProcChance(0);
+            setAttonProcReduce(0);
+            setLeechChance(0);
+            setLeechAmount(0);
+            setLeechGfx1(0);
+            setLeechGfx2(0);
+        }
     }
 
     public int getprobability() {
@@ -9624,6 +9640,20 @@ public class L1PcInstance extends L1Character { // src015
     public void setPvpDmg_R(final int i) {
         _PvpDmg_R += i;
     }
+
+    // 阿頓星盤 隨機減傷設定/取得
+    public void setAttonProcChance(int value) { _attonProcChance = Math.max(0, value); }
+    public int getAttonProcChance() { return _attonProcChance; }
+    public void setAttonProcReduce(int value) { _attonProcReduce = Math.max(0, value); }
+    public int getAttonProcReduce() { return _attonProcReduce; }
+    public void setLeechChance(int value) { _leechChance = Math.max(0, value); }
+    public int getLeechChance() { return _leechChance; }
+    public void setLeechAmount(int value) { _leechAmount = Math.max(0, value); }
+    public int getLeechAmount() { return _leechAmount; }
+    public void setLeechGfx1(int v) { _leechGfx1 = Math.max(0, v); }
+    public int getLeechGfx1() { return _leechGfx1; }
+    public void setLeechGfx2(int v) { _leechGfx2 = Math.max(0, v); }
+    public int getLeechGfx2() { return _leechGfx2; }
 
     /**
      * 正義滿角色名稱變黃

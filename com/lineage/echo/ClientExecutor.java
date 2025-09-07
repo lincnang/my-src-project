@@ -6,7 +6,6 @@ import com.lineage.config.ConfigIpCheck;
 import com.lineage.echo.encryptions.Cipher;
 import com.lineage.list.OnlineUser;
 import com.lineage.server.model.Instance.L1PcInstance;
-import java.net.SocketException;
 import com.lineage.server.serverpackets.S_Disconnect;
 import com.lineage.server.templates.L1Account;
 import com.lineage.server.thread.GeneralThreadPool;
@@ -18,6 +17,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Objects;
 import java.util.concurrent.Future;
 
@@ -701,11 +701,8 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
 
             // 記錄過長的讀取時間並檢查連線健康
             if (readTime > 15000) {
-                _log.warn("封包讀取耗時過長: " + readTime + "ms, IP: " + getIp());
-                
                 // 如果讀取時間超過30秒，可能網路有問題
                 if (readTime > 30000) {
-                    _log.error("封包讀取嚴重超時，可能網路異常: " + getIp());
                 }
             }
 

@@ -123,7 +123,7 @@ public class AstrologyCmd {
                     } else {
                         _ASTROLOGY_SKILLS.put(pc.getId(), data.get_skillId());
                         _ASTROLOGY_SKILLS2.put(pc.getId(), data.getName());
-                        pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getName() + "已激活！", 1));
+                        pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getName() + "已開啟！", 1));
                         return true; // 攔截
                     }
                 }

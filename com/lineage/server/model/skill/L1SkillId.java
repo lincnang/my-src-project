@@ -1028,6 +1028,8 @@ public class L1SkillId {
 
     public static final int Warrior_Charge = 235; // 佔據
     public static final int GAIA = 236; // 蓋亞
+    // 絲莉安專用假技能（避免與蓋亞共用），建議配道具呼叫
+    public static final int SILIAN_ASTROLOGY = 73601; // 絲莉安
 
     /**常駐技能群**/
     /**

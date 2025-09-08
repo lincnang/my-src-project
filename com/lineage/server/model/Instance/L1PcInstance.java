@@ -1168,6 +1168,8 @@ public class L1PcInstance extends L1Character { // src015
     private String _viewName = null;
     private L1NpcInstance _lastTalkedNpc;
 
+    
+
     public L1PcInstance() {
         _accessLevel = 0;
         _currentWeapon = 0;
@@ -1593,7 +1595,6 @@ public class L1PcInstance extends L1Character { // src015
     public int getAwakeSkillId() {
         return _awakeSkillId;
     }
-
     public void setAwakeSkillId(int i) {
         _awakeSkillId = i;
     }
@@ -2392,7 +2393,6 @@ public class L1PcInstance extends L1Character { // src015
     public void reduceCurrentHp(double d, L1Character l1character) {
         getStat().reduceCurrentHp(d, l1character);
     }
-
     private void notifyPlayersLogout(List<L1PcInstance> playersArray) {
         for (L1PcInstance player : playersArray) {
             if (player.knownsObject(this)) {
@@ -2951,13 +2951,7 @@ public class L1PcInstance extends L1Character { // src015
                     int newHp = Math.min(currentHp + healingAmount, maxHp);
                     // 更新當前血量
                     this.setCurrentHp(newHp);
-//                    // 打印日誌（可選）
-//                    System.out.println("反擊屏障:專家 觸發，吸收傷害 " + incomingDamage + " 點，轉化回血 " + healingAmount + " 點。");
                 }
-            } else {
-                // 否則執行常規的攻擊動作
-                attack.action();
-                attack.commit();
             }
         }
     }
@@ -3590,8 +3584,7 @@ public class L1PcInstance extends L1Character { // src015
                 }
                 // 638 您損失了 %0。
                 sendPackets(new S_ServerMessage(638, item.getLogName()));
-                RecordTable.get().recordeDeadItem(getName(), item.getAllName(), (int) item.getCount(), item
-                        .getId(), getIp());
+                RecordTable.get().recordeDeadItem(getName(), item.getAllName(), (int) item.getCount(), item.getId(), getIp());
             }
         }
     }
@@ -3703,7 +3696,6 @@ public class L1PcInstance extends L1Character { // src015
         }
         return false;
     }
-
     /**
      * 恢復經驗值
      */
@@ -4504,7 +4496,6 @@ public class L1PcInstance extends L1Character { // src015
             set_h_time(-1L);
         }
     }
-
     public L1EquipmentSlot getEquipSlot() {
         return _equipSlot;
     }
@@ -5303,7 +5294,6 @@ public class L1PcInstance extends L1Character { // src015
     public void resetOriginalConWeightReduction() {
         _originalConWeightReduction = L1PcOriginal.resetOriginalConWeightReduction(this);
     }
-
     public void resetOriginalBowDmgup() {
         _originalBowDmgup = L1PcOriginal.resetOriginalBowDmgup(this);
     }
@@ -6099,7 +6089,6 @@ public class L1PcInstance extends L1Character { // src015
     public int get_actionId() {
         return _actionId;
     }
-
     /**
      * 角色表情動作代號
      *
@@ -6896,7 +6885,6 @@ public class L1PcInstance extends L1Character { // src015
     public final void setApprentice(L1Apprentice apprentice) {
         _apprentice = apprentice;
     }
-
     public final void checkEffect() {
         int checkType = 0;
         if (getApprentice() != null) {
@@ -7237,7 +7225,7 @@ public class L1PcInstance extends L1Character { // src015
         return hasSkillEffect(167);
     }
 
-    public boolean isEntangle() { // 地面障碍　移动速度1/2
+    public boolean isEntangle() { // 地面障礙　移动速度1/2
         return this.hasSkillEffect(ENTANGLE);
     }
 
@@ -7690,7 +7678,6 @@ public class L1PcInstance extends L1Character { // src015
     public void setClanMemberNotes(String s) {
         _clanMemberNotes = s;
     }
-
     /**
      * 昏迷命中
      *
@@ -8484,7 +8471,6 @@ public class L1PcInstance extends L1Character { // src015
     protected void setAiRunning(final boolean aiRunning) {
         this._aiRunning = aiRunning;
     }
-
     public void allTargetClear() {
         // XXX
         if (_pcMove != null) {
@@ -9284,7 +9270,6 @@ public class L1PcInstance extends L1Character { // src015
     {
         return this._isGetPolyPower;
     }
-
     public final void setGetPolyPower(boolean flag) {
         this._isGetPolyPower = flag;
     }
@@ -9316,7 +9301,10 @@ public class L1PcInstance extends L1Character { // src015
             Optional.ofNullable(data).ifPresent(effect -> {
                 try {
                     if (getQuest().isEnd(data.get_questId())) {
-                        addAstrologyPower(data, key);
+                        // 舊星盤：僅自動套用非技能節點（skillId==0），技能節點需玩家點擊切換
+                        if (data.get_skillId() == 0) {
+                            addAstrologyPower(data, key);
+                        }
                         TimeUnit.MILLISECONDS.sleep(5);
                     }
                 } catch (InterruptedException e) {
@@ -9350,6 +9338,141 @@ public class L1PcInstance extends L1Character { // src015
         }
         AttonAstrologyTable.effectBuff(this, data, 1);
         ATTON_ASTROLOGY_DATA_MAP.put(key, data);
+    }
+
+    // ======= 絲莉安/阿頓 共用的擴充屬性（被動減傷類） =======
+    private int _tripleArrowReduction = 0; // 被三重矢攻擊時，固定減傷值
+    private int _rangedDmgReductionPercent = 0; // 遭受遠距離攻擊時減免百分比
+
+    public int getTripleArrowReduction() {
+        return _tripleArrowReduction;
+    }
+
+    public void addTripleArrowReduction(int amount) {
+        _tripleArrowReduction += amount;
+        if (_tripleArrowReduction < 0) _tripleArrowReduction = 0;
+    }
+
+    public int getRangedDmgReductionPercent() {
+        return _rangedDmgReductionPercent;
+    }
+
+    public void addRangedDmgReductionPercent(int percent) {
+        _rangedDmgReductionPercent += percent;
+        if (_rangedDmgReductionPercent < 0) _rangedDmgReductionPercent = 0;
+        if (_rangedDmgReductionPercent > 100) _rangedDmgReductionPercent = 100;
+    }
+
+    // 絲莉安專用 HOT 狀態追蹤（毫秒時間戳）。大於當前時間表示正在回復
+    private long _silianRegenUntilMs = 0L;
+    private long _silianCooldownUntilMs = 0L;
+
+    public void setSilianRegenUntil(long untilMs) {
+        _silianRegenUntilMs = untilMs;
+    }
+
+    public long getSilianRegenUntil() {
+        return _silianRegenUntilMs;
+    }
+
+    public void setSilianCooldownUntil(long untilMs) {
+        _silianCooldownUntilMs = untilMs;
+        // 同步至 character_other（以秒為單位），使用技能1欄位作為共用備援
+        try {
+            if (get_other() != null) {
+                int untilS = (int) (untilMs / 1000L);
+                get_other().set_silian_cd1_until_s(untilS);
+                com.lineage.server.datatables.sql.CharOtherTable tbl = new com.lineage.server.datatables.sql.CharOtherTable();
+                tbl.storeOther(getId(), get_other());
+            }
+        } catch (Throwable ignore) {}
+    }
+
+    public long getSilianCooldownUntil() {
+        return _silianCooldownUntilMs;
+    }
+
+    // 絲莉安三技能獨立冷卻
+    private long _silianCooldown1UntilMs = 0L;
+    private long _silianCooldown2UntilMs = 0L;
+    private long _silianCooldown3UntilMs = 0L;
+
+    public long getSilianCooldown1Until() { return _silianCooldown1UntilMs; }
+    public long getSilianCooldown2Until() { return _silianCooldown2UntilMs; }
+    public long getSilianCooldown3Until() { return _silianCooldown3UntilMs; }
+
+    public void setSilianCooldown1Until(long untilMs) { _silianCooldown1UntilMs = untilMs; }
+    public void setSilianCooldown2Until(long untilMs) { _silianCooldown2UntilMs = untilMs; }
+    public void setSilianCooldown3Until(long untilMs) { _silianCooldown3UntilMs = untilMs; }
+
+    public long getSilianCooldownUntilForSkill(int skillId) {
+        switch (skillId) {
+            case 2: return _silianCooldown2UntilMs;
+            case 3: return _silianCooldown3UntilMs;
+            case 1:
+            default: return _silianCooldown1UntilMs;
+        }
+    }
+
+    public void setSilianCooldownUntilForSkill(int skillId, long untilMs) {
+        switch (skillId) {
+            case 2: _silianCooldown2UntilMs = untilMs; break;
+            case 3: _silianCooldown3UntilMs = untilMs; break;
+            case 1:
+            default: _silianCooldown1UntilMs = untilMs; break;
+        }
+        // 寫入 character_other 的對應欄位（以秒）
+        try {
+            if (get_other() != null) {
+                int untilS = (int) (untilMs / 1000L);
+                switch (skillId) {
+                    case 2: get_other().set_silian_cd2_until_s(untilS); break;
+                    case 3: get_other().set_silian_cd3_until_s(untilS); break;
+                    case 1:
+                    default: get_other().set_silian_cd1_until_s(untilS); break;
+                }
+                com.lineage.server.datatables.sql.CharOtherTable tbl = new com.lineage.server.datatables.sql.CharOtherTable();
+                tbl.storeOther(getId(), get_other());
+            }
+        } catch (Throwable ignore) {}
+    }
+
+    /**
+     * 加載阿頓星盤：自動套用所有「非技能節點」的已完成能力（不用點擊啟用）
+     */
+    public final void addAttonAstrologyPowers() {
+        for (Integer key : AttonAstrologyTable.get().getIndexArray()) {
+            AttonAstrologyData data = AttonAstrologyTable.get().getData(key);
+            if (data == null) continue;
+            try {
+                if (getQuest().isEnd(data.getQuestId()) && data.getSkillId() == 0) {
+                    addAstrologyPower(data, key);
+                    java.util.concurrent.TimeUnit.MILLISECONDS.sleep(5);
+                }
+            } catch (InterruptedException e) {
+                _log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * 加載絲莉安星盤：自動套用所有「非技能節點」的已完成能力
+     */
+    public final void addSilianAstrologyPowers() {
+        for (Integer key : com.add.Tsai.Astrology.SilianAstrologyTable.get().getIndexArray()) {
+            com.add.Tsai.Astrology.SilianAstrologyData data = com.add.Tsai.Astrology.SilianAstrologyTable.get().getData(key);
+            if (data == null) continue;
+            try {
+                if (getQuest().isEnd(data.getQuestId()) && data.getSkillId() == 0) {
+                    // 轉為阿頓模型套用：僅用到 Hp/耐性/負重/HPR/MPR/減傷/特效
+                    // 直接使用絲莉安專用 effectBuff
+                    com.add.Tsai.Astrology.SilianAstrologyTable.effectBuff(this, data, 1);
+                    java.util.concurrent.TimeUnit.MILLISECONDS.sleep(5);
+                }
+            } catch (InterruptedException e) {
+                _log.error(e.getMessage(), e);
+            }
+        }
     }
 
     // 移除所有阿頓星盤效果（確保同時僅一組技能生效）
@@ -10001,7 +10124,6 @@ public class L1PcInstance extends L1Character { // src015
     public L1Inventory getTradeWindowInventory() { // 交易視窗
         return this._tradewindow;
     }
-
     public void beginExpMonitor() { // l1j-tw連續攻擊
         _atkMonitorFuture = GeneralThreadPool.get().scheduleAtFixedRate(new L1PcAtkMonitor(getId()), 0L, 300);
     }
@@ -10801,7 +10923,6 @@ public class L1PcInstance extends L1Character { // src015
     public void add_FearLevel(int add) {
         this._fearlevel += add;
     }
-
     public int get_FearLevel() {
         return this._fearlevel;
     }
@@ -12338,7 +12459,6 @@ public class L1PcInstance extends L1Character { // src015
     public boolean getBossfei() {
         return _bossfei;
     }
-
     public void setBossfei(boolean i) {
         _bossfei = i;
     }
@@ -13080,7 +13200,6 @@ public class L1PcInstance extends L1Character { // src015
             }
         }
     }
-
     /**
      * 死亡處理
      */

@@ -219,6 +219,7 @@ public class L1SkillMode {
             _skillMode.put(TITAN_STUN, new TITAN_STUN());// 泰坦之暈
             _skillMode.put(Warrior_Charge, new Warrior_Charge());// 佔據
             _skillMode.put(GAIA, new GAIA());// 蓋亞
+            _skillMode.put(SILIAN_ASTROLOGY, new SILIAN_ASTROLOGY());// 絲莉安（私用）
             _skillMode.put(Blood_strength, new Blood_strength());// 力量之血
             _skillMode.put(ARMOR_BREAK, new ARMOR_BREAK());// 裝甲破壞
         } catch (Exception e) {

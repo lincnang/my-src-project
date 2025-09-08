@@ -23,7 +23,15 @@ public class TRIPLE_ARROW extends SkillMode {
         int dmg = doBaseTripleArrow(srcpc, cha);
         int bonus = calculateExtraDamage(srcpc);
         srcpc.addTripleArrowCount(cha);
-        return dmg + bonus;
+        int total = dmg + bonus;
+        if (cha instanceof L1PcInstance) {
+            L1PcInstance targetPc = (L1PcInstance) cha;
+            int reduce = targetPc.getTripleArrowReduction();
+            if (reduce > 0) {
+                total = Math.max(0, total - reduce);
+            }
+        }
+        return total;
 
     }
 

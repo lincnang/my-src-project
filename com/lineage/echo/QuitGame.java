@@ -1,7 +1,6 @@
 package com.lineage.echo;
 
 import com.add.Tsai.DragonExp;
-import com.lineage.data.event.MiniGame.MiniSiege;
 import com.lineage.server.datatables.GetbackTable;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.L1Clan;
@@ -113,7 +112,7 @@ public class QuitGame {
                 //}
             } else if (pc.getMapId() == (short) 10502) { // 底比斯大戰
                 if (pc.isSiege) {
-                    if (MiniSiege.getInstance().running) {
+                    if (com.lineage.data.event.MiniGame.MiniSiege.getInstance().running) {
                         switch (pc.getTeam()) {
                             case 0:
                                 pc.setX(32771);
@@ -209,6 +208,12 @@ public class QuitGame {
             // 資料紀錄
             pc.save();
             // _log.error("人物離開遊戲的處理-資料紀錄");
+            // 背包紀錄前，回收絲莉安啟動道具
+            try {
+                com.add.Tsai.Astrology.SilianAstrologyTable.get().revokeGrantItems(pc, 0);
+            } catch (final Exception e) {
+                _log.error(e.getLocalizedMessage(), e);
+            }
             // 背包紀錄
             pc.saveInventory();
             // _log.error("人物離開遊戲的處理-背包紀錄");
@@ -258,8 +263,6 @@ public class QuitGame {
                     }
                 }
             }
-            // 清空 寵物 召喚獸 清單
-            pc.getPetList().clear();
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

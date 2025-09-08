@@ -75,6 +75,33 @@ public class C_LoginToServer extends ClientBasePacket {
                 pc.getInventory().equippedLoad();
                 pc.getInventory().viewItem();
             }
+            // 登入初期：若絲莉安 HOT 尚在，優先恢復 ICON 顯示
+            try {
+                if (pc.get_other() != null) {
+                    // 先恢復三個技能的冷卻，避免登入後短窗可再次施放
+                    final long nowMs0 = System.currentTimeMillis();
+                    int cd1s0 = pc.get_other().get_silian_cd1_until_s();
+                    int cd2s0 = pc.get_other().get_silian_cd2_until_s();
+                    int cd3s0 = pc.get_other().get_silian_cd3_until_s();
+                    long cd1ms0 = ((long) cd1s0) * 1000L;
+                    long cd2ms0 = ((long) cd2s0) * 1000L;
+                    long cd3ms0 = ((long) cd3s0) * 1000L;
+                    if (cd1ms0 > nowMs0) pc.setSilianCooldown1Until(cd1ms0); else pc.setSilianCooldown1Until(0L);
+                    if (cd2ms0 > nowMs0) pc.setSilianCooldown2Until(cd2ms0); else pc.setSilianCooldown2Until(0L);
+                    if (cd3ms0 > nowMs0) pc.setSilianCooldown3Until(cd3ms0); else pc.setSilianCooldown3Until(0L);
+
+                    final long nowMs = System.currentTimeMillis();
+                    int hotUntilS = pc.get_other().get_silian_hot_until_s();
+                    int hotSkill = pc.get_other().get_silian_hot_skill_id();
+                    long hotUntilMs = ((long) hotUntilS) * 1000L;
+                    if (hotUntilMs > nowMs && hotSkill > 0) {
+                        pc.setSilianRegenUntil(hotUntilMs);
+                        int leftSec = (int) ((hotUntilMs - nowMs) / 1000L);
+                        int iconId = (hotSkill == 2) ? 9708 : (hotSkill == 3 ? 9718 : 9700);
+                        pc.sendPackets(new S_InventoryIcon(iconId, true, 2783, leftSec));
+                    }
+                }
+            } catch (Throwable ignore) {}
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
@@ -2285,7 +2312,41 @@ public class C_LoginToServer extends ClientBasePacket {
                                 addHolySetStatus(_pc);
                                 break;
                             case 14:
-                                _pc.addAstrologyPower();//TODO 宙斯·守護星盤所有已解鎖卡牌能力值加載
+                                _pc.addAstrologyPower();// 宙斯·守護星盤(舊)所有已解鎖卡牌能力值加載
+                                _pc.addAttonAstrologyPowers(); // 阿頓星盤：自動套用所有非技能節點
+                                _pc.addSilianAstrologyPowers(); // 絲莉安星盤：自動套用所有非技能節點
+                                // 讀回絲莉安各技能冷卻（若仍在未來，轉回毫秒放入記憶體）
+                                try {
+                                    if (_pc.get_other() != null) {
+                                        final long nowMs = System.currentTimeMillis();
+                                        int cd1s = _pc.get_other().get_silian_cd1_until_s();
+                                        int cd2s = _pc.get_other().get_silian_cd2_until_s();
+                                        int cd3s = _pc.get_other().get_silian_cd3_until_s();
+                                        long cd1ms = ((long) cd1s) * 1000L;
+                                        long cd2ms = ((long) cd2s) * 1000L;
+                                        long cd3ms = ((long) cd3s) * 1000L;
+                                        if (cd1ms > nowMs) _pc.setSilianCooldown1Until(cd1ms); else _pc.setSilianCooldown1Until(0L);
+                                        if (cd2ms > nowMs) _pc.setSilianCooldown2Until(cd2ms); else _pc.setSilianCooldown2Until(0L);
+                                        if (cd3ms > nowMs) _pc.setSilianCooldown3Until(cd3ms); else _pc.setSilianCooldown3Until(0L);
+
+                                        // 若 HOT 尚未結束，恢復圖示與再生截止時間
+                                        int hotUntilS = _pc.get_other().get_silian_hot_until_s();
+                                        int hotSkill = _pc.get_other().get_silian_hot_skill_id();
+                                        long hotUntilMs = ((long) hotUntilS) * 1000L;
+                                        if (hotUntilMs > nowMs && hotSkill > 0) {
+                                            _pc.setSilianRegenUntil(hotUntilMs);
+                                            int leftSec = (int) ((hotUntilMs - nowMs) / 1000L);
+                                            int iconId = (hotSkill == 2) ? 9708 : (hotSkill == 3 ? 9718 : 9700);
+                                            _pc.sendPackets(new S_InventoryIcon(iconId, true, 2783, leftSec));
+                                        } else {
+                                            // 已過期：清空 HOT 記錄
+                                            _pc.get_other().set_silian_hot_until_s(0);
+                                            _pc.get_other().set_silian_hot_skill_id(0);
+                                            new com.lineage.server.datatables.sql.CharOtherTable().storeOther(_pc.getId(), _pc.get_other());
+                                        }
+                                    }
+                                } catch (Throwable ignore) {}
+                                _pc.sendPackets(new S_SystemMessage("\\aB獲得星盤能力加成。", 17));
                                 break;
                         }
                         TimeUnit.SECONDS.sleep(1);

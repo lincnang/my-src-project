@@ -26,6 +26,8 @@ public class AttonAstrologyCmd {
     // 玩家技能啟動紀錄
     private static final Map<Integer, Integer> _ASTROLOGY_SKILLS = new ConcurrentHashMap<>();
     private static final Map<Integer, String> _ASTROLOGY_SKILLS2 = new ConcurrentHashMap<>();
+    // 記錄每位玩家目前啟用中的「技能節點」按鈕編號（避免清空所有一般加成）
+    private static final Map<Integer, Integer> _ATTON_LAST_BTN = new ConcurrentHashMap<>();
 
 
     private static AttonAstrologyCmd _instance;
@@ -87,21 +89,23 @@ public class AttonAstrologyCmd {
                 // 已完成
                 if (pc.getQuest().isEnd(data.getQuestId())) {
                     if (data.getSkillId() > 0) {
-                        int prev = getAstrologySkillActive(pc);
-                        if (prev > 0 && prev != data.getSkillId()) {
-                            // 切換：先清舊，再套新，單點即生效
-                            pc.clearAttonAstrologyPower();
-                            _ASTROLOGY_SKILLS.remove(pc.getId());
-                            _ASTROLOGY_SKILLS2.remove(pc.getId());
+                        // 僅切換技能節點效果：移除上一個技能節點，不清除一般加成
+                        Integer prevBtn = _ATTON_LAST_BTN.get(pc.getId());
+                        if (prevBtn != null && prevBtn != id) {
+                            AttonAstrologyData prevData = AttonAstrologyTable.get().getData(prevBtn);
+                            if (prevData != null) {
+                                AttonAstrologyTable.effectBuff(pc, prevData, -1);
+                            }
                         }
-                        // 確保現選的效果立即套用
-                        pc.addAstrologyPower(data, id);
+                        AttonAstrologyTable.effectBuff(pc, data, 1);
+                        _ATTON_LAST_BTN.put(pc.getId(), id);
                         _ASTROLOGY_SKILLS.put(pc.getId(), data.getSkillId());
                         _ASTROLOGY_SKILLS2.put(pc.getId(), data.getNote());
                         pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getNote() + "已開啟！", 1));
                     } else {
-                        // 技能編號=0 一律不激活，只提示完成
-                        pc.sendPackets(new S_SystemMessage("星盤已完成"));
+                        // 非技能節點：直接套用一次性的屬性加成並記錄，避免重複
+                        pc.addAstrologyPower(data, id);
+                        pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
                     }
                     updateUI(pc, "t_atton");
                     return true;
@@ -153,6 +157,11 @@ public class AttonAstrologyCmd {
                         pc.getQuest().set_step(data.getQuestId(), 255);
                         AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
                         AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
+                        // 任務完成即給能力：非技能節點直接生效
+                        if (data.getSkillId() == 0) {
+                            pc.addAstrologyPower(data, astrologyType);
+                            pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
+                        }
                     }
                     updateUI(pc, "t_atton");
                     pc.sendPackets(new S_PacketBoxGree(1));

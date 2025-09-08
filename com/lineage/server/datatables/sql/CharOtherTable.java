@@ -106,6 +106,19 @@ public class CharOtherTable implements CharOtherStorage {
                     final int Lv_Artifact = rs.getInt("Lv_Artifact");
                     final int Artifact1 = rs.getInt("Artifact1");
                     final int Lv_Redmg_Artifact = rs.getInt("Lv_Redmg_Artifact");
+                    int silianCd1 = 0, silianCd2 = 0, silianCd3 = 0;
+                    try { silianCd1 = rs.getInt("silian_cd1_until_s"); } catch (SQLException ignore) {}
+                    try { if (silianCd1 == 0) silianCd1 = rs.getInt("silan_cd1_until_s"); } catch (SQLException ignore) {}
+                    try { silianCd2 = rs.getInt("silian_cd2_until_s"); } catch (SQLException ignore) {}
+                    try { if (silianCd2 == 0) silianCd2 = rs.getInt("silan_cd2_until_s"); } catch (SQLException ignore) {}
+                    try { silianCd3 = rs.getInt("silian_cd3_until_s"); } catch (SQLException ignore) {}
+                    try { if (silianCd3 == 0) silianCd3 = rs.getInt("silan_cd3_until_s"); } catch (SQLException ignore) {}
+                    int silianHotUntil = 0;
+                    int silianHotSkill = 0;
+                    try { silianHotUntil = rs.getInt("silian_hot_until_s"); } catch (SQLException ignore) {}
+                    try { if (silianHotUntil == 0) silianHotUntil = rs.getInt("silan_hot_until_s"); } catch (SQLException ignore) {}
+                    try { silianHotSkill = rs.getInt("silian_hot_skill_id"); } catch (SQLException ignore) {}
+                    try { if (silianHotSkill == 0) silianHotSkill = rs.getInt("silan_hot_skill_id"); } catch (SQLException ignore) {}
 
                     final L1PcOther other = new L1PcOther();
                     other.set_objid(char_obj_id);
@@ -132,6 +145,11 @@ public class CharOtherTable implements CharOtherStorage {
                     other.setLv_Artifact(Lv_Artifact);
                     other.setArtifact1(Artifact1);
                     other.setLv_Redmg_Artifact(Lv_Redmg_Artifact);
+                    other.set_silian_cd1_until_s(silianCd1);
+                    other.set_silian_cd2_until_s(silianCd2);
+                    other.set_silian_cd3_until_s(silianCd3);
+                    other.set_silian_hot_until_s(silianHotUntil);
+                    other.set_silian_hot_skill_id(silianHotSkill);
 
                     // === 反推 leaves_time_exp 回記憶體（避免重啟後顯示為 0） ===
                     // 規則：以 logintime 往回推，算出「段數 N」，再轉為 leaves_time_exp = N * EXP
@@ -239,33 +257,77 @@ public class CharOtherTable implements CharOtherStorage {
             other.set_login_time(logintime);
 
             cn = DatabaseFactory.get().getConnection();
-            ps = cn.prepareStatement(
-                    "UPDATE `character_other` SET " +
-                            "`logintime`=?,`hpup`=?,`mpup`=?," +
-                            "`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
-                            "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?," +
-                            "`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?" +
-                            " WHERE `char_obj_id`=?");
+            try {
+                ps = cn.prepareStatement(
+                        "UPDATE `character_other` SET " +
+                                "`logintime`=?,`hpup`=?,`mpup`=?," +
+                                "`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
+                                "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?," +
+                                "`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?," +
+                                "`silian_cd1_until_s`=?,`silian_cd2_until_s`=?,`silian_cd3_until_s`=?," +
+                                "`silian_hot_until_s`=?,`silian_hot_skill_id`=?" +
+                                " WHERE `char_obj_id`=?");
 
-            int i = 0;
-            ps.setInt(++i, logintime);
-            ps.setInt(++i, hpup);
-            ps.setInt(++i, mpup);
-            ps.setInt(++i, score);
-            ps.setInt(++i, color);
-            ps.setInt(++i, usemap);
-            ps.setInt(++i, usemapTime);
-            ps.setInt(++i, clanskill);
-            ps.setInt(++i, killCount);
-            ps.setInt(++i, deathCount);
-            ps.setInt(++i, getbonus);
-            ps.setInt(++i, Artifact);
-            ps.setInt(++i, Lv_Artifact);
-            ps.setInt(++i, Artifact1);
-            ps.setInt(++i, Lv_Redmg_Artifact);
-            ps.setInt(++i, other.get_objid());
+                int i = 0;
+                ps.setInt(++i, logintime);
+                ps.setInt(++i, hpup);
+                ps.setInt(++i, mpup);
+                ps.setInt(++i, score);
+                ps.setInt(++i, color);
+                ps.setInt(++i, usemap);
+                ps.setInt(++i, usemapTime);
+                ps.setInt(++i, clanskill);
+                ps.setInt(++i, killCount);
+                ps.setInt(++i, deathCount);
+                ps.setInt(++i, getbonus);
+                ps.setInt(++i, Artifact);
+                ps.setInt(++i, Lv_Artifact);
+                ps.setInt(++i, Artifact1);
+                ps.setInt(++i, Lv_Redmg_Artifact);
+                ps.setInt(++i, other.get_silian_cd1_until_s());
+                ps.setInt(++i, other.get_silian_cd2_until_s());
+                ps.setInt(++i, other.get_silian_cd3_until_s());
+                ps.setInt(++i, other.get_silian_hot_until_s());
+                ps.setInt(++i, other.get_silian_hot_skill_id());
+                ps.setInt(++i, other.get_objid());
 
-            ps.execute();
+                ps.execute();
+            } catch (SQLException e) {
+                // Fallback to legacy column names without the second 'i'
+                SQLUtil.close(ps);
+                ps = cn.prepareStatement(
+                        "UPDATE `character_other` SET " +
+                                "`logintime`=?,`hpup`=?,`mpup`=?," +
+                                "`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
+                                "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?," +
+                                "`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?," +
+                                "`silan_cd1_until_s`=?,`silan_cd2_until_s`=?,`silan_cd3_until_s`=?," +
+                                "`silan_hot_until_s`=?,`silan_hot_skill_id`=?" +
+                                " WHERE `char_obj_id`=?");
+                int i = 0;
+                ps.setInt(++i, logintime);
+                ps.setInt(++i, hpup);
+                ps.setInt(++i, mpup);
+                ps.setInt(++i, score);
+                ps.setInt(++i, color);
+                ps.setInt(++i, usemap);
+                ps.setInt(++i, usemapTime);
+                ps.setInt(++i, clanskill);
+                ps.setInt(++i, killCount);
+                ps.setInt(++i, deathCount);
+                ps.setInt(++i, getbonus);
+                ps.setInt(++i, Artifact);
+                ps.setInt(++i, Lv_Artifact);
+                ps.setInt(++i, Artifact1);
+                ps.setInt(++i, Lv_Redmg_Artifact);
+                ps.setInt(++i, other.get_silian_cd1_until_s());
+                ps.setInt(++i, other.get_silian_cd2_until_s());
+                ps.setInt(++i, other.get_silian_cd3_until_s());
+                ps.setInt(++i, other.get_silian_hot_until_s());
+                ps.setInt(++i, other.get_silian_hot_skill_id());
+                ps.setInt(++i, other.get_objid());
+                ps.execute();
+            }
 
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -310,30 +372,69 @@ public class CharOtherTable implements CharOtherStorage {
             other.set_login_time(logintime);
 
             cn = DatabaseFactory.get().getConnection();
-            ps = cn.prepareStatement(
-                    "INSERT INTO `character_other` SET `char_obj_id`=?,`logintime`=?,`hpup`=?," +
-                            "`mpup`=?,`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
-                            "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?,`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?");
+            try {
+                ps = cn.prepareStatement(
+                        "INSERT INTO `character_other` SET `char_obj_id`=?,`logintime`=?,`hpup`=?," +
+                                "`mpup`=?,`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
+                                "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?,`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?," +
+                                "`silian_cd1_until_s`=?,`silian_cd2_until_s`=?,`silian_cd3_until_s`=?,`silian_hot_until_s`=?,`silian_hot_skill_id`=?");
 
-            int i = 0;
-            ps.setInt(++i, oid);
-            ps.setInt(++i, logintime);
-            ps.setInt(++i, hpup);
-            ps.setInt(++i, mpup);
-            ps.setInt(++i, score);
-            ps.setInt(++i, color);
-            ps.setInt(++i, usemap);
-            ps.setInt(++i, usemapTime);
-            ps.setInt(++i, clanskill);
-            ps.setInt(++i, killCount);
-            ps.setInt(++i, deathCount);
-            ps.setInt(++i, getbonus);
-            ps.setInt(++i, Artifact);
-            ps.setInt(++i, Lv_Artifact);
-            ps.setInt(++i, Artifact1);
-            ps.setInt(++i, Lv_Redmg_Artifact);
+                int i = 0;
+                ps.setInt(++i, oid);
+                ps.setInt(++i, logintime);
+                ps.setInt(++i, hpup);
+                ps.setInt(++i, mpup);
+                ps.setInt(++i, score);
+                ps.setInt(++i, color);
+                ps.setInt(++i, usemap);
+                ps.setInt(++i, usemapTime);
+                ps.setInt(++i, clanskill);
+                ps.setInt(++i, killCount);
+                ps.setInt(++i, deathCount);
+                ps.setInt(++i, getbonus);
+                ps.setInt(++i, Artifact);
+                ps.setInt(++i, Lv_Artifact);
+                ps.setInt(++i, Artifact1);
+                ps.setInt(++i, Lv_Redmg_Artifact);
+                ps.setInt(++i, other.get_silian_cd1_until_s());
+                ps.setInt(++i, other.get_silian_cd2_until_s());
+                ps.setInt(++i, other.get_silian_cd3_until_s());
+                ps.setInt(++i, other.get_silian_hot_until_s());
+                ps.setInt(++i, other.get_silian_hot_skill_id());
 
-            ps.execute();
+                ps.execute();
+            } catch (SQLException e) {
+                // Fallback legacy columns
+                SQLUtil.close(ps);
+                ps = cn.prepareStatement(
+                        "INSERT INTO `character_other` SET `char_obj_id`=?,`logintime`=?,`hpup`=?," +
+                                "`mpup`=?,`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
+                                "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?,`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?," +
+                                "`silan_cd1_until_s`=?,`silan_cd2_until_s`=?,`silan_cd3_until_s`=?,`silan_hot_until_s`=?,`silan_hot_skill_id`=?");
+                int i = 0;
+                ps.setInt(++i, oid);
+                ps.setInt(++i, logintime);
+                ps.setInt(++i, hpup);
+                ps.setInt(++i, mpup);
+                ps.setInt(++i, score);
+                ps.setInt(++i, color);
+                ps.setInt(++i, usemap);
+                ps.setInt(++i, usemapTime);
+                ps.setInt(++i, clanskill);
+                ps.setInt(++i, killCount);
+                ps.setInt(++i, deathCount);
+                ps.setInt(++i, getbonus);
+                ps.setInt(++i, Artifact);
+                ps.setInt(++i, Lv_Artifact);
+                ps.setInt(++i, Artifact1);
+                ps.setInt(++i, Lv_Redmg_Artifact);
+                ps.setInt(++i, other.get_silian_cd1_until_s());
+                ps.setInt(++i, other.get_silian_cd2_until_s());
+                ps.setInt(++i, other.get_silian_cd3_until_s());
+                ps.setInt(++i, other.get_silian_hot_until_s());
+                ps.setInt(++i, other.get_silian_hot_skill_id());
+                ps.execute();
+            }
 
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);

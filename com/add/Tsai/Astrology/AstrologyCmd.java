@@ -115,17 +115,20 @@ public class AstrologyCmd {
                     }
                 }
                 if (pc.getQuest().isEnd(data.get_questId())) {
-                    pc.addAstrologyPower(data, id);
-                    if (data.get_skillId() > 0 && getAstrologySkillActive(pc) == data.get_skillId()) {
-                        pc.sendPackets(new S_SystemMessage("星盤已完成"));
+                    // 非技能節點：再次點選顯示「星盤已解鎖」
+                    if (data.get_skillId() == 0) {
+                        pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
                         UpdateInfo(pc, "t_zeus");
                         return true; // 攔截
-                    } else {
+                    }
+                    // 技能節點：做切換/維持開啟提示
+                    if (getAstrologySkillActive(pc) != data.get_skillId()) {
                         _ASTROLOGY_SKILLS.put(pc.getId(), data.get_skillId());
                         _ASTROLOGY_SKILLS2.put(pc.getId(), data.getName());
-                        pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getName() + "已開啟！", 1));
-                        return true; // 攔截
                     }
+                    pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getName() + "已開啟！", 1));
+                    UpdateInfo(pc, "t_zeus");
+                    return true; // 攔截
                 }
                 pc.setAstrologyType(id);
                 pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
@@ -171,6 +174,11 @@ public class AstrologyCmd {
                         pc.getQuest().set_step(data.get_questId(), 255);
                         AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
                         AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
+                        // 解鎖即永久：非技能節點立即套用能力
+                        if (data.get_skillId() == 0) {
+                            pc.addAstrologyPower(data, astrologyType);
+                            pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
+                        }
                     }
                     UpdateInfo(pc, "t_zeus");
                     pc.sendPackets(new S_PacketBoxGree(1));

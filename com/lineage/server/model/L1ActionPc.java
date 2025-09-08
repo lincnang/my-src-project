@@ -1208,7 +1208,9 @@ public class L1ActionPc {
             }
 
             if (AttonAstrologyCmd.get().Cmd(_pc, cmd)) {
-
+                return;
+            }
+            if (com.add.Tsai.Astrology.SilianAstrologyCmd.get().Cmd(_pc, cmd)) {
                 return;
             }
 

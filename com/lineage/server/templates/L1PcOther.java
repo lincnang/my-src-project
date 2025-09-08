@@ -51,6 +51,15 @@ public class L1PcOther {
     // 計時掛機剩餘點數
     private int _auto_points = 0;
 
+    // Silian astrology per-skill cooldown expiry (epoch seconds)
+    private int _silian_cd1_until_s = 0;
+    private int _silian_cd2_until_s = 0;
+    private int _silian_cd3_until_s = 0;
+
+    // Silian HOT status persistence
+    private int _silian_hot_until_s = 0;     // epoch seconds
+    private int _silian_hot_skill_id = 0;    // 1/2/3，用來決定 ICON
+
     public static void load() {
         if (!_isStart) {
             _titleList.put(1, new StringBuilder(""));
@@ -358,4 +367,19 @@ public class L1PcOther {
     public void set_Auto_Points(final int points) {
         _auto_points = points;
     }
+
+    // ===== Silian cooldown getters/setters (epoch seconds) =====
+    public int get_silian_cd1_until_s() { return _silian_cd1_until_s; }
+    public int get_silian_cd2_until_s() { return _silian_cd2_until_s; }
+    public int get_silian_cd3_until_s() { return _silian_cd3_until_s; }
+
+    public void set_silian_cd1_until_s(int untilSec) { _silian_cd1_until_s = Math.max(0, untilSec); }
+    public void set_silian_cd2_until_s(int untilSec) { _silian_cd2_until_s = Math.max(0, untilSec); }
+    public void set_silian_cd3_until_s(int untilSec) { _silian_cd3_until_s = Math.max(0, untilSec); }
+
+    public int get_silian_hot_until_s() { return _silian_hot_until_s; }
+    public int get_silian_hot_skill_id() { return _silian_hot_skill_id; }
+
+    public void set_silian_hot_until_s(int untilSec) { _silian_hot_until_s = Math.max(0, untilSec); }
+    public void set_silian_hot_skill_id(int skillId) { _silian_hot_skill_id = skillId; }
 }

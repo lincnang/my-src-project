@@ -1643,6 +1643,13 @@ public class L1AttackPc extends L1AttackMode {
         if (_targetPc.getZhufuPvp() != 0) {//祝福化PVP物理傷害減免
             dmg -= _targetPc.getZhufuPvp();
         }
+        // 絲莉安：遠距離傷害減免百分比（只對遠距離攻擊生效）
+        if (_weapon != null && _weaponRange == -1) { // -1 代表遠距離武器（符合專案定義）
+            int percent = _targetPc.getRangedDmgReductionPercent();
+            if (percent > 0) {
+                dmg -= (dmg * percent) / 100;
+            }
+        }
         if (_targetPc.getzhufuPvpbai() != 0) {//祝福化PVP物理傷害減免百分比
             dmg -= dmg / 100 * _targetPc.getzhufuPvpbai();
         }

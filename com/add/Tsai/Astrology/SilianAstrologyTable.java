@@ -71,12 +71,14 @@ public class SilianAstrologyTable {
                 // 擴充欄位：三重矢減傷、遠距離減免%、HPR、MPR、gfx1/2
                 int tripleArrowReduction = 0;
                 int rangedReducePercent = 0;
+                int stunDmgReduction = 0;
                 int hpr = 0;
                 int mpr = 0;
                 int gfxid1 = 0;
                 int gfxid2 = 0;
                 try { tripleArrowReduction = rs.getInt("被三重矢攻擊減傷"); } catch (SQLException ignore) {}
                 try { rangedReducePercent = rs.getInt("遠距離傷害減免+%"); } catch (SQLException ignore) {}
+                try { stunDmgReduction = rs.getInt("昏迷時傷害減免"); } catch (SQLException ignore) {}
                 try { hpr = rs.getInt("Hpr"); } catch (SQLException ignore) {}
                 try { mpr = rs.getInt("Mpr"); } catch (SQLException ignore) {}
                 try { gfxid1 = rs.getInt("gfxid1"); } catch (SQLException ignore) {}
@@ -96,12 +98,13 @@ public class SilianAstrologyTable {
                         buttonOrder, note, needQuestId, questId, cards, skillId,
                         incompleteGfxId, completeGfxId, needItemId, needItemCount,
                         addHp, stunResist, addWeightLimit,
-                        tripleArrowReduction, rangedReducePercent, hpr, mpr,
+                        tripleArrowReduction, rangedReducePercent, stunDmgReduction, hpr, mpr,
                         gfxid1, gfxid2, castItemId, castItemCount, hotTime, grantItemId, 0);
 
                 _index.put(data.getButtonOrder(), data);
                 if (grantItemId > 0) {
                     _grantItemIds.add(grantItemId);
+                    _grantMap.put(grantItemId, data);
                 }
                 count++;
             }
@@ -121,6 +124,7 @@ public class SilianAstrologyTable {
         if (value.getMpr() != 0) pc.addMpr(value.getMpr() * negative);
         if (value.getTripleArrowReduction() != 0) pc.addTripleArrowReduction(value.getTripleArrowReduction() * negative);
         if (value.getRangedDmgReductionPercent() != 0) pc.addRangedDmgReductionPercent(value.getRangedDmgReductionPercent() * negative);
+        if (value.getStunDmgReduction() != 0) pc.addStunDmgReduction(value.getStunDmgReduction() * negative);
         if (negative > 0) {
             if (value.getGfxid1() > 0) pc.setLeechGfx1(value.getGfxid1());
             if (value.getGfxid2() > 0) pc.setLeechGfx2(value.getGfxid2());
@@ -158,6 +162,13 @@ public class SilianAstrologyTable {
     public SilianAstrologyData getData(int buttonOrder) { return _index.get(buttonOrder); }
     public Integer[] getIndexArray() { return _index.keySet().toArray(new Integer[0]); }
     public int size() { return _index.size(); }
+
+    /**
+     * 透過啟動道具 itemId 取得對應的絲莉安配置（若無對應則回傳 null）。
+     */
+    public SilianAstrologyData getByGrantItemId(int itemId) {
+        return _grantMap.get(itemId);
+    }
 }
 
 

@@ -75,10 +75,9 @@ public class C_LoginToServer extends ClientBasePacket {
                 pc.getInventory().equippedLoad();
                 pc.getInventory().viewItem();
             }
-            // 登入初期：若絲莉安 HOT 尚在，優先恢復 ICON 顯示
+            // 登入時恢復冷卻，並顯示對應技能 ICON 倒數
             try {
                 if (pc.get_other() != null) {
-                    // 先恢復三個技能的冷卻，避免登入後短窗可再次施放
                     final long nowMs0 = System.currentTimeMillis();
                     int cd1s0 = pc.get_other().get_silian_cd1_until_s();
                     int cd2s0 = pc.get_other().get_silian_cd2_until_s();
@@ -90,15 +89,18 @@ public class C_LoginToServer extends ClientBasePacket {
                     if (cd2ms0 > nowMs0) pc.setSilianCooldown2Until(cd2ms0); else pc.setSilianCooldown2Until(0L);
                     if (cd3ms0 > nowMs0) pc.setSilianCooldown3Until(cd3ms0); else pc.setSilianCooldown3Until(0L);
 
-                    final long nowMs = System.currentTimeMillis();
-                    int hotUntilS = pc.get_other().get_silian_hot_until_s();
-                    int hotSkill = pc.get_other().get_silian_hot_skill_id();
-                    long hotUntilMs = ((long) hotUntilS) * 1000L;
-                    if (hotUntilMs > nowMs && hotSkill > 0) {
-                        pc.setSilianRegenUntil(hotUntilMs);
-                        int leftSec = (int) ((hotUntilMs - nowMs) / 1000L);
-                        int iconId = (hotSkill == 2) ? 9708 : (hotSkill == 3 ? 9718 : 9700);
-                        pc.sendPackets(new S_InventoryIcon(iconId, true, 2783, leftSec));
+                    // 顯示冷卻 ICON（各技能各自顯示）
+                    if (cd1ms0 > nowMs0) {
+                        int left = (int) ((cd1ms0 - nowMs0) / 1000L);
+                        pc.sendPackets(new S_InventoryIcon(9700, true, 2783, left));
+                    }
+                    if (cd2ms0 > nowMs0) {
+                        int left = (int) ((cd2ms0 - nowMs0) / 1000L);
+                        pc.sendPackets(new S_InventoryIcon(9708, true, 2783, left));
+                    }
+                    if (cd3ms0 > nowMs0) {
+                        int left = (int) ((cd3ms0 - nowMs0) / 1000L);
+                        pc.sendPackets(new S_InventoryIcon(9718, true, 2783, left));
                     }
                 }
             } catch (Throwable ignore) {}
@@ -2329,21 +2331,7 @@ public class C_LoginToServer extends ClientBasePacket {
                                         if (cd2ms > nowMs) _pc.setSilianCooldown2Until(cd2ms); else _pc.setSilianCooldown2Until(0L);
                                         if (cd3ms > nowMs) _pc.setSilianCooldown3Until(cd3ms); else _pc.setSilianCooldown3Until(0L);
 
-                                        // 若 HOT 尚未結束，恢復圖示與再生截止時間
-                                        int hotUntilS = _pc.get_other().get_silian_hot_until_s();
-                                        int hotSkill = _pc.get_other().get_silian_hot_skill_id();
-                                        long hotUntilMs = ((long) hotUntilS) * 1000L;
-                                        if (hotUntilMs > nowMs && hotSkill > 0) {
-                                            _pc.setSilianRegenUntil(hotUntilMs);
-                                            int leftSec = (int) ((hotUntilMs - nowMs) / 1000L);
-                                            int iconId = (hotSkill == 2) ? 9708 : (hotSkill == 3 ? 9718 : 9700);
-                                            _pc.sendPackets(new S_InventoryIcon(iconId, true, 2783, leftSec));
-                                        } else {
-                                            // 已過期：清空 HOT 記錄
-                                            _pc.get_other().set_silian_hot_until_s(0);
-                                            _pc.get_other().set_silian_hot_skill_id(0);
-                                            new com.lineage.server.datatables.sql.CharOtherTable().storeOther(_pc.getId(), _pc.get_other());
-                                        }
+                                        // 不再恢復 HOT/ICON（ICON 僅在施放時顯示冷卻秒）
                                     }
                                 } catch (Throwable ignore) {}
                                 _pc.sendPackets(new S_SystemMessage("\\aB獲得星盤能力加成。", 17));

@@ -20,6 +20,7 @@ public class SilianAstrologyData {
     private final int addWeightLimit;
     private final int tripleArrowReduction;
     private final int rangedDmgReductionPercent;
+    private final int stunDmgReduction;
     private final int hpr;
     private final int mpr;
     private final int gfxid1;
@@ -32,7 +33,7 @@ public class SilianAstrologyData {
     public SilianAstrologyData(int buttonOrder, String note, int needQuestId, int questId, int cards, int skillId,
                                int incompleteGfxId, int completeGfxId, String needItemId, String needItemCount,
                                int addHp, int stunResist, int addWeightLimit,
-                               int tripleArrowReduction, int rangedDmgReductionPercent, int hpr, int mpr,
+                               int tripleArrowReduction, int rangedDmgReductionPercent, int stunDmgReduction, int hpr, int mpr,
                                int gfxid1, int gfxid2, int castItemId, int castItemCount, int hotTime,
                                int grantItemId, int grantItemCount) {
         this.buttonOrder = buttonOrder;
@@ -50,6 +51,7 @@ public class SilianAstrologyData {
         this.addWeightLimit = addWeightLimit;
         this.tripleArrowReduction = tripleArrowReduction;
         this.rangedDmgReductionPercent = rangedDmgReductionPercent;
+        this.stunDmgReduction = stunDmgReduction;
         this.hpr = hpr;
         this.mpr = mpr;
         this.gfxid1 = gfxid1;
@@ -76,6 +78,7 @@ public class SilianAstrologyData {
     public int getAddWeightLimit() { return addWeightLimit; }
     public int getTripleArrowReduction() { return tripleArrowReduction; }
     public int getRangedDmgReductionPercent() { return rangedDmgReductionPercent; }
+    public int getStunDmgReduction() { return stunDmgReduction; }
     public int getHpr() { return hpr; }
     public int getMpr() { return mpr; }
     public int getGfxid1() { return gfxid1; }

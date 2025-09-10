@@ -86,15 +86,6 @@ public class SilianAstrologyCmd {
                     // 僅更新當前選擇（不在這裡套用效果 / HOT）
                     _SILIAN_LAST_BTN.put(pc.getId(), id);
                     if (data.getSkillId() > 0) {
-                        // 若有施放成本，需檢查與扣除（使用設定的施放道具數量）
-                        if (data.getCastItemId() > 0) {
-                            int need = Math.max(1, data.getCastItemCount());
-                            if (!pc.getInventory().checkItem(data.getCastItemId(), need)) {
-                                pc.sendPackets(new S_SystemMessage("道具不足，無法啟用技能節點！"));
-                                return true;
-                            }
-                            pc.getInventory().consumeItem(data.getCastItemId(), need);
-                        }
                         _SILIAN_SKILLS.put(pc.getId(), data.getSkillId());
                         _SILIAN_SKILL_NAMES.put(pc.getId(), data.getNote());
                         // 切換技能節點：回收其他等級啟動道具，並發放當前等級對應啟動道具（若有設定）

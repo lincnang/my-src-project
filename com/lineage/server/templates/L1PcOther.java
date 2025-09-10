@@ -56,9 +56,7 @@ public class L1PcOther {
     private int _silian_cd2_until_s = 0;
     private int _silian_cd3_until_s = 0;
 
-    // Silian HOT status persistence
-    private int _silian_hot_until_s = 0;     // epoch seconds
-    private int _silian_hot_skill_id = 0;    // 1/2/3，用來決定 ICON
+    // Silian HOT status persistence (removed)
 
     public static void load() {
         if (!_isStart) {
@@ -377,9 +375,5 @@ public class L1PcOther {
     public void set_silian_cd2_until_s(int untilSec) { _silian_cd2_until_s = Math.max(0, untilSec); }
     public void set_silian_cd3_until_s(int untilSec) { _silian_cd3_until_s = Math.max(0, untilSec); }
 
-    public int get_silian_hot_until_s() { return _silian_hot_until_s; }
-    public int get_silian_hot_skill_id() { return _silian_hot_skill_id; }
-
-    public void set_silian_hot_until_s(int untilSec) { _silian_hot_until_s = Math.max(0, untilSec); }
-    public void set_silian_hot_skill_id(int skillId) { _silian_hot_skill_id = skillId; }
+    // removed: silian_hot_until_s / silian_hot_skill_id accessors
 }

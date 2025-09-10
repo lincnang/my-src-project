@@ -26,10 +26,17 @@ public class TRIPLE_ARROW extends SkillMode {
         int total = dmg + bonus;
         if (cha instanceof L1PcInstance) {
             L1PcInstance targetPc = (L1PcInstance) cha;
+            // 1) 先吃三重矢固定減傷
             int reduce = targetPc.getTripleArrowReduction();
             if (reduce > 0) {
-                total = Math.max(0, total - reduce);
+                total = total - reduce;
             }
+            // 2) 再吃遠距離通用減免%（僅 PvP）
+            int percent = targetPc.getRangedDmgReductionPercent();
+            if (percent > 0 && srcpc != null) {
+                total -= (int) (((double) total * (double) percent) / 100.0);
+            }
+            // 3) 取消保底傷害，允許最終傷害為 0
         }
         return total;
 
@@ -37,10 +44,17 @@ public class TRIPLE_ARROW extends SkillMode {
 
     private int doBaseTripleArrow(L1PcInstance srcpc, L1Character cha) {
         int dmg = 0;
-
-        // 讓目標播放被攻擊動畫（這裡不會影響 triple arrow 的計數）
-        for (int i = 0; i < 3; i++) {
-            cha.onAction(srcpc);
+        // 標記三重矢射擊進行中，讓一般攻擊流程可以識別並扣除固定減傷
+        boolean prev = srcpc.isTripleArrowShooting();
+        srcpc.setTripleArrowShooting(true);
+        try {
+            // 讓目標播放被攻擊動畫（這裡不會影響 triple arrow 的計數）
+            for (int i = 0; i < 3; i++) {
+                cha.onAction(srcpc);
+            }
+        } finally {
+            // 還原旗標
+            srcpc.setTripleArrowShooting(prev);
         }
         // 播放三重矢動畫效果
         srcpc.sendPacketsAll(new S_SkillSound(srcpc.getId(), 4394));

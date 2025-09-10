@@ -1637,17 +1637,45 @@ public class L1AttackPc extends L1AttackMode {
                 dmg -= _targetPc.getPvpDmg_R();
             }
         }
+        // 三重矢：若本次為三重矢的箭矢，先扣固定減傷，之後才進行遠距離百分比減免
+        try {
+            if (_pc != null && _pc.isTripleArrowShooting() && _targetPc != null) {
+                int trReduce = _targetPc.getTripleArrowReduction();
+                if (trReduce > 0) {
+                    dmg -= trReduce;
+                    if (dmg < 0) dmg = 0;
+                }
+            }
+        } catch (Throwable ignore) {}
         if (_pc.getPvpDmg() != 0) { // 增加PVP傷害
             dmg += _pc.getPvpDmg();
         }
         if (_targetPc.getZhufuPvp() != 0) {//祝福化PVP物理傷害減免
             dmg -= _targetPc.getZhufuPvp();
         }
-        // 絲莉安：遠距離傷害減免百分比（只對遠距離攻擊生效）
+        // 昏迷狀態：固定減傷（來自星盤等）
+        try {
+            if (_targetPc != null && (
+                    _targetPc.hasSkillEffect(L1SkillId.SHOCK_STUN) ||
+                    _targetPc.hasSkillEffect(L1SkillId.KINGDOM_STUN) ||
+                    _targetPc.hasSkillEffect(L1SkillId.TITAN_STUN) ||
+                    _targetPc.hasSkillEffect(L1SkillId.FIRESTUN) ||
+                    _targetPc.hasSkillEffect(L1SkillId.TRUEFIRESTUN)
+            )) {
+                int stunReduce = _targetPc.getStunDmgReduction();
+                if (stunReduce > 0) {
+                    dmg -= stunReduce;
+                    if (dmg < 0) dmg = 0;
+                }
+            }
+        } catch (Throwable ignore) {}
+        // 遠距離傷害減免百分比（只在 PvP、且只對一般遠距離攻擊生效；三重矢已於上方先扣固定減傷）
         if (_weapon != null && _weaponRange == -1) { // -1 代表遠距離武器（符合專案定義）
-            int percent = _targetPc.getRangedDmgReductionPercent();
-            if (percent > 0) {
-                dmg -= (dmg * percent) / 100;
+            if (_targetPc != null && _pc != null) { // PvP
+                int percent = _targetPc.getRangedDmgReductionPercent();
+                if (percent > 0) {
+                    dmg -= (int) (((double) dmg * (double) percent) / 100.0);
+                }
             }
         }
         if (_targetPc.getzhufuPvpbai() != 0) {//祝福化PVP物理傷害減免百分比
@@ -3374,9 +3402,8 @@ public class L1AttackPc extends L1AttackMode {
             short newHp = (short) (_pc.getCurrentHp() + _drainHp);
             _pc.setCurrentHp(newHp);
         }
-        // damagePcWeaponDurability();
         _targetPc.receiveDamage(_pc, _damage, false, false);
-    }
+   }
 
     /**
      * 傷害資訊送出

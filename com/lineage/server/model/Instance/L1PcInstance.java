@@ -2953,6 +2953,12 @@ public class L1PcInstance extends L1Character { // src015
                     this.setCurrentHp(newHp);
                 }
             }
+
+            // 送出攻擊動作；若為反擊屏障，僅送出動畫不提交原攻擊傷害
+            attack.action();
+            if (!isCounterBarrier) {
+                attack.commit();
+            }
         }
     }
 
@@ -9343,6 +9349,9 @@ public class L1PcInstance extends L1Character { // src015
     // ======= 絲莉安/阿頓 共用的擴充屬性（被動減傷類） =======
     private int _tripleArrowReduction = 0; // 被三重矢攻擊時，固定減傷值
     private int _rangedDmgReductionPercent = 0; // 遭受遠距離攻擊時減免百分比
+    private int _stunDmgReduction = 0; // 處於昏迷(眩暈)狀態時承受的每次固定減傷
+    // 三重矢技能發動期間的臨時旗標（用於一般攻擊流程識別三重矢的三次射擊）
+    private transient boolean _tripleArrowShooting = false;
 
     public int getTripleArrowReduction() {
         return _tripleArrowReduction;
@@ -9361,6 +9370,23 @@ public class L1PcInstance extends L1Character { // src015
         _rangedDmgReductionPercent += percent;
         if (_rangedDmgReductionPercent < 0) _rangedDmgReductionPercent = 0;
         if (_rangedDmgReductionPercent > 100) _rangedDmgReductionPercent = 100;
+    }
+
+    public int getStunDmgReduction() {
+        return _stunDmgReduction;
+    }
+
+    public void addStunDmgReduction(int amount) {
+        _stunDmgReduction += amount;
+        if (_stunDmgReduction < 0) _stunDmgReduction = 0;
+    }
+
+    public boolean isTripleArrowShooting() {
+        return _tripleArrowShooting;
+    }
+
+    public void setTripleArrowShooting(boolean shooting) {
+        _tripleArrowShooting = shooting;
     }
 
     // 絲莉安專用 HOT 狀態追蹤（毫秒時間戳）。大於當前時間表示正在回復
@@ -9467,6 +9493,24 @@ public class L1PcInstance extends L1Character { // src015
                     // 轉為阿頓模型套用：僅用到 Hp/耐性/負重/HPR/MPR/減傷/特效
                     // 直接使用絲莉安專用 effectBuff
                     com.add.Tsai.Astrology.SilianAstrologyTable.effectBuff(this, data, 1);
+                    java.util.concurrent.TimeUnit.MILLISECONDS.sleep(5);
+                }
+            } catch (InterruptedException e) {
+                _log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * 加載格立特星盤：自動套用所有「非技能節點」的已完成能力
+     */
+    public final void addGritAstrologyPowers() {
+        for (Integer key : com.add.Tsai.Astrology.GritAstrologyTable.get().getIndexArray()) {
+            com.add.Tsai.Astrology.GritAstrologyData data = com.add.Tsai.Astrology.GritAstrologyTable.get().getData(key);
+            if (data == null) continue;
+            try {
+                if (getQuest().isEnd(data.getQuestId()) && data.getSkillId() == 0) {
+                    com.add.Tsai.Astrology.GritAstrologyTable.effectBuff(this, data, 1);
                     java.util.concurrent.TimeUnit.MILLISECONDS.sleep(5);
                 }
             } catch (InterruptedException e) {

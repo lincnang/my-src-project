@@ -133,6 +133,20 @@ public class AttonAstrologyTable {
 			pc.addDamageReductionPVE(value.getPveDmgReduction() * negative); // L1PcInstance 已有 _DamageReductionPVE
 		}
 
+		// 來自阿頓星盤的其他被動減傷：
+		// 1) 被三重矢攻擊時固定減傷（與絲莉安相同欄位，共用加總）
+		if (value.getTripleArrowReduction() != 0) {
+			pc.addTripleArrowReduction(value.getTripleArrowReduction() * negative);
+		}
+		// 2) 遭受遠距離攻擊的減免百分比（與絲莉安相同欄位，共用加總）
+		if (value.getMissileDmgReductionPercent() != 0) {
+			pc.addRangedDmgReductionPercent(value.getMissileDmgReductionPercent() * negative);
+		}
+		// 3) 處於昏迷狀態時的固定減傷（與絲莉安相同欄位，共用加總）
+		if (value.getStunDmgReduction() != 0) {
+			pc.addStunDmgReduction(value.getStunDmgReduction() * negative);
+		}
+
 		// 阿頓星盤 隨機減傷參數注入
 		if (negative > 0) {
 			if (value.getProcChance() > 0) pc.setAttonProcChance(value.getProcChance());

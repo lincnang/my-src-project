@@ -113,12 +113,7 @@ public class CharOtherTable implements CharOtherStorage {
                     try { if (silianCd2 == 0) silianCd2 = rs.getInt("silan_cd2_until_s"); } catch (SQLException ignore) {}
                     try { silianCd3 = rs.getInt("silian_cd3_until_s"); } catch (SQLException ignore) {}
                     try { if (silianCd3 == 0) silianCd3 = rs.getInt("silan_cd3_until_s"); } catch (SQLException ignore) {}
-                    int silianHotUntil = 0;
-                    int silianHotSkill = 0;
-                    try { silianHotUntil = rs.getInt("silian_hot_until_s"); } catch (SQLException ignore) {}
-                    try { if (silianHotUntil == 0) silianHotUntil = rs.getInt("silan_hot_until_s"); } catch (SQLException ignore) {}
-                    try { silianHotSkill = rs.getInt("silian_hot_skill_id"); } catch (SQLException ignore) {}
-                    try { if (silianHotSkill == 0) silianHotSkill = rs.getInt("silan_hot_skill_id"); } catch (SQLException ignore) {}
+                    // removed: silian_hot_* persistence
 
                     final L1PcOther other = new L1PcOther();
                     other.set_objid(char_obj_id);
@@ -148,8 +143,7 @@ public class CharOtherTable implements CharOtherStorage {
                     other.set_silian_cd1_until_s(silianCd1);
                     other.set_silian_cd2_until_s(silianCd2);
                     other.set_silian_cd3_until_s(silianCd3);
-                    other.set_silian_hot_until_s(silianHotUntil);
-                    other.set_silian_hot_skill_id(silianHotSkill);
+                    // removed: silian_hot_* setters
 
                     // === 反推 leaves_time_exp 回記憶體（避免重啟後顯示為 0） ===
                     // 規則：以 logintime 往回推，算出「段數 N」，再轉為 leaves_time_exp = N * EXP
@@ -264,8 +258,7 @@ public class CharOtherTable implements CharOtherStorage {
                                 "`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
                                 "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?," +
                                 "`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?," +
-                                "`silian_cd1_until_s`=?,`silian_cd2_until_s`=?,`silian_cd3_until_s`=?," +
-                                "`silian_hot_until_s`=?,`silian_hot_skill_id`=?" +
+                                "`silian_cd1_until_s`=?,`silian_cd2_until_s`=?,`silian_cd3_until_s`=?" +
                                 " WHERE `char_obj_id`=?");
 
                 int i = 0;
@@ -287,8 +280,6 @@ public class CharOtherTable implements CharOtherStorage {
                 ps.setInt(++i, other.get_silian_cd1_until_s());
                 ps.setInt(++i, other.get_silian_cd2_until_s());
                 ps.setInt(++i, other.get_silian_cd3_until_s());
-                ps.setInt(++i, other.get_silian_hot_until_s());
-                ps.setInt(++i, other.get_silian_hot_skill_id());
                 ps.setInt(++i, other.get_objid());
 
                 ps.execute();
@@ -301,8 +292,7 @@ public class CharOtherTable implements CharOtherStorage {
                                 "`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
                                 "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?," +
                                 "`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?," +
-                                "`silan_cd1_until_s`=?,`silan_cd2_until_s`=?,`silan_cd3_until_s`=?," +
-                                "`silan_hot_until_s`=?,`silan_hot_skill_id`=?" +
+                                "`silan_cd1_until_s`=?,`silan_cd2_until_s`=?,`silan_cd3_until_s`=?" +
                                 " WHERE `char_obj_id`=?");
                 int i = 0;
                 ps.setInt(++i, logintime);
@@ -323,8 +313,6 @@ public class CharOtherTable implements CharOtherStorage {
                 ps.setInt(++i, other.get_silian_cd1_until_s());
                 ps.setInt(++i, other.get_silian_cd2_until_s());
                 ps.setInt(++i, other.get_silian_cd3_until_s());
-                ps.setInt(++i, other.get_silian_hot_until_s());
-                ps.setInt(++i, other.get_silian_hot_skill_id());
                 ps.setInt(++i, other.get_objid());
                 ps.execute();
             }
@@ -377,7 +365,7 @@ public class CharOtherTable implements CharOtherStorage {
                         "INSERT INTO `character_other` SET `char_obj_id`=?,`logintime`=?,`hpup`=?," +
                                 "`mpup`=?,`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
                                 "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?,`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?," +
-                                "`silian_cd1_until_s`=?,`silian_cd2_until_s`=?,`silian_cd3_until_s`=?,`silian_hot_until_s`=?,`silian_hot_skill_id`=?");
+                                "`silian_cd1_until_s`=?,`silian_cd2_until_s`=?,`silian_cd3_until_s`=?");
 
                 int i = 0;
                 ps.setInt(++i, oid);
@@ -399,8 +387,6 @@ public class CharOtherTable implements CharOtherStorage {
                 ps.setInt(++i, other.get_silian_cd1_until_s());
                 ps.setInt(++i, other.get_silian_cd2_until_s());
                 ps.setInt(++i, other.get_silian_cd3_until_s());
-                ps.setInt(++i, other.get_silian_hot_until_s());
-                ps.setInt(++i, other.get_silian_hot_skill_id());
 
                 ps.execute();
             } catch (SQLException e) {
@@ -410,7 +396,7 @@ public class CharOtherTable implements CharOtherStorage {
                         "INSERT INTO `character_other` SET `char_obj_id`=?,`logintime`=?,`hpup`=?," +
                                 "`mpup`=?,`score`=?,`color`=?,`usemap`=?,`usemaptime`=?," +
                                 "`clanskill`=?,`killCount`=?,`deathCount`=?,`getbonus`=?,`Artifact`=?,`Lv_Artifact`=?,`Artifact1`=?,`Lv_Redmg_Artifact`=?," +
-                                "`silan_cd1_until_s`=?,`silan_cd2_until_s`=?,`silan_cd3_until_s`=?,`silan_hot_until_s`=?,`silan_hot_skill_id`=?");
+                                "`silan_cd1_until_s`=?,`silan_cd2_until_s`=?,`silan_cd3_until_s`=?");
                 int i = 0;
                 ps.setInt(++i, oid);
                 ps.setInt(++i, logintime);
@@ -431,8 +417,6 @@ public class CharOtherTable implements CharOtherStorage {
                 ps.setInt(++i, other.get_silian_cd1_until_s());
                 ps.setInt(++i, other.get_silian_cd2_until_s());
                 ps.setInt(++i, other.get_silian_cd3_until_s());
-                ps.setInt(++i, other.get_silian_hot_until_s());
-                ps.setInt(++i, other.get_silian_hot_skill_id());
                 ps.execute();
             }
 

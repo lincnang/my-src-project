@@ -135,7 +135,18 @@ public class L1TrapInstance extends L1Object {
      * @param trodFrom 踩到陷阱的玩家
      */
     public void onTrod(L1PcInstance trodFrom) {
-        _trap.onTrod(trodFrom, this);
+        try {
+            if (trodFrom == null) return;
+            if (_trap == null) {
+                _log.warn("Trap template is null on onTrod; disabling trap id=" + getId());
+                disableTrap();
+                return;
+            }
+            _trap.onTrod(trodFrom, this);
+        } catch (Exception e) {
+            _log.error("onTrod error for trap id=" + getId() + ": " + e.getMessage(), e);
+            disableTrap();
+        }
     }
 
     /**
@@ -144,7 +155,18 @@ public class L1TrapInstance extends L1Object {
      * @param caster 檢測陷阱的玩家
      */
     public void onDetection(L1PcInstance caster) {
-        _trap.onDetection(caster, this);
+        try {
+            if (caster == null) return;
+            if (_trap == null) {
+                _log.warn("Trap template is null on onDetection; disabling trap id=" + getId());
+                disableTrap();
+                return;
+            }
+            _trap.onDetection(caster, this);
+        } catch (Exception e) {
+            _log.error("onDetection error for trap id=" + getId() + ": " + e.getMessage(), e);
+            disableTrap();
+        }
     }
 
     /**
@@ -156,6 +178,11 @@ public class L1TrapInstance extends L1Object {
         try {
             // 如果玩家有特定技能效果（ID: 2002），則將陷阱加入玩家的已知物件並通知玩家
             if (perceivedFrom.hasSkillEffect(2002)) {
+                if (_trap == null) {
+                    _log.warn("Trap template is null on onPerceive; disabling trap id=" + getId());
+                    disableTrap();
+                    return;
+                }
                 perceivedFrom.addKnownObject(this);
                 perceivedFrom.sendPackets(new S_Trap(this, _trap.getType()));
                 _knownPlayers.add(perceivedFrom);

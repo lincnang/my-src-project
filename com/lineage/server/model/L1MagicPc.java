@@ -1052,6 +1052,26 @@ public class L1MagicPc extends L1MagicMode {
             }
             magicDamage = (int) (magicDamage * criticalCoefficient);
             _pc.setMagicCritical(true);
+
+            // 格立特：魔法爆擊成立時，若有永久爆擊吸收值則直接吸收 HP/MP
+            try {
+                // 若當下尚未注入吸收值，現場重算一次（避免需要重登或重新套用）
+                if (_pc.getGritSkillAbsorbHp() <= 0 && _pc.getGritSkillAbsorbMp() <= 0) {
+                    try { com.add.Tsai.Astrology.GritAstrologyTable.refreshPassiveAbsorb(_pc); } catch (Throwable ignore2) {}
+                }
+                int absorbHp = _pc.getGritSkillAbsorbHp();
+                if (absorbHp > 0) {
+                    int newHp = _pc.getCurrentHp() + absorbHp;
+                    if (newHp > _pc.getMaxHp()) newHp = _pc.getMaxHp();
+                    _pc.setCurrentHp(newHp);
+                }
+                int absorbMp = _pc.getGritSkillAbsorbMp();
+                if (absorbMp > 0) {
+                    int newMp = _pc.getCurrentMp() + absorbMp;
+                    if (newMp > _pc.getMaxMp()) newMp = _pc.getMaxMp();
+                    _pc.setCurrentMp(newMp);
+                }
+            } catch (Throwable ignore) {}
         }
 
         // 5. DISINTEGRATE帶debuff

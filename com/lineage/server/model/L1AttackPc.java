@@ -1190,8 +1190,48 @@ public class L1AttackPc extends L1AttackMode {
                 if (_pc.getCloseCritical() > 0) {
                     closeRnd += _pc.getCloseCritical();
                 }
+                // 目標暴擊抗性%：降低本次近距離爆擊率
+                if (_targetPc != null) {
+                    int resist = _targetPc.getGritCritResistPercent();
+                    if (resist > 0) {
+                        closeRnd -= resist;
+                        if (closeRnd < 0) closeRnd = 0;
+                    }
+                }
                 if (_random.nextInt(100) + 1 <= closeRnd) {
-                    dmg *= ConfigOther.Critical_Dmg; // 1.20
+                    dmg *= ConfigOther.Critical_Dmg; // 1.20 基礎暴擊倍率
+                    // 格立特技能：暴擊傷害額外加成（%）
+                    int extra = _pc.getGritCritDmgUpPercent();
+                    if (extra > 0) {
+                        dmg *= (1.0 + (extra / 100.0));
+                    }
+                    // 目標被動暴擊傷害減免%（僅在爆擊成立時生效）
+                    if (_targetPc != null) {
+                        int red = _targetPc.getGritCritDmgReductionPercent();
+                        if (red > 0) {
+                            dmg *= (1.0 - (red / 100.0));
+                            if (dmg < 0) dmg = 0;
+                        }
+                    }
+                    // 爆擊成立：若有設定永久爆擊吸收 HP/MP，直接吸收（不依賴技能機率）
+                    try {
+                        // 若當下尚未注入吸收值，現場重算一次（避免需要重登或重新套用）
+                        if (_pc.getGritSkillAbsorbHp() <= 0 && _pc.getGritSkillAbsorbMp() <= 0) {
+                            try { com.add.Tsai.Astrology.GritAstrologyTable.refreshPassiveAbsorb(_pc); } catch (Throwable ignore2) {}
+                        }
+                        int absorbHp = _pc.getGritSkillAbsorbHp();
+                        if (absorbHp > 0) {
+                            int newHp = _pc.getCurrentHp() + absorbHp;
+                            if (newHp > _pc.getMaxHp()) newHp = _pc.getMaxHp();
+                            _pc.setCurrentHp(newHp);
+                        }
+                        int absorbMp = _pc.getGritSkillAbsorbMp();
+                        if (absorbMp > 0) {
+                            int newMp = _pc.getCurrentMp() + absorbMp;
+                            if (newMp > _pc.getMaxMp()) newMp = _pc.getMaxMp();
+                            _pc.setCurrentMp(newMp);
+                        }
+                    } catch (Throwable ignore) {}
                     bonGfx(); // 武器爆擊特效
                 }
             } else {
@@ -1213,8 +1253,48 @@ public class L1AttackPc extends L1AttackMode {
                 if (_pc.getBowCritical() > 0) {
                     bowRnd += _pc.getBowCritical();
                 }
+                // 目標暴擊抗性%：降低本次遠距離爆擊率
+                if (_targetPc != null) {
+                    int resist = _targetPc.getGritCritResistPercent();
+                    if (resist > 0) {
+                        bowRnd -= resist;
+                        if (bowRnd < 0) bowRnd = 0;
+                    }
+                }
                 if (_random.nextInt(100) + 1 <= bowRnd) {
-                    dmg *= ConfigOther.Critical_Dmg_B; // 1.20
+                    dmg *= ConfigOther.Critical_Dmg_B; // 1.20 基礎暴擊倍率（遠距）
+                    // 格立特技能：暴擊傷害額外加成（%）
+                    int extra = _pc.getGritCritDmgUpPercent();
+                    if (extra > 0) {
+                        dmg *= (1.0 + (extra / 100.0));
+                    }
+                    // 目標被動暴擊傷害減免%（僅在爆擊成立時生效）
+                    if (_targetPc != null) {
+                        int red = _targetPc.getGritCritDmgReductionPercent();
+                        if (red > 0) {
+                            dmg *= (1.0 - (red / 100.0));
+                            if (dmg < 0) dmg = 0;
+                        }
+                    }
+                    // 爆擊成立：若有設定永久爆擊吸收 HP/MP，直接吸收（不依賴技能機率）
+                    try {
+                        // 若當下尚未注入吸收值，現場重算一次（避免需要重登或重新套用）
+                        if (_pc.getGritSkillAbsorbHp() <= 0 && _pc.getGritSkillAbsorbMp() <= 0) {
+                            try { com.add.Tsai.Astrology.GritAstrologyTable.refreshPassiveAbsorb(_pc); } catch (Throwable ignore2) {}
+                        }
+                        int absorbHp = _pc.getGritSkillAbsorbHp();
+                        if (absorbHp > 0) {
+                            int newHp = _pc.getCurrentHp() + absorbHp;
+                            if (newHp > _pc.getMaxHp()) newHp = _pc.getMaxHp();
+                            _pc.setCurrentHp(newHp);
+                        }
+                        int absorbMp = _pc.getGritSkillAbsorbMp();
+                        if (absorbMp > 0) {
+                            int newMp = _pc.getCurrentMp() + absorbMp;
+                            if (newMp > _pc.getMaxMp()) newMp = _pc.getMaxMp();
+                            _pc.setCurrentMp(newMp);
+                        }
+                    } catch (Throwable ignore) {}
                     bonGfx(); // 武器爆擊特效
 
                 }
@@ -1256,6 +1336,44 @@ public class L1AttackPc extends L1AttackMode {
                 dmg += _pc.getNEExtraDmg();
             }
         }
+        // 格立特技能：每一下攻擊皆可觸發的額外暴擊傷害（同時視為爆擊 → 觸發吸收）
+        try {
+            double proc = _pc.getGritSkillProcChance();
+            double skillCrit = _pc.getGritSkillCritDmgPercent();
+            if (proc > 0 && skillCrit > 0 && (_random.nextDouble() * 100.0) < proc) {
+                // 技能暴擊傷害：≤5.0 視為「倍數」，>5.0 視為「百分比」
+                double factor = (skillCrit <= 5.0) ? skillCrit : (1.0 + (skillCrit / 100.0));
+                dmg *= factor;
+                int lastBtn = com.add.Tsai.Astrology.GritAstrologyCmd.get().getGritLastBtn(_pc);
+                if (lastBtn >= 0) {
+                    com.add.Tsai.Astrology.GritAstrologyData d = com.add.Tsai.Astrology.GritAstrologyTable.get().getData(lastBtn);
+                    if (d != null) {
+                        int gfx = d.getSkillProcGfxId();
+                        if (gfx > 0 && _target != null) {
+                            _pc.sendPacketsAll(new com.lineage.server.serverpackets.S_SkillSound(_target.getId(), gfx));
+                        }
+                    }
+                }
+                // 技能觸發視同爆擊：執行永久吸收 HP/MP
+                try {
+                    if (_pc.getGritSkillAbsorbHp() <= 0 && _pc.getGritSkillAbsorbMp() <= 0) {
+                        try { com.add.Tsai.Astrology.GritAstrologyTable.refreshPassiveAbsorb(_pc); } catch (Throwable ignore2) {}
+                    }
+                    int absorbHp = _pc.getGritSkillAbsorbHp();
+                    if (absorbHp > 0) {
+                        int newHp = _pc.getCurrentHp() + absorbHp;
+                        if (newHp > _pc.getMaxHp()) newHp = _pc.getMaxHp();
+                        _pc.setCurrentHp(newHp);
+                    }
+                    int absorbMp = _pc.getGritSkillAbsorbMp();
+                    if (absorbMp > 0) {
+                        int newMp = _pc.getCurrentMp() + absorbMp;
+                        if (newMp > _pc.getMaxMp()) newMp = _pc.getMaxMp();
+                        _pc.setCurrentMp(newMp);
+                    }
+                } catch (Throwable ignore3) {}
+            }
+        } catch (Throwable ignore) {}
         // 附魔系統 兩倍傷害
         if (_pc.get_double_dmg() != 0 && ThreadLocalRandom.current().nextInt(100) + 1 <= _pc.get_double_dmg()) {
             dmg *= 2.0D;

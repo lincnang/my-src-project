@@ -2317,6 +2317,7 @@ public class C_LoginToServer extends ClientBasePacket {
                                 _pc.addAstrologyPower();// 宙斯·守護星盤(舊)所有已解鎖卡牌能力值加載
                                 _pc.addAttonAstrologyPowers(); // 阿頓星盤：自動套用所有非技能節點
                                 _pc.addSilianAstrologyPowers(); // 絲莉安星盤：自動套用所有非技能節點
+                                _pc.addGritAstrologyPowers();   // 格立特星盤：自動套用所有非技能節點
                                 // 讀回絲莉安各技能冷卻（若仍在未來，轉回毫秒放入記憶體）
                                 try {
                                     if (_pc.get_other() != null) {

@@ -9350,6 +9350,18 @@ public class L1PcInstance extends L1Character { // src015
     private int _tripleArrowReduction = 0; // 被三重矢攻擊時，固定減傷值
     private int _rangedDmgReductionPercent = 0; // 遭受遠距離攻擊時減免百分比
     private int _stunDmgReduction = 0; // 處於昏迷(眩暈)狀態時承受的每次固定減傷
+    // 格立特：暴擊傷害提升百分比（僅在攻擊者觸發近/遠暴擊時生效）
+    private int _gritCritDmgUpPercent = 0;
+    private double _gritSkillProcChance = 0.0D;      // 格立特技能發動機率（%）
+    private double _gritSkillCritDmgPercent = 0.0D;  // 格立特技能暴擊傷害（%）
+    // 格立特：被動暴擊傷害提升%、暴擊傷害減免%、暴擊抗性%
+    private int _gritCritDmgUpPassivePercent = 0;
+    private int _gritCritDmgReductionPercent = 0;
+    private int _gritCritResistPercent = 0;
+    // 格立特：技能觸發時吸收 HP/MP（固定值）
+    private int _gritSkillAbsorbHp = 0;
+    private int _gritSkillAbsorbMp = 0;
+    private int _gritSkillGfxId = 0;
     // 三重矢技能發動期間的臨時旗標（用於一般攻擊流程識別三重矢的三次射擊）
     private transient boolean _tripleArrowShooting = false;
 
@@ -9380,6 +9392,47 @@ public class L1PcInstance extends L1Character { // src015
         _stunDmgReduction += amount;
         if (_stunDmgReduction < 0) _stunDmgReduction = 0;
     }
+
+    public int getGritCritDmgUpPercent() {
+        return _gritCritDmgUpPercent;
+    }
+
+    public void setGritCritDmgUpPercent(int percent) {
+        if (percent < 0) percent = 0;
+        if (percent > 500) percent = 500; // 上限保護，避免異常倍率
+        _gritCritDmgUpPercent = percent;
+    }
+
+    public double getGritSkillProcChance() { return _gritSkillProcChance; }
+    public void setGritSkillProcChance(double percent) {
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
+        _gritSkillProcChance = percent;
+    }
+    public double getGritSkillCritDmgPercent() { return _gritSkillCritDmgPercent; }
+    public void setGritSkillCritDmgPercent(double percent) {
+        if (percent < 0) percent = 0;
+        if (percent > 500) percent = 500;
+        _gritSkillCritDmgPercent = percent;
+    }
+
+    public int getGritCritDmgUpPassivePercent() { return _gritCritDmgUpPassivePercent; }
+    public void addGritCritDmgUpPassivePercent(int v) { _gritCritDmgUpPassivePercent += v; }
+
+    public int getGritCritDmgReductionPercent() { return _gritCritDmgReductionPercent; }
+    public void addGritCritDmgReductionPercent(int v) { _gritCritDmgReductionPercent += v; }
+
+    public int getGritCritResistPercent() { return _gritCritResistPercent; }
+    public void addGritCritResistPercent(int v) { _gritCritResistPercent += v; }
+
+    public int getGritSkillAbsorbHp() { return _gritSkillAbsorbHp; }
+    public void setGritSkillAbsorbHp(int v) { _gritSkillAbsorbHp = Math.max(0, v); }
+
+    public int getGritSkillAbsorbMp() { return _gritSkillAbsorbMp; }
+    public void setGritSkillAbsorbMp(int v) { _gritSkillAbsorbMp = Math.max(0, v); }
+
+    public int getGritSkillGfxId() { return _gritSkillGfxId; }
+    public void setGritSkillGfxId(int v) { _gritSkillGfxId = Math.max(0, v); }
 
     public boolean isTripleArrowShooting() {
         return _tripleArrowShooting;
@@ -9517,6 +9570,10 @@ public class L1PcInstance extends L1Character { // src015
                 _log.error(e.getMessage(), e);
             }
         }
+        // 套用完所有非技能節點後，重新統計注入一次永久爆擊吸收
+        try {
+            com.add.Tsai.Astrology.GritAstrologyTable.refreshPassiveAbsorb(this);
+        } catch (Throwable ignore) {}
     }
 
     // 移除所有阿頓星盤效果（確保同時僅一組技能生效）

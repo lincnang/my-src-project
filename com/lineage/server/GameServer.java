@@ -392,6 +392,7 @@ public class GameServer {
             Astrology1Table.get().load();//守護星盤
             AttonAstrologyTable.get().load();  // 阿頓星盤資料
             com.add.Tsai.Astrology.SilianAstrologyTable.get().load(); // 絲莉安星盤資料
+            com.add.Tsai.Astrology.GritAstrologyTable.get().load();   // 格立特星盤資料
             AstrologyQuestReading.get().load();//星盤任務
             //TODO 玩家武器熟練度
             WeaponProficiencyTable.getInstance().loadProficiency();

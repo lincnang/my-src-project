@@ -1213,6 +1213,9 @@ public class L1ActionPc {
             if (com.add.Tsai.Astrology.SilianAstrologyCmd.get().Cmd(_pc, cmd)) {
                 return;
             }
+            if (com.add.Tsai.Astrology.GritAstrologyCmd.get().Cmd(_pc, cmd)) {
+                return;
+            }
 
             if(Npc_MagicCombind.Cmd(_pc, cmd)) {
                 return;

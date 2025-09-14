@@ -2852,6 +2852,8 @@ public class L1PcInstance extends L1Character { // src015
         return _skins;
     }
 
+    // （已移除）變身光圈特效（連播）support
+
     /**
      * vip 保護經驗
      */

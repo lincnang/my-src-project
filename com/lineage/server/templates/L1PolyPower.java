@@ -41,8 +41,9 @@ public class L1PolyPower // src014
     private int _add_StunLevel;
     private int _addCloseCritical;
     private int _addBowCritical;
+    private int _skinId;
 
-    public L1PolyPower(int polyId, int ac, int hp, int mp, int hpr, int mpr, int str, int con, int dex, int wis, int cha, int intel, int sp, int mr, int hit_modifier, int dmg_modifier, int bow_hit_modifier, int bow_dmg_modifier, int magic_dmg_modifier, int magic_dmg_reduction, int reduction_dmg, int defense_water, int defense_wind, int defense_fire, int defense_earth, int regist_stun, int regist_stone, int regist_sleep, int regist_freeze, int regist_sustain, int regist_blind, int Exp, int potion, int PVP, int PVP_R, int magic_hit, int StunLv, int CloseCritical, int BowCritical) {
+    public L1PolyPower(int polyId, int ac, int hp, int mp, int hpr, int mpr, int str, int con, int dex, int wis, int cha, int intel, int sp, int mr, int hit_modifier, int dmg_modifier, int bow_hit_modifier, int bow_dmg_modifier, int magic_dmg_modifier, int magic_dmg_reduction, int reduction_dmg, int defense_water, int defense_wind, int defense_fire, int defense_earth, int regist_stun, int regist_stone, int regist_sleep, int regist_freeze, int regist_sustain, int regist_blind, int Exp, int potion, int PVP, int PVP_R, int magic_hit, int StunLv, int CloseCritical, int BowCritical, int skinId) {
         this._polyId = polyId;
         this._ac = ac;
         this._hp = hp;
@@ -82,6 +83,7 @@ public class L1PolyPower // src014
         this._add_StunLevel = StunLv;
         this._addCloseCritical = CloseCritical;
         this._addBowCritical = BowCritical;
+        this._skinId = skinId;
     }
 
     public final int getPolyId() {
@@ -281,6 +283,10 @@ public class L1PolyPower // src014
 
     public void addBowCritical(final int i) {
         _addCloseCritical += i;
+    }
+
+    public int getSkinId() {
+        return _skinId;
     }
 
 

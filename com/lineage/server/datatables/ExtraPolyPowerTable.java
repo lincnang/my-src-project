@@ -2,6 +2,7 @@ package com.lineage.server.datatables;
 
 import com.lineage.DatabaseFactory;
 import com.lineage.server.model.Instance.L1PcInstance;
+import com.lineage.server.model.Instance.L1SkinInstance;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1PolyPower;
 import com.lineage.server.utils.ListMapUtil;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class ExtraPolyPowerTable//src014
 {
@@ -80,11 +82,35 @@ public final class ExtraPolyPowerTable//src014
         if (pc.isInParty()) {
             pc.getParty().updateMiniHP(pc);
         }
+        try {
+            // Skin 外觀 SPR：可選
+            final int skinId = value.getSkinId();
+            if (skinId != 0) {
+                if (negative == 1) {
+                    if (pc.getSkin(skinId) == null) {
+                        final L1SkinInstance skin = com.lineage.server.utils.L1SpawnUtil.spawnSkin(pc, skinId);
+                        if (skin != null) {
+                            skin.setMoveType(1);
+                            pc.addSkin(skin, skinId);
+                        }
+                    }
+                } else if (negative == -1) {
+                    if (pc.getSkin(skinId) != null) {
+                        pc.getSkin(skinId).deleteMe();
+                        pc.removeSkin(skinId);
+                    }
+                }
+            }
+            // 已移除光圈特效連播，僅保留 SPR 光環
+        } catch (Exception ignored) {
+        }
         if (negative == 1) {
             // 设定一个对话档，玩家自行设定 pc.getloginpoly() == 1 时才显示
             powerInfos(pc, value, pc.getloginpoly() == 0);
         }
     }
+
+    // （移除）光圈特效連播
 
     /**
      * 視窗展示變身額外能力值<br>
@@ -277,7 +303,12 @@ public final class ExtraPolyPowerTable//src014
                 int StunLv = rs.getInt("昏迷命中");
                 int CloseCritical = rs.getInt("近距離爆擊");
                 int BowCritical = rs.getInt("遠距離爆擊");
-                L1PolyPower polyPower = new L1PolyPower(polyId, ac, hp, mp, hpr, mpr, str, con, dex, wis, cha, intel, sp, mr, hit_modifier, dmg_modifier, bow_hit_modifier, bow_dmg_modifier, magic_dmg_modifier, magic_dmg_reduction, reduction_dmg, defense_water, defense_wind, defense_fire, defense_earth, regist_stun, regist_stone, regist_sleep, regist_freeze, regist_sustain, regist_blind, EXP, potion, PVP, PVP_R, magic_hit, StunLv, CloseCritical, BowCritical);
+                int skinId = 0;
+                try {
+                    skinId = rs.getInt("光環編號"); // SPR 外觀（可填 #19547/#19548 類）
+                } catch (Exception ignored) {
+                }
+                L1PolyPower polyPower = new L1PolyPower(polyId, ac, hp, mp, hpr, mpr, str, con, dex, wis, cha, intel, sp, mr, hit_modifier, dmg_modifier, bow_hit_modifier, bow_dmg_modifier, magic_dmg_modifier, magic_dmg_reduction, reduction_dmg, defense_water, defense_wind, defense_fire, defense_earth, regist_stun, regist_stone, regist_sleep, regist_freeze, regist_sustain, regist_blind, EXP, potion, PVP, PVP_R, magic_hit, StunLv, CloseCritical, BowCritical, skinId);
                 _polyList.put(polyId, polyPower);
             }
         } catch (SQLException e) {

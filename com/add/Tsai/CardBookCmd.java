@@ -4,14 +4,20 @@ import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1PolyMorph;
 import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.serverpackets.S_NPCTalkReturn;
+import com.lineage.server.serverpackets.S_PacketBoxGree;
 import com.lineage.server.serverpackets.S_SystemMessage;
+import com.lineage.server.serverpackets.S_Sound;
 import com.lineage.server.thread.GeneralThreadPool;
+// import placeholders removed
+import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 卡冊指令
@@ -25,6 +31,12 @@ public class CardBookCmd {
     public static CardBookCmd get() {
         if (_instance == null) {
             _instance = new CardBookCmd();
+            // 載入覺醒設定與玩家進度
+            try {
+                CardAwakenConfigTable.get().load();
+                CardAwakenProgressTable.get().load();
+            } catch (Exception ignored) {
+            }
         }
         return _instance;
     }
@@ -88,10 +100,24 @@ public class CardBookCmd {
                         if (CardQuestTable.get().IsQuest(pc, card.getQuestId())) {
                             if (card.getPolyId() != 0) {
                                 boolean doPoly = false;
+                                // 覺醒覆寫：若玩家已覺醒，套用覺醒後 polyId 與時效加秒
+                                int usePolyId = card.getPolyId();
+                                int usePolyTime = card.getPolyTime();
+                                int awakenedStageNow = getPlayerAwakenStage(pc, pc.getCardId());
+                                if (awakenedStageNow > 0) {
+                                    CardAwakenConfig acfg = CardAwakenConfigTable.get().getConfig(pc.getCardId(), awakenedStageNow);
+                                    if (acfg != null) {
+                                        Integer awPoly = acfg.getAwakenPolyId();
+                                        if (awPoly != null && awPoly > 0) {
+                                            usePolyId = awPoly;
+                                        }
+                                        usePolyTime = usePolyTime + Math.max(0, acfg.getAddPolyTimeSec());
+                                    }
+                                }
                                 // 需要消耗道具
                                 if (card.getPolyItemId() != 0 && card.getPolyItemCount() > 0) {
                                     if (pc.getInventory().checkItem(card.getPolyItemId(), card.getPolyItemCount())) {
-                                        L1PolyMorph.doPoly(pc, card.getPolyId(), card.getPolyTime(), L1PolyMorph.MORPH_BY_ITEMMAGIC);
+                                        L1PolyMorph.doPoly(pc, usePolyId, usePolyTime, L1PolyMorph.MORPH_BY_ITEMMAGIC);
                                         pc.getInventory().consumeItem(card.getPolyItemId(), card.getPolyItemCount());
                                         doPoly = true;
                                     } else {
@@ -99,11 +125,11 @@ public class CardBookCmd {
                                     }
                                 } else {
                                     // 不需要道具，直接變身
-                                    L1PolyMorph.doPoly(pc, card.getPolyId(), card.getPolyTime(), L1PolyMorph.MORPH_BY_ITEMMAGIC);
+                                    L1PolyMorph.doPoly(pc, usePolyId, usePolyTime, L1PolyMorph.MORPH_BY_ITEMMAGIC);
                                     doPoly = true;
                                 }
                                 if (doPoly) {
-                                    pc.setLastPolyCardId(card.getPolyId());
+                                    pc.setLastPolyCardId(usePolyId);
                                     new com.lineage.server.storage.mysql.MySqlCharacterStorage().storeCharacter(pc);
                                     pc.sendPackets(new S_SystemMessage("已自動記錄此變身卡為自動變身卡！"));
 
@@ -145,6 +171,8 @@ public class CardBookCmd {
                             } else {
                                 pc.sendPackets(new S_SystemMessage("無法變身"));
                             }
+                        } else {
+                            pc.sendPackets(new S_SystemMessage("尚未開啟卡片、請先解鎖"));
                         }
                     }
                     ok = true;
@@ -161,6 +189,26 @@ public class CardBookCmd {
                     CardAllSet(pc);//已加成所有能力
                     ok = true;
                     break;
+                case "card_awaken":
+                    openAwaken(pc);
+                    ok = true;
+                    break;
+                default:
+                    // 覺醒餵養：card_awaken_feed_1 / card_awaken_feed_10 / card_awaken_feed_99...
+                    if (cmd.startsWith("card_awaken_feed_")) {
+                        int count = 1;
+                        try {
+                            count = Integer.parseInt(cmd.substring("card_awaken_feed_".length()));
+                        } catch (Exception ignored) {}
+                        feedAwaken(pc, count);
+                        ok = true;
+                        break;
+                    }
+                    if (cmd.equals("card_awaken_try")) {
+                        tryAwaken(pc);
+                        ok = true;
+                        break;
+                    }
             }
             if (ok) {
                 return true;
@@ -258,6 +306,176 @@ public class CardBookCmd {
     }
 
 
+    private int getPlayerAwakenStage(final L1PcInstance pc, final int cardId) {
+        CardAwakenProgress p = CardAwakenProgressTable.get().get(pc.getAccountName(), cardId);
+        return p == null ? 0 : p.getStage();
+    }
+
+    private void openAwaken(final L1PcInstance pc) {
+        final int cardId = pc.getCardId();
+        CardAwakenProgress prog = CardAwakenProgressTable.get().get(pc.getAccountName(), cardId);
+        if (prog == null) prog = new CardAwakenProgress(pc.getAccountName(), cardId, 0, 0);
+        // 若已達最高階段，直接提示並返回
+        int maxStage = CardAwakenConfigTable.get().getMaxStage(cardId);
+        if (maxStage > 0 && prog.getStage() >= maxStage) {
+            pc.sendPackets(new S_SystemMessage("此卡片已經完成覺醒"));
+            return;
+        }
+        final int nextStage = prog.getStage() + 1; // 下一階設定頁
+        CardAwakenConfig cfg = CardAwakenConfigTable.get().getConfig(cardId, nextStage);
+        if (cfg == null) {
+            pc.sendPackets(new S_SystemMessage("此卡片目前沒有覺醒設定"));
+            return;
+        }
+
+        String title = cfg.getTitle();
+        String desc = cfg.getDescription();
+
+        // #1 彩色圖片（取系統_變身卡冊的彩圖ID）
+        String colorGfx = "0";
+        ACard baseCard = ACardTable.get().getCard(cardId);
+        if (baseCard != null && baseCard.getAddcgfxid() != null) {
+            colorGfx = baseCard.getAddcgfxid();
+        }
+
+        // 準備參數
+        List<String> args = new ArrayList<>();
+        // #0 標題
+        args.add(title == null ? "" : title);
+        // #1 彩色圖片ID
+        args.add(colorGfx);
+        // #2-#10 說明（以逗號分割）
+        if (desc != null && !desc.isEmpty()) {
+            String[] parts = desc.split("[，,]");
+            for (String p : parts) {
+                if (p != null && !p.isEmpty()) args.add(p.trim());
+            }
+        }
+        while (args.size() < 11) args.add("");
+
+        // #11 覺醒 EXP 文字進度條
+        int percentVal = Math.max(0, Math.min(100, prog.getExp()));
+        int filledBlocks = percentVal / 10; // 0..10
+        StringBuilder bar = new StringBuilder();
+        for (int i = 0; i < filledBlocks; i++) bar.append('■');
+        for (int i = filledBlocks; i < 10; i++) bar.append('□');
+        args.add("Exp " + percentVal + "% [" + bar + "]");
+
+        // #12 顯示需求道具清單：直接使用資料表的繁中說明
+        args.add(cfg.getDemandDisplay());
+
+        pc.sendPackets(new S_NPCTalkReturn(pc, cfg.getHtmlKey(), args.toArray(new String[0])));
+    }
+
+    private void feedAwaken(final L1PcInstance pc, final int feedTimes) {
+        final int cardId = pc.getCardId();
+        CardAwakenProgress prog = CardAwakenProgressTable.get().get(pc.getAccountName(), cardId);
+        if (prog == null) prog = new CardAwakenProgress(pc.getAccountName(), cardId, 0, 0);
+        // 已滿等暫停餵養
+        if (prog.getExp() >= 100) {
+            pc.sendPackets(new S_SystemMessage("覺醒Exp已滿，請先嘗試覺醒"));
+            openAwaken(pc);
+            return;
+        }
+        // 已達最大階段暫停餵養
+        int maxStage = CardAwakenConfigTable.get().getMaxStage(cardId);
+        if (maxStage > 0 && prog.getStage() >= maxStage) {
+            pc.sendPackets(new S_SystemMessage("此卡片已經完成覺醒"));
+            return;
+        }
+        final int nextStage = prog.getStage() + 1;
+        final CardAwakenConfig cfg = CardAwakenConfigTable.get().getConfig(cardId, nextStage);
+        if (cfg == null) {
+            pc.sendPackets(new S_SystemMessage("此卡片目前沒有覺醒設定"));
+            return;
+        }
+
+        // 計算每次餵養應消耗的素材道具
+        int expPerFeed = Math.max(1, cfg.getExpPerFeed()); // 10 代表 +10%
+        int needPerFeed = 1; // 每次餵養所需的道具張數（可擴充設定）
+
+        // 素材來源：若 feedRule=list 則用清單，否則以同群組卡識別（此版僅支援 list）
+        int[] feedItems = cfg.getFeedItemIds();
+        if (feedItems == null || feedItems.length == 0) {
+            pc.sendPackets(new S_SystemMessage("未設定增加道具清單"));
+            return;
+        }
+        if (pc.getInventory() == null) {
+            pc.sendPackets(new S_SystemMessage("無法取得背包資訊，請稍後再試"));
+            return;
+        }
+
+        int totalFeedsDone = 0;
+        for (int t = 0; t < feedTimes; t++) {
+            // 找到一種可用素材並扣除 needPerFeed 張
+            boolean consumed = false;
+            for (int itemId : feedItems) {
+                if (itemId <= 0) continue;
+                try {
+                    if (pc.getInventory().checkItem(itemId, needPerFeed)) {
+                        pc.getInventory().consumeItem(itemId, needPerFeed);
+                        consumed = true;
+                        break;
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+            if (!consumed) break; // 沒素材就停止
+
+            int newExp = Math.min(100, prog.getExp() + expPerFeed);
+            prog.setExp(newExp);
+            totalFeedsDone++;
+            if (newExp >= 100) break; // 滿了就停
+        }
+
+        if (totalFeedsDone > 0) {
+            CardAwakenProgressTable.get().upsert(prog);
+        } else {
+            pc.sendPackets(new S_SystemMessage("背包無可用素材，或數量不足"));
+        }
+        // 立即刷新畫面，讓 #11 立刻顯示最新 EXP
+        openAwaken(pc);
+    }
+
+    private void tryAwaken(final L1PcInstance pc) {
+        final int cardId = pc.getCardId();
+        CardAwakenProgress prog = CardAwakenProgressTable.get().get(pc.getAccountName(), cardId);
+        if (prog == null) {
+            pc.sendPackets(new S_SystemMessage("請先增加覺醒經驗"));
+            return;
+        }
+        final int nextStage = prog.getStage() + 1;
+        final CardAwakenConfig cfg = CardAwakenConfigTable.get().getConfig(cardId, nextStage);
+        if (cfg == null) {
+            pc.sendPackets(new S_SystemMessage("此卡片目前沒有覺醒設定"));
+            return;
+        }
+        if (prog.getExp() < 100) {
+            pc.sendPackets(new S_SystemMessage("\\f=覺醒經驗不足，需達 100%"));
+            return;
+        }
+        int roll = (int) (Math.random() * 100);
+        if (roll < cfg.getSuccessRate()) {
+            // 成功：升階、清 EXP、寫入任務
+            prog.setStage(nextStage);
+            prog.setExp(0);
+            CardAwakenProgressTable.get().upsert(prog);
+            CardQuestTable.get().storeQuest(pc.getAccountName(), cfg.getSuccessQuestId(), new CardQuest(pc.getAccountName(), cfg.getSuccessQuestId()));
+            World.get().broadcastPacketToAll(new S_PacketBoxGree(24));
+            pc.sendPacketsX8(new S_Sound(20360));
+            pc.sendPackets(new S_SystemMessage("\\f=覺醒成功！"));
+        } else {
+            int keep = Math.max(0, Math.min(100, cfg.getFailKeepPercent()));
+            int newExp = (prog.getExp() * keep) / 100;
+            prog.setExp(newExp);
+            CardAwakenProgressTable.get().upsert(prog);
+            World.get().broadcastPacketToAll(new S_PacketBoxGree(16));
+            pc.sendPackets(new S_SystemMessage("\\f=覺醒失敗，經驗返回 " + keep + "%"));
+        }
+        // 刷新畫面顯示最新階段/EXP
+        openAwaken(pc);
+    }
+
     private void CardSet(final L1PcInstance pc, final int questId) {
         try {
             final StringBuilder stringBuilder = new StringBuilder();
@@ -347,13 +565,24 @@ public class CardBookCmd {
                     if (cmd.equals(card.getCmd())) {//檢查變身卡DB資料
                         pc.setCarId(i);
 
+                        // 覺醒覆寫：顯示文字
+                        String showMsg2 = card.getMsg2();
+                        String showMsg1 = card.getMsg1();
                         if (CardQuestTable.get().IsQuest(pc, card.getQuestId())) {
+                            int awakenedStage = getPlayerAwakenStage(pc, i);
+                            if (awakenedStage > 0) {
+                                CardAwakenConfig cfg = CardAwakenConfigTable.get().getConfig(i, awakenedStage);
+                                if (cfg != null) {
+                                    if (cfg.getTitle() != null && !cfg.getTitle().isEmpty()) showMsg2 = cfg.getTitle();
+                                    if (cfg.getDescription() != null && !cfg.getDescription().isEmpty()) showMsg1 = cfg.getDescription();
+                                }
+                            }
                             stringBuilder.append(card.getAddcgfxid()).append(",");    // 0
                         } else {
                             stringBuilder.append(card.getAddhgfxid()).append(",");    // 0
                         }
-                        stringBuilder.append(card.getMsg2()).append(",");//1
-                        stringBuilder.append(card.getMsg1()).append(",");//2
+                        stringBuilder.append(showMsg2).append(",");
+                        stringBuilder.append(showMsg1).append(",");
 
 
                         final String[] clientStrAry = stringBuilder.toString().split(",");//從0開始分裂以逗號為單位

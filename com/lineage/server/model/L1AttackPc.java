@@ -1719,6 +1719,24 @@ public class L1AttackPc extends L1AttackMode {
             dmg = calcSubMagic(dmg, _pc, _targetPc);
         }
 
+        // 阻擋武器：完全格擋（物理專用；近/遠皆可；PVP/PVE皆適用）
+        if (_targetPc != null && _weapon != null) {
+            int block = 0;
+            try { block = Math.max(0, Math.min(100, _targetPc.getBlockWeapon())); } catch (Throwable ignore) {}
+            if (block > 0) {
+                int r = java.util.concurrent.ThreadLocalRandom.current().nextInt(100) + 1;
+                if (r <= block) {
+                    dmg = 0;
+                    try {
+                        _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), 6320));
+                        _targetPc.sendPackets(new S_SystemMessage("阻擋武器：完全格擋！", 1));
+                    } catch (Throwable ignore2) {}
+                }
+            }
+        }
+
+        // 依詩蒂觸發處已整合至 L1AttackPower，這裡不再重複處理
+
         /** [原碼] 反叛者的盾牌 機率減免傷害 */
         for (L1ItemInstance item : _targetPc.getInventory().getItems()) {
             if (item.getItemId() == 400041 && item.isEquipped()) {
@@ -1795,6 +1813,31 @@ public class L1AttackPc extends L1AttackMode {
                     dmg -= (int) (((double) dmg * (double) percent) / 100.0);
                 }
             }
+        }
+
+        // 近距離傷害減免百分比（只在 PvP、且只對近距離攻擊生效）
+        if (_weapon != null && _weaponType != 20 && _weaponType != 62) { // 非弓非槍 => 近距
+            if (_targetPc != null && _pc != null) { // PvP
+                int percent = _targetPc.getMeleeDmgReductionPercent();
+                if (percent > 0) {
+                    dmg -= (int) (((double) dmg * (double) percent) / 100.0);
+                }
+            }
+        }
+
+        // 通用全傷害減免百分比（PvP/PvE 皆可套用；置於最後）
+        if (_targetPc != null) {
+            int allp = _targetPc.getAllDmgReductionPercent();
+            if (allp > 0) {
+                dmg -= (int) (((double) dmg * (double) allp) / 100.0);
+            }
+            // 依詩蒂減益期間：額外增傷（以固定值表現，置於最後）
+            try {
+                int extra = _targetPc.getYishidiDebuffDownActive();
+                if (extra > 0) {
+                    dmg += extra;
+                }
+            } catch (Throwable ignore) {}
         }
         if (_targetPc.getzhufuPvpbai() != 0) {//祝福化PVP物理傷害減免百分比
             dmg -= dmg / 100 * _targetPc.getzhufuPvpbai();

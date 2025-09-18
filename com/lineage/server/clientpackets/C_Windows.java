@@ -4,10 +4,8 @@ import com.lineage.DatabaseFactory;
 import com.lineage.echo.ClientExecutor;
 import com.lineage.server.datatables.CharacterGiftTable;
 import com.lineage.server.datatables.SoulTowerTable;
-import com.lineage.server.datatables.lock.ClanReading;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.model.L1Clan;
 import com.lineage.server.model.L1Teleport;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1BookMark;
@@ -132,16 +130,10 @@ public class C_Windows extends ClientBasePacket {
                 case 9: // 更新Ctrl+Q的顯示時間
                     pc.sendPackets(new S_MapTimerOut(pc));
                     break;
-                case 0x2e: // 識別盟徽 狀態
-                    // 如果不是君主或聯盟王
-                    if ((pc.getClanRank() != L1Clan.CLAN_RANK_PRINCE) && (pc.getClanRank() != L1Clan.CLAN_RANK_LEAGUE_PRINCE)) {
-                        return;
-                    }
+                case 0x2e: // 識別盟徽 狀態（調整為玩家個人開關，不受王族限制）
                     final int emblemStatus = readC(); // 0: 關閉 1:開啟
-                    final L1Clan clan = pc.getClan();
-                    clan.setShowEmblem(emblemStatus);
-                    ClanReading.get().updateClan(clan);
-                    clan.sendPacketsAll(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, emblemStatus));
+                    pc.set_isClanGfx(emblemStatus == 1);
+                    pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, emblemStatus));
                     break;
                 case 0x30: // 村莊便利傳送
                     int mapIndex = readH(); // 1: 亞丁 2:古魯丁 3: 奇巖

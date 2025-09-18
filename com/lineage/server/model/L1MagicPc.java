@@ -741,6 +741,13 @@ public class L1MagicPc extends L1MagicMode {
         if (SubItemSet.START && _targetPc != null) { // 確保 _targetPc 不為 null
             dmg = (int) calcSubMagic(dmg, null, _targetPc);
         }
+        // 近/遠專屬%不在魔法計算中處理。通用全傷害減免%在此生效（最後階段）
+        if (_targetPc != null) {
+            int allp = _targetPc.getAllDmgReductionPercent();
+            if (allp > 0) {
+                dmg -= (int) (((double) dmg * (double) allp) / 100.0);
+            }
+        }
         // 其他傷害減免
         boolean dmgX2 = false;
         if ((!_targetPc.getSkillisEmpty()) && (_targetPc.getSkillEffect().size() > 0)) {

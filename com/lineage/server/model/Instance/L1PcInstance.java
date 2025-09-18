@@ -32,9 +32,11 @@ import com.lineage.server.clientpackets.AcceleratorChecker;
 import com.lineage.server.datatables.*;
 import com.lineage.server.datatables.lock.*;
 import com.lineage.server.datatables.sql.CharSkillTable;
+import com.lineage.server.templates.L1EmblemIcon;
 import com.lineage.server.datatables.sql.CharacterTable;
 import com.lineage.server.model.Instance.pcdelay.PcTelDelayAI;
 import com.lineage.server.model.*;
+import com.lineage.server.model.L1CastleLocation;
 import com.lineage.server.model.classes.L1ClassFeature;
 import com.lineage.server.model.monitor.L1PcInvisDelay;
 import com.lineage.server.model.skill.L1SkillId;
@@ -976,8 +978,8 @@ public class L1PcInstance extends L1Character { // src015
     private boolean _keyenemy = false;
     private boolean _outenemy = false;
     private int _na61 = 0;
-    //血盟盟徽開關
-    private boolean _isClanGfx = false;
+    //血盟盟徽開關（預設開啟）
+    private boolean _isClanGfx = true;
     //TODO 強化武器/防具加成系統
     private int _neran;
     private int _neextradmg;
@@ -1016,7 +1018,7 @@ public class L1PcInstance extends L1Character { // src015
     private boolean _zudui = false;
     private int _Armmoeset;
     private int _魔法格檔 = 0;
-    private int _物理格檔 = 0;
+    private int _blockWeapon = 0;
     private int _loginpoly = 1;
     /**
      * 血盟等級傷害減免
@@ -1867,6 +1869,22 @@ public class L1PcInstance extends L1Character { // src015
             }
             perceivedFrom.addKnownObject(this);
             perceivedFrom.sendPackets(new S_OtherCharPacks(this));
+            
+            // 如果對方開啟了 ClanGfx 或在攻城戰區域內，且本角色有盟徽，主動發送盟徽資料
+            boolean shouldShowEmblem = perceivedFrom.isClanGfx() || 
+                                       L1CastleLocation.checkInAllWarArea(perceivedFrom.getLocation());
+            
+            if (shouldShowEmblem && getClanid() > 0) {
+                L1Clan clan = getClan();
+                if (clan != null) {
+                    // 檢查是否有盟徽資料
+                    L1EmblemIcon emblemIcon = ClanEmblemReading.get().get(clan.getClanId());
+                    if (emblemIcon != null) {
+                        // 使用 clanId 建構 S_Emblem（第一個建構子）
+                        perceivedFrom.sendPackets(new S_Emblem(clan.getClanId()));
+                    }
+                }
+            }
             if (ConfigFreeKill.FREE_FIGHT_SWITCH) {
                 if (CheckFightTimeController.getInstance().isFightMap(getMapId())) {
                     perceivedFrom.sendPackets(new S_PinkName(getId(), -1));
@@ -6598,17 +6616,28 @@ public class L1PcInstance extends L1Character { // src015
     }
 
     /**
-     * 守護者不顯示盟徽
+     * 顯示盟徽：移除守護者限制，若無血盟則不顯示
      */
     public final int getEmblemId() {
-        if (isProtector() || getClanid() <= 0) {
+        if (getClanid() <= 0) {
             return 0;
         }
         L1Clan clan = getClan();
         if (clan == null) {
             return 0;
         }
-        return clan.getEmblemId();
+        // 如果有上傳過盟徽，使用 emblemId；否則使用 clanId
+        int emblemId = clan.getEmblemId();
+        if (emblemId == 0) {
+            // 檢查是否有盟徽資料
+            L1EmblemIcon emblemIcon = ClanEmblemReading.get().get(clan.getClanId());
+            if (emblemIcon != null) {
+                // 有盟徽資料，使用 clanId 作為 emblemId
+                return clan.getClanId();
+            }
+            return 0; // 沒有盟徽資料
+        }
+        return emblemId;
     }
 
     public AcceleratorChecker speed_Attack() {
@@ -9351,6 +9380,18 @@ public class L1PcInstance extends L1Character { // src015
     // ======= 絲莉安/阿頓 共用的擴充屬性（被動減傷類） =======
     private int _tripleArrowReduction = 0; // 被三重矢攻擊時，固定減傷值
     private int _rangedDmgReductionPercent = 0; // 遭受遠距離攻擊時減免百分比
+    // 新增：通用與近距離傷害減免百分比
+    private int _allDmgReductionPercent = 0;     // 遭受任何傷害時的通用減免百分比
+    private int _meleeDmgReductionPercent = 0;   // 遭受近距離攻擊時的減免百分比
+    // 依詩蒂：減益狀態（暫存於玩家身上，期間內降低減免）
+    private int _yishidiDebuffDown = 0;          // 減益狀態減傷值（期間內每擊增加傷害）
+    private long _yishidiDebuffUntil = 0L;       // 減益狀態結束時間戳
+    
+    // 依詩蒂減益狀態參數（從技能節點讀取並儲存）
+    private int _yishidiDebuffProcPercent = 0;   // 減益狀態觸發機率%
+    private int _yishidiDebuffDmgDown = 0;       // 減益狀態減傷值
+    private int _yishidiDebuffDurationSec = 0;   // 減益狀態持續時間(秒)
+    private int _yishidiDebuffGfxId = 0;         // 減益狀態GFX
     private int _stunDmgReduction = 0; // 處於昏迷(眩暈)狀態時承受的每次固定減傷
     // 格立特：暴擊傷害提升百分比（僅在攻擊者觸發近/遠暴擊時生效）
     private int _gritCritDmgUpPercent = 0;
@@ -9384,6 +9425,78 @@ public class L1PcInstance extends L1Character { // src015
         _rangedDmgReductionPercent += percent;
         if (_rangedDmgReductionPercent < 0) _rangedDmgReductionPercent = 0;
         if (_rangedDmgReductionPercent > 100) _rangedDmgReductionPercent = 100;
+    }
+
+    public int getAllDmgReductionPercent() {
+        return _allDmgReductionPercent;
+    }
+
+    public void addAllDmgReductionPercent(int percent) {
+        _allDmgReductionPercent += percent;
+        if (_allDmgReductionPercent < 0) _allDmgReductionPercent = 0;
+        if (_allDmgReductionPercent > 100) _allDmgReductionPercent = 100;
+    }
+
+    public int getMeleeDmgReductionPercent() {
+        return _meleeDmgReductionPercent;
+    }
+
+    public void addMeleeDmgReductionPercent(int percent) {
+        _meleeDmgReductionPercent += percent;
+        if (_meleeDmgReductionPercent < 0) _meleeDmgReductionPercent = 0;
+        if (_meleeDmgReductionPercent > 100) _meleeDmgReductionPercent = 100;
+    }
+
+    // 依詩蒂減益：設定/查詢
+    // 設定減益狀態參數（從技能節點讀取）
+    public void setYishidiDebuffProcPercent(int percent) {
+        _yishidiDebuffProcPercent = Math.max(0, Math.min(100, percent));
+    }
+    public int getYishidiDebuffProcPercent() {
+        return _yishidiDebuffProcPercent;
+    }
+    
+    public void setYishidiDebuffDmgDown(int dmg) {
+        _yishidiDebuffDmgDown = Math.max(0, dmg);
+    }
+    public int getYishidiDebuffDmgDown() {
+        return _yishidiDebuffDmgDown;
+    }
+    
+    public void setYishidiDebuffDurationSec(int sec) {
+        _yishidiDebuffDurationSec = Math.max(0, sec);
+    }
+    public int getYishidiDebuffDurationSec() {
+        return _yishidiDebuffDurationSec;
+    }
+    
+    public void setYishidiDebuffGfxId(int gfx) {
+        _yishidiDebuffGfxId = Math.max(0, gfx);
+    }
+    public int getYishidiDebuffGfxId() {
+        return _yishidiDebuffGfxId;
+    }
+    
+    // 觸發減益狀態（戰鬥時呼叫）- 支援自訂 ICON
+    public void setYishidiDebuff(int down, int durationSec, int iconId, int stringId) {
+        _yishidiDebuffDown = Math.max(0, down);
+        _yishidiDebuffUntil = System.currentTimeMillis() + Math.max(0, durationSec) * 1000L;
+        try {
+            // 使用傳入的 iconId 和 stringId 顯示負面 ICON
+            if (iconId > 0 && stringId > 0) {
+                this.sendPackets(new com.lineage.server.serverpackets.S_InventoryIcon(iconId, true, stringId, durationSec));
+            }
+        } catch (Throwable ignore) {}
+    }
+    
+    // 保留舊的方法簽名以相容
+    public void setYishidiDebuff(int down, int durationSec) {
+        setYishidiDebuff(down, durationSec, 10534, 2747); // 預設 ICON
+    }
+    public int getYishidiDebuffDownActive() {
+        if (_yishidiDebuffDown <= 0) return 0;
+        if (_yishidiDebuffUntil <= System.currentTimeMillis()) return 0;
+        return _yishidiDebuffDown;
     }
 
     public int getStunDmgReduction() {
@@ -9576,6 +9689,24 @@ public class L1PcInstance extends L1Character { // src015
         try {
             com.add.Tsai.Astrology.GritAstrologyTable.refreshPassiveAbsorb(this);
         } catch (Throwable ignore) {}
+    }
+
+    /**
+     * 加載依詩蒂星盤：自動套用所有「非技能節點」的已完成能力
+     */
+    public final void addYishidiAstrologyPowers() {
+        for (Integer key : com.add.Tsai.Astrology.YishidiAstrologyTable.get().getIndexArray()) {
+            com.add.Tsai.Astrology.YishidiAstrologyData data = com.add.Tsai.Astrology.YishidiAstrologyTable.get().getData(key);
+            if (data == null) continue;
+            try {
+                if (getQuest().isEnd(data.getQuestId()) && data.getSkillId() == 0) {
+                    com.add.Tsai.Astrology.YishidiAstrologyTable.effectBuff(this, data, 1);
+                    java.util.concurrent.TimeUnit.MILLISECONDS.sleep(5);
+                }
+            } catch (InterruptedException e) {
+                _log.error(e.getMessage(), e);
+            }
+        }
     }
 
     // 移除所有阿頓星盤效果（確保同時僅一組技能生效）
@@ -12176,12 +12307,12 @@ public class L1PcInstance extends L1Character { // src015
         _魔法格檔 += i;
     }
 
-    public int get物理格檔() {
-        return _物理格檔;
+    public int getBlockWeapon() {
+        return _blockWeapon;
     }
 
-    public void add物理格檔(int i) {
-        _物理格檔 += i;
+    public void addBlockWeapon(int i) {
+        _blockWeapon += i;
     }
 
     public int getClan_ReductionDmg() {

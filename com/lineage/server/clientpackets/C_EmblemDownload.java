@@ -22,15 +22,26 @@ public class C_EmblemDownload extends ClientBasePacket {
             final L1PcInstance pc = client.getActiveChar();
             final int emblemId = readD();
             int clanId = 0;
+            
+            // 先嘗試用 emblemId 查找
             for (final L1Clan clan : ClanReading.get().get_clans().values()) {
                 if (clan.getEmblemId() == emblemId) {
                     clanId = clan.getClanId();
                     break;
                 }
             }
+            
+            // 如果找不到，可能 emblemId 就是 clanId（舊血盟或未更新的情況）
             if (clanId <= 0) {
+                // 直接用 emblemId 當作 clanId 查找
+                L1EmblemIcon emblemIcon = ClanEmblemReading.get().get(emblemId);
+                if (emblemIcon != null) {
+                    pc.sendPackets(new S_Emblem(emblemId, emblemIcon.get_clanIcon()));
+                    return;
+                }
                 return;
             }
+            
             final L1EmblemIcon emblemIcon = ClanEmblemReading.get().get(clanId);
             if (emblemIcon != null) {
                 pc.sendPackets(new S_Emblem(emblemId, emblemIcon.get_clanIcon()));

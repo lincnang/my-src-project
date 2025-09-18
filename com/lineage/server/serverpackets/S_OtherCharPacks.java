@@ -124,11 +124,8 @@ public class S_OtherCharPacks extends ServerBasePacket {
             writeS(pc.getTitle());
         }
         writeC(status); // 狀態
-        if (pc.getMapId() == 2006 || pc.getMapId() == 12152) {
-            writeD(0);
-        } else {
-            writeD(pc.getEmblemId());
-        }
+        // 顯示所有地圖的盟徽
+        writeD(pc.getEmblemId());
         writeS(pc.getClanname());
         writeS(null);
         writeC(pc.getClanRank() << 4);// 血盟階級

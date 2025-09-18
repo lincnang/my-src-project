@@ -471,7 +471,8 @@ public class C_ItemCraft1 extends ClientBasePacket {
                                 pc.sendPackets(new S_ServerMessage(95, clan.getClanName()));// 95
                                 // \f1加入%0血盟。
                                 pc.sendPackets(new S_PassiveSpells(S_PassiveSpells.ClanNameAndRank, pc));
-                                pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, clan.getShowEmblem()));
+                                // 新入盟時：依玩家個人設定顯示盟徽
+                                pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.isClanGfx() ? 1 : 0));
                                 pc.sendPackets(new S_ClanUpdate(pc.getId(), clan.getClanName(), pc.getClanRank()));// 新入盟成員發送更新血盟數據
                                 ClanMembersTable.getInstance().newMember(pc);
                                 // 在線上的血盟成員發送新加入成員血盟數據
@@ -516,7 +517,8 @@ public class C_ItemCraft1 extends ClientBasePacket {
                                 pc.save(); // 資料存檔
                                 pc.sendPackets(new S_ServerMessage(95, clan.getClanName()));
                                 pc.sendPackets(new S_PassiveSpells(S_PassiveSpells.ClanNameAndRank, pc));
-                                pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, clan.getShowEmblem()));
+                                // 密碼加入時：依玩家個人設定顯示盟徽
+                                pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.isClanGfx() ? 1 : 0));
                                 pc.sendPackets(new S_ClanUpdate(pc.getId(), clan.getClanName(), pc.getClanRank()));
                                 ClanMembersTable.getInstance().newMember(pc);
                                 // 在線上的血盟成員發送新加入成員血盟數據

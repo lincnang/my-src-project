@@ -14,7 +14,6 @@ import org.apache.commons.logging.LogFactory;
 import java.sql.*;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class ClanTable implements ClanStorage {
@@ -144,8 +143,8 @@ public class ClanTable implements ClanStorage {
         clan.setCastleId(0);
         clan.setHouseId(0);
         //clan.setFoundDate(player.getCreateTime());
-        //clan.setEmblemId(0);
-        clan.setEmblemId(clan.getClanId());
+        // 創盟時預設沒有盟徽，設為 0
+        clan.setEmblemId(0);
         clan.set_clanskill(false);
         //clan.setAnnouncement("");
         //clan.setEmblemStatus(0);

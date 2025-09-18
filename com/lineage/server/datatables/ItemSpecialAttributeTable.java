@@ -67,7 +67,7 @@ public class ItemSpecialAttributeTable {
                 int skill_dmg = rs.getInt("魔法傷害");
                 int Special_magic = rs.getInt("Special_magic");
                 int Special_magic_rand = rs.getInt("Special_magic_rand");
-                int add物理格檔 = rs.getInt("物理格檔");
+                int add阻擋武器 = rs.getInt("阻擋武器");
                 int add魔法格檔 = rs.getInt("魔法格檔");
                 int addDamageReductionByArmor = rs.getInt("傷害減免");
                 L1ItemSpecialAttribute attr = new L1ItemSpecialAttribute();
@@ -103,7 +103,7 @@ public class ItemSpecialAttributeTable {
                 attr.set_add_skill_dmg(skill_dmg);
                 attr.set_add_Special_magic(Special_magic);
                 attr.set_Special_magic_rand(Special_magic_rand);
-                attr.add物理格檔(add物理格檔);
+                attr.addBlockWeapon(add阻擋武器);
                 attr.add魔法格檔(add魔法格檔);
                 attr.addShanghaijianmian(addDamageReductionByArmor);
                 _atrrList.put(id, attr);

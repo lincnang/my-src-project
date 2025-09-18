@@ -153,20 +153,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         _decrypt = new DecryptExecutor(this, _csocket.getInputStream());
         _encrypt = new EncryptExecutor(this, _csocket.getOutputStream());
         
-        // 記錄新連線到監控器
-        try {
-            String clientId = this.toString();
-            if (clientId != null && !clientId.isEmpty()) {
-                ConnectionMonitor.getInstance().recordConnection(clientId);
-                // 記錄到網路統計
-                if (_ip != null) {
-                    NetworkStats.getInstance().recordNewConnection(_ip.toString());
-                }
-            }
-        } catch (Exception e) {
-            // 忽略監控器錯誤，不影響主要流程
-            _log.debug("記錄連線到監控器時發生錯誤", e);
-        }
+        // 記錄新連線（已移除外部監控依賴）
     }
 
     /** 舊介面，維持存在（目前未使用） */
@@ -258,13 +245,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                             isEcho = true;
                             
                             // 記錄握手成功
-                            try {
-                                if (_ip != null) {
-                                    NetworkStats.getInstance().recordSuccessfulConnection(_ip.toString());
-                                }
-                            } catch (Exception e) {
-                                _log.debug("記錄握手成功時發生錯誤", e);
-                            }
+                            
                         } else if (opcode == C_LOGIN) {
                             // 確保保存時程
                             set_savePc(Config.AUTOSAVE_INTERVAL);
@@ -294,8 +275,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                     // Connection Reset 詳細分析和記錄
                     _log.warn("Connection Reset 檢測 - " + clientInfo + " 原因: " + analyzeConnectionReset(e));
                     
-                    // 記錄到連接監控系統
-                    recordConnectionReset(e);
+                    // 已移除外部監控系統
                     
                     // 嘗試優雅處理斷線
                     handleConnectionReset();
@@ -303,11 +283,9 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                 } else if (msg != null && (msg.toLowerCase().contains("connection aborted") || 
                                          msg.toLowerCase().contains("software caused connection abort"))) {
                     _log.warn("連接被中止 - " + clientInfo + " 原因: " + msg);
-                    recordConnectionAbort(e);
                     
                 } else if (msg != null && msg.toLowerCase().contains("broken pipe")) {
                     _log.warn("管道破裂 - " + clientInfo + " 原因: " + msg);
-                    recordBrokenPipe(e);
                     
                 } else {
                     _log.info("客戶端連線異常 (SocketException) - " + clientInfo + " 原因: " + msg);
@@ -384,57 +362,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         return analysis.toString();
     }
     
-    /**
-     * 記錄Connection Reset事件
-     */
-    private void recordConnectionReset(SocketException e) {
-        try {
-            // 記錄到連接監控器
-            ConnectionMonitor.getInstance().recordDisconnection(
-                this.toString(), 
-                "CONNECTION_RESET", 
-                e.getMessage()
-            );
-            
-            // 更新統計計數器
-            NetworkStats.getInstance().incrementConnectionResetCount();
-            
-        } catch (Exception ex) {
-            _log.debug("記錄Connection Reset事件時發生錯誤", ex);
-        }
-    }
     
-    /**
-     * 記錄Connection Aborted事件
-     */
-    private void recordConnectionAbort(SocketException e) {
-        try {
-            ConnectionMonitor.getInstance().recordDisconnection(
-                this.toString(), 
-                "CONNECTION_ABORTED", 
-                e.getMessage()
-            );
-            NetworkStats.getInstance().incrementConnectionAbortCount();
-        } catch (Exception ex) {
-            _log.debug("記錄Connection Abort事件時發生錯誤", ex);
-        }
-    }
-    
-    /**
-     * 記錄Broken Pipe事件
-     */
-    private void recordBrokenPipe(SocketException e) {
-        try {
-            ConnectionMonitor.getInstance().recordDisconnection(
-                this.toString(), 
-                "BROKEN_PIPE", 
-                e.getMessage()
-            );
-            NetworkStats.getInstance().incrementBrokenPipeCount();
-        } catch (Exception ex) {
-            _log.debug("記錄Broken Pipe事件時發生錯誤", ex);
-        }
-    }
     
     /**
      * 處理Connection Reset - 嘗試優雅關閉
@@ -636,19 +564,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
             // 記錄離線 - 簡化版
 
             
-            // 記錄斷線原因到監控器
-            String disconnectReason = "正常關閉";
-            if (_kick > 0) {
-                disconnectReason = "系統踢出";
-            } else if (_error >= 2) {
-                disconnectReason = "錯誤次數過多";
-            }
-            try {
-                ConnectionMonitor.getInstance().recordDisconnection(this.toString(), disconnectReason, "Client close");
-            } catch (Exception e) {
-                // 忽略監控器錯誤，不影響主要流程
-
-            }
+            
 
         } catch (final Exception ignore) {
             // 不做額外處理，避免關閉流程卡住

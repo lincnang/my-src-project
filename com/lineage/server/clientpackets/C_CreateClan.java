@@ -12,7 +12,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * 要求創立血盟
@@ -69,8 +68,8 @@ public class C_CreateClan extends ClientBasePacket {
                             pc.sendPackets(new S_ClanUpdate(pc.getId(), pc.getClanname(), pc.getClanRank()));
                             // 加入建立CLAN OBJID資料
                             CharObjidTable.get().addClan(clan.getClanId(), clan.getClanName());
-                            //SRC0822 修改創盟立即更新
-                            pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.getClan().getShowEmblem()));
+                            // 創盟後：依玩家個人設定顯示盟徽
+                            pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.isClanGfx() ? 1 : 0));
                             pc.sendPackets(new S_PledgeName(pc.getClanname(), pc.getClanRank()));
                             pc.sendPackets(new S_ServerMessage("\\fT建立血盟，請重新登入進行更新血盟。"));
                         }

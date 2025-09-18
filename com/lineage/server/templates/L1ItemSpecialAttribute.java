@@ -45,7 +45,7 @@ public class L1ItemSpecialAttribute {
     private int _add_Special_magic;
     private int _Special_magic_rand;
     private int _魔法格檔;
-    private int _物理格檔;
+    private int _blockWeapon;
     private int _shanghaijianmian;
 
     /**
@@ -598,12 +598,12 @@ public class L1ItemSpecialAttribute {
         this._魔法格檔 = i;
     }
 
-    public int get物理格檔() {
-        return this._物理格檔;
+    public int getBlockWeapon() {
+        return this._blockWeapon;
     }
 
-    public void add物理格檔(int i) {
-        this._物理格檔 = i;
+    public void addBlockWeapon(int i) {
+        this._blockWeapon = i;
     }
 
     public int getShanghaijianmian() {

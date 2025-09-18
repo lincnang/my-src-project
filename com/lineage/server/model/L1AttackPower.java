@@ -342,6 +342,86 @@ public class L1AttackPower {
                 reset_dmg += getAstrologyDamage(reset_dmg);
             }
 
+            // 依詩蒂：根據技能編號判斷是範圍傷害技能還是減益狀態技能
+            try {
+                // 僅使用玩家當前選擇的依詩蒂技能節點；未選擇時不觸發
+                Integer btn = com.add.Tsai.Astrology.YishidiAstrologyCmd.get().getYishidiLastBtn(_pc);
+                if (btn != null) {
+                    com.add.Tsai.Astrology.YishidiAstrologyData sd = com.add.Tsai.Astrology.YishidiAstrologyTable.get().getData(btn);
+                    if (sd != null && sd.getSkillId() > 0) {
+                        // 判斷是否為範圍傷害技能（有技能範圍的就是範圍傷害技能）
+                        if (sd.getSkillRange() > 0) {
+                            // 範圍傷害技能邏輯
+                            double proc = Math.max(0.0D, Math.min(100.0D, sd.getProcChance()));
+                            int gfx = sd.getSkillProcGfxId();
+                            int range = sd.getSkillRange();
+                            
+                            if (proc > 0) {
+                                int roll = _random.nextInt(100) + 1;
+                                if (roll <= proc) {
+                                    // 播放特效在被攻擊對象上
+                                    if (gfx > 0) {
+                                        if (_targetPc != null) {
+                                            _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), gfx));
+                                        } else if (_targetNpc != null) {
+                                            _targetNpc.broadcastPacketAll(new S_SkillSound(_targetNpc.getId(), gfx));
+                                        } else {
+                                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), gfx));
+                                        }
+                                    }
+                                    
+                                    // 範圍傷害
+                                    int pct = Math.max(0, Math.min(100, sd.getSkillRangeDamagePercent()));
+                                    for (L1PcInstance tgpc : World.get().getVisiblePlayer(_pc, range)) {
+                                        if (tgpc == null || tgpc.isDead()) continue;
+                                        if (tgpc.getId() == _pc.getId()) continue;
+                                        try { if (_pc.isInParty() && _pc.getParty().isMember(tgpc)) continue; } catch (Throwable ignore5) {}
+                                        try { if (_pc.getClanid() != 0 && _pc.getClanid() == tgpc.getClanid()) continue; } catch (Throwable ignore6) {}
+                                        // 安全區過濾：不對安全區內玩家造成傷害
+                                        try { if (tgpc.getMap().isSafetyZone(tgpc.getLocation())) continue; } catch (Throwable ignore7) {}
+                                        int areaDamage = Math.max(1, (int) Math.floor(reset_dmg * (pct / 100.0)));
+                                        tgpc.receiveDamage(_pc, areaDamage, false, true);
+                                    }
+                                    for (L1Object o : World.get().getVisibleObjects(_pc, range)) {
+                                        if (o instanceof L1NpcInstance) {
+                                            L1NpcInstance n = (L1NpcInstance) o;
+                                            if (n.isDead()) continue;
+                                            // 安全區過濾（若地圖定義安全區也不對NPC造成傷害）
+                                            try { if (n.getMap().isSafetyZone(n.getLocation())) continue; } catch (Throwable ignore8) {}
+                                            n.receiveDamage(_pc, Math.max(1, (int) Math.floor(reset_dmg * (pct / 100.0))));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // 判斷是否為減益狀態技能（有減益狀態觸發機率的就是減益技能）
+                        else if (sd.getDebuffProcPercent() > 0) {
+                            // 減益狀態技能邏輯（直接使用減益狀態觸發機率，不需要依詩蒂觸發機率）
+                            if (_targetPc != null) {
+                                int debuffProc = sd.getDebuffProcPercent();
+                                int debuffDown = sd.getDebuffDmgDown();
+                                int debuffGfx = sd.getDebuffGfxId();
+                                int debuffSec = sd.getDebuffDurationSec();
+                                int debuffIconId = sd.getDebuffIconId();
+                                int debuffStringId = sd.getDebuffStringId();
+                                
+                                if (debuffProc > 0 && debuffDown > 0 && debuffSec > 0) {
+                                    int r2 = _random.nextInt(100) + 1;
+                                    if (r2 <= debuffProc) {
+                                        // 播放減益特效
+                                        if (debuffGfx > 0) {
+                                            _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), debuffGfx));
+                                        }
+                                        // 套用減益狀態（使用自訂的 ICON）
+                                        _targetPc.setYishidiDebuff(debuffDown, debuffSec, debuffIconId, debuffStringId);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Throwable ignoreY) {}
+
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

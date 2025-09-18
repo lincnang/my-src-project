@@ -216,7 +216,7 @@ public class L1WilliamHonor {
         pc.setPvpDmg_R(HonorSkill.getDamageReductionByArmorForPK());
         pc.setPvpDmg(HonorSkill.getDmgupForPK());
         pc.addStunLevel(HonorSkill.getStunLevel());
-        pc.add物理格檔(HonorSkill.getBlockWeapon());
+        pc.addBlockWeapon(HonorSkill.getBlockWeapon());
         pc.sendPackets(new S_OwnCharStatus(pc));
         pc.sendPackets(new S_SPMR(pc));
         pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -267,7 +267,7 @@ public class L1WilliamHonor {
         pc.setPvpDmg_R(0);
         pc.setPvpDmg(0);
         pc.addStunLevel(-HonorSkill.getStunLevel());
-        pc.add物理格檔(-HonorSkill.getBlockWeapon());
+        pc.addBlockWeapon(-HonorSkill.getBlockWeapon());
         // 重置布林旗標，允許後續重新加成
         pc.setHonorSkillApplied(false);
         // 同步狀態

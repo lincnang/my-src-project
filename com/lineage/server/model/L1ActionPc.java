@@ -28,6 +28,7 @@ import com.lineage.server.timecontroller.server.ServerUseMapTimer;
 import com.lineage.server.utils.CalcStat;
 import com.lineage.server.world.World;
 import com.lineage.server.world.WorldClan;
+import com.lineage.server.templates.L1EmblemIcon;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import william.Honor;
@@ -1216,6 +1217,9 @@ public class L1ActionPc {
             if (com.add.Tsai.Astrology.GritAstrologyCmd.get().Cmd(_pc, cmd)) {
                 return;
             }
+            if (com.add.Tsai.Astrology.YishidiAstrologyCmd.get().Cmd(_pc, cmd)) {
+                return;
+            }
 
             if(Npc_MagicCombind.Cmd(_pc, cmd)) {
                 return;
@@ -1618,9 +1622,33 @@ public class L1ActionPc {
                 if (_pc.isClanGfx() == false) {
                     _pc.set_isClanGfx(true);
                     _pc.sendPackets(new S_SystemMessage("血盟圖示已開啟"));
+                    _pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, 1));
+                    // 與 381 一樣：打開全血盟注視清單，讓客戶端顯示所有血盟徽章
+                    _pc.sendPackets(new S_ClanMarkSee(2));
+                    
+                    // 為所有可見的有血盟玩家發送盟徽
+                    for (L1Object obj : _pc.getKnownObjects()) {
+                        if (obj instanceof L1PcInstance) {
+                            L1PcInstance target = (L1PcInstance) obj;
+                            // 先重送對象的物件封包，讓客戶端拿到正確的 EmblemId 並觸發下載
+                            _pc.sendPackets(new S_OtherCharPacks(target));
+                            if (target.getClanid() > 0) {
+                                L1Clan targetClan = target.getClan();
+                                if (targetClan != null) {
+                                    L1EmblemIcon emblemIcon = ClanEmblemReading.get().get(targetClan.getClanId());
+                                    if (emblemIcon != null) {
+                                        _pc.sendPackets(new S_Emblem(targetClan.getClanId()));
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } else {
                     _pc.set_isClanGfx(false);
                     _pc.sendPackets(new S_SystemMessage("血盟圖示已關閉"));
+                    _pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, 0));
+                    // 關閉注視
+                    _pc.sendPackets(new S_ClanMarkSee());
                 }
                 return;
             } else if (cmd.equalsIgnoreCase("War1_Part")) {// 邀請屏幕內所有盟友組隊

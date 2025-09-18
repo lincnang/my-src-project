@@ -185,7 +185,7 @@ public class Honor {
                         rs.getInt("近物理傷害"), rs.getInt("遠物理傷害"), rs.getInt("減免物理傷害"),
                         rs.getInt("魔法傷害"), rs.getInt("減免魔法傷害"), rs.getInt("防禦"),
                         rs.getInt("魔法命中"), rs.getInt("PVP傷害減免"), rs.getInt("無視PVP傷害減免"),
-                        rs.getInt("昏迷命中"), rs.getInt("武器格擋")
+                        rs.getInt("昏迷命中"), rs.getInt("阻擋武器+%")
                 );
                 _itemIdIndex.put(level, honor);
                 count++;

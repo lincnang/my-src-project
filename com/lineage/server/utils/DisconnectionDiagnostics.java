@@ -1,6 +1,6 @@
 package com.lineage.server.utils;
 
-import com.lineage.echo.ConnectionMonitor;
+// ConnectionMonitor 已移除
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,28 +41,27 @@ public class DisconnectionDiagnostics {
      * 啟動斷線監控
      */
     public void startMonitoring() {
-        // 每5分鐘檢查一次斷線統計
+        // 每5分鐘檢查一次斷線統計（無外部統計則僅輸出心跳）
         _scheduler.scheduleAtFixedRate(this::analyzeDisconnections, 5, 5, TimeUnit.MINUTES);
         
-        // 每30分鐘生成詳細報告
+        // 每30分鐘生成簡要報告
         _scheduler.scheduleAtFixedRate(this::generateDetailedReport, 30, 30, TimeUnit.MINUTES);
         
         _log.info("斷線診斷監控已啟動");
     }
     
     /**
-     * 分析斷線情況
+     * 分析斷線情況（無外部 ConnectionMonitor，僅輸出基礎訊息）
      */
     private void analyzeDisconnections() {
         try {
-            String stats = ConnectionMonitor.getInstance().getConnectionStats();
-            
-            // 檢查斷線率
+            String stats = ""; // 無外部統計來源
             if (stats.contains("斷線率")) {
                 String[] lines = stats.split("\n");
                 for (String line : lines) {
                     if (line.contains("斷線率:") && line.contains("%")) {
-                        String rateStr = line.substring(line.indexOf(":") + 1, line.indexOf("%")).trim();
+                        String rateStr = line.substring(line.indexOf(":") + 1, line.indexOf("%"))
+                                .trim();
                         try {
                             double rate = Double.parseDouble(rateStr);
                             if (rate > 30) {
@@ -75,7 +74,6 @@ public class DisconnectionDiagnostics {
                     }
                 }
             }
-            
         } catch (Exception e) {
             _log.error("分析斷線情況時發生錯誤", e);
         }
@@ -111,13 +109,12 @@ public class DisconnectionDiagnostics {
     }
     
     /**
-     * 生成詳細報告
+     * 生成簡要報告（無外部統計來源）
      */
     private void generateDetailedReport() {
         try {
-            String fullStats = ConnectionMonitor.getInstance().getConnectionStats();
-            
-            _log.info("=== 連線健康報告 ===");
+            String fullStats = ""; // 無外部統計來源
+            _log.info("=== 連線健康報告（無外部統計） ===");
             _log.info(fullStats);
             
             // 檢查記憶體使用情況
@@ -131,7 +128,7 @@ public class DisconnectionDiagnostics {
             long maxMemoryMB = maxMemory / 1024 / 1024;
             double memoryUsage = (double) usedMemory / maxMemory * 100;
             
-            _log.info("記憶體使用情況: " + usedMemoryMB + "MB / " + maxMemoryMB + "MB (" + 
+            _log.info("記憶體使用情況: " + usedMemoryMB + "MB / " + maxMemoryMB + "MB (" +
                      String.format("%.1f", memoryUsage) + "%)");
             
             if (memoryUsage > 80) {
@@ -145,7 +142,6 @@ public class DisconnectionDiagnostics {
             if (threadCount > 1000) {
                 _log.warn("⚠️ 線程數量過多，可能導致效能問題");
             }
-            
         } catch (Exception e) {
             _log.error("生成詳細報告時發生錯誤", e);
         }

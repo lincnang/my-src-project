@@ -1809,8 +1809,14 @@ public class C_LoginToServer extends ClientBasePacket {
                 }
             }
 
-            // 傳送血盟徽章狀態（7.6）
-            pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.getClan().getShowEmblem()));
+            // 傳送血盟徽章顯示狀態：個人偏好或在攻城戰區域時顯示
+            boolean shouldShowEmblem = pc.isClanGfx() || 
+                                       com.lineage.server.model.L1CastleLocation.checkInAllWarArea(pc.getLocation());
+            pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, shouldShowEmblem ? 1 : 0));
+            if (shouldShowEmblem) {
+                // 與 381 一致：打開全血盟注視名單，確保客戶端顯示所有血盟徽章
+                pc.sendPackets(new com.lineage.server.serverpackets.S_ClanMarkSee(2));
+            }
 
             // 顯示線上血盟成員人數
             int onlineCount = clan.getOnlineClanMember().length;
@@ -2318,6 +2324,7 @@ public class C_LoginToServer extends ClientBasePacket {
                                 _pc.addAttonAstrologyPowers(); // 阿頓星盤：自動套用所有非技能節點
                                 _pc.addSilianAstrologyPowers(); // 絲莉安星盤：自動套用所有非技能節點
                                 _pc.addGritAstrologyPowers();   // 格立特星盤：自動套用所有非技能節點
+                                _pc.addYishidiAstrologyPowers(); // 依詩蒂星盤：自動套用所有非技能節點
                                 // 讀回絲莉安各技能冷卻（若仍在未來，轉回毫秒放入記憶體）
                                 try {
                                     if (_pc.get_other() != null) {

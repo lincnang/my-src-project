@@ -163,7 +163,8 @@ public class L1Clan {
                 final L1PcInstance pc = World.get().getPlayer(member_name);
                 if (pc != null) {
                     L1Teleport.teleport(pc, pc.getX(), pc.getY(), pc.getMapId(), pc.getHeading(), false);
-                    pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, 0));
+                    // 保留玩家個人設定，不強制關閉
+                    pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.isClanGfx() ? 1 : 0));
                 }
             }
         } finally {
@@ -184,7 +185,8 @@ public class L1Clan {
                 if (pc != null) {
                     ClanMembersTable.getInstance().deleteMember(pc.getId());
                     L1Teleport.teleport(pc, pc.getX(), pc.getY(), pc.getMapId(), pc.getHeading(), false);
-                    pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, 0));
+                    // 退出血盟後仍保留個人偏好（僅顯示效果會因無血盟而為 0）
+                    pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.isClanGfx() ? 1 : 0));
                 }
             }
         } finally {

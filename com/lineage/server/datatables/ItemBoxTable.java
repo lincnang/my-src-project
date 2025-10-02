@@ -144,6 +144,7 @@ public class ItemBoxTable {
                 if (enchantlvl > 0) {
                     item.setEnchantLevel(enchantlvl);
                 }
+                item.setIdentified(true);
                 server_lv.forIntensifyArmor(pc, item);
                 createNewItem(pc, item);
             } else {
@@ -152,6 +153,7 @@ public class ItemBoxTable {
                     if (enchantlvl > 0) {
                         item.setEnchantLevel(enchantlvl);
                     }
+                    item.setIdentified(true);
                     server_lv.forIntensifyArmor(pc, item);
                     createNewItem(pc, item);
                 }
@@ -180,7 +182,7 @@ public class ItemBoxTable {
 		}
 	}*/
             if (item != null && box.is_out()) {
-                final String itemName = item.getName();
+                final String itemName = item.getLogName();
                 ConfigBoxMsg.msg(pc.getName(), tgitemName, itemName);
                 WriteLogTxt.Recording("開啟寶箱紀錄", "玩家:" + "【" + pc.getName() + "】" + "開啟寶箱" + "【" + tgitemName + "】" + " 獲得物品公告編號:" + "【" + item.getItemId() + "】");
                 RecordTable.get().recordbox(pc.getName(), tgitemName, itemName, count);
@@ -213,6 +215,7 @@ public class ItemBoxTable {
             load_boxs();
         }
         load_box_key();
+        ChooseBoxCache.get().loadCustomSelect();
     }
 
     public void load_box() {

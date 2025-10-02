@@ -49,8 +49,11 @@ public class Skill_SpellbookLv10 extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("魔法書(治愈逆行)")) { //治愈逆行
                 skillid = 80;
                 attribute = 1;
-                Skill_Check.check(pc, item, skillid, 10, attribute);
             }
+			// 統一於條件分支後觸發學習流程
+			if (skillid != 0) {
+				Skill_Check.check(pc, item, skillid, 10, attribute);
+			}
         }
     }
 }

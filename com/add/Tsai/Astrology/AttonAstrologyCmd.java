@@ -29,6 +29,10 @@ public class AttonAstrologyCmd {
     // 記錄每位玩家目前啟用中的「技能節點」按鈕編號（避免清空所有一般加成）
     private static final Map<Integer, Integer> _ATTON_LAST_BTN = new ConcurrentHashMap<>();
 
+    // 為避免與其他星盤共用進度鍵，加入 Atton 專用偏移
+    private static final int QUEST_KEY_OFFSET = 1000;
+    private int qk(int id) { return QUEST_KEY_OFFSET + id; }
+
 
     private static AttonAstrologyCmd _instance;
 
@@ -73,10 +77,10 @@ public class AttonAstrologyCmd {
                 if (checkEndAstrologyQuest(pc, id)) {
                     return true;
                 }
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), id);
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
                 if (quest == null) {
-                    quest = new AstrologyQuest(pc.getId(), id, data.get_cards());
-                    AstrologyQuestReading.get().storeQuest(pc.getId(), id, data.get_cards());
+                    quest = new AstrologyQuest(pc.getId(), qk(id), data.get_cards());
+                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.get_cards());
                 }
                 // 檢查守護石
                 if (!pc.getInventory().checkItem(11618, 1)) {
@@ -118,7 +122,7 @@ public class AttonAstrologyCmd {
             // 抽卡解鎖
             if (cmd.startsWith("abu")) {
                 int astrologyType = pc.getAstrologyType();
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), astrologyType);
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(astrologyType));
                 if (quest == null) {
                     return true;
                 }
@@ -134,7 +138,7 @@ public class AttonAstrologyCmd {
                 }
                 if (rnd < 85) {
                     pc.sendPackets(new S_SystemMessage("開啟守護星，失敗"));
-                    AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, quest.getNum() - 1);
+                    AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), quest.getNum() - 1);
                     pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + (quest.getNum() - 1), msg));
                     return true;
                 }
@@ -155,8 +159,8 @@ public class AttonAstrologyCmd {
                     }
                     if (unlockSuccess) {
                         pc.getQuest().set_step(data.getQuestId(), 255);
-                        AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
-                        AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
+                        AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), 1);
+                        AstrologyQuestReading.get().delQuest(pc.getId(), qk(astrologyType));
                         // 任務完成即給能力：非技能節點直接生效
                         if (data.getSkillId() == 0) {
                             pc.addAstrologyPower(data, astrologyType);

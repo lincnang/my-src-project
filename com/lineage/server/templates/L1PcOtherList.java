@@ -52,6 +52,9 @@ public class L1PcOtherList {
     public Map<Integer, int[]> SHOPLIST;// 商品領回暫時清單
     private L1PcInstance _pc;
     private Map<Integer, L1ShopItem> _cnList;// 購買奇怪的商人物品清單(ORDERID/指定的物品數據)
+    // 自選寶箱專用，避免與商城共用
+    private Map<Integer, L1ShopItem> _chooseList; // 顯示用索引 -> L1ShopItem
+    private Map<Integer, L1ChooseBoxOption> _chooseData; // 索引 -> 對應選項資料
     private Map<Integer, L1ShopAutoHp> _autoHpList; // 特殊商店 -> 購買自動喝水補魔道具
     private Map<Integer, L1ItemInstance> _removeItemSellList;// 特殊商店 -> 添加刪除物品
     private Map<Integer, L1ItemInstance> _removeItemBuyList;// 特殊商店 -> 取消刪除物品
@@ -70,6 +73,8 @@ public class L1PcOtherList {
         this._pc = pc;
         this.DELIST = new HashMap<>();
         this._cnList = new HashMap<>();
+        this._chooseList = new HashMap<>();
+        this._chooseData = new HashMap<>();
         this._autoHpList = new HashMap<>(); // 特殊商店 -> 購買自動喝水補魔道具
         this._removeItemSellList = new HashMap<>();// 特殊商店 -> 添加刪除物品
         this._removeItemBuyList = new HashMap<>();// 特殊商店 -> 取消刪除物品
@@ -103,6 +108,8 @@ public class L1PcOtherList {
             ListMapUtil.clear(_gamList);
             ListMapUtil.clear(_gamSellList);
             ListMapUtil.clear(_illusoryList);
+            ListMapUtil.clear(_chooseList);
+            ListMapUtil.clear(_chooseData);
             ListMapUtil.clear(_teleport);
             ListMapUtil.clear(_uplevelList);
             ListMapUtil.clear(_shiftingList);
@@ -119,6 +126,8 @@ public class L1PcOtherList {
             this._removeItemSellList = null; // 特殊商店 -> 添加刪除物品
             this._removeItemBuyList = null; // 特殊商店 -> 取消刪除物品
             this._cnSList = null;
+            this._chooseList = null;
+            this._chooseData = null;
             this._gamList = null;
             this._gamSellList = null;
             this._illusoryList = null;
@@ -609,6 +618,35 @@ public class L1PcOtherList {
      */
     public void add_cnList(final int index, final L1ShopItem shopItem) {
         this._cnList.put(index, shopItem);
+    }
+
+    /**
+     * 取得臨時商城/清單對應表 (index -> L1ShopItem)
+     */
+    public Map<Integer, L1ShopItem> get_cnList() {
+        return this._cnList;
+    }
+
+    // 自選寶箱專用
+    public void add_chooseList(final int index, final L1ShopItem shopItem) {
+        this._chooseList.put(index, shopItem);
+    }
+
+    public Map<Integer, L1ShopItem> get_chooseList() {
+        return this._chooseList;
+    }
+
+    public void add_chooseData(final int index, final L1ChooseBoxOption option) {
+        this._chooseData.put(index, option);
+    }
+
+    public Map<Integer, L1ChooseBoxOption> get_chooseData() {
+        return this._chooseData;
+    }
+
+    public void clear_chooseList() {
+        ListMapUtil.clear(this._chooseList);
+        ListMapUtil.clear(this._chooseData);
     }
 
     /**

@@ -57,14 +57,27 @@ public class L1ShopBuyOrderList {
     }
 
     public void add(final int orderNumber, final int count) {
-        if (this._shop.getSellingItems().size() < orderNumber) {
-            return;
+        final List<L1ShopItem> sellingItems = this._shop.getSellingItems();
+        // 容錯：客戶端可能傳回的是清單索引或是 itemId（排序後的情況）
+        L1ShopItem shopItem = null;
+        if (orderNumber >= 0 && orderNumber < sellingItems.size()) {
+            shopItem = sellingItems.get(orderNumber);
+        } else {
+            for (L1ShopItem candidate : sellingItems) {
+                if (candidate.getItemId() == orderNumber) {
+                    shopItem = candidate;
+                    break;
+                }
+            }
+            if (shopItem == null) {
+                return;
+            }
         }
+
         final int ch_count = Math.max(0, count);
         if (ch_count <= 0) {
             return;
         }
-        final L1ShopItem shopItem = this._shop.getSellingItems().get(orderNumber);
         final int price = (int) (shopItem.getPrice() * ConfigRate.RATE_SHOP_SELLING_PRICE);// 物品單價
         // 檢查販賣物品總價
         for (int j = 0; j < ch_count; j++) {

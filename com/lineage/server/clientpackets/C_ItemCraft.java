@@ -11,8 +11,8 @@ import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Object;
 import com.lineage.server.model.L1ObjectAmount;
 import com.lineage.server.model.L1PcInventory;
-import com.lineage.server.model.npc.L1NpcHtml;
-import com.lineage.server.model.npc.action.L1NpcAction;
+// import com.lineage.server.model.npc.L1NpcHtml;
+// import com.lineage.server.model.npc.action.L1NpcAction;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1Item;
 import com.lineage.server.utils.RandomArrayList;
@@ -284,110 +284,77 @@ public class C_ItemCraft extends ClientBasePacket {
                         }
                     }
                 }
-                int random = RandomArrayList.getInc(1000000, 1);
+                // 逐次試作
                 final List<L1ObjectAmount<Integer>> test = npcMakeItemAction.getAmountItemList();
-                //設置
                 String itemName;
                 for (final L1ObjectAmount<Integer> giveItem : test) {
                     int itemId = giveItem.getObject();
                     L1Item itemCheck = itemTable.getTemplate(itemId);
                     itemName = itemCheck.getName();
-                    _log.info("玩家:" + pc.getName() + "開始製作:" + itemName + " 數量(" + changeCount + ")個。");
+                    _log.info("玩家:" + pc.getName() + "開始製作:" + itemName + " 嘗試次數(" + changeCount + ")。");
                 }
-                if (random <= npcMakeItemAction.getSucceedRandom() + 10000 * sumAidCount) {
-                    _log.info("製作成功,製作機率:" + random);
-                    List<L1ObjectAmount<Integer>> successItems = npcMakeItemAction.getAmountItemList();
-                    for (L1ObjectAmount<Integer> delItemAmount : delItemObjIds) {
-                        if (pcInv.checkItem(delItemAmount.getObject(), delItemAmount.getAmount())) {
-                            pc.getInventory().consumeItem(delItemAmount.getObject(), delItemAmount.getAmount());
+
+                // 先扣材料（按嘗試次數匯總扣除）
+                for (L1ObjectAmount<Integer> delItemAmount : delItemObjIds) {
+                    if (pcInv.checkItem(delItemAmount.getObject(), delItemAmount.getAmount())) {
+                        pc.getInventory().consumeItem(delItemAmount.getObject(), delItemAmount.getAmount());
+                    }
+                }
+                if (sumAidCount != 0) {
+                    for (L1ObjectAmount<Integer> delAidItemAmount : delAidItemObjIds) {
+                        int AidItemId = delAidItemAmount.getObject();
+                        if (pcInv.checkItem(AidItemId, sumAidCount)) {
+                            pc.getInventory().consumeItem(AidItemId, sumAidCount);
                         }
                     }
-                    if (sumAidCount != 0) {
-                        for (L1ObjectAmount<Integer> delAidItemAmount : delAidItemObjIds) {
-                            int AidItemId = delAidItemAmount.getObject();
-                            if (pcInv.checkItem(AidItemId, sumAidCount)) {
-                                pc.getInventory().consumeItem(AidItemId, sumAidCount);
+                }
+
+                int successCount = 0;
+                for (int i = 0; i < changeCount; i++) {
+                    int rndTry = RandomArrayList.getInc(1000000, 1);
+                    if (rndTry <= npcMakeItemAction.getSucceedRandom() + 10000 * sumAidCount) {
+                        successCount++;
+                    }
+                }
+
+                final List<L1ItemInstance> giveItemObjs = new ArrayList<>();
+                // 發放成功產物
+                if (successCount > 0) {
+                    giveItemObjs.addAll(craftadditem(pc, pcInv, successCount, npcMakeItemAction.getAmountItemList(), npcMakeItemAction.isAmountBroad(), npcMakeItemAction.getSystemMessage()));
+                    // 隨機加獎，按成功次數獨立擲
+                    for (int i = 0; i < successCount; i++) {
+                        int r = RandomArrayList.getInt(npcMakeItemAction.getAmountRandom());
+                        int acc = 0;
+                        for (L1ObjectAmount<Integer> objectAmount : npcMakeItemAction.getAmountRandomItemList()) {
+                            acc += objectAmount.getAmountRandom();
+                            if (r < acc) {
+                                giveItemObjs.addAll(b(pc, pcInv, 1, objectAmount.getObject(), (int) objectAmount.getAmount(), objectAmount.getAmountEnchantLevel(), objectAmount.getAmountBless(), npcMakeItemAction.isAmountBroad(), npcMakeItemAction.getSystemMessage()));
+                                break;
                             }
                         }
                     }
-                    //List<L1ItemInstance> giveItemObjs = craftadditem(pc, pcInv, changeCount, successItems);
-                    final List<L1ItemInstance> giveItemObjs = craftadditem(pc, pcInv, changeCount, successItems, npcMakeItemAction.isAmountBroad(), npcMakeItemAction.getSystemMessage());
-                    int r = RandomArrayList.getInt(npcMakeItemAction.getAmountRandom());
-                    int change = 0;
-                    for (L1ObjectAmount<Integer> objectAmount : npcMakeItemAction.getAmountRandomItemList()) {
-                        change += objectAmount.getAmountRandom();
-                        int itemId = objectAmount.getObject();
-                        long amount = objectAmount.getAmount();
-                        int amountEnchant = objectAmount.getAmountEnchantLevel();
-                        int amountBless = objectAmount.getAmountBless();
-                        if (r < change) {
-                            L1Item itemCheck = itemTable.getTemplate(itemId);
-                            giveItemObjs.addAll(b(pc, pcInv, 1, itemId, (int) amount, amountEnchant, amountBless, npcMakeItemAction.isAmountBroad(), npcMakeItemAction.getSystemMessage()));
-                            break;
-                        }
-                    }
-                    pc.sendPackets(new S_ItemCraftList(true, giveItemObjs));
-                    L1NpcAction actionOnSucceed = npcMakeItemAction.getAmountSuceedAction();
-                    if (actionOnSucceed != null) {
-                        L1NpcHtml result = actionOnSucceed.execute(String.format("request craft%d", npcMakeItemAction.getAmountActionID()), pc, npc, null);
-                        if (result != null) {
-                            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), result));
-                        }
-                    }
-                    if (npcMakeItemAction.isAmountBroad()) {
-                        String msg = npcMakeItemAction.getSystemMessage();
-                        int msgId = npcMakeItemAction.getSystemMessageID();
-                        if ((msg != null) && (msg.length() > 0)) {
-                            //World.get().broadcastPacketToAll(new S_SystemMessage(String.format((String) msg, new Object[] { pc.getName(),itemName+"("+changeCount+")個" })));
-                        } else if (msgId != -1) {
-                            World.get().broadcastPacketToAll(new S_ServerMessage(msgId));
-                        }
-                    }
-                    giveItemObjs.clear();
-                } else {
-                    _log.info("製作失敗,機率:" + random);
-                    List<L1ObjectAmount<Integer>> failItems = npcMakeItemAction.getFailItemList();
-                    //List<L1ItemInstance> giveItemObjs = craftadditem(pc, pcInv, changeCount, failItems);
-                    final List<L1ItemInstance> giveItemObjs = craftadditem(pc, pcInv, changeCount, failItems, npcMakeItemAction.isAmountBroad(), npcMakeItemAction.getSystemMessage());
-                    int r = RandomArrayList.getInt(npcMakeItemAction.getFailRandom());
-                    int change = 0;
-                    for (L1ObjectAmount<Integer> msg : npcMakeItemAction.getFailAmountRandomItemList()) {
-                        change += msg.getAmountRandom();
-                        if (r < change) {
-                            //giveItemObjs.addAll(craftadditem(pc, pcInv, changeCount, failItems));
-                            giveItemObjs.addAll(craftadditem(pc, pcInv, changeCount, failItems, npcMakeItemAction.isAmountBroad(), npcMakeItemAction.getSystemMessage()));
-                            break;
-                        }
-                    }
-                    L1NpcAction actionOnFail = npcMakeItemAction.getFailAction();
-                    if (actionOnFail != null) {
-                        L1NpcHtml result = actionOnFail.execute(String.format("request craft%d", npcMakeItemAction.getAmountActionID()), pc, npc, null);
-                        if (result != null) {
-                            pc.sendPackets(new S_NPCTalkReturn(pc, result));
-                        }
-                    }
-                    String msg1 = npcMakeItemAction.getFailMessage();
-                    int msgId = npcMakeItemAction.getFailMessageID();
-                    if ((msg1 != null) && (msg1.length() > 0)) {
-                        pc.sendPackets(new S_SystemMessage(msg1));
-                    } else if (msgId != -1) {
-                        pc.sendPackets(new S_ServerMessage(msgId));
-                    }
-                    for (L1ObjectAmount<Integer> delItemAmount : delItemObjIds) {
-                        if (pcInv.checkItem(delItemAmount.getObject(), delItemAmount.getAmount())) {
-                            pc.getInventory().consumeItem(delItemAmount.getObject(), delItemAmount.getAmount());
-                            //pc.sendPackets(new S_SystemMessage("失敗材料已扣除."));
-                        }
-                    }
-                    if (sumAidCount != 0) {
-                        for (L1ObjectAmount<Integer> delAidItemAmount : delAidItemObjIds) {
-                            int AidItemId = delAidItemAmount.getObject();
-                            if (pcInv.checkItem(AidItemId, sumAidCount)) {
-                                pc.getInventory().consumeItem(AidItemId, sumAidCount);
+                }
+                // 失敗補償
+                int failCount = changeCount - successCount;
+                if (failCount > 0) {
+                    // 固定失敗物品
+                    giveItemObjs.addAll(craftadditem(pc, pcInv, failCount, npcMakeItemAction.getFailItemList(), npcMakeItemAction.isAmountBroad(), npcMakeItemAction.getSystemMessage()));
+                    // 失敗隨機補償（每次失敗擲一次）
+                    for (int i = 0; i < failCount; i++) {
+                        int r = RandomArrayList.getInt(npcMakeItemAction.getFailRandom());
+                        int acc = 0;
+                        for (L1ObjectAmount<Integer> msg : npcMakeItemAction.getFailAmountRandomItemList()) {
+                            acc += msg.getAmountRandom();
+                            if (r < acc) {
+                                giveItemObjs.addAll(craftadditem(pc, pcInv, 1, npcMakeItemAction.getFailItemList(), npcMakeItemAction.isAmountBroad(), npcMakeItemAction.getSystemMessage()));
+                                break;
                             }
                         }
                     }
-                    pc.sendPackets(new S_ItemCraftList(false, giveItemObjs));
+                }
+                pc.sendPackets(new S_ItemCraftList(successCount > 0, giveItemObjs));
+                if (successCount <= 0) {
+                    pc.sendPackets(new S_SystemMessage("製作失敗(0/" + changeCount + ")"));
                 }
             }
         } catch (final Exception e) {

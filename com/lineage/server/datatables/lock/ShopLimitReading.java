@@ -42,13 +42,14 @@ public class ShopLimitReading {
         int count = 0;
         try {
             con = DatabaseFactory.get().getConnection();
+            // 彙總同一天的所有紀錄，避免資料表缺少唯一鍵時讀到錯誤筆數
             pstm = con.prepareStatement(
-                    "SELECT `count` FROM `character_每日限購` WHERE `char_id`=? AND `item_id`=? AND `purchase_date`=CURDATE()");
+                    "SELECT COALESCE(SUM(`count`), 0) AS total FROM `character_每日限購` WHERE `char_id`=? AND `item_id`=? AND DATE(`purchase_date`)=CURDATE()");
             pstm.setInt(1, charId);
             pstm.setInt(2, itemId);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                count = rs.getInt("count");
+                count = rs.getInt("total");
             }
         } catch (final SQLException e) {
             _log.error("讀取角色商店購買紀錄時發生錯誤: char_id=" + charId + ", item_id=" + itemId, e);

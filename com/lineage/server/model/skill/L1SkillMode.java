@@ -59,7 +59,7 @@ public class L1SkillMode {
             _skillMode.put(113, new TRUE_TARGET()); //精準目標
             _skillMode.put(HAND_DARKNESS, new HAND_DARKNESS()); //黑暗之手
             _skillMode.put(LICH_CHANGE_LOCATION, new LICH_CHANGE_LOCATION());
-            _skillMode.put(PRIDE, new PRIDE());// 騎士榮耀
+            _skillMode.put(PRIDE, new PRIDE());// 恢復盔甲
             _skillMode.put(87, new SHOCK_STUN()); //衝擊之暈
             _skillMode.put(119, new KINGDOM_STUN()); //王者之劍
             _skillMode.put(EMPIRE, new EMPIRE());// 暈眩之劍

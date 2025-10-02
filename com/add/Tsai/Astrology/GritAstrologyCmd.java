@@ -24,6 +24,10 @@ public class GritAstrologyCmd {
     private static final Map<Integer, String> _GRIT_SKILL_NAMES = new ConcurrentHashMap<>();
     private static final Map<Integer, Integer> _GRIT_LAST_BTN = new ConcurrentHashMap<>();
 
+    // 偏移避免與其他星盤共用 quest key
+    private static final int QUEST_KEY_OFFSET = 3000;
+    private int qk(int id) { return QUEST_KEY_OFFSET + id; }
+
     private static GritAstrologyCmd _instance;
 
     public static GritAstrologyCmd get() {
@@ -63,10 +67,10 @@ public class GritAstrologyCmd {
                 }
 
                 // 建立/取得抽卡任務進度
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), id);
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
                 if (quest == null) {
-                    quest = new AstrologyQuest(pc.getId(), id, data.getCards());
-                    AstrologyQuestReading.get().storeQuest(pc.getId(), id, data.getCards());
+                    quest = new AstrologyQuest(pc.getId(), qk(id), data.getCards());
+                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.getCards());
                 }
 
                 // 檢查守護石（未持有也允許用需求道具直解；參考絲莉安）
@@ -112,7 +116,7 @@ public class GritAstrologyCmd {
             // 抽卡解鎖流程（沿用 abu 前綴）
             if (cmd.startsWith("abu")) {
                 int astrologyType = pc.getAstrologyType();
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), astrologyType);
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(astrologyType));
                 if (quest == null) {
                     return true;
                 }
@@ -128,7 +132,7 @@ public class GritAstrologyCmd {
                 }
                 if (rnd < 85) {
                     pc.sendPackets(new S_SystemMessage("開啟守護星，失敗"));
-                    AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, quest.getNum() - 1);
+                    AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), quest.getNum() - 1);
                     pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + (quest.getNum() - 1), msg));
                     return true;
                 }
@@ -151,8 +155,8 @@ public class GritAstrologyCmd {
                     }
                     if (unlockSuccess) {
                         pc.getQuest().set_step(data.getQuestId(), 255);
-                        AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
-                        AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
+                        AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), 1);
+                        AstrologyQuestReading.get().delQuest(pc.getId(), qk(astrologyType));
                         // 任務完成即給能力：非技能節點直接生效（以資料表驅動）
                         if (data.getSkillId() == 0) {
                             GritAstrologyTable.effectBuff(pc, data, 1);

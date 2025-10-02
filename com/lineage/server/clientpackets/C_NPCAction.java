@@ -265,6 +265,9 @@ public class C_NPCAction extends ClientBasePacket {
                         pc.sendPackets(new S_ShopBuyList(objid, pc));
                     }
                 }
+            } else if (cmd.equalsIgnoreCase("equipped")) {
+                // 顯示自己目前配戴的裝備（以商店清單樣式）
+                pc.sendPackets(new S_ShopSellList(pc, objid, pc));
             } else if (npctemp.get_npcId() == 91002) {
                 if (cmd.equalsIgnoreCase("ent")) {
                     L1PolyRace.getInstance().enterGame(pc);

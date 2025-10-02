@@ -13,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * 騎士榮耀
+ * 恢復盔甲
  *
  * @author dexc
  */

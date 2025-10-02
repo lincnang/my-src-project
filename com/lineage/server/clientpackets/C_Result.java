@@ -3,6 +3,7 @@ package com.lineage.server.clientpackets;
 import com.add.L1Config;
 import com.add.Mobbling.MobblingTimeList;
 import com.lineage.config.ConfigOtherSet2;
+import com.lineage.config.ConfigBoxMsg;
 import com.lineage.data.event.ShopXSet;
 import com.lineage.echo.ClientExecutor;
 import com.lineage.managerUI.Eva;
@@ -21,6 +22,7 @@ import com.lineage.server.model.shop.L1ShopBuyOrderList;
 import com.lineage.server.model.shop.L1ShopSellOrderList;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.*;
+import william.server_lv;
 import com.lineage.server.timecontroller.event.GamblingTime;
 import com.lineage.server.world.World;
 import com.lineage.server.world.WorldClan;
@@ -131,7 +133,8 @@ public class C_Result extends ClientBasePacket {
                     }
                     /** End */
                     /** [原碼] 自動練功技能 */
-                    if (npcObjectId == pc.getId()) {
+                    // 避免與自選寶箱(temporary==99)衝突
+                    if (npcObjectId == pc.getId() && pc.getTemporary() != 99) {
                         if (size > 1) {
                             pc.sendPackets(new S_ServerMessage("\\fR一次只能選擇一個技能。"));
                             return;
@@ -191,6 +194,9 @@ public class C_Result extends ClientBasePacket {
                                     break;
                                 case 7:
                                     this.mode_remove_item(pc, size, true); // 特殊商店 -> 取消刪除物品
+                                    break;
+                                case 99:
+                                    this.mode_choose_box(pc, size); // 自選寶箱
                                     break;
                             }
                             return;
@@ -412,6 +418,109 @@ public class C_Result extends ClientBasePacket {
             // _log.error(e.getLocalizedMessage(), e);
         } finally {
             this.over();
+        }
+    }
+
+    /**
+     * 自選寶箱：從清單選擇一項，依強化/數量發放，刪除寶箱
+     */
+    private void mode_choose_box(final L1PcInstance pc, final int size) {
+        try {
+            if (size != 1) {
+                // 取消或異常，多選都統一重置
+                pc.setTemporary(0);
+                pc.set_mode_id(0);
+                pc.get_otherList().clear_chooseList();
+                if (size > 1) {
+                    pc.sendPackets(new S_ServerMessage("一次只能選擇一項。"));
+                }
+                pc.sendPackets(new S_CloseList(pc.getId()));
+                return;
+            }
+            final int orderId = this.readD();
+            final int count = Math.max(0, this.readD());// 數量（此處僅允許 1）
+            if (count != 1) {
+                pc.sendPackets(new S_CloseList(pc.getId()));
+                return;
+            }
+            // 取回在列表內暫存的項目
+            final L1ShopItem chosen = pc.get_otherList().get_chooseList().get(orderId);
+            if (chosen == null) {
+                pc.sendPackets(new S_CloseList(pc.getId()));
+                return;
+            }
+            // 取回對應的原始資料（含 bless/精準數量等）
+            final L1ChooseBoxOption meta = pc.get_otherList().get_chooseData().get(orderId);
+            // 準備發放的物品參數
+            final int itemId = chosen.getItemId();
+            final int pack = Math.max(1, chosen.getPackCount());
+            final int enchant = Math.max(0, chosen.getEnchantLevel());
+
+            // 先找道具模板，容量重量確認，避免先刪箱後給物失敗
+            final L1Item itemtmp = ItemTable.get().getTemplate(itemId);
+            if (itemtmp == null) {
+                pc.sendPackets(new S_CloseList(pc.getId()));
+                return;
+            }
+            if (pc.getInventory().checkAddItem(itemtmp, pack) != L1Inventory.OK) {
+                pc.sendPackets(new S_ServerMessage(270)); // 當你負擔過重時不能交易。
+                pc.sendPackets(new S_CloseList(pc.getId()));
+                return;
+            }
+
+            // 找到此次使用的寶箱 OBJID 並刪除 1 個
+            final int boxObjId = pc.get_mode_id();
+            final L1ItemInstance boxItem = pc.getInventory().getItem(boxObjId);
+            if (boxItem == null) {
+                pc.sendPackets(new S_CloseList(pc.getId()));
+                return;
+            }
+            if (pc.getInventory().removeItem(boxObjId, 1) != 1) {
+                pc.sendPackets(new S_CloseList(pc.getId()));
+                return;
+            }
+
+            // 發放
+            L1ItemInstance lastGiven = null;
+            if (itemtmp.isStackable()) {
+                final L1ItemInstance give = ItemTable.get().createItem(itemId);
+                give.setCount(pack);
+                if (enchant > 0) give.setEnchantLevel(enchant);
+                if (meta != null && meta.getBless() > 0) give.setBless(meta.getBless());
+                give.setIdentified(true);
+                server_lv.forIntensifyArmor(pc, give);
+                pc.getInventory().storeItem(give);
+                pc.sendPackets(new S_ServerMessage(403, give.getLogName()));
+                lastGiven = give;
+            } else {
+                for (int i = 0; i < pack; i++) {
+                    final L1ItemInstance give = ItemTable.get().createItem(itemId);
+                    if (enchant > 0) give.setEnchantLevel(enchant);
+                    if (meta != null && meta.getBless() > 0) give.setBless(meta.getBless());
+                    give.setIdentified(true);
+                    server_lv.forIntensifyArmor(pc, give);
+                    pc.getInventory().storeItem(give);
+                    pc.sendPackets(new S_ServerMessage(403, give.getLogName()));
+                    lastGiven = give;
+                }
+            }
+
+            // 公告 out：依資料表 out=1 廣播
+            final String tgitemName = boxItem.getName();
+            if (ChooseBoxCache.get().isOut(boxItem.getItemId())) {
+                final String itemName = (lastGiven != null) ? lastGiven.getLogName() : itemtmp.getName();
+                ConfigBoxMsg.msg(pc.getName(), tgitemName, itemName);
+                World.get().broadcastPacketToAll(
+                        new S_SystemMessage("【公告】玩家 " + pc.getName() + " 開啟了「" + tgitemName + "」獲得「" + itemName + "」x" + pack + "!"));
+                WriteLogTxt.Recording("開啟寶箱紀錄", "玩家:" + "【" + pc.getName() + "】" + "開啟寶箱" + "【" + tgitemName + "】" + " 獲得物品公告編號:" + "【" + itemtmp.getItemId() + "】");
+                RecordTable.get().recordbox(pc.getName(), tgitemName, itemName, pack);
+            }
+            // 關閉並重置狀態
+            pc.setTemporary(0);
+            pc.set_mode_id(0);
+            pc.get_otherList().clear_chooseList();
+        } catch (Exception e) {
+            _log.error("自選寶箱處理異常: " + pc.getName(), e);
         }
     }
 

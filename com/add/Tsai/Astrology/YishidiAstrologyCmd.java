@@ -25,6 +25,10 @@ public class YishidiAstrologyCmd {
 
     private static final Map<Integer, Integer> _YI_LAST_BTN = new ConcurrentHashMap<>();
 
+    // 偏移避免與其他星盤共用 quest key
+    private static final int QUEST_KEY_OFFSET = 4000;
+    private int qk(int id) { return QUEST_KEY_OFFSET + id; }
+
     private static YishidiAstrologyCmd _instance;
     public static YishidiAstrologyCmd get() {
         if (_instance == null) {
@@ -92,10 +96,10 @@ public class YishidiAstrologyCmd {
                 if (checkEndAstrologyQuest(pc, id)) {
                     return true;
                 }
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), id);
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
                 if (quest == null) {
-                    quest = new AstrologyQuest(pc.getId(), id, data.getCards());
-                    AstrologyQuestReading.get().storeQuest(pc.getId(), id, data.getCards());
+                    quest = new AstrologyQuest(pc.getId(), qk(id), data.getCards());
+                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.getCards());
                 }
 
                 // 已完成：技能節點立即套用、非技能節點登入已套用
@@ -121,7 +125,7 @@ public class YishidiAstrologyCmd {
             // 抽卡流程 abu*
             if (cmd.startsWith("abu")) {
                 int astrologyType = pc.getAstrologyType();
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), astrologyType);
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(astrologyType));
                 if (quest == null) return true;
                 if (!pc.getInventory().checkItem(11618, 1)) {
                     pc.sendPackets(new S_SystemMessage("缺少守護石，無法啟用！"));
@@ -133,7 +137,7 @@ public class YishidiAstrologyCmd {
                 if (quest.getNum() == 1) rnd = 100;
                 if (rnd < 85) {
                     pc.sendPackets(new S_SystemMessage("開啟守護星，失敗"));
-                    AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, quest.getNum() - 1);
+                    AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), quest.getNum() - 1);
                     pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + (quest.getNum() - 1), msg));
                     return true;
                 }
@@ -156,8 +160,8 @@ public class YishidiAstrologyCmd {
                     }
                     if (unlockSuccess) {
                         pc.getQuest().set_step(data.getQuestId(), 255);
-                        AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
-                        AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
+                        AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), 1);
+                        AstrologyQuestReading.get().delQuest(pc.getId(), qk(astrologyType));
                         if (data.getSkillId() == 0) {
                             YishidiAstrologyTable.effectBuff(pc, data, 1);
                             pc.sendPackets(new S_SystemMessage("星盤已解鎖"));

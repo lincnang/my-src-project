@@ -78,7 +78,7 @@ public class Skill_TechnicalDocument extends ItemExecutor {
                 skillid = ABSOLUTE_BLADE;
                 attribute = 5;
                 magicLv = 31;
-            } else if (nameId.equalsIgnoreCase("技術書(騎士榮耀)")) {// 技術書(騎士榮耀)60
+            } else if (nameId.equalsIgnoreCase("技術書(恢復盔甲)")) {// 技術書(恢復盔甲)60
                 skillid = 96;
                 attribute = 5;
                 magicLv = 31;

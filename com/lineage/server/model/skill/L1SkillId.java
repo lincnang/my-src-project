@@ -396,7 +396,7 @@ public class L1SkillId {
     public static final int LICH_CHANGE_LOCATION = 95;
 
     /**
-     * 騎士榮耀96
+     * 恢復盔甲96
      */
     public static final int PRIDE = 96;
 

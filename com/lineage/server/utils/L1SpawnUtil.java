@@ -90,6 +90,15 @@ public class L1SpawnUtil {
                 user.sendPackets(new S_DoActionGFX(effect.getId(), 4));
                 effect.onPerceive(user);
             }
+        // 讓被施放者本人也能看到特效（若對象是玩家）
+        if (cha instanceof L1PcInstance) {
+            L1PcInstance targetPc = (L1PcInstance) cha;
+            effect.addKnownObject(targetPc);
+            targetPc.addKnownObject(effect);
+            targetPc.sendPackets(new S_NPCPack_Eff(effect));
+            targetPc.sendPackets(new S_DoActionGFX(effect.getId(), 4));
+            effect.onPerceive(targetPc);
+        }
             if (time > 0) {
                 // 存在時間(秒)
                 effect.set_spawnTime(time);

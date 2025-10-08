@@ -5,9 +5,9 @@ import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
-import com.lineage.server.serverpackets.S_TrueTarget;
+import com.lineage.server.serverpackets.S_DoActionGFX;
+import com.lineage.server.serverpackets.S_NPCPack_Eff;
 import com.lineage.server.utils.L1SpawnUtil;
-import com.lineage.server.world.WorldClan;
 import com.lineage.server.world.WorldEffect;
 
 import java.util.ArrayList;
@@ -45,24 +45,23 @@ public class TRUE_TARGET extends SkillMode {
         if (tgeffect == null || tgeffect.destroyed()) {// 空物件/已刪除
             tgeffect = L1SpawnUtil.spawnTrueTargetEffect(86131, 16, cha, srcpc, 0, 12299);
             cha.add_TrueTargetEffect(tgeffect);
+            // 讓被施放者也立即認得特效NPC，確保自己能看到
+            if (cha instanceof L1PcInstance) {
+                L1PcInstance targetPcForEffect = (L1PcInstance) cha;
+                tgeffect.addKnownObject(targetPcForEffect);
+                targetPcForEffect.addKnownObject(tgeffect);
+                targetPcForEffect.sendPackets(new S_NPCPack_Eff(tgeffect));
+                targetPcForEffect.sendPackets(new S_DoActionGFX(tgeffect.getId(), 4));
+                tgeffect.onPerceive(targetPcForEffect);
+            }
         }
         if (!cha.hasSkillEffect(TRUE_TARGET)) {// 精準目標效果
             cha.setSkillEffect(TRUE_TARGET, integer * 1000);
-            // System.out.println("integer ==" + integer);
-        }
-        // 施展者具有血盟
-        if (srcpc.getClan() != null) {
-            final L1PcInstance[] onlinemembers = WorldClan.get().getClan(srcpc.getClanname()).getOnlineClanMember();
-            // 對血盟成員發送封包
-            for (final L1PcInstance clanmember : onlinemembers) {
-                clanmember.sendPackets(new S_TrueTarget(cha.getId(), clanmember.getId(), srcpc.getText()));
+            // 被施放者：傷害減免 +3（僅玩家）
+            if (cha instanceof L1PcInstance) {
+                ((L1PcInstance) cha).addDamageReductionByArmor(3);
             }
-        } else {
-            // 對自己發送封包
-            srcpc.sendPackets(new S_TrueTarget(cha.getId(), srcpc.getId(), srcpc.getText()));
         }
-        // 清空暫時文字串
-        srcpc.setText("");
         return dmg;
     }
 
@@ -79,6 +78,9 @@ public class TRUE_TARGET extends SkillMode {
 
     @Override
     public void stop(final L1Character cha) throws Exception {
-        // TODO Auto-generated method stub
+        // 收回被施放者的傷害減免 +3
+        if (cha instanceof L1PcInstance) {
+            ((L1PcInstance) cha).addDamageReductionByArmor(-3);
+        }
     }
 }

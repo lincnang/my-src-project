@@ -458,7 +458,7 @@ public class L1SkillStop {
                     case Armor_Valor://勇猛盔甲
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.addDamageReductionByArmor(-100);
+                            pc.addDamageReductionByArmor(-7);
                             pc.sendPackets(new S_SPMR(pc));
                             pc.sendPackets(new S_PacketBoxIconAura(118, 0));
                         }

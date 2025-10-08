@@ -14,8 +14,8 @@ import java.util.Random;
 
 public class KINGDOM_STUN extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
-        // 技能ID固定為 87（沖暈技能）
-        L1Skills skill = SkillsTable.get().getTemplate(87);
+        // 技能ID固定為 119（王者之劍）
+        L1Skills skill = SkillsTable.get().getTemplate(119);
         int itemConsumeId = (skill != null) ? skill.getItemConsumeId() : 0;
         int itemConsumeCount = (skill != null) ? skill.getItemConsumeCount() : 0;
         int range = (skill != null) ? skill.getRanged() : 1; // 沒設則預設近戰1格

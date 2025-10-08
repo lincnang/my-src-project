@@ -172,7 +172,18 @@ public class L1MonsterInstance extends L1NpcInstance {
         if (com.lineage.config.ConfigAI.useL1JAIForNpc(getNpcTemplate().get_npcId())) {
             L1J_AI_Adapter.searchTarget(this);
         } else {
-            super.searchTarget_Original();
+            // 原生：先找玩家，再找NPC
+            L1PcInstance tp = searchTargetPlayer();
+            if (tp != null) {
+                _target = tp;
+                setHate(tp, 0);
+            } else {
+                L1MonsterInstance tn = searchTargetNpc();
+                if (tn != null) {
+                    _target = tn;
+                    setHate(tn, 0);
+                }
+            }
         }
         if (_target == null) {
             ISASCAPE = false;

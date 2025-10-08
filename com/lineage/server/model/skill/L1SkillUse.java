@@ -2348,7 +2348,7 @@ public class L1SkillUse {
                         pc.sendPackets(new S_PacketBoxIconAura(117, this._getBuffIconDuration));
                     } else if (this._skillId == Armor_Valor) { //勇猛盔甲
                         final L1PcInstance pc = (L1PcInstance) cha;
-                        pc.addDamageReductionByArmor(100);
+                        pc.addDamageReductionByArmor(7);
                         pc.sendPackets(new S_SPMR(pc));// 防禦更新
                         pc.sendPackets(new S_PacketBoxIconAura(118, this._getBuffIconDuration));
                     } else if (this._skillId == DEATH_HEAL) { // 法師新技能 治愈逆行

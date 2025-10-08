@@ -61,9 +61,8 @@ public class EMPIRE extends SkillMode {
         if (shock > 6) shock = 6;
 
         cha.setSkillEffect(L1SkillId.EMPIRE, shock * 1000);
-        // 騎士技能(暈眩之劍) 特效時間改以實際效果剩餘秒數為準
-        int durationSec = cha.getSkillEffectTimeSec(L1SkillId.EMPIRE);
-        L1SpawnUtil.spawnEffect(200300, durationSec, cha.getX(), cha.getY(), cha.getMapId(), cha, 0);
+        // 騎士技能(暈眩之劍)
+        L1SpawnUtil.spawnEffect(200300, shock, cha.getX(), cha.getY(), cha.getMapId(), cha, 0);
 
         if (cha instanceof L1PcInstance) {
             final L1PcInstance pc = (L1PcInstance) cha;

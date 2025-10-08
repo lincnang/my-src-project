@@ -1,6 +1,7 @@
 package com.lineage.config;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
@@ -53,12 +54,7 @@ public final class ConfigSkillKnight {
             final InputStream is = Files.newInputStream(new File(ConfigSkillKnight).toPath());
             set.load(is);
             is.close();
-            // 兼容多種鍵名與多餘空白，避免因鍵名尾隨空白導致讀取不到
-            String stunTimer = set.getProperty("SHOCK_STUN_TIMER");
-            if (stunTimer == null) stunTimer = set.getProperty("SHOCK_STUN_TIMER ");
-            if (stunTimer == null) stunTimer = set.getProperty("Shock_Stun_Timer");
-            if (stunTimer == null) stunTimer = "~6";
-            STUN_SEC = stunTimer.replaceAll("\\s+", "");
+            STUN_SEC = set.getProperty("SHOCK_STUN_TIMER ", "3~6");
             ImpactHalo1 = Integer.parseInt(set.getProperty("Impact_Halo_1", "1"));
             ImpactHalo2 = Integer.parseInt(set.getProperty("Impact_Halo_2", "1"));
             ImpactHalo3 = Integer.parseInt(set.getProperty("Impact_Halo_3", "1"));

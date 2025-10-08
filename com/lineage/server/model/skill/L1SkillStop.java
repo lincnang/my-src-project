@@ -841,21 +841,6 @@ public class L1SkillStop {
                             pc.addAc(-10);
                         }
                         break;
-                    // 通用：暈眩/硬直類狀態解除保底，避免任何遺漏造成反白
-                    case SHOCK_STUN: // 衝擊之暈
-                    case KINGDOM_STUN: // 王者之劍
-                    case EMPIRE: // 暈眩之劍
-                    case TITAN_STUN: // 泰坦之暈
-                    case Shadow_Daze: // 暗影暈眩
-                        if (cha instanceof L1PcInstance) {
-                            L1PcInstance pc = (L1PcInstance) cha;
-                            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
-                        } else if (cha instanceof L1MonsterInstance || cha instanceof L1SummonInstance
-                                || cha instanceof L1PetInstance || cha instanceof L1GuardianInstance || cha instanceof L1GuardInstance) {
-                            L1NpcInstance npc = (L1NpcInstance) cha;
-                            npc.setParalyzed(false);
-                        }
-                        break;
                     case HORROR_OF_DEATH://驚悚死神
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;

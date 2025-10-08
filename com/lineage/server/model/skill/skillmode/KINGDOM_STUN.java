@@ -47,7 +47,7 @@ public class KINGDOM_STUN extends SkillMode {
 
         // 4. 暈眩邏輯
         Random random = new Random();
-        int shock = random.nextInt(3) + 2; // 2~4秒（基礎秒數）
+        int shock = random.nextInt(3) + 2; // 2~4秒
         if (((cha instanceof L1PcInstance)) && (cha.hasSkillEffect(87))) {
             shock += cha.getSkillEffectTimeSec(87);
         }
@@ -55,16 +55,14 @@ public class KINGDOM_STUN extends SkillMode {
             shock += ConfigSkillKnight.K2;
         }
         if (shock > 4) shock = 4;
-        // 設定實際效果時間
         cha.setSkillEffect(87, shock * 1000);
-        // 以實際剩餘效果時間為準，確保特效與效果一致
-        int durationSec = cha.getSkillEffectTimeSec(87);
-        L1SpawnUtil.spawnEffect(200300, durationSec, cha.getX(), cha.getY(), srcpc.getMapId(), srcpc, 0);
+        L1SpawnUtil.spawnEffect(200300, shock, cha.getX(), cha.getY(), srcpc.getMapId(), srcpc, 0);
 
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
-            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
-        } else if ((cha instanceof L1MonsterInstance) || (cha instanceof L1SummonInstance) || (cha instanceof L1PetInstance)) {
+            pc.sendPackets(new S_Paralysis(5, true));
+        }
+        else if ((cha instanceof L1MonsterInstance) || (cha instanceof L1SummonInstance) || (cha instanceof L1PetInstance)) {
             L1NpcInstance tgnpc = (L1NpcInstance) cha;
             tgnpc.setParalyzed(true);
         }
@@ -88,7 +86,7 @@ public class KINGDOM_STUN extends SkillMode {
         L1SpawnUtil.spawnEffect(81162, shock, cha.getX(), cha.getY(), npc.getMapId(), npc, 0);
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
-            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
+            pc.sendPackets(new S_Paralysis(5, true));
         }
         else if ((cha instanceof L1MonsterInstance) || (cha instanceof L1SummonInstance)
                 || (cha instanceof L1GuardianInstance) || (cha instanceof L1GuardInstance) || (cha instanceof L1PetInstance)) {
@@ -104,7 +102,7 @@ public class KINGDOM_STUN extends SkillMode {
     public void stop(L1Character cha) throws Exception {
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
-            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
+            pc.sendPackets(new S_Paralysis(5, false));
         }
         else if ((cha instanceof L1MonsterInstance) || (cha instanceof L1SummonInstance)
                 || (cha instanceof L1GuardianInstance) || (cha instanceof L1GuardInstance) || (cha instanceof L1PetInstance)) {

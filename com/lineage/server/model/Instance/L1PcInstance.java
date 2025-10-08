@@ -1170,7 +1170,7 @@ public class L1PcInstance extends L1Character { // src015
     private String _viewName = null;
     private L1NpcInstance _lastTalkedNpc;
 
-
+    
 
     public L1PcInstance() {
         _accessLevel = 0;
@@ -1869,11 +1869,11 @@ public class L1PcInstance extends L1Character { // src015
             }
             perceivedFrom.addKnownObject(this);
             perceivedFrom.sendPackets(new S_OtherCharPacks(this));
-
+            
             // 如果對方開啟了 ClanGfx 或在攻城戰區域內，且本角色有盟徽，主動發送盟徽資料
-            boolean shouldShowEmblem = perceivedFrom.isClanGfx() ||
-                    L1CastleLocation.checkInAllWarArea(perceivedFrom.getLocation());
-
+            boolean shouldShowEmblem = perceivedFrom.isClanGfx() || 
+                                       L1CastleLocation.checkInAllWarArea(perceivedFrom.getLocation());
+            
             if (shouldShowEmblem && getClanid() > 0) {
                 L1Clan clan = getClan();
                 if (clan != null) {
@@ -9386,7 +9386,7 @@ public class L1PcInstance extends L1Character { // src015
     // 依詩蒂：減益狀態（暫存於玩家身上，期間內降低減免）
     private int _yishidiDebuffDown = 0;          // 減益狀態減傷值（期間內每擊增加傷害）
     private long _yishidiDebuffUntil = 0L;       // 減益狀態結束時間戳
-
+    
     // 依詩蒂減益狀態參數（從技能節點讀取並儲存）
     private int _yishidiDebuffProcPercent = 0;   // 減益狀態觸發機率%
     private int _yishidiDebuffDmgDown = 0;       // 減益狀態減傷值
@@ -9455,28 +9455,28 @@ public class L1PcInstance extends L1Character { // src015
     public int getYishidiDebuffProcPercent() {
         return _yishidiDebuffProcPercent;
     }
-
+    
     public void setYishidiDebuffDmgDown(int dmg) {
         _yishidiDebuffDmgDown = Math.max(0, dmg);
     }
     public int getYishidiDebuffDmgDown() {
         return _yishidiDebuffDmgDown;
     }
-
+    
     public void setYishidiDebuffDurationSec(int sec) {
         _yishidiDebuffDurationSec = Math.max(0, sec);
     }
     public int getYishidiDebuffDurationSec() {
         return _yishidiDebuffDurationSec;
     }
-
+    
     public void setYishidiDebuffGfxId(int gfx) {
         _yishidiDebuffGfxId = Math.max(0, gfx);
     }
     public int getYishidiDebuffGfxId() {
         return _yishidiDebuffGfxId;
     }
-
+    
     // 觸發減益狀態（戰鬥時呼叫）- 支援自訂 ICON
     public void setYishidiDebuff(int down, int durationSec, int iconId, int stringId) {
         _yishidiDebuffDown = Math.max(0, down);
@@ -9488,7 +9488,7 @@ public class L1PcInstance extends L1Character { // src015
             }
         } catch (Throwable ignore) {}
     }
-
+    
     // 保留舊的方法簽名以相容
     public void setYishidiDebuff(int down, int durationSec) {
         setYishidiDebuff(down, durationSec, 10534, 2747); // 預設 ICON

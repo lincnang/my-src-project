@@ -7,11 +7,8 @@ import com.lineage.server.serverpackets.S_NPCTalkReturn;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.world.World;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class L1EquipCollect {
-    private static final Log _log = LogFactory.getLog(L1EquipCollect.class);
     private int _npcid;
     private String _action;
     private String _note;
@@ -131,23 +128,6 @@ public class L1EquipCollect {
     }
 
     public void ShowEquipCollectHtml(L1PcInstance pc, L1EquipCollect EquipCollect) {
-        // 記錄呼叫來源與必要欄位（協助定位 NPE 與缺漏資料）
-        try {
-            _log.info("[EquipCollect] ShowHtml click: pc=" + (pc != null ? pc.getName() : "null")
-                    + ", npcId=" + (EquipCollect != null ? EquipCollect.get_npcid() : -1)
-                    + ", action=" + (EquipCollect != null ? EquipCollect.get_action() : null)
-                    + ", checkLevel=" + (EquipCollect != null ? EquipCollect.getCheckLevel() : -1)
-                    + ", checkClass=" + (EquipCollect != null ? EquipCollect.getCheckClass() : -1)
-                    + ", questId=" + (EquipCollect != null ? EquipCollect.getquest() : -1)
-                    + ", successHtml=" + (EquipCollect != null ? EquipCollect.get_sucesshtml() : null)
-                    + ", failHtml=" + (EquipCollect != null ? EquipCollect.get_failhtml() : null)
-            );
-        } catch (Throwable ignore) {}
-
-        if (pc == null || EquipCollect == null) {
-            return;
-        }
-
         String msg0 = "";
         String msg2 = "";
         String msg3 = "";
@@ -231,22 +211,9 @@ public class L1EquipCollect {
         int[] Materials = EquipCollect.getMaterials();
         int[] counts = EquipCollect.getMaterials_count();
         int[] enchants = EquipCollect.get_materials_enchants();
-        // 進一步記錄缺漏資訊
-        try {
-            _log.info("[EquipCollect] data: materials=" + (Materials != null ? Materials.length : -1)
-                    + ", counts=" + (counts != null ? counts.length : -1)
-                    + ", enchants=" + (enchants != null ? enchants.length : -1)
-                    + ", questStep=" + pc.getQuest().get_step(EquipCollect.getquest())
-            );
-        } catch (Throwable ignore) {}
-        if (Materials != null && counts != null && enchants != null) {
+        if (Materials != null) {
             for (int i = 0; i < Materials.length; ++i) {
-                if (i >= counts.length || i >= enchants.length) break;
                 L1ItemInstance temp = ItemTable.get().createItem(Materials[i]);
-                if (temp == null) {
-                    try { _log.info("[EquipCollect] missing item template: itemId=" + Materials[i]); } catch (Throwable ignore) {}
-                    continue;
-                }
                 temp.setEnchantLevel(enchants[i]);
                 temp.setIdentified(true);
                 switch (i) {

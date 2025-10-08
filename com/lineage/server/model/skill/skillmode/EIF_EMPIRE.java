@@ -81,6 +81,7 @@ public class EIF_EMPIRE extends SkillMode {
         if (cha instanceof L1PcInstance) {
             L1PcInstance pc = (L1PcInstance) cha;
             pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
+            pc.setParalyzed(true);
             pc.sendPackets(new S_IconConfig(S_IconConfig.SKILL_ICON, 26, shock, false, false));
         } else if (cha instanceof L1MonsterInstance || cha instanceof L1SummonInstance || cha instanceof L1PetInstance) {
             L1NpcInstance tgnpc = (L1NpcInstance) cha;
@@ -102,6 +103,7 @@ public class EIF_EMPIRE extends SkillMode {
     public void stop(final L1Character cha) throws Exception {
         if (cha instanceof L1PcInstance) {
             final L1PcInstance pc = (L1PcInstance) cha;
+            pc.setParalyzed(false);
             pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
         } else if ((cha instanceof L1MonsterInstance) || (cha instanceof L1SummonInstance)
                 || (cha instanceof L1GuardianInstance) || (cha instanceof L1GuardInstance)

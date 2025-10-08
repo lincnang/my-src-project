@@ -12,23 +12,21 @@ import java.util.Random;
 public class SHOCK_STUN extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
         Random random = new Random();
-        String[] sec = ConfigSkillKnight.STUN_SEC.split("~");
-        int min = Integer.parseInt(sec[0].trim());
-        int max = Integer.parseInt(sec[1].trim());
-        int shock = random.nextInt(max - min + 1) + min; // 依 SHOCK_STUN_TIMER 隨機
-        // 騎士額外加秒（保持原行為）
+        int shock = random.nextInt(3) + 2;
+        if (((cha instanceof L1PcInstance)) && (cha.hasSkillEffect(87))) {
+            shock += cha.getSkillEffectTimeSec(87);
+        }
         if (srcpc.isKnight() && srcpc.getMeteLevel() >= 2) {   //SRC0808
             shock += ConfigSkillKnight.K2;
         }
-        // 以設定上限為最大值
-        if (shock > max) shock = max; // 保障不超過設定上限
-        // 設定實際效果，並用實際剩餘秒數播放特效，確保同步
+        if (shock > 4) {
+            shock = 4;
+        }
         cha.setSkillEffect(87, shock * 1000);
-        int durationSec = cha.getSkillEffectTimeSec(87);
-        L1SpawnUtil.spawnEffect(81162, durationSec, cha.getX(), cha.getY(), srcpc.getMapId(), srcpc, 0);
-        if (cha instanceof L1PcInstance) {
+        L1SpawnUtil.spawnEffect(81162, shock, cha.getX(), cha.getY(), srcpc.getMapId(), srcpc, 0);
+        if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
-            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
+            pc.sendPackets(new S_Paralysis(5, true));
         } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1PetInstance))) {
             L1NpcInstance tgnpc = (L1NpcInstance) cha;
             tgnpc.setParalyzed(true);
@@ -39,16 +37,19 @@ public class SHOCK_STUN extends SkillMode {
     public int start(L1NpcInstance npc, L1Character cha, L1Magic magic, int integer) throws Exception {
         Random random = new Random();
         String[] sec = ConfigSkillKnight.STUN_SEC.split("~");
-        int min = Integer.parseInt(sec[0].trim());
-        int max = Integer.parseInt(sec[1].trim());
-        int shock = random.nextInt(max - min + 1) + min;
-        if (shock > max) shock = max;
+        int shock = random.nextInt(Integer.parseInt(sec[1]) - Integer.parseInt(sec[0]) + 1) + Integer.parseInt(sec[0]);
+        // 取回目標是否已被施展沖暈
+        if ((cha instanceof L1PcInstance) && cha.hasSkillEffect(87)) {
+            shock += cha.getSkillEffectTimeSec(87);// 累計時間
+        }
+        if (shock > 8) {// 最大沖暈時間8秒
+            shock = 8;
+        }
         cha.setSkillEffect(87, shock * 1000);
-        int durationSec = cha.getSkillEffectTimeSec(87);
-        L1SpawnUtil.spawnEffect(81162, durationSec, cha.getX(), cha.getY(), npc.getMapId(), npc, 0);
+        L1SpawnUtil.spawnEffect(81162, shock, cha.getX(), cha.getY(), npc.getMapId(), npc, 0);
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
-            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
+            pc.sendPackets(new S_Paralysis(5, true));
         } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1GuardianInstance)) || ((cha instanceof L1GuardInstance)) || ((cha instanceof L1PetInstance))) {
             L1NpcInstance tgnpc = (L1NpcInstance) cha;
             tgnpc.setParalyzed(true);
@@ -62,7 +63,7 @@ public class SHOCK_STUN extends SkillMode {
     public void stop(L1Character cha) throws Exception {
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
-            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
+            pc.sendPackets(new S_Paralysis(5, false));
         } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1GuardianInstance)) || ((cha instanceof L1GuardInstance)) || ((cha instanceof L1PetInstance))) {
             L1NpcInstance npc = (L1NpcInstance) cha;
             npc.setParalyzed(false);

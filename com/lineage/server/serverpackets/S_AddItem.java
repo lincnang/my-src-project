@@ -20,7 +20,8 @@ public class S_AddItem extends ServerBasePacket {
         if (status.length > 127) {
             item.setIdentified(false); // 設置未鑒定
             WriteLogTxt.Recording("屬性顯示過多道具紀錄", "屬性顯示過多道具編號(" + item.getItemId() + ")，名稱(" + item.getItem().getName() + ").");
-            System.out.println("道具編號(" + item.getItemId() + ")，名稱(" + item.getItem().getName() + ")屬性顯示過多");
+            // System.out.println("道具編號(" + item.getItemId() + ")，名稱(" +
+            // item.getItem().getName() + ")屬性顯示過多");
         }
         writeC(S_ADD_INVENTORY);
         writeD(item.getId());

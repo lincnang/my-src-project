@@ -5,27 +5,20 @@ import com.lineage.server.datatables.NpcHonorTable;
 import com.lineage.server.datatables.NpcTable;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Teleport;
-import com.lineage.server.serverpackets.S_PacketBoxGree;
-import com.lineage.server.serverpackets.S_SystemMessage;
+import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1Npc;
 import com.lineage.server.thread.GeneralThreadPool;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Honor {
     private static final Map<Integer, Boolean> _dailyQuestStatus = new ConcurrentHashMap<>();
-    private static final Log _log = LogFactory.getLog(Honor.class);
+    private static final Logger _log = Logger.getLogger(Honor.class.getName());
     private static Honor _instance;
     private final Map<Integer, L1WilliamHonor> _itemIdIndex = new HashMap<>();
     private final Map<Integer, Map<Integer, LocalDate>> _enteredStageMap = new ConcurrentHashMap<>();
@@ -47,28 +40,13 @@ public class Honor {
 
     public void enterStage(L1PcInstance pc, int stage) {
         if (hasCompletedStage(pc, stage)) {
-            pc.sendPackets(new S_SystemMessage("你已完成第 " + (stage + 1) + " 階段，無法再次進入。"));
+            pc.sendPackets(new S_SystemMessage("你已完成第 " + stage + " 階段，無法再次進入。"));
             return;
         }
 
         if (stage > 1 && !hasCompletedStage(pc, stage - 1)) {
-            pc.sendPackets(new S_SystemMessage("尚未完成第 " + (stage) + " 階段，無法進入第 " + (stage + 1) + " 階段。"));
+            pc.sendPackets(new S_SystemMessage("尚未完成第 " + (stage - 1) + " 階段，無法進入第 " + stage + " 階段。"));
             return;
-        }
-
-        // 先確認階段是否對應啟用中的階級，未開放則直接返回
-        L1WilliamHonor targetStageCheck = getHonorByStageIndex(stage);
-        if (targetStageCheck == null) {
-            // 再嘗試更寬鬆對應（相容舊按鈕/腳本）
-            targetStageCheck = getHonorByAnyStage(stage);
-            if (targetStageCheck == null) {
-                // 最後退路：使用第一個已啟用階級，避免玩家被卡死
-                targetStageCheck = getFirstActiveTemplate();
-                if (targetStageCheck == null) {
-                    pc.sendPackets(new S_SystemMessage("爵位資料未載入，請通知GM。"));
-                    return;
-                }
-            }
         }
 
         if (!hasEnteredStageToday(pc, stage)) {
@@ -88,16 +66,20 @@ public class Honor {
             }
         }
 
-        L1WilliamHonor targetStage = targetStageCheck;
+        L1WilliamHonor targetStage = getHonorByStageIndex(stage);
+        if (targetStage == null) {
+            pc.sendPackets(new S_SystemMessage("無法對應此階段的爵位資料，請通知GM。"));
+            return;
+        }
 
         int currentHonor = pc.getHonor();
         int requiredHonor = targetStage.getHonorMax();
         int remain = requiredHonor - currentHonor;
 
         if (remain > 0) {
-            pc.sendPackets(new S_SystemMessage("第 " + (stage + 1) + " 階任務目標:擊殺 " + names + "，還需「" + remain + "」點爵位積分。"));
+            pc.sendPackets(new S_SystemMessage("任務目標:擊殺 " + names + "，還需「" + remain + "」點爵位積分。"));
         } else {
-            pc.sendPackets(new S_SystemMessage("第 " + (stage + 1) + " 階任務目標：擊殺 " + names + "，你已達成該階段積分，完成擊殺即可升階！"));
+            pc.sendPackets(new S_SystemMessage("任務目標：擊殺 " + names + "，你已達成該階段積分，完成擊殺即可升階！"));
         }
 
         if (currentHonor >= requiredHonor) {
@@ -107,10 +89,8 @@ public class Honor {
     }
 
     private boolean hasCompletedStage(L1PcInstance pc, int stage) {
-        // 0-based 階段：第 0 階對應等級 1，因此需要完成等級 = stage + 1
-        int requiredLevel = stage + 1;
         int currentStage = getHonorLevel(pc.getHonor());
-        return currentStage >= requiredLevel && pc.getHonorLevel() >= requiredLevel;
+        return currentStage >= stage && pc.getHonorLevel() >= stage;
     }
 
     // 判斷今天是否已進入此階段
@@ -173,13 +153,11 @@ public class Honor {
     }
 
     private int getStageMapId(int stage) {
-        // 0-based 階段：以 stage+1 對應原有地圖配置
-        return _stageMapId.getOrDefault(stage + 1, 4); // 預設錯誤值
+        return _stageMapId.getOrDefault(stage, 4); // 預設錯誤值
     }
 
     private int[] getStageCoords(int stage) {
-        // 0-based 階段：以 stage+1 對應原有座標配置
-        return _stageCoords.getOrDefault(stage + 1, new int[]{33443, 32808});
+        return _stageCoords.getOrDefault(stage, new int[]{33443, 32808});
 
     }
 
@@ -188,6 +166,7 @@ public class Honor {
              PreparedStatement ps = con.prepareStatement("SELECT * FROM 系統_爵位能力 ORDER BY 爵位階級 ASC");
              ResultSet rs = ps.executeQuery()) {
 
+            int count = 0;
             while (rs.next()) {
                 int level = rs.getInt("爵位階級");
                 L1WilliamHonor honor = new L1WilliamHonor(
@@ -209,44 +188,19 @@ public class Honor {
                         rs.getInt("昏迷命中"), rs.getInt("阻擋武器+%")
                 );
                 _itemIdIndex.put(level, honor);
+                count++;
             }
-            _log.info("讀取->系統_爵位能力資料數量: " + _itemIdIndex.size());
         } catch (SQLException e) {
-            _log.error("error while loading 系統_爵位能力 table", e);
+            _log.log(Level.SEVERE, "error while loading 系統_爵位能力 table", e);
         }
     }
 
     public int getHonorLevel(int honor) {
-        // 以階級排序，確保邏輯穩定；最後一階改為 honor >= min 即落入
-        if (_itemIdIndex.isEmpty()) {
-            return 0;
-        }
-        List<Map.Entry<Integer, L1WilliamHonor>> sorted = new ArrayList<>(_itemIdIndex.entrySet());
-        sorted.sort(Map.Entry.comparingByKey());
-
-        for (int i = 0; i < sorted.size(); i++) {
-            L1WilliamHonor h = sorted.get(i).getValue();
-            if (h.getIsActive() != 1) {
-                continue;
-            }
-            boolean isLast = true;
-            for (int j = i + 1; j < sorted.size(); j++) {
-                if (sorted.get(j).getValue().getIsActive() == 1) {
-                    isLast = false;
-                    break;
-                }
-            }
-            if (!isLast) {
-                if (honor >= h.getHonorMin() && honor < h.getHonorMax()) {
-                    return h.getHonorLevel();
-                }
-            } else {
-                if (honor >= h.getHonorMin()) {
-                    return h.getHonorLevel();
-                }
+        for (L1WilliamHonor h : _itemIdIndex.values()) {
+            if (h.getIsActive() == 1 && honor >= h.getHonorMin() && honor < h.getHonorMax()) {
+                return h.getHonorLevel();
             }
         }
-        // 若未命中任一區間，回傳 0（未入門）
         return 0;
     }
 
@@ -289,21 +243,6 @@ public class Honor {
             applyHonorUpgrade(pc, realLevel);
             return;
         }
-
-        // 邊界安全升級：honor 已達當前等級上限，但 realLevel 仍等於 currentLevel
-        L1WilliamHonor curr = getTemplate(currentLevel);
-        if (curr != null) {
-            int currMax = curr.getHonorMax();
-            if (currentHonor >= currMax) {
-                int nextLevel = currentLevel + 1;
-                L1WilliamHonor next = getTemplate(nextLevel);
-                if (next != null && next.getIsActive() == 1) {
-                    applyHonorUpgrade(pc, nextLevel);
-                    return;
-                }
-            }
-        }
-
         if (realLevel == currentLevel && fromMission && forceTeleport) {
             applyHonorUpgrade(pc, realLevel);
             return;
@@ -364,54 +303,11 @@ public class Honor {
     }
 
     public L1WilliamHonor getHonorByStageIndex(int stage) {
-        // 先嘗試「階段 == 爵位階級」直接對應（最直覺：stage=0 -> 等級0）
-        L1WilliamHonor direct = _itemIdIndex.get(stage);
-        if (direct != null && direct.getIsActive() == 1) {
-            return direct;
-        }
-
-        // 否則回退為「第 N 個啟用中的階級」，以相容舊設計
-        List<Map.Entry<Integer, L1WilliamHonor>> sorted = new ArrayList<>(_itemIdIndex.entrySet());
-        sorted.sort(Map.Entry.comparingByKey());
-        int idx = 0;
-        for (Map.Entry<Integer, L1WilliamHonor> e : sorted) {
-            L1WilliamHonor h = e.getValue();
-            if (h.getIsActive() != 1) {
-                continue;
-            }
-            if (idx == stage) {
-                return h;
-            }
-            idx++;
-        }
-        return null;
-    }
-
-    // 寬鬆對應：優先直接等級，否則嘗試 0-based 索引與 +/-1 回退
-    public L1WilliamHonor getHonorByAnyStage(int stage) {
-        L1WilliamHonor h = getHonorByStageIndex(stage);
-        if (h != null) return h;
-        if (stage > 0) {
-            h = getHonorByStageIndex(stage - 1);
-            if (h != null) return h;
-        }
-        h = getTemplate(stage);
-        if (h != null && h.getIsActive() == 1) return h;
-        h = getTemplate(stage + 1);
-        if (h != null && h.getIsActive() == 1) return h;
-        return null;
-    }
-
-    // 取得第一個啟用中的階級模板（依爵位階級遞增）
-    public L1WilliamHonor getFirstActiveTemplate() {
-        List<Map.Entry<Integer, L1WilliamHonor>> entries = new ArrayList<>(_itemIdIndex.entrySet());
-        entries.sort(Map.Entry.comparingByKey());
-        for (Map.Entry<Integer, L1WilliamHonor> e : entries) {
-            L1WilliamHonor h = e.getValue();
-            if (h != null && h.getIsActive() == 1) {
-                return h;
-            }
-        }
-        return null;
+        return _itemIdIndex.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .skip(stage - 1L)
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(null);
     }
 }

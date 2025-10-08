@@ -18,11 +18,6 @@ public class L1FishingPc extends L1PcInstance {
     public final void join() {
         setMap((short) 5490);
         ArrayList<L1NewMap> maps = NewMapUtil.getBlock(getMapId());
-        // 防止 NullPointerException：地圖未載入時跳過
-        if (maps == null || maps.isEmpty()) {
-//            System.err.println("警告：釣魚地圖 5490 未載入，跳過假人釣魚: " + getName());
-            return;
-        }
         int size = maps.size();
         int x = 0;
         int y = 0;

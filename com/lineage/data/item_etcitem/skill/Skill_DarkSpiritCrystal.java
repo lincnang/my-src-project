@@ -55,7 +55,7 @@ public class Skill_DarkSpiritCrystal extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("英雄技能卡(暗影加速)")) {
                 skillid = 104;
                 magicLv = 42;
-            } else if (nameId.equalsIgnoreCase("英雄技能卡(暗影恢復)")) {
+            } else if (nameId.equalsIgnoreCase("傳說技能卡(暗影恢復)")) {
                 skillid = 110;
                 magicLv = 42;
             } else if (nameId.equalsIgnoreCase("$2526")) {

@@ -1411,17 +1411,13 @@ public class L1AttackPc extends L1AttackMode {
         if (!_pc.isKnight()) {
             return dmg;
         }
-        // 先安全取得武器資訊，避免空手或未載入物件時發生 NPE
-        L1ItemInstance weapon = _pc.getWeapon();
         // 騎士 單手
-        if (_pc.isSWORD() && ThreadLocalRandom.current().nextInt(100) < 0.10
-                && weapon != null && weapon.getItem() != null && !weapon.getItem().isTwohandedWeapon()) {
+        if (_pc.isSWORD() && ThreadLocalRandom.current().nextInt(100) < 0.10 && !_pc.getWeapon().getItem().isTwohandedWeapon()) {
             // 0.05代表5%的概率
             dmg += _pc.getDmgup() * 0.10;  // 傷害增加1%
         }
         // 騎士 雙手
-        if (_pc.isSWORD_2() && ThreadLocalRandom.current().nextInt(100) < 0.15
-                && weapon != null && weapon.getItem() != null && weapon.getItem().isTwohandedWeapon()) {
+        if (_pc.isSWORD_2() && ThreadLocalRandom.current().nextInt(100) < 0.15 && _pc.getWeapon().getItem().isTwohandedWeapon()) {
             // 0.05代表5%的概率
             dmg += _pc.getDmgup() * 0.15;  // 傷害增加1%
         }
@@ -1609,18 +1605,14 @@ public class L1AttackPc extends L1AttackMode {
             }
         }
         /**破除目標聖潔-台灣JAVA技術老爹*/
-        L1ItemInstance wForNE = _pc.getWeapon();
-        if (wForNE != null && wForNE.getItem() != null) {
-            NewEnchantSystem NE_List = NewEnchantSystem.get().get2(
-                    wForNE.getSafeEnchantLevel(), wForNE.getEnchantLevel(), wForNE.getItem().getType());
-            if (NE_List != null) {
-                if (NE_List.getsjj() && ThreadLocalRandom.current().nextInt(100) + 1 <= NE_List.getsjjjilv()) { // 是否破除聖潔 返回幾率
-                    if (_targetPc.hasSkillEffect(IMMUNE_TO_HARM)) { // 判定玩家是否有聖潔
-                        _targetPc.removeSkillEffect(IMMUNE_TO_HARM); // 移除目標聖潔
-                        _targetPc.sendPackets(new S_PacketBox(S_PacketBox.ICON_I2H, 1, 0)); // 解除玩家聖潔圖標
-                        _targetPc.broadcastPacketX8(new S_SkillSound(_targetPc.getId(), NE_List.gettexiao())); // 破除聖潔觸發特效
-                        _targetPc.sendPackets(new S_ServerMessage(166, "對方武器有破除聖結界，聖結界已失效請小心！")); // 給被打玩家發送文字封包
-                    }
+        NewEnchantSystem NE_List = NewEnchantSystem.get().get2(_pc.getWeapon().getSafeEnchantLevel(), _pc.getWeapon().getEnchantLevel(), _pc.getWeapon().getItem().getType());
+        if (NE_List != null) {
+            if (NE_List.getsjj() && ThreadLocalRandom.current().nextInt(100) + 1 <= NE_List.getsjjjilv()) {//是否破除聖潔 返回幾率
+                if (_targetPc.hasSkillEffect(IMMUNE_TO_HARM)) {//判定玩家是否有聖潔
+                    _targetPc.removeSkillEffect(IMMUNE_TO_HARM);//移除目標聖潔
+                    _targetPc.sendPackets(new S_PacketBox(S_PacketBox.ICON_I2H, 1, 0));//解除玩家聖潔圖標
+                    _targetPc.broadcastPacketX8(new S_SkillSound(_targetPc.getId(), NE_List.gettexiao()));//破除聖潔觸發特效
+                    _targetPc.sendPackets(new S_ServerMessage(166, "對方武器有破除聖結界，聖結界已失效請小心！"));//給被打玩家發送文字封包
                 }
             }
         }
@@ -1635,8 +1627,7 @@ public class L1AttackPc extends L1AttackMode {
             dmg /= 3;
         }
         //2017/04/25
-        // 僅在本次攻擊命中時才可能觸發占卜沖暈，避免未命中造成反白
-        if (_isHit && _pc.getbbdmg1() && RandomArrayList.getInc(100, 1) <= 3) {
+        if (_pc.getbbdmg1() && RandomArrayList.getInc(100, 1) <= 3) {
             L1SpawnUtil.spawnEffect(81162, 1, _targetPc.getX(), _targetPc.getY(), _targetPc.getMapId(), _targetPc, 0);
             _targetPc.setSkillEffect(L1SkillId.SHOCK_STUN, 1000);
             _targetPc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));

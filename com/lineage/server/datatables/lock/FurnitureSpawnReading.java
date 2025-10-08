@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class FurnitureSpawnReading {
-    private static FurnitureSpawnReading _instance;
+    private static class Holder {
+        private static final FurnitureSpawnReading INSTANCE = new FurnitureSpawnReading();
+    }
     private final Lock _lock;
     private final FurnitureSpawnStorage _storage;
 
@@ -18,10 +20,7 @@ public class FurnitureSpawnReading {
     }
 
     public static FurnitureSpawnReading get() {
-        if (_instance == null) {
-            _instance = new FurnitureSpawnReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class IpReading {
-    private static IpReading _instance;
+    private static class Holder {
+        private static final IpReading INSTANCE = new IpReading();
+    }
     private final Lock _lock;
     private final IpStorage _storage;
 
@@ -18,10 +20,7 @@ public class IpReading {
     }
 
     public static IpReading get() {
-        if (_instance == null) {
-            _instance = new IpReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

@@ -10,7 +10,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BoardReading {
-    private static BoardReading _instance;
+    private static class Holder {
+        private static final BoardReading INSTANCE = new BoardReading();
+    }
     private final Lock _lock;
     private final BoardStorage _storage;
 
@@ -20,10 +22,7 @@ public class BoardReading {
     }
 
     public static BoardReading get() {
-        if (_instance == null) {
-            _instance = new BoardReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

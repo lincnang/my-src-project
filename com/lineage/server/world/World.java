@@ -36,13 +36,20 @@ public class World { // src016
     private static final byte[] HEADING_TABLE_X = {0, 1, 1, 1, 0, -1, -1, -1};
     private static final byte[] HEADING_TABLE_Y = {-1, -1, 0, 1, 1, 1, 0, -1};
     private static final List<String> _htmlString = new ArrayList<>();
-    private static World _instance;
+    
+    /**
+     * 線程安全的單例 Holder
+     */
+    private static class Holder {
+        private static final World INSTANCE = new World();
+    }
+    
     // 世界人物資料<pcName, Object>
     private final ConcurrentHashMap<String, L1PcInstance> _allPlayers;
     // 世界物件資料<Objid, Object>
     private final ConcurrentHashMap<Integer, L1Object> _allObjects;
     // 世界物件資料(區分地圖編號)<MapId, <Objid, Object>>
-    private final HashMap<Integer, ConcurrentHashMap<Integer, L1Object>> _visibleObjects;
+    private final ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, L1Object>> _visibleObjects;
     // 紅騎士 訓練副本 by darling
     private final ConcurrentHashMap<Integer, L1ItemInstance> _allItems;
     // _allObjects 的 Collection
@@ -55,10 +62,10 @@ public class World { // src016
     // 紅騎士 訓練副本 by darling
     private Collection<L1ItemInstance> _allItemValues;
 
-    public World() {
+    private World() {
         _allPlayers = new ConcurrentHashMap<>(); // 世界人物資料
         _allObjects = new ConcurrentHashMap<>(); // 世界物件資料
-        _visibleObjects = new HashMap<>(); // 世界物件資料(區分地圖編號)
+        _visibleObjects = new ConcurrentHashMap<>(); // 世界物件資料(區分地圖編號)
         _allItems = new ConcurrentHashMap<>();// 紅騎士 訓練副本 by darling
         for (Integer mapid : MapsTable.get().getMaps().keySet()) {
             final ConcurrentHashMap<Integer, L1Object> map = new ConcurrentHashMap<>();
@@ -67,11 +74,11 @@ public class World { // src016
         _log.info("讀取->遊戲世界儲存中心建立完成!!!");
     }
 
+    /**
+     * 獲取 World 單例實例（線程安全）
+     */
     public static World get() {
-        if (_instance == null) {
-            _instance = new World();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     private static boolean check(L1PcInstance tgpc) {
@@ -226,7 +233,29 @@ public class World { // src016
      * 世界資料狀態全部重置
      */
     public void clear() {
-        _instance = new World();
+        try {
+            // 清空所有集合
+            _allPlayers.clear();
+            _allObjects.clear();
+            _allItems.clear();
+            
+            // 清空可見物件地圖
+            for (ConcurrentHashMap<Integer, L1Object> map : _visibleObjects.values()) {
+                map.clear();
+            }
+            
+            // 重置狀態
+            _allValues = null;
+            _allPlayerValues = null;
+            _allItemValues = null;
+            _weather = 4;
+            _worldChatEnabled = true;
+            _processingContributionTotal = false;
+            
+            _log.info("世界資料已重置");
+        } catch (Exception e) {
+            _log.error("重置世界資料時發生錯誤", e);
+        }
     }
 
     /**
@@ -985,7 +1014,7 @@ public class World { // src016
      * 全部地圖(MAPID為KEY)世界資料
      *
      */
-    public final HashMap<Integer, ConcurrentHashMap<Integer, L1Object>> getVisibleObjects() {
+    public final ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, L1Object>> getVisibleObjects() {
         return _visibleObjects;
     }
 

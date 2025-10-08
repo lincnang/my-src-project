@@ -94,7 +94,9 @@ public class L1SkillUse {
     private int _hpConsume = 0;
     private int _targetX = 0;
     private int _targetY = 0;
+    @SuppressWarnings("unused")
     private int _dmg = 0;// 傷害
+    @SuppressWarnings("unused")
     private int _dice_dmg = 0;
     private int _skillTime = 0;
     private int _type = 0;
@@ -108,6 +110,7 @@ public class L1SkillUse {
     private int _itemobjid = 0;
     private boolean _checkedUseSkill = false; // 事前チェック濟みか
     private int _leverage = 10; // 1/10倍なので10で1倍
+    @SuppressWarnings("unused")
     private boolean _isFreeze = false;
     private boolean _isCounterMagic = true;// 是否可被魔法屏障抵銷
     private boolean _isGlanceCheckFail = false;
@@ -2898,13 +2901,14 @@ public class L1SkillUse {
         return true;
     }
 
-    private int calculateNewCoordinate(int current, int offset, int randomDistance) {
-        if (offset > 0) {
-            return current - randomDistance; // 推離原點
-        } else if (offset < 0) {
-            return current + randomDistance; // 推向原點
+    @SuppressWarnings("unused")
+    private int calculateNewCoordinate(final int x, final int y, final int ref) {
+        if (ref > 0) {
+            return x - ref; // 推離原點
+        } else if (ref < 0) {
+            return x + ref; // 推向原點
         }
-        return current; // 若 offset 為 0，保持不變
+        return x; // 若 ref 為 0，保持不變
     }
 
     /**

@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
 
@@ -17,7 +18,7 @@ public class PcAutoSaveTimer extends TimerTask {
     private ScheduledFuture<?> _timer;
 
     public void start() {
-        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, 60000L, 60000L);
+        _timer = GeneralThreadPool.get().scheduleWithFixedDelay(this, 60000L, 60000L);
     }
 
     public void run() {

@@ -6,9 +6,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import com.lineage.server.thread.GeneralThreadPool;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * 玩家活動監控器
@@ -157,23 +158,27 @@ public class ActivityMonitor {
     /**
      * 啟動定期清理任務
      */
+    private ScheduledFuture<?> cleanupTask;
+
     private void startCleanupTask() {
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r, "ActivityMonitor-Cleanup");
-            t.setDaemon(true);
-            return t;
-        });
-        
-        // 每小時清理一次離線玩家的活動記錄
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                cleanupOfflinePlayers();
-            } catch (Exception e) {
-                _log.error("清理離線玩家活動記錄時發生錯誤", e);
+        cleanupTask = GeneralThreadPool.get().scheduleAtFixedRate(new TimerTask(){
+            @Override public void run() {
+                try {
+                    cleanupOfflinePlayers();
+                } catch (Exception e) {
+                    _log.error("清理離線玩家活動記錄時發生錯誤", e);
+                }
             }
-        }, 1, 1, TimeUnit.HOURS);
-        
+        }, TimeUnit.HOURS.toMillis(1), TimeUnit.HOURS.toMillis(1));
         _log.info("玩家活動監控器已啟動");
+    }
+
+    public void stop() {
+        try {
+            if (cleanupTask != null) {
+                GeneralThreadPool.get().cancel(cleanupTask, false);
+            }
+        } catch (Exception ignored) { }
     }
     
     /**

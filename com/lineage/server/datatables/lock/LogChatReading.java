@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class LogChatReading {
-    private static LogChatReading _instance;
+    private static class Holder {
+        private static final LogChatReading INSTANCE = new LogChatReading();
+    }
     private final Lock _lock;
     private final LogChatStorage _storage;
 
@@ -18,10 +20,7 @@ public class LogChatReading {
     }
 
     public static LogChatReading get() {
-        if (_instance == null) {
-            _instance = new LogChatReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void isTarget(L1PcInstance pc, L1PcInstance target, String text, int type) {

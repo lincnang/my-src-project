@@ -1344,7 +1344,6 @@ public class C_LoginToServer extends ClientBasePacket {
             pc.lawfulUpdate();// 戰鬥特化狀態圖示更新
             if (EffectAISet.START) { // 特效驗證系統
                 if (EffectAISet.AI_TIME_RANDOM != 0 && pc.getAITimer() == 0) {
-                    Random _random = new Random();
                     pc.setAITimer(ThreadLocalRandom.current().nextInt(EffectAISet.AI_TIME_RANDOM) + EffectAISet.AI_TIME);
                 }
             }
@@ -1398,10 +1397,7 @@ public class C_LoginToServer extends ClientBasePacket {
                     if (value.get_c1_type() != 0) {
                         pc.get_c_power().set_power(pc, true);
                         pc.sendPacketsAll(new S_ChangeName(pc, true));
-                        String type = C1_Name_Table.get().get(pc.get_c_power().get_c1_type());
-                        /* pc.sendPackets(new S_ServerMessage("\\fR您目前所屬的陣營: " +
-						 type));
-						pc.sendPackets(new S_GmMessage("您目前所屬的陣營: " + type + "", "\\aH")); */
+                        // type 僅供訊息時使用，移除未使用變數
                     }
                 } /* else if (pc.getMapId() == 99) {
 					pc.sendPackets(new S_PacketBoxGree(2, "選擇陣營後即可進入遊戲!"));

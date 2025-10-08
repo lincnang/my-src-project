@@ -18,56 +18,79 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GeneralThreadPool {//src032
     private static final Log _log = LogFactory.getLog(GeneralThreadPool.class);
     private static final int SCHEDULED_CORE_POOL_SIZE = 100;
-    private static GeneralThreadPool _instance;
+    
+    /**
+     * 線程安全的 Holder 模式
+     */
+    private static class Holder {
+        private static final GeneralThreadPool INSTANCE = new GeneralThreadPool();
+    }
     // ThreadPoolExecutor，它可另行安排在給定的延遲後運行命令，或者定期執行命令。
     // 需要多個輔助線程時，或者要求 ThreadPoolExecutor 具有額外的靈活性或功能時，此類要優於 Timer。
     // private ScheduledThreadPoolExecutor _poolExecutor;
-    private final int _pcSchedulerPoolSize = Math.max(2, (Config.PC_SCHEDULER_POOL_SIZE > 0) ? Config.PC_SCHEDULER_POOL_SIZE : (1 + Config.MAX_ONLINE_USERS / 10));
+    private final int _pcSchedulerPoolSize = 1 + Config.MAX_ONLINE_USERS / 10;
     // 執行已提交的 Runnable 任務的對象。
     // 此接口提供.一種將任務提交與每個任務將如何運行的機制（包括線程使用的細節、調度等）分離開來的方法。
     // 通常使用 Executor 而不是顯式地創建線程。例如，可能會使用以下方法，
     // 而不是為.一組任務中的每個任務調用 new Thread(new(RunnableTask())).start()：
-    private final Executor _executor;
+    private final ThreadPoolExecutor _executor;
     // 一個 ExecutorService，可安排在給定的延遲後運行或定期執行的命令。
     private final ScheduledExecutorService _scheduler;
     private final ScheduledExecutorService _pcScheduler;
     private final ScheduledExecutorService _aiScheduler;
 
     private GeneralThreadPool() {
-        // 還原舊行為：根據需要創建新線程並重用（避免初始連線時發送執行緒被阻塞）
-        _executor = Executors.newCachedThreadPool();
-        // 常規(創建一個線程池，它可安排在給定延遲後運行命令或者定期地執行。)
-        int corePool = (Config.SCHEDULER_CORE_POOL_SIZE > 0) ? Config.SCHEDULER_CORE_POOL_SIZE : SCHEDULED_CORE_POOL_SIZE;
-        _scheduler = Executors.newScheduledThreadPool(corePool, new PriorityThreadFactory("GSTPool", Thread.NORM_PRIORITY));
-        // PC(創建一個線程池，它可安排在給定延遲後運行命令或者定期地執行。)
-        _pcScheduler = Executors.newScheduledThreadPool(_pcSchedulerPoolSize, new PriorityThreadFactory("PSTPool", Thread.NORM_PRIORITY));
-        // AI(創建一個線程池，它可安排在給定延遲後運行命令或者定期地執行。)
-        int aiPool = (Config.AI_SCHEDULER_POOL_SIZE > 0) ? Config.AI_SCHEDULER_POOL_SIZE : _pcSchedulerPoolSize;
-        _aiScheduler = Executors.newScheduledThreadPool(aiPool, new PriorityThreadFactory("AITPool", Thread.NORM_PRIORITY));
+        // 有界執行緒池，避免無限制成長
+        final int cores = Math.max(4, Runtime.getRuntime().availableProcessors());
+        final int maxThreads = Math.max(cores * 4, 64);
+        final int queueCapacity = Math.max(1000, Config.MAX_ONLINE_USERS * 10);
+        _executor = new ThreadPoolExecutor(
+                cores,
+                maxThreads,
+                60L,
+                TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(queueCapacity),
+                new PriorityThreadFactory("GTPool", Thread.NORM_PRIORITY),
+                new ThreadPoolExecutor.CallerRunsPolicy()
+        );
+        _executor.allowCoreThreadTimeOut(false);
+
+        // 單一集中式排程器，減少多個排程池導致的資源浪費
+        _scheduler = Executors.newScheduledThreadPool(
+                Math.max(SCHEDULED_CORE_POOL_SIZE, _pcSchedulerPoolSize),
+                new PriorityThreadFactory("GTScheduler", Thread.NORM_PRIORITY)
+        );
+        if (_scheduler instanceof ScheduledThreadPoolExecutor) {
+            ((ScheduledThreadPoolExecutor) _scheduler).setRemoveOnCancelPolicy(true);
+        }
+        // 與舊接口相容：指向同一個排程器
+        _pcScheduler = _scheduler;
+        _aiScheduler = _scheduler;
     }
 
+    /**
+     * 獲取 GeneralThreadPool 單例實例（線程安全）
+     */
     public static GeneralThreadPool get() {
-        if (_instance == null) {
-            _instance = new GeneralThreadPool();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
     // Executor
 
     /**
      * 使該線程開始執行；Java 虛擬機調用該線程的 run 方法。
-     *
+     * 
+     * @param r 要執行的任務
+     * @throws RejectedExecutionException 如果任務無法被接受執行
      */
     public void execute(final Runnable r) {
         try {
-            if (_executor == null) {
-                final Thread t = new Thread(r);
-                t.start();
-            } else {
-                _executor.execute(r);
-            }
+            _executor.execute(r);
+        } catch (final RejectedExecutionException e) {
+            _log.error("線程池已滿或已關閉，無法執行任務: " + e.getLocalizedMessage());
+            throw e;  // 重新拋出異常，讓調用者知道失敗了
         } catch (final Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
+            _log.error("執行任務時發生異常: " + e.getLocalizedMessage(), e);
+            throw new RuntimeException("執行任務失敗", e);
         }
     }
 
@@ -77,7 +100,8 @@ public class GeneralThreadPool {//src032
      */
     public void execute(final Thread t) {
         try {
-            t.start();
+            // 避免繞過池管理，改由池執行其 run()
+            _executor.execute(t);
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
@@ -173,6 +197,18 @@ public class GeneralThreadPool {//src032
     }
 
     /**
+     * 以固定延遲重複執行任務（上一輪完成後延遲 period 再執行下一輪）。
+     */
+    public ScheduledFuture<?> scheduleWithFixedDelay(final TimerTask command, final long initialDelay, final long period) {
+        try {
+            return this._aiScheduler.scheduleWithFixedDelay(command, initialDelay, period, TimeUnit.MILLISECONDS);
+        } catch (final RejectedExecutionException e) {
+            _log.error(e.getLocalizedMessage(), e);
+            return null;
+        }
+    }
+
+    /**
      * 試圖取消對此任務的執行。 如果任務已完成、或已取消，或者由於某些其他原因而無法取消，則此嘗試將失敗。 當調用 cancel
      * 時，如果調用成功，而此任務尚未啟動，則此任務將永不運行。 如果任務已經啟動，則 mayInterruptIfRunning
      * 參數確定是否應該以試圖停止任務的方式來中斷執行此任務的線程。 此方法返回後，對 isDone() 的後續調用將始終返回 true。 如果此方法返回
@@ -239,6 +275,40 @@ public class GeneralThreadPool {//src032
             task.cancel();
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
+        }
+    }
+
+    /**
+     * 安全關閉所有執行緒池
+     */
+    public void shutdown() {
+        try {
+            _executor.shutdown();
+        } catch (Exception e) {
+            _log.error("shutdown executor error", e);
+        }
+        try {
+            _scheduler.shutdown();
+        } catch (Exception e) {
+            _log.error("shutdown scheduler error", e);
+        }
+        try {
+            _executor.awaitTermination(10, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        try {
+            _scheduler.awaitTermination(10, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        try {
+            _executor.shutdownNow();
+        } catch (Exception ignored) {
+        }
+        try {
+            _scheduler.shutdownNow();
+        } catch (Exception ignored) {
         }
     }
 

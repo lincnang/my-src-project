@@ -19,7 +19,6 @@ import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1Item;
 import com.lineage.server.templates.L1Skills;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.types.Point;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
@@ -39,7 +38,6 @@ public class AutoAttack2020_1 extends TimerTask {
     protected static final byte[] HEADING_TABLE_X = {0, 1, 1, 1, 0, -1, -1, -1};
     protected static final byte[] HEADING_TABLE_Y = {-1, -1, 0, 1, 1, 1, 0, -1};
     private static final Log _log = LogFactory.getLog(AutoAttack2020_1.class);
-    private static final Random _random = new Random();
     protected static int[] _heading0 = {7, 0, 1, 2, 3, 4, 5, 6};
     protected static int[] _heading1 = {1, 2, 3, 4, 5, 6, 7, 0};
     private final L1PcInstance pc;
@@ -52,7 +50,6 @@ public class AutoAttack2020_1 extends TimerTask {
     private int _refresh = 0;
     private int _moveError = 0;
     private int h = -1;
-    private int error = 0;
     private long targetTime = 0;
     private long skillDelayTime = 0;
     private ScheduledFuture<?> _timer;

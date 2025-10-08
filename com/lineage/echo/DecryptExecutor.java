@@ -27,7 +27,7 @@ public class DecryptExecutor {
 
     /** 超時警告閾值 - 只記錄，不中斷 */
     private static final int READ_TIMEOUT_WARNING = 8000;  // 8秒警告（放寬）
-    private static final int READ_TIMEOUT_SERIOUS = 15000; // 15秒記錄為嚴重（放寬）
+    // 僅用於檢查邏輯，移除未使用常數避免警告
 
     private final ClientExecutor _client;
     private final InputStream _in;
@@ -246,22 +246,5 @@ public class DecryptExecutor {
             throw new EOFException("對端關閉（讀取 header 時遇到 EOF）");
         }
         return b & 0xFF;
-    }
-
-    /**
-     * 讀滿 len 個位元組；若中途 EOF，拋 EOFException
-     */
-    private byte[] readFully(int len) throws IOException {
-        if (len == 0) return new byte[0];
-        byte[] buf = new byte[len];
-        int off = 0;
-        while (off < len) {
-            int r = _in.read(buf, off, len - off);
-            if (r < 0) {
-                throw new EOFException("對端關閉（預期 " + len + " bytes，實得 " + off + " bytes）");
-            }
-            off += r;
-        }
-        return buf;
     }
 }

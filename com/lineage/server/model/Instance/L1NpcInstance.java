@@ -82,7 +82,7 @@ public class L1NpcInstance extends L1Character {
     private boolean firstFound = true;
     private int _randomMoveDistance = 0;
     private int _randomMoveDirection = 0;
-    private boolean _aiRunning = false;
+    private volatile boolean _aiRunning = false;
     private boolean _actived = false;
     private boolean _firstAttack = false;
     private int _sleep_time;
@@ -156,14 +156,21 @@ public class L1NpcInstance extends L1Character {
     }
 
     /**
-     * 啟用NPC AI
+     * 啟用NPC AI（修復版：解決AI無法啟動的問題）
      */
     protected void startAI() {
+        // 檢查 AI 是否已運行（使用 volatile 降低競態風險）
+        if (isAiRunning()) {
+            return;
+        }
+        
+        // 寵物特殊處理
         if (this instanceof L1PetInstance) {
             // System.out.println(this.getName());
-        } else {
-            this.setAiRunning(true);// 修正怪物會爆走
+            return;
         }
+        
+        // 檢查 NPC 狀態
         if (isDead()) {
             return;
         }
@@ -173,10 +180,22 @@ public class L1NpcInstance extends L1Character {
         if (getCurrentHp() <= 0) {
             return;
         }
+        
+        // 創建並啟動 AI
         final NpcAI npcai = new NpcAI(this);
-        npcai.startAI();
-        startHpRegeneration();
-        startMpRegeneration();
+        // 先標記運行，避免 run 設置前的競態窗口
+        this.setAiRunning(true);
+        boolean success = npcai.startAI();
+        
+        if (success) {
+            // 只有成功啟動 AI 後，才啟動 HP/MP 恢復
+            // 注意：_aiRunning 會在 NpcAI.run() 中設置
+            startHpRegeneration();
+            startMpRegeneration();
+        } else {
+            // AI 啟動失敗，恢復狀態
+            this.setAiRunning(false);
+        }
     }
 
     /**
@@ -1563,6 +1582,11 @@ public class L1NpcInstance extends L1Character {
         if (_destroyed) {
             return;
         }
+        // 從工作計時器移除，避免殘留引用
+        try {
+            com.lineage.server.timecontroller.npc.NpcWorkTimer.remove(this);
+        } catch (Throwable ignored) {
+        }
         if (getFollowEffect() != null) { // R版Top10暴擊特效處理 by 聖子默默
             getFollowEffect().deleteMe();
         }
@@ -2487,6 +2511,14 @@ public class L1NpcInstance extends L1Character {
         // 移出死亡清單
         if (_deadTimerTemp != -1) {
             _deadTimerTemp = -1;
+        }
+        // 復活後若 AI 未運作，重新啟動
+        try {
+            if (!this.isAiRunning()) {
+                this.startAI();
+            }
+        } catch (Throwable t) {
+            _log.error("NPC 復活後啟動 AI 失敗: " + getNameId(), t);
         }
     }
 

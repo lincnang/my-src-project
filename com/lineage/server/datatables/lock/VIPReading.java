@@ -15,7 +15,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author dexc
  */
 public class VIPReading {
-    private static VIPReading _instance;
+    private static class Holder {
+        private static final VIPReading INSTANCE = new VIPReading();
+    }
     private final Lock _lock;
     private final VIPStorage _storage;
 
@@ -25,10 +27,7 @@ public class VIPReading {
     }
 
     public static VIPReading get() {
-        if (_instance == null) {
-            _instance = new VIPReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

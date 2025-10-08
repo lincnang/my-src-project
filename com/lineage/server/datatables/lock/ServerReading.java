@@ -7,7 +7,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ServerReading {
-    private static ServerReading _instance;
+    private static class Holder {
+        private static final ServerReading INSTANCE = new ServerReading();
+    }
     private final Lock _lock;
     private final ServerStorage _storage;
 
@@ -17,10 +19,7 @@ public class ServerReading {
     }
 
     public static ServerReading get() {
-        if (_instance == null) {
-            _instance = new ServerReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

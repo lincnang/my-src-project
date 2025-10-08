@@ -5,8 +5,8 @@ import com.lineage.server.thread.GeneralThreadPool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
 
@@ -17,11 +17,18 @@ import java.util.concurrent.ScheduledFuture;
  */
 public class NpcWorkTimer extends TimerTask {
     private static final Log _log = LogFactory.getLog(NpcWorkTimer.class);
-    private static final Map<L1NpcInstance, Integer> _map = new HashMap<>();
+    private static final Map<L1NpcInstance, Integer> _map = new ConcurrentHashMap<>();
     private ScheduledFuture<?> _timer;
 
     public static void put(L1NpcInstance npc, Integer time) {
         _map.put(npc, time);
+    }
+
+    public static void remove(final L1NpcInstance npc) {
+        if (npc == null) {
+            return;
+        }
+        _map.remove(npc);
     }
 
     private static void startWork(final L1NpcInstance npc) {
@@ -52,6 +59,10 @@ public class NpcWorkTimer extends TimerTask {
                 return;
             }
             for (final L1NpcInstance npc : _map.keySet()) {
+                if (npc == null || npc.destroyed() || npc.isDead()) {
+                    _map.remove(npc);
+                    continue;
+                }
                 Integer time = _map.get(npc);
                 // System.out.println(npc.getNpcTemplate().get_name() +
                 // "/"+time);

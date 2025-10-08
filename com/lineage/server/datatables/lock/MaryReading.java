@@ -7,7 +7,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MaryReading {
-    private static MaryReading _instance;
+    private static class Holder {
+        private static final MaryReading INSTANCE = new MaryReading();
+    }
     private final Lock _lock;
     private final MaryStorage _storage;
 
@@ -17,10 +19,7 @@ public class MaryReading {
     }
 
     public static MaryReading get() {
-        if (_instance == null) {
-            _instance = new MaryReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

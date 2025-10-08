@@ -10,7 +10,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ClanReading {
-    private static ClanReading _instance;
+    private static class Holder {
+        private static final ClanReading INSTANCE = new ClanReading();
+    }
     private final Lock _lock;
     private final ClanStorage _storage;
 
@@ -20,10 +22,7 @@ public class ClanReading {
     }
 
     public static ClanReading get() {
-        if (_instance == null) {
-            _instance = new ClanReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

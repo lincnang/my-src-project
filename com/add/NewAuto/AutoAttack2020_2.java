@@ -35,7 +35,6 @@ public class AutoAttack2020_2 extends TimerTask {
     protected static int _heading0[] = {7, 0, 1, 2, 3, 4, 5, 6};
     protected static int _heading1[] = {1, 2, 3, 4, 5, 6, 7, 0};
     private static Log _log = LogFactory.getLog(AutoAttack2020_2.class);
-    private static Random _random = new Random();
     protected int[][] DIR_TABLE = {{0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}};
     L1Character target;
     Random random = new Random();
@@ -44,7 +43,6 @@ public class AutoAttack2020_2 extends TimerTask {
     private int 更新畫面 = 0;
     private int 卡牆用 = 0;
     private int h = -1;
-    private int error = 0;
     private ArrayList<Integer> _list = new ArrayList<>();
     private ScheduledFuture<?> _timer;
     private int courceRange = 200;

@@ -13,7 +13,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author dexc
  */
 public class EzpayReading {
-    private static EzpayReading _instance;
+    private static class Holder {
+        private static final EzpayReading INSTANCE = new EzpayReading();
+    }
     private final Lock _lock;
     private final EzpayStorage _storage;
 
@@ -23,10 +25,7 @@ public class EzpayReading {
     }
 
     public static EzpayReading get() {
-        if (_instance == null) {
-            _instance = new EzpayReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

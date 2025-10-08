@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class HouseReading {
-    private static HouseReading _instance;
+    private static class Holder {
+        private static final HouseReading INSTANCE = new HouseReading();
+    }
     private final Lock _lock;
     private final HouseStorage _storage;
 
@@ -19,10 +21,7 @@ public class HouseReading {
     }
 
     public static HouseReading get() {
-        if (_instance == null) {
-            _instance = new HouseReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

@@ -7,7 +7,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class OtherUserTitleReading {
-    private static OtherUserTitleReading _instance;
+    private static class Holder {
+        private static final OtherUserTitleReading INSTANCE = new OtherUserTitleReading();
+    }
     private final Lock _lock;
     private final OtherUserTradeStorage _storage;
 
@@ -17,10 +19,7 @@ public class OtherUserTitleReading {
     }
 
     public static OtherUserTitleReading get() {
-        if (_instance == null) {
-            _instance = new OtherUserTitleReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void add(String itemname, int itemobjid, int itemadena, long itemcount, int pcobjid, String pcname, int srcpcobjid, String srcpcname) {

@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BoardOrimReading {
-    private static BoardOrimReading _instance;
+    private static class Holder {
+        private static final BoardOrimReading INSTANCE = new BoardOrimReading();
+    }
     private final Lock _lock;
     private final BoardOrimStorage _storage;
 
@@ -19,10 +21,7 @@ public class BoardOrimReading {
     }
 
     public static BoardOrimReading get() {
-        if (_instance == null) {
-            _instance = new BoardOrimReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

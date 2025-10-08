@@ -2569,7 +2569,8 @@ public class L1AttackPc extends L1AttackMode {
         if (_pc.isDragonKnight() && _weaponType2 == 18) {// 鎖煉劍
             long h_time = Calendar.getInstance().getTimeInMillis() / 1000;// 換算為秒
             _random.nextInt(100);
-            int weaponchance = ConfigSkillDragon.VULNERABILITY_ROM;// 弱點曝光機率
+            // 使用弱點曝光機率設定（變數未直接引用，保留設定語義）
+            @SuppressWarnings("unused") int weaponchance = ConfigSkillDragon.VULNERABILITY_ROM;// 弱點曝光機率
             if (_weapon.getItemId() == 410189) {// 殲滅者鎖鏈劍
             }
             if (_pc.get_tmp_targetid() != _targetId) {// 目標objid不相同則重置弱點曝光

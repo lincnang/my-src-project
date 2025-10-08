@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ServerGmCommandReading {
-    private static ServerGmCommandReading _instance;
+    private static class Holder {
+        private static final ServerGmCommandReading INSTANCE = new ServerGmCommandReading();
+    }
     private final Lock _lock;
     private final ServerGmCommandStorage _storage;
 
@@ -18,10 +20,7 @@ public class ServerGmCommandReading {
     }
 
     public static ServerGmCommandReading get() {
-        if (_instance == null) {
-            _instance = new ServerGmCommandReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void create(L1PcInstance pc, String cmd) {

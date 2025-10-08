@@ -16,7 +16,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author dexc
  */
 public class SpawnBossReading {
-    private static SpawnBossReading _instance;
+    private static class Holder {
+        private static final SpawnBossReading INSTANCE = new SpawnBossReading();
+    }
     private final Lock _lock;
     private final SpawnBossStorage _storage;
 
@@ -26,10 +28,7 @@ public class SpawnBossReading {
     }
 
     public static SpawnBossReading get() {
-        if (_instance == null) {
-            _instance = new SpawnBossReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

@@ -15,7 +15,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author terry0412
  */
 public class ClanAllianceReading {
-    private static ClanAllianceReading _instance;
+    private static class Holder {
+        private static final ClanAllianceReading INSTANCE = new ClanAllianceReading();
+    }
     private final Lock _lock;
     private final ClanAllianceStorage _storage;
 
@@ -25,10 +27,7 @@ public class ClanAllianceReading {
     }
 
     public static ClanAllianceReading get() {
-        if (_instance == null) {
-            _instance = new ClanAllianceReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

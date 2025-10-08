@@ -6,7 +6,7 @@ import com.lineage.server.model.L1Location;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 世界陷阱暫存區<BR>
@@ -15,25 +15,32 @@ import java.util.HashMap;
  */
 public class WorldTrap {
     private static final Log _log = LogFactory.getLog(WorldTrap.class);
-    private static WorldTrap _instance;
-    private final HashMap<Integer, L1TrapInstance> _isTrap;
+    
+    /**
+     * 線程安全的單例 Holder
+     */
+    private static class Holder {
+        private static final WorldTrap INSTANCE = new WorldTrap();
+    }
+    
+    private final ConcurrentHashMap<Integer, L1TrapInstance> _isTrap;
 
     private WorldTrap() {
-        _isTrap = new HashMap<>();
-    }
-
-    public static WorldTrap get() {
-        if (_instance == null) {
-            _instance = new WorldTrap();
-        }
-        return _instance;
+        _isTrap = new ConcurrentHashMap<>();
     }
 
     /**
-     * NPC清單
+     * 獲取 WorldTrap 單例實例（線程安全）
+     */
+    public static WorldTrap get() {
+        return Holder.INSTANCE;
+    }
+
+    /**
+     * NPC清單（線程安全）
      *
      */
-    public HashMap<Integer, L1TrapInstance> map() {
+    public ConcurrentHashMap<Integer, L1TrapInstance> map() {
         return _isTrap;
     }
 

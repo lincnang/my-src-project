@@ -14,7 +14,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author dexc
  */
 public class CharOtherReading {
-    private static CharOtherReading _instance;
+    private static class Holder {
+        private static final CharOtherReading INSTANCE = new CharOtherReading();
+    }
     private final Lock _lock;
     private final CharOtherStorage _storage;
 
@@ -24,10 +26,7 @@ public class CharOtherReading {
     }
 
     public static CharOtherReading get() {
-        if (_instance == null) {
-            _instance = new CharOtherReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

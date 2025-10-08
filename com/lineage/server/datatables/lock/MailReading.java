@@ -15,7 +15,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author dexc
  */
 public class MailReading {
-    private static MailReading _instance;
+    private static class Holder {
+        private static final MailReading INSTANCE = new MailReading();
+    }
     private final Lock _lock;
     private final MailStorage _storage;
 
@@ -25,10 +27,7 @@ public class MailReading {
     }
 
     public static MailReading get() {
-        if (_instance == null) {
-            _instance = new MailReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

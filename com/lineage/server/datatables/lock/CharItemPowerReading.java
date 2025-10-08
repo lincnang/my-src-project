@@ -13,7 +13,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author dexc
  */
 public class CharItemPowerReading {
-    private static CharItemPowerReading _instance;
+    private static class Holder {
+        private static final CharItemPowerReading INSTANCE = new CharItemPowerReading();
+    }
     private final Lock _lock;
     private final CharItemsPowerStorage _storage;
 
@@ -23,10 +25,7 @@ public class CharItemPowerReading {
     }
 
     public static CharItemPowerReading get() {
-        if (_instance == null) {
-            _instance = new CharItemPowerReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

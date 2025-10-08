@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CharacterQuestReading {
-    private static CharacterQuestReading _instance;
+    private static class Holder {
+        private static final CharacterQuestReading INSTANCE = new CharacterQuestReading();
+    }
     private final Lock _lock;
     private final CharacterQuestStorage _storage;
 
@@ -19,10 +21,7 @@ public class CharacterQuestReading {
     }
 
     public static CharacterQuestReading get() {
-        if (_instance == null) {
-            _instance = new CharacterQuestReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CharBuffReading {
-    private static CharBuffReading _instance;
+    private static class Holder {
+        private static final CharBuffReading INSTANCE = new CharBuffReading();
+    }
     private final Lock _lock;
     private final CharBuffStorage _storage;
 
@@ -18,10 +20,7 @@ public class CharBuffReading {
     }
 
     public static CharBuffReading get() {
-        if (_instance == null) {
-            _instance = new CharBuffReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

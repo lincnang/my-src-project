@@ -73,7 +73,7 @@ public class DIYGfxTimer extends TimerTask {
 
     public void start() {
         final int timeMillis = 1000; // 1秒
-        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
+        _timer = GeneralThreadPool.get().scheduleWithFixedDelay(this, timeMillis, timeMillis);
     }
 
     @Override

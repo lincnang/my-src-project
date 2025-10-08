@@ -13,12 +13,14 @@ public class CharOtherReading1 {
 
   private final CharOtherStorage1 _storage = (CharOtherStorage1)new CharOtherTable1();
 
-  private static CharOtherReading1 _instance;
+  private CharOtherReading1() {}
+
+  private static class LazyHolder {
+    private static final CharOtherReading1 INSTANCE = new CharOtherReading1();
+  }
 
   public static CharOtherReading1 get() {
-    if (_instance == null)
-      _instance = new CharOtherReading1();
-    return _instance;
+    return LazyHolder.INSTANCE;
   }
 
   public void load() {

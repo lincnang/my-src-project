@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CharSkillReading {
-    private static CharSkillReading _instance;
+    private static class Holder {
+        private static final CharSkillReading INSTANCE = new CharSkillReading();
+    }
     private final Lock _lock;
     private final CharSkillStorage _storage;
 
@@ -19,10 +21,7 @@ public class CharSkillReading {
     }
 
     public static CharSkillReading get() {
-        if (_instance == null) {
-            _instance = new CharSkillReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
     public int getSkillLevel(int playerobjid, int skillid) {
         _lock.lock();

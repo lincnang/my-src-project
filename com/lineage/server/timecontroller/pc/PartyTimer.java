@@ -3,7 +3,6 @@ package com.lineage.server.timecontroller.pc;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Party;
 import com.lineage.server.serverpackets.S_Party;
-import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,7 +53,7 @@ public class PartyTimer extends TimerTask {
 
     public void start() {
         int timeMillis = 5000;
-        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
+        com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
     }
 
     public void run() {
@@ -73,7 +72,7 @@ public class PartyTimer extends TimerTask {
             }
         } catch (Exception e) {
             _log.error("隊伍更新時間軸異常重啟", e);
-            GeneralThreadPool.get().cancel(_timer, false);
+            com.lineage.server.thread.GeneralThreadPool.get().cancel(_timer, false);
             PartyTimer partyTimer = new PartyTimer();
             partyTimer.start();
         }

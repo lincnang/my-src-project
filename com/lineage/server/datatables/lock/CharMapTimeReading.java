@@ -14,7 +14,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author sudawei
  */
 public class CharMapTimeReading {
-    private static CharMapTimeReading _instance;
+    private static class Holder {
+        private static final CharMapTimeReading INSTANCE = new CharMapTimeReading();
+    }
     private final Lock _lock;
     private final CharMapTimeStorage _storage;
 
@@ -29,10 +31,7 @@ public class CharMapTimeReading {
      * @author sudawei
      */
     public static CharMapTimeReading get() {
-        if (_instance == null) {
-            _instance = new CharMapTimeReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

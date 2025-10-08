@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PetReading {
-    private static PetReading _instance;
+    private static class Holder {
+        private static final PetReading INSTANCE = new PetReading();
+    }
     private final Lock _lock;
     private final PetStorage _storage;
 
@@ -19,10 +21,7 @@ public class PetReading {
     }
 
     public static PetReading get() {
-        if (_instance == null) {
-            _instance = new PetReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

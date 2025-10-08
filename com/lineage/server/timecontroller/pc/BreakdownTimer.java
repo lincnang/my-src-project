@@ -3,7 +3,6 @@ package com.lineage.server.timecontroller.pc;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_Poison;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

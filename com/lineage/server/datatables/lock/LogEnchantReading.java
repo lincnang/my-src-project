@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class LogEnchantReading {
-    private static LogEnchantReading _instance;
+    private static class Holder {
+        private static final LogEnchantReading INSTANCE = new LogEnchantReading();
+    }
     private final Lock _lock;
     private final LogEnchantStorage _storage;
 
@@ -19,10 +21,7 @@ public class LogEnchantReading {
     }
 
     public static LogEnchantReading get() {
-        if (_instance == null) {
-            _instance = new LogEnchantReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void failureEnchant(L1PcInstance pc, L1ItemInstance item) {

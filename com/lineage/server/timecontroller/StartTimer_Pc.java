@@ -100,5 +100,13 @@ public class StartTimer_Pc {
             final PcWeaponTimer weaponTimer = new PcWeaponTimer();
             weaponTimer.start(ConfigWeaponryEffects.WEAPON_EFFECT_DELAY * 1000);
         }
+        TimeUnit.MILLISECONDS.sleep(50);// 延遲
+        // PC 自動掛機系統（重要！）
+        ResetAuto resetAuto = new ResetAuto();
+        resetAuto.start();
+        TimeUnit.MILLISECONDS.sleep(50);// 延遲
+        // PC 自動掛機重置系統（重要！）
+        ResetAutoStart resetAutoStart = new ResetAutoStart();
+        resetAutoStart.start();
     }
 }

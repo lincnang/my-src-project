@@ -266,7 +266,7 @@ public class C_MoveChar extends ClientBasePacket {
                         }
                         if (petObject instanceof L1SummonInstance) {
                             L1SummonInstance summon = (L1SummonInstance) petObject;
-                            S_NewMaster packet = new S_NewMaster(summon);
+                            new S_NewMaster(summon);
                             if (summon.destroyed()) {
                                 return;
                             }

@@ -14,7 +14,9 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class CharacterConfigReading {
 
-    private static CharacterConfigReading _instance;
+    private static class Holder {
+        private static final CharacterConfigReading INSTANCE = new CharacterConfigReading();
+    }
     private final Lock _lock;
     private final CharacterConfigStorage _storage;
 
@@ -24,10 +26,7 @@ public class CharacterConfigReading {
     }
 
     public static CharacterConfigReading get() {
-        if (_instance == null) {
-            _instance = new CharacterConfigReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

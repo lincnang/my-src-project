@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CastleReading {
-    private static CastleReading _instance;
+    private static class Holder {
+        private static final CastleReading INSTANCE = new CastleReading();
+    }
     private final Lock _lock;
     private final CastleStorage _storage;
 
@@ -19,10 +21,7 @@ public class CastleReading {
     }
 
     public static CastleReading get() {
-        if (_instance == null) {
-            _instance = new CastleReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

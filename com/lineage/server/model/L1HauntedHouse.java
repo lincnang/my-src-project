@@ -9,7 +9,6 @@ import com.lineage.server.utils.collections.Lists;
 import com.lineage.server.world.WorldNpc;
 
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class L1HauntedHouse {
@@ -161,8 +160,7 @@ public class L1HauntedHouse {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 90000L);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 90000L);
         }
     }
 
@@ -176,8 +174,7 @@ public class L1HauntedHouse {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 300000L);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 300000L);
         }
     }
 }

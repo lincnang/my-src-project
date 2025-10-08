@@ -22,7 +22,7 @@ public class GeneralThreadPool {//src032
     // ThreadPoolExecutor，它可另行安排在給定的延遲後運行命令，或者定期執行命令。
     // 需要多個輔助線程時，或者要求 ThreadPoolExecutor 具有額外的靈活性或功能時，此類要優於 Timer。
     // private ScheduledThreadPoolExecutor _poolExecutor;
-    private final int _pcSchedulerPoolSize = 1 + Config.MAX_ONLINE_USERS / 10;
+    private final int _pcSchedulerPoolSize = Math.max(2, (Config.PC_SCHEDULER_POOL_SIZE > 0) ? Config.PC_SCHEDULER_POOL_SIZE : (1 + Config.MAX_ONLINE_USERS / 10));
     // 執行已提交的 Runnable 任務的對象。
     // 此接口提供.一種將任務提交與每個任務將如何運行的機制（包括線程使用的細節、調度等）分離開來的方法。
     // 通常使用 Executor 而不是顯式地創建線程。例如，可能會使用以下方法，
@@ -34,14 +34,16 @@ public class GeneralThreadPool {//src032
     private final ScheduledExecutorService _aiScheduler;
 
     private GeneralThreadPool() {
-        // 創建一個可根據需要創建新線程的線程池，但是在以前構造的線程可用時將重用它們。
+        // 還原舊行為：根據需要創建新線程並重用（避免初始連線時發送執行緒被阻塞）
         _executor = Executors.newCachedThreadPool();
         // 常規(創建一個線程池，它可安排在給定延遲後運行命令或者定期地執行。)
-        _scheduler = Executors.newScheduledThreadPool(SCHEDULED_CORE_POOL_SIZE, new PriorityThreadFactory("GSTPool", Thread.NORM_PRIORITY));
+        int corePool = (Config.SCHEDULER_CORE_POOL_SIZE > 0) ? Config.SCHEDULER_CORE_POOL_SIZE : SCHEDULED_CORE_POOL_SIZE;
+        _scheduler = Executors.newScheduledThreadPool(corePool, new PriorityThreadFactory("GSTPool", Thread.NORM_PRIORITY));
         // PC(創建一個線程池，它可安排在給定延遲後運行命令或者定期地執行。)
         _pcScheduler = Executors.newScheduledThreadPool(_pcSchedulerPoolSize, new PriorityThreadFactory("PSTPool", Thread.NORM_PRIORITY));
         // AI(創建一個線程池，它可安排在給定延遲後運行命令或者定期地執行。)
-        _aiScheduler = Executors.newScheduledThreadPool(_pcSchedulerPoolSize, new PriorityThreadFactory("AITPool", Thread.NORM_PRIORITY));
+        int aiPool = (Config.AI_SCHEDULER_POOL_SIZE > 0) ? Config.AI_SCHEDULER_POOL_SIZE : _pcSchedulerPoolSize;
+        _aiScheduler = Executors.newScheduledThreadPool(aiPool, new PriorityThreadFactory("AITPool", Thread.NORM_PRIORITY));
     }
 
     public static GeneralThreadPool get() {

@@ -2,7 +2,7 @@ package com.lineage.server.timecontroller.pc;
 
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_SkillSound;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +73,7 @@ public class VIPGfxTimer extends TimerTask {
 
     public void start() {
         final int timeMillis = 1000; // 1秒
-        _timer = PcOtherThreadPool.get().scheduleWithFixedDelay(this, timeMillis, timeMillis);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class VIPGfxTimer extends TimerTask {
             }
         } catch (final Exception e) {
             // _log.error("VIP定時特效處理時間軸異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             final VIPGfxTimer expTimer = new VIPGfxTimer();
             expTimer.start();
         }

@@ -2,7 +2,6 @@ package com.lineage.server.model;
 
 import com.lineage.server.model.Instance.L1ItemInstance;
 
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class L1ItemOwnerTimer extends TimerTask {
@@ -20,8 +19,7 @@ public class L1ItemOwnerTimer extends TimerTask {
     }
 
     public void begin() {
-        Timer timer = new Timer();
-        timer.schedule(this, _timeMillis);
+        com.lineage.server.thread.GeneralThreadPool.get().schedule(this, _timeMillis);
     }
 }
 /*

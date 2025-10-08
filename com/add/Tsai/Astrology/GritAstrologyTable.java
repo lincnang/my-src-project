@@ -12,8 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 載入並管理「守護星盤_格立特」資料
@@ -21,7 +21,7 @@ import java.util.Map;
 public class GritAstrologyTable {
     private static final Log _log = LogFactory.getLog(GritAstrologyTable.class);
     private static GritAstrologyTable _instance;
-    private static final Map<Integer, GritAstrologyData> _index = new HashMap<>();
+    private static final Map<Integer, GritAstrologyData> _index = new ConcurrentHashMap<>();
 
     private GritAstrologyTable() {}
 

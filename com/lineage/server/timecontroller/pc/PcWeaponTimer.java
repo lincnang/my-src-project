@@ -5,13 +5,11 @@ import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_EffectLocation;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.thread.PcOtherThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
 
@@ -228,7 +226,7 @@ public class PcWeaponTimer extends TimerTask {
             }
         } catch (final Exception e) {
             _log.error("PC武器加成特效時間軸 異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             final PcWeaponTimer pcWeaponTimer = new PcWeaponTimer();
             pcWeaponTimer.start(_timeMillis);
         }

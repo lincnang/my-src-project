@@ -19,7 +19,7 @@ import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1Item;
 import com.lineage.server.templates.L1Skills;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.thread.PcAutoThreadPoolNew;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.types.Point;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
@@ -302,7 +302,7 @@ public class AutoAttack2020_1 extends TimerTask {
             h = -1;
             _list.clear();
             pc.setIsAuto(false);
-            PcAutoThreadPoolNew.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

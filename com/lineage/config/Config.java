@@ -139,6 +139,25 @@ public final class Config {
      */
     public static boolean DBClearAll;
 
+    /**
+     * 執行緒池容量（可由 server.properties 調整）
+     */
+    public static int SCHEDULER_CORE_POOL_SIZE;
+    public static int PC_SCHEDULER_POOL_SIZE;
+    public static int AI_SCHEDULER_POOL_SIZE;
+
+    /**
+     * 網路限速與背壓（可由 server.properties 調整）
+     */
+    public static boolean NET_RATE_LIMIT_ENABLED;
+    public static int NET_MAX_PPS;              // 每連線每秒最大封包數
+    public static int NET_MAX_BPS;              // 每連線每秒最大位元組數
+    public static int NET_MAX_STRIKES;          // 連續超限次數到達後軟踢
+    public static int NET_STRIKE_RESET_MS;      // 超限計數重置毫秒
+    public static int NET_OUT_MAX_QUEUE;        // 輸出佇列上限
+    public static int NET_OUT_DROP_BURST;       // 背壓單次丟棄量
+    public static int NET_OUT_SLEEP_EMPTY_MS;   // 佇列空時休眠毫秒
+
     public static void load() throws ConfigErrorException {
         // TODO 伺服器捆綁
         Properties pack = new Properties();
@@ -186,6 +205,22 @@ public final class Config {
             TIME_ZONE = set.getProperty("TimeZone", "CST");
             AUTO_CREATE_ACCOUNTS = Boolean.parseBoolean(set.getProperty("AutoCreateAccounts", "true"));
             MAX_ONLINE_USERS = Short.parseShort(set.getProperty("MaximumOnlineUsers", "30"));
+            // 執行緒池容量（提供可調整的預設值）
+            // 總排程池（一般系統用）
+            SCHEDULER_CORE_POOL_SIZE = Integer.parseInt(set.getProperty("SchedulerCorePool", "200"));
+            // PC/AI 排程池（預設依 MAX_ONLINE_USERS 動態計算，至少 2）
+            int defaultPcAi = Math.max(2, 1 + (MAX_ONLINE_USERS / 5));
+            PC_SCHEDULER_POOL_SIZE = Integer.parseInt(set.getProperty("PcSchedulerPool", String.valueOf(defaultPcAi)));
+            AI_SCHEDULER_POOL_SIZE = Integer.parseInt(set.getProperty("AiSchedulerPool", String.valueOf(defaultPcAi)));
+            // 網路限速 / 背壓
+            NET_RATE_LIMIT_ENABLED = Boolean.parseBoolean(set.getProperty("NetRateLimitEnabled", "true"));
+            NET_MAX_PPS = Integer.parseInt(set.getProperty("NetMaxPps", "120"));
+            NET_MAX_BPS = Integer.parseInt(set.getProperty("NetMaxBps", "65536"));
+            NET_MAX_STRIKES = Integer.parseInt(set.getProperty("NetMaxStrikes", "5"));
+            NET_STRIKE_RESET_MS = Integer.parseInt(set.getProperty("NetStrikeResetMs", "30000"));
+            NET_OUT_MAX_QUEUE = Integer.parseInt(set.getProperty("NetOutMaxQueue", "2000"));
+            NET_OUT_DROP_BURST = Integer.parseInt(set.getProperty("NetOutDropBurst", "200"));
+            NET_OUT_SLEEP_EMPTY_MS = Integer.parseInt(set.getProperty("NetOutSleepEmptyMs", "10"));
             AUTOSAVE_INTERVAL = Integer.parseInt(set.getProperty("AutosaveInterval", "1200"), 10);
             AUTOSAVE_INTERVAL /= 60;
             if (AUTOSAVE_INTERVAL <= 0) {

@@ -218,6 +218,8 @@ public class QuitGame {
             pc.saveInventory();
             // _log.error("人物離開遊戲的處理-背包紀錄");
             L1BookMark.WriteBookmark(pc); // 日版記憶座標
+            // 人物登出前：登出清理掛鉤
+            com.lineage.server.model.Instance.L1PcInstanceCleanupIntegration.onPlayerLogout(pc);
             // 人物登出
             pc.logout();
             // _log.error("人物離開遊戲的處理-人物登出");

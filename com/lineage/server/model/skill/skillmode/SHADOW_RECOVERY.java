@@ -13,7 +13,6 @@ import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.templates.L1Skills;
 
 import java.sql.Timestamp;
-import java.util.Timer;
 import java.util.TimerTask;
 
 /**
@@ -75,10 +74,9 @@ public class SHADOW_RECOVERY extends SkillMode {
         pc.sendPackets(new S_SystemMessage("\\fT暗隱恢復發動，開始回復HP，並獲得閃避加成。"));
 
         // 8. HOT回血（每秒回復）
-        Timer timer = new Timer();
         for (int i = 1; i <= hotTime; i++) {
             final int heal = (i == hotTime) ? lastHeal : healPerSec;
-            timer.schedule(new TimerTask() {
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (pc.hasSkillEffect(L1SkillId.SHADOW_RECOVERY)) {

@@ -6,7 +6,7 @@ import com.lineage.server.model.L1Object;
 import com.lineage.server.model.L1Teleport;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.templates.L1Item;
-import com.lineage.server.thread.PcAutoThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.types.Point;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
@@ -26,7 +26,7 @@ public class PcAI implements Runnable {
 
     public void startAI() {
         // 啟動 AI 執行緒
-        PcAutoThreadPool.get().execute(this);
+        GeneralThreadPool.get().execute(this);
     }
 
     @Override

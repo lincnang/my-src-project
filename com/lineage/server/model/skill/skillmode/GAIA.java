@@ -12,7 +12,6 @@ import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.templates.L1Skills;
 
 import java.sql.Timestamp;
-import java.util.Timer;
 import java.util.TimerTask;
 
 /**
@@ -69,10 +68,9 @@ public class GAIA extends SkillMode {
         pc.sendPackets(new S_InventoryIcon(10297, true, 2777, 2777, 1200));
         pc.sendPackets(new S_SystemMessage("\\fT蓋亞之力發動，開始回復HP。"));
 
-        Timer timer = new Timer();
         for (int i = 1; i <= hotTime; i++) {
             final int heal = (i == hotTime) ? lastHeal : healPerSec;
-            timer.schedule(new TimerTask() {
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (pc.hasSkillEffect(L1SkillId.GAIA)) {

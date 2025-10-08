@@ -44,9 +44,7 @@ import com.lineage.server.model.skill.L1SkillUse;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.serverpackets.ability.*;
 import com.lineage.server.templates.*;
-import com.lineage.server.thread.DeathThreadPool;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.thread.PcOtherThreadPool;
 import com.lineage.server.timecontroller.other.ins.*;
 import com.lineage.server.timecontroller.pc.MapTimerThread;
 import com.lineage.server.timecontroller.pc.PcHellTimer;
@@ -855,6 +853,13 @@ public class L1PcInstance extends L1Character { // src015
     private boolean _SkillSoundActiveAutoMp2;// 自動補魔 -> 第二組 魂體
     private SkillSoundBackHome _SkillSoundAutoBackHome;// 自動回村
     private boolean _SkillSoundActiveAutoBackHome;// 自動回村
+    private java.util.concurrent.ScheduledFuture<?> _autoHp1Future;
+    private java.util.concurrent.ScheduledFuture<?> _autoHp2Future;
+    private java.util.concurrent.ScheduledFuture<?> _autoHp3Future;
+    private java.util.concurrent.ScheduledFuture<?> _autoMp1Future;
+    private java.util.concurrent.ScheduledFuture<?> _autoMp2Future;
+    private java.util.concurrent.ScheduledFuture<?> _autoBackHomeFuture;
+    private java.util.concurrent.ScheduledFuture<?> SustainEffectFuture;
     private boolean _isAutoHpAll = false;// 自動喝藥總開關
     private boolean _isAutoHp1 = false;// 自動喝药第一组
     private boolean _isAutoHp2 = false;// 自動喝药第二组
@@ -877,6 +882,7 @@ public class L1PcInstance extends L1Character { // src015
     private int _autoItemId4 = 40067; // 第一組 自動補魔的道具編號
     private SkillSoundItemAll _SkillSoundAutoItemAll;// 自動鋪助道具
     private boolean _SkillSoundActiveAutoItemAll;// 自動鋪助道具
+    private java.util.concurrent.ScheduledFuture<?> _autoItemAllFuture;
     private boolean _isAutoItemAll = false;// 輔助狀態(道具)總開關
     private boolean _isAutoItem1 = false;// 解毒藥水
     private boolean _isAutoItem2 = false;// 藍色藥水
@@ -893,6 +899,7 @@ public class L1PcInstance extends L1Character { // src015
     private boolean _isAutoItem13 = false;// 自動魔法卷軸(魔法屏障)
     private SkillSoundSkillAll _SkillSoundAutoSkillAll;// 輔助狀態(魔法) -> 全職
     private boolean _SkillSoundActiveAutoSkillAll;// 輔助狀態(魔法) -> 全職
+    private java.util.concurrent.ScheduledFuture<?> _autoSkillAllFuture;
     private boolean _isAutoSkillAll = false;// 輔助狀態(魔法) -> 全職通用
     private boolean _AutoSkill_1 = false; // 輔助狀態(魔法) -> 全職通用
     private boolean _AutoSkill_2 = false; // 輔助狀態(魔法) -> 全職通用
@@ -927,6 +934,7 @@ public class L1PcInstance extends L1Character { // src015
     private boolean _AutoSkill_31 = false; // 輔助狀態(魔法) -> 全職通用
     private SkillSoundRemoveItem _SkillSoundAutoRemoveItem;// 輔助(自動刪物)
     private boolean _SkillSoundActiveAutoRemoveItem;// 輔助(自動刪物)
+    private java.util.concurrent.ScheduledFuture<?> _autoRemoveItemFuture;
     private boolean _AutoRemoveItem = false; // 輔助(自動刪物) -> 全職通用
     private boolean check_lv = false;
     // AI偵測
@@ -993,6 +1001,7 @@ public class L1PcInstance extends L1Character { // src015
     private int _negfx;
     private SkillSound _SkillSound;
     private boolean _SkillSoundActive;
+    private java.util.concurrent.ScheduledFuture<?> _skillSoundFuture;
     /////////////////////////////////////娃娃合成///////////////////////////////////////
     private int _dollcount = 0;//增加減少娃娃數量2
     private int _dollcount2 = 0;//增加減少娃娃數量3
@@ -8188,13 +8197,20 @@ public class L1PcInstance extends L1Character { // src015
     public void startSustainEffect(L1PcInstance pc, int effect_id, int Interval) {
         if (!_checkSustainEffect) {
             SustainEffect = new SustainEffect(pc, effect_id);
-            _regenTimer.scheduleAtFixedRate(SustainEffect, Interval, Interval);
+            if (SustainEffectFuture != null) {
+                SustainEffectFuture.cancel(false);
+            }
+            SustainEffectFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(SustainEffect, Interval, Interval);
             _checkSustainEffect = true;
         }
     }
 
     public void stopSustainEffect() {
         if (_checkSustainEffect) {
+            if (SustainEffectFuture != null) {
+                SustainEffectFuture.cancel(false);
+                SustainEffectFuture = null;
+            }
             SustainEffect.cancel();
             SustainEffect = null;
             _checkSustainEffect = false;
@@ -10381,7 +10397,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_HP1 = delay + 100; // 間隔時間
         if (!_SkillSoundActiveAutoHp1) {
             _SkillSoundAutoHp1 = new SkillSoundHp1(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoHp1, INTERVAL_HP1, INTERVAL_HP1);
+            if (_autoHp1Future != null) {
+                _autoHp1Future.cancel(false);
+            }
+            _autoHp1Future = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoHp1, INTERVAL_HP1, INTERVAL_HP1);
             _SkillSoundActiveAutoHp1 = true;
         }
     }
@@ -10391,6 +10410,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoHP1() {
         if (_SkillSoundActiveAutoHp1) {
+            if (_autoHp1Future != null) {
+                _autoHp1Future.cancel(false);
+                _autoHp1Future = null;
+            }
             _SkillSoundAutoHp1.cancel();
             _SkillSoundAutoHp1 = null;
             _SkillSoundActiveAutoHp1 = false;
@@ -10405,7 +10428,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_HP2 = delay + 100; // 間隔時間
         if (!_SkillSoundActiveAutoHp2) {
             _SkillSoundAutoHp2 = new SkillSoundHp2(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoHp2, INTERVAL_HP2, INTERVAL_HP2);
+            if (_autoHp2Future != null) {
+                _autoHp2Future.cancel(false);
+            }
+            _autoHp2Future = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoHp2, INTERVAL_HP2, INTERVAL_HP2);
             _SkillSoundActiveAutoHp2 = true;
         }
     }
@@ -10415,6 +10441,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoHP2() {
         if (_SkillSoundActiveAutoHp2) {
+            if (_autoHp2Future != null) {
+                _autoHp2Future.cancel(false);
+                _autoHp2Future = null;
+            }
             _SkillSoundAutoHp2.cancel();
             _SkillSoundAutoHp2 = null;
             _SkillSoundActiveAutoHp2 = false;
@@ -10429,7 +10459,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_HP3 = delay + 100; // 間隔時間
         if (!_SkillSoundActiveAutoHp3) {
             _SkillSoundAutoHp3 = new SkillSoundHp3(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoHp3, INTERVAL_HP3, INTERVAL_HP3);
+            if (_autoHp3Future != null) {
+                _autoHp3Future.cancel(false);
+            }
+            _autoHp3Future = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoHp3, INTERVAL_HP3, INTERVAL_HP3);
             _SkillSoundActiveAutoHp3 = true;
         }
     }
@@ -10439,6 +10472,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoHP3() {
         if (_SkillSoundActiveAutoHp3) {
+            if (_autoHp3Future != null) {
+                _autoHp3Future.cancel(false);
+                _autoHp3Future = null;
+            }
             _SkillSoundAutoHp3.cancel();
             _SkillSoundAutoHp3 = null;
             _SkillSoundActiveAutoHp3 = false;
@@ -10453,7 +10490,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_MP1 = 1000;
         if (!_SkillSoundActiveAutoMp1) {
             _SkillSoundAutoMp1 = new SkillSoundMp1(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoMp1, INTERVAL_MP1, INTERVAL_MP1);
+            if (_autoMp1Future != null) {
+                _autoMp1Future.cancel(false);
+            }
+            _autoMp1Future = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoMp1, INTERVAL_MP1, INTERVAL_MP1);
             _SkillSoundActiveAutoMp1 = true;
         }
     }
@@ -10463,6 +10503,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoMP1() {
         if (_SkillSoundActiveAutoMp1) {
+            if (_autoMp1Future != null) {
+                _autoMp1Future.cancel(false);
+                _autoMp1Future = null;
+            }
             _SkillSoundAutoMp1.cancel();
             _SkillSoundAutoMp1 = null;
             _SkillSoundActiveAutoMp1 = false;
@@ -10477,7 +10521,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_MP2 = 2400;
         if (!_SkillSoundActiveAutoMp2) {
             _SkillSoundAutoMp2 = new SkillSoundMp2(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoMp2, INTERVAL_MP2, INTERVAL_MP2);
+            if (_autoMp2Future != null) {
+                _autoMp2Future.cancel(false);
+            }
+            _autoMp2Future = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoMp2, INTERVAL_MP2, INTERVAL_MP2);
             _SkillSoundActiveAutoMp2 = true;
         }
     }
@@ -10487,6 +10534,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoMP2() {
         if (_SkillSoundActiveAutoMp2) {
+            if (_autoMp2Future != null) {
+                _autoMp2Future.cancel(false);
+                _autoMp2Future = null;
+            }
             _SkillSoundAutoMp2.cancel();
             _SkillSoundAutoMp2 = null;
             _SkillSoundActiveAutoMp2 = false;
@@ -10501,7 +10552,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_BackHome = 1000; // 間隔時間
         if (!_SkillSoundActiveAutoBackHome) {
             _SkillSoundAutoBackHome = new SkillSoundBackHome(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoBackHome, INTERVAL_BackHome, INTERVAL_BackHome);
+            if (_autoBackHomeFuture != null) {
+                _autoBackHomeFuture.cancel(false);
+            }
+            _autoBackHomeFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoBackHome, INTERVAL_BackHome, INTERVAL_BackHome);
             _SkillSoundActiveAutoBackHome = true;
         }
     }
@@ -10511,6 +10565,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoBackHome() {
         if (_SkillSoundActiveAutoBackHome) {
+            if (_autoBackHomeFuture != null) {
+                _autoBackHomeFuture.cancel(false);
+                _autoBackHomeFuture = null;
+            }
             _SkillSoundAutoBackHome.cancel();
             _SkillSoundAutoBackHome = null;
             _SkillSoundActiveAutoBackHome = false;
@@ -10677,7 +10735,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_ItemAll = 2500; // 間隔時間
         if (!_SkillSoundActiveAutoItemAll) {
             _SkillSoundAutoItemAll = new SkillSoundItemAll(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoItemAll, INTERVAL_ItemAll, INTERVAL_ItemAll);
+            if (_autoItemAllFuture != null) {
+                _autoItemAllFuture.cancel(false);
+            }
+            _autoItemAllFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoItemAll, INTERVAL_ItemAll, INTERVAL_ItemAll);
             _SkillSoundActiveAutoItemAll = true;
         }
     }
@@ -10687,6 +10748,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoItemAll() {
         if (_SkillSoundActiveAutoItemAll) {
+            if (_autoItemAllFuture != null) {
+                _autoItemAllFuture.cancel(false);
+                _autoItemAllFuture = null;
+            }
             _SkillSoundAutoItemAll.cancel();
             _SkillSoundAutoItemAll = null;
             _SkillSoundActiveAutoItemAll = false;
@@ -10813,7 +10878,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_SkillAll = 3000; // 間隔時間
         if (!_SkillSoundActiveAutoSkillAll) {
             _SkillSoundAutoSkillAll = new SkillSoundSkillAll(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoSkillAll, INTERVAL_SkillAll, INTERVAL_SkillAll);
+            if (_autoSkillAllFuture != null) {
+                _autoSkillAllFuture.cancel(false);
+            }
+            _autoSkillAllFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoSkillAll, INTERVAL_SkillAll, INTERVAL_SkillAll);
             _SkillSoundActiveAutoSkillAll = true;
         }
     }
@@ -10823,6 +10891,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoSkillAll() {
         if (_SkillSoundActiveAutoSkillAll) {
+            if (_autoSkillAllFuture != null) {
+                _autoSkillAllFuture.cancel(false);
+                _autoSkillAllFuture = null;
+            }
             _SkillSoundAutoSkillAll.cancel();
             _SkillSoundAutoSkillAll = null;
             _SkillSoundActiveAutoSkillAll = false;
@@ -11093,7 +11165,10 @@ public class L1PcInstance extends L1Character { // src015
         final int INTERVAL_RemoveItem = 3000; // 間隔時間
         if (!_SkillSoundActiveAutoRemoveItem) {
             _SkillSoundAutoRemoveItem = new SkillSoundRemoveItem(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSoundAutoRemoveItem, INTERVAL_RemoveItem, INTERVAL_RemoveItem);
+            if (_autoRemoveItemFuture != null) {
+                _autoRemoveItemFuture.cancel(false);
+            }
+            _autoRemoveItemFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSoundAutoRemoveItem, INTERVAL_RemoveItem, INTERVAL_RemoveItem);
             _SkillSoundActiveAutoRemoveItem = true;
         }
     }
@@ -11103,6 +11178,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void stopSkillSound_autoRemoveItem() {
         if (_SkillSoundActiveAutoRemoveItem) {
+            if (_autoRemoveItemFuture != null) {
+                _autoRemoveItemFuture.cancel(false);
+                _autoRemoveItemFuture = null;
+            }
             _SkillSoundAutoRemoveItem.cancel();
             _SkillSoundAutoRemoveItem = null;
             _SkillSoundActiveAutoRemoveItem = false;
@@ -12093,12 +12172,18 @@ public class L1PcInstance extends L1Character { // src015
     public void startSkillSound() {
         if (getNETimeGfx() > 0 && !_SkillSoundActive) {
             _SkillSound = new SkillSound(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSound, 10000, 10000);
+            if (_skillSoundFuture != null) {
+                _skillSoundFuture.cancel(false);
+            }
+            _skillSoundFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSound, 10000, 10000);
             _SkillSoundActive = true;
         }
         if (getNETimeGfx2() > 0 && !_SkillSoundActive) {
             _SkillSound = new SkillSound(this);
-            _regenTimer.scheduleAtFixedRate(_SkillSound, 10000, 10000);
+            if (_skillSoundFuture != null) {
+                _skillSoundFuture.cancel(false);
+            }
+            _skillSoundFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_SkillSound, 10000, 10000);
             _SkillSoundActive = true;
         }
     }
@@ -12237,6 +12322,10 @@ public class L1PcInstance extends L1Character { // src015
 
     public void stopSkillSound() {
         if (_SkillSoundActive) {
+            if (_skillSoundFuture != null) {
+                _skillSoundFuture.cancel(false);
+                _skillSoundFuture = null;
+            }
             _SkillSound.cancel();
             _SkillSound = null;
             _SkillSoundActive = false;
@@ -13137,7 +13226,7 @@ public class L1PcInstance extends L1Character { // src015
     public void sendHtmlCastGfx(String[] data) {
         this.sendPackets(new S_NPCTalkReturn(this, "wwhc", data));
         HtmlCastGfx htmlCastGfx = new HtmlCastGfx(this, data);
-        PcOtherThreadPool.get().schedule(htmlCastGfx, 300);
+        com.lineage.server.thread.GeneralThreadPool.get().schedule(htmlCastGfx, 300);
     }
 
     public int[] getReward_Ac() {
@@ -14096,7 +14185,7 @@ public class L1PcInstance extends L1Character { // src015
 
         private void DeathTime() {
             _timeHandler.schedule(this, 1000, 1000);
-            DeathThreadPool.get().execute(this);
+            GeneralThreadPool.get().execute(this);
         }
 
         @Override

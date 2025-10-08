@@ -3,7 +3,7 @@ package com.lineage.server.timecontroller.pc;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.serverpackets.S_ServerMessage;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.WorldDarkelf;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +22,7 @@ public class BlindHidingMpTimer extends TimerTask {
     private ScheduledFuture<?> _timer;
 
     public void start() {
-        _timer = PcOtherThreadPool.get().scheduleAtFixedRate(this, 1000L, 1000L);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, 1000L, 1000L);
         _log.info("BlindHidingMpTimer 啟動完成，每秒檢查黑妖暗隱術消耗。");
     }
 
@@ -50,7 +50,7 @@ public class BlindHidingMpTimer extends TimerTask {
             }
         } catch (Exception e) {
             _log.error("BlindHidingMpTimer 執行異常，自動重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             BlindHidingMpTimer timer = new BlindHidingMpTimer();
             timer.start();
         }

@@ -142,14 +142,14 @@ public class DecryptExecutor {
             // 問題分析和日志記錄已移除
         }
 
-        // 每1000次輸出簡單統計
-        if (totalReadCount % 1000 == 0) {
-            double avgTime = (double) totalReadTime / totalReadCount;
-            double slowRate = (double) slowReadCount / totalReadCount * 100;
-            _log.info("讀取統計: 次數=" + totalReadCount +
-                    ", 平均=" + String.format("%.2f", avgTime) + "ms" +
-                    ", 慢讀取=" + String.format("%.1f", slowRate) + "%");
-        }
+//        // 每1000次輸出簡單統計
+//        if (totalReadCount % 1000 == 0) {
+//            double avgTime = (double) totalReadTime / totalReadCount;
+//            double slowRate = (double) slowReadCount / totalReadCount * 100;
+//            _log.info("讀取統計: 次數=" + totalReadCount +
+//                    ", 平均=" + String.format("%.2f", avgTime) + "ms" +
+//                    ", 慢讀取=" + String.format("%.1f", slowRate) + "%");
+//        }
     }
 
     /**
@@ -200,15 +200,15 @@ public class DecryptExecutor {
     /**
      * 獲取讀取統計
      */
-    public String getReadStats() {
-        if (totalReadCount == 0) return "無讀取記錄";
-
-        double avgTime = (double) totalReadTime / totalReadCount;
-        double slowRate = (double) slowReadCount / totalReadCount * 100;
-
-        return String.format("讀取統計[次數=%d, 平均=%.2fms, 慢讀取=%.1f%%]",
-                totalReadCount, avgTime, slowRate);
-    }
+//    public String getReadStats() {
+//        if (totalReadCount == 0) return "無讀取記錄";
+//
+////        double avgTime = (double) totalReadTime / totalReadCount;
+////        double slowRate = (double) slowReadCount / totalReadCount * 100;
+//
+////        return String.format("讀取統計[次數=%d, 平均=%.2fms, 慢讀取=%.1f%%]",
+////                totalReadCount, avgTime, slowRate);
+//    }
 
     /**
      * 重置統計

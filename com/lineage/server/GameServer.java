@@ -44,6 +44,7 @@ import com.lineage.server.model.skill.L1SkillMode;
 import com.lineage.server.model.skill.skillmode.BraveavatarController;
 import com.lineage.server.templates.L1PcOther;
 import com.lineage.server.thread.*;
+import com.lineage.server.threads.pc.CharacterQuickCheckThread;
 import com.lineage.server.timecontroller.*;
 import com.lineage.server.timecontroller.event.ranking.RankingHeroTimer;
 import com.lineage.server.utils.PerformanceTimer;
@@ -102,9 +103,9 @@ public class GameServer {
             //QuestNewTable.get();
             AccountReading.get().load();
             GeneralThreadPool.get();
-            PcOtherThreadPool.get();
-            NpcAiThreadPool.get();
-            DeAiThreadPool.get();
+            // 已統一 GeneralThreadPool，移除舊池初始化
+            com.lineage.config.ConfigAI.load();
+            
             L1SystemMessageTable.get().loadSystemMessage();// DB化系統設定
             SystemMessage.getInstance(); // DB化訊息
             ExpTable.get().load();
@@ -366,8 +367,8 @@ public class GameServer {
             MagicHeChengTable.getInstance().load();//魔法合成調用圖片
             ACardTable.get().load();//卡冊
             CardSetTable.get().load();//組合卡冊
-            ServerGcTimePool.get();// 線程工廠設置
-            DeathThreadPool.get();// 線程工廠設置
+            
+            // DeathThreadPool 已代理 GeneralThreadPool 可不強制初始化
             Day_Signature.get().load();//每日領取
             Day_Signature_New.get().load();//每日領取(新)
             NewEnchantSystem.get().load();//強化武器加成系統
@@ -451,6 +452,15 @@ public class GameServer {
             L1DoorInstance.openDoor();
             BraveavatarController braveavatarController = BraveavatarController.getInstance();
             GeneralThreadPool.get().execute(braveavatarController);
+            // 啟動：玩家連線快速檢查（改用 GeneralThreadPool 定時任務）
+            CharacterQuickCheckThread.start();
+            // 啟動玩家數據清理管理器（若已啟動將忽略）
+            try {
+                com.add.Tsai.PlayerDataCleanupManager.getInstance();
+                _log.info("玩家數據清理管理器已啟動");
+            } catch (Exception ignore) {
+                _log.warn("玩家數據清理管理器啟動時發生例外，但不影響伺服器啟動");
+            }
             // 成長果實系統(Tam幣)
             TamController tamController = TamController.getInstance();
             GeneralThreadPool.get().scheduleAtFixedRate(tamController, 0, TamController.SLEEP_TIME);

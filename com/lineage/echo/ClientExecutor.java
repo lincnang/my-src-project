@@ -73,7 +73,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     private int _kick = 0;
     private int _error = -1;                 // 錯誤次數（沿用）
     private int _saveInventory = 0;
-    
+
     // === 连接监控相关 ===
     private long _connectTime = System.currentTimeMillis(); // 连接建立时间
     private volatile long _lastRecv = System.currentTimeMillis(); // 最后接收数据时间
@@ -109,31 +109,31 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
             // 1. TCP基本優化
             _csocket.setTcpNoDelay(true);              // 禁用Nagle算法，減少延遲
             _csocket.setKeepAlive(true);               // 啟用TCP KeepAlive檢測
-            
+
             // 2. 合理的緩衝區大小 - 避免過大導致內存問題
             _csocket.setReceiveBufferSize(256 * 1024); // 256KB 接收緩衝區
             _csocket.setSendBufferSize(256 * 1024);    // 256KB 發送緩衝區
-            
+
             // 3. 連接超時設置
             _csocket.setSoTimeout(READ_TIMEOUT_MS_HANDSHAKE);
             // 注意：Socket.setConnectTimeout只在連接時有效，這裡設置SO_TIMEOUT
             // _csocket.setConnectTimeout(30000);      // 連接超時在accept時已設定
-            
+
             // 4. 性能優化 - 優先考慮連接時間和延遲
             _csocket.setPerformancePreferences(1, 2, 0);
-            
+
             // 5. 優雅關閉設置 - 防止強制RST
             _csocket.setSoLinger(true, 30);            // 30秒內完成數據傳輸後關閉
-            
+
             // 6. 重用地址 - 防止TIME_WAIT狀態問題
             _csocket.setReuseAddress(true);
-            
+
             // 7. 禁用OOB數據 - 避免異常數據干擾
             _csocket.setOOBInline(false);
-            
-            _log.debug("Socket參數設置完成 - IP: " + _csocket.getInetAddress().getHostAddress() + 
-                      " 本地端口: " + _csocket.getLocalPort() + " 遠程端口: " + _csocket.getPort());
-                      
+
+            _log.debug("Socket參數設置完成 - IP: " + _csocket.getInetAddress().getHostAddress() +
+                    " 本地端口: " + _csocket.getLocalPort() + " 遠程端口: " + _csocket.getPort());
+
         } catch (Throwable t) {
             _log.warn("設定 socket 參數發生例外（使用系統預設）: " + t.getMessage(), t);
         }
@@ -152,7 +152,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         _keys = new Cipher();
         _decrypt = new DecryptExecutor(this, _csocket.getInputStream());
         _encrypt = new EncryptExecutor(this, _csocket.getOutputStream());
-        
+
         // 記錄新連線（已移除外部監控依賴）
     }
 
@@ -243,9 +243,9 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                             } catch (Throwable ignore) { /* ignore */ }
                             LanSecurityManager.BANIPPACK.remove(_ip.toString());
                             isEcho = true;
-                            
+
                             // 記錄握手成功
-                            
+
                         } else if (opcode == C_LOGIN) {
                             // 確保保存時程
                             set_savePc(Config.AUTOSAVE_INTERVAL);
@@ -270,23 +270,23 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                 // === 改善的Connection Reset處理 ===
                 String msg = e.getMessage();
                 String clientInfo = "IP: " + getIp() + " 帳號: " + (_account != null ? _account.get_login() : "未登入");
-                
+
                 if (msg != null && msg.toLowerCase().contains("connection reset")) {
                     // Connection Reset 詳細分析和記錄
                     _log.warn("Connection Reset 檢測 - " + clientInfo + " 原因: " + analyzeConnectionReset(e));
-                    
+
                     // 已移除外部監控系統
-                    
+
                     // 嘗試優雅處理斷線
                     handleConnectionReset();
-                    
-                } else if (msg != null && (msg.toLowerCase().contains("connection aborted") || 
-                                         msg.toLowerCase().contains("software caused connection abort"))) {
+
+                } else if (msg != null && (msg.toLowerCase().contains("connection aborted") ||
+                        msg.toLowerCase().contains("software caused connection abort"))) {
                     _log.warn("連接被中止 - " + clientInfo + " 原因: " + msg);
-                    
+
                 } else if (msg != null && msg.toLowerCase().contains("broken pipe")) {
                     _log.warn("管道破裂 - " + clientInfo + " 原因: " + msg);
-                    
+
                 } else {
                     _log.info("客戶端連線異常 (SocketException) - " + clientInfo + " 原因: " + msg);
                 }
@@ -320,19 +320,19 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     // =====================================================================
     // Connection Reset 診斷和處理
     // =====================================================================
-    
+
     /**
      * 分析Connection Reset的可能原因
      */
     private String analyzeConnectionReset(SocketException e) {
         StringBuilder analysis = new StringBuilder();
-        
+
         // 1. 檢查連接時長
         long connectionTime = System.currentTimeMillis() - _lastRecv;
         if (connectionTime > IDLE_KILL_MS) {
             analysis.append("長時間無活動(").append(connectionTime / 1000).append("秒)");
         }
-        
+
         // 2. 檢查Socket狀態
         if (_csocket != null) {
             analysis.append(" Socket狀態[");
@@ -341,7 +341,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
             analysis.append(" 已綁定:").append(_csocket.isBound());
             analysis.append("]");
         }
-        
+
         // 3. 檢查網絡條件
         String clientIp = getIp() != null ? getIp().toString() : "unknown";
         if (clientIp != null) {
@@ -351,19 +351,19 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                 analysis.append(" 外網IP");
             }
         }
-        
+
         // 4. 檢查當前狀態
         if (_account != null) {
             analysis.append(" 已登入");
         } else {
             analysis.append(" 未登入");
         }
-        
+
         return analysis.toString();
     }
-    
-    
-    
+
+
+
     /**
      * 處理Connection Reset - 嘗試優雅關閉
      */
@@ -372,7 +372,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
             // 1. 如果有角色在線，嘗試保存數據
             if (_activeChar != null && !_activeChar.isGhost()) {
                 _log.info("Connection Reset - 嘗試保存角色數據: " + _activeChar.getName());
-                
+
                 // 強制保存角色數據
                 try {
                     _activeChar.save();
@@ -380,7 +380,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                 } catch (Exception saveEx) {
                     _log.error("保存角色數據失敗: " + _activeChar.getName(), saveEx);
                 }
-                
+
                 // 從遊戲世界移除
                 try {
                     _activeChar.logout();
@@ -388,20 +388,20 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                     _log.error("角色登出處理失敗", logoutEx);
                 }
             }
-            
+
             // 2. 處理斷線（重連功能已移除，簡化處理）
             if (_account != null) {
                 _log.debug("玩家斷線: " + _account.get_login());
             }
-            
+
             // 3. 記錄斷線信息用於後續分析
             logDisconnectionInfo();
-            
+
         } catch (Exception e) {
             _log.error("處理Connection Reset時發生錯誤", e);
         }
     }
-    
+
     /**
      * 記錄斷線詳細信息
      */
@@ -409,20 +409,20 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         StringBuilder info = new StringBuilder();
         info.append("斷線詳情 - ");
         info.append("IP: ").append(getIp());
-        
+
         if (_account != null) {
             info.append(" 帳號: ").append(_account.get_login());
         }
-        
+
         if (_activeChar != null) {
             info.append(" 角色: ").append(_activeChar.getName());
             info.append(" 等級: ").append(_activeChar.getLevel());
             info.append(" 位置: ").append(_activeChar.getMapId()).append("(").append(_activeChar.getX()).append(",").append(_activeChar.getY()).append(")");
         }
-        
+
         long sessionTime = System.currentTimeMillis() - _connectTime;
         info.append(" 連線時長: ").append(sessionTime / 1000).append("秒");
-        
+
         _log.info(info.toString());
     }
 
@@ -434,7 +434,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     private void touchRecv() {
         _lastRecv = System.currentTimeMillis();
     }
-    
+
     /**
      * 更新活動時間 - 用於防止誤判閒置
      */
@@ -442,7 +442,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         lastActivityAt = System.currentTimeMillis();
         lastRecvAt = System.currentTimeMillis(); // 同時更新收包時間
     }
-    
+
     /**
      * 手動觸發活動更新 - 供外部調用
      */
@@ -456,37 +456,37 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         public void run() {
             try {
                 if (!_isStrat) return;
-                
+
                 // 1. 檢查閒置時間 - 使用活動時間而非收包時間
                 long idleByActivity = System.currentTimeMillis() - lastActivityAt;
                 long idleByReceive = System.currentTimeMillis() - lastRecvAt;
-                
+
                 // 只有在活動時間和收包時間都超過閾值時才判定為閒置
                 if (idleByActivity > IDLE_KILL_MS && idleByReceive > IDLE_KILL_MS) {
-                    _log.info("閒置超時，關閉連線: " + getIpString() + 
-                              " 活動閒置=" + (idleByActivity/1000) + "秒, 收包閒置=" + (idleByReceive/1000) + "秒");
+                    _log.info("閒置超時，關閉連線: " + getIpString() +
+                            " 活動閒置=" + (idleByActivity/1000) + "秒, 收包閒置=" + (idleByReceive/1000) + "秒");
                     kick();
                     return;
                 }
-                
+
                 // 記錄接近閒置的警告
                 if (idleByActivity > IDLE_KILL_MS * 0.8) { // 80% 閒置時間時警告
-                    _log.warn("連線接近閒置超時: " + getIpString() + 
-                              " 活動閒置=" + (idleByActivity/1000) + "秒");
+                    _log.warn("連線接近閒置超時: " + getIpString() +
+                            " 活動閒置=" + (idleByActivity/1000) + "秒");
                 }
-                
+
                 // 2. 檢查Socket連線狀態
                 if (_csocket != null && (_csocket.isClosed() || !_csocket.isConnected())) {
                     _log.info("Socket連線已斷開，清理資源: " + getIpString());
                     kick();
                     return;
                 }
-                
+
                 // 3. 檢查異常封包頻率
                 if (badPacketCount > BAD_PACKET_THRESHOLD / 2) {
                     _log.warn("異常封包頻率較高: " + getIpString() + " count=" + badPacketCount);
                 }
-                
+
             } catch (Throwable t) {
                 _log.warn("IdleWatchdog 例外（忽略）", t);
             } finally {
@@ -563,8 +563,8 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
 
             // 記錄離線 - 簡化版
 
-            
-            
+
+
 
         } catch (final Exception ignore) {
             // 不做額外處理，避免關閉流程卡住
@@ -656,7 +656,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
 
     /** 傳回IP位置 */
     public StringBuilder getIp() { return _ip; }
-    
+
     /**
      * 獲取IP地址字串
      */

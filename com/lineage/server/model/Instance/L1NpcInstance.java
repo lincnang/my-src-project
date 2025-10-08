@@ -119,6 +119,7 @@ public class L1NpcInstance extends L1Character {
     private int _deadTimerTemp = -1;
     private int _stop_time = -1;
     private int _work_time = -1;
+    private java.util.concurrent.ScheduledFuture<?> _kirtasFuture;
     // ■■■■■■■■■■■■■ ＡＩ關連 ■■■■■■■■■■■
     private KIRTAS_Timer _kirtastimer;
     /**
@@ -188,6 +189,19 @@ public class L1NpcInstance extends L1Character {
      * npc目標搜尋設置
      */
     public void searchTarget() {
+        // 依照設定決定採用 L1J 或原生搜尋
+        if (com.lineage.config.ConfigAI.useL1JAIForNpc(getNpcTemplate().get_npcId())) {
+            L1J_AI_Adapter.searchTarget(this);
+        } else {
+            searchTarget_Original();
+        }
+    }
+
+    /**
+     * 原本 NPC 的搜尋目標行為（保留回退與混用場景）。
+     */
+    protected void searchTarget_Original() {
+        // 預設不做事，由子類（如 L1MonsterInstance/L1GuardInstance 等）覆寫。
     }
 
     /**
@@ -1868,11 +1882,17 @@ public class L1NpcInstance extends L1Character {
 
     public void startKIRTAS_Timer() {
         _kirtastimer = new KIRTAS_Timer(this);
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(_kirtastimer, 1000L, 1000L);
+        if (_kirtasFuture != null) {
+            _kirtasFuture.cancel(false);
+        }
+        _kirtasFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_kirtastimer, 1000L, 1000L);
     }
 
     public void stopKIRTAS_Timer() {
+        if (_kirtasFuture != null) {
+            _kirtasFuture.cancel(false);
+            _kirtasFuture = null;
+        }
         _kirtastimer.cancel();
         _kirtastimer = null;
     }
@@ -2559,12 +2579,11 @@ public class L1NpcInstance extends L1Character {
         if (npcChat == null) {
             return;
         }
-        final Timer timer = new Timer(true);
         final L1NpcChatTimer npcChatTimer = new L1NpcChatTimer(this, npcChat);
         if (!npcChat.isRepeat()) {
-            timer.schedule(npcChatTimer, npcChat.getStartDelayTime());
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(npcChatTimer, npcChat.getStartDelayTime());
         } else {
-            timer.scheduleAtFixedRate(npcChatTimer, npcChat.getStartDelayTime(), npcChat.getRepeatInterval());
+            com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(npcChatTimer, npcChat.getStartDelayTime(), npcChat.getRepeatInterval());
         }
     }
 

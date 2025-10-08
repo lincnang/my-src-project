@@ -50,9 +50,24 @@ public class AstrologyCmd {
 
     public static AstrologyCmd get() {
         if (_instance == null) {
-            _instance = new AstrologyCmd();
+            synchronized (AstrologyCmd.class) {
+                if (_instance == null) {
+                    _instance = new AstrologyCmd();
+                }
+            }
         }
         return _instance;
+    }
+    
+    /**
+     * 清理玩家數據，防止記憶體洩漏
+     */
+    public static void cleanupPlayerData(int playerId) {
+        skill1ActiveMap.remove(playerId);
+        skill2ActiveMap.remove(playerId);
+        _ASTROLOGY_SKILLS.remove(playerId);
+        _ASTROLOGY_SKILLS2.remove(playerId);
+        _ASTROLOGY_BUFFS.remove(playerId);
     }
 
     /**

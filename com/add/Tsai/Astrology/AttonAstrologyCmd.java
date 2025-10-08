@@ -38,9 +38,22 @@ public class AttonAstrologyCmd {
 
     public static AttonAstrologyCmd get() {
         if (_instance == null) {
-            _instance = new AttonAstrologyCmd();
+            synchronized (AttonAstrologyCmd.class) {
+                if (_instance == null) {
+                    _instance = new AttonAstrologyCmd();
+                }
+            }
         }
         return _instance;
+    }
+    
+    /**
+     * 清理玩家數據，防止記憶體洩漏
+     */
+    public static void cleanupPlayerData(int playerId) {
+        _ASTROLOGY_SKILLS.remove(playerId);
+        _ASTROLOGY_SKILLS2.remove(playerId);
+        _ATTON_LAST_BTN.remove(playerId);
     }
 
     /**

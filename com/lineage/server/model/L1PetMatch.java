@@ -11,7 +11,6 @@ import com.lineage.server.templates.L1Npc;
 import com.lineage.server.templates.L1Pet;
 import com.lineage.server.world.World;
 
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
@@ -232,8 +231,7 @@ public class L1PetMatch {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 3000L);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 3000L);
         }
 
         public void run() {
@@ -268,8 +266,7 @@ public class L1PetMatch {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 0L);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 0L);
         }
 
         public void run() {

@@ -1,7 +1,7 @@
 package com.lineage.server.timecontroller.pc;
 
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.WorldDragonKnight;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,7 +15,7 @@ public class UpdateObjectDKTimer extends TimerTask {
     private ScheduledFuture<?> _timer;
 
     public void start() {
-        _timer = PcOtherThreadPool.get().scheduleAtFixedRate(this, 350L, 350L);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, 350L, 350L);
     }
 
     public void run() {
@@ -32,7 +32,7 @@ public class UpdateObjectDKTimer extends TimerTask {
             }
         } catch (Exception e) {
             _log.error("Pc 可見物更新處理時間軸(龍騎)異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             UpdateObjectDKTimer objectDKTimer = new UpdateObjectDKTimer();
             objectDKTimer.start();
         }

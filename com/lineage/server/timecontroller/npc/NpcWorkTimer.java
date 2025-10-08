@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * NPC工作時間軸
@@ -62,7 +61,7 @@ public class NpcWorkTimer extends TimerTask {
                 } else {
                     startWork(npc);
                 }
-                TimeUnit.MILLISECONDS.sleep(50);
+                // 移除逐筆 sleep，避免在高壓下阻塞 AI 排程
             }
         } catch (final Exception e) {
             _log.error("NPC工作時間軸異常重啟", e);

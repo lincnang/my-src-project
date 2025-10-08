@@ -9,14 +9,17 @@ import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.DeName;
 import com.lineage.server.templates.L1EmblemIcon;
 import com.lineage.server.templates.L1Npc;
-import com.lineage.server.thread.DeAiThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.types.Point;
 import com.lineage.server.utils.ListMapUtil;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -573,7 +576,7 @@ public class L1DeInstance extends L1NpcInstance {
                 setDead(true);
                 setStatus(8);
                 Death death = new Death(attacker);
-                DeAiThreadPool.get().execute(death);
+                GeneralThreadPool.get().execute(death);
             }
             if (newHp > 0) {
                 setCurrentHp(newHp);
@@ -582,7 +585,7 @@ public class L1DeInstance extends L1NpcInstance {
             setDead(true);
             setStatus(8);
             Death death = new Death(attacker);
-            DeAiThreadPool.get().execute(death);
+            GeneralThreadPool.get().execute(death);
         }
     }
 
@@ -771,7 +774,7 @@ public class L1DeInstance extends L1NpcInstance {
         }
 
         private void startCmd() {
-            DeAiThreadPool.get().execute(this);
+            GeneralThreadPool.get().execute(this);
         }
 
         public void run() {

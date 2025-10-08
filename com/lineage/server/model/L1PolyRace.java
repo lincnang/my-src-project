@@ -11,7 +11,6 @@ import com.lineage.server.serverpackets.*;
 import javolution.util.FastTable;
 
 import java.util.Random;
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class L1PolyRace {
@@ -436,9 +435,8 @@ public class L1PolyRace {
     }
 
     private void startGameTimeLimitTimer() {
-        Timer timer = new Timer();
         limitTimer = new GameTimeLimitTimer();
-        timer.schedule(limitTimer, limitTime);
+        com.lineage.server.thread.GeneralThreadPool.get().schedule(limitTimer, limitTime);
     }
 
     private void stopGameTimeLimitTimer() {
@@ -450,9 +448,8 @@ public class L1PolyRace {
     }
 
     private void startCompareTimer() {
-        Timer timer = new Timer();
         compareTimer = new CompareTimer();
-        timer.schedule(compareTimer, 2000L, 2000L);
+        com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(compareTimer, 2000L, 2000L);
     }
 
     private void stopCompareTimer() {
@@ -473,8 +470,7 @@ public class L1PolyRace {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 30000L);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 30000L);
         }
     }
 
@@ -492,8 +488,7 @@ public class L1PolyRace {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 5000L);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 5000L);
         }
     }
 
@@ -522,8 +517,7 @@ public class L1PolyRace {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 5000L);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 5000L);
         }
     }
 
@@ -554,8 +548,7 @@ public class L1PolyRace {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, L1PolyRace.readyTime);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, L1PolyRace.readyTime);
         }
     }
 }

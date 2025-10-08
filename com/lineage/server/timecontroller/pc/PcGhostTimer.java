@@ -4,7 +4,7 @@ import com.lineage.server.model.Instance.L1MonsterInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Object;
 import com.lineage.server.serverpackets.S_DoActionGFX;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,7 +46,7 @@ public class PcGhostTimer extends TimerTask {
     }
 
     public void start() {
-        _timer = PcOtherThreadPool.get().scheduleAtFixedRate(this, 1100L, 1100L);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, 1100L, 1100L);
     }
 
     public void run() {
@@ -80,7 +80,7 @@ public class PcGhostTimer extends TimerTask {
             }
         } catch (Exception e) {
             _log.error("PC 鬼魂模式處理時間軸異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             PcGhostTimer pcghostTimer = new PcGhostTimer();
             pcghostTimer.start();
         }

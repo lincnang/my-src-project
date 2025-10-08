@@ -10,8 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 玩家覺醒進度存取
@@ -20,12 +20,17 @@ public class CardAwakenProgressTable {
     private static final Log _log = LogFactory.getLog(CardAwakenProgressTable.class);
     private static CardAwakenProgressTable _instance;
 
-    // 快取：(account|cardId) -> progress
-    private final Map<String, CardAwakenProgress> cache = new HashMap<>();
+    // 快取：(account|cardId) -> progress (線程安全)
+    private final Map<String, CardAwakenProgress> cache = new ConcurrentHashMap<>();
 
+    // 修復後代碼
     public static CardAwakenProgressTable get() {
         if (_instance == null) {
-            _instance = new CardAwakenProgressTable();
+            synchronized (CardAwakenProgressTable.class) {
+                if (_instance == null) {
+                    _instance = new CardAwakenProgressTable();
+                }
+            }
         }
         return _instance;
     }

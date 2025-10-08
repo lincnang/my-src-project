@@ -12,19 +12,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 載入並管理「守護星盤_絲莉安」資料
  */
 public class SilianAstrologyTable {
     private static final Log _log = LogFactory.getLog(SilianAstrologyTable.class);
-    private static final Map<Integer, SilianAstrologyData> _index = new HashMap<>();
-    private static final Set<Integer> _grantItemIds = new HashSet<>();
-    private static final Map<Integer, SilianAstrologyData> _grantMap = new HashMap<>();
+    private static final Map<Integer, SilianAstrologyData> _index = new ConcurrentHashMap<>();
+    private static final Set<Integer> _grantItemIds = ConcurrentHashMap.newKeySet();
+    private static final Map<Integer, SilianAstrologyData> _grantMap = new ConcurrentHashMap<>();
     private static SilianAstrologyTable _instance;
 
     private SilianAstrologyTable() {}

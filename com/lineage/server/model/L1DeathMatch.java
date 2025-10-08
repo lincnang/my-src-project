@@ -600,9 +600,8 @@ public class L1DeathMatch {
     }
 
     private void startGameTimeLimitTimer() {
-        Timer timer = new Timer();
         limitTimer = new GameTimeLimitTimer();
-        timer.schedule(limitTimer, limitTime);
+        com.lineage.server.thread.GeneralThreadPool.get().schedule(limitTimer, limitTime);
     }
 
     private void stopGameTimeLimitTimer() {
@@ -788,8 +787,7 @@ public class L1DeathMatch {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 50 * 1000); // 50s
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 50 * 1000);
         }
     }
 
@@ -834,8 +832,7 @@ public class L1DeathMatch {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, limitPenaltyTime, 3 * 1000); // 3秒週期
+            com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(this, limitPenaltyTime, 3 * 1000);
         }
     }
 
@@ -861,8 +858,7 @@ public class L1DeathMatch {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 60 * 3 * 1000); // 3分鐘
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 60 * 3 * 1000);
         }
     }
 
@@ -875,8 +871,7 @@ public class L1DeathMatch {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 10000);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 10000);
         }
     }
 
@@ -907,8 +902,7 @@ public class L1DeathMatch {
         }
 
         public void begin() {
-            Timer timer = new Timer();
-            timer.schedule(this, 4 * 1000);
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(this, 4 * 1000);
         }
     }
 }

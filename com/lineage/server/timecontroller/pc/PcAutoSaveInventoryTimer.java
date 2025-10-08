@@ -4,12 +4,11 @@ import com.lineage.config.Config;
 import com.lineage.echo.ClientExecutor;
 import com.lineage.list.OnlineUser;
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
 
@@ -18,7 +17,7 @@ public class PcAutoSaveInventoryTimer extends TimerTask {
     private ScheduledFuture<?> _timer;
 
     public void start() {
-        _timer = PcOtherThreadPool.get().scheduleWithFixedDelay(this, 60000L, 60000L);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, 60000L, 60000L);
     }
 
     public void run() {
@@ -37,7 +36,7 @@ public class PcAutoSaveInventoryTimer extends TimerTask {
             }
         } catch (Exception e) {
             _log.error("背包物品自動保存時間軸異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             PcAutoSaveInventoryTimer restart = new PcAutoSaveInventoryTimer();
             restart.start();
         }

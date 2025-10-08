@@ -1232,6 +1232,8 @@ public class C_LoginToServer extends ClientBasePacket {
             pc.setPacketOutput(client.out());// 登記封包發送組
             pc.sendPackets(new S_EnterGame(pc));// 宣告進入遊戲
             client.setActiveChar(pc);// 登記玩家資料
+            // 登入清理掛鉤：通知清理管理器玩家已登入
+            com.lineage.server.model.Instance.L1PcInstanceCleanupIntegration.onPlayerLogin(pc);
             pc.sendPackets(new S_InitialAbilityGrowth(pc));// 初始點數獎勵
             items(pc);// 讀取角色道具
             //昇華系統

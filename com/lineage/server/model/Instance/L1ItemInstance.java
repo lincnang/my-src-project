@@ -16,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.lineage.server.model.skill.L1SkillId.BLESS_WEAPON;
@@ -63,6 +62,7 @@ public class L1ItemInstance extends L1Object {
     private Timestamp _lastUsed;
     private L1PcInstance _pc;
     private EnchantTimer _timer;
+    private java.util.concurrent.ScheduledFuture<?> _enchantFuture;
     /**
      * [原碼] 怪物對戰系統
      */
@@ -78,6 +78,7 @@ public class L1ItemInstance extends L1Object {
     private int _hitByMagic = 0;
     private int _itemOwnerId = 0;
     private L1EquipmentTimer _equipmentTimer;
+    private java.util.concurrent.ScheduledFuture<?> _equipmentFuture;
     private boolean _isNowLighting = false;
     private boolean _isMatch = false;
     private int _char_objid = -1;
@@ -1174,7 +1175,10 @@ public class L1ItemInstance extends L1Object {
         _pc = pc;
         _char_objid = _pc.getId();
         _timer = new EnchantTimer();
-        new Timer().schedule(_timer, skillTime);
+        if (_enchantFuture != null) {
+            _enchantFuture.cancel(false);
+        }
+        _enchantFuture = com.lineage.server.thread.GeneralThreadPool.get().schedule(_timer, skillTime);
         _isRunning = true;
     }
 
@@ -1213,7 +1217,10 @@ public class L1ItemInstance extends L1Object {
         _pc = pc;
         _char_objid = _pc.getId();
         _timer = new EnchantTimer();
-        new Timer().schedule(_timer, skillTime);
+        if (_enchantFuture != null) {
+            _enchantFuture.cancel(false);
+        }
+        _enchantFuture = com.lineage.server.thread.GeneralThreadPool.get().schedule(_timer, skillTime);
         _isRunning = true;
     }
 
@@ -1231,8 +1238,10 @@ public class L1ItemInstance extends L1Object {
         }
         if (getRemainingTime() > 0) {
             _equipmentTimer = new L1EquipmentTimer(pc, this);
-            Timer timer = new Timer(true);
-            timer.scheduleAtFixedRate(_equipmentTimer, 1000L, 1000L);
+            if (_equipmentFuture != null) {
+                _equipmentFuture.cancel(false);
+            }
+            _equipmentFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_equipmentTimer, 1000L, 1000L);
         }
     }
 
@@ -1241,8 +1250,14 @@ public class L1ItemInstance extends L1Object {
             return;
         }
         if (getRemainingTime() > 0) {
-            _equipmentTimer.cancel();
-            _equipmentTimer = null;
+            if (_equipmentFuture != null) {
+                _equipmentFuture.cancel(false);
+                _equipmentFuture = null;
+            }
+            if (_equipmentTimer != null) {
+                _equipmentTimer.cancel();
+                _equipmentTimer = null;
+            }
         }
     }
 

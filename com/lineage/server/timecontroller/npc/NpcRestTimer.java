@@ -7,10 +7,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * NPC動作暫停時間軸
@@ -47,7 +45,7 @@ public class NpcRestTimer extends TimerTask {
                     npc.set_stop_time(-1);
                     npc.setRest(false);
                 }
-                TimeUnit.MILLISECONDS.sleep(50);
+                // 移除逐筆 sleep，避免阻塞整個 NPC 動作恢復
             }
         } catch (final Exception e) {
             _log.error("NPC動作暫停時間軸異常重啟", e);

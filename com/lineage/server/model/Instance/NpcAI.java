@@ -1,7 +1,7 @@
 package com.lineage.server.model.Instance;
 
 import com.lineage.server.model.L1Inventory;
-import com.lineage.server.thread.NpcAiThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +26,7 @@ public class NpcAI implements Runnable {
     }
 
     public void startAI() {
-        NpcAiThreadPool.get().execute(this);
+        GeneralThreadPool.get().execute(this);
     }
 
     @Override

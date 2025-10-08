@@ -13,7 +13,6 @@ import com.lineage.server.utils.L1SpawnUtil;
 import com.lineage.server.world.World;
 
 import java.util.Random;
-import java.util.Timer;
 import java.util.TimerTask;
 
 /**
@@ -51,11 +50,10 @@ public class TITAN_STUN extends SkillMode {
         int healPerSec = totalHeal / hotTime;
         int lastHeal = totalHeal - healPerSec * (hotTime - 1);
         srcpc.setSkillEffect(L1SkillId.TITAN_STUN_HEAL, hotTime * 1000);
-        Timer timer = new Timer();
         for (int i = 1; i <= hotTime; i++) {
             final int heal = (i == hotTime) ? lastHeal : healPerSec;
             int delay = i * 1000;
-            timer.schedule(new TimerTask() {
+            com.lineage.server.thread.GeneralThreadPool.get().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (srcpc.hasSkillEffect(L1SkillId.TITAN_STUN_HEAL)) {

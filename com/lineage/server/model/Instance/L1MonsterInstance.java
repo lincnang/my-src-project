@@ -59,6 +59,23 @@ public class L1MonsterInstance extends L1NpcInstance {
     public L1MonsterInstance(final L1Npc template) {
         super(template);
         this._storeDroped = false;
+        applyAISettings();
+    }
+
+    private void applyAISettings() {
+        try {
+            final int npcId = getNpcTemplate().get_npcId();
+            if (com.lineage.config.ConfigAI.EXCLUDE_NPC_IDS.contains(npcId)) {
+                return; // 黑名單不啟用
+            }
+            if (!com.lineage.config.ConfigAI.L1J_AI_NPC_IDS.isEmpty()) {
+                if (com.lineage.config.ConfigAI.L1J_AI_NPC_IDS.contains(npcId)) {
+                    // 無需設旗標，因我們已將 searchTarget 統一改為 L1J；此函式保留日後細分擴充
+                }
+            } else if (com.lineage.config.ConfigAI.USE_L1J_AI) {
+                // 全域啟用；目前 searchTarget 已統一切換
+            }
+        } catch (Exception ignored) {}
     }
 
     /**
@@ -151,24 +168,24 @@ public class L1MonsterInstance extends L1NpcInstance {
 
     @Override
     public void searchTarget() {
-        // 攻擊目標搜尋
-        L1NpcInstance targetNpc = searchTargetNpc();
-        L1PcInstance targetPlayer = searchTargetPlayer();
-        if (targetNpc != null) {
-            _hateList.add(targetNpc, 0);
-            _target = targetNpc;
-        } else if (targetPlayer != null) {
-            _hateList.add(targetPlayer, 0);
-            _target = targetPlayer;
+        // 依照設定決定採用 L1J 或原生搜尋
+        if (com.lineage.config.ConfigAI.useL1JAIForNpc(getNpcTemplate().get_npcId())) {
+            L1J_AI_Adapter.searchTarget(this);
         } else {
+            super.searchTarget_Original();
+        }
+        if (_target == null) {
             ISASCAPE = false;
         }
     }
+
+    // 舊版搜尋函式保留原始實作供必要時回退使用
 
     /**
      * 搜尋NPC目標
      *
      */
+    @SuppressWarnings("unused")
     private L1MonsterInstance searchTargetNpc() {
         L1MonsterInstance targetNpc = null;
         // /** [原碼] 怪物對戰系統 * /
@@ -244,6 +261,7 @@ public class L1MonsterInstance extends L1NpcInstance {
      * 搜尋玩家目標
      *
      */
+    @SuppressWarnings("unused")
     private L1PcInstance searchTargetPlayer() {
         // 攻擊目標搜尋
         L1PcInstance targetPlayer = null;
@@ -896,6 +914,10 @@ public class L1MonsterInstance extends L1NpcInstance {
                 distributeDrop();
                 // 陣營
                 giveKarma(pc);
+                // 立即移除怪物屍體，死亡即消失
+                try {
+                    deleteMe();
+                } catch (Exception ignored) {}
             }
         }
     }

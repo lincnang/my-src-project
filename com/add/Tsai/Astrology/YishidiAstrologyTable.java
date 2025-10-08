@@ -15,8 +15,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 載入並管理「守護星盤_依詩蒂」資料
@@ -25,7 +25,7 @@ import java.util.Map;
 public class YishidiAstrologyTable {
     private static final Log _log = LogFactory.getLog(YishidiAstrologyTable.class);
     private static YishidiAstrologyTable _instance;
-    private static final Map<Integer, YishidiAstrologyData> _index = new HashMap<>();
+    private static final Map<Integer, YishidiAstrologyData> _index = new ConcurrentHashMap<>();
 
     private YishidiAstrologyTable() {}
 

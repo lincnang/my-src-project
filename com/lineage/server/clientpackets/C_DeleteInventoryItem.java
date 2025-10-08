@@ -96,7 +96,7 @@ public class C_DeleteInventoryItem extends ClientBasePacket {
                     return;
                 }
                 // 個人刪除物品紀錄
-                _log.info("人物:" + pc.getName() + "刪除物品" + item.getItem().getName() + " 物品OBJID:" + item.getId());
+                // _log.info("人物:" + pc.getName() + "刪除物品" + item.getItem().getName() + " 物品OBJID:" + item.getId());
                 WriteLogTxt.Recording("物品刪除紀錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】刪除物品:【" + item.getRecordName(item.getCount()) + "】個  物品OBJID:" + item.getId() + "】.");
                 OtherUserTitleReading.get().add(item.getItem().getName() + "(" + item.getItemId() + ")", item.getId(), 0, item.getCount(), pc.getId(), "刪除者:" + pc.getName(), pc.getMapId(), "刪除物品");
                 pc.getInventory().removeItem(item, itemCount);

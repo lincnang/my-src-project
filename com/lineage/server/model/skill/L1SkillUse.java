@@ -957,7 +957,13 @@ public class L1SkillUse {
                 // 範圍攻擊
             } else {
                 if (!this._skill.getTarget().equals("none")) {
-                    this._targetList.add(new TargetStatus(this._target));
+                    // 假人法師範圍技能不攻擊其他假人
+                    boolean isDeUser = (this._user instanceof com.lineage.server.model.Instance.L1DeInstance);
+                    boolean isAoEAttack = ((_skill.getTarget().equals("none") && (_skill.getType() == L1Skills.TYPE_ATTACK))
+                            || ((_skill.getArea() != 0) && (_skill.getTarget().equals("attack") || (_skill.getType() == L1Skills.TYPE_ATTACK))));
+                    if (!(isDeUser && isAoEAttack && (this._target instanceof com.lineage.server.model.Instance.L1DeInstance))) {
+                        this._targetList.add(new TargetStatus(this._target));
+                    }
                 }
                 if ((this._skillId != HEAL_ALL) && !(this._skill.getTarget().equals("attack") || (this._skill.getType() == L1Skills.TYPE_ATTACK))) {
                     // 攻擊系以外のスキルとH-A以外はターゲット自身を含める
@@ -990,6 +996,13 @@ public class L1SkillUse {
                     }
                     final L1Character cha = (L1Character) tgobj;
                     if (!this.isTarget(cha)) {
+                        continue;
+                    }
+                    // 假人法師範圍技能不攻擊其他假人
+                    boolean isDeUser = (this._user instanceof com.lineage.server.model.Instance.L1DeInstance);
+                    boolean isAoEAttack = ((_skill.getTarget().equals("none") && (_skill.getType() == L1Skills.TYPE_ATTACK))
+                            || ((_skill.getArea() != 0) && (_skill.getTarget().equals("attack") || (_skill.getType() == L1Skills.TYPE_ATTACK))));
+                    if (isDeUser && isAoEAttack && (cha instanceof com.lineage.server.model.Instance.L1DeInstance)) {
                         continue;
                     }
                     // 技能發動 目標清單判定:加入目標清單 - 回圈
@@ -1773,11 +1786,33 @@ public class L1SkillUse {
                                 iter.remove();
                                 continue;
                             }
+                            // 命中後才執行對應的 skillmode 效果（例如 SHOCK_STUN 暈眩）
+                            {
+                                final SkillMode m = L1SkillMode.get().getSkill(this._skillId);
+                                if (m != null) {
+                                    if (this._user instanceof L1PcInstance) {
+                                        this._dmg = m.start(this._player, cha, magic, this._getBuffIconDuration);
+                                    } else if (this._user instanceof L1NpcInstance) {
+                                        this._dmg = m.start(this._npc, cha, magic, this._getBuffIconDuration);
+                                    }
+                                }
+                            }
                             if ((this._skillId == STRIKER_GALE) && (cha instanceof L1PcInstance)) {  //src041
                                 final L1PcInstance pc = (L1PcInstance) cha;
                                 pc.sendPackets(new S_PacketBox(S_PacketBox.UPDATE_ER, 0));
                             }
                         } else { // 失敗した場合、リストから削除
+                            // 保險：衝暈/暈眩類失敗時，強制解除任何可能殘留的暈眩鎖定
+                            if ((this._skillId == SHOCK_STUN || this._skillId == EMPIRE || this._skillId == KINGDOM_STUN
+                                    || this._skillId == TITAN_STUN || this._skillId == Shadow_Daze) && (cha instanceof L1PcInstance)) {
+                                final L1PcInstance pc = (L1PcInstance) cha;
+                                pc.removeSkillEffect(SHOCK_STUN);
+                                pc.removeSkillEffect(EMPIRE);
+                                pc.removeSkillEffect(KINGDOM_STUN);
+                                pc.removeSkillEffect(TITAN_STUN);
+                                pc.removeSkillEffect(Shadow_Daze);
+                                pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
+                            }
                             if ((/*this._skillId == FOG_OF_SLEEPING || */_skillId == 212 || _skillId == 103) && (cha instanceof L1PcInstance)) {
                                 final L1PcInstance pc = (L1PcInstance) cha;
                                 // 297 你感覺些微地暈眩。
@@ -1848,22 +1883,29 @@ public class L1SkillUse {
                     // 施展者是PC
                     if (this._user instanceof L1PcInstance) {
                         switch (this._skillId) {
-						/*case TELEPORT:// 指定傳送5
-						case MASS_TELEPORT:// 集體傳送術69
-							this._dmg = mode.start(this._player, cha, magic, this._bookmarkId);
-							break;*/
-                            //						case CALL_CLAN:// 呼喚盟友
-                            //						case RUN_CLAN:// 援護盟友118
-                            //							this._dmg = mode.start(this._player, cha, magic, this._targetID);
-                            //							break;
+                        /*case TELEPORT:// 指定傳送5
+                        case MASS_TELEPORT:// 集體傳送術69
+                            this._dmg = mode.start(this._player, cha, magic, this._bookmarkId);
+                            break;*/
+                            //                        case CALL_CLAN:// 呼喚盟友
+                            //                        case RUN_CLAN:// 援護盟友118
+                            //                            this._dmg = mode.start(this._player, cha, magic, this._targetID);
+                            //                            break;
                             default:
-                                this._dmg = mode.start(this._player, cha, magic, this._getBuffIconDuration);
+                                // 機率/詛咒類技能改為等命中判定通過後再執行，避免未命中也套用效果
+                                if (!(_skill.getType() == L1Skills.TYPE_PROBABILITY || _skill.getType() == L1Skills.TYPE_CURSE
+                                        || _skillId == SHOCK_STUN || _skillId == EMPIRE || _skillId == KINGDOM_STUN || _skillId == TITAN_STUN || _skillId == Shadow_Daze)) {
+                                    this._dmg = mode.start(this._player, cha, magic, this._getBuffIconDuration);
+                                }
                                 break;
                         }
                     }
                     // 施展者是NPC
                     if (this._user instanceof L1NpcInstance) {
-                        this._dmg = mode.start(this._npc, cha, magic, this._getBuffIconDuration);
+                        if (!(_skill.getType() == L1Skills.TYPE_PROBABILITY || _skill.getType() == L1Skills.TYPE_CURSE
+                                || _skillId == SHOCK_STUN || _skillId == EMPIRE || _skillId == KINGDOM_STUN || _skillId == TITAN_STUN || _skillId == Shadow_Daze)) {
+                            this._dmg = mode.start(this._npc, cha, magic, this._getBuffIconDuration);
+                        }
                     }
                 } else {// 沒有skillmode
                     // ■■■■ 個別處理のあるスキルのみ書いてください。 ■■■■

@@ -8,10 +8,10 @@ import com.lineage.server.model.L1Clan;
 import com.lineage.server.serverpackets.S_BlueMessage;
 import com.lineage.server.serverpackets.S_Message_YN;
 import com.lineage.server.serverpackets.S_ServerMessage;
-import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.timecontroller.server.ServerWarExecutor;
 import com.lineage.server.world.World;
 import com.lineage.server.world.WorldClan;
+import com.lineage.server.datatables.MapsTable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,10 +41,7 @@ public class Clan_Teleprot extends ItemExecutor {
     @Override
     public void execute(final int[] data, final L1PcInstance pc, final L1ItemInstance item) {
         try {
-            if (!pc.getMap().chuanyunjian()) {
-                pc.sendPackets(new S_SystemMessage("此地圖無法使用穿雲箭用" + item.getName()));
-                return;
-            }
+            // 放寬：允許在任何地圖使用穿雲箭
             if (pc.getClanid() == 0) {
                 pc.sendPackets(new S_ServerMessage("\\fY無血盟狀態無法使用"));
                 return;
@@ -95,15 +92,18 @@ public class Clan_Teleprot extends ItemExecutor {
                         if (clan_pc != null) {
                             clan_pc.setTempID(pc.getId()); // 暫存盟主ID
                             clan_pc.setCallClan(true);
-                            String msg = pc.getName() + "使用" + item.getName();
-                            //							// 729 盟主正在呼喚你，你要接受他的呼喚嗎？(Y/N)
+                            // 729 盟主正在呼喚你，你要接受他的呼喚嗎？(Y/N)
                             clan_pc.sendPackets(new S_Message_YN(729));
-                            clan_pc.sendPackets(new S_ServerMessage(166, "血盟成員發出穿雲箭，你要接受他的支援嗎？"));
-                            clan_pc.sendPackets(new S_BlueMessage(166, "\\f=【\\f3" + msg + "\\f=】\\f>向你發送一隻穿雲箭，千鈞萬馬來相見"));
                         }
                     }
                 }
             }
+            // 與隊伍穿雲一致的全服公告樣式
+            int mapid = pc.getMapId();
+            pc.sendPacketsAll(new com.lineage.server.serverpackets.S_SkillSound(pc.getId(), 729));
+            World.get().broadcastPacketToAll(new S_BlueMessage(166,
+                    "\\f3 大神 【" + pc.getName() + "】在【" + MapsTable.get().locationname(mapid) +
+                    "】. \\f4 使用了一隻穿雲箭！\\f2 千軍萬馬來相見！"));
             pc.sendPackets(new S_ServerMessage("\\fY你已經對所有在線血盟成員發出訊息!"));
             if (_remove == 1) {
                 pc.getInventory().removeItem(item, 1);

@@ -225,8 +225,8 @@ public class ServerQuestMobTable {  //src027
             } else {
                 System.out.println("[DEBUG] 任務尚未啟動，不進行擊殺紀錄。");
             }
-        } else {
-            System.out.println("[DEBUG] 玩家目前沒有正在進行中的主線任務，不執行任務紀錄。");
+//        } else {
+//            System.out.println("[DEBUG] 玩家目前沒有正在進行中的主線任務，不執行任務紀錄。");
         }
     }
 
@@ -571,7 +571,7 @@ public class ServerQuestMobTable {  //src027
                 }
             }
         }
-        System.out.println("getCurrentMainQuestId: 找不到下一階段，全部任務已完成");
+//        System.out.println("getCurrentMainQuestId: 找不到下一階段，全部任務已完成");
         return -1;
     }
 

@@ -263,6 +263,7 @@ public class L1WeaponProficiency {
             case 13: return 4;
             case 17: return 10;
             case 12: return 9;
+            case 16: return 7;
             default: return type;
         }
     }

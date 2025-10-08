@@ -45,7 +45,6 @@ public class SHADOW_IMPACT extends SkillMode {
         if (target instanceof L1PcInstance) {
             L1PcInstance pc = (L1PcInstance) target;
             pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
-            pc.setParalyzed(true);
             pc.sendPackets(new S_IconConfig(S_IconConfig.SKILL_ICON, 26, shock, false, false));
             L1SpawnUtil.spawnEffect(200426, shock, pc.getX(), pc.getY(), pc.getMapId(), pc, 0);
         } else if (target instanceof L1NpcInstance) {
@@ -69,7 +68,6 @@ public class SHADOW_IMPACT extends SkillMode {
     public void stop(final L1Character cha) throws Exception {
         if (cha instanceof L1PcInstance) {
             final L1PcInstance pc = (L1PcInstance) cha;
-            pc.setParalyzed(false);
             pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
         } else if (cha instanceof L1NpcInstance) {
             final L1NpcInstance npc = (L1NpcInstance) cha;

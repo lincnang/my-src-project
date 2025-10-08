@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -199,6 +198,11 @@ public final class ConfigOtherSet2 {
     public static boolean PVP_ARMOR;// PVP防
     public static int PVP_plus2;// PVP+
     /**
+     * 掛機限制時間：是否啟用與禁止的小時陣列
+     */
+    public static boolean checktimeguaji;
+    public static int[] GUAJI_ITEM;
+    /**
      * 陣營威望搶奪開關
      */
     public static boolean Prestigesnatch;
@@ -336,6 +340,24 @@ public final class ConfigOtherSet2 {
             PVP_ARMOR = Boolean.parseBoolean(set.getProperty("PVP_ARMOR", "false"));
             // PVP+
             PVP_plus2 = Integer.parseInt(set.getProperty("PVP_plus2", "1"));
+            // 掛機限制時間
+            checktimeguaji = Boolean.parseBoolean(set.getProperty("checktimeguaji", "false"));
+            {
+                final String hours = set.getProperty("GUAJI_ITEM", "");
+                if (hours != null && hours.trim().length() > 0) {
+                    final String[] parts = hours.split(",");
+                    GUAJI_ITEM = new int[parts.length];
+                    for (int i = 0; i < parts.length; i++) {
+                        try {
+                            GUAJI_ITEM[i] = Integer.parseInt(parts[i].trim());
+                        } catch (Exception ignore) {
+                            GUAJI_ITEM[i] = -1;
+                        }
+                    }
+                } else {
+                    GUAJI_ITEM = new int[0];
+                }
+            }
             // 150429 Smile 新增威望搶奪系統(開關與設定值)
             Prestigesnatch = Boolean.parseBoolean(set.getProperty("Prestigesnatch", "false"));
             // 同陣營搶奪積分設定

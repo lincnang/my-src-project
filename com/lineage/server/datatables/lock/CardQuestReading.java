@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CardQuestReading {
-    private static CardQuestReading _instance;
+    private static class Holder {
+        private static final CardQuestReading INSTANCE = new CardQuestReading();
+    }
     private final Lock _lock;
     private final CardQuestStorage _storage;
 
@@ -19,10 +21,7 @@ public class CardQuestReading {
     }
 
     public static CardQuestReading get() {
-        if (_instance == null) {
-            _instance = new CardQuestReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

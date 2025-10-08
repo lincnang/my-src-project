@@ -3,7 +3,7 @@ package com.lineage.server.timecontroller.pc;
 import com.lineage.config.ThreadPoolSetNew;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_ServerMessage;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +40,7 @@ public class ResetAuto extends TimerTask {
 
     public void start() {
         final int timeMillis = 1000 * 60;
-        _timer = PcOtherThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ResetAuto extends TimerTask {
             }
         } catch (final Exception e) {
             _log.error("PC 掛機處理時間軸異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             final ResetAuto autoTimer = new ResetAuto();
             autoTimer.start();
         }

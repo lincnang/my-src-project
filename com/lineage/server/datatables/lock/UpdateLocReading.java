@@ -7,7 +7,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class UpdateLocReading {
-    private static UpdateLocReading _instance;
+    private static class Holder {
+        private static final UpdateLocReading INSTANCE = new UpdateLocReading();
+    }
     private final Lock _lock;
     private final UpdateLocStorage _storage;
 
@@ -17,10 +19,7 @@ public class UpdateLocReading {
     }
 
     public static UpdateLocReading get() {
-        if (_instance == null) {
-            _instance = new UpdateLocReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void setPcLoc(String accName) {

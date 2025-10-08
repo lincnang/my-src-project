@@ -300,14 +300,8 @@ public class DropShare implements DropShareExecutor {
             int dir = 0;
             Random random = new Random();
 
-            while (true) {
-                if (dirList.isEmpty()) {
-                    // 如果所有方向都不可通行，則物品不掉落
-                    x = 0;
-                    y = 0;
-                    break;
-                }
-
+            boolean foundPassable = false;
+            while (!dirList.isEmpty()) {
                 // 隨機選擇一個方向
                 int randomIndex = random.nextInt(dirList.size());
                 dir = dirList.remove(randomIndex);
@@ -326,8 +320,14 @@ public class DropShare implements DropShareExecutor {
 
                 // 檢查目標位置是否可通行
                 if (npc.getMap().isPassable(npc.getX(), npc.getY(), dir, null)) {
+                    foundPassable = true;
                     break;
                 }
+            }
+            if (!foundPassable) {
+                // 所有方向都不可通行，回退到原點
+                x = 0;
+                y = 0;
             }
 
             // 設置物品的顯示ID為NPC的顯示ID

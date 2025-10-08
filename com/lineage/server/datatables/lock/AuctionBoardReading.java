@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class AuctionBoardReading {
-    private static AuctionBoardReading _instance;
+    private static class Holder {
+        private static final AuctionBoardReading INSTANCE = new AuctionBoardReading();
+    }
     private final Lock _lock;
     private final AuctionBoardStorage _storage;
 
@@ -19,10 +21,7 @@ public class AuctionBoardReading {
     }
 
     public static AuctionBoardReading get() {
-        if (_instance == null) {
-            _instance = new AuctionBoardReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

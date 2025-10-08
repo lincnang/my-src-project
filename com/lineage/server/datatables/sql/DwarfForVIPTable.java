@@ -1,3 +1,79 @@
+package com.lineage.server.datatables.sql;
+
+import com.lineage.server.datatables.storage.DwarfForVIPStorage;
+import com.lineage.server.model.Instance.L1ItemInstance;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+/**
+ * 角色物品贖回物件清單（最小實作，使用記憶體儲存）
+ */
+public class DwarfForVIPTable implements DwarfForVIPStorage {
+
+    private static final Map<String, CopyOnWriteArrayList<L1ItemInstance>> ITEM_LIST = new ConcurrentHashMap<String, CopyOnWriteArrayList<L1ItemInstance>>();
+
+    @Override
+    public void load() {
+        // no-op for in-memory implementation
+    }
+
+    @Override
+    public Map<String, CopyOnWriteArrayList<L1ItemInstance>> allItems() {
+        return ITEM_LIST;
+    }
+
+    @Override
+    public CopyOnWriteArrayList<L1ItemInstance> loadItems(final String char_name) {
+        return ITEM_LIST.get(char_name);
+    }
+
+    @Override
+    public void delUserItems(final String char_name) {
+        ITEM_LIST.remove(char_name);
+    }
+
+    @Override
+    public boolean getUserItems(final String char_name, final int objid, final int count) {
+        final CopyOnWriteArrayList<L1ItemInstance> list = ITEM_LIST.get(char_name);
+        if (list == null || list.isEmpty()) {
+            return false;
+        }
+        for (L1ItemInstance item : list) {
+            if (item.getId() == objid && item.getCount() >= count) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void insertItem(final String char_name, final L1ItemInstance item) {
+        CopyOnWriteArrayList<L1ItemInstance> list = ITEM_LIST.get(char_name);
+        if (list == null) {
+            list = new CopyOnWriteArrayList<L1ItemInstance>();
+            ITEM_LIST.put(char_name, list);
+        }
+        if (!list.contains(item)) {
+            list.add(item);
+        }
+    }
+
+    @Override
+    public void updateItem(final L1ItemInstance item) {
+        // no-op for in-memory implementation (item is mutated in place)
+    }
+
+    @Override
+    public void deleteItem(final String char_name, final L1ItemInstance item) {
+        final CopyOnWriteArrayList<L1ItemInstance> list = ITEM_LIST.get(char_name);
+        if (list != null) {
+            list.remove(item);
+        }
+    }
+}
+
 //package com.lineage.server.datatables.sql;
 //
 //import java.sql.Connection;

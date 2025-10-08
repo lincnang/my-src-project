@@ -44,9 +44,7 @@ import com.lineage.server.model.skill.L1SkillUse;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.serverpackets.ability.*;
 import com.lineage.server.templates.*;
-import com.lineage.server.thread.DeathThreadPool;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.thread.PcOtherThreadPool;
 import com.lineage.server.timecontroller.other.ins.*;
 import com.lineage.server.timecontroller.pc.MapTimerThread;
 import com.lineage.server.timecontroller.pc.PcHellTimer;
@@ -748,7 +746,7 @@ public class L1PcInstance extends L1Character { // src015
     // 自動攻擊
     private L1Character _aiTarget = null;
     private boolean _firstAttack = false;
-    private boolean _aiRunning = false; // PC AI時間軸 正在運行
+    private volatile boolean _aiRunning = false; // PC AI時間軸 正在運行
     /**
      * 尋怪週期 by 聖子默默
      */
@@ -8428,19 +8426,17 @@ public class L1PcInstance extends L1Character { // src015
      * 啟用PC AI
      */
     public void startPcAI() {
+        if (this.isAiRunning()) {
+            this.sendPackets(new S_ServerMessage("自動掛機已在運行中。"));
+            return;
+        }
         boolean checkStart = this.getWeapon() == null;
         if (this.getWeapon() == null) {
             this.sendPackets(new S_ServerMessage(this.getName() + " 沒有裝備武器，無法進行掛機。"));
             return;
         }
 
-        if (this.isDead()) {
-            checkStart = true;
-        }
-        if (this.isGhost()) {
-            checkStart = true;
-        }
-        if (this.getCurrentHp() <= 0) {
+        if (this.isDead() || this.getCurrentHp() <= 0) {
             checkStart = true;
         }
         if (this.isPrivateShop()) {
@@ -8450,7 +8446,7 @@ public class L1PcInstance extends L1Character { // src015
             checkStart = true;
         }
         if (checkStart) {
-            this.sendPackets(new S_ServerMessage(79)); // 沒有任何事情發生
+            this.sendPackets(new S_ServerMessage("沒有任何事情發生 (檢查：裝備武器/非死亡/非擺攤/非麻痺/HP>0)"));
             return;
         }
         if (_pcMove != null) { // 重複啟動
@@ -8459,8 +8455,11 @@ public class L1PcInstance extends L1Character { // src015
             _pcMove = new pcMove(this);
         }
         this.setActivated(true);
+        this.setAiRunning(true);
         final PcAI pcAI = new PcAI(this);
         pcAI.startAI();
+        // 顯示啟動提示，與既有關閉提示對稱
+        this.set_Test_Auto(true);
         //        sendPackets(new S_ServerMessage("\\fn自動掛機啟動by 聖子默默"));
         // --------------------------------------------
         if (this.getLsRange() > 0) {
@@ -13137,7 +13136,7 @@ public class L1PcInstance extends L1Character { // src015
     public void sendHtmlCastGfx(String[] data) {
         this.sendPackets(new S_NPCTalkReturn(this, "wwhc", data));
         HtmlCastGfx htmlCastGfx = new HtmlCastGfx(this, data);
-        PcOtherThreadPool.get().schedule(htmlCastGfx, 300);
+        GeneralThreadPool.get().schedule(htmlCastGfx, 300);
     }
 
     public int[] getReward_Ac() {
@@ -14096,7 +14095,7 @@ public class L1PcInstance extends L1Character { // src015
 
         private void DeathTime() {
             _timeHandler.schedule(this, 1000, 1000);
-            DeathThreadPool.get().execute(this);
+            GeneralThreadPool.get().execute(this);
         }
 
         @Override

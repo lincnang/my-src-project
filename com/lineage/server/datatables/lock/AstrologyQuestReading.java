@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class AstrologyQuestReading {
-    private static AstrologyQuestReading _instance;
+    private static class Holder {
+        private static final AstrologyQuestReading INSTANCE = new AstrologyQuestReading();
+    }
     private final Lock _lock;
     private final AstrologyQuestStorage _storage;
 
@@ -18,10 +20,7 @@ public class AstrologyQuestReading {
     }
 
     public static AstrologyQuestReading get() {
-        if (_instance == null) {
-            _instance = new AstrologyQuestReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

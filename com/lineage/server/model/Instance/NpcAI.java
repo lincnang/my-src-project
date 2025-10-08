@@ -1,7 +1,7 @@
 package com.lineage.server.model.Instance;
 
 import com.lineage.server.model.L1Inventory;
-import com.lineage.server.thread.NpcAiThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,8 +25,19 @@ public class NpcAI implements Runnable {
         _npc = npc;
     }
 
-    public void startAI() {
-        NpcAiThreadPool.get().execute(this);
+    /**
+     * 啟動 NPC AI
+     * 
+     * @return true 成功啟動，false 啟動失敗
+     */
+    public boolean startAI() {
+        try {
+            GeneralThreadPool.get().execute(this);
+            return true;
+        } catch (final Exception e) {
+            _log.error("無法啟動 NPC AI: " + _npc.getName() + " (ID: " + _npc.getNpcId() + ")", e);
+            return false;
+        }
     }
 
     @Override
@@ -38,7 +49,9 @@ public class NpcAI implements Runnable {
                     try {
                         TimeUnit.MILLISECONDS.sleep(200);
                     } catch (InterruptedException e) {
-                        _npc.setParalyzed(false);
+                        // 恢復中斷狀態並優雅結束 AI 執行
+                        Thread.currentThread().interrupt();
+                        return;
                     }
                 }
                 // 中止AI的處理
@@ -66,6 +79,8 @@ public class NpcAI implements Runnable {
             TimeUnit.MILLISECONDS.sleep(20);
         } catch (final Exception e) {
             _log.error("NpcAI發生例外狀況: " + this._npc.getName(), e);
+            // 確保異常時也重置 AI 運行狀態
+            _npc.setAiRunning(false);
         }
     }
 

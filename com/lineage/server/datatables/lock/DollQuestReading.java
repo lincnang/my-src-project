@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class DollQuestReading {
-    private static DollQuestReading _instance;
+    private static class Holder {
+        private static final DollQuestReading INSTANCE = new DollQuestReading();
+    }
     private final Lock _lock;
     private final DollQuestStorage _storage;
 
@@ -19,10 +21,7 @@ public class DollQuestReading {
     }
 
     public static DollQuestReading get() {
-        if (_instance == null) {
-            _instance = new DollQuestReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

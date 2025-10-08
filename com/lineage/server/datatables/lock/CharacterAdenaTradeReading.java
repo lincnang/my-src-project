@@ -10,7 +10,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CharacterAdenaTradeReading {
-    private static CharacterAdenaTradeReading _instance;
+    private static class Holder {
+        private static final CharacterAdenaTradeReading INSTANCE = new CharacterAdenaTradeReading();
+    }
     private final Lock _lock;
     private final CharacterAdenaTradeStorage _storage;
 
@@ -20,10 +22,7 @@ public class CharacterAdenaTradeReading {
     }
 
     public static CharacterAdenaTradeReading get() {
-        if (_instance == null) {
-            _instance = new CharacterAdenaTradeReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

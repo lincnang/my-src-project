@@ -19,13 +19,12 @@ public class ShopLimitReading {
 
     private static final Log _log = LogFactory.getLog(ShopLimitReading.class);
 
-    private static ShopLimitReading _instance;
+    private static class Holder {
+        private static final ShopLimitReading INSTANCE = new ShopLimitReading();
+    }
 
     public static ShopLimitReading get() {
-        if (_instance == null) {
-            _instance = new ShopLimitReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

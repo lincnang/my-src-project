@@ -10,7 +10,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CharShiftingReading {
-    private static CharShiftingReading _instance;
+    private static class Holder {
+        private static final CharShiftingReading INSTANCE = new CharShiftingReading();
+    }
     private final Lock _lock;
     private final CharShiftingStorage _storage;
 
@@ -20,10 +22,7 @@ public class CharShiftingReading {
     }
 
     public static CharShiftingReading get() {
-        if (_instance == null) {
-            _instance = new CharShiftingReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void newShifting(L1PcInstance pc, int tgId, String tgName, int srcObjid, L1Item srcItem, L1ItemInstance newItem, int mode) {

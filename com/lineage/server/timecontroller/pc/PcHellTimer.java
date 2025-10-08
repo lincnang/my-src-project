@@ -1,7 +1,7 @@
 package com.lineage.server.timecontroller.pc;
 
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.utils.collections.Maps;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
@@ -57,7 +57,7 @@ public class PcHellTimer extends TimerTask {
 
     public void start() {
         final int timeMillis = 1000;
-        _timer = PcOtherThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class PcHellTimer extends TimerTask {
             }
         } catch (final Exception e) {
             _log.error("PC 地獄模式處理時間軸異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             final PcHellTimer hellTimer = new PcHellTimer();
             hellTimer.start();
         }

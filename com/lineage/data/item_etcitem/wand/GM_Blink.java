@@ -7,7 +7,7 @@ import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Object;
 import com.lineage.server.serverpackets.S_ServerMessage;
-import com.lineage.server.thread.DeAiThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -89,7 +89,7 @@ public class GM_Blink extends ItemExecutor {
         }
 
         private void start() {
-            DeAiThreadPool.get().execute(this);
+            GeneralThreadPool.get().execute(this);
         }
 
         public void run() {

@@ -75,15 +75,18 @@ public class L1GameTimeClock {
     private class TimeUpdater implements Runnable {
         @Override
         public void run() {
-            try {
-                while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
                     _previousTime = _currentTime;
                     _currentTime = L1GameTime.fromSystemCurrentTime();
                     notifyChanged();
                     TimeUnit.MILLISECONDS.sleep(500);
+                } catch (final InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                } catch (final Exception e) {
+                    _log.error(e.getLocalizedMessage(), e);
                 }
-            } catch (final Exception e) {
-                _log.error(e.getLocalizedMessage(), e);
             }
         }
     }

@@ -4,9 +4,8 @@ package com.lineage.server.utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import com.lineage.server.thread.GeneralThreadPool;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * 斷線問題診斷工具
@@ -16,15 +15,10 @@ public class DisconnectionDiagnostics {
     
     private static final Log _log = LogFactory.getLog(DisconnectionDiagnostics.class);
     private static DisconnectionDiagnostics _instance;
-    private ScheduledExecutorService _scheduler;
+    private ScheduledFuture<?> task1;
+    private ScheduledFuture<?> task2;
     
-    private DisconnectionDiagnostics() {
-        _scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r, "DisconnectionDiagnostics");
-            t.setDaemon(true);
-            return t;
-        });
-    }
+    private DisconnectionDiagnostics() { }
     
     public static DisconnectionDiagnostics getInstance() {
         if (_instance == null) {
@@ -42,10 +36,14 @@ public class DisconnectionDiagnostics {
      */
     public void startMonitoring() {
         // 每5分鐘檢查一次斷線統計（無外部統計則僅輸出心跳）
-        _scheduler.scheduleAtFixedRate(this::analyzeDisconnections, 5, 5, TimeUnit.MINUTES);
-        
+        task1 = GeneralThreadPool.get().scheduleAtFixedRate(new java.util.TimerTask(){
+            @Override public void run(){ analyzeDisconnections(); }
+        }, 5 * 60 * 1000L, 5 * 60 * 1000L);
+
         // 每30分鐘生成簡要報告
-        _scheduler.scheduleAtFixedRate(this::generateDetailedReport, 30, 30, TimeUnit.MINUTES);
+        task2 = GeneralThreadPool.get().scheduleAtFixedRate(new java.util.TimerTask(){
+            @Override public void run(){ generateDetailedReport(); }
+        }, 30 * 60 * 1000L, 30 * 60 * 1000L);
         
         _log.info("斷線診斷監控已啟動");
     }
@@ -151,18 +149,13 @@ public class DisconnectionDiagnostics {
      * 停止監控
      */
     public void stopMonitoring() {
-        if (_scheduler != null && !_scheduler.isShutdown()) {
-            _scheduler.shutdown();
-            try {
-                if (!_scheduler.awaitTermination(10, TimeUnit.SECONDS)) {
-                    _scheduler.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                _scheduler.shutdownNow();
-                Thread.currentThread().interrupt();
-            }
-            _log.info("斷線診斷監控已停止");
-        }
+        try {
+            if (task1 != null) GeneralThreadPool.get().cancel(task1, false);
+        } catch (Exception ignored) { }
+        try {
+            if (task2 != null) GeneralThreadPool.get().cancel(task2, false);
+        } catch (Exception ignored) { }
+        _log.info("斷線診斷監控已停止");
     }
     
     /**

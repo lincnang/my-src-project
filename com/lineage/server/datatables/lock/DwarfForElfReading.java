@@ -9,7 +9,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class DwarfForElfReading {
-    private static DwarfForElfReading _instance;
+    private static class Holder {
+        private static final DwarfForElfReading INSTANCE = new DwarfForElfReading();
+    }
     private final Lock _lock;
     private final DwarfForElfStorage _storage;
 
@@ -19,10 +21,7 @@ public class DwarfForElfReading {
     }
 
     public static DwarfForElfReading get() {
-        if (_instance == null) {
-            _instance = new DwarfForElfReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

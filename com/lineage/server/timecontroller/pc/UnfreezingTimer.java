@@ -7,7 +7,7 @@ import com.lineage.server.model.L1Teleport;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
 import com.lineage.server.serverpackets.S_Teleport;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 
 import java.util.Collection;
@@ -17,7 +17,7 @@ import java.util.TimerTask;
 public class UnfreezingTimer extends TimerTask {
     public void start() {
         int timeMillis = 1000;
-        PcOtherThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
+        GeneralThreadPool.get().scheduleAtFixedRate(this, timeMillis, timeMillis);
     }
 
     @Override

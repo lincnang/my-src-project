@@ -14,6 +14,8 @@ import com.lineage.server.serverpackets.S_Disconnect;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.templates.L1Account;
 import com.lineage.server.thread.GeneralThreadPool;
+import com.lineage.server.utils.ActivityMonitor;
+import com.lineage.server.utils.DisconnectionDiagnostics;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -247,6 +249,16 @@ public class Shutdown extends Thread {
             AccountReading.get().updateLan();
             CharMapTimeReading.get().saveAllTime();
             ServerReading.get().isStop();
+            // 統一釋放背景任務與執行緒池
+            try {
+                ActivityMonitor.getInstance().stop();
+            } catch (Exception ignored) { }
+            try {
+                DisconnectionDiagnostics.getInstance().stopMonitoring();
+            } catch (Exception ignored) { }
+            try {
+                GeneralThreadPool.get().shutdown();
+            } catch (Exception ignored) { }
         }
     }
 }

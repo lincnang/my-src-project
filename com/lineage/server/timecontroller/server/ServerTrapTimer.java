@@ -6,7 +6,7 @@ import com.lineage.server.world.WorldTrap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +21,7 @@ public class ServerTrapTimer extends TimerTask {
 
     public void run() {
         try {
-            HashMap<Integer, L1TrapInstance> allTrap = WorldTrap.get().map();
+            Map<Integer, L1TrapInstance> allTrap = WorldTrap.get().map();
             if (allTrap.isEmpty()) {
                 return;
             }

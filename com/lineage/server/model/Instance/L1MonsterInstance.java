@@ -448,7 +448,7 @@ public class L1MonsterInstance extends L1NpcInstance {
         if (this.isAiRunning()) {
             return;
         }
-        this.setAiRunning(true);// 修正怪物會爆走
+        // 不要在這裡提前設置 AI 運行狀態，避免 startAI() 被短路
         if (!this._storeDroped) {// 背包尚未加入掉落物品
             final SetDropExecutor setdrop = new SetDrop();
             setdrop.setDrop(this, this.getInventory());

@@ -15,14 +15,14 @@ import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.templates.L1Item;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.utils.collections.Lists;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game_Fight {
     public static final int STATUS_NONE = 0;
@@ -31,11 +31,12 @@ public class Game_Fight {
     public static final int STATUS_CLEANING = 4;
     private static final Log _log = LogFactory.getLog(C_NPCAction.class);
     private static Game_Fight _instance;
-    private final List<L1PcInstance> playerListA = Lists.newList();
-    private final List<L1PcInstance> playerListB = Lists.newList();
-    private final List<L1PcInstance> playerListC = Lists.newList();
-    private final List<L1PcInstance> playerListD = Lists.newList();
-    private int _FightStatus = 0;
+    private final List<L1PcInstance> playerListA = new CopyOnWriteArrayList<L1PcInstance>();
+    private final List<L1PcInstance> playerListB = new CopyOnWriteArrayList<L1PcInstance>();
+    private final List<L1PcInstance> playerListC = new CopyOnWriteArrayList<L1PcInstance>();
+    private final List<L1PcInstance> playerListD = new CopyOnWriteArrayList<L1PcInstance>();
+    private volatile int _FightStatus = 0;
+    private final AtomicBoolean running = new AtomicBoolean(false);
 
     public static Game_Fight getInstance() {
         if (_instance == null) {
@@ -62,7 +63,9 @@ public class Game_Fight {
         if ((getMembersCountA() == 1) && (getFightStatus() == 0)) {
             _log.info("藍隊 隊伍對決啟動");
         }
-        GeneralThreadPool.get().execute(new runFight());
+        if (running.compareAndSet(false, true)) {
+            GeneralThreadPool.get().execute(new runFight());
+        }
     }
 
     public void addPlayerListB(L1PcInstance pc) {
@@ -74,7 +77,9 @@ public class Game_Fight {
         if ((getMembersCountB() == 1) && (getFightStatus() == 0)) {
             _log.info("紅隊  隊伍對決啟動");
         }
-        GeneralThreadPool.get().execute(new runFight());
+        if (running.compareAndSet(false, true)) {
+            GeneralThreadPool.get().execute(new runFight());
+        }
     }
 
     public void addPlayerListC(L1PcInstance pc) {
@@ -289,7 +294,6 @@ public class Game_Fight {
         clearColosseum();
     }
 
-    @SuppressWarnings("rawtypes")
     private void clearColosseum() {
         for (Object obj : World.get().getVisibleObjects(4941).values()) {
             if ((obj instanceof L1Inventory)) {
@@ -407,6 +411,8 @@ public class Game_Fight {
                 Game_Fight.this.setFightStatus(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } finally {
+                running.set(false);
             }
         }
     }

@@ -13,7 +13,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * 輔助(自動刪物)倉庫數據
  */
 public class CharRemoveItemReading {
-    private static CharRemoveItemReading _instance;
+    private static class Holder {
+        private static final CharRemoveItemReading INSTANCE = new CharRemoveItemReading();
+    }
     private final Lock _lock;
     private final CharRemoveItemStorage _storage;
 
@@ -23,10 +25,7 @@ public class CharRemoveItemReading {
     }
 
     public static CharRemoveItemReading get() {
-        if (_instance == null) {
-            _instance = new CharRemoveItemReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

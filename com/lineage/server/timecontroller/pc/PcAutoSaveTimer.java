@@ -4,7 +4,7 @@ import com.lineage.config.Config;
 import com.lineage.echo.ClientExecutor;
 import com.lineage.list.OnlineUser;
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,7 +18,7 @@ public class PcAutoSaveTimer extends TimerTask {
     private ScheduledFuture<?> _timer;
 
     public void start() {
-        _timer = PcOtherThreadPool.get().scheduleWithFixedDelay(this, 60000L, 60000L);
+        _timer = GeneralThreadPool.get().scheduleWithFixedDelay(this, 60000L, 60000L);
     }
 
     public void run() {
@@ -37,7 +37,7 @@ public class PcAutoSaveTimer extends TimerTask {
             }
         } catch (Exception e) {
             _log.error("人物資料自動保存時間軸異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             PcAutoSaveTimer restart = new PcAutoSaveTimer();
             restart.start();
         }

@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CharItemsTimeReading {
-    private static CharItemsTimeReading _instance;
+    private static class Holder {
+        private static final CharItemsTimeReading INSTANCE = new CharItemsTimeReading();
+    }
     private final Lock _lock;
     private final CharItemsTimeStorage _storage;
 
@@ -18,10 +20,7 @@ public class CharItemsTimeReading {
     }
 
     public static CharItemsTimeReading get() {
-        if (_instance == null) {
-            _instance = new CharItemsTimeReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

@@ -13,7 +13,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author dexc
  */
 public class CharItemBlessReading {
-    private static CharItemBlessReading _instance;
+    private static class Holder {
+        private static final CharItemBlessReading INSTANCE = new CharItemBlessReading();
+    }
     private final Lock _lock;
     private final CharItemsBlessStorage _storage;
 
@@ -23,10 +25,7 @@ public class CharItemBlessReading {
     }
 
     public static CharItemBlessReading get() {
-        if (_instance == null) {
-            _instance = new CharItemBlessReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

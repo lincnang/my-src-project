@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ServerCnInfoReading {
-    private static ServerCnInfoReading _instance;
+    private static class Holder {
+        private static final ServerCnInfoReading INSTANCE = new ServerCnInfoReading();
+    }
     private final Lock _lock;
     private final ServerCnInfoTable _storage;
 
@@ -18,10 +20,7 @@ public class ServerCnInfoReading {
     }
 
     public static ServerCnInfoReading get() {
-        if (_instance == null) {
-            _instance = new ServerCnInfoReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void create(L1PcInstance pc, L1Item itemtmp, long count, boolean mode) {

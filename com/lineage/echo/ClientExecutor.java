@@ -517,7 +517,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         if (closed) return; // 重入保護
         closed = true;
         try {
-            String mac = (_mac != null) ? _mac.toString() : null;
+            // mac值未使用，移除避免警告
             if (_csocket == null) return;
 
             _kick = 0;
@@ -533,9 +533,9 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
             }
 
             final String ipAddr = getIpString();
-            String account = null;
             if (_kick < 1 && _account != null) {
-                account = _account.get_login();
+                // 保留行為，不需暫存變數
+                _account.get_login();
             }
 
             // 停止加解密

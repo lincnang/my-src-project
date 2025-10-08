@@ -10,7 +10,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class AccountReading {
-    private static AccountReading _instance;
+    private static class Holder {
+        private static final AccountReading INSTANCE = new AccountReading();
+    }
     private final Lock _lock;
     private final AccountStorage _storage;
 
@@ -20,10 +22,7 @@ public class AccountReading {
     }
 
     public static AccountReading get() {
-        if (_instance == null) {
-            _instance = new AccountReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

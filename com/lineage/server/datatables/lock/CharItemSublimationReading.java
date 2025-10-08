@@ -12,7 +12,9 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class CharItemSublimationReading {
 
-    private static CharItemSublimationReading _instance;
+    private static class Holder {
+        private static final CharItemSublimationReading INSTANCE = new CharItemSublimationReading();
+    }
     private final Lock _lock;
     private final CharItemSublimationStorage _storage;
 
@@ -22,10 +24,7 @@ public class CharItemSublimationReading {
     }
 
     public static CharItemSublimationReading get() {
-        if (_instance == null) {
-            _instance = new CharItemSublimationReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

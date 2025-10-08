@@ -102,9 +102,6 @@ public class GameServer {
             //QuestNewTable.get();
             AccountReading.get().load();
             GeneralThreadPool.get();
-            PcOtherThreadPool.get();
-            NpcAiThreadPool.get();
-            DeAiThreadPool.get();
             L1SystemMessageTable.get().loadSystemMessage();// DB化系統設定
             SystemMessage.getInstance(); // DB化訊息
             ExpTable.get().load();
@@ -309,7 +306,7 @@ public class GameServer {
             if (ConfigThebes.Mini_Siege) {
                 MiniSiegeNpcStart.getInstance();
             }
-            ServerTimerController.getInstance(); // 各種時間控制
+            ServerTimerController.getInstance().start(); // 各種時間控制（啟動定時器）
             _log.info("------------------------------------------------------------");
             _log.info("       潘朵拉系列");
             _log.info("------------------------------------------------------------");
@@ -366,8 +363,7 @@ public class GameServer {
             MagicHeChengTable.getInstance().load();//魔法合成調用圖片
             ACardTable.get().load();//卡冊
             CardSetTable.get().load();//組合卡冊
-            ServerGcTimePool.get();// 線程工廠設置
-            DeathThreadPool.get();// 線程工廠設置
+            // 已統一由 GeneralThreadPool 管理
             Day_Signature.get().load();//每日領取
             Day_Signature_New.get().load();//每日領取(新)
             NewEnchantSystem.get().load();//強化武器加成系統

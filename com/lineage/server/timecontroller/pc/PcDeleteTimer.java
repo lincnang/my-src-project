@@ -4,7 +4,7 @@ import com.lineage.echo.ClientExecutor;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_ChangeName;
 import com.lineage.server.serverpackets.S_PacketBoxSelect;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +32,7 @@ public class PcDeleteTimer extends TimerTask {
     }
 
     public void start() {
-        _timer = PcOtherThreadPool.get().scheduleAtFixedRate(this, 1100L, 1100L);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, 1100L, 1100L);
     }
 
     public void run() {
@@ -55,7 +55,7 @@ public class PcDeleteTimer extends TimerTask {
             }
         } catch (Exception e) {
             _log.error("PC 死亡刪除處理時間軸異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             PcDeleteTimer pcHprTimer = new PcDeleteTimer();
             pcHprTimer.start();
         }

@@ -18,7 +18,7 @@ import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.model.skill.L1SkillUse;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1Skills;
-import com.lineage.server.thread.PcAutoThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.types.Point;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
@@ -228,7 +228,7 @@ public class FollowPc extends TimerTask {
 
     public void begin() {
         _timeHandler.schedule(this, 250, 250);
-        PcAutoThreadPool.get().execute(this);
+        GeneralThreadPool.get().execute(this);
     }
 
     public void stop() {

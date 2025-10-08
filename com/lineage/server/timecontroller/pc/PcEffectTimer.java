@@ -4,7 +4,6 @@ import com.lineage.data.event.ProtectorSet;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_EffectLocation;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.thread.PcOtherThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,7 +46,7 @@ public class PcEffectTimer extends TimerTask {
             }
         } catch (final Exception e) {
             _log.error("PC特效編號時間軸 異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             final PcEffectTimer pcEffectTimer = new PcEffectTimer();
             pcEffectTimer.start();
         }

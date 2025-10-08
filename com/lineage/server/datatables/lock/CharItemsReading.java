@@ -10,7 +10,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CharItemsReading {
-    private static CharItemsReading _instance;
+    private static class Holder {
+        private static final CharItemsReading INSTANCE = new CharItemsReading();
+    }
     private final Lock _lock;
     private final CharItemsStorage _storage;
 
@@ -20,10 +22,7 @@ public class CharItemsReading {
     }
 
     public static CharItemsReading get() {
-        if (_instance == null) {
-            _instance = new CharItemsReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

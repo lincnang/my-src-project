@@ -9,7 +9,7 @@ import com.lineage.server.model.L1Trade;
 import com.lineage.server.model.map.L1Map;
 import com.lineage.server.model.map.L1WorldMap;
 import com.lineage.server.serverpackets.*;
-import com.lineage.server.thread.PcAutoThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.types.Point;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
@@ -331,7 +331,7 @@ public class AutoAttack extends TimerTask {
      */
     public void begin() {
         _timeHandler.schedule(this, 300, 300);
-        PcAutoThreadPool.get().execute(this);
+        GeneralThreadPool.get().execute(this);
     }
 
     /**

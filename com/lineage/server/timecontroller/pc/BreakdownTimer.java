@@ -3,7 +3,6 @@ package com.lineage.server.timecontroller.pc;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_Poison;
 import com.lineage.server.thread.GeneralThreadPool;
-import com.lineage.server.thread.PcOtherThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,7 +44,7 @@ public class BreakdownTimer extends TimerTask {
             }
         } catch (Exception e) {
             _log.error("時間軸異常重啟.時間軸異常重啟.時間軸異常重啟", e);
-            PcOtherThreadPool.get().cancel(_timer, false);
+            GeneralThreadPool.get().cancel(_timer, false);
             BreakdownTimer breakdownTimer = new BreakdownTimer();
             breakdownTimer.start(_timeMillis, _random);
         }

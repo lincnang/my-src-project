@@ -8,7 +8,7 @@ import com.lineage.server.serverpackets.S_EffectLocation;
 import com.lineage.server.serverpackets.S_InventoryIcon;
 import com.lineage.server.serverpackets.S_SkillSound;
 import com.lineage.server.serverpackets.S_UseAttackSkill;
-import com.lineage.server.thread.PcOtherThreadPool;
+import com.lineage.server.thread.GeneralThreadPool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -564,7 +564,7 @@ public abstract class L1WeaponSkillType {
         }
 
         public void start_skill() {
-            PcOtherThreadPool.get().execute(this);
+            GeneralThreadPool.get().execute(this);
         }
 
         public void run() {

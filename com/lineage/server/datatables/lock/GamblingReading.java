@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GamblingReading {
-    private static GamblingReading _instance;
+    private static class Holder {
+        private static final GamblingReading INSTANCE = new GamblingReading();
+    }
     private final Lock _lock;
     private final GamblingStorage _storage;
 
@@ -18,10 +20,7 @@ public class GamblingReading {
     }
 
     public static GamblingReading get() {
-        if (_instance == null) {
-            _instance = new GamblingReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

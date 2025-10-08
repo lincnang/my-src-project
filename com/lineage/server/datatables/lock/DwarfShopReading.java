@@ -11,7 +11,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class DwarfShopReading {
-    private static DwarfShopReading _instance;
+    private static class Holder {
+        private static final DwarfShopReading INSTANCE = new DwarfShopReading();
+    }
     private final Lock _lock;
     private final DwarfShopStorage _storage;
 
@@ -21,10 +23,7 @@ public class DwarfShopReading {
     }
 
     public static DwarfShopReading get() {
-        if (_instance == null) {
-            _instance = new DwarfShopReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     public void load() {

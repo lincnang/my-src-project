@@ -13,7 +13,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author dexc
  */
 public class ClanEmblemReading {
-    private static ClanEmblemReading _instance;
+    private static class Holder {
+        private static final ClanEmblemReading INSTANCE = new ClanEmblemReading();
+    }
     private final Lock _lock;
     private final ClanEmblemStorage _storage;
 
@@ -23,10 +25,7 @@ public class ClanEmblemReading {
     }
 
     public static ClanEmblemReading get() {
-        if (_instance == null) {
-            _instance = new ClanEmblemReading();
-        }
-        return _instance;
+        return Holder.INSTANCE;
     }
 
     /**

@@ -2813,7 +2813,7 @@ public class L1ItemStatus {
             this._os.writeS("爆擊傷害 " + pw_dmg);
         }
         showItemDelTimer();
-        checkArmorSet(); // 套裝能力顯示
+        // checkArmorSet(); // 套裝能力顯示（已停用以避免第二組額外組合重複顯示）
         return _os;
     }
 
@@ -3815,7 +3815,7 @@ public class L1ItemStatus {
             }
         }
         showItemDelTimer();
-        checkArmorSet(); // 套裝能力顯示
+        // checkArmorSet(); // 套裝能力顯示（已停用以避免第二組額外組合重複顯示）
         return _os;
     }
     // TODO 武器
@@ -4506,7 +4506,7 @@ public class L1ItemStatus {
             }
         }
         showItemDelTimer();
-        checkArmorSet(); // 套裝能力顯示
+        // checkArmorSet(); // 套裝能力顯示（已停用以避免第二組額外組合重複顯示）
         return _os;
     }
 

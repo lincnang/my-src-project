@@ -105,10 +105,11 @@ public class QuitGame {
                 pc.setX(loc[0]);
                 pc.setY(loc[1]);
                 pc.setMap((short) loc[2]);
-                pc.setCurrentHp(pc.getLevel());
-                if (pc.get_food() > 40) {
-                    pc.set_food(40);
-                }
+                // 【修改】移除強制修改血量和飽食度，保留玩家登出時的真實狀態
+                // pc.setCurrentHp(pc.getLevel());
+                // if (pc.get_food() > 40) {
+                //     pc.set_food(40);
+                // }
                 //}
             } else if (pc.getMapId() == (short) 10502) { // 底比斯大戰
                 if (pc.isSiege) {

@@ -75,7 +75,7 @@ public class ComesMonsterController implements Runnable {
     @Override
     public void run() {
         final Calendar cal = Calendar.getInstance();
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
                 cal.setTimeInMillis(System.currentTimeMillis());
@@ -97,8 +97,11 @@ public class ComesMonsterController implements Runnable {
                         task.add(i);
                     }
                 }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                break;
             } catch (Exception e) {
-                e.printStackTrace();
+                _log.error(e.getLocalizedMessage(), e);
             }
         }
     }

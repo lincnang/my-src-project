@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static com.lineage.server.model.skill.L1SkillId.MEDITATION;
 
 /**
  * 掛機
@@ -236,7 +235,6 @@ public class AutoAttack extends TimerTask {
             pc.removeAllKnownObjects();
             pc.updateObject();
             pc.sendPackets(new S_CharVisualUpdate(pc));
-            pc.killSkillEffectTimer(32);// 冥想術
             pc.setCallClanId(0);
             if (!pc.isGhost()) {
                 // 可以攜帶寵物
@@ -769,6 +767,12 @@ public class AutoAttack extends TimerTask {
             pc.broadcastPacketAll(new S_OtherCharPacks(pc));//更新其他玩家
             pc.sendPackets(new S_MoveCharPacket(pc));//自己移動
             pc.sendPackets(new S_CharVisualUpdate(pc));//更換武器
+        if (pc.hasSkillEffect(com.lineage.server.model.skill.L1SkillId.MEDITATION)) {
+            int remain = pc.getSkillEffectTimeSec(com.lineage.server.model.skill.L1SkillId.MEDITATION);
+            if (remain > 0) {
+                pc.sendPackets(new S_PacketBoxIconAura(152, remain));
+            }
+        }
         }
     }
 
@@ -804,7 +808,6 @@ public class AutoAttack extends TimerTask {
             pc.sendVisualEffectAtTeleport();
             pc.updateObject();
             pc.sendPackets(new S_CharVisualUpdate(pc));
-            pc.killSkillEffectTimer(MEDITATION);
             pc.setCallClanId(0); // 唱後移動召喚無效
             HashSet<L1PcInstance> subjects = new HashSet<>();
             subjects.add(pc);

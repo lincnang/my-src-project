@@ -125,7 +125,6 @@ public class Teleportation {
             pc.updateObject();
             pc.sendVisualEffectAtTeleport();
             pc.sendPackets(new S_CharVisualUpdate(pc));
-            pc.killSkillEffectTimer(32);// 冥想術
             pc.setCallClanId(0);
             final HashSet<L1PcInstance> subjects = new HashSet<>();
             subjects.add(pc);

@@ -103,7 +103,7 @@ public class C_AttackBow extends ClientBasePacket {
                 pc.startHpRegeneration();
                 pc.startMpRegeneration();
             }
-            pc.killSkillEffectTimer(32);
+            // 攻擊時不再取消冥想術
             pc.delInvis();
             pc.setRegenState(1);
             if ((target != null) && (!((L1Character) target).isDead())) {// 具有目標

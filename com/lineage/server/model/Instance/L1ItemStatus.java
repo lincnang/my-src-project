@@ -2486,8 +2486,8 @@ public class L1ItemStatus {
                 zhufu = Zhufu.getInstance().getTemplateByType(_item.getType(), 2);
             }
             if (zhufu != null) {
-                _os.writeC(39);
-                _os.writeS("祝福化屬性：");
+//                _os.writeC(39);
+//                _os.writeS("祝福化屬性：");
                 if (zhufu.getAddStr() != 0) {
                     _os.writeC(39);
                     _os.writeS("力量：+" + zhufu.getAddStr());
@@ -3681,8 +3681,8 @@ public class L1ItemStatus {
                 zhufu = Zhufu.getInstance().getTemplateByType(_item.getType(), 2);
             }
             if (zhufu != null) {
-                _os.writeC(39);
-                _os.writeS("祝福化屬性：");
+//                _os.writeC(39);
+//                _os.writeS("祝福化屬性：");
                 if (zhufu.getAddStr() != 0) {
                     _os.writeC(39);
                     _os.writeS("力量：+" + zhufu.getAddStr());
@@ -5060,8 +5060,8 @@ public class L1ItemStatus {
                 zhufu = Zhufu.getInstance().getTemplateByType(_item.getType(), 1);
             }
             if (zhufu != null) {
-                _os.writeC(39);
-                _os.writeS("祝福化屬性：");
+//                _os.writeC(39);
+//                _os.writeS("祝福化屬性：");
                 if (zhufu.getAddStr() != 0) {
                     _os.writeC(39);
                     _os.writeS("力量：+" + zhufu.getAddStr());

@@ -41,7 +41,6 @@ public class L1SkillMode {
         try {
             _skillMode.put(Shadow_ACCELERATION, new HASTE3X());   //暗影加速
             _skillMode.put(41, new HASTE());   //加速術
-            _skillMode.put(MEDITATION, new MEDITATION()); //冥想術
             _skillMode.put(59, new CANCELLATION()); //魔法相消術
             _skillMode.put(9, new CURE_POISON()); //解毒術
             _skillMode.put(35, new REMOVE_CURSE()); //聖潔之光

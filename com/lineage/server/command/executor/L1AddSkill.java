@@ -149,24 +149,25 @@ public class L1AddSkill implements L1CommandExecutor {
                 }
             } else if (pc.isWarrior()) { // 戰士
                 pc.sendPackets(new S_AddSkill(pc, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 127));
-                // 只學習指定清單：1,2,3,4,225,226,228,229,230,231,232,234,235,236,241~247
-                final int[] warriorSkillIds = new int[] {
-                        1, 2, 3, 4,
-                        225, 226, 228, 229, 230, 231, 232,
-                        234, 235, 236,
-                        241, 242, 243, 244, 245, 246, 247
-                };
-                for (final int sid : warriorSkillIds) {
-                    final L1Skills l1skills = SkillsTable.get().getTemplate(sid);
-                    if (l1skills == null) {
-                        continue;
-                    }
+                for (cnt = 1; cnt <= 4; cnt++) {
+                    final L1Skills l1skills = SkillsTable.get().getTemplate(cnt); // スキル情報を取得
                     skill_name = l1skills.getName();
                     skill_id = l1skills.getSkillId();
-                    CharSkillReading.get().spellMastery(object_id, skill_id, skill_name, 0, 0);
-                    if (skill_id >= 241 && skill_id <= 247) {
-                        pc.sendPackets(new S_WarriorSkill(S_WarriorSkill.ADD, l1skills.getSkillNumber()));
-                    }
+                    CharSkillReading.get().spellMastery(object_id, skill_id, skill_name, 0, 0); // DBに登錄
+                }
+                for (cnt = 225; cnt <= 232; cnt++) {
+                    final L1Skills l1skills = SkillsTable.get().getTemplate(cnt); // スキル情報を取得
+                    skill_name = l1skills.getName();
+                    skill_id = l1skills.getSkillId();
+                    CharSkillReading.get().spellMastery(object_id, skill_id, skill_name, 0, 0); // DBに登錄
+                }
+                //for (cnt = 233; cnt <= 239; cnt++) {
+                for (cnt = 241; cnt <= 248; cnt++) {
+                    final L1Skills l1skills = SkillsTable.get().getTemplate(cnt); // スキル情報を取得
+                    skill_name = l1skills.getName();
+                    skill_id = l1skills.getSkillId();
+                    CharSkillReading.get().spellMastery(object_id, skill_id, skill_name, 0, 0); // DBに登錄
+                    pc.sendPackets(new S_WarriorSkill(S_WarriorSkill.ADD, l1skills.getSkillNumber()));
                 }
             }
         } catch (final Exception e) {

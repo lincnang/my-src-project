@@ -101,6 +101,7 @@ public class FollowPc extends TimerTask {
             pc.removeAllKnownObjects();
             pc.updateObject();
             pc.sendPackets(new S_CharVisualUpdate(pc));
+            pc.killSkillEffectTimer(32);// 冥想術
             pc.setCallClanId(0);
             if (!pc.getDolls().isEmpty()) {
                 // 主人身邊隨機座標取回

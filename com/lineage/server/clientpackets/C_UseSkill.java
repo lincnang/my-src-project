@@ -282,8 +282,8 @@ public class C_UseSkill extends ClientBasePacket {
                 pc.startHpRegeneration();
                 pc.startMpRegeneration();
             }
-            // 冥想術解除 - 已改為BUFF型，不再自動解除
-            // pc.removeSkillEffect(MEDITATION);
+            // 冥想術解除
+            pc.removeSkillEffect(MEDITATION);
             // pc.killSkillEffectTimer(MEDITATION);
             try {
                 // 呼喚盟友/援護盟友

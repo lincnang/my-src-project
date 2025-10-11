@@ -16,6 +16,7 @@ import java.util.Calendar;
 
 import static com.lineage.server.model.Instance.L1PcInstance.REGENSTATE_ATTACK;
 import static com.lineage.server.model.skill.L1SkillId.ABSOLUTE_BARRIER;
+import static com.lineage.server.model.skill.L1SkillId.MEDITATION;
 
 /**
  * 要求角色攻擊
@@ -115,7 +116,7 @@ public class C_Attack extends ClientBasePacket {
                 pc.startHpRegeneration();
                 pc.startMpRegeneration();
             }
-            // 攻擊時不再取消冥想術
+            pc.killSkillEffectTimer(MEDITATION);
 
             // =============== 攻擊主流程包裝（防黑妖提前現身） ===============
             pc.setAssassinAttackNow(true);

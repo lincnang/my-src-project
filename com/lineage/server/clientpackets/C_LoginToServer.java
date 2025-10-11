@@ -2026,13 +2026,6 @@ public class C_LoginToServer extends ClientBasePacket {
             CharBuffReading.get().buff(pc);
             pc.sendPackets(new S_PacketBoxActiveSpells(pc));
             CharMapTimeReading.get().getTime(pc);
-            // 補發三段加速圖示（避免登入後客戶端未顯示）
-            if (pc.hasSkillEffect(L1SkillId.STATUS_BRAVE3)) {
-                int left = pc.getSkillEffectTimeSec(L1SkillId.STATUS_BRAVE3);
-                if (left > 0) {
-                    pc.sendPackets(new S_PacketBoxThirdSpeed(left));
-                }
-            }
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

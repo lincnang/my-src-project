@@ -11848,10 +11848,6 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void clearAttackSkillList() {
         _autoattackNew.clear();
-        // 同時清除數據庫記錄，避免登入時重新加載
-        if (get_other1() != null) {
-            get_other1().set_type11(0);
-        }
     }
 
     /**

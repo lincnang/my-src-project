@@ -1808,8 +1808,8 @@ public class C_LoginToServer extends ClientBasePacket {
             }
 
             // 傳送血盟徽章顯示狀態：個人偏好或在攻城戰區域時顯示
-            boolean shouldShowEmblem = pc.isClanGfx() || 
-                                       com.lineage.server.model.L1CastleLocation.checkInAllWarArea(pc.getLocation());
+            boolean shouldShowEmblem = pc.isClanGfx() ||
+                    com.lineage.server.model.L1CastleLocation.checkInAllWarArea(pc.getLocation());
             pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, shouldShowEmblem ? 1 : 0));
             if (shouldShowEmblem) {
                 // 與 381 一致：打開全血盟注視名單，確保客戶端顯示所有血盟徽章

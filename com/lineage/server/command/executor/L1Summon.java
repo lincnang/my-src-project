@@ -56,6 +56,8 @@ public class L1Summon implements L1CommandExecutor {
             for (int i = 0; i < count; i++) {
                 final L1PetInstance pet = new L1PetInstance(npc, pc);
                 pet.setPetcost(0);
+                // GM召喚的寵物預設為攻擊狀態
+                pet.setCurrentPetStatus(1);  // 1 = 攻擊狀態
             }
             nameid = NpcTable.get().getTemplate(npcid).get_name();
             pc.sendPackets(new S_ServerMessage(166, nameid + "(ID:" + npcid + ") 數量:" + count + " 完成召喚"));

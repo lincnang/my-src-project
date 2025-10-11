@@ -643,6 +643,10 @@ public class pcMove extends NpcMoveExecutor {
                 // 最短經路が見つかった場合:鄰
                 return firstCource[i];
             }
+            // guard against out-of-bounds before accessing serchMap
+            if (locNext[0] < 0 || locNext[0] >= serchMap.length || locNext[1] < 0 || locNext[1] >= serchMap[0].length) {
+                continue;
+            }
             if (serchMap[locNext[0]][locNext[1]]) {
                 final int tmpX = locNext[0] + diff_x;
                 final int tmpY = locNext[1] + diff_y;
@@ -694,6 +698,10 @@ public class pcMove extends NpcMoveExecutor {
                 this._moveLocation(locNext, dirFront[i]);
                 if ((locNext[0] - locCenter == 0) && (locNext[1] - locCenter == 0)) {
                     return locNext[3];
+                }
+                // guard against out-of-bounds before accessing serchMap
+                if (locNext[0] < 0 || locNext[0] >= serchMap.length || locNext[1] < 0 || locNext[1] >= serchMap[0].length) {
+                    continue;
                 }
                 if (serchMap[locNext[0]][locNext[1]]) {
                     final int tmpX = locNext[0] + diff_x;

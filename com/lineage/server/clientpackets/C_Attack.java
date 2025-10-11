@@ -129,6 +129,8 @@ public class C_Attack extends ClientBasePacket {
                         L1PcInstance tg = (L1PcInstance) target;
                         pc.setNowTarget(tg);
                     }
+                    // 同步主人的攻擊目標給寵物/召喚，確保攻擊模式下跟打同一隻
+                    pc.setPetTarget((L1Character) target);
                     target.onAction(pc); // 主攻擊（這裡才會 new L1AttackPc ...）
                 } else { // 空攻擊
                     pc.setHeading(pc.targetDirection(locx, locy));

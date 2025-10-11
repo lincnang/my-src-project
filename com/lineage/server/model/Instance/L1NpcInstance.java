@@ -165,10 +165,7 @@ public class L1NpcInstance extends L1Character {
         }
         
         // 寵物特殊處理
-        if (this instanceof L1PetInstance) {
-            // System.out.println(this.getName());
-            return;
-        }
+        // 允許寵物與召喚也啟動 AI，避免無法跟隨/接受指令
         
         // 檢查 NPC 狀態
         if (isDead()) {

@@ -36,6 +36,17 @@ public class L1SpeedCheck implements L1CommandExecutor {//src042
             final int attack = Integer.parseInt(stringtokenizer.nextToken());
             final int type = Integer.parseInt(stringtokenizer.nextToken());
             final int time = Integer.parseInt(stringtokenizer.nextToken());
+            // 第五個參數（可選）：總開關 on/off 或 1/0
+            boolean hasToggle = stringtokenizer.hasMoreTokens();
+            boolean toggleVal = ConfigPRO.ACCELERATOR_CHECK_ENABLED;
+            if (hasToggle) {
+                String toggle = stringtokenizer.nextToken();
+                if ("on".equalsIgnoreCase(toggle) || "true".equalsIgnoreCase(toggle) || "1".equalsIgnoreCase(toggle)) {
+                    toggleVal = true;
+                } else if ("off".equalsIgnoreCase(toggle) || "false".equalsIgnoreCase(toggle) || "0".equalsIgnoreCase(toggle)) {
+                    toggleVal = false;
+                }
+            }
             ConfigPRO.CHECK_MOVE_STRICTNESS = move;
             AcceleratorChecker.Setspeed();
             pc.sendPackets(new S_SystemMessage("目前移動防加速誤差值為 :" + ConfigPRO.CHECK_MOVE_STRICTNESS));
@@ -46,9 +57,12 @@ public class L1SpeedCheck implements L1CommandExecutor {//src042
             pc.sendPackets(new S_SystemMessage("\\aG目前防加速的懲罰類行為 :" + ConfigPRO.PUNISHMENT_TYPE));
             ConfigPRO.PUNISHMENT_TIME = time;
             pc.sendPackets(new S_SystemMessage("\\aH目前防加速的懲罰時間為 :" + ConfigPRO.PUNISHMENT_TIME));
+            // 套用總開關
+            ConfigPRO.ACCELERATOR_CHECK_ENABLED = toggleVal;
+            pc.sendPackets(new S_SystemMessage("\\aG防加速總開關 : " + (ConfigPRO.ACCELERATOR_CHECK_ENABLED ? "ON" : "OFF")));
         } catch (final Exception e) {
             _log.error("錯誤的 GM 指令格式: " + this.getClass().getSimpleName() + " 執行 GM :" + pc.getName());
-            pc.sendPackets(new S_SystemMessage("\\aG請輸入  移動/攻擊/類型/時間 參數。"));
+            pc.sendPackets(new S_SystemMessage("\\aG請輸入  移動/攻擊/類型/時間/[on|off] 參數。"));
         }
     }
 }

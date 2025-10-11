@@ -246,6 +246,7 @@ public class L1PetInstance extends L1NpcInstance {
                 break;
             case 6:
             default:
+                // 跟隨主人體系（移除GM自動尋怪，避免自行脫隊）
                 if ((_petMaster != null) && (_petMaster.getMapId() == getMapId())) {
                     if ((getLocation().getTileLineDistance(_petMaster.getLocation()) > 2) && (_npcMove != null)) {
                         int dir = _npcMove.moveDirection(_petMaster.getX(), _petMaster.getY());

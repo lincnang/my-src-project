@@ -1,7 +1,6 @@
 package com.lineage.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -21,6 +20,8 @@ public final class ConfigPRO {
     public static int PUNISHMENT_TYPE;
     public static int PUNISHMENT_TIME;
     public static int PUNISHMENT_MAP_ID;
+    // 反加速總開關：true=啟用檢測, false=完全不判斷
+    public static volatile boolean ACCELERATOR_CHECK_ENABLED;
 
     public static void load() throws ConfigErrorException {
         // _log.info("載入服務器限制設置!");
@@ -39,6 +40,7 @@ public final class ConfigPRO {
             PUNISHMENT_TYPE = Integer.parseInt(set.getProperty("Punishment_Type", "1"));
             PUNISHMENT_TIME = Integer.parseInt(set.getProperty("Punishment_Time", "5"));
             PUNISHMENT_MAP_ID = Integer.parseInt(set.getProperty("Punishment_Map", "666"));
+            ACCELERATOR_CHECK_ENABLED = Boolean.parseBoolean(set.getProperty("Accelerator_Check_Enabled", "true"));
         } catch (final Exception e) {
             throw new ConfigErrorException("設置檔案遺失: " + ALT_SETTINGS_FILE);
         } finally {

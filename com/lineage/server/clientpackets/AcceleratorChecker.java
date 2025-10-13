@@ -193,9 +193,9 @@ public class AcceleratorChecker {//src042
         }
         if (this._pc.isGm()) {
             if (type.equals(ACT_TYPE.ATTACK)) {
-                this._pc.sendPackets((ServerBasePacket) new S_SystemMessage("??��?????�?:" + interval));  // GM除錯：顯示計算後的攻擊間隔
+                this._pc.sendPackets((ServerBasePacket) new S_SystemMessage("攻擊速度:" + interval));  // GM除錯：顯示計算後的攻擊間隔
             } else if (type.equals(ACT_TYPE.MOVE)) {
-                this._pc.sendPackets((ServerBasePacket) new S_SystemMessage("移�?????�?:" + interval));  // GM除錯：顯示計算後的移動間隔
+                this._pc.sendPackets((ServerBasePacket) new S_SystemMessage("移動速度:" + interval));  // GM除錯：顯示計算後的移動間隔
             }
         }
         return (int) interval;
@@ -211,10 +211,10 @@ public class AcceleratorChecker {//src042
             int mapid = this._pc.getMapId();
             switch (punishment_type) {
                 case 0:
-                    _pc.sendPackets(new S_SystemMessage("\\aG????????�檢測警???" + punishment_time + "�?�?強�?��????��??"));
+                    _pc.sendPackets(new S_SystemMessage("\\aG加速器檢測警告" + punishment_time + "秒後強制驅離。"));
                     try {
                         TimeUnit.MILLISECONDS.sleep(punishment_time * 1000L);
-                        RecordTable.get().r_speed(this._pc.getName(), "??�測??�常(??��??or走�??");
+                        RecordTable.get().r_speed(this._pc.getName(), "偵測異常(攻速or走速");
                     } catch (Exception e) {
                         System.out.println(e.getLocalizedMessage());
                     }
@@ -222,10 +222,10 @@ public class AcceleratorChecker {//src042
                     break;
                 case 1:
                     _pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_BIND, true));
-                    _pc.sendPackets(new S_SystemMessage("\\aG????????�檢測警???" + punishment_time + "�?�?�???��?��??�???????"));
+                    _pc.sendPackets(new S_SystemMessage("\\aG加速器檢測警告" + punishment_time + "秒後解除您的行動。"));
                     try {
                         TimeUnit.MILLISECONDS.sleep(punishment_time * 1000L);
-                        RecordTable.get().r_speed(this._pc.getName(), "??�測??�常(??��??or走�??");
+                        RecordTable.get().r_speed(this._pc.getName(), "偵測異常(攻速or走速");
                     } catch (Exception e) {
                         System.out.println(e.getLocalizedMessage());
                     }
@@ -233,14 +233,14 @@ public class AcceleratorChecker {//src042
                     break;
                 case 2:
                     L1Teleport.teleport(_pc, 32698, 32857, (short) punishment_mapid, 5, false);
-                    _pc.sendPackets(new S_SystemMessage("\\aG????????�檢測警???" + punishment_time + "�?�???��????��?��?????"));
+                    _pc.sendPackets(new S_SystemMessage("\\aG加速器檢測警告" + punishment_time + "秒後傳送到地獄。"));
                     try {
                         TimeUnit.MILLISECONDS.sleep(punishment_time * 1000L);
                     } catch (Exception e) {
                         System.out.println(e.getLocalizedMessage());
                     }
                     L1Teleport.teleport(_pc, x, y, (short) mapid, 5, false);
-                    RecordTable.get().r_speed(this._pc.getName(), "??�測??�常(??��??or走�??");
+                    RecordTable.get().r_speed(this._pc.getName(), "偵測異常(攻速or走速");
                     break;
                 case 3:
                     int[] Head = {0, 1, 2, 3, 4, 5, 6, 7};
@@ -249,19 +249,19 @@ public class AcceleratorChecker {//src042
                     for (int i = 0; i < Head.length; i++) {
                         if (_pc.getHeading() == Head[i]) {
                             L1Teleport.teleport(this._pc, X[i], Y[i], (short) mapid, _pc.getHeading(), false);
-                            _pc.sendPackets(new S_SystemMessage("\\aG????????�檢測�??"));
+                            _pc.sendPackets(new S_SystemMessage("\\aG加速器檢測。"));
                         }
                         try {
                             TimeUnit.MILLISECONDS.sleep(punishment_time * 1000L);
-                            RecordTable.get().r_speed(this._pc.getName(), "??�測??�常(??��??or走�??");
+                            RecordTable.get().r_speed(this._pc.getName(), "偵測異常(攻速or走速");
                         } catch (Exception e) {
                             System.out.println(e.getLocalizedMessage());
                         }
                     }
             }
         } else {
-            _pc.set_misslocTime(1);  // GM 自保：暫時啟用 missloc 保護，避免被處罰
-            _pc.sendPackets(new S_SystemMessage("\\aD?????�管?????��?��????�中使�?��???????�檢測中???"));
+            _pc.set_misslocTime(1);  //加速偵測回逤
+            _pc.sendPackets(new S_SystemMessage("\\aD遊戲管理員在遊戲中使用加速器檢測中。"));
             move_justiceCount = 0;
         }
     }

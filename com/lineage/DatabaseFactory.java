@@ -19,8 +19,8 @@ public class DatabaseFactory {
 
     public DatabaseFactory() throws SQLException {
         try {
-            // 使用 c3p0 命名配置，套用 config/c3p0-config.xml 的 game-db 參數
-            _source = new ComboPooledDataSource("game-db");
+            // 使用 c3p0 默認配置
+            _source = new ComboPooledDataSource();
             _source.setDriverClass(_driver);
             _source.setJdbcUrl(_url);
             _source.setUser(_user);

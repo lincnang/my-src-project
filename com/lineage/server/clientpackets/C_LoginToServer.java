@@ -2026,6 +2026,14 @@ public class C_LoginToServer extends ClientBasePacket {
             CharBuffReading.get().buff(pc);
             pc.sendPackets(new S_PacketBoxActiveSpells(pc));
             CharMapTimeReading.get().getTime(pc);
+            // 還原BUFF後，若玩家仍有三段加速，補送三段加速圖示（避免重登後圖示消失）
+            if (pc.hasSkillEffect(com.lineage.server.model.skill.L1SkillId.STATUS_BRAVE3)) {
+                int remain = pc.getSkillEffectTimeSec(com.lineage.server.model.skill.L1SkillId.STATUS_BRAVE3);
+                if (remain > 0) {
+                    pc.sendPackets(new S_PacketBoxThirdSpeed(remain));
+                    pc.sendPacketsAll(new S_Liquor(pc.getId(), 8));
+                }
+            }
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

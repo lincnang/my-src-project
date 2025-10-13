@@ -28,11 +28,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 廣播系統時間軸
@@ -147,11 +145,10 @@ public final class BroadcastController implements Runnable {
             // 執行全PC檢查程序
             for (final L1PcInstance pc : all) {
                 if (check(pc)) {
-                    // 發送封包
+                    // 發送封包（移除節流等待）
                     pc.sendPackets(packet1);
                     pc.sendPackets(packet2);
                 }
-                TimeUnit.MILLISECONDS.sleep(1);
             }
         } catch (final Exception e) {
             _log.error("廣播系統時間軸異常重啟");

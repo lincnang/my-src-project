@@ -41,6 +41,9 @@ public class NpcDeadTimer extends TimerTask {
             if (allMob.isEmpty()) {
                 return;
             }
+            
+            int processedCount = 0;
+            
             for (final L1NpcInstance npc : allMob) {
                 if (npc == null) {
                     continue;
@@ -52,16 +55,24 @@ public class NpcDeadTimer extends TimerTask {
                 if (!npc.isDead()) {
                     continue;
                 }
+                // 跳過已被個別清理機制處理的怪物（新增優化）
                 if (npc.get_deadTimerTemp() == -1) {
                     continue;
                 }
+                
+                processedCount++;
                 final int time = npc.get_deadTimerTemp();
                 npc.set_deadTimerTemp(time - 5);
                 if (npc.get_deadTimerTemp() <= 0) {
                     npc.deleteMe();
                 }
-                TimeUnit.MILLISECONDS.sleep(50);
+                
+                // 避免過長的處理時間，分批處理
+                if (processedCount % 100 == 0) {
+                    TimeUnit.MILLISECONDS.sleep(10);
+                }
             }
+            
         } catch (final Exception e) {
             _log.error("NPC死亡時間軸異常重啟", e);
             GeneralThreadPool.get().cancel(_timer, false);

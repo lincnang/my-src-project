@@ -19,12 +19,10 @@
 package com.eric;
 
 import com.lineage.server.model.Instance.L1NpcInstance;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.utils.L1SpawnUtil;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class RandomMobDeleteTimer extends TimerTask {
+public class RandomMobDeleteTimer implements Runnable {
     /*
      * private static final Logger _log =
      * Logger.getLogger(RandomMobDeleteTimer.class .getName());
@@ -45,13 +43,12 @@ public class RandomMobDeleteTimer extends TimerTask {
                 npc.deleteMe();
             }
         }
-        this.cancel();
     }
 
     public void begin() {
-        Timer timer = new Timer();
         if (!(RandomMobTable.getInstance().getTimeSecondToDelete(_randomMobId) <= 0)) {
-            timer.schedule(this, RandomMobTable.getInstance().getTimeSecondToDelete(_randomMobId) * 1000L);
+            GeneralThreadPool.get().schedule(this, 
+                RandomMobTable.getInstance().getTimeSecondToDelete(_randomMobId) * 1000L);
         }
     }
 }

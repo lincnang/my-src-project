@@ -852,7 +852,7 @@ public class L1SkillUse {
             ) && (_player.getClanid() == xpc.getClanid())) || _player.isGm())) {
                 return true;
             }
-            if (((_skill.getTargetTo() & L1Skills.TARGET_TO_PARTY) == L1Skills.TARGET_TO_PARTY) && (_player.getParty().isMember(xpc) || _player.isGm())) {
+            if (((_skill.getTargetTo() & L1Skills.TARGET_TO_PARTY) == L1Skills.TARGET_TO_PARTY) && (((_player.isInParty() && _player.getParty() != null && _player.getParty().isMember(xpc)) || _player.isGm()))) {
                 return true;
             }
         }
@@ -1263,9 +1263,6 @@ public class L1SkillUse {
         switch (this._skillId) {
             case SHIELD: // シールド
                 pc.sendPackets(new S_SkillIconShield(5, this._getBuffIconDuration));
-                break;
-            case SHADOW_ARMOR: // 影之防護
-                pc.sendPackets(new S_SkillIconShield(3, this._getBuffIconDuration));
                 break;
             case DRESS_DEXTERITY: // 敏捷提升
                 pc.sendPackets(new S_Dexup(pc, 3, this._getBuffIconDuration));

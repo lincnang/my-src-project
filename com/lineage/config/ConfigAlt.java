@@ -1,7 +1,6 @@
 package com.lineage.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -43,6 +42,9 @@ public final class ConfigAlt {
     public static int DELETE_CHARACTER_AFTER_LV;
     public static boolean DELETE_CHARACTER_AFTER_7DAYS;
     public static int NPC_DELETION_TIME;
+    public static int MIN_MONSTER_DEATH_DISPLAY_TIME;
+    public static int BOSS_MONSTER_DEATH_DISPLAY_TIME;
+    public static boolean ENABLE_DIRECT_RESPAWN_TRIGGER;
     public static int DEFAULT_CHARACTER_SLOT;
     public static int MEDICINE;
     public static int POWER;
@@ -140,6 +142,9 @@ public final class ConfigAlt {
             DELETE_CHARACTER_AFTER_LV = Integer.parseInt(set.getProperty("DeleteCharacterAfterLV", "60"));
             DELETE_CHARACTER_AFTER_7DAYS = Boolean.parseBoolean(set.getProperty("DeleteCharacterAfter7Days", "True"));
             NPC_DELETION_TIME = Integer.parseInt(set.getProperty("NpcDeletionTime", "10"));
+            MIN_MONSTER_DEATH_DISPLAY_TIME = Integer.parseInt(set.getProperty("MinMonsterDeathDisplayTime", "2"));
+            BOSS_MONSTER_DEATH_DISPLAY_TIME = Integer.parseInt(set.getProperty("BossMonsterDeathDisplayTime", "60"));
+            ENABLE_DIRECT_RESPAWN_TRIGGER = Boolean.parseBoolean(set.getProperty("EnableDirectRespawnTrigger", "true"));
             DEFAULT_CHARACTER_SLOT = Integer.parseInt(set.getProperty("DefaultCharacterSlot", "4"));
             MEDICINE = Integer.parseInt(set.getProperty("Medicine", "20"));
             POWER = Integer.parseInt(set.getProperty("Power", "35"));

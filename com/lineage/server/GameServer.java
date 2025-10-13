@@ -306,7 +306,6 @@ public class GameServer {
             if (ConfigThebes.Mini_Siege) {
                 MiniSiegeNpcStart.getInstance();
             }
-            ServerTimerController.getInstance().start(); // 各種時間控制（啟動定時器）
             _log.info("------------------------------------------------------------");
             _log.info("       潘朵拉系列");
             _log.info("------------------------------------------------------------");

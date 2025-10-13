@@ -53,6 +53,8 @@ public class ServerExecutor extends Thread {
      *
      */
     public void stsrtEcho() throws IOException {
+        String timestamp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+        _log.warn("[DIAG-SERVER] ServerExecutor.stsrtEcho() - 端口: " + _port + " 時間: " + timestamp);
         GeneralThreadPool.get().execute(this);
     }
 
@@ -98,14 +100,27 @@ public class ServerExecutor extends Thread {
      * 停止監聽
      */
     public void stopEcho() {
+        String timestamp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+        
         try {
+            _log.warn("[DIAG-SERVER] ServerExecutor.stopEcho() 開始 - 端口: " + _port + " 時間: " + timestamp);
+            
             if (_server != null) {
+                _log.warn("[DIAG-SERVER] 關閉 ServerSocket - 端口: " + _port);
                 StreamUtil.close(_server);
+                
+                _log.warn("[DIAG-SERVER] 中斷執行緒 - 端口: " + _port);
                 StreamUtil.interrupt(this);
+                
                 _server = null;
+                
+                String endTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+                _log.warn("[DIAG-SERVER] ServerExecutor.stopEcho() 完成 - 端口: " + _port + " 時間: " + endTime);
+            } else {
+                _log.warn("[DIAG-SERVER] ServerSocket 已為 null - 端口: " + _port);
             }
         } catch (Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
+            _log.error("[DIAG-SERVER] stopEcho() 發生錯誤 - 端口: " + _port, e);
         } finally {
         }
     }

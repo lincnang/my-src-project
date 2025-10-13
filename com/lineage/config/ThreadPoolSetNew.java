@@ -56,6 +56,19 @@ public final class ThreadPoolSetNew {
             REXT = Integer.parseInt(set.getProperty("REXT", "100"));
             ATTACK_SPEED = Integer.parseInt(set.getProperty("ATTACK_SPEED", "350"));
             WALK_SPEED = Integer.parseInt(set.getProperty("WALK_SPEED", "450"));
+            
+            // 讀取商品價格設定
+            ITEMADENA1 = Integer.parseInt(set.getProperty("ITEMADENA1", "80"));
+            ITEMADENA2 = Integer.parseInt(set.getProperty("ITEMADENA2", "180"));
+            ITEMADENA3 = Integer.parseInt(set.getProperty("ITEMADENA3", "0"));
+            ITEMADENA4 = Integer.parseInt(set.getProperty("ITEMADENA4", "0"));
+            ITEMADENA5 = Integer.parseInt(set.getProperty("ITEMADENA5", "0"));
+            ITEMADENA6 = Integer.parseInt(set.getProperty("ITEMADENA6", "0"));
+            ITEMADENA7 = Integer.parseInt(set.getProperty("ITEMADENA7", "800"));
+            ITEMADENA8 = Integer.parseInt(set.getProperty("ITEMADENA8", "1500"));
+            ITEMADENA9 = Integer.parseInt(set.getProperty("ITEMADENA9", "1500"));
+            ITEMADENA10 = Integer.parseInt(set.getProperty("ITEMADENA10", "20000"));
+            ITEMADENA11 = Integer.parseInt(set.getProperty("ITEMADENA11", "0"));
         } catch (final Exception e) {
             throw new ConfigErrorException("設置檔案遺失: " + THREAD_POOL_FILE);
         } finally {

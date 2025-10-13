@@ -748,6 +748,12 @@ public class L1PcInstance extends L1Character { // src015
     private boolean _firstAttack = false;
     private boolean _aiRunning = false; // PC AI時間軸 正在運行
     /**
+     * PC AI 控制器實例 (事件驅動架構)
+     * 用於正確管理 AI 生命週期,防止實例洩漏
+     * Phase 1.5 修復: 2025-10-12
+     */
+    private PcAI _pcAI = null;
+    /**
      * 尋怪週期 by 聖子默默
      */
     private int _searchThink = 0;
@@ -8444,19 +8450,17 @@ public class L1PcInstance extends L1Character { // src015
      * 啟用PC AI
      */
     public void startPcAI() {
+        if (this.isAiRunning()) {
+            this.sendPackets(new S_ServerMessage("自動掛機已在運行中。"));
+            return;
+        }
         boolean checkStart = this.getWeapon() == null;
         if (this.getWeapon() == null) {
             this.sendPackets(new S_ServerMessage(this.getName() + " 沒有裝備武器，無法進行掛機。"));
             return;
         }
 
-        if (this.isDead()) {
-            checkStart = true;
-        }
-        if (this.isGhost()) {
-            checkStart = true;
-        }
-        if (this.getCurrentHp() <= 0) {
+        if (this.isDead() || this.getCurrentHp() <= 0) {
             checkStart = true;
         }
         if (this.isPrivateShop()) {
@@ -8466,7 +8470,7 @@ public class L1PcInstance extends L1Character { // src015
             checkStart = true;
         }
         if (checkStart) {
-            this.sendPackets(new S_ServerMessage(79)); // 沒有任何事情發生
+            this.sendPackets(new S_ServerMessage("沒有任何事情發生 (檢查：裝備武器/非死亡/非擺攤/非麻痺/HP>0)"));
             return;
         }
         if (_pcMove != null) { // 重複啟動
@@ -8475,8 +8479,17 @@ public class L1PcInstance extends L1Character { // src015
             _pcMove = new pcMove(this);
         }
         this.setActivated(true);
-        final PcAI pcAI = new PcAI(this);
-        pcAI.startAI();
+        this.setAiRunning(true);
+        
+        // ✅ Phase 1.5 修復: 停止舊實例並創建新實例,防止實例洩漏
+        if (_pcAI != null) {
+            _pcAI.stopAI(); // 確保舊實例完全停止
+        }
+        _pcAI = new PcAI(this); // 創建新實例並保存引用
+        _pcAI.startAI();        // 啟動 AI
+        
+        // 顯示啟動提示，與既有關閉提示對稱
+        this.set_Test_Auto(true);
         //        sendPackets(new S_ServerMessage("\\fn自動掛機啟動by 聖子默默"));
         // --------------------------------------------
         if (this.getLsRange() > 0) {
@@ -8491,11 +8504,19 @@ public class L1PcInstance extends L1Character { // src015
 
     /**
      * 停止掛機 by 聖子默默
+     * Phase 1.5 修復: 正確停止 PcAI 實例,防止洩漏
      */
     public void stopPcAI() {
         if (!this.isActivated()) {
             return;
         }
+        
+        // ✅ Phase 1.5 修復: 正確停止 PcAI 實例
+        if (_pcAI != null) {
+            _pcAI.stopAI(); // 取消排程任務,釋放線程
+            _pcAI = null;   // 釋放引用,允許 GC 回收
+        }
+        
         this.allTargetClear();
         this.setAiRunning(false);// PC AI時間軸 正在運行
         this.setActivated(false);// 啟用PC AI
@@ -11848,6 +11869,10 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void clearAttackSkillList() {
         _autoattackNew.clear();
+        // 同時清除數據庫記錄，避免登入時重新加載
+        if (get_other1() != null) {
+            get_other1().set_type11(0);
+        }
     }
 
     /**

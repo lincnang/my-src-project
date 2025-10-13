@@ -17,80 +17,99 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class GeneralThreadPool {//src032
     private static final Log _log = LogFactory.getLog(GeneralThreadPool.class);
-    private static final int SCHEDULED_CORE_POOL_SIZE = 100;
-    
-    /**
-     * 線程安全的 Holder 模式
-     */
-    private static class Holder {
-        private static final GeneralThreadPool INSTANCE = new GeneralThreadPool();
-    }
-    // ThreadPoolExecutor，它可另行安排在給定的延遲後運行命令，或者定期執行命令。
-    // 需要多個輔助線程時，或者要求 ThreadPoolExecutor 具有額外的靈活性或功能時，此類要優於 Timer。
-    // private ScheduledThreadPoolExecutor _poolExecutor;
-    private final int _pcSchedulerPoolSize = 1 + Config.MAX_ONLINE_USERS / 10;
-    // 執行已提交的 Runnable 任務的對象。
-    // 此接口提供.一種將任務提交與每個任務將如何運行的機制（包括線程使用的細節、調度等）分離開來的方法。
-    // 通常使用 Executor 而不是顯式地創建線程。例如，可能會使用以下方法，
-    // 而不是為.一組任務中的每個任務調用 new Thread(new(RunnableTask())).start()：
-    private final ThreadPoolExecutor _executor;
-    // 一個 ExecutorService，可安排在給定的延遲後運行或定期執行的命令。
+    private static GeneralThreadPool _instance;
+
+    // === L1J 簡化執行緒池架構 ===
+    // 主要執行緒池（用於即時、短期的任務）
+    private final Executor _executor;
+
+    // 通用排程池（處理所有排程任務:AI、系統、技能等）
     private final ScheduledExecutorService _scheduler;
+
+    // 玩家專用排程池（用於玩家監控、獨立任務）
     private final ScheduledExecutorService _pcScheduler;
-    private final ScheduledExecutorService _aiScheduler;
 
     private GeneralThreadPool() {
-        // 有界執行緒池，避免無限制成長
-        final int cores = Math.max(4, Runtime.getRuntime().availableProcessors());
-        final int maxThreads = Math.max(cores * 4, 64);
-        final int queueCapacity = Math.max(1000, Config.MAX_ONLINE_USERS * 10);
-        _executor = new ThreadPoolExecutor(
-                cores,
-                maxThreads,
-                60L,
-                TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(queueCapacity),
-                new PriorityThreadFactory("GTPool", Thread.NORM_PRIORITY),
-                new ThreadPoolExecutor.CallerRunsPolicy()
-        );
-        _executor.allowCoreThreadTimeOut(false);
-
-        // 單一集中式排程器，減少多個排程池導致的資源浪費
-        _scheduler = Executors.newScheduledThreadPool(
-                Math.max(SCHEDULED_CORE_POOL_SIZE, _pcSchedulerPoolSize),
-                new PriorityThreadFactory("GTScheduler", Thread.NORM_PRIORITY)
-        );
-        if (_scheduler instanceof ScheduledThreadPoolExecutor) {
-            ((ScheduledThreadPoolExecutor) _scheduler).setRemoveOnCancelPolicy(true);
+        // 載入配置
+        try {
+            com.lineage.config.ThreadPoolSet.load();
+        } catch (Exception e) {
         }
-        // 與舊接口相容：指向同一個排程器
-        _pcScheduler = _scheduler;
-        _aiScheduler = _scheduler;
+        // 計算基礎執行緒池大小
+        int maxPlayers = Config.MAX_ONLINE_USERS;
+        int corePoolSize = calculateCorePoolSize(maxPlayers);
+        // 1. 主要執行緒池（動態，用於即時任務）
+        _executor = Executors.newCachedThreadPool(
+                new PriorityThreadFactory("MainExecutor", Thread.NORM_PRIORITY));
+        // 2. 通用排程池（AI、系統、技能、高低優先級任務共用）
+        _scheduler = Executors.newScheduledThreadPool(corePoolSize,
+                new PriorityThreadFactory("GeneralScheduler", Thread.NORM_PRIORITY));
+        // 3. 玩家專用排程池（處理玩家獨立任務，如 L1PcMonitor）
+        // 優先使用 server.properties 的 PcSchedulerPool 配置
+        int pcSchedulerSize;
+        if (Config.PC_SCHEDULER_POOL_SIZE > 0) {
+            pcSchedulerSize = Config.PC_SCHEDULER_POOL_SIZE;
+        } else {
+            pcSchedulerSize = Math.max(20, corePoolSize / 4);
+        }
+        _pcScheduler = Executors.newScheduledThreadPool(pcSchedulerSize,
+                new PriorityThreadFactory("PcScheduler", Thread.NORM_PRIORITY));
+    }
+    
+    /**
+     * 根據伺服器規模計算核心執行緒池大小
+     */
+    private int calculateCorePoolSize(int maxPlayers) {
+        // 優先使用 server.properties 的 SchedulerCorePool 配置
+        if (Config.SCHEDULER_CORE_POOL_SIZE > 0) {
+            return Config.SCHEDULER_CORE_POOL_SIZE;
+        }
+        
+        // 其次使用自動掛機設置.properties 的核心執行緒池配置
+        if (com.lineage.config.ThreadPoolSet.CORE_THREAD_POOL_SIZE > 0) {
+            return com.lineage.config.ThreadPoolSet.CORE_THREAD_POOL_SIZE;
+        }
+        
+        // 再次使用舊版配置（向後兼容）
+        if (com.lineage.config.ThreadPoolSet.SCHEDULED_CORE_POOL_SIZE > 0) {
+            return com.lineage.config.ThreadPoolSet.SCHEDULED_CORE_POOL_SIZE;
+        }
+        
+        // 最後根據最大玩家數動態計算
+        // 基礎公式：基礎執行緒(50) + 每10個玩家1個執行緒
+        int baseThreads = 50;
+        int playerThreads = maxPlayers / 10;
+        int totalThreads = baseThreads + playerThreads;
+        
+        // 設定上下限
+        totalThreads = Math.max(100, totalThreads);  // 最少100
+        totalThreads = Math.min(500, totalThreads);  // 最多500
+        
+        return totalThreads;
     }
 
-    /**
-     * 獲取 GeneralThreadPool 單例實例（線程安全）
-     */
     public static GeneralThreadPool get() {
-        return Holder.INSTANCE;
+        if (_instance == null) {
+            _instance = new GeneralThreadPool();
+        }
+        return _instance;
     }
     // Executor
 
     /**
      * 使該線程開始執行；Java 虛擬機調用該線程的 run 方法。
-     * 
-     * @param r 要執行的任務
-     * @throws RejectedExecutionException 如果任務無法被接受執行
+     *
      */
     public void execute(final Runnable r) {
         try {
-            _executor.execute(r);
-        } catch (final RejectedExecutionException e) {
-            _log.error("線程池已滿或已關閉，無法執行任務: " + e.getLocalizedMessage());
-            throw e;  // 重新拋出異常，讓調用者知道失敗了
+            if (_executor == null) {
+                final Thread t = new Thread(r);
+                t.start();
+            } else {
+                _executor.execute(r);
+            }
         } catch (final Exception e) {
-            _log.error("執行任務時發生異常: " + e.getLocalizedMessage(), e);
-            throw new RuntimeException("執行任務失敗", e);
+            _log.error(e.getLocalizedMessage(), e);
         }
     }
 
@@ -100,8 +119,7 @@ public class GeneralThreadPool {//src032
      */
     public void execute(final Thread t) {
         try {
-            // 避免繞過池管理，改由池執行其 run()
-            _executor.execute(t);
+            t.start();
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
@@ -158,54 +176,54 @@ public class GeneralThreadPool {//src032
     public ScheduledFuture<?> pcSchedule(final L1PcMonitor r, final long delay) {
         try {
             if (delay <= 0) {
-                // 在未來某個時間執行給定的命令。
-                // 該命令可能在新的線程、已入池的線程或者正調用的線程中執行，這由 Executor 實現決定。
                 this._executor.execute(r);
                 return null;
             }
-            // 創建並執行在給定延遲後啟用的一次性操作。
             return this._pcScheduler.schedule(r, delay, TimeUnit.MILLISECONDS);
         } catch (final RejectedExecutionException e) {
             _log.error(e.getLocalizedMessage(), e);
             return null;
         }
     }
-    // ScheduledThreadPoolExecutor
+// ScheduledThreadPoolExecutor
 
-    /**
-     * 創建並執行一個在給定初始延遲後首次啟用的定期操作，後續操作具有給定的週期； 也就是將在 initialDelay 後開始執行，然後在
-     * initialDelay+period 後執行， 接著在 initialDelay + 2 * period 後執行，依此類推。
-     * 如果任務的任何一個執行遇到異常，則後續執行都會被取消。
-     * <p>
-     * 否則，只能通過執行程序的取消或終止方法來終止該任務。 如果此任務的任何一個執行要花費比其週期更長的時間，則將推遲後續執行，但不會同時執行。
-     *
-     * @param command      - 要執行的任務
-     * @param initialDelay - 首次執行的延遲時間
-     * @param period       - 連續執行之間的週期
-     */
-    public ScheduledFuture<?> scheduleAtFixedRate(final TimerTask command, final long initialDelay, final long period) {
-        try {
-            /*
-             * Timer timer = new Timer(); timer.scheduleAtFixedRate(command,
-             * initialDelay, period); return timer;
-             */
-            return this._aiScheduler.scheduleAtFixedRate(command, initialDelay, period, TimeUnit.MILLISECONDS);
-        } catch (final RejectedExecutionException e) {
-            _log.error(e.getLocalizedMessage(), e);
-            return null;
-        }
+/**
+ * 創建並執行一個在給定初始延遲後首次啟用的定期操作，後續操作具有給定的週期； 也就是將在 initialDelay 後開始執行，然後在
+ * initialDelay+period 後執行， 接著在 initialDelay + 2 * period 後執行，依此類推。
+ * 如果任務的任何一個執行遇到異常，則後續執行都會被取消。
+ * <p>
+ * 否則，只能通過執行程序的取消或終止方法來終止該任務。 如果此任務的任何一個執行要花費比其週期更長的時間，則將推遲後續執行，但不會同時執行。
+ *
+ * @param command      - 要執行的任務
+ * @param initialDelay - 首次執行的延遲時間
+ * @param period       - 連續執行之間的週期
+ */
+public ScheduledFuture<?> scheduleAtFixedRate(final TimerTask command, final long initialDelay, final long period) {
+    try {
+        return this._scheduler.scheduleAtFixedRate(command, initialDelay, period, TimeUnit.MILLISECONDS);
+    } catch (final RejectedExecutionException e) {
+        _log.error(e.getLocalizedMessage(), e);
+        return null;
     }
+}
 
-    /**
-     * 以固定延遲重複執行任務（上一輪完成後延遲 period 再執行下一輪）。
-     */
-    public ScheduledFuture<?> scheduleWithFixedDelay(final TimerTask command, final long initialDelay, final long period) {
-        try {
-            return this._aiScheduler.scheduleWithFixedDelay(command, initialDelay, period, TimeUnit.MILLISECONDS);
-        } catch (final RejectedExecutionException e) {
-            _log.error(e.getLocalizedMessage(), e);
-            return null;
-        }
+/**
+ * 以固定延遲重複執行任務（上一輪完成後延遲 period 再執行下一輪）。
+ */
+public ScheduledFuture<?> scheduleWithFixedDelay(final TimerTask command, final long initialDelay, final long period) {
+    try {
+        return this._scheduler.scheduleWithFixedDelay(command, initialDelay, period, TimeUnit.MILLISECONDS);
+    } catch (final RejectedExecutionException e) {
+        _log.error(e.getLocalizedMessage(), e);
+        return null;
+    }
+}
+
+/**
+ * 相容 int 型別參數的多載。
+ */
+public ScheduledFuture<?> scheduleWithFixedDelay(final TimerTask command, final int initialDelay, final int period) {
+        return scheduleWithFixedDelay(command, (long) initialDelay, (long) period);
     }
 
     /**
@@ -279,37 +297,176 @@ public class GeneralThreadPool {//src032
     }
 
     /**
-     * 安全關閉所有執行緒池
+     * 取得遊戲邏輯執行緒池（向後兼容，返回通用排程池）
+     */
+    public ScheduledExecutorService getGameScheduler() {
+        return _scheduler;
+    }
+    
+    /**
+     * 取得高優先級執行緒池（向後兼容，返回通用排程池）
+     */
+    public ScheduledExecutorService getHighPriorityScheduler() {
+        return _scheduler;
+    }
+    
+    /**
+     * 取得低優先級執行緒池（向後兼容，返回通用排程池）
+     */
+    public ScheduledExecutorService getLowPriorityScheduler() {
+        return _scheduler;
+    }
+    
+    /**
+     * 執行遊戲邏輯任務（向後兼容，使用通用排程池）
+     */
+    public ScheduledFuture<?> scheduleGameTask(Runnable command, long delay) {
+        try {
+            if (delay <= 0) {
+                _scheduler.execute(command);
+                return null;
+            }
+            return _scheduler.schedule(command, delay, TimeUnit.MILLISECONDS);
+        } catch (RejectedExecutionException e) {
+            _log.error("遊戲邏輯任務執行失敗", e);
+            return null;
+        }
+    }
+    
+    /**
+     * 執行高優先級任務（向後兼容，使用通用排程池）
+     */
+    public ScheduledFuture<?> scheduleHighPriorityTask(Runnable command, long delay) {
+        return scheduleGameTask(command, delay);
+    }
+    
+    /**
+     * 執行低優先級任務（向後兼容，使用通用排程池）
+     */
+    public ScheduledFuture<?> scheduleLowPriorityTask(Runnable command, long delay) {
+        return scheduleGameTask(command, delay);
+    }
+    
+    // === 向後兼容方法（重定向到新的執行緒池） ===
+    
+    /**
+     * 取得假人系統執行緒池（向後兼容，使用通用排程池）
+     */
+    public ScheduledExecutorService getDeScheduler() {
+        return _scheduler;
+    }
+    
+    /**
+     * 取得玩家其他功能執行緒池（向後兼容，使用通用排程池）
+     */
+    public ScheduledExecutorService getPcOtherScheduler() {
+        return _scheduler;
+    }
+    
+    /**
+     * 取得自動掛機執行緒池（向後兼容，使用通用排程池）
+     */
+    public ScheduledExecutorService getPcAutoScheduler() {
+        return _scheduler;
+    }
+    
+    /**
+     * 執行假人系統任務（向後兼容，使用通用排程池）
+     */
+    public ScheduledFuture<?> scheduleDeTask(Runnable command, long delay) {
+        return scheduleGameTask(command, delay);
+    }
+    
+    /**
+     * 執行玩家其他功能任務（向後兼容，使用通用排程池）
+     */
+    public ScheduledFuture<?> schedulePcOtherTask(Runnable command, long delay) {
+        return scheduleGameTask(command, delay);
+    }
+    
+    /**
+     * 執行自動掛機任務（向後兼容，使用通用排程池）
+     */
+    public ScheduledFuture<?> schedulePcAutoTask(Runnable command, long delay) {
+        return scheduleGameTask(command, delay);
+    }
+    
+    /**
+     * 獲得 pc 專用執行緒池（向後兼容，返回玩家專用池）
+     */
+    public ScheduledExecutorService pcScheduler() {
+        return _pcScheduler;
+    }
+    
+    /**
+     * 獲得 ai 專用執行緒池（向後兼容，返回通用排程池）
+     */
+    public ScheduledExecutorService aiScheduler() {
+        return _scheduler;
+    }
+    
+    /**
+     * 安全關閉執行緒池與排程器
      */
     public void shutdown() {
         try {
-            _executor.shutdown();
-        } catch (Exception e) {
+            if (_executor instanceof ExecutorService) {
+                ((ExecutorService) _executor).shutdown();
+            }
+        } catch (final Exception e) {
             _log.error("shutdown executor error", e);
         }
         try {
             _scheduler.shutdown();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             _log.error("shutdown scheduler error", e);
         }
         try {
-            _executor.awaitTermination(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            _pcScheduler.shutdown();
+        } catch (final Exception e) {
+            _log.error("shutdown pcScheduler error", e);
         }
-        try {
-            _scheduler.awaitTermination(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+    }
+
+    /**
+     * 獲取執行緒池狀態資訊（用於監控和診斷）
+     */
+    public String getPoolStatus() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== GeneralThreadPool 狀態 ===\n");
+        
+        // 通用排程池狀態
+        if (_scheduler instanceof ScheduledThreadPoolExecutor) {
+            ScheduledThreadPoolExecutor scheduler = (ScheduledThreadPoolExecutor) _scheduler;
+            sb.append("[通用排程池]\n");
+            sb.append("  核心執行緒: ").append(scheduler.getCorePoolSize()).append("\n");
+            sb.append("  最大執行緒: ").append(scheduler.getMaximumPoolSize()).append("\n");
+            sb.append("  當前執行緒: ").append(scheduler.getPoolSize()).append("\n");
+            sb.append("  活躍執行緒: ").append(scheduler.getActiveCount()).append("\n");
+            sb.append("  佇列任務數: ").append(scheduler.getQueue().size()).append("\n");
+            sb.append("  已完成任務: ").append(scheduler.getCompletedTaskCount()).append("\n");
         }
-        try {
-            _executor.shutdownNow();
-        } catch (Exception ignored) {
+        
+        // 玩家專用池狀態
+        if (_pcScheduler instanceof ScheduledThreadPoolExecutor) {
+            ScheduledThreadPoolExecutor pcScheduler = (ScheduledThreadPoolExecutor) _pcScheduler;
+            sb.append("[玩家專用池]\n");
+            sb.append("  核心執行緒: ").append(pcScheduler.getCorePoolSize()).append("\n");
+            sb.append("  最大執行緒: ").append(pcScheduler.getMaximumPoolSize()).append("\n");
+            sb.append("  當前執行緒: ").append(pcScheduler.getPoolSize()).append("\n");
+            sb.append("  活躍執行緒: ").append(pcScheduler.getActiveCount()).append("\n");
+            sb.append("  佇列任務數: ").append(pcScheduler.getQueue().size()).append("\n");
+            sb.append("  已完成任務: ").append(pcScheduler.getCompletedTaskCount()).append("\n");
         }
-        try {
-            _scheduler.shutdownNow();
-        } catch (Exception ignored) {
-        }
+        
+        return sb.toString();
+    }
+    
+    /**
+     * 記錄執行緒池狀態到日誌
+     */
+    public void logPoolStatus() {
+        _log.info(getPoolStatus());
     }
 
     /**

@@ -216,7 +216,7 @@ public class L1Master {
         if (pc.getMasterID() < 0) {// master
             for (L1PcInstance disciple : getOnlineDiscipleList(pc.getId())) {
                 // EFFECT_WITH_MASTER_1~4 --> EFFECT_NO_MASTER_1~4
-                if (pc.getParty().isMember(disciple)) {
+                if (pc.isInParty() && pc.getParty() != null && pc.getParty().isMember(disciple)) {
                     changeBuff(disciple, -4);
                 }
             }
@@ -224,7 +224,7 @@ public class L1Master {
             for (L1PcInstance disciple : getOnlineDiscipleList(pc.getMasterID())) {
                 if (disciple.getId() == pc.getId()) {
                     changeBuff(disciple, -8);
-                } else if (pc.getParty().isMember(disciple)) { // 隊友裡有同門弟子
+                } else if (pc.isInParty() && pc.getParty() != null && pc.getParty().isMember(disciple)) { // 隊友裡有同門弟子
                     if (pc.getParty().isLeader(pc)) { // 隊長離隊 = 解散隊伍
                         changeBuff(disciple, -8);
                     } else {
@@ -239,14 +239,14 @@ public class L1Master {
     public void creatParty(L1PcInstance pc) {
         if (pc.getMasterID() == -1) {// master
             for (L1PcInstance disciple : getOnlineDiscipleList(pc.getId())) {
-                if (pc.getParty().isMember(disciple)) {
+                if (pc.isInParty() && pc.getParty() != null && pc.getParty().isMember(disciple)) {
                     // EFFECT_NO_MASTER--->EFFECT_WITH_MASTER
                     changeBuff(disciple, 4);
                 }
             }
         } else if (pc.getMasterID() > 0) { // disciple
             for (L1PcInstance disciple : getOnlineDiscipleList(pc.getMasterID())) {
-                if (pc.getId() != disciple.getId() && pc.getParty().isMember(disciple)) {
+                if (pc.getId() != disciple.getId() && pc.isInParty() && pc.getParty() != null && pc.getParty().isMember(disciple)) {
                     // EFFECT +1
                     changeBuff(disciple, 1);
                 }
@@ -257,15 +257,15 @@ public class L1Master {
     public void joinParty(L1PcInstance pc) {
         if (pc.getMasterID() == -1) {// master
             for (L1PcInstance disciple : getOnlineDiscipleList(pc.getId())) {
-                if (pc.getParty().isMember(disciple)) {
+                if (pc.isInParty() && pc.getParty() != null && pc.getParty().isMember(disciple)) {
                     // EFFECT_NO_MASTER--->EFFECT_WITH_MASTER
                     changeBuff(disciple, 4);
                 }
             }
         } else if (pc.getMasterID() > 0) { // disciple
             int skillid = 0;
-            for (L1PcInstance disciple : getOnlineDiscipleList(pc.getMasterID())) {
-                if (pc.getId() != disciple.getId() && pc.getParty().isMember(disciple)) {
+                for (L1PcInstance disciple : getOnlineDiscipleList(pc.getMasterID())) {
+                if (pc.getId() != disciple.getId() && pc.isInParty() && pc.getParty() != null && pc.getParty().isMember(disciple)) {
                     // EFFECT +1
                     skillid = changeBuff(disciple, 1);
                 }

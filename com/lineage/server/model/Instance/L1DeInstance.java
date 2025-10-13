@@ -50,6 +50,9 @@ public class L1DeInstance extends L1NpcInstance {
     private boolean _is_fishing = false;
     private int _fishX = -1;
     private int _fishY = -1;
+    // 假人找不到目標時的順移冷卻（毫秒）
+    private static final long NO_TARGET_TELEPORT_COOLDOWN_MS = 2000L;
+    private long _lastNoTargetTeleportMs = 0L;
 
     public L1DeInstance(L1Npc template) {
         super(template);
@@ -437,6 +440,13 @@ public class L1DeInstance extends L1NpcInstance {
                         }
                     }
                 }
+            } else {
+                // 找不到目標：觸發隨機順移（帶冷卻）以便更快找到怪物
+                long now = System.currentTimeMillis();
+                if (now - _lastNoTargetTeleportMs >= NO_TARGET_TELEPORT_COOLDOWN_MS) {
+                    _lastNoTargetTeleportMs = now;
+                    tryRandomTeleportNear();
+                }
             }
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -445,29 +455,57 @@ public class L1DeInstance extends L1NpcInstance {
 
     private L1MonsterInstance searchTarget(L1DeInstance npc) {
         try {
-            for (L1Object tg : World.get().getVisibleObjects(this, -1)) {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(10L);
-                } catch (InterruptedException e) {
-                    _log.error(e.getLocalizedMessage(), e);
-                }
-                if ((tg instanceof L1MonsterInstance)) {
-                    L1MonsterInstance tgNpc = (L1MonsterInstance) tg;
-                    if (!tgNpc.isDead()) {
-                        if (tgNpc.getCurrentHp() > 0) {
-                            if (get_showId() == tgNpc.get_showId()) {
-                                if ((tgNpc.getLevel() > 5) && (_random.nextBoolean())) {
-                                    return tgNpc;
-                                }
-                            }
-                        }
+            L1MonsterInstance nearest = null;
+            double nearestDist = Double.MAX_VALUE;
+            for (L1Object obj : World.get().getVisibleObjects(this, -1)) {
+                if (obj instanceof L1MonsterInstance) {
+                    L1MonsterInstance candidate = (L1MonsterInstance) obj;
+                    if (candidate.isDead()) {
+                        continue;
                     }
+                    if (candidate.getCurrentHp() <= 0) {
+                        continue;
+                    }
+                    if (get_showId() != candidate.get_showId()) {
+                        continue;
+                    }
+                    // 僅在一定半徑內選取最近目標，降低來回走動
+                    double dist = getLocation().getTileLineDistance(candidate.getLocation());
+                    if (dist <= 15.0D && dist < nearestDist) {
+                        nearest = candidate;
+                        nearestDist = dist;
+                    }
+                }
+            }
+            return nearest;
+        } catch (Exception e) {
+            _log.error(e.getLocalizedMessage(), e);
+        }
+        return null;
+    }
+
+    /**
+     * 假人隨機順移到附近可通行位置（保持在同地圖）。
+     * 半徑：10 格內嘗試，最多嘗試 20 次。
+     */
+    private void tryRandomTeleportNear() {
+        try {
+            int attempts = 20;
+            int radius = 10;
+            L1Map map = getMap();
+            Random rnd = _random;
+            while (attempts-- > 0) {
+                int tx = getX() + rnd.nextInt(radius * 2 + 1) - radius;
+                int ty = getY() + rnd.nextInt(radius * 2 + 1) - radius;
+                if (map.isInMap(tx, ty) && map.isPassable(tx, ty, this)) {
+                    int heading = rnd.nextInt(8);
+                    teleport(tx, ty, heading);
+                    break;
                 }
             }
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
-        return null;
     }
 
     public void setLink(L1Character cha) {

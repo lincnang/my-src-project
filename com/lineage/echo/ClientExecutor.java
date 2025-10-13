@@ -153,7 +153,25 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         _decrypt = new DecryptExecutor(this, _csocket.getInputStream());
         _encrypt = new EncryptExecutor(this, _csocket.getOutputStream());
 
-        // 記錄新連線（已移除外部監控依賴）
+        // === 診斷用: 註冊到 SOCKETLIST (加入安全判斷) ===
+        try {
+            if (_ip != null && com.lineage.commons.system.IpAttackCheck.SOCKETLIST != null) {
+                com.lineage.commons.system.IpAttackCheck.SOCKETLIST.put(this, _ip.toString());
+                
+                // 僅在 debug 模式記錄詳細資訊
+                if (_log.isDebugEnabled()) {
+                    _log.debug("[DIAG] ClientExecutor 建立 - IP: " + _ip + 
+                              " 時間: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date()) +
+                              " SOCKETLIST 大小: " + com.lineage.commons.system.IpAttackCheck.SOCKETLIST.size());
+                } else {
+                    _log.info("[DIAG] ClientExecutor 建立 - IP: " + _ip);
+                }
+            }
+        } catch (Exception e) {
+            _log.warn("[DIAG] 註冊 SOCKETLIST 失敗: " + e.getMessage());
+        }
+
+        // 記錄新連線(已移除外部監控依賴)
     }
 
     /** 舊介面，維持存在（目前未使用） */
@@ -368,8 +386,25 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
      * 處理Connection Reset - 嘗試優雅關閉
      */
     private void handleConnectionReset() {
+        // === 診斷用: 記錄詳細資訊 (加入判斷避免 NPE) ===
         try {
-            // 1. 如果有角色在線，嘗試保存數據
+            String timestamp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+            String accountName = (_account != null) ? _account.get_login() : "未登入";
+            String charName = (_activeChar != null && !_activeChar.isGhost()) ? _activeChar.getName() : "無角色";
+            String threadName = Thread.currentThread().getName();
+            String ipStr = (_ip != null) ? _ip.toString() : "unknown";
+            
+            _log.warn("[DIAG-RESET] Connection Reset 檢測 - 時間: " + timestamp + 
+                      " IP: " + ipStr + 
+                      " 帳號: " + accountName + 
+                      " 角色: " + charName + 
+                      " 執行緒: " + threadName);
+        } catch (Exception e) {
+            _log.warn("[DIAG-RESET] 記錄 Reset 資訊失敗: " + e.getMessage());
+        }
+        
+        try {
+            // 1. 如果有角色在線,嘗試保存數據
             if (_activeChar != null && !_activeChar.isGhost()) {
                 _log.info("Connection Reset - 嘗試保存角色數據: " + _activeChar.getName());
 
@@ -511,13 +546,52 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     // =====================================================================
 
     /**
-     * 關閉連線線程（可重入）
+     * 關閉連線線程(可重入)
      */
     public void close() {
         if (closed) return; // 重入保護
         closed = true;
+        
+        // === 診斷用: 記錄關閉原因與調用堆疊 (加入判斷與效能優化) ===
         try {
-            // mac值未使用，移除避免警告
+            String timestamp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+            String accountName = (_account != null) ? _account.get_login() : "未登入";
+            String charName = (_activeChar != null) ? _activeChar.getName() : "無角色";
+            String threadName = Thread.currentThread().getName();
+            String ipStr = (_ip != null) ? _ip.toString() : "unknown";
+            
+            // 獲取調用堆疊 (只取前 3 層,避免效能問題)
+            StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+            StringBuilder callerInfo = new StringBuilder();
+            int stackDepth = Math.min(5, stack.length);
+            for (int i = 2; i < stackDepth; i++) {
+                callerInfo.append("\n    at ").append(stack[i].toString());
+            }
+            
+            _log.warn("[DIAG-CLOSE] ClientExecutor.close() 被呼叫 - 時間: " + timestamp +
+                      " IP: " + ipStr +
+                      " 帳號: " + accountName +
+                      " 角色: " + charName +
+                      " 執行緒: " + threadName +
+                      " 呼叫堆疊:" + callerInfo.toString());
+            
+            // 從 SOCKETLIST 移除 (加入判斷避免 NPE)
+            if (com.lineage.commons.system.IpAttackCheck.SOCKETLIST != null) {
+                com.lineage.commons.system.IpAttackCheck.SOCKETLIST.remove(this);
+                if (_log.isDebugEnabled()) {
+                    _log.debug("[DIAG] ClientExecutor 從 SOCKETLIST 移除 - IP: " + ipStr + 
+                              " 剩餘: " + com.lineage.commons.system.IpAttackCheck.SOCKETLIST.size());
+                } else {
+                    _log.info("[DIAG] ClientExecutor 從 SOCKETLIST 移除 - IP: " + ipStr);
+                }
+            }
+            
+        } catch (Exception e) {
+            _log.warn("[DIAG] 記錄關閉資訊失敗: " + e.getMessage());
+        }
+        
+        try {
+            // mac值未使用,移除避免警告
             if (_csocket == null) return;
 
             _kick = 0;
@@ -575,6 +649,22 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
      * 中斷連線（發送斷線封包 -> 離線流程）
      */
     public boolean kick() {
+        // === 診斷用: 記錄踢除資訊 (加入判斷) ===
+        try {
+            if (_log.isInfoEnabled()) {
+                String timestamp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+                String accountName = (_account != null) ? _account.get_login() : "未登入";
+                String ipStr = (_ip != null) ? _ip.toString() : "unknown";
+                
+                _log.warn("[DIAG-KICK] 踢除玩家 - 時間: " + timestamp +
+                          " IP: " + ipStr +
+                          " 帳號: " + accountName +
+                          " 執行緒: " + Thread.currentThread().getName());
+            }
+        } catch (Exception e) {
+            // 忽略日誌錯誤
+        }
+        
         try {
             if (_encrypt != null) {
                 _encrypt.encrypt(new S_Disconnect());

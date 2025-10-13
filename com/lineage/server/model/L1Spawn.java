@@ -616,14 +616,13 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
                 _log.warn("npcId:" + _template + "可能设定错误.");
                 return;
             }
-            /* --
-            if (_time != null && (_time.isDeleteAtEndTime() || this._time.getWeekDays() != null && !this._time.getWeekDays().isEmpty())) {
-                // 因刷怪機制的差異可能性 此處個性可能待觀察 by 聖子默默
-                synchronized (_mobs) {
-                    _mobs.add(npc);
-                }
-                // 但是SQL表相關資料是空的 so 這條新增判斷不會有毛病 by 聖子默默
-            }*/
+            // 修復：正確管理_mobs列表以避免怪物越來越少的問題
+            synchronized (_mobs) {
+                // 移除已死亡或已刪除的怪物
+                _mobs.removeIf(mob -> mob.isDead() || mob.destroyed());
+                // 加入新生成的怪物
+                _mobs.add(npc);
+            }
             int id;
             if (objectId == 0) {
                 id = IdFactoryNpc.get().nextId();
@@ -673,11 +672,13 @@ public class L1Spawn extends L1GameTimeAdapter {  //src053
                     }
                     if (tryCount > 49) { // 已經召喚失敗次數
                         if (_nextSpawnTime == null) {
+                            // 使用原始座標，避免無限重試
                             newlocx = this.getLocX();
                             newlocy = this.getLocY();
+//                            _log.warn("生怪失敗50次，使用預設座標: " + newlocx + "," + newlocy + " mapId:" + getMapId());
                         } else {
-                            // 延後5秒後重試
-                            final SpawnTask task = new SpawnTask(spawnNumber, npc.getId(), 5000L);
+                            // 延後2秒後重試（減少延遲累積）
+                            final SpawnTask task = new SpawnTask(spawnNumber, npc.getId(), 2000L);
                             task.getStart();
                             return;
                         }

@@ -68,7 +68,7 @@ public class L1Tomahawk {
         public void run() {
             L1PcInstance player = null;
             L1MonsterInstance mob = null;
-            while (!isInterrupted()) {
+            while (true) {
                 try {
                     TimeUnit.MILLISECONDS.sleep(_damageSpan);
                 } catch (final InterruptedException e) {

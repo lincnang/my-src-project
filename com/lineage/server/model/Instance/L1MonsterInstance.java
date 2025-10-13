@@ -477,7 +477,7 @@ public class L1MonsterInstance extends L1NpcInstance {
         if (this.isAiRunning()) {
             return;
         }
-        // 不要在這裡提前設置 AI 運行狀態，避免 startAI() 被短路
+        this.setAiRunning(true);// 修正怪物會爆走
         if (!this._storeDroped) {// 背包尚未加入掉落物品
             final SetDropExecutor setdrop = new SetDrop();
             setdrop.setDrop(this, this.getInventory());
@@ -1417,7 +1417,11 @@ public class L1MonsterInstance extends L1NpcInstance {
             mob.setExp(0L);
             mob.setKarma(0);
             mob.allTargetClear();
+            
+            // 改進：根據配置決定清理和重生方式
+            boolean isBossMonster = false;
             int deltime = 0;
+            
             switch (mob.getNpcId()) {
                 case 71016:// 安塔瑞斯
                 case 71028:// 法利昂
@@ -1426,12 +1430,27 @@ public class L1MonsterInstance extends L1NpcInstance {
                 case 92000:// 雙蛇
                 case 92001:
                 case 97206:// 林德拜爾
-                    deltime = 60;
+                    isBossMonster = true;
+                    deltime = ConfigAlt.BOSS_MONSTER_DEATH_DISPLAY_TIME;
                     break;
                 default:
-                    deltime = ConfigAlt.NPC_DELETION_TIME;
+                    deltime = ConfigAlt.MIN_MONSTER_DEATH_DISPLAY_TIME;
             }
-            mob.startDeleteTimer(deltime);
+            
+            if (ConfigAlt.ENABLE_DIRECT_RESPAWN_TRIGGER && !isBossMonster) {
+                // 普通怪物：死亡動畫播放後直接deleteMe()觸發重生邏輯
+                mob.set_deadTimerTemp(-1); // 標記跳過NpcDeadTimer處理
+                
+                GeneralThreadPool.get().schedule(() -> {
+                    if (mob.isDead() && !mob.destroyed()) {
+                        // 直接刪除並觸發重生邏輯（在deleteMe()中會呼叫executeSpawnTask）
+                        mob.deleteMe();
+                    }
+                }, deltime * 1000);
+            } else {
+                // BOSS怪物或關閉直接重生功能時，使用原有的延遲清理方式
+                mob.startDeleteTimer(deltime);
+            }
         }
     }
 

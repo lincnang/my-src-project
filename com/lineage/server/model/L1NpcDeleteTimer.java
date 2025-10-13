@@ -1,14 +1,12 @@
 package com.lineage.server.model;
 
 import com.lineage.server.model.Instance.L1NpcInstance;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.lineage.server.thread.GeneralThreadPool;
 
 /**
  * 怪物回收
  */
-public class L1NpcDeleteTimer extends TimerTask {
+public class L1NpcDeleteTimer implements Runnable {
     private final L1NpcInstance _npc;
     private final int _timeMillis;
 
@@ -22,11 +20,9 @@ public class L1NpcDeleteTimer extends TimerTask {
         if (_npc.getCurrentHp() == _npc.getMaxHp()) { // 滿血才回收
             _npc.deleteMe();
         }
-        this.cancel();
     }
 
     public void begin() {
-        Timer timer = new Timer();
-        timer.schedule(this, _timeMillis);
+        GeneralThreadPool.get().schedule(this, _timeMillis);
     }
 }

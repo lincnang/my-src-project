@@ -5,10 +5,11 @@ import com.lineage.server.thread.GeneralThreadPool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * NPC工作時間軸
@@ -17,18 +18,11 @@ import java.util.concurrent.ScheduledFuture;
  */
 public class NpcWorkTimer extends TimerTask {
     private static final Log _log = LogFactory.getLog(NpcWorkTimer.class);
-    private static final Map<L1NpcInstance, Integer> _map = new ConcurrentHashMap<>();
+    private static final Map<L1NpcInstance, Integer> _map = new HashMap<>();
     private ScheduledFuture<?> _timer;
 
     public static void put(L1NpcInstance npc, Integer time) {
         _map.put(npc, time);
-    }
-
-    public static void remove(final L1NpcInstance npc) {
-        if (npc == null) {
-            return;
-        }
-        _map.remove(npc);
     }
 
     private static void startWork(final L1NpcInstance npc) {
@@ -59,10 +53,6 @@ public class NpcWorkTimer extends TimerTask {
                 return;
             }
             for (final L1NpcInstance npc : _map.keySet()) {
-                if (npc == null || npc.destroyed() || npc.isDead()) {
-                    _map.remove(npc);
-                    continue;
-                }
                 Integer time = _map.get(npc);
                 // System.out.println(npc.getNpcTemplate().get_name() +
                 // "/"+time);
@@ -72,7 +62,7 @@ public class NpcWorkTimer extends TimerTask {
                 } else {
                     startWork(npc);
                 }
-                // 移除逐筆 sleep，避免在高壓下阻塞 AI 排程
+                TimeUnit.MILLISECONDS.sleep(50);
             }
         } catch (final Exception e) {
             _log.error("NPC工作時間軸異常重啟", e);

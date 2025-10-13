@@ -5,7 +5,6 @@ import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
 import com.lineage.server.serverpackets.S_SPMR;
-import com.lineage.server.serverpackets.S_SkillIconShield;
 
 import static com.lineage.server.model.skill.L1SkillId.SHADOW_ARMOR;
 
@@ -15,12 +14,15 @@ import static com.lineage.server.model.skill.L1SkillId.SHADOW_ARMOR;
 public class SHADOW_ARMOR extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
         int dmg = 0;
-        if ((!cha.hasSkillEffect(SHADOW_ARMOR)) && ((cha instanceof L1PcInstance))) {
+        if (cha instanceof L1PcInstance) {
             L1PcInstance pc = (L1PcInstance) cha;
-            pc.setSkillEffect(SHADOW_ARMOR, integer * 1000);
-            pc.addMr(5);
-            pc.sendPackets(new S_SkillIconShield(3, integer));
-            pc.sendPackets(new S_SPMR(pc));
+            synchronized (pc) {
+                if (!pc.hasSkillEffect(SHADOW_ARMOR)) {
+                    pc.setSkillEffect(SHADOW_ARMOR, integer * 1000);
+                    pc.addMr(5);
+                    pc.sendPackets(new S_SPMR(pc));
+                }
+            }
         }
         return dmg;
     }
@@ -36,7 +38,6 @@ public class SHADOW_ARMOR extends SkillMode {
     public void stop(L1Character cha) throws Exception {
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
-            pc.sendPackets(new S_SkillIconShield(3, 0));
             pc.addMr(-5);
             pc.sendPackets(new S_SPMR(pc));
         }

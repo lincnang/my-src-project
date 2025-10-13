@@ -40,18 +40,60 @@ public class EchoServerTimer extends TimerTask {
     }
 
     public void run() {
+        String startTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+        
         try {
-            _log.warn("監聽端口重置作業!");
+            // === 診斷用: 加入判斷與詳細時間戳 ===
+            int socketListSize = 0;
             try {
-                stopEcho();
-                startEcho();
+                socketListSize = (com.lineage.commons.system.IpAttackCheck.SOCKETLIST != null) 
+                    ? com.lineage.commons.system.IpAttackCheck.SOCKETLIST.size() 
+                    : 0;
             } catch (Exception e) {
-                _log.error("重新啟動端口作業失敗!!", e);
+                _log.warn("[DIAG-RESTART] 無法取得 SOCKETLIST 大小: " + e.getMessage());
+            }
+            
+            _log.warn("[DIAG-RESTART] ========================================");
+            _log.warn("[DIAG-RESTART] 監聽端口重置作業開始! 時間: " + startTime);
+            _log.warn("[DIAG-RESTART] 當前 SOCKETLIST 連線數: " + socketListSize);
+            _log.warn("[DIAG-RESTART] ========================================");
+            
+            try {
+                String stopStartTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+                _log.warn("[DIAG-RESTART] 執行 stopEcho() - 時間: " + stopStartTime);
+                stopEcho();
+                
+                String stopEndTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+                _log.warn("[DIAG-RESTART] stopEcho() 完成 - 時間: " + stopEndTime);
+                
+                String startStartTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+                _log.warn("[DIAG-RESTART] 執行 startEcho() - 時間: " + startStartTime);
+                startEcho();
+                
+                String startEndTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+                _log.warn("[DIAG-RESTART] startEcho() 完成 - 時間: " + startEndTime);
+                
+            } catch (Exception e) {
+                _log.error("[DIAG-RESTART] 重新啟動端口作業失敗!!", e);
             }
         } catch (Exception e) {
-            _log.error("監聽端口重置作業失敗!!", e);
+            _log.error("[DIAG-RESTART] 監聽端口重置作業失敗!!", e);
         } finally {
-            _log.warn("監聽端口重置作業完成!!");
+            String endTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
+            
+            int finalSocketListSize = 0;
+            try {
+                finalSocketListSize = (com.lineage.commons.system.IpAttackCheck.SOCKETLIST != null) 
+                    ? com.lineage.commons.system.IpAttackCheck.SOCKETLIST.size() 
+                    : 0;
+            } catch (Exception e) {
+                _log.warn("[DIAG-RESTART] 無法取得最終 SOCKETLIST 大小: " + e.getMessage());
+            }
+            
+            _log.warn("[DIAG-RESTART] ========================================");
+            _log.warn("[DIAG-RESTART] 監聽端口重置作業完成!! 時間: " + endTime);
+            _log.warn("[DIAG-RESTART] 重置後 SOCKETLIST 連線數: " + finalSocketListSize);
+            _log.warn("[DIAG-RESTART] ========================================");
         }
     }
 

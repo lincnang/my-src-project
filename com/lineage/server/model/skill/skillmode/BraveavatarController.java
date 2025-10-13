@@ -26,12 +26,15 @@ public class BraveavatarController implements Runnable {
     }
 
     public void run() {
-        try {
-            while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
                 TimeUnit.MILLISECONDS.sleep(2000);
                 BraveAvata();
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                break;
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
         }
     }
 
@@ -87,7 +90,7 @@ public class BraveavatarController implements Runnable {
     private void Bravestart(L1PcInstance pc, int count) {
         try {
             for (L1PcInstance player : World.get().getVisiblePlayer(pc, 16)) { // 8カンヌで15軒にリニューアル
-                if (pc.getParty().isMember(player)) {
+                if (pc.isInParty() && pc.getParty() != null && pc.getParty().isMember(player)) {
                     if (count >= 2 && count <= 3) {
                         BraveState(player, 1);
                         player.setPbacount(count);
@@ -194,7 +197,7 @@ public class BraveavatarController implements Runnable {
                 if (pc.getParty() == null) {
                     continue;
                 }
-                if (pc.getParty().isMember(player)) {
+                if (pc.isInParty() && pc.getParty() != null && pc.getParty().isMember(player)) {
                     count += 1;
                 }
             }

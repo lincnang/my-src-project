@@ -21,85 +21,38 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
- * 各種時間控制（線程安全版本）
+ * 各種時間控制
  */
 public class ServerTimerController implements Runnable {
     private static final Log _log = LogFactory.getLog(ServerTimerController.class);
-    
-    /**
-     * 線程安全的單例 Holder
-     */
-    private static class Holder {
-        private static final ServerTimerController INSTANCE = new ServerTimerController();
-    }
-    
-    private volatile boolean _running = false; // 運行狀態標記
-    private volatile boolean _isShopResetDone = false; // 商店重置標記
-    private ScheduledFuture<?> _scheduledFuture; // 定時任務控制
-    
-    private ServerTimerController() {
-        // 不在構造函數中啟動線程
+    private static ServerTimerController _instance;
+    private boolean _isShopResetDone = false; // <-- 【修改二】新增執行旗標
+    public ServerTimerController() {
+        GeneralThreadPool.get().execute(this);
     }
 
-    /**
-     * 獲取單例實例（線程安全）
-     */
     public static ServerTimerController getInstance() {
-        return Holder.INSTANCE;
-    }
-    
-    /**
-     * 啟動定時器
-     */
-    public synchronized void start() {
-        if (_running) {
-            _log.warn("ServerTimerController 已經在運行中");
-            return;
+        if (_instance == null) {
+            _instance = new ServerTimerController();
         }
-        
-        _running = true;
-        _scheduledFuture = GeneralThreadPool.get().scheduleAtFixedRate(
-            this, 
-            0L, 
-            1000L
-        );
-        _log.info("ServerTimerController 已啟動");
-    }
-    
-    /**
-     * 停止定時器
-     */
-    public synchronized void stop() {
-        if (!_running) {
-            return;
-        }
-        
-        _running = false;
-        
-        if (_scheduledFuture != null) {
-            _scheduledFuture.cancel(false);
-            _scheduledFuture = null;
-        }
-        
-        _log.info("ServerTimerController 已停止");
+        return _instance;
     }
 
     @Override
     public void run() {
-        if (!_running) {
-            return; // 可控制的停止
-        }
-        
-        try {
-            shopLimitResetCheck();
-            TeleportOutChack(); // 指定地圖指定時間傳走玩家
-            MapRestartChack(); // 重置地圖使用時間
-            ActivityNoticeBossChack(); // 活動召喚BOSS
-        } catch (Exception e) {
-            _log.error("ServerTimerController 執行時發生錯誤", e);
+        while (true) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(1000);
+                shopLimitResetCheck();
+                TeleportOutChack(); // 指定地圖指定時間傳走玩家
+                MapRestartChack(); // 重置地圖使用時間
+                ActivityNoticeBossChack(); // 活動召喚BOSS
+            } catch (Exception e) {
+                _log.error(e.getLocalizedMessage(), e);
+            }
         }
     }
     /**

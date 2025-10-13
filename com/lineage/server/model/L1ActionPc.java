@@ -1606,7 +1606,8 @@ public class L1ActionPc {
                             continue;
                         }
                         if (tgpc.isInParty()) {
-                            if (_pc.getParty().isMember(tgpc)) {// 是自己的隊員
+                            // 避免當前玩家沒有隊伍時呼叫 _pc.getParty() 造成 NPE
+                            if (_pc.isInParty() && _pc.getParty() != null && _pc.getParty().isMember(tgpc)) { // 是自己的隊員
                                 continue;
                             } else {
                                 _pc.sendPackets(new S_SystemMessage(tgpc.getName() + " 已在其他隊伍中"));
@@ -1693,7 +1694,8 @@ public class L1ActionPc {
                             continue;
                         }
                         if (tgpc.isInParty()) {
-                            if (_pc.getParty().isMember(tgpc)) {// 是自己的隊員
+                            // 避免當前玩家沒有隊伍時呼叫 _pc.getParty() 造成 NPE
+                            if (_pc.isInParty() && _pc.getParty() != null && _pc.getParty().isMember(tgpc)) { // 是自己的隊員
                                 continue;
                             } else {
                                 _pc.sendPackets(new S_SystemMessage(tgpc.getName() + " 已在其他隊伍中"));

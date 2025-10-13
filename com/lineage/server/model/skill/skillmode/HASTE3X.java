@@ -4,21 +4,20 @@ import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
-import com.lineage.server.serverpackets.S_Liquor;
-import com.lineage.server.serverpackets.S_ServerMessage;
-import com.lineage.server.serverpackets.S_SkillSound;
+import com.lineage.server.model.skill.L1BuffUtil;
+import com.lineage.server.serverpackets.S_SkillBrave;
 
-import static com.lineage.server.model.skill.L1SkillId.STATUS_BRAVE3;
+import static com.lineage.server.model.skill.L1SkillId.STATUS_BRAVE;
 
 public class HASTE3X extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
-        srcpc.sendPackets(new S_ServerMessage(1065));// 將發生神秘的奇跡力量。
-        srcpc.sendPacketsX8(new S_SkillSound(srcpc.getId(), 2945));
-        srcpc.setSkillEffect(STATUS_BRAVE3, integer * 1000);
-        srcpc.broadcastPacketAll(new S_Liquor(srcpc.getId(), 0x08));
-        if (srcpc.getMoveSpeed() != 2) {
-            srcpc.setMoveSpeed(1);
-        }
+        // 取消其他勇敢系統衝突，改套用一段勇敢效果，時間採用 skills.buffDuration(秒)
+        L1BuffUtil.braveStart(srcpc);
+        srcpc.setSkillEffect(STATUS_BRAVE, integer * 1000);
+        srcpc.setBraveSpeed(1);
+        // 僅顯示勇敢一段圖示
+        srcpc.sendPackets(new S_SkillBrave(srcpc.getId(), 1, integer));
+        srcpc.broadcastPacketAll(new S_SkillBrave(srcpc.getId(), 1, 0));
         return 0;
     }
 

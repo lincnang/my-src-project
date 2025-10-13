@@ -13,12 +13,16 @@ import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
+import java.lang.management.BufferPoolMXBean;
+import java.lang.management.GarbageCollectorMXBean;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ServerResourceDialog extends JDialog {
-    private JLabel lblTotalMemory, lblUsedMemory, lblThreadCount, lblOnlineCount, lblCpu, lblDeadlock;
+    private JLabel lblTotalMemory, lblUsedMemory, lblMaxMemory, lblThreadCount, lblOnlineCount, lblCpu, lblProcCpu, lblProcMemPct, lblGcCount, lblGcTime, lblDeadlock;
     private JButton btnRefresh, btnGC, btnThreadInfo;
     private Timer autoRefreshTimer;
     private ChartPanel piePanel; // 圓餅圖 Panel
@@ -40,7 +44,7 @@ public class ServerResourceDialog extends JDialog {
     public ServerResourceDialog(JFrame owner) {
         super(owner, "伺服器資源監控", true);
         setLayout(new GridBagLayout());
-        setSize(400, 600);
+        setSize(400, 700);
         setResizable(false);
         setLocationRelativeTo(owner);
 
@@ -55,29 +59,74 @@ public class ServerResourceDialog extends JDialog {
         gbc.gridy++;
         add(new JLabel("已使用記憶體(MB):"), gbc);
         gbc.gridy++;
+        add(new JLabel("JVM最大記憶體(MB):"), gbc);
+        gbc.gridy++;
         add(new JLabel("執行緒數:"), gbc);
         gbc.gridy++;
         add(new JLabel("線上玩家數:"), gbc);
         gbc.gridy++;
-        add(new JLabel("CPU使用率(%):"), gbc);
+        add(new JLabel("系統CPU(%):"), gbc);
+        gbc.gridy++;
+        add(new JLabel("JVM進程CPU(%):"), gbc);
+        gbc.gridy++;
+        add(new JLabel("JVM記憶體佔整機(%):"), gbc);
+        gbc.gridy++;
+        add(new JLabel("GC次數:"), gbc);
+        gbc.gridy++;
+        add(new JLabel("GC總停頓(秒):"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
         lblTotalMemory = new JLabel();
+        lblTotalMemory.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblTotalMemory.setForeground(new Color(230, 230, 230));
         add(lblTotalMemory, gbc);
         gbc.gridy++;
         lblUsedMemory = new JLabel();
+        lblUsedMemory.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblUsedMemory.setForeground(new Color(230, 230, 230));
         add(lblUsedMemory, gbc);
         gbc.gridy++;
+        lblMaxMemory = new JLabel();
+        lblMaxMemory.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblMaxMemory.setForeground(new Color(230, 230, 230));
+        add(lblMaxMemory, gbc);
+        gbc.gridy++;
         lblThreadCount = new JLabel();
+        lblThreadCount.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblThreadCount.setForeground(new Color(230, 230, 230));
         add(lblThreadCount, gbc);
         gbc.gridy++;
         lblOnlineCount = new JLabel();
+        lblOnlineCount.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblOnlineCount.setForeground(new Color(230, 230, 230));
         add(lblOnlineCount, gbc);
         gbc.gridy++;
         lblCpu = new JLabel();
+        lblCpu.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblCpu.setForeground(new Color(230, 230, 230));
         add(lblCpu, gbc);
+        gbc.gridy++;
+        lblProcCpu = new JLabel();
+        lblProcCpu.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblProcCpu.setForeground(new Color(230, 230, 230));
+        add(lblProcCpu, gbc);
+        gbc.gridy++;
+        lblProcMemPct = new JLabel();
+        lblProcMemPct.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblProcMemPct.setForeground(new Color(230, 230, 230));
+        add(lblProcMemPct, gbc);
+        gbc.gridy++;
+        lblGcCount = new JLabel();
+        lblGcCount.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblGcCount.setForeground(new Color(230, 230, 230));
+        add(lblGcCount, gbc);
+        gbc.gridy++;
+        lblGcTime = new JLabel();
+        lblGcTime.setFont(new Font("Consolas", Font.BOLD, 14));
+        lblGcTime.setForeground(new Color(230, 230, 230));
+        add(lblGcTime, gbc);
 
         // 死鎖偵測
         gbc.gridx = 0;
@@ -176,8 +225,10 @@ public class ServerResourceDialog extends JDialog {
         Runtime rt = Runtime.getRuntime();
         long total = rt.totalMemory() / 1024 / 1024;
         long used = (rt.totalMemory() - rt.freeMemory()) / 1024 / 1024;
+        long max = rt.maxMemory() / 1024 / 1024;
         lblTotalMemory.setText(String.valueOf(total));
         lblUsedMemory.setText(String.valueOf(used));
+        lblMaxMemory.setText(String.valueOf(max));
 
         ThreadMXBean tmbean = ManagementFactory.getThreadMXBean();
         lblThreadCount.setText(String.valueOf(tmbean.getThreadCount()));
@@ -188,11 +239,56 @@ public class ServerResourceDialog extends JDialog {
         lblOnlineCount.setText(String.valueOf(online));
         try {
             OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-            double cpuLoad = osBean.getSystemCpuLoad();
-            if (cpuLoad < 0) cpuLoad = 0;
-            lblCpu.setText(String.format("%.1f", cpuLoad * 100));
+            double sysCpuLoad = osBean.getSystemCpuLoad();
+            if (sysCpuLoad < 0) sysCpuLoad = 0;
+            lblCpu.setText(String.format("%.1f", sysCpuLoad * 100));
+
+            double procCpuLoad = osBean.getProcessCpuLoad();
+            if (procCpuLoad < 0) {
+                lblProcCpu.setText("不支援");
+            } else {
+                lblProcCpu.setText(String.format("%.1f", procCpuLoad * 100));
+            }
+
+            // 計算 JVM 記憶體(估算：Heap使用 + Non-Heap使用 + Direct/Mapped Buffers) 佔整機比例
+            long totalPhysical = 0;
+            try {
+                totalPhysical = (long) osBean.getTotalPhysicalMemorySize();
+            } catch (Throwable ignore) {}
+
+            if (totalPhysical > 0) {
+                MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+                MemoryUsage nonHeap = memoryMXBean.getNonHeapMemoryUsage();
+                long usedHeapBytes = rt.totalMemory() - rt.freeMemory();
+                long usedNonHeapBytes = nonHeap.getUsed();
+                long bufferBytes = 0;
+                for (BufferPoolMXBean pool : ManagementFactory.getPlatformMXBeans(BufferPoolMXBean.class)) {
+                    bufferBytes += pool.getMemoryUsed();
+                }
+                long jvmUsedBytes = usedHeapBytes + usedNonHeapBytes + bufferBytes;
+                double pct = (jvmUsedBytes * 100.0) / totalPhysical;
+                lblProcMemPct.setText(String.format("%.1f", pct));
+            } else {
+                lblProcMemPct.setText("不支援");
+            }
+
+            // 彙總 GC 次數與停頓時間(秒)
+            long gcCount = 0;
+            long gcTimeMs = 0;
+            for (GarbageCollectorMXBean gc : ManagementFactory.getGarbageCollectorMXBeans()) {
+                long c = gc.getCollectionCount();
+                long t = gc.getCollectionTime();
+                if (c > 0) gcCount += c;
+                if (t > 0) gcTimeMs += t;
+            }
+            lblGcCount.setText(String.valueOf(gcCount));
+            lblGcTime.setText(String.format("%.1f", gcTimeMs / 1000.0));
         } catch (Exception ex) {
             lblCpu.setText("不支援");
+            lblProcCpu.setText("不支援");
+            lblProcMemPct.setText("不支援");
+            lblGcCount.setText("—");
+            lblGcTime.setText("—");
         }
 
         // 死鎖偵測
@@ -233,9 +329,9 @@ public class ServerResourceDialog extends JDialog {
         // ==== 【這段是重點！設置中文字型】====
         PiePlot plot = (PiePlot) chart.getPlot();
         // Pie圖標籤字型
-        plot.setLabelFont(new Font("Microsoft JhengHei", Font.BOLD, 12));
+        plot.setLabelFont(new Font("Microsoft JhengHei", Font.BOLD, 13));
         // 圖表標題字型
-        chart.getTitle().setFont(new Font("Microsoft JhengHei", Font.BOLD, 14));
+        chart.getTitle().setFont(new Font("Microsoft JhengHei", Font.BOLD, 15));
         piePanel.setChart(chart);
     }
 }

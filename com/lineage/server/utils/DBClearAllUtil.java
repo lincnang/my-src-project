@@ -106,7 +106,7 @@ public class DBClearAllUtil {
                 System.out.println("ok!");
 
                 System.out.print("刪除日誌紀錄.....");
-                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_gm指令`");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_GM指令`");
                 ps.execute();
                 System.out.println("ok!");
 
@@ -195,12 +195,43 @@ public class DBClearAllUtil {
 
 
                 System.out.print("刪除指令紀錄.....");
-                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_gm指令`");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_GM指令`");
                 ps.execute();
                 System.out.println("ok!");
 
                 System.out.print("刪除加速紀錄.....");
                 ps = cn.prepareStatement("TRUNCATE TABLE `日誌_加速`");
+                ps.execute();
+                System.out.println("ok!");
+
+                // 追加：清除更多日誌/紀錄表
+                System.out.print("刪除日誌_回憶蠟燭.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_回憶蠟燭`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_攻城獎勵.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_攻城獎勵`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_玩家擺攤買賣紀錄.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_玩家擺攤買賣紀錄`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_玩家擺攤買賣紀錄2.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_玩家擺攤買賣紀錄2`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_金幣買賣系統紀錄.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_金幣買賣系統紀錄`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_道具_記憶座標.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_道具_記憶座標`");
                 ps.execute();
                 System.out.println("ok!");
 
@@ -232,6 +263,92 @@ public class DBClearAllUtil {
 
                 System.out.print("刪除character_變身卡帳號.....");
                 ps = cn.prepareStatement("TRUNCATE TABLE `character_變身卡帳號`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除character_變身卡覺醒.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `character_變身卡覺醒`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除character_內掛.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `character_內掛`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除character_每日限購.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `character_每日限購`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除character_昇華.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `character_昇華`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除character_武器經驗.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `character_武器經驗`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除內掛_自動練功仇人名單.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `內掛_自動練功仇人名單`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除內掛_自動練功被殺名單.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `內掛_自動練功被殺名單`");
+                ps.execute();
+                System.out.println("ok!");
+
+                // 角色操作類日誌
+                System.out.print("刪除日誌_角色_刪人.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_刪人`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_撿物.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_撿物`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_噴裝.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_噴裝`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_更名.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_更名`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_妖倉.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_妖倉`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_盟倉.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_盟倉`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_個倉.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_個倉`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_角倉.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_角倉`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_殺人.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_殺人`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除日誌_角色_寶箱.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `日誌_角色_寶箱`");
                 ps.execute();
                 System.out.println("ok!");
 

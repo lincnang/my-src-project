@@ -26,7 +26,8 @@ public class AcceleratorChecker {//src042
     private static final double WAFFLE_RATE = 0.9;
     private static double CHECK_STRICTNESS = (ConfigPRO.CHECK_STRICTNESS - 5) / 100D;
     private static double CHECK_MOVESTRICTNESS = (ConfigPRO.CHECK_MOVE_STRICTNESS - 5) / 100D;
-    private final EnumMap<ACT_TYPE, Long> _actTimers = new EnumMap<>(ACT_TYPE.class);
+    // 行為間隔檢查所用的計時器（以 nanoTime 記錄）：_actTimers 記錄各行為最後觸發時間；_checkTimers 預留為額外檢查/冷卻用途
+    private final EnumMap<ACT_TYPE, Long> _actTimers = new EnumMap<>(ACT_TYPE.class); // nanoTime
     private final EnumMap<ACT_TYPE, Long> _checkTimers = new EnumMap<>(ACT_TYPE.class);
     private final L1PcInstance _pc;
     private int move_injusticeCount;
@@ -37,7 +38,7 @@ public class AcceleratorChecker {//src042
         _pc = pc;
         move_injusticeCount = 0;
         move_justiceCount = 0;
-        long now = System.currentTimeMillis();
+        long now = System.nanoTime();
         for (ACT_TYPE each : ACT_TYPE.values()) {
             _actTimers.put(each, now);
             _checkTimers.put(each, now);
@@ -50,19 +51,42 @@ public class AcceleratorChecker {//src042
     }
 
     public int checkInterval(ACT_TYPE type) {
+        // 若未啟用加速檢測，直接通過
+        if (!ConfigPRO.ACCELERATOR_CHECK_ENABLED) {
+            return R_OK;
+        }
         if (Objects.requireNonNull(type) == ACT_TYPE.MOVE) {
-            long moveNow = System.currentTimeMillis();
-            long moveInterval = moveNow - _actTimers.get(type);
+            long moveNow = System.nanoTime();
+            long last = _actTimers.get(type);
+            long moveInterval = TimeUnit.NANOSECONDS.toMillis(moveNow - last);
             int moveRightInterval = getRightInterval(type);
             moveInterval = (long) (CHECK_MOVESTRICTNESS * moveInterval);
+            // 若換算後的移動間隔 <= 0，視為雜訊，直接放行並重置時間
+            if (moveInterval <= 0) {
+                _actTimers.put(type, moveNow);
+                moveResult = R_OK;
+                return moveResult;
+            }
+            // 採用突發流量寬容：若實際間隔遠大於標準（> 標準的 6 倍或 > 1 秒），視為卡頓/GC/IO 導致，放寬這次檢測以降低誤判
+            boolean burstForgive = TimeUnit.NANOSECONDS.toMillis(moveNow - last) > Math.max(moveRightInterval * 6L, 1000L);
             if (0 < moveInterval && moveInterval < moveRightInterval) {
-                move_injusticeCount++;
-                move_justiceCount = 0;
-                if (move_injusticeCount >= INJUSTICE_COUNT_LIMIT) {
-                    doPunishment();
-                    moveResult = R_DISPOSED;
+                if (burstForgive) {
+                    // 視為合法，累計一次正常次數；達門檻（JUSTICE_COUNT_LIMIT）則清空違規計數
+                    move_justiceCount++;
+                    if (move_justiceCount >= JUSTICE_COUNT_LIMIT) {
+                        move_injusticeCount = 0;
+                        move_justiceCount = 0;
+                    }
+                    moveResult = R_OK;
                 } else {
-                    moveResult = R_DETECTED;
+                    move_injusticeCount++;
+                    move_justiceCount = 0;
+                    if (move_injusticeCount >= INJUSTICE_COUNT_LIMIT) {
+                        doPunishment();
+                        moveResult = R_DISPOSED;
+                    } else {
+                        moveResult = R_DETECTED;
+                    }
                 }
             } else if (moveInterval >= moveRightInterval) {
                 move_justiceCount++;
@@ -75,12 +99,15 @@ public class AcceleratorChecker {//src042
             _actTimers.put(type, moveNow);
             return moveResult;
         }
-        long attackKnow = System.currentTimeMillis();
-        long attackInterval = attackKnow - _actTimers.get(type);
+        long attackKnow = System.nanoTime();
+        long attackInterval = TimeUnit.NANOSECONDS.toMillis(attackKnow - _actTimers.get(type));
         int attackRightInterval = getRightInterval(type);
         attackInterval = (long) (CHECK_STRICTNESS * attackInterval);
         int attackResult;
-        if (0 < attackInterval && attackInterval < attackRightInterval) {
+        // 若換算後的攻擊間隔 <= 0，視為雜訊，直接放行
+        if (attackInterval <= 0) {
+            attackResult = R_OK;
+        } else if (0 < attackInterval && attackInterval < attackRightInterval) {
             attackResult = R_DISPOSED;
         } else if (attackInterval >= attackRightInterval) {
             attackResult = R_OK;
@@ -124,12 +151,12 @@ public class AcceleratorChecker {//src042
             case 1:
                 interval *= HASTE_RATE;
                 break;
-            case 3: // 精靈餅乾 / 人物速度 x1.15(2段加速)
-                //interval *= WAFFLE_RATE;
+            case 3: // 勇敢/類似增速狀態：移動以加速係數，非移動以餅乾係數（約 1.11x）
+                // interval *= WAFFLE_RATE;
                 if (type.equals(ACT_TYPE.MOVE)) {
-                    interval *= HASTE_RATE; // 移速 * 1.33倍
+                    interval *= HASTE_RATE; // 移動：乘以加速係數（約 1.33x）
                 } else {
-                    interval *= WAFFLE_RATE; // 攻速 * 1.15倍
+                    interval *= WAFFLE_RATE; // 非移動：乘以餅乾係數（約 1.11x）
                 }
                 break;
             case 4:
@@ -137,7 +164,7 @@ public class AcceleratorChecker {//src042
                     interval *= HASTE_RATE;
                 }
                 break;
-            case 5: // 荒神加速
+            case 5: // 超高速狀態：再以 HASTE_RATE/2 調整
                 interval *= HASTE_RATE / 2;
                 break;
             case 6:
@@ -158,7 +185,7 @@ public class AcceleratorChecker {//src042
             interval /= 2;
         }
 
-        if (type.equals(ACT_TYPE.ATTACK) && this._pc.isActivated()) { // pc掛機激活時攻擊速度降低
+        if (type.equals(ACT_TYPE.ATTACK) && this._pc.isActivated()) { // 角色處於啟動/激發狀態：攻速再加成
             interval /= WAFFLE_RATE;
         }
         if (_pc.getMapId() == 5143) {
@@ -166,9 +193,9 @@ public class AcceleratorChecker {//src042
         }
         if (this._pc.isGm()) {
             if (type.equals(ACT_TYPE.ATTACK)) {
-                this._pc.sendPackets((ServerBasePacket) new S_SystemMessage("攻擊速度:" + interval));  // 顯示攻擊速度
+                this._pc.sendPackets((ServerBasePacket) new S_SystemMessage("??��?????�?:" + interval));  // GM除錯：顯示計算後的攻擊間隔
             } else if (type.equals(ACT_TYPE.MOVE)) {
-                this._pc.sendPackets((ServerBasePacket) new S_SystemMessage("移動速度:" + interval));  // 顯示移動速度
+                this._pc.sendPackets((ServerBasePacket) new S_SystemMessage("移�?????�?:" + interval));  // GM除錯：顯示計算後的移動間隔
             }
         }
         return (int) interval;
@@ -184,10 +211,10 @@ public class AcceleratorChecker {//src042
             int mapid = this._pc.getMapId();
             switch (punishment_type) {
                 case 0:
-                    _pc.sendPackets(new S_SystemMessage("\\aG加速器檢測警告" + punishment_time + "秒後強制驅離。"));
+                    _pc.sendPackets(new S_SystemMessage("\\aG????????�檢測警???" + punishment_time + "�?�?強�?��????��??"));
                     try {
                         TimeUnit.MILLISECONDS.sleep(punishment_time * 1000L);
-                        RecordTable.get().r_speed(this._pc.getName(), "偵測異常(攻速or走速");
+                        RecordTable.get().r_speed(this._pc.getName(), "??�測??�常(??��??or走�??");
                     } catch (Exception e) {
                         System.out.println(e.getLocalizedMessage());
                     }
@@ -195,10 +222,10 @@ public class AcceleratorChecker {//src042
                     break;
                 case 1:
                     _pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_BIND, true));
-                    _pc.sendPackets(new S_SystemMessage("\\aG加速器檢測警告" + punishment_time + "秒後解除您的行動。"));
+                    _pc.sendPackets(new S_SystemMessage("\\aG????????�檢測警???" + punishment_time + "�?�?�???��?��??�???????"));
                     try {
                         TimeUnit.MILLISECONDS.sleep(punishment_time * 1000L);
-                        RecordTable.get().r_speed(this._pc.getName(), "偵測異常(攻速or走速");
+                        RecordTable.get().r_speed(this._pc.getName(), "??�測??�常(??��??or走�??");
                     } catch (Exception e) {
                         System.out.println(e.getLocalizedMessage());
                     }
@@ -206,14 +233,14 @@ public class AcceleratorChecker {//src042
                     break;
                 case 2:
                     L1Teleport.teleport(_pc, 32698, 32857, (short) punishment_mapid, 5, false);
-                    _pc.sendPackets(new S_SystemMessage("\\aG加速器檢測警告" + punishment_time + "秒後傳送到地獄。"));
+                    _pc.sendPackets(new S_SystemMessage("\\aG????????�檢測警???" + punishment_time + "�?�???��????��?��?????"));
                     try {
                         TimeUnit.MILLISECONDS.sleep(punishment_time * 1000L);
                     } catch (Exception e) {
                         System.out.println(e.getLocalizedMessage());
                     }
                     L1Teleport.teleport(_pc, x, y, (short) mapid, 5, false);
-                    RecordTable.get().r_speed(this._pc.getName(), "偵測異常(攻速or走速");
+                    RecordTable.get().r_speed(this._pc.getName(), "??�測??�常(??��??or走�??");
                     break;
                 case 3:
                     int[] Head = {0, 1, 2, 3, 4, 5, 6, 7};
@@ -222,19 +249,19 @@ public class AcceleratorChecker {//src042
                     for (int i = 0; i < Head.length; i++) {
                         if (_pc.getHeading() == Head[i]) {
                             L1Teleport.teleport(this._pc, X[i], Y[i], (short) mapid, _pc.getHeading(), false);
-                            _pc.sendPackets(new S_SystemMessage("\\aG加速器檢測。"));
+                            _pc.sendPackets(new S_SystemMessage("\\aG????????�檢測�??"));
                         }
                         try {
                             TimeUnit.MILLISECONDS.sleep(punishment_time * 1000L);
-                            RecordTable.get().r_speed(this._pc.getName(), "偵測異常(攻速or走速");
+                            RecordTable.get().r_speed(this._pc.getName(), "??�測??�常(??��??or走�??");
                         } catch (Exception e) {
                             System.out.println(e.getLocalizedMessage());
                         }
                     }
             }
         } else {
-            _pc.set_misslocTime(1);  //加速偵測回逤 新增 by 小林
-            _pc.sendPackets(new S_SystemMessage("\\aD遊戲管理員在遊戲中使用加速器檢測中。"));
+            _pc.set_misslocTime(1);  // GM 自保：暫時啟用 missloc 保護，避免被處罰
+            _pc.sendPackets(new S_SystemMessage("\\aD?????�管?????��?��????�中使�?��???????�檢測中???"));
             move_justiceCount = 0;
         }
     }

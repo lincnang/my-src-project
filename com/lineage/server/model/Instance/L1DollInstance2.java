@@ -119,6 +119,15 @@ public class L1DollInstance2 extends L1NpcInstance {  //src016
 //                masterpc.sendPackets(new S_PacketBox(56, 0));
                 masterpc.sendPackets(new S_InventoryIcon(12079, false, 1143, 0)); // 2565(一階段經驗料理圖示編號)
             }
+            // 主動對可視玩家送出移除封包，避免客戶端殘留顯示
+            try {
+                for (L1PcInstance pc : World.get().getRecognizePlayer(this)) {
+                    if (pc == null) continue;
+                    pc.removeKnownObject(this);
+                    pc.sendPackets(new S_RemoveObject(this));
+                }
+            } catch (Exception ignored) {
+            }
 
             _master.setUsingDoll2(null);// 設定目前使用娃娃為空
             _master.removeDoll2(this);// 從使用清單中移出

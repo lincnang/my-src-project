@@ -17,7 +17,7 @@ public class PcAutoSaveTimer extends TimerTask {
     private ScheduledFuture<?> _timer;
 
     public void start() {
-        _timer = GeneralThreadPool.get().scheduleWithFixedDelay(this, 60000L, 60000L);
+        _timer = GeneralThreadPool.get().scheduleAtFixedRate(this, 60000L, 60000L);
     }
 
     public void run() {

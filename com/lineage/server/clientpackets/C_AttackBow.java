@@ -111,6 +111,8 @@ public class C_AttackBow extends ClientBasePacket {
                     L1PcInstance tg = (L1PcInstance) target;
                     pc.setNowTarget(tg);
                 }
+                // 同步主人的攻擊目標給寵物/召喚
+                pc.setPetTarget((L1Character) target);
                 target.onAction(pc);
             } else {// 沒有目標
                 pc.setHeading(pc.targetDirection(locx, locy));

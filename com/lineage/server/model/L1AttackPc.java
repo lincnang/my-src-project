@@ -3487,7 +3487,7 @@ public class L1AttackPc extends L1AttackMode {
                         }
                     } else if (_damage > 200 && _damage <= 300) {
                         if (chance < 20) { // 20%的機率觸發
-                            _pc.sendPacketsAll(new S_SkillSound(_targetNpc.getId(), 17327)); // Damage x2 17327
+                            _pc.sendPacketsAll(new S_SkillSound(_targetNpc.getId(), 17261)); // Damage x2 17327
                         }
                     } else { // 300以上
                         if (chance < 10) { // 10%的機率觸發

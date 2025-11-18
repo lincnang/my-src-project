@@ -48,9 +48,31 @@ public class S_BlueMessage extends ServerBasePacket {
         } else {
             this.writeC(info.length);
             for (String s : info) {
-                this.writeS(s);
+                this.writeS(sanitizeForClient(s));
             }
         }
+    }
+
+    // 與 S_ServerMessage 相同的最小清理策略
+    private static String sanitizeForClient(String input) {
+        if (input == null) return "";
+        String s = input
+                .replace('%', '％')
+                .replace('\n', ' ')
+                .replace('\r', ' ')
+                .replace('\t', ' ');
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= 0x20 && c != 0x7F) {
+                sb.append(c);
+            } else {
+                sb.append(' ');
+            }
+        }
+        final int MAX_LEN = 200;
+        if (sb.length() > MAX_LEN) return sb.substring(0, MAX_LEN);
+        return sb.toString();
     }
 
     @Override

@@ -2666,13 +2666,16 @@ public class L1SkillUse {
                     } else if (this._skillId == HOLY_WALK) { // ホーリーウォーク
                         final L1PcInstance pc = (L1PcInstance) cha;
                         if (pc.isHOLY_WALK2()) { // 神聖迅猛
+                            if (pc.hasSkillEffect(STATUS_BRAVE3)) {
+                                continue;
+                            }
                             /*
                              * 取消蛋糕效果
                             if (pc.hasSkillEffect(998)) {
                                 pc.killSkillEffectTimer(998);
                             }
                             pc.sendPacketsAll(new S_Liquor(pc.getId(), 8));
-                            pc.sendPackets(new S_ServerMessage(1065)); // xxxxxx
+                            pc.sendPackets(new S_SystemMessage("將發生神秘的奇跡力量。"));
                             // 是否需要送出使用蛋糕的動畫
                             if (_gfxid > 0) {
                                 pc.sendPacketsX8(new S_SkillSound(pc.getId(), _gfxid));

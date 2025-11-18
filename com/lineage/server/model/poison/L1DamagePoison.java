@@ -3,7 +3,6 @@ package com.lineage.server.model.poison;
 import com.lineage.server.model.Instance.L1MonsterInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
-import com.lineage.server.model.ModelError;
 import com.lineage.server.serverpackets.S_SkillIconPoison;
 import com.lineage.server.thread.GeneralThreadPool;
 import org.apache.commons.logging.Log;
@@ -95,7 +94,9 @@ public class L1DamagePoison extends L1Poison {
                     }
                 }
             } catch (InterruptedException e) {
-                ModelError.isError(L1DamagePoison._log, e.getLocalizedMessage(), e);
+                // 睡眠被中斷通常是正常情況：中毒解除(cure 呼叫 interrupt)或伺服器正在關閉/重載。
+                // 不將其視為錯誤，恢復中斷旗標以便上層可感知目前狀態。
+                Thread.currentThread().interrupt();
             }
             cure();
         }

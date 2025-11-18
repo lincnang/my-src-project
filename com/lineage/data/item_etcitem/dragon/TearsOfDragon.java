@@ -4,8 +4,8 @@ import com.lineage.data.executor.ItemExecutor;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.skill.L1BuffUtil;
-import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
+import com.lineage.server.serverpackets.S_YouFeelBetter;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,7 +34,7 @@ public class TearsOfDragon extends ItemExecutor {
                     addhp += (int) (Math.random() * 323.0D);
                     if ((addhp > 0) //&&
                         /*(ConfigOther.Show_Hp_Msg)*/) {
-                        pc.sendPackets(new S_ServerMessage(77));
+                        pc.sendPackets(new S_YouFeelBetter());
                     }
                     pc.setCurrentHp(pc.getCurrentHp() + addhp);
                 }

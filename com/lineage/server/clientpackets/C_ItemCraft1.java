@@ -387,9 +387,8 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         }
                         //任務選單
                         if (var2 == 19) {
-                            int mainQuestBaseId = 995000; // 你的主線任務系列ID（或你設計的ID）
-                            int nowStage = pc.getQuest().get_now_stage(mainQuestBaseId); // 取得已完成階段
-                            int quest_id = ServerQuestMobTable.get().getNextQuestIdByStage(mainQuestBaseId, nowStage);
+                            // 使用新方法：直接檢查任務完成狀態來取得當前任務
+                            int quest_id = ServerQuestMobTable.get().getCurrentMainQuestId(pc);
 
                             if (quest_id != -1) {
                                 String[] evdList = ServerQuestMobTable.get().getEvdList(pc);

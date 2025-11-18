@@ -55,6 +55,7 @@ public final class ConfigOther {
     public static int CUSTOM_MAPID;// 自定義回血魔地圖
     public static double Critical_Dmg;//近距離爆擊
     public static double Critical_Dmg_B;//遠距離爆擊
+    public static int[] AUTO_RECYCLE_SKILLS;// 自動循環技能 ID 列表
 
     public static void load() throws ConfigErrorException {
         Properties set = new Properties();
@@ -107,9 +108,25 @@ public final class ConfigOther {
             // 自訂義回血魔區
             CUSTOM_HPR = Integer.parseInt(set.getProperty("Costom_hpr", "20"));
             CUSTOM_MPR = Integer.parseInt(set.getProperty("Costom_mpr", "20"));
-            CUSTOM_MAPID = Integer.parseInt(set.getProperty("Costom_mapid", "4"));
-            Critical_Dmg = Double.parseDouble(set.getProperty("Critical_Dmg", "1.00"));
-            Critical_Dmg_B = Double.parseDouble(set.getProperty("Critical_Dmg_B", "1.00"));
+            CUSTOM_MAPID = Integer.parseInt(set.getProperty("Custom_MAPID", "0"));
+            Critical_Dmg = Double.parseDouble(set.getProperty("Critical_Dmg", "1.0"));
+            Critical_Dmg_B = Double.parseDouble(set.getProperty("Critical_Dmg_B", "1.0"));
+            
+            // 讀取自動循環技能 ID 列表
+            String autoRecycleSkillsStr = set.getProperty("AutoRecycleSkills", "");
+            if (autoRecycleSkillsStr != null && !autoRecycleSkillsStr.trim().isEmpty()) {
+                String[] skillIds = autoRecycleSkillsStr.split(",");
+                AUTO_RECYCLE_SKILLS = new int[skillIds.length];
+                for (int i = 0; i < skillIds.length; i++) {
+                    try {
+                        AUTO_RECYCLE_SKILLS[i] = Integer.parseInt(skillIds[i].trim());
+                    } catch (NumberFormatException e) {
+                        System.err.println("[配置錯誤] 無效的技能 ID: " + skillIds[i]);
+                    }
+                }
+            } else {
+                AUTO_RECYCLE_SKILLS = new int[0]; // 空陣列，代表關閉功能
+            }
         } catch (Exception e) {
             throw new ConfigErrorException("設置檔案遺失: " + LIANG);
         } finally {

@@ -154,7 +154,7 @@ public class SkillSoundItemAll extends TimerTask {
                 }
                 // 自動名譽貨幣
                 if (_pc.isAutoItem5()) {
-                    if (!_pc.hasSkillEffect(BLOODLUST) // 沒有血之渴望
+            if (!_pc.hasSkillEffect(BLOODLUST) // 沒有血之渴望
                             && !_pc.hasSkillEffect(STATUS_RIBRAVE) // 沒有生命之樹果實效果
                             && !_pc.hasSkillEffect(HOLY_WALK) // 沒有神聖疾走
                             && !_pc.hasSkillEffect(MOVING_ACCELERATION) // 沒有行走加速
@@ -162,6 +162,7 @@ public class SkillSoundItemAll extends TimerTask {
                             && !_pc.hasSkillEffect(STATUS_BRAVE2) // 沒有荒神加速
                             && !_pc.hasSkillEffect(STATUS_BRAVE) // 沒有勇敢藥水效果
                             && !_pc.hasSkillEffect(STATUS_ELFBRAVE) // 沒有精靈餅乾效果
+                && !_pc.hasSkillEffect(STATUS_BRAVE3) // 沒有三段加速
                             && !_pc.hasSkillEffect(FIRE_BLESS) // 沒有舞躍之火
                     ) {
                         if (L1BuffUtil.stopPotion(_pc)) {
@@ -183,10 +184,13 @@ public class SkillSoundItemAll extends TimerTask {
                         if (L1BuffUtil.stopPotion(_pc)) {
                             if (_pc.getInventory().checkItem(49138)) { // 巧克力蛋糕
                                 L1BuffUtil.cancelAbsoluteBarrier(_pc);// 解除魔法技能絕對屏障
+                                L1BuffUtil.braveStart(_pc);
                                 _pc.getInventory().consumeItem(49138, 1);
                                 _pc.sendPacketsAll(new S_Liquor(_pc.getId(), 0x08));// 巧克力蛋糕效果(速度增加1.15)
-                                _pc.sendPackets(new S_ServerMessage(1065));// 將發生神秘的奇跡力量。
+                                _pc.sendPackets(new S_SystemMessage("將發生神秘的奇跡力量。"));
+                                _pc.sendPackets(new S_PacketBoxThirdSpeed(600));
                                 _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 751));
+                                _pc.setBraveSpeed(5);
                                 _pc.setSkillEffect(STATUS_BRAVE3, 600 * 1000);
                             }
                         }

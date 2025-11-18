@@ -52,7 +52,7 @@ public final class Config {
     /**
      * 除錯模式
      */
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
     /**
      * 伺服器編號
      */

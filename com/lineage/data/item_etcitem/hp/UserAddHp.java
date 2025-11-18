@@ -5,8 +5,8 @@ import com.lineage.data.executor.ItemExecutor;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.skill.L1BuffUtil;
-import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
+import com.lineage.server.serverpackets.S_YouFeelBetter;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.serverpackets.ServerBasePacket;
 import org.apache.commons.logging.Log;
@@ -75,7 +75,7 @@ public class UserAddHp extends ItemExecutor {
                     addhp *= -1;
                 }
                 if (addhp > 0) {
-                    pc.sendPackets(new S_ServerMessage(77));
+                    pc.sendPackets(new S_YouFeelBetter());
                 }
                 if (pc.isGm())
                     pc.sendPackets((ServerBasePacket) new S_SystemMessage("GM顯示當下喝水量:" + addhp));

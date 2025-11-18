@@ -3,6 +3,7 @@ package com.lineage.data.item_etcitem;
 import com.lineage.data.executor.ItemExecutor;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
+import com.lineage.server.model.skill.L1BuffUtil;
 import com.lineage.server.serverpackets.*;
 
 import static com.lineage.server.model.skill.L1SkillId.STATUS_BRAVE3;
@@ -44,11 +45,13 @@ public class WATER1 extends ItemExecutor {
         // 判斷經驗加倍技能
         final int time = 600;
         pc.setSkillEffect(85501, time * 1000);
-        pc.sendPacketsAll(new S_SkillSound(pc.getId(), 245));
-        pc.sendPacketsAll(new S_Liquor(pc.getId(), 0x08));
-        // 1065:將發生神秘的奇蹟力量。
-        pc.sendPackets(new S_ServerMessage(1065));
-        pc.setSkillEffect(STATUS_BRAVE3, 600 * 1000);
+    L1BuffUtil.braveStart(pc);
+    pc.sendPacketsAll(new S_SkillSound(pc.getId(), 245));
+    pc.sendPacketsAll(new S_Liquor(pc.getId(), 0x08));
+    pc.sendPackets(new S_SystemMessage("將發生神秘的奇跡力量。"));
+    pc.sendPackets(new S_PacketBoxThirdSpeed(time));
+    pc.setBraveSpeed(5);
+    pc.setSkillEffect(STATUS_BRAVE3, time * 1000);
         pc.addMaxHp(+100);
         pc.addMaxMp(+100);
         pc.addDmgup(+5);

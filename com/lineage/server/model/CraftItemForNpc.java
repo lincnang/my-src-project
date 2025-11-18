@@ -3,7 +3,7 @@ package com.lineage.server.model;
 import com.lineage.server.templates.L1CraftItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +11,11 @@ import java.util.Map;
  * 樂天堂火神製作(DB化)
  */
 public class CraftItemForNpc {
-    private Map<Integer, L1CraftItem> materialList = new HashMap<>();
-    private Map<Integer, L1CraftItem> aidMaterialList = new HashMap<>();
-    private Map<Integer, L1CraftItem> itemList = new HashMap<>();
-    private Map<Integer, L1CraftItem> bigsuccesitemList = new HashMap<>(); // 大成功道具
-    private Map<Integer, L1CraftItem> failItem = new HashMap<>();
+    private Map<Integer, L1CraftItem> materialList = new LinkedHashMap<>();
+    private Map<Integer, L1CraftItem> aidMaterialList = new LinkedHashMap<>();
+    private Map<Integer, L1CraftItem> itemList = new LinkedHashMap<>();
+    private Map<Integer, L1CraftItem> bigsuccesitemList = new LinkedHashMap<>(); // 大成功道具
+    private Map<Integer, L1CraftItem> failItem = new LinkedHashMap<>();
     private List<Integer> polyList = new ArrayList<>();
     private List<Integer> bless = new ArrayList<>();
     private int actionid;
@@ -30,6 +30,8 @@ public class CraftItemForNpc {
     private int npcId;
     private int succeedRandom;
     private int showWorld;
+    private String showWorldMsg; // 自定義廣播文字
+    private int showWorldType; // 廣播類型: 1=全服廣播, 2=中央廣播
     private int bigsuccessitemrandom;
     private int craft_nameid;
 
@@ -181,6 +183,22 @@ public class CraftItemForNpc {
 
     public void setShowWorld(final int showworld) {
         this.showWorld = showworld;
+    }
+
+    public String getShowWorldMsg() {
+        return this.showWorldMsg;
+    }
+
+    public void setShowWorldMsg(final String showWorldMsg) {
+        this.showWorldMsg = showWorldMsg;
+    }
+
+    public int getShowWorldType() {
+        return this.showWorldType;
+    }
+
+    public void setShowWorldType(final int showWorldType) {
+        this.showWorldType = showWorldType;
     }
 
     public int getBigSuccessItemRandom() {

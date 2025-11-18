@@ -38,8 +38,7 @@ public class BAPHOMET extends SkillMode {
             srcpc.sendPackets(new S_SPMR(srcpc));
             srcpc.sendPackets(new S_OwnCharStatus2(srcpc));
             srcpc.setSkillEffect(L1SkillId.Baphomet, integer * 1000);
-            // 1065:將發生神秘的奇跡力量。
-            srcpc.sendPackets(new S_ServerMessage(1065));
+            srcpc.sendPackets(new S_SystemMessage("將發生神秘的奇跡力量。"));
         }
         return dmg;
     }

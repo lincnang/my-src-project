@@ -374,7 +374,11 @@ public class S_NewCreateItem extends ServerBasePacket {
                     model.setBless(craftItem.getBless());
                     model.setUnknown2(0);
                     model.setUnknown3(0);
-                    model.setName(ByteString.copyFrom(item2.getLogName().getBytes()));
+                    try {
+                        model.setName(ByteString.copyFrom(item2.getLogName().getBytes(Config.CLIENT_LANGUAGE_CODE)));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     model.setUnknown4(0);
                     model.setUnknown5(0);
                     model.setGfxId(item2.get_gfxid());
@@ -413,7 +417,11 @@ public class S_NewCreateItem extends ServerBasePacket {
                                 model.setBless(craftbigsuccessItem.getBless());
                                 model.setUnknown2(0);
                                 model.setUnknown3(0);
-                                model.setName(ByteString.copyFrom(bigsuccessitem.getLogName().getBytes()));
+                                try {
+                                    model.setName(ByteString.copyFrom(bigsuccessitem.getLogName().getBytes(Config.CLIENT_LANGUAGE_CODE)));
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
                                 model.setUnknown4(0);
                                 model.setUnknown5(0);
                                 model.setGfxId(bigsuccessitem.get_gfxid());
@@ -460,7 +468,11 @@ public class S_NewCreateItem extends ServerBasePacket {
                 model.setBless(craftItem.getBless());
                 model.setUnknown2(0);
                 model.setUnknown3(0);
-                model.setName(ByteString.copyFrom(item2.getLogName().getBytes()));
+                try {
+                    model.setName(ByteString.copyFrom(item2.getLogName().getBytes(Config.CLIENT_LANGUAGE_CODE)));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 model.setUnknown4(0);
                 model.setUnknown5(0);
                 model.setGfxId(item2.get_gfxid());

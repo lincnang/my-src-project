@@ -43,6 +43,11 @@ public class StatusBrave extends ItemExecutor {
         }
         if (L1BuffUtil.stopPotion(pc)) {
             if (check(pc)) {
+                // ✅ 移除三段加速檢查限制，允許與龍之珍珠共存
+                // if (pc.hasSkillEffect(L1SkillId.STATUS_BRAVE3)) {
+                //     pc.sendPackets(new S_ServerMessage(79));
+                //     return;
+                // }
                 pc.getInventory().removeItem(item, 1L);
                 L1BuffUtil.cancelAbsoluteBarrier(pc);
                 L1BuffUtil.braveStart(pc);

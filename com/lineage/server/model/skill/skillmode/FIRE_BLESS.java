@@ -5,12 +5,16 @@ import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
 import com.lineage.server.model.skill.L1BuffUtil;
+import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.serverpackets.S_SkillBrave;
 
 public class FIRE_BLESS extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
         int dmg = 0;
         L1PcInstance pc = (L1PcInstance) cha;
+        if (pc.hasSkillEffect(L1SkillId.STATUS_BRAVE3)) {
+            return dmg;
+        }
         L1BuffUtil.braveStart(pc);
         pc.setSkillEffect(155, integer * 1000);
         pc.setBraveSpeed(1);

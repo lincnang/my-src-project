@@ -7,6 +7,7 @@ import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.skill.L1BuffUtil;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
+import com.lineage.server.serverpackets.S_YouFeelBetter;
 
 import java.util.Random;
 
@@ -144,7 +145,7 @@ public class Fish extends ItemExecutor {
             healHp *= -1;
         }
         if (healHp > 0) {
-            pc.sendPackets(new S_ServerMessage(77));
+            pc.sendPackets(new S_YouFeelBetter());
         }
         pc.setCurrentHp(pc.getCurrentHp() + healHp);
     }

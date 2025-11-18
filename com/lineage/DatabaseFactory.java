@@ -25,10 +25,30 @@ public class DatabaseFactory {
             _source.setJdbcUrl(_url);
             _source.setUser(_user);
             _source.setPassword(_password);
+            applyResilienceSettings(_source);
             _source.getConnection().close();
         } catch (Exception e) {
             _log.fatal("資料庫讀取錯誤!", e);
         }
+    }
+
+    private void applyResilienceSettings(ComboPooledDataSource source) {
+        // 以程式方式套用與 c3p0-config.xml 同步的連線耐久設定
+        source.setInitialPoolSize(10);
+        source.setMinPoolSize(10);
+        source.setMaxPoolSize(100);
+        source.setAcquireIncrement(5);
+        source.setAcquireRetryAttempts(0);
+        source.setAcquireRetryDelay(500);
+    source.setCheckoutTimeout(0);
+    // 僅使用 SQL 測試查詢，避免 c3p0 建立自動測試資料表
+    source.setPreferredTestQuery("SELECT 1");
+        source.setTestConnectionOnCheckout(true);
+        source.setTestConnectionOnCheckin(true);
+        source.setIdleConnectionTestPeriod(60);
+        source.setMaxConnectionAge(14400);
+        source.setMaxIdleTime(900);
+        source.setMaxStatementsPerConnection(100);
     }
 
     public static void setDatabaseSettings() {

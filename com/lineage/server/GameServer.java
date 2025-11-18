@@ -44,6 +44,7 @@ import com.lineage.server.model.skill.L1SkillMode;
 import com.lineage.server.model.skill.skillmode.BraveavatarController;
 import com.lineage.server.templates.L1PcOther;
 import com.lineage.server.thread.*;
+import com.lineage.server.netty.NettyGameServer;
 import com.lineage.server.timecontroller.*;
 import com.lineage.server.timecontroller.event.ranking.RankingHeroTimer;
 import com.lineage.server.utils.PerformanceTimer;
@@ -440,7 +441,11 @@ public class GameServer {
             DeShopChatTable.get().load();
             DeGlobalChatTable.get().load();
             DeShopItemTable.get().load();
-            EchoServerTimer.get().start();
+            // 切換為 Netty 監聽
+            NettyGameServer netty = new NettyGameServer();
+            netty.start();
+            // 停用舊的 ServerSocket 監聽（EchoServerTimer）
+            // EchoServerTimer.get().start();
             IceQueenSystem.getInstance().load();
             // ValakasRoomSystem.getInstance().load();
             L1DoorInstance.openDoor();

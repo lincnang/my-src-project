@@ -1943,9 +1943,25 @@ public class L1PcInstance extends L1Character { // src015
         }
     }
 
-    private void removeOutOfRangeObjects() {
+    /**
+     * 清理視野外的物件
+     * ★ 移植自J-src的removeOutOfRangeObjects(int distance)機制
+     * 
+     * @param maxDistance 最大距離,超過此距離的物件將被清理 (-1表示使用畫面範圍)
+     */
+    private void removeOutOfRangeObjects(int maxDistance) {
         for (L1Object known : getKnownObjects()) {
             if (known != null) {
+                // ★ J-src機制: 優先檢查距離限制
+                if (maxDistance > 0) {
+                    if (getLocation().getTileLineDistance(known.getLocation()) > maxDistance) {
+                        removeKnownObject(known);
+                        sendPackets(new S_RemoveObject(known));
+                        continue; // 已處理,跳過後續檢查
+                    }
+                }
+                
+                // 原有的畫面範圍檢查
                 if (Config.PC_RECOGNIZE_RANGE == -1) {
                     if (!getLocation().isInScreen(known.getLocation())) {
                         removeKnownObject(known);
@@ -1958,6 +1974,13 @@ public class L1PcInstance extends L1Character { // src015
             }
         }
     }
+    
+    /**
+     * 清理視野外的物件 (無距離限制版本,保持向下相容)
+     */
+    private void removeOutOfRangeObjects() {
+        removeOutOfRangeObjects(-1); // 使用畫面範圍
+    }
 
     /**
      * 可見物更新處理
@@ -1966,7 +1989,10 @@ public class L1PcInstance extends L1Character { // src015
         if (isOutGame()) {
             return;
         }
-        removeOutOfRangeObjects();
+        
+        // ★ J-src機制: 主動清理17格外的物件,防止物件累積導致封包洪水
+        removeOutOfRangeObjects(17);
+        
         // 指定可視範圍資料更新
         for (final L1Object visible : World.get().getVisibleObjects(this, Config.PC_RECOGNIZE_RANGE)) {
             if (visible instanceof L1MerchantInstance) {// 對話NPC
@@ -2490,6 +2516,10 @@ public class L1PcInstance extends L1Character { // src015
         stopSkillSound_autoSkillAll();// 停止自動輔助狀態(魔法) -> 全職業
         stopSkillSound_autoRemoveItem();// 停止輔助(自動刪物)
         // }
+        
+        // 停止所有自動循環技能
+        com.lineage.server.model.skill.L1AutoRecycleSkill.stopAllAutoRecycle(this);
+        
         setDead(true);
         setNetConnection(null);
         setPacketOutput(null);
@@ -11272,7 +11302,7 @@ public class L1PcInstance extends L1Character { // src015
     public void set_Test_Auto(boolean b) {
         _autoattack = b;
         if (_autoattack) {
-            sendPackets(new S_SystemMessage("開始自動練功"));
+            sendPackets(new S_SystemMessage("\\fU開啟自動練功，物品掉落不顯示。"));
         } else {
             sendPackets(new S_SystemMessage("停止自動練功"));
             set_AutoTimeCount(0);
@@ -13457,7 +13487,7 @@ public class L1PcInstance extends L1Character { // src015
 
     /**
      * 設置積分
-     *
+     * 修改：只允許升級，不允許降級（爵位等級永久保留）
      */
     public void setHonor(int honor) {
         if (honor < 0) {
@@ -13469,7 +13499,8 @@ public class L1PcInstance extends L1Character { // src015
         int oldLevel = getHonorLevel();
         int newLevel = Honor.getInstance().getHonorLevel(honor);
 
-        if (oldLevel != newLevel) {
+        // ✅ 只在新等級更高時才升級，不會降級
+        if (newLevel > oldLevel) {
             L1WilliamHonor.delHonorSkill(this, oldLevel);
             setHonorLevel(newLevel);
             L1WilliamHonor.getHonorSkill(this);

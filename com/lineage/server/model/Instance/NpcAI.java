@@ -251,6 +251,7 @@ public class NpcAI implements Runnable {
      * @return true:AI終了 false:AI續行
      */
     @Deprecated
+    @SuppressWarnings("unused")
     private boolean stopAIProcess() {
         // 此方法已被 processAI() 取代
         // 保留僅供向後兼容,實際不應被調用

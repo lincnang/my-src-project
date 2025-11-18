@@ -29,6 +29,9 @@ public class GeneralThreadPool {//src032
     // 玩家專用排程池（用於玩家監控、獨立任務）
     private final ScheduledExecutorService _pcScheduler;
 
+    // 關機狀態旗標：啟動關機程序時設為 true，阻止新的排程任務
+    private volatile boolean _shuttingDown = false;
+
     private GeneralThreadPool() {
         // 載入配置
         try {
@@ -42,39 +45,34 @@ public class GeneralThreadPool {//src032
         _executor = Executors.newCachedThreadPool(
                 new PriorityThreadFactory("MainExecutor", Thread.NORM_PRIORITY));
         // 2. 通用排程池（AI、系統、技能、高低優先級任務共用）
-        _scheduler = Executors.newScheduledThreadPool(corePoolSize,
-                new PriorityThreadFactory("GeneralScheduler", Thread.NORM_PRIORITY));
+    _scheduler = Executors.newScheduledThreadPool(corePoolSize,
+        new PriorityThreadFactory("GeneralScheduler", Thread.NORM_PRIORITY));
+    // 關閉時的行為與拒絕策略調整，避免噪音與殭屍任務
+    if (_scheduler instanceof ScheduledThreadPoolExecutor) {
+        ScheduledThreadPoolExecutor ste = (ScheduledThreadPoolExecutor) _scheduler;
+        ste.setRemoveOnCancelPolicy(true);
+        ste.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
+        ste.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
+        ste.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+    }
         // 3. 玩家專用排程池（處理玩家獨立任務，如 L1PcMonitor）
-        // 優先使用 server.properties 的 PcSchedulerPool 配置
-        int pcSchedulerSize;
-        if (Config.PC_SCHEDULER_POOL_SIZE > 0) {
-            pcSchedulerSize = Config.PC_SCHEDULER_POOL_SIZE;
-        } else {
-            pcSchedulerSize = Math.max(20, corePoolSize / 4);
-        }
-        _pcScheduler = Executors.newScheduledThreadPool(pcSchedulerSize,
-                new PriorityThreadFactory("PcScheduler", Thread.NORM_PRIORITY));
+        // 若有配置可在外部調整，這裡採用穩健的動態值
+        int pcSchedulerSize = Math.max(20, corePoolSize / 4);
+    _pcScheduler = Executors.newScheduledThreadPool(pcSchedulerSize,
+        new PriorityThreadFactory("PcScheduler", Thread.NORM_PRIORITY));
+    if (_pcScheduler instanceof ScheduledThreadPoolExecutor) {
+        ScheduledThreadPoolExecutor ste = (ScheduledThreadPoolExecutor) _pcScheduler;
+        ste.setRemoveOnCancelPolicy(true);
+        ste.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
+        ste.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
+        ste.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+    }
     }
     
     /**
      * 根據伺服器規模計算核心執行緒池大小
      */
     private int calculateCorePoolSize(int maxPlayers) {
-        // 優先使用 server.properties 的 SchedulerCorePool 配置
-        if (Config.SCHEDULER_CORE_POOL_SIZE > 0) {
-            return Config.SCHEDULER_CORE_POOL_SIZE;
-        }
-        
-        // 其次使用自動掛機設置.properties 的核心執行緒池配置
-        if (com.lineage.config.ThreadPoolSet.CORE_THREAD_POOL_SIZE > 0) {
-            return com.lineage.config.ThreadPoolSet.CORE_THREAD_POOL_SIZE;
-        }
-        
-        // 再次使用舊版配置（向後兼容）
-        if (com.lineage.config.ThreadPoolSet.SCHEDULED_CORE_POOL_SIZE > 0) {
-            return com.lineage.config.ThreadPoolSet.SCHEDULED_CORE_POOL_SIZE;
-        }
-        
         // 最後根據最大玩家數動態計算
         // 基礎公式：基礎執行緒(50) + 每10個玩家1個執行緒
         int baseThreads = 50;
@@ -133,13 +131,27 @@ public class GeneralThreadPool {//src032
      */
     public ScheduledFuture<?> schedule(final Runnable r, final long delay) {
         try {
+            if (_shuttingDown || _scheduler.isShutdown() || _scheduler.isTerminated()) {
+                if (_log.isDebugEnabled()) {
+                    _log.debug("skip schedule during shutdown: " + (r != null ? r.getClass().getName() : "null"));
+                }
+                return null;
+            }
             if (delay <= 0) {
-                _executor.execute(r);
+                if (!_shuttingDown && _executor != null) {
+                    _executor.execute(r);
+                }
                 return null;
             }
             return _scheduler.schedule(r, delay, TimeUnit.MILLISECONDS);
         } catch (final RejectedExecutionException e) {
-            _log.error(e.getLocalizedMessage(), e);
+            if (_shuttingDown || _scheduler.isShutdown()) {
+                if (_log.isDebugEnabled()) {
+                    _log.debug("schedule rejected (shutting down)");
+                }
+            } else {
+                _log.error(e.getLocalizedMessage(), e);
+            }
         }
         return null;
     }
@@ -159,6 +171,12 @@ public class GeneralThreadPool {//src032
      */
     public ScheduledFuture<?> scheduleAtFixedRate(final Runnable r, final long initialDelay, final long period) {
         try {
+            if (_shuttingDown || _scheduler.isShutdown() || _scheduler.isTerminated()) {
+                if (_log.isDebugEnabled()) {
+                    _log.debug("skip scheduleAtFixedRate during shutdown: " + (r != null ? r.getClass().getName() : "null"));
+                }
+                return null;
+            }
             return this._scheduler.scheduleAtFixedRate(r, initialDelay, period, TimeUnit.MILLISECONDS);
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -175,13 +193,25 @@ public class GeneralThreadPool {//src032
      */
     public ScheduledFuture<?> pcSchedule(final L1PcMonitor r, final long delay) {
         try {
+            if (_shuttingDown || _pcScheduler.isShutdown() || _pcScheduler.isTerminated()) {
+                if (_log.isDebugEnabled()) {
+                    _log.debug("skip pcSchedule during shutdown: " + (r != null ? r.getClass().getName() : "null"));
+                }
+                return null;
+            }
             if (delay <= 0) {
                 this._executor.execute(r);
                 return null;
             }
             return this._pcScheduler.schedule(r, delay, TimeUnit.MILLISECONDS);
         } catch (final RejectedExecutionException e) {
-            _log.error(e.getLocalizedMessage(), e);
+            if (_shuttingDown || _pcScheduler.isShutdown()) {
+                if (_log.isDebugEnabled()) {
+                    _log.debug("pcSchedule rejected (shutting down)");
+                }
+            } else {
+                _log.error(e.getLocalizedMessage(), e);
+            }
             return null;
         }
     }
@@ -200,9 +230,21 @@ public class GeneralThreadPool {//src032
  */
 public ScheduledFuture<?> scheduleAtFixedRate(final TimerTask command, final long initialDelay, final long period) {
     try {
+        if (_shuttingDown || _scheduler.isShutdown() || _scheduler.isTerminated()) {
+            if (_log.isDebugEnabled()) {
+                _log.debug("skip scheduleAtFixedRate(TimerTask) during shutdown: " + (command != null ? command.getClass().getName() : "null"));
+            }
+            return null;
+        }
         return this._scheduler.scheduleAtFixedRate(command, initialDelay, period, TimeUnit.MILLISECONDS);
     } catch (final RejectedExecutionException e) {
-        _log.error(e.getLocalizedMessage(), e);
+        if (_shuttingDown || _scheduler.isShutdown()) {
+            if (_log.isDebugEnabled()) {
+                _log.debug("scheduleAtFixedRate(TimerTask) rejected (shutting down)");
+            }
+        } else {
+            _log.error(e.getLocalizedMessage(), e);
+        }
         return null;
     }
 }
@@ -212,9 +254,21 @@ public ScheduledFuture<?> scheduleAtFixedRate(final TimerTask command, final lon
  */
 public ScheduledFuture<?> scheduleWithFixedDelay(final TimerTask command, final long initialDelay, final long period) {
     try {
+        if (_shuttingDown || _scheduler.isShutdown() || _scheduler.isTerminated()) {
+            if (_log.isDebugEnabled()) {
+                _log.debug("skip scheduleWithFixedDelay during shutdown: " + (command != null ? command.getClass().getName() : "null"));
+            }
+            return null;
+        }
         return this._scheduler.scheduleWithFixedDelay(command, initialDelay, period, TimeUnit.MILLISECONDS);
     } catch (final RejectedExecutionException e) {
-        _log.error(e.getLocalizedMessage(), e);
+        if (_shuttingDown || _scheduler.isShutdown()) {
+            if (_log.isDebugEnabled()) {
+                _log.debug("scheduleWithFixedDelay rejected (shutting down)");
+            }
+        } else {
+            _log.error(e.getLocalizedMessage(), e);
+        }
         return null;
     }
 }
@@ -410,6 +464,7 @@ public ScheduledFuture<?> scheduleWithFixedDelay(final TimerTask command, final 
      */
     public void shutdown() {
         try {
+            _shuttingDown = true; // 先設為關機狀態，阻止新任務進入
             if (_executor instanceof ExecutorService) {
                 ((ExecutorService) _executor).shutdown();
             }
@@ -426,6 +481,15 @@ public ScheduledFuture<?> scheduleWithFixedDelay(final TimerTask command, final 
         } catch (final Exception e) {
             _log.error("shutdown pcScheduler error", e);
         }
+    }
+
+    /**
+     * 是否處於關機狀態（或正在關機）
+     */
+    public boolean isShuttingDown() {
+        return _shuttingDown
+                || _scheduler.isShutdown() || _scheduler.isTerminated()
+                || _pcScheduler.isShutdown() || _pcScheduler.isTerminated();
     }
 
     /**

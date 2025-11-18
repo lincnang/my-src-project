@@ -13,6 +13,7 @@ import com.lineage.server.model.L1PolyMorph;
 import com.lineage.server.model.skill.L1BuffUtil;
 import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.model.skill.L1SkillUse;
+import com.lineage.server.model.skill.L1AutoRecycleSkill;
 import com.lineage.server.serverpackets.S_Paralysis;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SystemMessage;
@@ -320,6 +321,23 @@ public class C_UseSkill extends ClientBasePacket {
                 }
                 final L1SkillUse skilluse = new L1SkillUse();
                 skilluse.handleCommands(pc, skillId, targetId, targetX, targetY, 0, L1SkillUse.TYPE_NORMAL);
+                
+                // ===== 自動循環技能系統 =====
+                // 只處理配置檔 other.properties 中 AutoRecycleSkills 列表內的技能
+                if (com.lineage.config.ConfigOther.AUTO_RECYCLE_SKILLS != null) {
+                    for (int autoSkillId : com.lineage.config.ConfigOther.AUTO_RECYCLE_SKILLS) {
+                        if (skillId == autoSkillId) {
+                            L1Skills skill = SkillsTable.get().getTemplate(skillId);
+                            if (skill != null) {
+                                int duration = skill.getBuffDuration() * 1000;
+                                L1AutoRecycleSkill.toggleAutoRecycle(pc, skillId, duration);
+                            }
+                            break;
+                        }
+                    }
+                }
+                // ===== 自動循環技能系統結束 =====
+                
                 if (skillId == L1SkillId.DECREASE_WEIGHT || skillId == L1SkillId.JOY_OF_PAIN) {
                     // XXX 7.6 重量程度資訊
                     pc.sendPackets(new S_WeightStatus(pc.getInventory().getWeight() * 100 / (int) pc.getMaxWeight(), pc.getInventory().getWeight(), (int) pc.getMaxWeight()));

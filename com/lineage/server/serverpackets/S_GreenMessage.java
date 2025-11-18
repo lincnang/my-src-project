@@ -21,7 +21,7 @@ public class S_GreenMessage extends ServerBasePacket {
         writeC(S_OPCODE_GREENMESSAGE);
         writeC(0x54);
         writeC(0x02);
-        writeS(s);
+        writeS(sanitizeForClient(s));
     }
 
     @Override
@@ -32,5 +32,27 @@ public class S_GreenMessage extends ServerBasePacket {
     @Override
     public String getType() {
         return S_GREENMESSAGE;
+    }
+
+    // 與 S_ServerMessage 相同的最小清理策略
+    private static String sanitizeForClient(String input) {
+        if (input == null) return "";
+        String s = input
+                .replace('%', '％')
+                .replace('\n', ' ')
+                .replace('\r', ' ')
+                .replace('\t', ' ');
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= 0x20 && c != 0x7F) {
+                sb.append(c);
+            } else {
+                sb.append(' ');
+            }
+        }
+        final int MAX_LEN = 200;
+        if (sb.length() > MAX_LEN) return sb.substring(0, MAX_LEN);
+        return sb.toString();
     }
 }

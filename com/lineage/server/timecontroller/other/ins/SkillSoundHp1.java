@@ -3,8 +3,8 @@ package com.lineage.server.timecontroller.other.ins;
 import com.lineage.config.ConfigAutoAll;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.skill.L1BuffUtil;
-import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
+import com.lineage.server.serverpackets.S_YouFeelBetter;
 
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -99,7 +99,7 @@ public class SkillSoundHp1 extends TimerTask {
                             _pc.getInventory().consumeItem(_pc.getAutoItemId1(), 1);
                             if (ConfigAutoAll.Auto_Hp_Msg) {
                                 if (addhp > 0) {
-                                    _pc.sendPackets(new S_ServerMessage(77));//你覺得舒服多了訊息
+                                    _pc.sendPackets(new S_YouFeelBetter());
                                 }
                             }
                             L1BuffUtil.cancelAbsoluteBarrier(_pc);// 解除魔法技能絕對屏障

@@ -1,19 +1,20 @@
 package com.lineage.server.serverpackets;
 
+
 public class S_SystemMessage extends ServerBasePacket {
     private byte[] _byte = null;
 
     public S_SystemMessage(String msg) {
         writeC(S_MESSAGE);
         writeC(9);
-        writeS(msg);
+        writeS(sanitizeForClient(msg));
     }
 
     public S_SystemMessage(String msg, boolean nameid) {
         writeC(S_SAY_CODE);
         writeC(2);
         writeD(0);
-        writeS(msg);
+        writeS(sanitizeForClient(msg));
     }
 
     /**
@@ -41,7 +42,7 @@ public class S_SystemMessage extends ServerBasePacket {
     public S_SystemMessage(String msg, int color) {
         writeC(S_MESSAGE);
         writeC(color);
-        writeS(msg);
+        writeS(sanitizeForClient(msg));
     }
 
     public byte[] getContent() {
@@ -53,5 +54,31 @@ public class S_SystemMessage extends ServerBasePacket {
 
     public String getType() {
         return getClass().getSimpleName();
+    }
+
+    /**
+     * 與 S_ServerMessage 相同的最小清理策略，避免 '%' 與控制字元造成舊客戶端崩潰。
+     */
+    private static String sanitizeForClient(String input) {
+        if (input == null) return "";
+        String s = input
+                .replace('%', '％')
+                .replace('\n', ' ')
+                .replace('\r', ' ')
+                .replace('\t', ' ');
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= 0x20 && c != 0x7F) {
+                sb.append(c);
+            } else {
+                sb.append(' ');
+            }
+        }
+        final int MAX_LEN = 200;
+        if (sb.length() > MAX_LEN) {
+            return sb.substring(0, MAX_LEN);
+        }
+        return sb.toString();
     }
 }

@@ -284,6 +284,9 @@ public class CharBuffTable implements CharBuffStorage {
                                 pc.setSkillEffect(skill_id, remaining_time * 1000);
                                 break;
                             case 1000:
+                                if (pc.hasSkillEffect(STATUS_BRAVE3)) {
+                                    break;
+                                }
                                 pc.sendPackets(new S_SkillBrave(pc.getId(), 1, remaining_time));
                                 pc.broadcastPacketAll(new S_SkillBrave(pc.getId(), 1, 0));
                                 pc.setBraveSpeed(1);

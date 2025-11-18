@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.Future;
 
@@ -70,6 +71,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     // === 狀態 ===
     private volatile boolean _isStrat = true; // 沿用舊名，作為主循環旗標
     private volatile boolean closed = false;  // close() 重入保護
+    private volatile boolean expectedClose = false; // 標記預期斷線，減少不必要的警告
     private int _kick = 0;
     private int _error = -1;                 // 錯誤次數（沿用）
     private int _saveInventory = 0;
@@ -97,6 +99,14 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
     private int badPacketCount = 0;
     private long lastBadPacketTime = 0;
     private static final long BAD_PACKET_RESET_MS = 600_000; // 10分鐘重置（更寬鬆）
+
+    // === 出站追蹤（診斷用） ===
+    private static final int OUT_TRACE_SIZE = 128;
+    private final int[] outTraceOpcode = new int[OUT_TRACE_SIZE];
+    private final int[] outTraceArg = new int[OUT_TRACE_SIZE]; // 例如 S_ServerMessage 的 type，其餘為 -1
+    private final long[] outTraceAt = new long[OUT_TRACE_SIZE];
+    private final byte[][] outTraceHead = new byte[OUT_TRACE_SIZE][];
+    private int outTraceIdx = 0;
 
     /**
      * 啟用設置 - 優化Socket參數
@@ -164,7 +174,7 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
                               " 時間: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date()) +
                               " SOCKETLIST 大小: " + com.lineage.commons.system.IpAttackCheck.SOCKETLIST.size());
                 } else {
-                    _log.info("[DIAG] ClientExecutor 建立 - IP: " + _ip);
+                    // _log.info("[DIAG] ClientExecutor 建立 - IP: " + _ip);
                 }
             }
         } catch (Exception e) {
@@ -176,6 +186,57 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
 
     /** 舊介面，維持存在（目前未使用） */
     public void start() {
+    }
+
+    /**
+     * 記錄最近送出的封包（明文內容）。用於斷線/崩潰時回溯。
+     */
+    public synchronized void traceOutbound(byte[] plain) {
+        if (plain == null || plain.length == 0) return;
+        int opcode = plain[0] & 0xFF;
+        int arg = -1;
+        if (opcode == com.lineage.server.serverpackets.OpcodesServer.S_MESSAGE_CODE) {
+            if (plain.length >= 3) {
+                arg = (plain[1] & 0xFF) | ((plain[2] & 0xFF) << 8); // type（小端）
+            }
+        }
+        int idx = (outTraceIdx++) % OUT_TRACE_SIZE;
+        outTraceOpcode[idx] = opcode;
+        outTraceArg[idx] = arg;
+        outTraceAt[idx] = System.currentTimeMillis();
+        int headLen = Math.min(plain.length, 12);
+        byte[] head = Arrays.copyOf(plain, headLen);
+        outTraceHead[idx] = head;
+    }
+
+    /**
+     * 取得最近送出的封包追蹤摘要（最多 OUT_TRACE_SIZE 筆）。
+     */
+    public synchronized String dumpOutboundTrace() {
+        StringBuilder sb = new StringBuilder(256);
+        sb.append("OutboundTrace(last ").append(OUT_TRACE_SIZE).append(")\n");
+        int count = Math.min(outTraceIdx, OUT_TRACE_SIZE);
+        for (int i = 0; i < count; i++) {
+            int pos = (outTraceIdx - 1 - i);
+            if (pos < 0) break;
+            int idx = pos % OUT_TRACE_SIZE;
+            long at = outTraceAt[idx];
+            int op = outTraceOpcode[idx];
+            int arg = outTraceArg[idx];
+                        sb.append(new java.text.SimpleDateFormat("HH:mm:ss.SSS").format(new java.util.Date(at)))
+                            .append(" op=").append(op)
+                            .append(arg >= 0 ? (" type=" + arg) : "");
+                        byte[] head = outTraceHead[idx];
+                        if (head != null && head.length > 0) {
+                                sb.append(" head=");
+                                for (int j = 0; j < head.length; j++) {
+                                        sb.append(String.format("%02X", head[j]));
+                                        if (j + 1 < head.length) sb.append(' ');
+                                }
+                        }
+                        sb.append('\n');
+        }
+        return sb.toString();
     }
 
     // =====================================================================
@@ -552,42 +613,9 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
         if (closed) return; // 重入保護
         closed = true;
         
-        // === 診斷用: 記錄關閉原因與調用堆疊 (加入判斷與效能優化) ===
-        try {
-            String timestamp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
-            String accountName = (_account != null) ? _account.get_login() : "未登入";
-            String charName = (_activeChar != null) ? _activeChar.getName() : "無角色";
-            String threadName = Thread.currentThread().getName();
-            String ipStr = (_ip != null) ? _ip.toString() : "unknown";
-            
-            // 獲取調用堆疊 (只取前 3 層,避免效能問題)
-            StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-            StringBuilder callerInfo = new StringBuilder();
-            int stackDepth = Math.min(5, stack.length);
-            for (int i = 2; i < stackDepth; i++) {
-                callerInfo.append("\n    at ").append(stack[i].toString());
-            }
-            
-            _log.warn("[DIAG-CLOSE] ClientExecutor.close() 被呼叫 - 時間: " + timestamp +
-                      " IP: " + ipStr +
-                      " 帳號: " + accountName +
-                      " 角色: " + charName +
-                      " 執行緒: " + threadName +
-                      " 呼叫堆疊:" + callerInfo.toString());
-            
-            // 從 SOCKETLIST 移除 (加入判斷避免 NPE)
-            if (com.lineage.commons.system.IpAttackCheck.SOCKETLIST != null) {
-                com.lineage.commons.system.IpAttackCheck.SOCKETLIST.remove(this);
-                if (_log.isDebugEnabled()) {
-                    _log.debug("[DIAG] ClientExecutor 從 SOCKETLIST 移除 - IP: " + ipStr + 
-                              " 剩餘: " + com.lineage.commons.system.IpAttackCheck.SOCKETLIST.size());
-                } else {
-                    _log.info("[DIAG] ClientExecutor 從 SOCKETLIST 移除 - IP: " + ipStr);
-                }
-            }
-            
-        } catch (Exception e) {
-            _log.warn("[DIAG] 記錄關閉資訊失敗: " + e.getMessage());
+        // 從 SOCKETLIST 移除
+        if (com.lineage.commons.system.IpAttackCheck.SOCKETLIST != null) {
+            com.lineage.commons.system.IpAttackCheck.SOCKETLIST.remove(this);
         }
         
         try {
@@ -635,10 +663,19 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
             _csocket = null;
             _keys = null;
 
-            // 記錄離線 - 簡化版
-
-
-
+            // 記錄離線訊息
+            final StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("\n--------------------------------------------------");
+            stringBuilder.append("\n       客戶端 離線: (");
+            if (_account != null) {
+                stringBuilder.append(_account.get_login() + " ");
+            }
+            if (_mac != null) {
+                stringBuilder.append(" " + _mac + " / ");
+            }
+            stringBuilder.append(ipAddr + ") 完成連線中斷!!");
+            stringBuilder.append("\n--------------------------------------------------");
+            _log.info(stringBuilder.toString());
 
         } catch (final Exception ignore) {
             // 不做額外處理，避免關閉流程卡住
@@ -800,6 +837,16 @@ public class ClientExecutor extends OpcodesClient implements Runnable {
 
     /** 設置自動存檔人物資料時間 */
     public void set_savePc(final int savePc) { _savePc = savePc; }
+
+    /** 標記後續 close() 為預期行為，避免噪音日誌 */
+    public void markExpectedClose() {
+        expectedClose = true;
+    }
+
+    /** 供診斷或測試確認預期關閉狀態 */
+    public boolean isExpectedClose() {
+        return expectedClose;
+    }
 
     // 輔助：除錯時好看
     @Override

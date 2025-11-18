@@ -46,6 +46,7 @@ public class L1ResetTime implements L1CommandExecutor {
                 }
             }
             CharBuffReading.get().deleteBuff_skill(40000);
+            Honor.getInstance().forceDailyReset();
             if (pc == null) {
                 _log.warn("系統命令執行: " + cmdName + "重置所有玩家限時地監與爵位任務。");
             } else {

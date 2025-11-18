@@ -103,13 +103,13 @@ public class C_NewCreateItem extends ClientBasePacket {
                         return;
                     }
                     L1NpcInstance npc = (L1NpcInstance) obj;
-                    int difflocx = Math.abs(pc.getX() - npc.getX());
-                    int difflocy = Math.abs(pc.getY() - npc.getY());
-                    if ((pc.getMapId() != npc.getMapId()) || (difflocx > 10) || (difflocy > 10)) {
-                        // _log.info("玩家離NPC太遠，玩家：" + pc.getName());
-                        pc.sendPackets(new S_SystemMessage("您離NPC過遠，請走近後再試"));
-                        return;
-                    }
+                    // 允許遠程製作 - 移除距離和地圖檢查
+                    // int difflocx = Math.abs(pc.getX() - npc.getX());
+                    // int difflocy = Math.abs(pc.getY() - npc.getY());
+                    // if ((pc.getMapId() != npc.getMapId()) || (difflocx > 10) || (difflocy > 10)) {
+                    //     pc.sendPackets(new S_SystemMessage("您離NPC過遠，請走近後再試"));
+                    //     return;
+                    // }
                     Map<Integer, CraftItemForNpc> npcMakeItemActions = CraftConfigTable.get().readItemList(npc.getNpcId());
                     if (npcMakeItemActions == null) {
                         _log.error("無此兌換NPCID:" + npc.getNpcId() + "，玩家：" + pc.getName());
@@ -272,8 +272,36 @@ public class C_NewCreateItem extends ClientBasePacket {
                             pc.sendPackets(new S_SystemMessage("恭喜獲得 " + item.getName() + "(" + (int) successItems.get(index).getCount() + ")。"));
                             _log.info((new StringBuilder()).append("玩家 ").append(pc.getName()).append(" 成功製作 ").append(item.getName()).append(" 數量(").append((int) successItems.get(index).getCount()).append(")。").toString());
                             if (npcMakeItemAction.getShowWorld() != 0) {
-                                // 2綠色 3紅色  13黃色 14白色 22淺綠 44淺藍 45淺紅
-                                World.get().broadcastPacketToAll(new S_AllChannelsChat("恭喜玩家 " + pc.getName() + " 成功製作 " + item.getName() + "(" + (int) successItems.get(index).getCount() + ")。", 2));
+                                // 使用自定義廣播文字，如果沒有設置則使用預設訊息
+                                String broadcastMsg;
+                                String itemDisplayName;
+                                
+                                // 如果物品有 name_id 就使用多語系格式，否則使用固定文字名稱
+                                if (item.getItem().getNameId() != null && !item.getItem().getNameId().isEmpty()) {
+                                    // 使用 name_id 多語系格式讓客戶端自動顯示
+                                    itemDisplayName = item.getItem().getNameId() + "(" + (int) successItems.get(index).getCount() + ")";
+                                } else {
+                                    // 使用固定文字名稱
+                                    itemDisplayName = item.getName() + "(" + (int) successItems.get(index).getCount() + ")";
+                                }
+                                
+                                if (npcMakeItemAction.getShowWorldMsg() != null && !npcMakeItemAction.getShowWorldMsg().isEmpty()) {
+                                    // 使用 %s 格式化：第一個 %s = 玩家名稱，第二個 %s = 製作道具名稱
+                                    broadcastMsg = String.format(npcMakeItemAction.getShowWorldMsg(), pc.getName(), itemDisplayName);
+                                } else {
+                                    // 預設訊息
+                                    broadcastMsg = "恭喜玩家 " + pc.getName() + " 成功製作 " + itemDisplayName + "。";
+                                }
+                                
+                                // 根據 showWorldType 選擇廣播類型
+                                int broadcastType = npcMakeItemAction.getShowWorldType();
+                                if (broadcastType == 2) {
+                                    // 中央廣播 (S_SystemMessage 色碼 26 = 螢幕頂端綠色文字)
+                                    World.get().broadcastPacketToAll(new S_SystemMessage(broadcastMsg, 26));
+                                } else {
+                                    // 全服廣播 (S_AllChannelsChat 色碼 2 = 綠色)
+                                    World.get().broadcastPacketToAll(new S_AllChannelsChat(broadcastMsg, 2));
+                                }
                             }
                         } else {// 單一道具
                             L1ItemInstance item = null;
@@ -286,8 +314,36 @@ public class C_NewCreateItem extends ClientBasePacket {
                                 pc.sendPackets(new S_SkillSound(pc.getId(), 2029)); // 煙花特效
                                 _log.info((new StringBuilder()).append("玩家 ").append(pc.getName()).append(" 成功製作大成功道具 ").append(item.getName()).append(" 數量(").append((int) bigsuccessItems.get(0).getCount()).append(")。").toString());
                                 if (npcMakeItemAction.getShowWorld() != 0) {
-                                    // 2綠色 3紅色  13黃色 14白色 22淺綠 44淺藍 45淺紅
-                                    World.get().broadcastPacketToAll(new S_AllChannelsChat("恭喜玩家 " + pc.getName() + " 成功製作大成功道具 " + item.getName() + "(" + (int) bigsuccessItems.get(0).getCount() + ")。", 2));
+                                    // 使用自定義廣播文字，如果沒有設置則使用預設訊息
+                                    String broadcastMsg;
+                                    String itemDisplayName;
+                                    
+                                    // 如果物品有 name_id 就使用多語系格式，否則使用固定文字名稱
+                                    if (item.getItem().getNameId() != null && !item.getItem().getNameId().isEmpty()) {
+                                        // 使用 name_id 多語系格式讓客戶端自動顯示
+                                        itemDisplayName = item.getItem().getNameId() + "(" + (int) bigsuccessItems.get(0).getCount() + ")";
+                                    } else {
+                                        // 使用固定文字名稱
+                                        itemDisplayName = item.getName() + "(" + (int) bigsuccessItems.get(0).getCount() + ")";
+                                    }
+                                    
+                                    if (npcMakeItemAction.getShowWorldMsg() != null && !npcMakeItemAction.getShowWorldMsg().isEmpty()) {
+                                        // 使用 %s 格式化：第一個 %s = 玩家名稱，第二個 %s = 製作道具名稱
+                                        broadcastMsg = String.format(npcMakeItemAction.getShowWorldMsg(), pc.getName(), itemDisplayName);
+                                    } else {
+                                        // 預設訊息 (大成功)
+                                        broadcastMsg = "恭喜玩家 " + pc.getName() + " 成功製作大成功道具 " + itemDisplayName + "。";
+                                    }
+                                    
+                                    // 根據 showWorldType 選擇廣播類型
+                                    int broadcastType = npcMakeItemAction.getShowWorldType();
+                                    if (broadcastType == 2) {
+                                        // 中央廣播 (S_SystemMessage 色碼 26 = 螢幕頂端綠色文字)
+                                        World.get().broadcastPacketToAll(new S_SystemMessage(broadcastMsg, 26));
+                                    } else {
+                                        // 全服廣播 (S_AllChannelsChat 色碼 2 = 綠色)
+                                        World.get().broadcastPacketToAll(new S_AllChannelsChat(broadcastMsg, 2));
+                                    }
                                 }
                             } else {
                                 item = pc.getInventory().storeItem(successItems.get(0).getItemId(), (int) successItems.get(0).getCount(), successItems.get(0).getEnchantLevel());
@@ -297,8 +353,36 @@ public class C_NewCreateItem extends ClientBasePacket {
                                 pc.sendPackets(new S_SystemMessage("恭喜獲得 " + item.getName() + "(" + (int) successItems.get(0).getCount() + ")。"));
                                 _log.info((new StringBuilder()).append("玩家 ").append(pc.getName()).append(" 成功製作 ").append(item.getName()).append(" 數量(").append((int) successItems.get(0).getCount()).append(")。").toString());
                                 if (npcMakeItemAction.getShowWorld() != 0) {
-                                    // 2綠色 3紅色  13黃色 14白色 22淺綠 44淺藍 45淺紅
-                                    World.get().broadcastPacketToAll(new S_AllChannelsChat("恭喜玩家 " + pc.getName() + " 成功製作 " + item.getName() + "(" + (int) successItems.get(0).getCount() + ")。", 2));
+                                    // 使用自定義廣播文字，如果沒有設置則使用預設訊息
+                                    String broadcastMsg;
+                                    String itemDisplayName;
+                                    
+                                    // 如果物品有 name_id 就使用多語系格式，否則使用固定文字名稱
+                                    if (item.getItem().getNameId() != null && !item.getItem().getNameId().isEmpty()) {
+                                        // 使用 name_id 多語系格式讓客戶端自動顯示
+                                        itemDisplayName = item.getItem().getNameId() + "(" + (int) successItems.get(0).getCount() + ")";
+                                    } else {
+                                        // 使用固定文字名稱
+                                        itemDisplayName = item.getName() + "(" + (int) successItems.get(0).getCount() + ")";
+                                    }
+                                    
+                                    if (npcMakeItemAction.getShowWorldMsg() != null && !npcMakeItemAction.getShowWorldMsg().isEmpty()) {
+                                        // 使用 %s 格式化：第一個 %s = 玩家名稱，第二個 %s = 製作道具名稱
+                                        broadcastMsg = String.format(npcMakeItemAction.getShowWorldMsg(), pc.getName(), itemDisplayName);
+                                    } else {
+                                        // 預設訊息
+                                        broadcastMsg = "恭喜玩家 " + pc.getName() + " 成功製作 " + itemDisplayName + "。";
+                                    }
+                                    
+                                    // 根據 showWorldType 選擇廣播類型
+                                    int broadcastType = npcMakeItemAction.getShowWorldType();
+                                    if (broadcastType == 2) {
+                                        // 中央廣播 (S_SystemMessage 色碼 26 = 螢幕頂端綠色文字)
+                                        World.get().broadcastPacketToAll(new S_SystemMessage(broadcastMsg, 26));
+                                    } else {
+                                        // 全服廣播 (S_AllChannelsChat 色碼 2 = 綠色)
+                                        World.get().broadcastPacketToAll(new S_AllChannelsChat(broadcastMsg, 2));
+                                    }
                                 }
                             }
                         }

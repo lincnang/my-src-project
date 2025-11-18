@@ -9,15 +9,27 @@ import com.lineage.server.datatables.polyHeChengTable;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.serverpackets.*;
+import com.lineage.server.serverpackets.S_NPCTalkReturn;
+import com.lineage.server.serverpackets.S_PacketBoxGree;
+import com.lineage.server.serverpackets.S_Sound;
+import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.templates.L1polyHeCheng;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 public class Npc_PolyCombind extends NpcExecutor {
+    // 供合成流程使用的簡單結構
+    private static class ItemConsume {
+        L1ItemInstance itemInstance;
+        int count;
+        ItemConsume(L1ItemInstance itemInstance, int count) {
+            this.itemInstance = itemInstance;
+            this.count = count;
+        }
+    }
     private final int[] poly1 = Configpoly.poly_LIST_1;
     private final int[] poly2 = Configpoly.poly_LIST_2;
     private final int[] poly3 = Configpoly.poly_LIST_3;
@@ -189,15 +201,7 @@ public class Npc_PolyCombind extends NpcExecutor {
                 return;
         }
 
-        // 消耗卡片統計
-        class ItemConsume {
-            L1ItemInstance itemInstance;
-            int count;
-            ItemConsume(L1ItemInstance itemInstance, int count) {
-                this.itemInstance = itemInstance;
-                this.count = count;
-            }
-        }
+        // 消耗卡片統計（使用類別頂端的 ItemConsume 結構）
         boolean enough = false;
         ArrayList<ItemConsume> consumeList = new ArrayList<>();
         if (oldpolys != null) {
@@ -255,13 +259,20 @@ public class Npc_PolyCombind extends NpcExecutor {
         pc.setpolyrun2(0); pc.setpolyrun3(0); pc.setpolyrun4(0); pc.setpolyrun5(0);
 
         boolean isPlayAnimation = !cmd.contains("_total");
-        try {
-            if (isPlayAnimation) {
-                pc.sendHtmlCastGfx(new String[3]);
-                TimeUnit.MILLISECONDS.sleep(2100);
-            }
-        } catch (Exception ignored) {}
+        // 非阻塞：先送動畫，再延遲執行合成結果
+        if (isPlayAnimation) {
+            try { pc.sendHtmlCastGfx(new String[3]); } catch (Exception ignored) {}
+            final int fNewpoly = newpoly;
+            final int fChance = chance;
+            final ArrayList<ItemConsume> fConsumeList = new ArrayList<>(consumeList);
+            GeneralThreadPool.get().schedule(() -> doPolyCombine(pc, isPlayAnimation, fNewpoly, fChance, fConsumeList), 2100);
+            return;
+        }
+        // 直接執行合成結果（無動畫/批量）
+        doPolyCombine(pc, false, newpoly, chance, consumeList);
+    }
 
+    private void doPolyCombine(L1PcInstance pc, boolean isPlayAnimation, int newpoly, int chance, ArrayList<ItemConsume> consumeList) {
         // ===== 合成結果 =====
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             // 成功

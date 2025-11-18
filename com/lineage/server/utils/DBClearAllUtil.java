@@ -158,6 +158,11 @@ public class DBClearAllUtil {
                 ps.execute();
                 System.out.println("ok!");
 
+                System.out.print("刪除血盟成員.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `clan_members`");
+                ps.execute();
+                System.out.println("ok!");
+
                 System.out.print("刪除盟輝圖檔.....");
                 ps = cn.prepareStatement("TRUNCATE TABLE `clan_emblem`");
                 ps.execute();
@@ -258,6 +263,11 @@ public class DBClearAllUtil {
 
                 System.out.print("刪除character_潘朵拉商城.....");
                 ps = cn.prepareStatement("TRUNCATE TABLE `character_潘朵拉商城`");
+                ps.execute();
+                System.out.println("ok!");
+
+                System.out.print("刪除character_warehouse_game_mall.....");
+                ps = cn.prepareStatement("TRUNCATE TABLE `character_warehouse_game_mall`");
                 ps.execute();
                 System.out.println("ok!");
 

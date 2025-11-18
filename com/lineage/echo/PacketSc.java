@@ -61,6 +61,11 @@ public class PacketSc implements Runnable {
              * UChar8.fromArray(encrypt); // 加密 ac = _keys.encrypt(ac); if (ac
              * == null) { return; } encrypt = UByte8.fromArray(ac);
              */
+            // 記錄明文封包供診斷（反射呼叫，避免編譯期依賴）
+            try {
+                java.lang.reflect.Method m = _client.getClass().getMethod("traceOutbound", byte[].class);
+                m.invoke(_client, encrypt);
+            } catch (Throwable ignore) { }
             final byte[] data = Arrays.copyOf(encrypt, encrypt.length);
             _keys.encryptHash(data);
             requestWork(data);

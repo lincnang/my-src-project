@@ -1825,7 +1825,7 @@ public class L1MerchantInstance extends L1NpcInstance {
                 if (pc.getLevel() < 13) {
                     pc.setCurrentMp(pc.getMaxMp());
                 }
-                pc.sendPackets(new S_ServerMessage(77));
+                pc.sendPackets(new S_YouFeelBetter());
                 pc.sendPackets(new S_SkillSound(pc.getId(), 830));
                 break;
             case 2:// 加速

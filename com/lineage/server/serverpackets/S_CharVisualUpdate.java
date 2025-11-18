@@ -21,8 +21,6 @@ public class S_CharVisualUpdate extends ServerBasePacket {
         writeC(S_WIELD);
         writeD(cha.getId());
         writeC(status);
-        writeC(0xff);
-        writeC(0xff);
     }
 
     public S_CharVisualUpdate(final L1PcInstance cha) {

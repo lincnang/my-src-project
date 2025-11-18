@@ -13,8 +13,6 @@ import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.utils.ListMapUtil;
 import com.lineage.server.utils.RandomArrayList;
 import com.lineage.server.world.World;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @author dexc
  */
 public class DropShare implements DropShareExecutor {
-    private static final Log _log = LogFactory.getLog(DropShare.class);
+    // private static final Log _log = LogFactory.getLog(DropShare.class);
 
     // 定義8個方向的X和Y坐標偏移量（順時針方向）
     private static final byte[] HEADING_TABLE_X = {0, 1, 1, 1, 0, -1, -1, -1};
@@ -261,14 +259,21 @@ public class DropShare implements DropShareExecutor {
                     for (Object obj : partyMembers) {
                         if (obj instanceof L1PcInstance) {
                             final L1PcInstance tgpc = (L1PcInstance) obj;
+                            // AU_17 開啟時，不對該成員顯示掉落訊息
+                            if (tgpc.isActivated()) {
+                                continue;
+                            }
                             // 813: 隊員%2%s 從%0 取得 %1%o
                             tgpc.sendPackets(new S_ServerMessage(813, npc.getNameId(), item.getLogName(), player.getName()));
                         }
                     }
                 }
             } else {
-                // 143: \f1%0%s 給你 %1%o 。
-                player.sendPackets(new S_ServerMessage(143, npc.getNameId(), item.getLogName()));
+                // AU_17 開啟時，不顯示掉落訊息
+                if (!player.isActivated()) {
+                    // 143: \f1%0%s 給你 %1%o 。
+                    player.sendPackets(new S_ServerMessage(143, npc.getNameId(), item.getLogName()));
+                }
             }
 
             // 根據配置，發送額外的消息
@@ -380,14 +385,19 @@ public class DropShare implements DropShareExecutor {
                                 for (Object obj : pcs) {
                                     if (obj instanceof L1PcInstance) {
                                         final L1PcInstance tgpc = (L1PcInstance) obj;
+                                        if (tgpc.isActivated()) {
+                                            continue;
+                                        }
                                         // 813: 隊員%2%s 從%0 取得 %1%o
                                         tgpc.sendPackets(new S_ServerMessage(813, npc.getNameId(), drop.getLogName(), pc.getName()));
                                     }
                                 }
                             }
                         } else {
-                            // 143: \f1%0%s 給你 %1%o 。
-                            pc.sendPackets(new S_ServerMessage(143, npc.getNameId(), drop.getLogName()));
+                            if (!pc.isActivated()) {
+                                // 143: \f1%0%s 給你 %1%o 。
+                                pc.sendPackets(new S_ServerMessage(143, npc.getNameId(), drop.getLogName()));
+                            }
                         }
                     } else {
                         // 如果背包已滿，則將物品掉落在地面
@@ -433,14 +443,19 @@ public class DropShare implements DropShareExecutor {
                                 for (Object obj : pcs) {
                                     if (obj instanceof L1PcInstance) {
                                         final L1PcInstance tgpc = (L1PcInstance) obj;
+                                        if (tgpc.isActivated()) {
+                                            continue;
+                                        }
                                         // 813: 隊員%2%s 從%0 取得 %1%o
                                         tgpc.sendPackets(new S_ServerMessage(813, npc.getNameId(), drop.getLogName(), pc.getName()));
                                     }
                                 }
                             }
                         } else {
-                            // 143: \f1%0%s 給你 %1%o 。
-                            pc.sendPackets(new S_ServerMessage(143, npc.getNameId(), drop.getLogName()));
+                            if (!pc.isActivated()) {
+                                // 143: \f1%0%s 給你 %1%o 。
+                                pc.sendPackets(new S_ServerMessage(143, npc.getNameId(), drop.getLogName()));
+                            }
                         }
                     } else {
                         // 如果背包已滿，則將物品掉落在地面

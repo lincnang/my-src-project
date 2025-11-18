@@ -34,7 +34,7 @@ public class FakeNpcController implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
                 if (L1Config._9319 == 0) {
@@ -49,8 +49,11 @@ public class FakeNpcController implements Runnable {
                     _time = 0;
                     _count++;
                 }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                break;
             } catch (Exception e) {
-                e.printStackTrace();
+                _log.error(e.getLocalizedMessage(), e);
             }
         }
     }

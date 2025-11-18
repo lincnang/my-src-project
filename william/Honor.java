@@ -88,9 +88,14 @@ public class Honor {
 
     }
 
+    /**
+     * 判斷玩家是否已完成該階段（達到該爵位等級）
+     * 修改：只要爵位等級達到，就視為已完成該階段，不能再進入
+     */
     private boolean hasCompletedStage(L1PcInstance pc, int stage) {
-        int currentStage = getHonorLevel(pc.getHonor());
-        return currentStage >= stage && pc.getHonorLevel() >= stage;
+        // ✅ 只檢查爵位等級，不檢查積分
+        // 例如：玩家爵位 Lv.3，則第 1、2、3 階段都視為已完成
+        return pc.getHonorLevel() >= stage;
     }
 
     // 判斷今天是否已進入此階段
@@ -216,12 +221,17 @@ public class Honor {
         _dailyQuestStatus.put(pc.getId(), true);
     }
 
+    /**
+     * 每日重置積分（不影響已獲得的爵位等級）
+     */
     public void resetHonorIfNotCompleted(L1PcInstance pc, boolean isOffline) throws Exception {
         if (!isDailyQuestCompleted(pc)) {
+            // ✅ 只清零積分，不改變爵位等級
             pc.setHonor(0);
             _dailyQuestStatus.put(pc.getId(), false);
             if (!isOffline) {
                 pc.sendPackets(new S_SystemMessage("你未完成今日爵位任務，當日積分已清除。"));
+                pc.sendPackets(new S_SystemMessage("你的爵位等級 Lv." + pc.getHonorLevel() + " 保持不變。"));
             }
         }
         markDailyQuestComplete(pc);
@@ -230,6 +240,7 @@ public class Honor {
 
     /**
      * 檢查並處理玩家威望升級
+     * 修改：爵位升級後記錄當下等級，不掉階
      */
     public void checkHonor(L1PcInstance pc, boolean fromMission, boolean forceTeleport) {
         if (pc == null) return;
@@ -239,14 +250,20 @@ public class Honor {
         int currentLevel = pc.getHonorLevel();
         int realLevel = getHonorLevel(currentHonor);
 
+        // ✅ 只允許升階，不允許掉階
         if (realLevel > currentLevel) {
             applyHonorUpgrade(pc, realLevel);
             return;
         }
+        
+        // ✅ 特殊情況：在任務中且積分達標，強制觸發升階效果（重新套用能力）
         if (realLevel == currentLevel && fromMission && forceTeleport) {
             applyHonorUpgrade(pc, realLevel);
             return;
         }
+        
+        // ✅ 積分不足不處理（保持當前爵位等級）
+        // 註：realLevel < currentLevel 時不會執行任何操作，爵位等級保持不變
     }
 
     private void applyHonorUpgrade(L1PcInstance pc, int level) {
@@ -309,5 +326,14 @@ public class Honor {
                 .map(Map.Entry::getValue)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * 手動清除所有玩家的爵位每日紀錄與進入紀錄。
+     */
+    public void forceDailyReset() {
+        _dailyQuestStatus.clear();
+        _enteredStageMap.clear();
+        _log.log(Level.INFO, "Honor daily cache has been cleared manually.");
     }
 }

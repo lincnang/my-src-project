@@ -80,6 +80,10 @@ public class StatusBrave2 extends ItemExecutor {
         }
         if (L1BuffUtil.stopPotion(pc)) {
             if (check(pc)) {
+                if (pc.hasSkillEffect(L1SkillId.STATUS_BRAVE3)) {
+                    pc.sendPackets(new S_ServerMessage(79));
+                    return;
+                }
                 // 血之渴望
                 if (pc.hasSkillEffect(L1SkillId.BLOODLUST)) {
                     // 1,413：目前情況是無法使用。

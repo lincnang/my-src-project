@@ -919,9 +919,24 @@ public class L1SkillStop {
                     case STATUS_HASTE://加速藥水效果
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.sendPacketsAll(new S_SkillHaste(pc.getId(), 0, 0));
+                            
+                            // ✅ 智能移動速度管理：檢查其他加速效果
+                            int remainingMoveSpeed = 0;
+                            
+                            // 檢查加速術
+                            if (pc.hasSkillEffect(HASTE)) {
+                                remainingMoveSpeed = 1;
+                            }
+                            // 檢查強力加速術
+                            else if (pc.hasSkillEffect(GREATER_HASTE)) {
+                                remainingMoveSpeed = 1;
+                            }
+                            
+                            pc.setMoveSpeed(remainingMoveSpeed);
+                            pc.sendPacketsAll(new S_SkillHaste(pc.getId(), remainingMoveSpeed, 0));
+                        } else {
+                            cha.setMoveSpeed(0);
                         }
-                        cha.setMoveSpeed(0);
                         break;
                     case STATUS_RIBRAVE://生命之樹果實效果
                         if ((cha instanceof L1PcInstance)) {
@@ -939,7 +954,33 @@ public class L1SkillStop {
                     case STATUS_BRAVE3://三段加速
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.sendPacketsAll(new S_Liquor(pc.getId(), 0));
+                            
+                            // ✅ 智能速度管理：檢查其他速度效果
+                            int remainingSpeed = 0;
+                            
+                            // 檢查三段加速 (最高優先級)
+                            if (skillId != STATUS_BRAVE3 && pc.hasSkillEffect(STATUS_BRAVE3)) {
+                                remainingSpeed = 5;
+                            }
+                            // 檢查荒神加速
+                            else if (skillId != STATUS_BRAVE2 && pc.hasSkillEffect(STATUS_BRAVE2)) {
+                                remainingSpeed = 5;
+                            }
+                            // 檢查精靈餅乾
+                            else if (skillId != STATUS_ELFBRAVE && pc.hasSkillEffect(STATUS_ELFBRAVE)) {
+                                remainingSpeed = 1;
+                            }
+                            // 檢查勇敢藥水
+                            else if (skillId != STATUS_BRAVE && pc.hasSkillEffect(STATUS_BRAVE)) {
+                                remainingSpeed = 1;
+                            }
+                            
+                            pc.setBraveSpeed(remainingSpeed);
+                            pc.sendPacketsAll(new S_Liquor(pc.getId(), remainingSpeed > 0 ? 8 : 0));
+                            
+                            if (skillId == STATUS_BRAVE3) {
+                                pc.sendPackets(new S_PacketBoxThirdSpeed(0));
+                            }
                         }
                         break;
                     case STATUS_BLUE_POTION://魔力回覆藥水效果

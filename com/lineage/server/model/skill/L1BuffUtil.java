@@ -182,6 +182,9 @@ public class L1BuffUtil {  //src029
      */
     public static void brave(L1PcInstance pc, int timeMillis) {
         try {
+            if (pc.hasSkillEffect(STATUS_BRAVE3)) {
+                return;
+            }
             braveStart(pc);
             // 勇敢藥水效果
             pc.setSkillEffect(STATUS_BRAVE, timeMillis);
@@ -203,6 +206,9 @@ public class L1BuffUtil {  //src029
      */
     public static void superbrave(final L1PcInstance pc, final int timeMillis) {
         try {
+            if (pc.hasSkillEffect(STATUS_BRAVE3)) {
+                return;
+            }
             braveStart(pc); // 勇敢效果 抵銷對應技能
             // 荒神加速效果
             pc.setSkillEffect(STATUS_BRAVE2, timeMillis);

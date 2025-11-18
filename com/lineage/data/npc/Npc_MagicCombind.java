@@ -133,6 +133,22 @@ public class Npc_MagicCombind extends NpcExecutor {
                 || cmd.equalsIgnoreCase("magic_C") || cmd.equalsIgnoreCase("magic_C_total")
                 || cmd.equalsIgnoreCase("magic_D") || cmd.equalsIgnoreCase("magic_D_total")) {
             new Npc_MagicCombind().action(pc, null, cmd, 0);
+            
+            // ✅ 合成完刷新頁面（無論成功、失敗或材料不足）
+            String[] data = new String[3];
+            if (cmd.toLowerCase().startsWith("magic_a")) {
+                data[0] = String.valueOf(ConfigMagic.CONSUME2 + pc.getMagicrun2());
+                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang2", data));
+            } else if (cmd.toLowerCase().startsWith("magic_b")) {
+                data[0] = String.valueOf(ConfigMagic.CONSUME3 + pc.getMagicrun3());
+                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang3", data));
+            } else if (cmd.toLowerCase().startsWith("magic_c")) {
+                data[0] = String.valueOf(ConfigMagic.CONSUME4 + pc.getMagicrun4());
+                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang4", data));
+            } else if (cmd.toLowerCase().startsWith("magic_d")) {
+                data[0] = String.valueOf(ConfigMagic.CONSUME5 + pc.getMagicrun5());
+                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang5", data));
+            }
             return true;
         }
         return false;
@@ -210,31 +226,8 @@ public class Npc_MagicCombind extends NpcExecutor {
 
         if (!enough) {
             pc.sendPackets(new S_SystemMessage("你的技能卡不足【" + needcount + "】個"));
-            String htmlPage = "";
-            String[] data = new String[3];
-
-            // 根據cmd決定回到哪個頁面
-            if (cmd.equalsIgnoreCase("A") || cmd.equalsIgnoreCase("A_total")) {
-                htmlPage = "magicchang2";
-                data[0] = String.valueOf(ConfigMagic.CONSUME2 + pc.getMagicrun2());
-            } else if (cmd.equalsIgnoreCase("B") || cmd.equalsIgnoreCase("B_total")) {
-                htmlPage = "magicchang3";
-                data[0] = String.valueOf(ConfigMagic.CONSUME3 + pc.getMagicrun3());
-            } else if (cmd.equalsIgnoreCase("C") || cmd.equalsIgnoreCase("C_total")) {
-                htmlPage = "magicchang4";
-                data[0] = String.valueOf(ConfigMagic.CONSUME4 + pc.getMagicrun4());
-            } else if (cmd.equalsIgnoreCase("D") || cmd.equalsIgnoreCase("D_total")) {
-                htmlPage = "magicchang5";
-                data[0] = String.valueOf(ConfigMagic.CONSUME5 + pc.getMagicrun5());
-            }
-
-            if (!htmlPage.isEmpty())
-                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), htmlPage, data));
             return;
         }
-
-
-
 
         // 材料足夠才進入合成
         for (ItemConsume ic : consumeList) {

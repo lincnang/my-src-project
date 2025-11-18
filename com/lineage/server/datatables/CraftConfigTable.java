@@ -17,9 +17,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +30,10 @@ public class CraftConfigTable {
     private static final Log _log = LogFactory.getLog(CraftConfigTable.class);
     private static CraftConfigTable _instance;
     private byte[] sha1 = null;
-    private Map<Integer, CraftItemForNpc> _craftList = new HashMap<>();
+    private Map<Integer, CraftItemForNpc> _craftList = new LinkedHashMap<>();
     private ArrayList<CraftItemForNpc> _npcCraftList1 = new ArrayList<>();
-    private Map<Integer, Map<Integer, CraftItemForNpc>> _npcCraftList = new HashMap<>();
-    private Map<Integer, List<int[]>> substituteList = new HashMap<>();
+    private Map<Integer, Map<Integer, CraftItemForNpc>> _npcCraftList = new LinkedHashMap<>();
+    private Map<Integer, List<int[]>> substituteList = new LinkedHashMap<>();
 
     private CraftConfigTable() {
         this.loadExchangeItem();
@@ -102,6 +101,7 @@ public class CraftConfigTable {
                 boolean issave = true;
                 final int actionid = rs.getInt("id");
                 final int craft_nameid = rs.getInt("craft_nameid");
+                int errorCount = 0;
                 final String craft_itemid = rs.getString("craft_itemid");
                 final String craft_count = rs.getString("craft_count");
                 final String craft_enchant = rs.getString("craft_enchant");
@@ -204,6 +204,8 @@ public class CraftConfigTable {
                 final int change = rs.getInt("change");
                 final int bigchange = rs.getInt("bigsucces_change");
                 final int showworld = rs.getInt("showworld");
+                final String showworld_msg = rs.getString("showworld_msg"); // 自定義廣播文字
+                final int showworld_type = rs.getInt("showworld_type"); // 廣播類型
                 final String poly = rs.getString("poly");
                 final String[] poly_list = poly.split(",");
                 final List<Integer> polyList = new ArrayList<>();
@@ -216,17 +218,29 @@ public class CraftConfigTable {
                 if (craftDelayTime <= 0) {
                     craftDelayTime = 1;
                 }
-                final Map<Integer, L1CraftItem> itemList = new HashMap<>();
-                final Map<Integer, L1CraftItem> bigsuccesitemList = new HashMap<>();
-                final Map<Integer, L1CraftItem> failItem = new HashMap<>();
-                final Map<Integer, L1CraftItem> materialList = new HashMap<>();
-                final Map<Integer, L1CraftItem> aidMaterialList = new HashMap<>();
+                final Map<Integer, L1CraftItem> itemList = new LinkedHashMap<>();
+                final Map<Integer, L1CraftItem> bigsuccesitemList = new LinkedHashMap<>();
+                final Map<Integer, L1CraftItem> failItem = new LinkedHashMap<>();
+                final Map<Integer, L1CraftItem> materialList = new LinkedHashMap<>();
+                final Map<Integer, L1CraftItem> aidMaterialList = new LinkedHashMap<>();
                 if (craft_itemid_list != null && craft_itemid_list.length > 0) {
+                    if (craft_count_list == null || craft_enchant_list == null || craft_bless_list == null ||
+                            craft_itemid_list.length != craft_count_list.length ||
+                            craft_itemid_list.length != craft_enchant_list.length ||
+                            craft_itemid_list.length != craft_bless_list.length) {
+                        _log.error("[Craft ID: " + actionid + "] 製作道具欄位數量不一致 - itemid:" + craft_itemid_list.length + 
+                                " count:" + (craft_count_list != null ? craft_count_list.length : "null") + 
+                                " enchant:" + (craft_enchant_list != null ? craft_enchant_list.length : "null") + 
+                                " bless:" + (craft_bless_list != null ? craft_bless_list.length : "null"));
+                        issave = false;
+                        errorCount++;
+                    }
                     for (int i = 0; i < craft_itemid_list.length; i++) {
                         final L1Item item = ItemTable.get().getTemplate(Integer.parseInt(craft_itemid_list[i]));
                         if (item == null) {
-                            _log.error("製作道具不存在：" + craft_itemid_list[i]);
+                            _log.error("[Craft ID: " + actionid + "] 製作道具不存在：" + craft_itemid_list[i]);
                             issave = false;
+                            errorCount++;
                         }
                         final L1CraftItem craftItem = new L1CraftItem(Integer.parseInt(craft_itemid_list[i]), Integer.parseInt(craft_count_list[i]), Integer.parseInt(craft_enchant_list[i]), Integer.parseInt(craft_bless_list[i]), i + 1);
                         itemList.put(i, craftItem);
@@ -246,38 +260,61 @@ public class CraftConfigTable {
                 if (bigsucces_itemid != 0) { // 大成功道具
                     final L1Item item = ItemTable.get().getTemplate(bigsucces_itemid);
                     if (item == null) {
-                        _log.error("大成功道具不存在：" + bigsucces_itemid);
+                        _log.error("[Craft ID: " + actionid + "] 大成功道具不存在：" + bigsucces_itemid);
                         issave = false;
+                        errorCount++;
                     }
                     final L1CraftItem bigsuccescraftItem = new L1CraftItem(bigsucces_itemid, bigsucces_count, bigsucces_enchant, bigsucces_bless, 1);
                     bigsuccesitemList.put(0, bigsuccescraftItem);
                 }
                 if (fail_Itemid_list != null && fail_Itemid_list.length > 0) {
+                    if (fail_count_list == null || fail_enchant_list == null ||
+                            fail_Itemid_list.length != fail_count_list.length ||
+                            fail_Itemid_list.length != fail_enchant_list.length) {
+                        _log.error("[Craft ID: " + actionid + "] 失敗道具欄位數量不一致 - itemid:" + fail_Itemid_list.length + 
+                                " count:" + (fail_count_list != null ? fail_count_list.length : "null") + 
+                                " enchant:" + (fail_enchant_list != null ? fail_enchant_list.length : "null"));
+                        issave = false;
+                        errorCount++;
+                    }
                     for (int i = 0; i < fail_Itemid_list.length; i++) {
                         final L1Item item = ItemTable.get().getTemplate(Integer.parseInt(fail_Itemid_list[i]));
                         if (item == null) {
-                            _log.error("製作失敗道具不存在：" + fail_Itemid_list[i]);
+                            _log.error("[Craft ID: " + actionid + "] 製作失敗道具不存在：" + fail_Itemid_list[i]);
                             issave = false;
+                            errorCount++;
                         }
                         final L1CraftItem failCraftItem = new L1CraftItem(Integer.parseInt(fail_Itemid_list[i]), Integer.parseInt(fail_count_list[i]), Integer.parseInt(fail_enchant_list[i]), 1, i + 1);
                         failItem.put(i, failCraftItem);
                     }
                 }
                 if (material_list != null && material_list.length > 0) {
+                    if (material_count_list == null || material_enchant_list == null ||
+                            material_list.length != material_count_list.length ||
+                            material_list.length != material_enchant_list.length) {
+                        _log.error("[Craft ID: " + actionid + "] 製作材料欄位數量不一致 - material:" + material_list.length + 
+                                " count:" + (material_count_list != null ? material_count_list.length : "null") + 
+                                " enchant:" + (material_enchant_list != null ? material_enchant_list.length : "null"));
+                        issave = false;
+                        errorCount++;
+                    }
                     for (int i = 0; i < material_list.length; i++) {
-                        L1Item item = ItemTable.get().getTemplate(Integer.parseInt(material_list[i]));
-                        if (item == null) {
-                            _log.error("製作材料不存在：" + material_list[i]);
-                            issave = false;
-                        }
-                        final L1CraftItem materialItem = new L1CraftItem(Integer.parseInt(material_list[i]), Integer.parseInt(material_count_list[i]), Integer.parseInt(material_enchant_list[i]), 1, i + 1);
+                        try {
+                            L1Item item = ItemTable.get().getTemplate(Integer.parseInt(material_list[i]));
+                            if (item == null) {
+                                _log.error("[Craft ID: " + actionid + "] 製作材料不存在：" + material_list[i]);
+                                issave = false;
+                                errorCount++;
+                            }
+                            final L1CraftItem materialItem = new L1CraftItem(Integer.parseInt(material_list[i]), Integer.parseInt(material_count_list[i]), Integer.parseInt(material_enchant_list[i]), 1, i + 1);
                         if (substituteList.get(actionid) != null) {
                             final ArrayList<L1CraftItem> list = new ArrayList<>();
                             for (final int[] test2 : substituteList.get(actionid)) {
                                 if (test2[0] == materialItem.getItemId()) {
                                     item = ItemTable.get().getTemplate(test2[1]);
                                     if (item == null) {
-                                        _log.error("可替換材料不存在：" + test2[1]);
+                                        _log.error("[Craft ID: " + actionid + "] 可替換材料不存在：" + test2[1]);
+                                        errorCount++;
                                         issave = false;
                                     }
                                     final L1CraftItem sub2 = new L1CraftItem(test2[1], test2[2], test2[3], 1, 0);
@@ -289,14 +326,29 @@ public class CraftConfigTable {
                             }
                         }
                         materialList.put(i, materialItem);
+                        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                            _log.error("[Craft ID: " + actionid + "] 製作材料第 " + (i+1) + " 筆資料格式錯誤：" + e.getMessage());
+                            issave = false;
+                            errorCount++;
+                        }
                     }
                 }
                 if (aidMaterial_list != null && aidMaterial_list.length > 0) {
+                    if (aidMaterial_count_list == null || aidMaterial_enchant_list == null ||
+                            aidMaterial_list.length != aidMaterial_count_list.length ||
+                            aidMaterial_list.length != aidMaterial_enchant_list.length) {
+                        _log.error("[Craft ID: " + actionid + "] 輔助材料欄位數量不一致 - aidMaterial:" + aidMaterial_list.length + 
+                                " count:" + (aidMaterial_count_list != null ? aidMaterial_count_list.length : "null") + 
+                                " enchant:" + (aidMaterial_enchant_list != null ? aidMaterial_enchant_list.length : "null"));
+                        issave = false;
+                        errorCount++;
+                    }
                     for (int i = 0; i < aidMaterial_list.length; i++) {
-                        L1Item item = ItemTable.get().getTemplate(Integer.parseInt(material_list[i]));
+                        L1Item item = ItemTable.get().getTemplate(Integer.parseInt(aidMaterial_list[i]));
                         if (item == null) {
-                            _log.error("製作材料不存在：" + material_list[i]);
+                            _log.error("[Craft ID: " + actionid + "] 輔助材料不存在：" + aidMaterial_list[i]);
                             issave = false;
+                            errorCount++;
                         }
                         final L1CraftItem aidMaterialItem = new L1CraftItem(Integer.parseInt(aidMaterial_list[i]), Integer.parseInt(aidMaterial_count_list[i]), Integer.parseInt(aidMaterial_enchant_list[i]), 1, i + 1);
                         if (substituteList.get(actionid) != null) {
@@ -305,8 +357,9 @@ public class CraftConfigTable {
                                 if (test[0] == aidMaterialItem.getItemId()) {
                                     item = ItemTable.get().getTemplate(test[1]);
                                     if (item == null) {
-                                        _log.error("可替換材料不存在：" + test[1]);
+                                        _log.error("[Craft ID: " + actionid + "] 輔助材料可替換品不存在：" + test[1]);
                                         issave = false;
+                                        errorCount++;
                                     }
                                     final L1CraftItem sub = new L1CraftItem(test[1], test[2], test[3], 1, 0);
                                     list.add(sub);
@@ -336,14 +389,20 @@ public class CraftConfigTable {
                 npc.setMinLevel(min_level);
                 npc.setNpcId(npcId);
                 npc.setShowWorld(showworld);
+                npc.setShowWorldMsg(showworld_msg); // 設置自定義廣播文字
+                npc.setShowWorldType(showworld_type); // 設置廣播類型
                 npc.setPolyList(polyList);
                 npc.setSucceedRandom(change);
                 npc.setBigSuccessItemRandom(bigchange);
                 npc.setCraftNameID(craft_nameid);
                 if (issave) {
                     this._craftList.put(npc.getActionid(), npc);
+                } else {
+                    _log.warn("[Craft ID: " + actionid + "] 因 " + errorCount + " 個錯誤而跳過此筆製作設定");
+                }
+                if (issave) {
                     if (this._npcCraftList.get(npc.getNpcId()) == null) {
-                        final Map<Integer, CraftItemForNpc> test = new HashMap<>();
+                        final Map<Integer, CraftItemForNpc> test = new LinkedHashMap<>();
                         test.put(npc.getActionid(), npc);
                         this._npcCraftList.put(npc.getNpcId(), test);
                     } else {

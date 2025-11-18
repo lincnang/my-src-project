@@ -241,8 +241,7 @@ public class ServerQuestMobTable {  //src027
             if (mobData != null) {
                 int[] mobArr = new int[mobData.get_mob_id().length];
                 pc.getQuest().set_step(quest_id, firstStep);
-                // ★ 正確設定 nowStage
-                pc.getQuest().set_now_stage(quest_id, mobData.get_quest_stage() - 1);
+                // 不再需要設定 now_stage，直接初始化即可
                 pc.getQuest().set_mob_count(quest_id, mobArr);
             }
         }
@@ -259,11 +258,7 @@ public class ServerQuestMobTable {  //src027
                     if (pc != tgpc && World.get().getVisibleObjects(pc, tgpc)) {
                         if (!tgpc.getQuest().isStart(quest_id)) {
                             for (L1ServerQuestMob serverQuestMob : questMap.values()) {
-                                int targetStage = serverQuestMob.get_quest_stage();
-                                int nowStage = tgpc.getQuest().get_now_stage(quest_id);
-                                if (targetStage > 1 && nowStage != (targetStage - 1)) {
-                                    continue;
-                                }
+                                // 不再使用 targetStage，直接檢查任務狀態
                                 if (tgpc.getLevel() + (tgpc.getMeteLevel() * 99) < serverQuestMob.get_lv()) {
                                     return;
                                 }
@@ -343,20 +338,16 @@ public class ServerQuestMobTable {  //src027
         // 完成條件判斷（只要有擊殺才進入！）
 
         if (questCompleted && updated) {
-            int mainQuestBaseId = 995000;  // 或直接寫995000
-            System.out.println("[DEBUG] checkMob階段推進: mainQuestBaseId=" + mainQuestBaseId + ", currQuest.get_quest_stage()=" + currQuest.get_quest_stage());
-            System.out.println("[DEBUG] checkMob before: now_stage=" + pc.getQuest().get_now_stage(mainQuestBaseId));
-            // 1. 標記 now_stage 完成本階段
-            pc.getQuest().set_now_stage(mainQuestBaseId, currQuest.get_quest_stage());
-            System.out.println("[DEBUG] checkMob after: now_stage=" + pc.getQuest().get_now_stage(mainQuestBaseId));
+            // 不再需要設定 now_stage，任務完成直接標記為 255 即可
+            System.out.println("[主線任務] 玩家 " + pc.getName() + " 完成任務 " + quest_id + " (階段 " + currQuest.get_quest_stage() + ")");
 
-            // 2. 標記 step=255（結束）
+            // 1. 標記 step=255（結束）
             pc.getQuest().set_step(quest_id, L1PcQuest.QUEST_END);
-            // 3. 清空 mob_count
+            // 2. 清空 mob_count
             pc.getQuest().set_mob_count(quest_id, new int[mob_id.length]);
-            // 4. 更新資料庫
+            // 3. 更新資料庫
             CharacterQuestReading.get().updateQuest(pc.getId(), quest_id, pc.getQuest().getCharQuest(quest_id));
-            // 5. 發送獎勵訊息
+            // 4. 發送獎勵訊息
             pc.sendPackets(new S_ServerMessage("完成了狩獵任務，獎勵物品："));
             final int[] item_id = currQuest.get_item_id();
             final int[] item_lv = currQuest.get_item_lv();
@@ -381,7 +372,7 @@ public class ServerQuestMobTable {  //src027
             }
             pc.sendPackets(new S_ServerMessage(""));
 
-            // 6. UI即時更新
+            // 5. UI即時更新
             String[] evdList = ServerQuestMobTable.get().getEvdList(pc);
             pc.sendPackets(new S_NPCTalkReturn(pc, "evd_list", evdList));
 
@@ -395,7 +386,7 @@ public class ServerQuestMobTable {  //src027
                 }
             }
 
-            // 7. 傳送座標
+            // 6. 傳送座標
             final int x = currQuest.get_tele_x();
             final int y = currQuest.get_tele_y();
             final int tomapid = currQuest.get_tele_m();
@@ -406,7 +397,7 @@ public class ServerQuestMobTable {  //src027
                 }
                 L1Teleport.teleport(pc, x, y, (short) tomapid, 5, true);
             }
-            // 8. 結束，**不再自動進行下一主線**
+            // 7. 結束，**不再自動進行下一主線**
             return;
         }
     }
@@ -553,25 +544,39 @@ public class ServerQuestMobTable {  //src027
 
 
 
+    /**
+     * 取得玩家當前應執行的主線任務ID
+     * 邏輯：直接檢查任務狀態，找出第一個未完成的任務
+     * @param pc 玩家
+     * @return 當前任務ID，如果全部完成則回傳 -1
+     */
     public int getCurrentMainQuestId(L1PcInstance pc) {
-        int mainQuestBaseId = 995000; // 主線任務起始ID，可視你的需求調整
+        int mainQuestBaseId = 995000; // 主線任務起始ID
         int maxQuestIdOffset = 200;   // 支援編號 995000~995199
-        // 取得角色目前主線階段
-        int nowStage = pc.getQuest().get_now_stage(mainQuestBaseId);
-        int nextStage = nowStage + 1;
-        // 找尋 quest_stage==nextStage 的 quest_id
-        for (int offset = 0; offset < maxQuestIdOffset; offset++) {
+        
+        // 直接遍歷檢查任務狀態
+        for (int offset = 0; offset < maxQuestIdOffset; offset++) { // 從 0 開始 (995000 就是第一關)
             int tryId = mainQuestBaseId + offset;
-            HashMap<Integer, L1ServerQuestMob> questMap = _questMobList.get(tryId);
-            if (questMap != null) {
-                for (L1ServerQuestMob mob : questMap.values()) {
-                    if (mob.get_quest_stage() == nextStage) {
-                        return tryId;
-                    }
-                }
+            
+            // 檢查這個任務是否存在於配置中
+            if (!_questMobList.containsKey(tryId)) {
+                continue; // 這個ID沒有配置任務，跳過
             }
+            
+            int questStep = pc.getQuest().get_step(tryId);
+            
+            if (questStep == L1PcQuest.QUEST_NOT || questStep == 0) {
+                // 任務尚未開始 → 這就是下一個要做的！
+                return tryId;
+            } else if (questStep > L1PcQuest.QUEST_NOT && questStep < L1PcQuest.QUEST_END) {
+                // 任務進行中 (1~254) → 繼續做這個
+                return tryId;
+            }
+            // questStep == 255 (已完成) → 繼續檢查下一個任務
         }
-        System.out.println("getCurrentMainQuestId: 找不到下一階段，全部任務已完成");
+        
+        // 所有任務都完成了
+        System.out.println("[主線任務] 玩家 " + pc.getName() + " 已完成全部主線任務");
         return -1;
     }
 
@@ -632,27 +637,4 @@ public class ServerQuestMobTable {  //src027
         pc.sendPackets(new S_ServerMessage("已為您傳送到任務地圖"));
     }
 
-    /**
-     * 根據主線 base id 與目前完成階段，取得下一階段的 quest_id
-     * @param mainQuestBaseId 主線任務系列起始ID（如995000）
-     * @param nowStage        玩家已完成階段（例：0=未完成，1=第一階段...）
-     * @return 下一階段的 quest_id，找不到則回傳 -1
-     */
-    public int getNextQuestIdByStage(int mainQuestBaseId, int nowStage) {
-        int nextStage = nowStage + 1;
-        int result = -1;
-        int minQid = Integer.MAX_VALUE;
-        for (Integer qid : _questMobList.keySet()) {
-            if (qid >= mainQuestBaseId && qid < mainQuestBaseId + 100) { // 你主線範圍
-                HashMap<Integer, L1ServerQuestMob> questMap = _questMobList.get(qid);
-                for (L1ServerQuestMob mob : questMap.values()) {
-                    if (mob.get_quest_stage() == nextStage && qid < minQid) {
-                        minQid = qid;
-                        result = qid;
-                    }
-                }
-            }
-        }
-        return result;
-    }
 }

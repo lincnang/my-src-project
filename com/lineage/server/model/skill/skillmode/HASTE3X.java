@@ -8,16 +8,29 @@ import com.lineage.server.model.skill.L1BuffUtil;
 import com.lineage.server.serverpackets.S_SkillBrave;
 
 import static com.lineage.server.model.skill.L1SkillId.STATUS_BRAVE;
+import static com.lineage.server.model.skill.L1SkillId.STATUS_BRAVE3;
 
 public class HASTE3X extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
-        // 取消其他勇敢系統衝突，改套用一段勇敢效果，時間採用 skills.buffDuration(秒)
-        L1BuffUtil.braveStart(srcpc);
-        srcpc.setSkillEffect(STATUS_BRAVE, integer * 1000);
+        int timeMillis = integer * 1000;
+        // 需求：暗影加速施放勇敢類加速，且可與三段加速共存
+        if (srcpc.hasSkillEffect(STATUS_BRAVE3)) {
+            // 三段存在時，不變更移動速度與三段圖示，僅補上勇敢狀態與圖示
+            int objId = srcpc.getId();
+            srcpc.setSkillEffect(STATUS_BRAVE, timeMillis);
+            srcpc.sendPackets(new S_SkillBrave(objId, 1, timeMillis / 1000));
+            srcpc.broadcastPacketAll(new S_SkillBrave(objId, 1, 0));
+//            srcpc.sendPacketsX8(new S_SkillSound(objId, 751));
+            return 0;
+        }
+        // 未有三段時,自行實作勇敢邏輯(不發送751特效)
+        L1BuffUtil.braveStart(srcpc); // 處理技能衝突
+        srcpc.setSkillEffect(STATUS_BRAVE, timeMillis);
+        int objId = srcpc.getId();
+        srcpc.sendPackets(new S_SkillBrave(objId, 1, timeMillis / 1000));
+        srcpc.broadcastPacketAll(new S_SkillBrave(objId, 1, 0));
+        // 不發送 751 特效: srcpc.sendPacketsX8(new S_SkillSound(objId, 751));
         srcpc.setBraveSpeed(1);
-        // 僅顯示勇敢一段圖示
-        srcpc.sendPackets(new S_SkillBrave(srcpc.getId(), 1, integer));
-        srcpc.broadcastPacketAll(new S_SkillBrave(srcpc.getId(), 1, 0));
         return 0;
     }
 

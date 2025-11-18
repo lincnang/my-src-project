@@ -1405,7 +1405,7 @@ public class C_NPCAction extends ClientBasePacket {
                 if ((cmd.equalsIgnoreCase("0")) || (cmd.equalsIgnoreCase("fullheal"))) {
                     int hp = _random.nextInt(21) + 70;
                     pc.setCurrentHp(pc.getCurrentHp() + hp);
-                    pc.sendPackets(new S_ServerMessage(77));
+                    pc.sendPackets(new S_YouFeelBetter());
                     pc.sendPackets(new S_SkillSound(pc.getId(), 830));
                     pc.sendPackets(new S_HPUpdate(pc));
                     htmlid = "";
@@ -1414,7 +1414,7 @@ public class C_NPCAction extends ClientBasePacket {
                 if (cmd.equalsIgnoreCase("0")) {
                     pc.setCurrentHp(pc.getMaxHp());
                     pc.setCurrentMp(pc.getMaxMp());
-                    pc.sendPackets(new S_ServerMessage(77));
+                    pc.sendPackets(new S_YouFeelBetter());
                     pc.sendPackets(new S_SkillSound(pc.getId(), 830));
                     pc.sendPackets(new S_HPUpdate(pc));
                     pc.sendPackets(new S_MPUpdate(pc));
@@ -1425,7 +1425,7 @@ public class C_NPCAction extends ClientBasePacket {
                         pc.getInventory().consumeItem(40308, 5L);
                         pc.setCurrentHp(pc.getMaxHp());
                         pc.setCurrentMp(pc.getMaxMp());
-                        pc.sendPackets(new S_ServerMessage(77));
+                        pc.sendPackets(new S_YouFeelBetter());
                         pc.sendPackets(new S_SkillSound(pc.getId(), 830));
                         pc.sendPackets(new S_HPUpdate(pc));
                         pc.sendPackets(new S_MPUpdate(pc));

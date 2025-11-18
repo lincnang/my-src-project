@@ -2,14 +2,16 @@ package com.lineage.server.clientpackets;
 
 import com.lineage.echo.ClientExecutor;
 import com.lineage.server.model.Instance.L1PcInstance;
-import com.lineage.server.serverpackets.S_ServerMessage;
 
 public class C_CheckPK extends ClientBasePacket {
     public void start(byte[] decrypt, ClientExecutor client) {
         try {
             L1PcInstance pc = client.getActiveChar();
-            String count = String.valueOf(pc.get_PKcount());
-            pc.sendPackets(new S_ServerMessage(562, count));
+            if (pc == null) {
+                return;
+            }
+            //String count = String.valueOf(pc.get_PKcount());
+            //pc.sendPackets(new S_SystemMessage("您目前的PK次數為: " + count));
         } catch (Exception localException) {
         } finally {
             over();

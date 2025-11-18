@@ -7,6 +7,8 @@ import com.lineage.server.model.skill.L1BuffUtil;
 import com.lineage.server.serverpackets.S_Liquor;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
+import com.lineage.server.serverpackets.S_SystemMessage;
+import com.lineage.server.serverpackets.S_PacketBoxThirdSpeed;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -39,25 +41,31 @@ public class StatusBraveCake extends ItemExecutor {
         }
         // === 重點: 判斷 HIT_BUFF 狀態 ===
         if (pc.hasSkillEffect(HIT_BUFF)) {
-            pc.sendPackets(new S_ServerMessage("你受到混沌影響，無法獲得龍之珍珠效果！"));
+            pc.sendPackets(new S_SystemMessage("你受到混沌影響，無法獲得龍之珍珠效果！"));
             return;
         }
 
         if (L1BuffUtil.stopPotion(pc)) {
             if (check(pc)) {
+                // 先移除既有三段加速，並清掉舊圖示
                 if (pc.hasSkillEffect(998)) {
                     pc.killSkillEffectTimer(998);
+                    pc.sendPackets(new S_PacketBoxThirdSpeed(0));
                 }
                 if (!_notConsume) {
                     pc.getInventory().removeItem(item, 1L);
                 }
                 L1BuffUtil.cancelAbsoluteBarrier(pc);
+                // 顯示蛋糕酒醉特效（移動速度增加動畫）
                 pc.sendPacketsAll(new S_Liquor(pc.getId(), 8));
-                pc.sendPackets(new S_ServerMessage(1065));
                 if (_gfxid > 0) {
                     pc.sendPacketsX8(new S_SkillSound(pc.getId(), _gfxid));
                 }
+                // 套用三段加速效果並送出狀態圖示
                 pc.setSkillEffect(998, _time * 1000);
+                pc.sendPackets(new S_PacketBoxThirdSpeed(_time));
+                // 維持伺服端移動/勇敢速度參數一致（比照其他三段來源）
+                pc.setBraveSpeed(5);
             } else {
                 pc.sendPackets(new S_ServerMessage(79));
             }

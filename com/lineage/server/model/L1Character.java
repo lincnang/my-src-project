@@ -7,6 +7,7 @@ import com.lineage.server.datatables.RewardAcTable;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.map.L1Map;
 import com.lineage.server.model.poison.L1Poison;
+import com.lineage.server.model.skill.L1SkillStop;
 import com.lineage.server.model.skill.L1SkillTimer;
 import com.lineage.server.model.skill.L1SkillTimerCreator;
 import com.lineage.server.serverpackets.*;
@@ -783,9 +784,12 @@ public class L1Character extends L1Object {
      *
      */
     public void removeSkillEffect(int skillId) {
-        L1SkillTimer timer = (L1SkillTimer) _skillEffect.remove(skillId);
+        boolean hadEffect = _skillEffect.containsKey(skillId);
+        L1SkillTimer timer = _skillEffect.remove(skillId);
         if (timer != null) {
             timer.end();
+        } else if (hadEffect) {
+            L1SkillStop.stopSkill(this, skillId);
         }
     }
 

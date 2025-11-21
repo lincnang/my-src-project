@@ -16,6 +16,7 @@ import com.lineage.server.person.Read_Sha;
 import com.lineage.server.serverpackets.*;
 import com.lineage.server.templates.L1CraftItem;
 import com.lineage.server.templates.L1Item;
+import com.lineage.server.utils.ClassLimitUtils;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -66,7 +67,7 @@ public class C_NewCreateItem extends ClientBasePacket {
                         L1NpcInstance npc = (L1NpcInstance) obj;
                         Map<Integer, CraftItemForNpc> npcMakeItemActions = CraftConfigTable.get().readItemList(npc.getNpcId());
                         if (npcMakeItemActions != null) {
-                            pc.sendPackets(new S_NewCreateItem(S_NewCreateItem.NPCCRAFTLIST, npc.getNpcId()));
+                            pc.sendPackets(new S_NewCreateItem(S_NewCreateItem.NPCCRAFTLIST, npc.getNpcId(), pc));
                         } else {
                             pc.sendPackets(new S_NewCreateItem(null));
                         }
@@ -118,6 +119,10 @@ public class C_NewCreateItem extends ClientBasePacket {
                     CraftItemForNpc npcMakeItemAction = (CraftItemForNpc) npcMakeItemActions.get(craftList.getActionId());
                     if (npcMakeItemAction == null) {
                         _log.error("為止兌換物品ID：" + craftList.getActionId());
+                        return;
+                    }
+                    if (!ClassLimitUtils.isClassAllowed(npcMakeItemAction.getClassLimit(), pc)) {
+                        pc.sendPackets(new S_SystemMessage("你的職業無法製作此配方"));
                         return;
                     }
                     List<Integer> polyIds = npcMakeItemAction.getPolyList();
@@ -305,7 +310,7 @@ public class C_NewCreateItem extends ClientBasePacket {
                             }
                         } else {// 單一道具
                             L1ItemInstance item = null;
-                            if (npcMakeItemAction.getBigSuccessItemList().size() > 0 && _random.nextInt(100) < npcMakeItemAction.getBigSuccessItemRandom()) { // 大成功
+                            if (npcMakeItemAction.getBigSuccessItemList().size() > 0 && _random.nextInt(1000000) < npcMakeItemAction.getBigSuccessItemRandom()) { // 大成功
                                 item = pc.getInventory().storeItem(bigsuccessItems.get(0).getItemId(), (int) bigsuccessItems.get(0).getCount(), bigsuccessItems.get(0).getEnchantLevel());
                                 pc.getInventory().saveItem(item, L1PcInventory.COL_BLESS);
                                 //pc.sendPackets(new S_ServerMessage(403, item.getName()));
@@ -316,17 +321,8 @@ public class C_NewCreateItem extends ClientBasePacket {
                                 if (npcMakeItemAction.getShowWorld() != 0) {
                                     // 使用自定義廣播文字，如果沒有設置則使用預設訊息
                                     String broadcastMsg;
-                                    String itemDisplayName;
-                                    
-                                    // 如果物品有 name_id 就使用多語系格式，否則使用固定文字名稱
-                                    if (item.getItem().getNameId() != null && !item.getItem().getNameId().isEmpty()) {
-                                        // 使用 name_id 多語系格式讓客戶端自動顯示
-                                        itemDisplayName = item.getItem().getNameId() + "(" + (int) bigsuccessItems.get(0).getCount() + ")";
-                                    } else {
-                                        // 使用固定文字名稱
-                                        itemDisplayName = item.getName() + "(" + (int) bigsuccessItems.get(0).getCount() + ")";
-                                    }
-                                    
+                                    String itemDisplayName = item.getName() + "(" + (int) bigsuccessItems.get(0).getCount() + ")";
+
                                     if (npcMakeItemAction.getShowWorldMsg() != null && !npcMakeItemAction.getShowWorldMsg().isEmpty()) {
                                         // 使用 %s 格式化：第一個 %s = 玩家名稱，第二個 %s = 製作道具名稱
                                         broadcastMsg = String.format(npcMakeItemAction.getShowWorldMsg(), pc.getName(), itemDisplayName);

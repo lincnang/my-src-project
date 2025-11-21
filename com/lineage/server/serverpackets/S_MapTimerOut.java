@@ -31,7 +31,8 @@ public class S_MapTimerOut extends ServerBasePacket {
         for (final L1MapsLimitTime mapLimit : mapLimitList) {
             final int order_id = mapLimit.getOrderId();
             final int used_time = pc.getMapsTime(order_id);
-            final int time_str = (mapLimit.getLimitTime() - used_time) / 60;
+            final int limit_time = mapLimit.getLimitTime() + pc.getMapsBonusTime(order_id);
+            final int time_str = Math.max(0, (limit_time - used_time) / 60);
             // write
             writeD(order_id);
             writeS(mapLimit.getMapName());

@@ -6,9 +6,11 @@ import com.lineage.server.datatables.CraftConfigTable;
 import com.lineage.server.datatables.ItemTable;
 import com.lineage.server.model.CraftItemForNpc;
 import com.lineage.server.model.Instance.L1ItemInstance;
+import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.person.*;
 import com.lineage.server.templates.L1CraftItem;
 import com.lineage.server.templates.L1Item;
+import com.lineage.server.utils.ClassLimitUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -101,6 +103,10 @@ public class S_NewCreateItem extends ServerBasePacket {
     }
 
     public S_NewCreateItem(int type, int subtype) {
+        this(type, subtype, null);
+    }
+
+    public S_NewCreateItem(int type, int subtype, L1PcInstance pc) {
         writeC(S_EXTENDED_PROTOBUF);
         writeH(type);
         switch (type) {
@@ -110,6 +116,9 @@ public class S_NewCreateItem extends ServerBasePacket {
                 npcCraftList.setUnknown2(0);
                 final Map<Integer, CraftItemForNpc> npcMakeItemActionMap = CraftConfigTable.get().readItemList(subtype);
                 for (final CraftItemForNpc npc : npcMakeItemActionMap.values()) {
+                    if (pc != null && !ClassLimitUtils.isClassAllowed(npc.getClassLimit(), pc)) {
+                        continue;
+                    }
                     final ItemCraft_NpcId.sendCraftNpcCraftList.List.Builder list = ItemCraft_NpcId.sendCraftNpcCraftList.List.newBuilder();
                     list.setActionId(npc.getActionid());
                     list.setUnknown1(0);

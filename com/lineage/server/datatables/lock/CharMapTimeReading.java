@@ -61,6 +61,17 @@ public class CharMapTimeReading {
         return tmp;
     }
 
+    public Map<Integer, Integer> addBonus(int objId, int order_id, int bonus_time) {
+        this._lock.lock();
+        Map<Integer, Integer> tmp;
+        try {
+            tmp = this._storage.addBonus(objId, order_id, bonus_time);
+        } finally {
+            this._lock.unlock();
+        }
+        return tmp;
+    }
+
     /**
      * 取回地圖入場時間紀錄
      *
@@ -118,6 +129,15 @@ public class CharMapTimeReading {
         this._lock.lock();
         try {
             this._storage.update(objid, mapid, time);
+        } finally {
+            this._lock.unlock();
+        }
+    }
+
+    public void updateBonus(int objid, int mapid, int bonus_time) {
+        this._lock.lock();
+        try {
+            this._storage.updateBonus(objid, mapid, bonus_time);
         } finally {
             this._lock.unlock();
         }

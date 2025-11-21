@@ -313,9 +313,9 @@ public class Teleportation {
                 if (mapsLimitTime != null) {
                     final int order_id = mapsLimitTime.getOrderId();
                     final int used_time = pc.getMapsTime(order_id);
-                    final int limit_time = mapsLimitTime.getLimitTime();
-                    if (used_time < limit_time) {
-                        pc.sendPackets(new S_PacketBox(S_PacketBox.MAP_TIMER, limit_time - used_time));
+                    final int effective_limit = mapsLimitTime.getLimitTime() + pc.getMapsBonusTime(order_id);
+                    if (used_time < effective_limit) {
+                        pc.sendPackets(new S_PacketBox(S_PacketBox.MAP_TIMER, effective_limit - used_time));
                     }
                 }
                 if (ConfigFreeKill.FREE_FIGHT_SWITCH) // src015

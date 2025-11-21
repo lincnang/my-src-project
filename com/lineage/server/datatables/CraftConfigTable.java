@@ -206,6 +206,7 @@ public class CraftConfigTable {
                 final int showworld = rs.getInt("showworld");
                 final String showworld_msg = rs.getString("showworld_msg"); // 自定義廣播文字
                 final int showworld_type = rs.getInt("showworld_type"); // 廣播類型
+                final int classLimit = rs.getInt("class_limit");
                 final String poly = rs.getString("poly");
                 final String[] poly_list = poly.split(",");
                 final List<Integer> polyList = new ArrayList<>();
@@ -395,6 +396,7 @@ public class CraftConfigTable {
                 npc.setSucceedRandom(change);
                 npc.setBigSuccessItemRandom(bigchange);
                 npc.setCraftNameID(craft_nameid);
+                npc.setClassLimit(classLimit);
                 if (issave) {
                     this._craftList.put(npc.getActionid(), npc);
                 } else {
@@ -449,4 +451,5 @@ public class CraftConfigTable {
     public Map<Integer, CraftItemForNpc> readItemList(final int npcId) {
         return this._npcCraftList.get(npcId);
     }
+
 }

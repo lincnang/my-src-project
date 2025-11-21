@@ -43,7 +43,7 @@ public class L1NpcTeleportAction extends L1NpcXmlAction {
                 // 已使用時間 (單位:秒)
                 final int used_time = pc.getMapsTime(order_id);
                 // 最大時間
-                final int limit_time = mapsLimitTime.getLimitTime();
+                final int limit_time = mapsLimitTime.getLimitTime() + pc.getMapsBonusTime(order_id);
                 // 允許時間已到
                 if (used_time > limit_time) {
                     return L1NpcHtml.HTML_CLOSE;

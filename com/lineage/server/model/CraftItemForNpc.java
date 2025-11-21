@@ -34,6 +34,7 @@ public class CraftItemForNpc {
     private int showWorldType; // 廣播類型: 1=全服廣播, 2=中央廣播
     private int bigsuccessitemrandom;
     private int craft_nameid;
+    private int classLimit;
 
     public Map<Integer, L1CraftItem> getMaterialList() {
         return this.materialList;
@@ -223,5 +224,13 @@ public class CraftItemForNpc {
 
     public void setBless(final List<Integer> bless) {
         this.bless = bless;
+    }
+
+    public int getClassLimit() {
+        return this.classLimit;
+    }
+
+    public void setClassLimit(final int classLimit) {
+        this.classLimit = classLimit;
     }
 }

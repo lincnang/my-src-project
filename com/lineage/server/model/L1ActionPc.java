@@ -209,7 +209,7 @@ public class L1ActionPc {
             if (mapsLimitTime != null) {
                 final int order_id = mapsLimitTime.getOrderId();
                 final int used_time = pc.getMapsTime(order_id);
-                final int limit_time = mapsLimitTime.getLimitTime();
+                final int limit_time = mapsLimitTime.getLimitTime() + pc.getMapsBonusTime(order_id);
                 // 允許時間已到
                 if (used_time > limit_time) {
                     pc.sendPackets(new S_ServerMessage("已超過該地圖的允許入場時間。"));

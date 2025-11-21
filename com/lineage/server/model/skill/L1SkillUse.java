@@ -1242,8 +1242,8 @@ public class L1SkillUse {
         if (mode == null) {// 沒有class
             cha.setSkillEffect(_skillId, _getBuffDuration);// 給予技能效果時間
         }
-        // 判斷是否重新發送技能圖示
-        if ((cha instanceof L1PcInstance) && repetition) { // 對像がPCで既にスキルが重複している場合
+        // 發送技能圖示（首次施放和重複施放都需要發送）
+        if (cha instanceof L1PcInstance) {
             final L1PcInstance pc = (L1PcInstance) cha;
             sendIcon(pc);
         }
@@ -1342,6 +1342,10 @@ public class L1SkillUse {
                 break;
             case WIND_SHACKLE://風之枷鎖
                 pc.sendPackets(new S_PacketBoxWindShackle(pc.getId(), _getBuffIconDuration));
+                break;
+            case COUNTER_BARRIER: // 反擊屏障 (skill_id=91)
+                // 發送反擊屏障 BUFF ICON (iconId=10187, stringId=1088)
+                pc.sendPackets(new S_InventoryIcon(10187, true, 1088, this._getBuffIconDuration));
                 break;
         }
         pc.sendPackets(new S_OwnCharStatus(pc));

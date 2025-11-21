@@ -16,6 +16,8 @@ public interface CharMapTimeStorage {
      */
     public Map<Integer, Integer> addTime(int objId, int order_id, int used_time);
 
+    public Map<Integer, Integer> addBonus(int objId, int order_id, int bonus_time);
+
     /**
      * 取回地圖入場時間紀錄
      *
@@ -42,4 +44,6 @@ public interface CharMapTimeStorage {
      * 更新人物記時地圖信息
      */
     public abstract void update(int objid, int mapid, int time);
+
+    public abstract void updateBonus(int objid, int mapid, int bonus_time);
 }

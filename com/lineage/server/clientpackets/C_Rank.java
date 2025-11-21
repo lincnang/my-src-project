@@ -470,7 +470,7 @@ public class C_Rank extends ClientBasePacket {
                     final Collection<L1MapsLimitTime> mapLimitList = MapsGroupTable.get().getGroupMaps().values();
                     for (final L1MapsLimitTime mapLimit : mapLimitList) {
                         final int used_time = pc.getMapsTime(mapLimit.getOrderId());
-                        final int time_str = (mapLimit.getLimitTime() - used_time) / 60;
+						final int time_str = Math.max(0, (mapLimit.getLimitTime() + pc.getMapsBonusTime(mapLimit.getOrderId()) - used_time) / 60);
                         pc.sendPackets(new S_ServerMessage(2535, mapLimit.getMapName(), String.valueOf(time_str)));
                     }
                     final int g_entertime = pc.getRocksPrisonTime();

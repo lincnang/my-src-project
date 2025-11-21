@@ -129,6 +129,26 @@ public class L1EquipmentSlot {  //src039
             int type = weapon.getItem().getType();
             _owner.getProficiency().setProficiencyType(L1WeaponProficiency.normalizeWeaponType(type));
         }
+
+        enforceCounterBarrierWeaponRestriction(weapon);
+    }
+
+    private void enforceCounterBarrierWeaponRestriction(final L1ItemInstance weapon) {
+        if (!_owner.hasSkillEffect(COUNTER_BARRIER)) {
+            return;
+        }
+        final boolean isTwoHandSword = weapon != null && weapon.getItem().getType() == 3;
+        if (!isTwoHandSword) {
+            removeCounterBarrierEffect();
+        }
+    }
+
+    // Ensures both effect state and UI icon are cleared when Counter Barrier becomes invalid.
+    private void removeCounterBarrierEffect() {
+        _owner.removeSkillEffect(COUNTER_BARRIER);
+        // 直接使用固定的 iconId=10187 來取消反擊屏障 BUFF ICON
+        // 這樣可以確保即使資料庫未配置或配置錯誤，也能正確清除 BUFF 圖示
+        _owner.sendPackets(new S_InventoryIcon(10187, false, 1088, 0));
     }
 
 
@@ -201,11 +221,15 @@ public class L1EquipmentSlot {  //src039
                 _owner.setSecondWeapon(null);
                 _owner.sendPackets(new S_EquipmentWindow(_owner.getWeapon().getId(), 8, true));
                 _owner.setCurrentWeapon(_owner.getWeapon().getItem().getType1());
+                // 檢查新的主手武器是否符合反擊屏障的武器限制
+                enforceCounterBarrierWeaponRestriction(_owner.getWeapon());
             } else { // 副手沒有武器
                 _owner.setWeapon(null);
                 _owner.setCurrentWeapon(0); // 設定為空手
+
+                // 統一使用 removeCounterBarrierEffect 方法，確保同時移除效果與 BUFF ICON
                 if (_owner.hasSkillEffect(COUNTER_BARRIER)) {
-                    _owner.removeSkillEffect(COUNTER_BARRIER);
+                    removeCounterBarrierEffect();
                 }
                 if (_owner.hasSkillEffect(FIRE_BLESS)) {
                     _owner.removeSkillEffect(FIRE_BLESS);

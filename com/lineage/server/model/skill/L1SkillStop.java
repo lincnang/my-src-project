@@ -919,10 +919,10 @@ public class L1SkillStop {
                     case STATUS_HASTE://加速藥水效果
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            
+
                             // ✅ 智能移動速度管理：檢查其他加速效果
                             int remainingMoveSpeed = 0;
-                            
+
                             // 檢查加速術
                             if (pc.hasSkillEffect(HASTE)) {
                                 remainingMoveSpeed = 1;
@@ -931,7 +931,7 @@ public class L1SkillStop {
                             else if (pc.hasSkillEffect(GREATER_HASTE)) {
                                 remainingMoveSpeed = 1;
                             }
-                            
+
                             pc.setMoveSpeed(remainingMoveSpeed);
                             pc.sendPacketsAll(new S_SkillHaste(pc.getId(), remainingMoveSpeed, 0));
                         } else {
@@ -954,10 +954,10 @@ public class L1SkillStop {
                     case STATUS_BRAVE3://三段加速
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            
+
                             // ✅ 智能速度管理：檢查其他速度效果
                             int remainingSpeed = 0;
-                            
+
                             // 檢查三段加速 (最高優先級)
                             if (skillId != STATUS_BRAVE3 && pc.hasSkillEffect(STATUS_BRAVE3)) {
                                 remainingSpeed = 5;
@@ -974,10 +974,10 @@ public class L1SkillStop {
                             else if (skillId != STATUS_BRAVE && pc.hasSkillEffect(STATUS_BRAVE)) {
                                 remainingSpeed = 1;
                             }
-                            
+
                             pc.setBraveSpeed(remainingSpeed);
                             pc.sendPacketsAll(new S_Liquor(pc.getId(), remainingSpeed > 0 ? 8 : 0));
-                            
+
                             if (skillId == STATUS_BRAVE3) {
                                 pc.sendPackets(new S_PacketBoxThirdSpeed(0));
                             }

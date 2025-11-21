@@ -106,6 +106,10 @@ public class L1PcInstance extends L1Character { // src015
      * 最大尋路週期 根據PcAI實際運作情況進行調整
      */
     public static final int _maxAutoMoveCycle = 13;
+    /**
+     * 限時地圖可允許的總停留時間上限（8 小時）。
+     */
+    public static final int MAX_MAP_LIMIT_SECONDS = 8 * 60 * 60;
     public static final int _maxMoveDirection = 30;
     /**
      * <font color="00ff00">移动</font>
@@ -773,6 +777,7 @@ public class L1PcInstance extends L1Character { // src015
     private int _randomMoveDirection = 0;
     // 地圖時間記錄
     private Map<Integer, Integer> _mapsList;
+    private Map<Integer, Integer> _mapsBonusList;
     // 戒指欄位擴充紀錄 by terry0412 //src013
     private byte _ringsExpansion;
     private byte _earringsExpansion;
@@ -9316,6 +9321,36 @@ public class L1PcInstance extends L1Character { // src015
 
     public void removeMapsTime(final int key) { // src022
         _mapsList.remove(key);
+    }
+
+    public final void setMapsBonusList(final HashMap<Integer, Integer> list) {
+        _mapsBonusList = list;
+    }
+
+    public final int getMapsBonusTime(final int key) {
+        if (_mapsBonusList == null || !_mapsBonusList.containsKey(key)) {
+            return 0;
+        }
+        return _mapsBonusList.get(key);
+    }
+
+    public void putMapsBonusTime(final int key, final int value) {
+        if (_mapsBonusList == null) {
+            _mapsBonusList = CharMapTimeReading.get().addBonus(getId(), key, value);
+        }
+        _mapsBonusList.put(key, value);
+    }
+
+    public int addMapsBonusTime(final int key, final int value, final int baseLimitSeconds) {
+        final int bonusCap = Math.max(0, MAX_MAP_LIMIT_SECONDS - Math.max(0, baseLimitSeconds));
+        if (bonusCap <= 0) {
+            putMapsBonusTime(key, 0);
+            return 0;
+        }
+        final int current = getMapsBonusTime(key);
+        final int newValue = Math.max(0, Math.min(bonusCap, current + value));
+        putMapsBonusTime(key, newValue);
+        return newValue;
     }
 
     public boolean isTripleArrow() {

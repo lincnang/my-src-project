@@ -220,7 +220,7 @@ public class L1WeaponProficiency {
         if (_owner.getWeapon() == null) {
             return;
         }
-//        System.out.println("裝備武器type: " + _owner.getWeapon().getItem().getType());
+//       System.out.println("裝備武器type: " + _owner.getWeapon().getItem().getType());
         int originalType = _owner.getWeapon().getItem().getType();
         int type = normalizeWeaponType(originalType); //   核心修改：轉換武器類型
 
@@ -261,6 +261,7 @@ public class L1WeaponProficiency {
             case 38: return 11;
             case 39: return 10;
             case 13: return 4;
+            case 14: return 5; // 單手矛與雙手矛共用熟練度
             case 17: return 10;
             case 12: return 9;
             default: return type;

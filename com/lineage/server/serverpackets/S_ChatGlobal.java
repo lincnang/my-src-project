@@ -50,7 +50,7 @@ public class S_ChatGlobal extends ServerBasePacket {
         writeC(S_MESSAGE);
         writeC(0x03);
         if (pc.isGm()) {
-            writeS("[******] " + chat);
+            writeS("\\f3[********] " + chat);
             //} else if (pc.isProtector()) { //2017/04/23
             //	writeS("[**守護者**] " + chat);
         } else {

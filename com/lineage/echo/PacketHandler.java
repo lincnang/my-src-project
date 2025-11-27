@@ -182,7 +182,7 @@ public class PacketHandler extends PacketHandlerExecutor {
         } else if (i == C_QUERY_PERSONAL_SHOP) {
             new C_ShopList().start(decrypt, _client);
         } else if (i == C_CHAT) {
-            new C_ChatGlobal().start(decrypt, _client);
+            new C_ItemCraft1().start(decrypt, _client);
         } else if (i == C_JOIN_PLEDGE) {
             new C_JoinClan().start(decrypt, _client);
         } else if (i == C_READ_NEWS) {

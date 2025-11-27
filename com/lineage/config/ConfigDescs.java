@@ -11,6 +11,7 @@ public class ConfigDescs {
 
     public static void load() throws ConfigErrorException {
         try {
+            _show_desc.clear();
             InputStream is = Files.newInputStream(new File(_show_desc_file).toPath());
             // 指定檔案編碼
             InputStreamReader isr = new InputStreamReader(is, "utf-8");
@@ -44,7 +45,7 @@ public class ConfigDescs {
      */
     public static String getShow(int nameid) {
         try {
-            return (String) _show_desc.get(nameid);
+            return _show_desc.get(nameid);
         } catch (Exception e) {
             e.printStackTrace();
         }

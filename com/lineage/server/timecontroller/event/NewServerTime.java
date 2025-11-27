@@ -1,7 +1,7 @@
 package com.lineage.server.timecontroller.event;
 
 import com.lineage.config.ConfigDescs;
-import com.lineage.server.serverpackets.S_HelpMessage;
+import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 import org.apache.commons.logging.Log;
@@ -24,17 +24,45 @@ public class NewServerTime extends TimerTask {
 
     public void run() {
         try {
-            World.get().broadcastPacketToAll(new S_HelpMessage(ConfigDescs.getShow(_count)));
-            _count += 1;
-            if (_count >= ConfigDescs.get_show_size()) {
+            int total = ConfigDescs.get_show_size();
+            if (total <= 0) {
+                String warn = "[NewServerTime] 無公告內容，請檢查定時公告循環設定表";
+                _log.warn(warn);
+                System.out.println(warn);
+                return;
+            }
+
+            if (_count > total) {
                 _count = 1;
             }
+
+            String message = ConfigDescs.getShow(_count);
+                if (message != null && !message.trim().isEmpty()) {
+                    World.get().broadcastPacketToAll(new S_SystemMessage(message));
+            } else {
+                String warn = "[NewServerTime] 取得的公告為空，索引=" + _count;
+                _log.warn(warn);
+                System.out.println(warn);
+            }
+
+            _count = nextIndex(_count, total);
         } catch (Exception e) {
             _log.error("服務器介紹與教學時間軸異常重啟", e);
             GeneralThreadPool.get().cancel(_timer, false);
             NewServerTime timerTask = new NewServerTime();
             timerTask.start(_time);
         }
+    }
+
+    private int nextIndex(int current, int total) {
+        if (total <= 0) {
+            return 1;
+        }
+        int next = current + 1;
+        if (next > total) {
+            next = 1;
+        }
+        return next;
     }
 }
 /*

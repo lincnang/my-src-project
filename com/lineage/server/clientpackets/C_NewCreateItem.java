@@ -249,14 +249,14 @@ public class C_NewCreateItem extends ClientBasePacket {
                             pc.getInventory().removeItem(item, temp[1]);
                         } else {
                             L1ItemInstance[] list1 = inventory.findItemsId(item.getItemId());
-                            int count2 = 0;
+                            int removed = 0;
                             for (L1ItemInstance temp1 : list1) {
-                                if (count2 > temp[2]) {
+                                if (removed >= temp[1]) {
                                     break;
                                 }
                                 if (temp1.getEnchantLevel() == temp[2]) {
                                     pc.getInventory().removeItem(temp1);
-                                    count2++;
+                                    removed++;
                                 }
                             }
                         }

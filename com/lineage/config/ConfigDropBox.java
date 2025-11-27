@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.IllegalFormatException;
 import java.util.Map;
 import java.util.Random;
 
@@ -51,35 +52,39 @@ public class ConfigDropBox {
         }
     }
 
-    // 測試掉寶公告
-    public static void msg(final String string1, final String string2, final String string3) {
+    // 掉寶公告
+    public static void msg(final String playerName, final String npcName, final String itemName) {
+        if (_box_msg_list.isEmpty()) {
+            return;
+        }
         try {
-            final String msg = _box_msg_list.get(_random.nextInt(_box_msg_list.size()) + 1);
-            if (msg != null) {
-                //	final String out = String.format(msg, string1, string2, string3);
-                // 寶物公告
-                // World.get().broadcastPacketToAll(new S_BoxMessage(out));
-                if (ConfigSay.DROP_Position) {
-                    World.get().broadcastPacketToAll(new S_PacketBoxGree("\\f=恭喜玩家【" + string1 + "】從【" + string2 + "】獲得【" + string3 + "】"));
-                    switch (_random.nextInt(4) + 1) {
-                        case 1:
-                            World.get().broadcastPacketToAll((new S_PacketBoxGree(0x01)));
-                            break;
-                        case 2:
-                            World.get().broadcastPacketToAll((new S_PacketBoxGree(6)));
-                            break;
-                        case 3:
-                            World.get().broadcastPacketToAll((new S_PacketBoxGree(7)));
-                            break;
-                        case 4:
-                            World.get().broadcastPacketToAll((new S_PacketBoxGree(8)));
-                            break;
+            final String template = _box_msg_list.get(_random.nextInt(_box_msg_list.size()) + 1);
+            String message = template;
+            try {
+                message = String.format(template, playerName, npcName, itemName);
+            } catch (final IllegalFormatException ignored) {
+                // fallback to default格式
+                message = "\\f=恭喜玩家【" + playerName + "】從【" + npcName + "】獲得【" + itemName + "】";
+            }
 
-                        //                } else {
-                        //                    World.get().broadcastPacketToAll(new S_BoxMessage("\\f=恭喜玩家【" + string1 + "】從【" + string2 + "】獲得【" + string3 + "】"));
-                        //                    World.get().broadcastPacketToAll((new S_PacketBoxGree(6)));
-                    }
+            if (ConfigSay.DROP_Position) {
+                World.get().broadcastPacketToAll(new S_PacketBoxGree(message));
+                switch (_random.nextInt(4) + 1) {
+                    case 1:
+                        World.get().broadcastPacketToAll(new S_PacketBoxGree(0x01));
+                        break;
+                    case 2:
+                        World.get().broadcastPacketToAll(new S_PacketBoxGree(6));
+                        break;
+                    case 3:
+                        World.get().broadcastPacketToAll(new S_PacketBoxGree(7));
+                        break;
+                    case 4:
+                        World.get().broadcastPacketToAll(new S_PacketBoxGree(8));
+                        break;
                 }
+            } else {
+                World.get().broadcastPacketToAll(new S_PacketBoxGree(message));
             }
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);

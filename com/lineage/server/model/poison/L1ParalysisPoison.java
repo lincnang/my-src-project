@@ -2,17 +2,13 @@ package com.lineage.server.model.poison;
 
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
-import com.lineage.server.model.ModelError;
 import com.lineage.server.serverpackets.S_Paralysis;
 import com.lineage.server.serverpackets.S_SkillIconPoison;
 import com.lineage.server.thread.GeneralThreadPool;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.concurrent.TimeUnit;
 
 public class L1ParalysisPoison extends L1Poison {
-    private static final Log _log = LogFactory.getLog(L1ParalysisPoison.class);
     private final L1Character _target;
     private final int _delay;
     private final int _time;
@@ -74,7 +70,7 @@ public class L1ParalysisPoison extends L1Poison {
             try {
                 TimeUnit.MILLISECONDS.sleep(_delay);
             } catch (InterruptedException e) {
-                ModelError.isError(L1ParalysisPoison._log, e.getLocalizedMessage(), e);
+                Thread.currentThread().interrupt();
                 return;
             }
             _effectId = 2;
@@ -103,7 +99,8 @@ public class L1ParalysisPoison extends L1Poison {
             try {
                 TimeUnit.MILLISECONDS.sleep(_time);
             } catch (InterruptedException e) {
-                ModelError.isError(L1ParalysisPoison._log, e.getLocalizedMessage(), e);
+                Thread.currentThread().interrupt();
+                return;
             }
             _target.killSkillEffectTimer(1009);
             if ((_target instanceof L1PcInstance)) {

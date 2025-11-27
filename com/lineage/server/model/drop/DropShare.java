@@ -276,13 +276,9 @@ public class DropShare implements DropShareExecutor {
                 }
             }
 
-            // 根據配置，發送額外的消息
-            if (ConfigDropBox.ISMSG) {
-                if (ItemMsgTable.get().contains(item.getItemId()) && player.getWeapon() != null) {
-                    if (!player.isGm() && player.hasSkillEffect(1691)) {
-                        ConfigDropBox.msg(player.getName(), npc.getNameId(), item.getLogName());
-                    }
-                }
+            // 掉寶公告：只要在清單內就廣播
+            if (ConfigDropBox.ISMSG && ItemMsgTable.get().contains(item.getItemId())) {
+                ConfigDropBox.msg(player.getName(), npc.getNameId(), item.getLogName());
             }
         }
 

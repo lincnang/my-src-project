@@ -127,16 +127,11 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     break;
                 }
                 case 0x007a: { // 請求呼叫魔法娃娃合成介面
-                    // (驗證客戶端alchemyInfo.dat的sha1雜湊碼)
-                    // 封包傳遞有效的數據長度
                     final int len = this.readH();
-                    // 例外狀況長度小於等於0
                     if (len <= 0) {
                         return;
                     }
-                    // 讀取指定長度的數據
                     final byte[] data = this.readByte(len);
-                    // 例外狀況 實際數據不足長度 等等 例外狀況
                     if (data == null) {
                         return;
                     }
@@ -144,15 +139,11 @@ public class C_ItemCraft1 extends ClientBasePacket {
                     break;
                 }
                 case 0x007c: { // 合成魔法娃娃
-                    // 封包傳遞有效的數據長度
                     final int len = this.readH();
-                    // 例外狀況長度小於等於0
                     if (len <= 0) {
                         return;
                     }
-                    // 讀取指定長度的數據
                     final byte[] data = this.readByte(len);
-                    // 例外狀況 實際數據不足長度 等等 例外狀況
                     if (data == null) {
                         return;
                     }
@@ -755,15 +746,12 @@ public class C_ItemCraft1 extends ClientBasePacket {
 
     private void checkDollCompoundData(L1PcInstance pc, byte[] data) {
         try {
-            // 死亡
             if (pc.isDead()) {
                 return;
             }
-            // 鬼魂
             if (pc.isGhost()) {
                 return;
             }
-            // 非安全區域
             if (!pc.getMap().isSafetyZone(pc.getLocation())) {
                 return;
             }
@@ -2351,12 +2339,13 @@ public class C_ItemCraft1 extends ClientBasePacket {
         com.lineage.system.RankingAbilityBonus.AbilityBonus bonus = com.lineage.system.RankingAbilityBonus.getBonusByRank(rank);
         String prefix = bonus.titlePrefix != null ? bonus.titlePrefix : "";
 
-        S_ChatGlobal packet = new S_ChatGlobal(prefix + pc.getName(), chatText);
-
         if (pc.isGm()) {
-            World.get().broadcastPacketToAll(packet);
+            S_ChatGlobal gmPacket = new S_ChatGlobal("\\f3[********] " + chatText);
+            World.get().broadcastPacketToAll(gmPacket);
             return;
         }
+
+        S_ChatGlobal packet = new S_ChatGlobal(prefix + pc.getName(), chatText);
         String name = pc.getName();
         if (!pc.isGm()) {
             // 廣播扣除金幣或是飽食度(0:飽食度 其他:指定道具編號)
@@ -2540,9 +2529,12 @@ public class C_ItemCraft1 extends ClientBasePacket {
      */
     private void chatType_2(L1PcInstance pc, String chatText) {
         if (pc.isGhost()) {
+            World.get().broadcastPacketToAll(new S_ChatGlobal("****"));
+            if (ConfigRecord.LOGGING_CHAT_WORLD) {
+                LogChatReading.get().noTarget(pc, chatText, 3);
+            }
             return;
         }
-// 排行榜前綴取得
         int rank = com.lineage.server.datatables.T_RankTable.get().getRankOfPlayer(pc.getName());
         com.lineage.system.RankingAbilityBonus.AbilityBonus bonus = com.lineage.system.RankingAbilityBonus.getBonusByRank(rank);
         String prefix = bonus.titlePrefix != null ? bonus.titlePrefix : "";

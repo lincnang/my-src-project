@@ -62,7 +62,7 @@ public class TServer implements Runnable {
                     final byte[] encrypt = readPacket();
                     if (encrypt.length > 1) {
                         String chatText = new String(encrypt, "utf-8");
-                        if (chatText.startsWith("[******]")) {// GM
+                        if (chatText.startsWith("[******]") || chatText.startsWith("\\f3[********]")) {// GM
                             World.get().broadcastPacketToAll(new S_ChatGlobal(chatText));
                         } else {
                             for (final L1PcInstance listner : World.get().getAllPlayers()) {

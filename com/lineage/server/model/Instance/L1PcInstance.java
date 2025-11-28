@@ -1510,17 +1510,32 @@ public class L1PcInstance extends L1Character { // src015
     }
 
     /**
-     * 法師 究極光裂術(古代)
+     * 法師 神聖迅猛
      */
     public boolean isHOLY_WALK2() {
+        if (this.isSkillMastery(HOLY_WALK2)) {
+            return true;
+        }
         return CharSkillReading.get().spellCheck(this.getId(), HOLY_WALK2);
     }
 
     /**
-     * 法師 神聖迅猛
+     * 法師 究極光裂術(古代)
      */
     public boolean isDISINTEGRATE_2() {
         return CharSkillReading.get().spellCheck(this.getId(), DISINTEGRATE_2);
+    }
+
+    /**
+     * 清除神聖疾走效果（如果角色已學習神聖迅猛）
+     */
+    public void removeHolyWalkIfHasHolyWalk2() {
+        if (isHOLY_WALK2() && hasSkillEffect(HOLY_WALK)) {
+            // 移除神聖疾走效果
+            killSkillEffectTimer(HOLY_WALK);
+            setBraveSpeed(0);
+            sendPacketsAll(new S_SkillBrave(getId(), 0, 0));
+        }
     }
 
     public int getMpRegenState() {
@@ -2208,6 +2223,11 @@ public class L1PcInstance extends L1Character { // src015
     public void setSkillMastery(int skillid) {
         if (!_skillList.contains(skillid)) {
             _skillList.add(skillid);
+
+            // 如果學習的是神聖迅猛，清除神聖疾走效果
+            if (skillid == HOLY_WALK2) {
+                removeHolyWalkIfHasHolyWalk2();
+            }
         }
     }
 

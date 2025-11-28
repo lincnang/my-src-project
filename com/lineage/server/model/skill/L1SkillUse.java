@@ -1330,6 +1330,65 @@ public class L1SkillUse {
                 pc.broadcastPacketAll(new S_SkillHaste(pc.getId(), 1, 0));
                 break;
             case HOLY_WALK: //神聖疾走50
+                // 檢查是否學習神聖迅猛，如果有則給予STATUS_BRAVE(勇水效果)
+                if (pc.isHOLY_WALK2()) {
+                    // 先檢查並保存StatusBraveCake狀態
+                    boolean hasStatusBraveCake = pc.hasSkillEffect(STATUS_BRAVE3);
+                    int braveCakeTime = 0;
+                    if (hasStatusBraveCake) {
+                        braveCakeTime = pc.getSkillEffectTimeSec(STATUS_BRAVE3);
+                    }
+
+                    // 先清除原有的神聖疾走效果
+                    pc.killSkillEffectTimer(HOLY_WALK);
+
+                    // 只在沒有StatusBraveCake時才清除勇敢速度和圖標
+                    if (!hasStatusBraveCake) {
+                        pc.setBraveSpeed(0);
+                        pc.sendPacketsAll(new S_SkillBrave(pc.getId(), 0, 0));
+                    }
+
+                    // 必須給予STATUS_BRAVE狀態與圖標，與StatusBraveCake共存
+                    // 只移除舊的STATUS_BRAVE效果
+                    pc.killSkillEffectTimer(STATUS_BRAVE);
+
+                    // 給予新的STATUS_BRAVE效果
+                    pc.setSkillEffect(STATUS_BRAVE, this._getBuffIconDuration * 1000);
+                    pc.sendPackets(new S_SkillBrave(pc.getId(), 1, this._getBuffIconDuration));
+                    pc.broadcastPacketAll(new S_SkillBrave(pc.getId(), 1, 0));
+                    pc.sendPacketsX8(new S_SkillSound(pc.getId(), 751));
+
+                    // 根據是否有StatusBraveCake設置不同的速度
+                    if (hasStatusBraveCake) {
+                        // 有StatusBraveCake時，設置為三段加速速度
+                        pc.setBraveSpeed(5);
+                    } else {
+                        // 沒有StatusBraveCake時，設置為勇水速度
+                        pc.setBraveSpeed(1);
+                    }
+
+                    // 保護並恢復StatusBraveCake狀態，並添加完整的視覺效果
+                    if (hasStatusBraveCake) {
+                        // 確保StatusBraveCake狀態存在
+                        if (!pc.hasSkillEffect(STATUS_BRAVE3)) {
+                            pc.setSkillEffect(STATUS_BRAVE3, braveCakeTime * 1000);
+                        }
+
+                        // 添加完整的StatusBraveCake視覺效果，確保與道具效果完全一致
+                        // 先解除絕對屏障（如果有的話）
+                        L1BuffUtil.cancelAbsoluteBarrier(pc);
+                        // 顯示蛋糕酒醉特效（移動速度增加動畫）
+                        pc.sendPacketsAll(new S_Liquor(pc.getId(), 8));
+                        // 重新發送StatusBraveCake的圖標確保顯示
+                        pc.sendPackets(new S_PacketBoxThirdSpeed(braveCakeTime));
+                        // 播放三段加速音效（如果有的話）
+                        pc.sendPacketsX8(new S_SkillSound(pc.getId(), 750)); // 使用750音效
+                    }
+                } else {
+                    pc.sendPackets(new S_SkillBrave(pc.getId(), 4, this._getBuffIconDuration));
+                    pc.broadcastPacketAll(new S_SkillBrave(pc.getId(), 4, 0));
+                }
+                break;
             case MOVING_ACCELERATION://行走加速101
             case WIND_WALK: // 風之疾走150
                 pc.sendPackets(new S_SkillBrave(pc.getId(), 4, this._getBuffIconDuration));
@@ -2669,29 +2728,16 @@ public class L1SkillUse {
                         }
                     } else if (this._skillId == HOLY_WALK) { // ホーリーウォーク
                         final L1PcInstance pc = (L1PcInstance) cha;
+                        if (pc.hasSkillEffect(L1SkillId.STATUS_BRAVE3)) {
+                        }
                         if (pc.isHOLY_WALK2()) { // 神聖迅猛
-                            if (pc.hasSkillEffect(STATUS_BRAVE3)) {
-                                continue;
-                            }
-                            /*
-                             * 取消蛋糕效果
-                            if (pc.hasSkillEffect(998)) {
-                                pc.killSkillEffectTimer(998);
-                            }
-                            pc.sendPacketsAll(new S_Liquor(pc.getId(), 8));
-                            pc.sendPackets(new S_SystemMessage("將發生神秘的奇跡力量。"));
-                            // 是否需要送出使用蛋糕的動畫
-                            if (_gfxid > 0) {
-                                pc.sendPacketsX8(new S_SkillSound(pc.getId(), _gfxid));
-                            }
-                            pc.setSkillEffect(998, this._getBuffIconDuration * 1000);
-                            */
-                            L1BuffUtil.braveStart(pc); // 神聖迅猛下變更為一段勇敢藥水效果
-                            pc.setSkillEffect(L1SkillId.HOLY_WALK, this._getBuffIconDuration * 1000);
-                            pc.setBraveSpeed(1);// 勇水速度
+                            L1BuffUtil.braveStart(pc); // 先清理既有勇敢/疾走類狀態
+                            pc.setSkillEffect(L1SkillId.STATUS_BRAVE, this._getBuffIconDuration * 1000);
+                            pc.setBraveSpeed(1); // 勇水速度
                             pc.sendPackets(new S_SkillBrave(pc.getId(), 1, this._getBuffIconDuration));
                             pc.broadcastPacketAll(new S_SkillBrave(pc.getId(), 1, 0));
                         } else {
+                            pc.setSkillEffect(L1SkillId.HOLY_WALK, this._getBuffIconDuration * 1000);
                             pc.setBraveSpeed(4);
                             pc.sendPackets(new S_SkillBrave(pc.getId(), 4, this._getBuffIconDuration));
                             pc.broadcastPacketAll(new S_SkillBrave(pc.getId(), 4, 0));

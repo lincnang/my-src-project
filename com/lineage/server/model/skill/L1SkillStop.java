@@ -756,6 +756,12 @@ public class L1SkillStop {
                     case HOLY_WALK://神聖疾走
                     case MOVING_ACCELERATION://行走加速
                     case WIND_WALK://風之疾走
+                        if ((cha instanceof L1PcInstance)) {
+                            L1PcInstance pc = (L1PcInstance) cha;
+                            if (pc.hasSkillEffect(STATUS_BRAVE)) {
+                                pc.killSkillEffectTimer(STATUS_BRAVE);
+                            }
+                        }
                         cha.setBraveSpeed(0);
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;

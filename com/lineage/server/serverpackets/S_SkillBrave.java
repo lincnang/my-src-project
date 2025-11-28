@@ -14,7 +14,7 @@ public class S_SkillBrave extends ServerBasePacket {
      *              1:從身體的深處感到熱血沸騰。(第一階段勇水)<br>
      *              3:身體內深刻的感覺到充滿了森林的活力。(精靈餅乾)<br>
      *              4:風之疾走 / 神聖疾走 / 行走加速 / 生命之樹果實效果<br>
-     *              5:從身體的深處感到熱血沸騰。(第二階段勇水)<br>
+     *              5:從身體的深處感到熱血沸騰。(第二階段勇水 / 學習神聖迅猛後的神聖疾走效果)<br>
      *              6:引發龍之血暴發出來了。<br>
      */
     public S_SkillBrave(final int objid, final int mode, final int time) {

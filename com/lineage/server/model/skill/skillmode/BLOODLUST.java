@@ -11,9 +11,7 @@ import com.lineage.server.serverpackets.S_SkillBrave;
 public class BLOODLUST extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
         L1PcInstance pc = (L1PcInstance) cha;
-        if (pc.hasSkillEffect(L1SkillId.STATUS_BRAVE3)) {
-            return 0;
-        }
+        // 移除STATUS_BRAVE3衝突檢查，允許與三段加速同時使用
         L1BuffUtil.braveStart(pc);
         pc.setSkillEffect(186, integer * 1000);
         pc.setBraveSpeed(1);// 勇水速度

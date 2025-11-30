@@ -8,6 +8,10 @@ import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_NPCTalkReturn;
 import com.lineage.server.serverpackets.S_SystemMessage;
+import com.lineage.server.serverpackets.S_HPUpdate;
+import com.lineage.server.serverpackets.S_MPUpdate;
+import com.lineage.server.serverpackets.S_OwnCharStatus;
+import com.lineage.server.serverpackets.S_SPMR;
 import com.lineage.server.thread.GeneralThreadPool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -372,7 +376,11 @@ public class WenYangCmd {
 
                 // 實際升級
                 addWyLevelBySlot(_pc, _slot, add);
-                _pc.sendPackets(new S_SystemMessage("恭喜升級成功 (+" + add + ")，重登後獲得紋樣屬性"));
+
+                // 立即應用新的紋樣能力
+                applyWyAbilities(_pc, _slot);
+
+                _pc.sendPackets(new S_SystemMessage("恭喜升級成功 (+" + add + ")，紋樣屬性已立即生效"));
                 _pc.save();
 
                 // 記錄一次成功
@@ -397,6 +405,110 @@ public class WenYangCmd {
                     finishAnimation(_pc, null, _type, _wy, 0, getWyLevel(_pc, _type));
                 } catch (Exception ignore) {}
             }
+        }
+    }
+
+    /**
+     * 立即應用指定槽位的紋樣能力
+     * @param pc 玩家實例
+     * @param slot 槽位編號 (1-6)
+     */
+    private void applyWyAbilities(final L1PcInstance pc, final int slot) {
+        try {
+            int type = getWyType(pc, slot);
+            int level = getWyLevelBySlot(pc, slot);
+
+            if (type == 0 || level <= 0) {
+                return; // 沒有紋樣或等級為0，不應用能力
+            }
+
+            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(type, level);
+            if (wenYang == null) {
+                return; // 找不到對應的紋樣模板
+            }
+
+            // 應用紋樣能力（複製自 C_LoginToServer.java 中的邏輯）
+            int liliang = wenYang.getliliang();
+            if (liliang != 0) {
+                pc.addStr(liliang);
+            }
+            int minjie = wenYang.getminjie();
+            if (minjie != 0) {
+                pc.addDex(minjie);
+            }
+            int zhili = wenYang.getzhili();
+            if (zhili != 0) {
+                pc.addInt(zhili);
+            }
+            int jingshen = wenYang.getjingshen();
+            if (jingshen != 0) {
+                pc.addWis(jingshen);
+            }
+            int tizhi = wenYang.gettizhi();
+            if (tizhi != 0) {
+                pc.addCon(tizhi);
+            }
+            int meili = wenYang.getmeili();
+            if (meili != 0) {
+                pc.addCha(meili);
+            }
+            int xue = wenYang.getxue();
+            if (xue != 0) {
+                pc.addMaxHp(xue);
+                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
+            }
+            int mo = wenYang.getmo();
+            if (mo != 0) {
+                pc.addMaxMp(mo);
+                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
+            }
+            int huixue = wenYang.gethuixue();
+            if (huixue != 0) {
+                pc.addHpr(huixue);
+            }
+            int huimo = wenYang.gethuimo();
+            if (huimo != 0) {
+                pc.addMpr(huimo);
+            }
+            int ewai = wenYang.getewai();
+            if (ewai != 0) {
+                pc.addDmgup(ewai);
+            }
+            int chenggong = wenYang.getchenggong();
+            if (chenggong != 0) {
+                pc.addHitup(chenggong);
+            }
+            int mogong = wenYang.getmogong();
+            if (mogong != 0) {
+                pc.addSp(mogong);
+            }
+            int mofang = wenYang.getmofang();
+            if (mofang != 0) {
+                pc.addMr(mofang);
+            }
+            int feng = wenYang.getfeng();
+            if (feng != 0) {
+                pc.addWind(feng);
+            }
+            int shui = wenYang.getshui();
+            if (shui != 0) {
+                pc.addWater(shui);
+            }
+            int tu = wenYang.gettu();
+            if (tu != 0) {
+                pc.addEarth(tu);
+            }
+            int huo = wenYang.gethuo();
+            if (huo != 0) {
+                pc.addFire(huo);
+            }
+
+            // 更新狀態顯示
+            pc.sendPackets(new S_OwnCharStatus(pc));
+            pc.sendPackets(new S_SPMR(pc));
+
+        } catch (Exception e) {
+            _log.error("應用紋樣能力時發生錯誤: " + e.getLocalizedMessage(), e);
         }
     }
 }

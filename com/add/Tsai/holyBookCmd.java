@@ -35,6 +35,7 @@ public class holyBookCmd {
                 final holy holy1 = holyTable.get().getHoly(i);
                 //獲取列表id
                 if (holy1 != null) {//列表ID空白不啟動
+                    // 聖物系統使用共用表格 character_娃娃卡帳號
                     if (dollQuestTable.get().IsQuest(pc, holy1.getQuestId())) {
                         stringBuilder.append(String.valueOf(holy1.getAddcgfxid())).append(",");
                     } else {
@@ -115,6 +116,7 @@ public class holyBookCmd {
     public void polyHoly(final L1PcInstance pc) {
         holy holy = holyTable.get().getHoly(pc.getHolyId());
         if (holy != null) {
+            // 聖物系統使用共用表格 character_娃娃卡帳號
             if (dollQuestTable.get().IsQuest(pc, holy.getQuestId())) {
                 if (holy.getPolyId() != 0) {
                     if (holy.getPolyItemId() != 0) {
@@ -308,6 +310,7 @@ public class holyBookCmd {
                     stringBuilder.append(holy.getMsg1()).append(",");
 
                     for (int j = 0; j < holy.getNeedQuest().length; j++) {
+                        // 聖物系統使用共用表格 character_娃娃卡帳號
                         if (!dollQuestTable.get().IsQuest(pc, holy.getNeedQuest()[j])) {
                             anyTaskUncompleted = true;
                             stringBuilder.append(holy.getNeedName()[j]).append("(未開啟),");

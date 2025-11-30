@@ -73,16 +73,23 @@ public class dollQuestTable implements DollQuestStorage {
         PreparedStatement pm = null;
         try {
             co = DatabaseFactory.get().getConnection();
-            pm = co.prepareStatement("INSERT INTO `character_娃娃卡帳號` SET `帳號名稱`=?,`任務編號`=?");
+            // 使用 INSERT IGNORE 或 ON DUPLICATE KEY UPDATE 避免重複
+            pm = co.prepareStatement("INSERT IGNORE INTO `character_娃娃卡帳號` (`帳號名稱`,`任務編號`) VALUES (?,?)");
             int i = 0;
             pm.setString(++i, account);
             pm.setInt(++i, key);
-            pm.execute();
-            //------
-            final dollQuest dollQuest = new dollQuest(account, key);
-            _dollQuestIndex.add(dollQuest);
+            int affectedRows = pm.executeUpdate();
+
+            // 只有在成功插入時才添加到記憶體中
+            if (affectedRows > 0) {
+                final dollQuest dollQuest = new dollQuest(account, key);
+                _dollQuestIndex.add(dollQuest);
+//                _log.info("娃娃卡任務記錄: 帳號=" + account + ", 任務編號=" + key);
+            } else {
+                _log.info("娃娃卡任務已存在，跳過: 帳號=" + account + ", 任務編號=" + key);
+            }
         } catch (final SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
+            _log.error("儲存娃娃卡任務時發生錯誤: " + e.getLocalizedMessage(), e);
         } finally {
             SQLUtil.close(pm);
             SQLUtil.close(co);

@@ -1216,6 +1216,10 @@ public class L1PcInventory extends L1Inventory {
                                 break;
                             }
                         }
+                        // 如果沒找到空槽位，預設使用第一個耳環槽位
+                        if (type == 0) {
+                            type = 13;
+                        }
                     } else {
                         for (int i = 0; i < 2; i++) {
                             if (_EarringList.get(i) != null && _EarringList.get(i) == item) {
@@ -1226,6 +1230,10 @@ public class L1PcInventory extends L1Inventory {
                                 }
                                 break;
                             }
+                        }
+                        // 如果沒找到對應耳環，預設使用第一個耳環槽位
+                        if (type == 0) {
+                            type = 13;
                         }
                     }
                 } else if (temp.getType() == 14) {
@@ -1240,6 +1248,10 @@ public class L1PcInventory extends L1Inventory {
                                 break;
                             }
                         }
+                        // 如果沒找到空槽位，預設使用第一個符文槽位
+                        if (type == 0) {
+                            type = 23;
+                        }
                     } else {
                         for (int i = 0; i < 2; i++) {
                             if (_RuneList.get(i) != null && _RuneList.get(i) == item) {
@@ -1251,7 +1263,13 @@ public class L1PcInventory extends L1Inventory {
                                 break;
                             }
                         }
+                        // 如果沒找到對應符文，預設使用第一個符文槽位
+                        if (type == 0) {
+                            type = 23;
+                        }
                     }
+                } else if (temp.getType() == 20) {
+                    type = 51; // 蒂蜜特的符文 (talisman3)
                 }
                 break;
         }

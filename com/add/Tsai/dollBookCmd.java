@@ -252,9 +252,13 @@ public class dollBookCmd {
                     stringBuilder.append(dolls.getMsg1()).append(",");
 
                     for (int j = 0; j < dolls.getNeedQuest().length; j++) {
-                        if (!CardQuestTable.get().IsQuest(pc, dolls.getNeedQuest()[j])) {
+                        // 修復：娃娃套卡應該使用 dollQuestTable 檢查任務狀態，而不是 CardQuestTable
+                        if (!dollQuestTable.get().IsQuest(pc, dolls.getNeedQuest()[j])) {
                             anyTaskUncompleted = true;
                             stringBuilder.append(dolls.getNeedName()[j]).append("(未開啟),");
+                        } else {
+                            // 任務已完成，顯示已開啟狀態（可選）
+                            // stringBuilder.append(dolls.getNeedName()[j]).append("(已開啟),");
                         }
                     }
 

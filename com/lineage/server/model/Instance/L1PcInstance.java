@@ -9438,12 +9438,16 @@ public class L1PcInstance extends L1Character { // src015
     }
 
     public final void resetPolyPower() {
+        resetPolyPower(false);
+    }
+
+    public final void resetPolyPower(boolean skipDisplay) {
         if (getPolyPower() != null) {
-            ExtraPolyPowerTable.effectBuff(this, getPolyPower(), -1);
+            ExtraPolyPowerTable.effectBuff(this, getPolyPower(), -1, skipDisplay);
         }
         this._polyPower = ExtraPolyPowerTable.getInstance().get(getTempCharGfx());
         if (getPolyPower() != null) {
-            ExtraPolyPowerTable.effectBuff(this, this.getPolyPower(), 1);
+            ExtraPolyPowerTable.effectBuff(this, this.getPolyPower(), 1, skipDisplay);
         }
     }
 

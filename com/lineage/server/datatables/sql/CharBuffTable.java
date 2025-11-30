@@ -252,7 +252,7 @@ public class CharBuffTable implements CharBuffStorage {
                 int poly_id = buffTmp.get_poly_id();
                 if (remaining_time > 0) {// 還有剩餘時間
                     if (skill_id == SHAPE_CHANGE) {// 變身
-                        L1PolyMorph.doPoly(pc, poly_id, remaining_time, L1PolyMorph.MORPH_BY_LOGIN);
+                        L1PolyMorph.doPoly(pc, poly_id, remaining_time, L1PolyMorph.MORPH_BY_LOGIN, true);
                     } else {// 除了變身以外的其他技能
                         switch (skill_id) {
                             case STATUS_BRAVE3:

@@ -19,7 +19,6 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public final class ExtraPolyPowerTable//src014
 {
@@ -35,6 +34,10 @@ public final class ExtraPolyPowerTable//src014
     }
 
     public static void effectBuff(L1PcInstance pc, L1PolyPower value, int negative) {
+        effectBuff(pc, value, negative, false);
+    }
+
+    public static void effectBuff(L1PcInstance pc, L1PolyPower value, int negative, boolean skipDisplay) {
         pc.addAc(value.getAc() * negative); // 增加護甲等級
         pc.addMaxHp(value.getHp() * negative); // 增加最大生命值
         pc.addMaxMp(value.getMp() * negative); // 增加最大魔法值
@@ -104,9 +107,9 @@ public final class ExtraPolyPowerTable//src014
             // 已移除光圈特效連播，僅保留 SPR 光環
         } catch (Exception ignored) {
         }
-        if (negative == 1) {
+        if (negative == 1 && !skipDisplay) {
             // 设定一个对话档，玩家自行设定 pc.getloginpoly() == 1 时才显示
-            powerInfos(pc, value, pc.getloginpoly() == 0);
+            powerInfos(pc, value, pc.getloginpoly() == 1);
         }
     }
 

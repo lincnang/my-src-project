@@ -154,6 +154,10 @@ public class L1PolyMorph {
      *
      */
     public static void doPoly(L1Character cha, int polyId, int timeSecs, int cause) {  //src014
+        doPoly(cha, polyId, timeSecs, cause, false);
+    }
+
+    public static void doPoly(L1Character cha, int polyId, int timeSecs, int cause, boolean skipDisplay) {  //src014
         try {
             if ((cha == null) || (cha.isDead())) {
                 return;
@@ -376,7 +380,7 @@ public class L1PolyMorph {
                     ArrowGfxid.forItemUSe(pc, polyId);
                     pc.sendPackets(new S_PacketBox(35, timeSecs));
                 }
-                pc.resetPolyPower();
+                pc.resetPolyPower(skipDisplay);
             } else if ((cha instanceof L1MonsterInstance)) {
                 L1MonsterInstance mob = (L1MonsterInstance) cha;
                 mob.removeSkillEffect(SHAPE_CHANGE);// 刪除變身效果

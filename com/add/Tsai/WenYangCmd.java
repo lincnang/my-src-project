@@ -10,6 +10,7 @@ import com.lineage.server.serverpackets.S_NPCTalkReturn;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.serverpackets.S_HPUpdate;
 import com.lineage.server.serverpackets.S_MPUpdate;
+import com.lineage.server.serverpackets.S_OwnCharAttrDef;
 import com.lineage.server.serverpackets.S_OwnCharStatus;
 import com.lineage.server.serverpackets.S_SPMR;
 import com.lineage.server.thread.GeneralThreadPool;
@@ -501,6 +502,14 @@ public class WenYangCmd {
             int huo = wenYang.gethuo();
             if (huo != 0) {
                 pc.addFire(huo);
+            }
+
+            // 處理防禦屬性
+            int addAc = wenYang.getAc();
+            if (addAc != 0) {
+                pc.addAc(addAc);
+                // 更新客戶端防禦屬性顯示
+                pc.sendPackets(new S_OwnCharAttrDef(pc));
             }
 
             // 更新狀態顯示

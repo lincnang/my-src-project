@@ -476,16 +476,19 @@ public class L1EquipmentSlot {  //src039
         for (Integer key : ArmorSet.getAllSet().keySet()) {
             ArmorSet armorSet = (ArmorSet) ArmorSet.getAllSet().get(key);
             if ((armorSet.isPartOfSet(itemId)) && (armorSet.isValid(_owner))) {
-                if (armor.getItem().getUseType() == 23) {// 戒指
-                    if (!armorSet.isEquippedRingOfArmorSet(_owner)) {// 沒有裝備相同套裝戒指兩個以上
+                // 檢查套裝是否已經激活，避免重複處理
+                if (!_currentArmorSet.contains(armorSet)) {
+                    if (armor.getItem().getUseType() == 23) {// 戒指
+                        if (!armorSet.isEquippedRingOfArmorSet(_owner)) {// 沒有裝備相同套裝戒指兩個以上
+                            armorSet.giveEffect(_owner);// 給予套裝完成效果
+                            _currentArmorSet.add(armorSet);
+                            _owner.getInventory().setPartMode(armorSet, true);
+                        }
+                    } else {// 其他裝備
                         armorSet.giveEffect(_owner);// 給予套裝完成效果
                         _currentArmorSet.add(armorSet);
                         _owner.getInventory().setPartMode(armorSet, true);
                     }
-                } else {// 其他裝備
-                    armorSet.giveEffect(_owner);// 給予套裝完成效果
-                    _currentArmorSet.add(armorSet);
-                    _owner.getInventory().setPartMode(armorSet, true);
                 }
             }
         }

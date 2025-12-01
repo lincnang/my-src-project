@@ -806,8 +806,14 @@ public class L1PcInventory extends L1Inventory {
         for (int j : tgItemId) {
             L1ItemInstance[] tgItems = findItemsId(j);
             for (L1ItemInstance tgItem : tgItems) {
-                tgItem.setIsMatch(isMode);
-                this._owner.sendPackets(new S_ItemStatus(tgItem));
+                // 只對已裝備的物品進行狀態更新，避免重複顯示
+                if (tgItem.isEquipped()) {
+                    // 額外檢查：避免重複設置相同狀態
+                    if (tgItem.isMatch() != isMode) {
+                        tgItem.setIsMatch(isMode);
+                        this._owner.sendPackets(new S_ItemStatus(tgItem));
+                    }
+                }
             }
         }
     }

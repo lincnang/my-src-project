@@ -2813,7 +2813,7 @@ public class L1ItemStatus {
             this._os.writeS("爆擊傷害 " + pw_dmg);
         }
         showItemDelTimer();
-        checkArmorSet(); // 套裝能力顯示
+        // checkArmorSet(); // 套裝能力顯示 - 已註釋，防止重複顯示
         return _os;
     }
 
@@ -3815,7 +3815,7 @@ public class L1ItemStatus {
             }
         }
         showItemDelTimer();
-        checkArmorSet(); // 套裝能力顯示
+        // checkArmorSet(); // 套裝能力顯示 - 已註釋，防止重複顯示
         return _os;
     }
     // TODO 武器
@@ -4506,7 +4506,7 @@ public class L1ItemStatus {
             }
         }
         showItemDelTimer();
-        checkArmorSet(); // 套裝能力顯示
+        // checkArmorSet(); // 套裝能力顯示 - 已註釋，防止重複顯示
         return _os;
     }
 
@@ -6016,7 +6016,9 @@ public class L1ItemStatus {
     }
 
     private void checkArmorSet() { //昇華系統顯示
+        // 防止重複顯示 - 只有當套裝真正激活且已裝備時才顯示
         if ((ArmorSetTable.get().checkArmorSet(_itemInstance.getItemId()))
+                && (isMatch() && _itemInstance.isEquipped()) // 套裝激活且已裝備
                 && (_item.get_mode()[0] != 0 // 套裝效果:力量
                 || _item.get_mode()[1] != 0 // 套裝效果:敏捷
                 || _item.get_mode()[2] != 0 // 套裝效果:體質
@@ -6049,13 +6051,9 @@ public class L1ItemStatus {
                 || _item.get_mode()[29] != 0 // 套裝效果:增加防禦
                 || _item.get_mode()[30] > 0  // 套裝效果:套裝變身
         )) {
-            // 0x45=69 [額外組合] // 0:結尾 1:橘色 2:灰色
+            // 0x45=69 [額外組合] // 0:結尾 1:橘色
             _os.writeC(69);
-            if (isMatch() && _itemInstance.isEquipped()) { // 完成套裝並且是使用中的就顯示1:橘色
-                _os.writeC(1); // 1:橘色
-            } else {
-                _os.writeC(2); // 2:灰色
-            }
+            _os.writeC(1); // 1:橘色 (套裝已激活，因為已通過條件檢查)
 
             if (_item.get_mode()[30] > 0 // 變身
                     && _item.get_mode()[31] > 0) { // 變身名字

@@ -224,6 +224,7 @@ public class L1BossWeapon {
                     if ((cha instanceof L1PcInstance)) {
                         L1PcInstance player = (L1PcInstance) cha;
                         player.sendPackets(new S_Paralysis(5, true));
+                        player.setParalyzed(true);  // 修復：設置玩家麻痹狀態
                     } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1PetInstance))) {
                         L1NpcInstance tgnpc = (L1NpcInstance) cha;
                         tgnpc.setParalyzed(true);

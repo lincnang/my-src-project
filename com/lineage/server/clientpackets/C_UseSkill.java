@@ -87,24 +87,20 @@ public class C_UseSkill extends ClientBasePacket {
             if ((poly != null) && !poly.canUseSkill()) {
                 isError = true;
             }
-            // 麻痺?凍結狀態
-            if (pc.isParalyzed() && !isError) {
-                isError = true;
-            }
-            // 下列狀態無法使用魔法(魔法封印)
+
+            // 下列狀態無法使用魔法(魔法封印相關 - 保留專門的魔法封印檢查)
             if (pc.hasSkillEffect(SILENCE) && !isError) {
                 isError = true;
             }
-            // 下列狀態無法使用魔法(封印禁地)
             if (pc.hasSkillEffect(AREA_OF_SILENCE) && !isError) {
                 isError = true;
             }
-            // 下列狀態無法使用魔法(沈默毒素效果)
             if (pc.hasSkillEffect(STATUS_POISON_SILENCE) && !isError) {
                 isError = true;
             }
-            // 無法攻擊/使用道具/技能/回城的狀態
-            if (pc.isParalyzedX() && !isError) {
+
+            // 使用統一控制狀態檢查，涵蓋所有限制行動的狀態
+            if (pc.isInAnyControlState() && !isError) {
                 isError = true;
             }
             if (isError) {

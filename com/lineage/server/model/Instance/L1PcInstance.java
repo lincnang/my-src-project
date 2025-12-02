@@ -8553,10 +8553,10 @@ public class L1PcInstance extends L1Character { // src015
             this.setLsOpen(true);
         }
         this.setRestartAuto(ThreadPoolSetNew.RESTART_AUTO);
-        this.setHH((int) (getMaxHp() * this.getH() * 0.01));
-        this.setMM((int) (getMaxMp() * getAutoAttackMP() * 0.01));
     }
 
+    
+    
     /**
      * 停止掛機 by 聖子默默
      * Phase 1.5 修復: 正確停止 PcAI 實例,防止洩漏
@@ -8686,13 +8686,10 @@ public class L1PcInstance extends L1Character { // src015
             // _log.error("要求角色攻擊:重量過重");
             return;
         }
-        if (hasSkillEffect(L1SkillId.STATUS_CURSE_PARALYZED)) {
-            return;
-        }
-        if (hasSkillEffect(L1SkillId.STATUS_POISON_PARALYZED)) {
-            return;
-        }
-        if (hasSkillEffect(L1SkillId.STATUS_FREEZE)) {
+
+        // 檢查是否處於任何控制狀態，如果是則停止攻擊
+        if (isInAnyControlState()) {
+            // 在控制狀態下無法攻擊，等待狀態結束
             return;
         }
         if (target instanceof L1PcInstance) {
@@ -8741,18 +8738,27 @@ public class L1PcInstance extends L1Character { // src015
      */
     private boolean ConfirmTheEnemy() {
         try {
+            // 檢查是否在控制狀態下，控制狀態下不進行任何瞬移
+            if (isInAnyControlState()) {
+                return false;
+            }
+
             if (this.IsAttackTeleportHp()) {//已經開啟被攻擊立即瞬移狀態並且假設正在被攻擊中
-                autoRandomTeleport(0, 25);
-                this.setIsAttackTeleportHp(false);
-                return true;
+                if (canAutoTeleport()) {
+                    autoRandomTeleport(0, 25);
+                    this.setIsAttackTeleportHp(false);
+                    return true;
+                }
             }
             if (this.IsEnemyTeleport()) {// 遇見仇人進行順移開啟
                 boolean ok = false;
                 for (L1PcInstance player : World.get().getRecognizePlayer(this)) {
                     if (this.isInEnemyList(player.getName())) {
-                        autoRandomTeleport(0, 120);
-                        ok = true;
-                        break;
+                        if (canAutoTeleport()) {
+                            autoRandomTeleport(0, 120);
+                            ok = true;
+                            break;
+                        }
                     }
                 }
                 return ok;
@@ -9149,6 +9155,70 @@ public class L1PcInstance extends L1Character { // src015
     }
 
     /**
+     * 檢查是否處於任何控制狀態
+     * 包含所有限制行動的負面狀態和暈眩技能
+     *
+     * @return true:處於控制狀態 false:正常
+     */
+    public boolean isInAnyControlState() {
+        return isSleeped()
+            || isParalyzedX()
+            || isParalyzed()
+            // 基本控制狀態
+            || hasSkillEffect(L1SkillId.DESPERADO)           // 亡命之徒
+            || hasSkillEffect(L1SkillId.SHOCK_STUN)           // 衝擊之暈
+            || hasSkillEffect(L1SkillId.KINGDOM_STUN)         // 王者之劍暈眩
+            || hasSkillEffect(L1SkillId.TITAN_STUN)           // 泰坦之暈
+            || hasSkillEffect(L1SkillId.FIRESTUN)             // 火焰暈眩
+            || hasSkillEffect(L1SkillId.TRUEFIRESTUN)         // 真實火焰暈眩
+            || hasSkillEffect(L1SkillId.SHOCK_SKIN)           // 衝擊之盾
+            // 麻痺類技能
+            || hasSkillEffect(L1SkillId.STATUS_CURSE_PARALYZED) // 詛咒型麻痺
+            || hasSkillEffect(L1SkillId.STATUS_POISON_PARALYZED) // 毒性麻痺
+            || hasSkillEffect(L1SkillId.CURSE_PARALYZE)         // 詛咒麻痺
+            || hasSkillEffect(L1SkillId.CURSE_PARALYZE2)        // 詛咒麻痺2
+            || hasSkillEffect(L1SkillId.BONE_BREAK)           // 骷髏毀壞
+            || hasSkillEffect(L1SkillId.HAND_DARKNESS)        // 黑暗之手
+            || hasSkillEffect(L1SkillId.THUNDER_GRAB)         // 雷電抓取
+            // 凍結束縛類技能
+            || hasSkillEffect(L1SkillId.STATUS_FREEZE)         // 凍結狀態
+            || hasSkillEffect(L1SkillId.ICE_LANCE)             // 冰矛
+            || hasSkillEffect(L1SkillId.EARTH_BIND)           // 地面障礙
+            || hasSkillEffect(L1SkillId.ENTANGLE)             // 纏繞
+            // 其他控制技能
+            || hasSkillEffect(L1SkillId.PHANTASM)             // 幻象
+            || hasSkillEffect(L1SkillId.FOG_OF_SLEEPING)       // 霧之睡眠
+            || hasSkillEffect(L1SkillId.DARKNESS)             // 黑暗
+            || hasSkillEffect(L1SkillId.DARK_BLIND)           // 黑暗失明
+            || hasSkillEffect(L1SkillId.SLOW)                 // 緩速
+            || hasSkillEffect(L1SkillId.SILENCE)              // 靜默
+            || hasSkillEffect(L1SkillId.AREA_OF_SILENCE)       // 封印禁地
+            || hasSkillEffect(L1SkillId.STATUS_POISON_SILENCE) // 沉默毒素
+            || hasSkillEffect(L1SkillId.CUBE_SHOCK)           // 立方體衝擊
+            || hasSkillEffect(L1SkillId.STATUS_CUBE_SHOCK_TO_ENEMY); // 立方體衝擊(敵對)
+    }
+
+    /**
+     * 檢查是否可以使用物品
+     * 控制狀態下無法使用任何物品
+     *
+     * @return true 可以使用 false 不可以使用
+     */
+    public boolean canUseItem() {
+        return !isInAnyControlState();
+    }
+
+    /**
+     * 檢查是否可以使用技能
+     * 控制狀態下無法使用任何技能
+     *
+     * @return true 可以使用 false 不可以使用
+     */
+    public boolean canUseSkill() {
+        return !isInAnyControlState();
+    }
+
+    /**
      * PC已經激活
      *
      * @param actived true:激活 false:無
@@ -9157,6 +9227,7 @@ public class L1PcInstance extends L1Character { // src015
         this._activated = actived;
     }
 
+    
     protected boolean isFirstAttack() {
         return this._firstAttack;
     }
@@ -9215,15 +9286,12 @@ public class L1PcInstance extends L1Character { // src015
      * 沒有目標的處理<BR>
      */
     public void noTarget() {
-        if (hasSkillEffect(L1SkillId.STATUS_CURSE_PARALYZED)) {
+        // 檢查是否處於任何控制狀態，如果是則保持靜止
+        if (isInAnyControlState()) {
+            // 在控制狀態下保持靜止，等待狀態結束
             return;
         }
-        if (hasSkillEffect(L1SkillId.STATUS_POISON_PARALYZED)) {
-            return;
-        }
-        if (hasSkillEffect(L1SkillId.STATUS_FREEZE)) {
-            return;
-        }
+
         if (_pcMove != null) {
             int dir = _pcMove.checkObject(_randomMoveDirection);
             if (dir != -1) {
@@ -11765,6 +11833,18 @@ public class L1PcInstance extends L1Character { // src015
     public boolean IsAttackTeleportHp() {
 //        return _attackteleporthp;
         return get_other1().get_type15() == 1;
+    }
+
+    /**
+     * 檢查是否可以進行自動瞬移
+     * 控制狀態下不允許瞬移
+     *
+     * @return true 可以瞬移 false 不可以瞬移
+     */
+    public boolean canAutoTeleport() {
+        return isActivated()
+            && !isInAnyControlState() // 控制狀態下不允許瞬移
+            && getMap().isTeleportable();
     }
 
     /**

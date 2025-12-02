@@ -67,6 +67,7 @@ public class PcAI implements Runnable {
      * 執行完成後根據狀態決定:
      * 1. 重新排程 (繼續 AI)
      * 2. 停止 (角色死亡/離線/條件不符)
+     * 控制狀態下AI繼續運行但行為受限
      */
     @Override
     public void run() {
@@ -74,12 +75,6 @@ public class PcAI implements Runnable {
             // 檢查是否應該繼續執行
             if (!shouldContinue()) {
                 stopAI();
-                return;
-            }
-
-            // 檢查睡眠/麻痺狀態
-            if (isParalyzedOrSleeped()) {
-                schedule(200); // 200ms 後重試
                 return;
             }
 
@@ -91,7 +86,9 @@ public class PcAI implements Runnable {
             }
 
             // 計算下次執行延遲
-            long nextDelay = Math.max(200, _pc.getSleepTimeAI());
+            // 在控制狀態下降低執行頻率，節省資源
+            long baseDelay = Math.max(200, _pc.getSleepTimeAI());
+            long nextDelay = _pc.isInAnyControlState() ? 1000 : baseDelay; // 控制狀態下1秒執行一次
             schedule(nextDelay);
 
         } catch (final Exception e) {
@@ -102,13 +99,15 @@ public class PcAI implements Runnable {
 
     /**
      * 檢查是否應該繼續執行 AI
+     * AI在控制狀態下繼續運行，但行為會被限制
      * @return true 繼續, false 停止
      */
     private boolean shouldContinue() {
-        return _isRunning 
-            && _pc != null 
-            && _pc.getMaxHp() > 0 
+        return _isRunning
+            && _pc != null
+            && _pc.getMaxHp() > 0
             && !_pc.isDead();
+            // 移除控制狀態檢查 - AI在控制狀態下繼續運行
     }
 
     /**

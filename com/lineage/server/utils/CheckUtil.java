@@ -13,9 +13,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
-import java.util.Iterator;
-
-import static com.lineage.server.model.skill.L1SkillId.*;
 
 /**
  * 對像檢查器
@@ -148,33 +145,8 @@ public class CheckUtil {
      * @param pc 檢查對像
      */
     public static boolean getUseItemAll(final L1PcInstance pc) {
-        if (pc.hasSkillEffect(STATUS_CURSE_PARALYZED)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(STATUS_POISON_PARALYZED)) {
-            return false;
-        }
-        //        if (pc.hasSkillEffect(FOG_OF_SLEEPING)) {
-        //            return false;
-        //        }
-        if (pc.hasSkillEffect(SHOCK_STUN)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(KINGDOM_STUN)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(PHANTASM)) {
-            return false;
-        }
-        /*
-        if (pc.hasSkillEffect(ICE_LANCE)) {
-            return false;
-        }
-        */
-        if (pc.hasSkillEffect(EARTH_BIND)) {
-            return false;
-        }
-        return !pc.hasSkillEffect(BONE_BREAK);
+        // 使用統一控制狀態檢查，涵蓋所有限制行動的狀態
+        return !pc.isInAnyControlState();
     }
 
     /**
@@ -183,40 +155,8 @@ public class CheckUtil {
      * @param pc 檢查對像
      */
     public static boolean getUseItem_heal(final L1PcInstance pc) {
-        //		if (pc.hasSkillEffect(DECAY_POTION)) {
-        //			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
-        //			return false;
-        //		}
-        if (pc.hasSkillEffect(STATUS_CURSE_PARALYZED)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(STATUS_POISON_PARALYZED)) {
-            return false;
-        }
-        //        if (pc.hasSkillEffect(FOG_OF_SLEEPING)) {
-        //            return false;
-        //        }
-        if (pc.hasSkillEffect(SHOCK_STUN)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(KINGDOM_STUN)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(PHANTASM)) {
-            return false;
-        }
-        /*
-        if (pc.hasSkillEffect(ICE_LANCE)) {
-            return false;
-        }
-        */
-        if (pc.hasSkillEffect(EARTH_BIND)) {
-            return false;
-        }
-        return !pc.hasSkillEffect(BONE_BREAK);
-		/*if (pc.hasSkillEffect(DESPERADO)) {
-			return false;
-		}*/
+        // 使用統一控制狀態檢查，涵蓋所有限制行動的狀態
+        return !pc.isInAnyControlState();
     }
 
     /**
@@ -225,36 +165,8 @@ public class CheckUtil {
      * @param pc 檢查對像
      */
     public static boolean getUseItem(final L1PcInstance pc) {
-        if (pc.hasSkillEffect(STATUS_CURSE_PARALYZED)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(STATUS_POISON_PARALYZED)) {
-            return false;
-        }
-        //        if (pc.hasSkillEffect(FOG_OF_SLEEPING)) {
-        //            return false;
-        //        }
-        if (pc.hasSkillEffect(SHOCK_STUN)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(KINGDOM_STUN)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(PHANTASM)) {
-            return false;
-        }
-        /*
-        if (pc.hasSkillEffect(ICE_LANCE)) {
-            return false;
-        }
-        */
-        if (pc.hasSkillEffect(EARTH_BIND)) {
-            return false;
-        }
-        if (pc.hasSkillEffect(BONE_BREAK)) {
-            return false;
-        }
-        return !pc.hasSkillEffect(DESPERADO);
+        // 使用統一控制狀態檢查，涵蓋所有限制行動的狀態
+        return !pc.isInAnyControlState();
     }
 
     /**

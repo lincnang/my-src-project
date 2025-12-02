@@ -23,6 +23,14 @@ package com.lineage.server.Manly;
  */
 public class L1WenYang {
 
+    // 紋樣類型常量定義
+    public static final int WENYANG_TYPE_1 = 1;
+    public static final int WENYANG_TYPE_2 = 2;
+    public static final int WENYANG_TYPE_3 = 3;
+    public static final int WENYANG_TYPE_4 = 4;
+    public static final int WENYANG_TYPE_5 = 5;
+    public static final int WENYANG_TYPE_6 = 6;
+
     private int _type;              // 類型
     private int _level;             // 等級
     private String _not;            // 說明(名稱)
@@ -179,7 +187,7 @@ public class L1WenYang {
     public int getYaoshui() { return _addyaoshui; }    // 藥水增加
     public int getFuzhong() { return _addfuzhong; }    // 負重
     public int getAc() { return _add_Ac; }             // 防禦
-    public int gatDiceDmg() { return _adddice_dmg; }   // 機率給予爆擊率 (沿用舊命名)
+    public int getDiceDmg() { return _adddice_dmg; }   // 機率給予爆擊率
     public int getDmg() { return _adddmg; }            // 機率給予爆擊質
     public int getpvpdmg() { return _addpvpdmg; }      // PVP 傷害
     public int getpvpdmg_r() { return _addpvpdmg_r; }  // PVP 減傷

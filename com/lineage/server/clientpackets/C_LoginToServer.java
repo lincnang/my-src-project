@@ -49,7 +49,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 public class C_LoginToServer extends ClientBasePacket {
     private static final Log _log = LogFactory.getLog(C_LoginToServer.class);
@@ -228,12 +227,11 @@ public class C_LoginToServer extends ClientBasePacket {
                         pc.addEarth(holyPolySet.getAddEarth());
                         //						pc.sendPackets(new S_SystemMessage(cards.getMsg1()));
                         pc.sendPackets(new S_OwnCharStatus(pc));
-                        TimeUnit.MILLISECONDS.sleep(5);
                     }
                 }
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error("載入聖物套装狀態時發生錯誤: " + pc.getName(), e);
         }
     }
 
@@ -282,12 +280,11 @@ public class C_LoginToServer extends ClientBasePacket {
                         pc.addRegistSleep(holy.getShuimian());
                         //						pc.sendPackets(new S_SystemMessage(card.getMsg1()));
                         pc.sendPackets(new S_OwnCharStatus(pc));
-                        TimeUnit.MILLISECONDS.sleep(5);
                     }
                 }
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error("載入聖物狀態時發生錯誤: " + pc.getName(), e);
         }
     }
 
@@ -324,12 +321,11 @@ public class C_LoginToServer extends ClientBasePacket {
                         pc.addEarth(dollPolySet.getAddEarth());
                         //						pc.sendPackets(new S_SystemMessage(cards.getMsg1()));
                         pc.sendPackets(new S_OwnCharStatus(pc));
-                        TimeUnit.MILLISECONDS.sleep(5);
                     }
                 }
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error("載入娃娃套装狀態時發生錯誤: " + pc.getName(), e);
         }
     }
 
@@ -378,12 +374,11 @@ public class C_LoginToServer extends ClientBasePacket {
                         pc.addRegistSleep(doll.getShuimian());
                         //						pc.sendPackets(new S_SystemMessage(card.getMsg1()));
                         pc.sendPackets(new S_OwnCharStatus(pc));
-                        TimeUnit.MILLISECONDS.sleep(5);
                     }
                 }
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error("載入娃娃狀態時發生錯誤: " + pc.getName(), e);
         }
     }
 
@@ -420,12 +415,11 @@ public class C_LoginToServer extends ClientBasePacket {
                         pc.addEarth(cards.getAddEarth());
                         // pc.sendPackets(new S_SystemMessage(cards.getMsg1()));
                         pc.sendPackets(new S_OwnCharStatus(pc));
-                        TimeUnit.MILLISECONDS.sleep(5);
                     }
                 }
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error("載入收藏套装狀態時發生錯誤: " + pc.getName(), e);
         }
     }
 
@@ -474,12 +468,12 @@ public class C_LoginToServer extends ClientBasePacket {
                         pc.addRegistSleep(card.getShuimian());
                         // pc.sendPackets(new S_SystemMessage(card.getMsg1()));
                         pc.sendPackets(new S_OwnCharStatus(pc));
-                        TimeUnit.MILLISECONDS.sleep(5);
+                        // 移除延遲以提高載入速度
                     }
                 }
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error("載入狀態時發生錯誤: " + pc.getName(), e);
         }
     }
 
@@ -516,12 +510,12 @@ public class C_LoginToServer extends ClientBasePacket {
                         pc.addEarth(cards.getAddEarth());
                         // pc.sendPackets(new S_SystemMessage(cards.getMsg1()));
                         pc.sendPackets(new S_OwnCharStatus(pc));
-                        TimeUnit.MILLISECONDS.sleep(5);
+                        // 移除延遲以提高載入速度
                     }
                 }
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error("載入狀態時發生錯誤: " + pc.getName(), e);
         }
     }
 
@@ -570,626 +564,181 @@ public class C_LoginToServer extends ClientBasePacket {
                         pc.addRegistSleep(card.getShuimian());
                         // pc.sendPackets(new S_SystemMessage(card.getMsg1()));
                         pc.sendPackets(new S_OwnCharStatus(pc));
-                        TimeUnit.MILLISECONDS.sleep(5);
+                        // 移除延遲以提高載入速度
                     }
                 }
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error("載入狀態時發生錯誤: " + pc.getName(), e);
+        }
+    }
+
+    /**
+     * 輔助方法：應用紋樣的屬性防禦
+     */
+    private static void applyWenYangAttributeDefense(L1PcInstance pc, L1WenYang wenYang) {
+        // 屬性防禦
+        int wind = wenYang.getfeng(); // 風屬性防禦
+        if (wind != 0) {
+            pc.addWind(wind);
+        }
+        int water = wenYang.getshui(); // 水屬性防禦
+        if (water != 0) {
+            pc.addWater(water);
+        }
+        int earth = wenYang.gettu(); // 地屬性防禦
+        if (earth != 0) {
+            pc.addEarth(earth);
+        }
+        int fire = wenYang.gethuo(); // 火屬性防禦
+        if (fire != 0) {
+            pc.addFire(fire);
+        }
+      }
+
+    /**
+     * 應用指定類型紋樣的所有階段效果（累加效果）
+     */
+    private static void applyWenYangType(L1PcInstance pc, int type, int typeConstant) {
+        for (int level = 1; level <= pc.getWyLevel(type); level++) {
+            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(typeConstant, level);
+            if (wenYang != null) {
+                // 基礎屬性
+                int liliang = wenYang.getliliang();
+                if (liliang != 0) {
+                    pc.addStr(liliang);
+                }
+                int minjie = wenYang.getminjie();
+                if (minjie != 0) {
+                    pc.addDex(minjie);
+                }
+                int zhili = wenYang.getzhili();
+                if (zhili != 0) {
+                    pc.addInt(zhili);
+                }
+                int jingshen = wenYang.getjingshen();
+                if (jingshen != 0) {
+                    pc.addWis(jingshen);
+                }
+                int tizhi = wenYang.gettizhi();
+                if (tizhi != 0) {
+                    pc.addCon(tizhi);
+                }
+                int meili = wenYang.getmeili();
+                if (meili != 0) {
+                    pc.addCha(meili);
+                }
+                // 戰鬥屬性
+                int xue = wenYang.getxue();
+                if (xue != 0) {
+                    pc.addMaxHp(xue);
+                }
+                int mo = wenYang.getmo();
+                if (mo != 0) {
+                    pc.addMaxMp(mo);
+                }
+                int huixue = wenYang.gethuixue();
+                if (huixue != 0) {
+                    pc.addHpr(huixue);
+                }
+                int huimo = wenYang.gethuimo();
+                if (huimo != 0) {
+                    pc.addMpr(huimo);
+                }
+                int dmg = wenYang.getDmg();
+                int dice_dmg = wenYang.getDiceDmg();
+                if (dmg != 0 || dice_dmg != 0) {
+                    pc.set_dmgAdd(dmg, dice_dmg);
+                }
+                int pvpdmg = wenYang.getpvpdmg();
+                if (pvpdmg != 0) {
+                    pc.setPvpDmg(pvpdmg);
+                }
+                int pvpdmg_r = wenYang.getpvpdmg_r();
+                if (pvpdmg_r != 0) {
+                    pc.setPvpDmg_R(pvpdmg_r);
+                }
+                int setAc = wenYang.getAc();
+                if (setAc != 0) {
+                    pc.addAc(setAc);
+                }
+                int jianmian = wenYang.getjianmian();
+                if (jianmian != 0) {
+                    pc.addDamageReductionByArmor(jianmian);
+                }
+                int jingyan = wenYang.getjingyan();
+                if (jingyan != 0) {
+                    pc.setExpRateToPc(jingyan);
+                }
+                // 紋樣1特有的額外屬性
+                if (type == 1) {
+                    int shanbi = wenYang.getaddshanbi(); // 閃避
+                    if (shanbi != 0) {
+                        pc.add_dodge(shanbi);
+                    }
+                    int huibi = wenYang.getHuibi(); // 迴避
+                    if (huibi != 0) {
+                        pc.addOriginalEr(huibi);
+                    }
+                    int yaoshui = wenYang.getYaoshui(); // 藥水增加
+                    if (yaoshui != 0) {
+                        pc.add_up_hp_potion(yaoshui);
+                    }
+                    int fuzhong = wenYang.getFuzhong(); // 負重
+                    if (fuzhong != 0) {
+                        pc.addWeightReduction(fuzhong);
+                    }
+                }
+                // 應用屬性防禦
+                applyWenYangAttributeDefense(pc, wenYang);
+                // 只有最高階段才顯示訊息和圖標
+                if (level == pc.getWyLevel(type)) {
+                    pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣第" + level + "階"));
+                    pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
+                    pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
+                    pc.sendPackets(new S_OwnCharStatus(pc));
+                    pc.sendPackets(new S_OwnCharStatus2(pc));
+                    pc.sendPackets(new S_SPMR(pc));
+                    pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1));
+                }
+            }
         }
     }
 
     private static void addWyType6(L1PcInstance pc) {
-        if (pc.getWyType6() == 6 && pc.getWyLevel6() > 0) {
-            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(pc.getWyType6(), pc.getWyLevel6());
-            if (wenYang != null) {
-                int liliang = wenYang.getliliang();
-                if (liliang != 0) {
-                    pc.addStr(liliang);
-                }
-                int minjie = wenYang.getminjie();
-                if (minjie != 0) {
-                    pc.addDex(minjie);
-                }
-                int zhili = wenYang.getzhili();
-                if (zhili != 0) {
-                    pc.addInt(zhili);
-                }
-                int jingshen = wenYang.getjingshen();
-                if (jingshen != 0) {
-                    pc.addWis(jingshen);
-                }
-                int tizhi = wenYang.gettizhi();
-                if (tizhi != 0) {
-                    pc.addCon(tizhi);
-                }
-                int meili = wenYang.getmeili();
-                if (meili != 0) {
-                    pc.addCha(meili);
-                }
-                int xue = wenYang.getxue();
-                if (xue != 0) {
-                    pc.addMaxHp(xue);
-                }
-                int mo = wenYang.getmo();
-                if (mo != 0) {
-                    pc.addMaxMp(mo);
-                }
-                int huixue = wenYang.gethuixue();
-                if (huixue != 0) {
-                    pc.addHpr(huixue);
-                }
-                int huimo = wenYang.gethuimo();
-                if (huimo != 0) {
-                    pc.addMpr(huimo);
-                }
-                int ewai = wenYang.getewai();
-                if (ewai != 0) {
-                    pc.addDmgup(ewai);
-                    pc.addBowDmgup(ewai);
-                }
-                int chenggong = wenYang.getchenggong();
-                if (chenggong != 0) {
-                    pc.addHitup(chenggong);
-                    pc.addBowHit(chenggong);
-                }
-                int mogong = wenYang.getmogong();
-                if (mogong != 0) {
-                    pc.addSp(mogong);
-                }
-                int mofang = wenYang.getmofang();
-                if (mofang != 0) {
-                    pc.addMr(mofang);
-                }
-                int feng = wenYang.getfeng();
-                if (feng != 0) {
-                    pc.addWind(feng);
-                }
-                int shui = wenYang.getshui();
-                if (shui != 0) {
-                    pc.addWater(shui);
-                }
-                int tu = wenYang.gettu();
-                if (tu != 0) {
-                    pc.addEarth(tu);
-                }
-                int huo = wenYang.gethuo();
-                if (huo != 0) {
-                    pc.addFire(huo);
-                }
-                int jianmian = wenYang.getjianmian();
-                if (jianmian != 0) {
-                    pc.addDamageReductionByArmor(jianmian);
-                }
-                int jingyan = wenYang.getjingyan();
-                if (jingyan != 0) {
-                    pc.setExpRateToPc(jingyan);
-                }
-                pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣" + pc.getWyLevel6() + "階"));
-                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-                pc.sendPackets(new S_OwnCharStatus(pc));
-                pc.sendPackets(new S_OwnCharStatus2(pc));
-                pc.sendPackets(new S_SPMR(pc));
-                pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1)); // 重登不會有訊息
-            }
+        if (pc.getWyType6() == L1WenYang.WENYANG_TYPE_6 && pc.getWyLevel6() > 0) {
+            // 累加應用1到6階的所有效果
+            applyWenYangType(pc, 6, pc.getWyType6());
         }
     }
 
     private static void addWyType5(L1PcInstance pc) {
-        if (pc.getWyType5() == 5 && pc.getWyLevel5() > 0) {
-            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(pc.getWyType5(), pc.getWyLevel5());
-            if (wenYang != null) {
-                int liliang = wenYang.getliliang();
-                if (liliang != 0) {
-                    pc.addStr(liliang);
-                }
-                int minjie = wenYang.getminjie();
-                if (minjie != 0) {
-                    pc.addDex(minjie);
-                }
-                int zhili = wenYang.getzhili();
-                if (zhili != 0) {
-                    pc.addInt(zhili);
-                }
-                int jingshen = wenYang.getjingshen();
-                if (jingshen != 0) {
-                    pc.addWis(jingshen);
-                }
-                int tizhi = wenYang.gettizhi();
-                if (tizhi != 0) {
-                    pc.addCon(tizhi);
-                }
-                int meili = wenYang.getmeili();
-                if (meili != 0) {
-                    pc.addCha(meili);
-                }
-                int xue = wenYang.getxue();
-                if (xue != 0) {
-                    pc.addMaxHp(xue);
-                }
-                int mo = wenYang.getmo();
-                if (mo != 0) {
-                    pc.addMaxMp(mo);
-                }
-                int huixue = wenYang.gethuixue();
-                if (huixue != 0) {
-                    pc.addHpr(huixue);
-                }
-                int huimo = wenYang.gethuimo();
-                if (huimo != 0) {
-                    pc.addMpr(huimo);
-                }
-                int ewai = wenYang.getewai();
-                if (ewai != 0) {
-                    pc.addDmgup(ewai);
-                    pc.addBowDmgup(ewai);
-                }
-                int chenggong = wenYang.getchenggong();
-                if (chenggong != 0) {
-                    pc.addHitup(chenggong);
-                    pc.addBowHit(chenggong);
-                }
-                int mogong = wenYang.getmogong();
-                if (mogong != 0) {
-                    pc.addSp(mogong);
-                }
-                int mofang = wenYang.getmofang();
-                if (mofang != 0) {
-                    pc.addMr(mofang);
-                }
-                int feng = wenYang.getfeng();
-                if (feng != 0) {
-                    pc.addWind(feng);
-                }
-                int shui = wenYang.getshui();
-                if (shui != 0) {
-                    pc.addWater(shui);
-                }
-                int tu = wenYang.gettu();
-                if (tu != 0) {
-                    pc.addEarth(tu);
-                }
-                int huo = wenYang.gethuo();
-                if (huo != 0) {
-                    pc.addFire(huo);
-                }
-                int jianmian = wenYang.getjianmian();
-                if (jianmian != 0) {
-                    pc.addDamageReductionByArmor(jianmian);
-                }
-                int jingyan = wenYang.getjingyan();
-                if (jingyan != 0) {
-                    pc.setExpRateToPc(jingyan);
-                }
-                pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣" + pc.getWyLevel5() + "階"));
-                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-                pc.sendPackets(new S_OwnCharStatus(pc));
-                pc.sendPackets(new S_OwnCharStatus2(pc));
-                pc.sendPackets(new S_SPMR(pc));
-                pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1)); // 重登不會有訊息
-            }
+        if (pc.getWyType5() == L1WenYang.WENYANG_TYPE_5 && pc.getWyLevel5() > 0) {
+            applyWenYangType(pc, 5, pc.getWyType5());
         }
     }
 
     private static void addWyType4(L1PcInstance pc) {
-        if (pc.getWyType4() == 4 && pc.getWyLevel4() > 0) {
-            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(pc.getWyType4(), pc.getWyLevel4());
-            if (wenYang != null) {
-                int liliang = wenYang.getliliang();
-                if (liliang != 0) {
-                    pc.addStr(liliang);
-                }
-                int minjie = wenYang.getminjie();
-                if (minjie != 0) {
-                    pc.addDex(minjie);
-                }
-                int zhili = wenYang.getzhili();
-                if (zhili != 0) {
-                    pc.addInt(zhili);
-                }
-                int jingshen = wenYang.getjingshen();
-                if (jingshen != 0) {
-                    pc.addWis(jingshen);
-                }
-                int tizhi = wenYang.gettizhi();
-                if (tizhi != 0) {
-                    pc.addCon(tizhi);
-                }
-                int meili = wenYang.getmeili();
-                if (meili != 0) {
-                    pc.addCha(meili);
-                }
-                int xue = wenYang.getxue();
-                if (xue != 0) {
-                    pc.addMaxHp(xue);
-                }
-                int mo = wenYang.getmo();
-                if (mo != 0) {
-                    pc.addMaxMp(mo);
-                }
-                int huixue = wenYang.gethuixue();
-                if (huixue != 0) {
-                    pc.addHpr(huixue);
-                }
-                int huimo = wenYang.gethuimo();
-                if (huimo != 0) {
-                    pc.addMpr(huimo);
-                }
-                int ewai = wenYang.getewai();
-                if (ewai != 0) {
-                    pc.addDmgup(ewai);
-                    pc.addBowDmgup(ewai);
-                }
-                int chenggong = wenYang.getchenggong();
-                if (chenggong != 0) {
-                    pc.addHitup(chenggong);
-                    pc.addBowHit(chenggong);
-                }
-                int mogong = wenYang.getmogong();
-                if (mogong != 0) {
-                    pc.addSp(mogong);
-                }
-                int mofang = wenYang.getmofang();
-                if (mofang != 0) {
-                    pc.addMr(mofang);
-                }
-                int feng = wenYang.getfeng();
-                if (feng != 0) {
-                    pc.addWind(feng);
-                }
-                int shui = wenYang.getshui();
-                if (shui != 0) {
-                    pc.addWater(shui);
-                }
-                int tu = wenYang.gettu();
-                if (tu != 0) {
-                    pc.addEarth(tu);
-                }
-                int huo = wenYang.gethuo();
-                if (huo != 0) {
-                    pc.addFire(huo);
-                }
-                int jianmian = wenYang.getjianmian();
-                if (jianmian != 0) {
-                    pc.addDamageReductionByArmor(jianmian);
-                }
-                int jingyan = wenYang.getjingyan();
-                if (jingyan != 0) {
-                    pc.setExpRateToPc(jingyan);
-                }
-                pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣" + pc.getWyLevel4() + "階"));
-                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-                pc.sendPackets(new S_OwnCharStatus(pc));
-                pc.sendPackets(new S_OwnCharStatus2(pc));
-                pc.sendPackets(new S_SPMR(pc));
-                pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1)); // 重登不會有訊息
-            }
+        if (pc.getWyType4() == L1WenYang.WENYANG_TYPE_4 && pc.getWyLevel4() > 0) {
+            applyWenYangType(pc, 4, pc.getWyType4());
         }
     }
 
     private static void addWyType3(L1PcInstance pc) {
-        if (pc.getWyType3() == 3 && pc.getWyLevel3() > 0) {
-            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(pc.getWyType3(), pc.getWyLevel3());
-            if (wenYang != null) {
-                int liliang = wenYang.getliliang();
-                if (liliang != 0) {
-                    pc.addStr(liliang);
-                }
-                int minjie = wenYang.getminjie();
-                if (minjie != 0) {
-                    pc.addDex(minjie);
-                }
-                int zhili = wenYang.getzhili();
-                if (zhili != 0) {
-                    pc.addInt(zhili);
-                }
-                int jingshen = wenYang.getjingshen();
-                if (jingshen != 0) {
-                    pc.addWis(jingshen);
-                }
-                int tizhi = wenYang.gettizhi();
-                if (tizhi != 0) {
-                    pc.addCon(tizhi);
-                }
-                int meili = wenYang.getmeili();
-                if (meili != 0) {
-                    pc.addCha(meili);
-                }
-                int xue = wenYang.getxue();
-                if (xue != 0) {
-                    pc.addMaxHp(xue);
-                }
-                int mo = wenYang.getmo();
-                if (mo != 0) {
-                    pc.addMaxMp(mo);
-                }
-                int huixue = wenYang.gethuixue();
-                if (huixue != 0) {
-                    pc.addHpr(huixue);
-                }
-                int huimo = wenYang.gethuimo();
-                if (huimo != 0) {
-                    pc.addMpr(huimo);
-                }
-                int ewai = wenYang.getewai();
-                if (ewai != 0) {
-                    pc.addDmgup(ewai);
-                    pc.addBowDmgup(ewai);
-                }
-                int chenggong = wenYang.getchenggong();
-                if (chenggong != 0) {
-                    pc.addHitup(chenggong);
-                    pc.addBowHit(chenggong);
-                }
-                int mogong = wenYang.getmogong();
-                if (mogong != 0) {
-                    pc.addSp(mogong);
-                }
-                int mofang = wenYang.getmofang();
-                if (mofang != 0) {
-                    pc.addMr(mofang);
-                }
-                int feng = wenYang.getfeng();
-                if (feng != 0) {
-                    pc.addWind(feng);
-                }
-                int shui = wenYang.getshui();
-                if (shui != 0) {
-                    pc.addWater(shui);
-                }
-                int tu = wenYang.gettu();
-                if (tu != 0) {
-                    pc.addEarth(tu);
-                }
-                int huo = wenYang.gethuo();
-                if (huo != 0) {
-                    pc.addFire(huo);
-                }
-                int jianmian = wenYang.getjianmian();
-                if (jianmian != 0) {
-                    pc.addDamageReductionByArmor(jianmian);
-                }
-                int jingyan = wenYang.getjingyan();
-                if (jingyan != 0) {
-                    pc.setExpRateToPc(jingyan);
-                }
-                pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣" + pc.getWyLevel3() + "階"));
-                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-                pc.sendPackets(new S_OwnCharStatus(pc));
-                pc.sendPackets(new S_OwnCharStatus2(pc));
-                pc.sendPackets(new S_SPMR(pc));
-                pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1)); // 重登不會有訊息
-            }
+        if (pc.getWyType3() == L1WenYang.WENYANG_TYPE_3 && pc.getWyLevel3() > 0) {
+            applyWenYangType(pc, 3, pc.getWyType3());
         }
     }
 
     private static void addWyType2(L1PcInstance pc) {
-        if (pc.getWyType2() == 2 && pc.getWyLevel2() > 0) {
-            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(pc.getWyType2(), pc.getWyLevel2());
-            if (wenYang != null) {
-                int liliang = wenYang.getliliang();
-                if (liliang != 0) {
-                    pc.addStr(liliang);
-                }
-                int minjie = wenYang.getminjie();
-                if (minjie != 0) {
-                    pc.addDex(minjie);
-                }
-                int zhili = wenYang.getzhili();
-                if (zhili != 0) {
-                    pc.addInt(zhili);
-                }
-                int jingshen = wenYang.getjingshen();
-                if (jingshen != 0) {
-                    pc.addWis(jingshen);
-                }
-                int tizhi = wenYang.gettizhi();
-                if (tizhi != 0) {
-                    pc.addCon(tizhi);
-                }
-                int meili = wenYang.getmeili();
-                if (meili != 0) {
-                    pc.addCha(meili);
-                }
-                int xue = wenYang.getxue();
-                if (xue != 0) {
-                    pc.addMaxHp(xue);
-                }
-                int mo = wenYang.getmo();
-                if (mo != 0) {
-                    pc.addMaxMp(mo);
-                }
-                int huixue = wenYang.gethuixue();
-                if (huixue != 0) {
-                    pc.addHpr(huixue);
-                }
-                int huimo = wenYang.gethuimo();
-                if (huimo != 0) {
-                    pc.addMpr(huimo);
-                }
-                int ewai = wenYang.getewai();
-                if (ewai != 0) {
-                    pc.addDmgup(ewai);
-                    pc.addBowDmgup(ewai);
-                }
-                int chenggong = wenYang.getchenggong();
-                if (chenggong != 0) {
-                    pc.addHitup(chenggong);
-                    pc.addBowHit(chenggong);
-                }
-                int mogong = wenYang.getmogong();
-                if (mogong != 0) {
-                    pc.addSp(mogong);
-                }
-                int mofang = wenYang.getmofang();
-                if (mofang != 0) {
-                    pc.addMr(mofang);
-                }
-                int feng = wenYang.getfeng();
-                if (feng != 0) {
-                    pc.addWind(feng);
-                }
-                int shui = wenYang.getshui();
-                if (shui != 0) {
-                    pc.addWater(shui);
-                }
-                int tu = wenYang.gettu();
-                if (tu != 0) {
-                    pc.addEarth(tu);
-                }
-                int huo = wenYang.gethuo();
-                if (huo != 0) {
-                    pc.addFire(huo);
-                }
-                int jianmian = wenYang.getjianmian();
-                if (jianmian != 0) {
-                    pc.addDamageReductionByArmor(jianmian);
-                }
-                int jingyan = wenYang.getjingyan();
-                if (jingyan != 0) {
-                    pc.setExpRateToPc(jingyan);
-                }
-                pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣" + pc.getWyLevel2() + "階"));
-                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-                pc.sendPackets(new S_OwnCharStatus(pc));
-                pc.sendPackets(new S_OwnCharStatus2(pc));
-                pc.sendPackets(new S_SPMR(pc));
-                pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1)); // 重登不會有訊息
-            }
+        if (pc.getWyType2() == L1WenYang.WENYANG_TYPE_2 && pc.getWyLevel2() > 0) {
+            applyWenYangType(pc, 2, pc.getWyType2());
         }
     }
 
     private static void addWyType1(L1PcInstance pc) {
-        if (pc.getWyType1() == 1 && pc.getWyLevel1() > 0) {
-            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(pc.getWyType1(), pc.getWyLevel1());
-            if (wenYang != null) {
-                int liliang = wenYang.getliliang();
-                if (liliang != 0) {
-                    pc.addStr(liliang);
-                }
-                int minjie = wenYang.getminjie();
-                if (minjie != 0) {
-                    pc.addDex(minjie);
-                }
-                int zhili = wenYang.getzhili();
-                if (zhili != 0) {
-                    pc.addInt(zhili);
-                }
-                int jingshen = wenYang.getjingshen();
-                if (jingshen != 0) {
-                    pc.addWis(jingshen);
-                }
-                int tizhi = wenYang.gettizhi();
-                if (tizhi != 0) {
-                    pc.addCon(tizhi);
-                }
-                int meili = wenYang.getmeili();
-                if (meili != 0) {
-                    pc.addCha(meili);
-                }
-                int xue = wenYang.getxue();
-                if (xue != 0) {
-                    pc.addMaxHp(xue);
-                }
-                int mo = wenYang.getmo();
-                if (mo != 0) {
-                    pc.addMaxMp(mo);
-                }
-                int huixue = wenYang.gethuixue();
-                if (huixue != 0) {
-                    pc.addHpr(huixue);
-                }
-                int huimo = wenYang.gethuimo();
-                if (huimo != 0) {
-                    pc.addMpr(huimo);
-                }
-                int ewai = wenYang.getewai();
-                if (ewai != 0) {
-                    pc.addDmgup(ewai);
-                    pc.addBowDmgup(ewai);
-                }
-                int chenggong = wenYang.getchenggong();
-                if (chenggong != 0) {
-                    pc.addHitup(chenggong);
-                    pc.addBowHit(chenggong);
-                }
-                int mogong = wenYang.getmogong();
-                if (mogong != 0) {
-                    pc.addSp(mogong);
-                }
-                int mofang = wenYang.getmofang();
-                if (mofang != 0) {
-                    pc.addMr(mofang);
-                }
-                int feng = wenYang.getfeng();
-                if (feng != 0) {
-                    pc.addWind(feng);
-                }
-                int shui = wenYang.getshui();
-                if (shui != 0) {
-                    pc.addWater(shui);
-                }
-                int tu = wenYang.gettu();
-                if (tu != 0) {
-                    pc.addEarth(tu);
-                }
-                int huo = wenYang.gethuo();
-                if (huo != 0) {
-                    pc.addFire(huo);
-                }
-                int jianmian = wenYang.getjianmian();
-                if (jianmian != 0) {
-                    pc.addDamageReductionByArmor(jianmian);
-                }
-                int jingyan = wenYang.getjingyan();
-                if (jingyan != 0) {
-                    pc.setExpRateToPc(jingyan);
-                }
-                int shanbi = wenYang.getaddshanbi(); //0115/**閃避*/
-                if (shanbi != 0) {
-                    pc.add_dodge(shanbi);
-                }
-                int huibi = wenYang.getHuibi(); //0115/**迴避*/
-                if (huibi != 0) {
-                    pc.addOriginalEr(huibi);
-                }
-                int yaoshui = wenYang.getYaoshui(); //0115//**藥水增加*/
-                if (yaoshui != 0) {
-                    pc.add_up_hp_potion(yaoshui);
-                }
-                int fuzhong = wenYang.getFuzhong(); //0115/**負重*/
-                if (fuzhong != 0) {
-                    pc.addWeightReduction(fuzhong);
-                }
-                int setAc = wenYang.getAc(); //0122/**防禦*/
-                if (setAc != 0) {
-                    pc.addAc(setAc);
-                }
-                int dice_dmg = wenYang.gatDiceDmg(); //0122/機率給予爆擊
-                int dmg = wenYang.getDmg(); //0122/**// 機率給予爆擊質
-                pc.set_dmgAdd(dmg, dice_dmg);
-                int pvpdmg = wenYang.getpvpdmg(); //0122/**// 增加PVP傷害
-                if (pvpdmg != 0) {
-                    pc.setPvpDmg(pvpdmg);
-                }
-                int pvpdmg_r = wenYang.getpvpdmg_r(); //0122/**// 增加PVP減免
-                if (pvpdmg_r != 0) {
-                    pc.setPvpDmg_R(pvpdmg_r);
-                }
-                pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣" + pc.getWyLevel1() + "階"));
-                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-                pc.sendPackets(new S_OwnCharStatus(pc));
-                pc.sendPackets(new S_OwnCharStatus2(pc));
-                pc.sendPackets(new S_OwnCharStatus2(pc));
-                pc.sendPackets(new S_SPMR(pc));
-                pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1)); // 重登不會有訊息
-            }
+        if (pc.getWyType1() == L1WenYang.WENYANG_TYPE_1 && pc.getWyLevel1() > 0) {
+            applyWenYangType(pc, 1, pc.getWyType1());
         }
     }
 
@@ -2281,97 +1830,60 @@ public class C_LoginToServer extends ClientBasePacket {
                     return;
                 }
                 try {
-                    for (int i = 0; i < 20; i++) {
-                        switch (i) {
-                            case 0:
-                                addWyType1(_pc);
-                                break;
-                            case 1:
-                                addWyType2(_pc);
-                                break;
-                            case 2:
-                                addWyType3(_pc);
-                                break;
-                            case 3:
-                                addWyType4(_pc);
-                                break;
-                            case 4:
-                                addWyType5(_pc);
-                                break;
-                            case 5:
-                                addWyType6(_pc);
-                                break;
-                            case 6:
-                                addCardsStatus(_pc);
-                                break;
-                            case 7:
-                                addCardSetStatus(_pc);
-                                break;
-                            case 8:
-                                addCollectsStatus(_pc);
-                                break;
-                            case 9:
-                                addCollectSetStatus(_pc);
-                                break;
-                            case 10:
-                                addDollsStatus(_pc);
-                                break;
-                            case 11:
-                                addDollSetStatus(_pc);
-                                break;
-                            case 12:
-                                addHolysStatus(_pc);
-                                break;
-                            case 13:
-                                addHolySetStatus(_pc);
-                                break;
-                            case 14:
-                                _pc.addAstrologyPower();// 宙斯·守護星盤(舊)所有已解鎖卡牌能力值加載
-                                _pc.addAttonAstrologyPowers(); // 阿頓星盤：自動套用所有非技能節點
-                                _pc.addSilianAstrologyPowers(); // 絲莉安星盤：自動套用所有非技能節點
-                                _pc.addGritAstrologyPowers();   // 格立特星盤：自動套用所有非技能節點
-                                _pc.addYishidiAstrologyPowers(); // 依詩蒂星盤：自動套用所有非技能節點
-                                // 讀回絲莉安各技能冷卻（若仍在未來，轉回毫秒放入記憶體）
-                                try {
-                                    if (_pc.get_other() != null) {
-                                        final long nowMs = System.currentTimeMillis();
-                                        int cd1s = _pc.get_other().get_silian_cd1_until_s();
-                                        int cd2s = _pc.get_other().get_silian_cd2_until_s();
-                                        int cd3s = _pc.get_other().get_silian_cd3_until_s();
-                                        long cd1ms = ((long) cd1s) * 1000L;
-                                        long cd2ms = ((long) cd2s) * 1000L;
-                                        long cd3ms = ((long) cd3s) * 1000L;
-                                        if (cd1ms > nowMs) _pc.setSilianCooldown1Until(cd1ms); else _pc.setSilianCooldown1Until(0L);
-                                        if (cd2ms > nowMs) _pc.setSilianCooldown2Until(cd2ms); else _pc.setSilianCooldown2Until(0L);
-                                        if (cd3ms > nowMs) _pc.setSilianCooldown3Until(cd3ms); else _pc.setSilianCooldown3Until(0L);
-
-                                        // 不再恢復 HOT/ICON（ICON 僅在施放時顯示冷卻秒）
-                                    }
-                                } catch (Throwable ignore) {}
-                                _pc.sendPackets(new S_SystemMessage("\\aB獲得星盤能力加成。", 17));
-                                break;
-                        }
-                        TimeUnit.SECONDS.sleep(1);
-                    /* check
+                    // 使用批次載入取代延遲載入，避免阻塞主執行緒
+                    // 載入紋樣系統（所有6個紋樣立即載入）
                     addWyType1(_pc);
                     addWyType2(_pc);
                     addWyType3(_pc);
                     addWyType4(_pc);
                     addWyType5(_pc);
                     addWyType6(_pc);
+
+                    // 載入卡片系統
                     addCardsStatus(_pc);
                     addCardSetStatus(_pc);
+
+                    // 載入收集系統
                     addCollectsStatus(_pc);
                     addCollectSetStatus(_pc);
+
+                    // 載入娃娃系統
                     addDollsStatus(_pc);
                     addDollSetStatus(_pc);
+
+                    // 載入聖物系統
                     addHolysStatus(_pc);
                     addHolySetStatus(_pc);
-                    _pc.addAstrologyPower();
-                    */
-                    }
-                } catch (InterruptedException e) {
-                    _log.error(e.getLocalizedMessage(), e);
+
+                    // 載入星盤系統
+                    _pc.addAstrologyPower();// 宙斯·守護星盤(舊)所有已解鎖卡牌能力值加載
+                    _pc.addAttonAstrologyPowers(); // 阿頓星盤：自動套用所有非技能節點
+                    _pc.addSilianAstrologyPowers(); // 絲莉安星盤：自動套用所有非技能節點
+                    _pc.addGritAstrologyPowers();   // 格立特星盤：自動套用所有非技能節點
+                    _pc.addYishidiAstrologyPowers(); // 依詩蒂星盤：自動套用所有非技能節點
+
+                    // 讀回絲莉安各技能冷卻（若仍在未來，轉回毫秒放入記憶體）
+                    try {
+                        if (_pc.get_other() != null) {
+                            final long nowMs = System.currentTimeMillis();
+                            int cd1s = _pc.get_other().get_silian_cd1_until_s();
+                            int cd2s = _pc.get_other().get_silian_cd2_until_s();
+                            int cd3s = _pc.get_other().get_silian_cd3_until_s();
+                            long cd1ms = ((long) cd1s) * 1000L;
+                            long cd2ms = ((long) cd2s) * 1000L;
+                            long cd3ms = ((long) cd3s) * 1000L;
+                            if (cd1ms > nowMs) _pc.setSilianCooldown1Until(cd1ms); else _pc.setSilianCooldown1Until(0L);
+                            if (cd2ms > nowMs) _pc.setSilianCooldown2Until(cd2ms); else _pc.setSilianCooldown2Until(0L);
+                            if (cd3ms > nowMs) _pc.setSilianCooldown3Until(cd3ms); else _pc.setSilianCooldown3Until(0L);
+
+                            // 不再恢復 HOT/ICON（ICON 僅在施放時顯示冷卻秒）
+                        }
+                    } catch (Throwable ignore) {}
+
+                    _pc.sendPackets(new S_SystemMessage("\\aB所有能力加成載入完成。", 17));
+
+                } catch (Exception e) {
+                    _log.error("載入其他狀態時發生錯誤: " + _pc.getName(), e);
                 }
             }
         }

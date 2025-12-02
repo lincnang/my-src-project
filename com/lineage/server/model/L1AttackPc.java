@@ -1626,13 +1626,7 @@ public class L1AttackPc extends L1AttackMode {
             _pc.sendPackets(new S_ServerMessage("發動-魔法占卜[減傷效果]"));
             dmg /= 3;
         }
-        //2017/04/25
-        if (_pc.getbbdmg1() && RandomArrayList.getInc(100, 1) <= 3) {
-            L1SpawnUtil.spawnEffect(81162, 1, _targetPc.getX(), _targetPc.getY(), _targetPc.getMapId(), _targetPc, 0);
-            _targetPc.setSkillEffect(L1SkillId.SHOCK_STUN, 1000);
-            _targetPc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
-            _pc.sendPackets(new S_ServerMessage("發動-魔法占卜[沖暈效果]"));
-        }
+        //2017/04/25 - 暈眩效果已移動到commit()方法中確保只有命中才觸發
         if (_pc.getbbdmg2() && RandomArrayList.getInc(100, 1) <= 10) {
             int drainHp = ThreadLocalRandom.current().nextInt(20) + 1;
             if (_pc.getCurrentHp() < _pc.getMaxHp() * 0.97) {
@@ -3430,6 +3424,15 @@ public class L1AttackPc extends L1AttackMode {
      */
     public void commit() {
         if (_isHit) {// 命中
+            // 2017/04/25 魔法占卜暈眩效果 - 確保只有在命中時才觸發
+            if (_pc.getbbdmg1() && RandomArrayList.getInc(100, 1) <= 3) {
+                L1SpawnUtil.spawnEffect(81162, 1, _targetPc.getX(), _targetPc.getY(), _targetPc.getMapId(), _targetPc, 0);
+                _targetPc.setSkillEffect(L1SkillId.SHOCK_STUN, 1000);
+                _targetPc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
+                _targetPc.setParalyzed(true);  // 設置玩家麻痹狀態
+                _pc.sendPackets(new S_ServerMessage("發動-魔法占卜[沖暈效果]"));
+            }
+
             if (_pc.dice_hp() != 0 && _random.nextInt(100) + 1 <= _pc.dice_hp()) {// 附魔系統
                 // 機率吸取體力
                 _drainHp = _pc.sucking_hp();

@@ -580,6 +580,7 @@ public class L1MobSkillUse {
             if (!pc.isGmInvis()) {// 不是GM隱身狀態
                 pc.setSkillEffect(SHOCK_STUN, shock * 1000);
                 pc.sendPackets(new S_Paralysis(5, true));
+                pc.setParalyzed(true);  // 修復：設置玩家麻痹狀態
                 L1SpawnUtil.spawnEffect(81162, shock, pc.getX(), pc.getY(), _attacker.getMapId(), _attacker, 0);
             }
         }

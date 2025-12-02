@@ -27,6 +27,7 @@ public class SHOCK_STUN extends SkillMode {
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
             pc.sendPackets(new S_Paralysis(5, true));
+            pc.setParalyzed(true);
         } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1PetInstance))) {
             L1NpcInstance tgnpc = (L1NpcInstance) cha;
             tgnpc.setParalyzed(true);
@@ -50,6 +51,7 @@ public class SHOCK_STUN extends SkillMode {
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
             pc.sendPackets(new S_Paralysis(5, true));
+            pc.setParalyzed(true);
         } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1GuardianInstance)) || ((cha instanceof L1GuardInstance)) || ((cha instanceof L1PetInstance))) {
             L1NpcInstance tgnpc = (L1NpcInstance) cha;
             tgnpc.setParalyzed(true);
@@ -64,6 +66,7 @@ public class SHOCK_STUN extends SkillMode {
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
             pc.sendPackets(new S_Paralysis(5, false));
+            pc.setParalyzed(false);  // 修復：清除玩家麻痹狀態
         } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1GuardianInstance)) || ((cha instanceof L1GuardInstance)) || ((cha instanceof L1PetInstance))) {
             L1NpcInstance npc = (L1NpcInstance) cha;
             npc.setParalyzed(false);

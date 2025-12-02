@@ -1684,6 +1684,7 @@ public class L1SkillUse {
         //        }
         // 衝暈 + 強化秒數
         if ((_skillId == SHOCK_STUN) && (_user instanceof L1PcInstance)) {
+            // 修復：先進行命中判定，只有命中才設置暈眩效果
             // 把 _user 轉成玩家
             L1PcInstance pc = (L1PcInstance) _user;
             // (A) 讀取衝暈技能等級 (若 L1PcInstance 有 getShockStunLevel)
@@ -1706,7 +1707,24 @@ public class L1SkillUse {
                 }
             } else {
             }
-            _target.setSkillEffect(SHOCK_STUN, stunSec * 1000);
+
+            // 修復：進行命中判定
+            L1Magic magic = new L1Magic(pc, _target);
+            if (magic.calcProbabilityMagic(SHOCK_STUN)) {
+                // 只有命中才設置暈眩效果
+                if (_target instanceof L1PcInstance) {
+                    L1PcInstance targetPc = (L1PcInstance) _target;
+                    targetPc.setSkillEffect(SHOCK_STUN, stunSec * 1000);
+                    targetPc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
+                    targetPc.setParalyzed(true); // 設置玩家麻痹狀態
+                } else if (_target instanceof L1NpcInstance) {
+                    L1NpcInstance targetNpc = (L1NpcInstance) _target;
+                    targetNpc.setSkillEffect(SHOCK_STUN, stunSec * 1000);
+                    targetNpc.setParalyzed(true);
+                }
+                L1SpawnUtil.spawnEffect(81162, stunSec, _target.getX(), _target.getY(), _target.getMapId(), pc, 0);
+            }
+            // 恢復攻擊動作
             _target.onAction(_player);
         }
         if ((_skillId == KINGDOM_STUN) && (_user instanceof L1PcInstance)) {

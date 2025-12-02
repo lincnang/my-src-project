@@ -28,11 +28,8 @@ import com.lineage.server.timecontroller.server.ServerUseMapTimer;
 import com.lineage.server.utils.CalcStat;
 import com.lineage.server.world.World;
 import com.lineage.server.world.WorldClan;
-import com.lineage.server.templates.L1EmblemIcon;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import william.Honor;
-import william.L1WilliamHonor;
 import william.Npc_Honor;
 import william.ReincarnationSkill;
 
@@ -1237,6 +1234,40 @@ public class L1ActionPc {
             if (ServerQuestMobTable.get().Cmd(_pc, cmd)) {
                 return;
             }
+
+            // BOSS相關指令 (必須在技能強化系統之前處理，防止衝突)
+            if (cmd.equalsIgnoreCase("bossseach")) {
+                _pc.setBossSeachPage(0);
+                BossShowPage(_pc.getBossSeachPage());
+                return;
+            } else if (cmd.startsWith("bo_")) {
+                try {
+                    String bossIdStr = cmd.substring(3);
+                    // 檢查是否為純數字
+                    if (!bossIdStr.matches("\\d+")) {
+                        return;
+                    }
+                    int bossId = Integer.parseInt(bossIdStr);
+                    // 檢查BOSS ID是否在有效範圍內
+                    int totalBossCount = SpawnBossTable.get().BossSeachSize();
+                    if (bossId <= 0 || bossId > totalBossCount) {
+                        return;
+                    }
+
+                    // 再次確認BOSS資料存在
+                    L1Spawn spawn = SpawnBossTable.get().getBossSeach(bossId);
+                    if (spawn == null) {
+                        _pc.sendPackets(new S_SystemMessage("找不到該BOSS資料，請聯繫GM"));
+                        return;
+                    }
+                    TeleportBoss(_pc, bossId);
+                } catch (NumberFormatException e) {
+                } catch (Exception e) {
+                    _pc.sendPackets(new S_SystemMessage("執行BOSS傳送時發生錯誤，請稍後再試"));
+                }
+                return;
+            }
+
             // 技能強化
             if (SkillEnhanceTable.Cmd(_pc, cmd)) {
                 return;
@@ -1552,12 +1583,6 @@ public class L1ActionPc {
                 //	showCulture2(_pc);
             } else if (cmd.equalsIgnoreCase("Status11")) { // 檢查個人狀態
                 showStatus11(_pc);
-            } else if (cmd.equalsIgnoreCase("bossseach")) {
-                _pc.setBossSeachPage(0);
-                BossShowPage(_pc.getBossSeachPage());
-            } else if (cmd.startsWith("bo_")) {
-                int bossId = Integer.parseInt(cmd.substring(3));
-                TeleportBoss(_pc, bossId);
             }
             //			else if (cmd.equalsIgnoreCase("uppu")) {
             //				int v = _pc.getBossSeachPage();
@@ -1652,7 +1677,7 @@ public class L1ActionPc {
                     _pc.sendPackets(new S_ClanMarkSee());
                 }
                 return;
-            } else if (cmd.equalsIgnoreCase("War1_Part")) {// 邀請屏幕內所有盟友組隊
+            } else if (cmd.equalsIgnoreCase("War1s_Part")) {// 邀請屏幕內所有未組隊者組隊
                 if (_pc.isInParty()) {
                     if (!_pc.getParty().isLeader(_pc)) {
                         // 只有領導者才能邀請其他的成員。
@@ -1660,21 +1685,36 @@ public class L1ActionPc {
                         return;
                     }
                 }
-                L1WilliamHonor Honor1 = Honor.getInstance().getTemplate(_pc.getHonorLevel() + 1);
-                if (Honor1 != null) {
-                    int next_lv_honor1 = Honor1.getHonorMax() - _pc.getHonor();//升到下級所需聲望
-                    if (next_lv_honor1 <= 0) {
-                        _pc.setHonor(_pc.getHonor());
-                        _pc.sendPackets(new S_SystemMessage("你的聲望階級升級了，請重新登入獲取新的能力。"));
-                        _pc.sendPackets(new S_SystemMessage("重登前切記把寵物收回唷。"));
-                        _pc.save();
-                    } else {
-                        _pc.sendPackets(new S_SystemMessage("聲望值還需要「" + next_lv_honor1 + "」點才能升級聲望階級。"));
+                _pc.sendPackets(new S_SystemMessage("屏幕組隊邀請已發送!等待入隊..."));
+                for (final L1Object obj : World.get().getVisibleObjects(_pc)) {
+                    if (obj instanceof L1PcInstance) {
+                        final L1PcInstance tgpc = (L1PcInstance) obj;
+                        if (tgpc.isGhost()) { // 鬼魂模式
+                            continue;
+                        }
+                        if (tgpc.isDead()) { // 死亡
+                            continue;
+                        }
+                        if (tgpc.isTeleport()) { // 傳送中
+                            continue;
+                        }
+                        if (tgpc.isPrivateShop()) { // 擺攤中
+                            continue;
+                        }
+                        if (tgpc.isInParty()) {
+                            // 避免當前玩家沒有隊伍時呼叫 _pc.getParty() 造成 NPE
+                            if (_pc.isInParty() && _pc.getParty() != null && _pc.getParty().isMember(tgpc)) { // 是自己的隊員
+                                continue;
+                            } else {
+                                _pc.sendPackets(new S_SystemMessage(tgpc.getName() + " 已在其他隊伍中"));
+                                continue;
+                            }
+                        }
+                        tgpc.setPartyID(_pc.getId());
+                        // 玩家 %0%s 邀請您加入隊伍？(Y/N)
+                        tgpc.sendPackets(new S_Message_YN(953, _pc.getName()));
                     }
-                } else {
-                    _pc.sendPackets(new S_SystemMessage("你的聲望階級已經達到最高等級不能再升級了。"));
                 }
-                _pc.sendPackets(new S_CloseList(_pc.getId()));
             } else if (cmd.equalsIgnoreCase("Honor_Q")) {
                 _pc.sendPackets(new S_ServerMessage("目前威望為：" + _pc.getHonor() + " 。"));//"\\fV目前累積儲值金額"+_pc.getpaycount()+"元"20170122
                 _pc.sendPackets(new S_SystemMessage("屏幕組隊邀請已發送!等待入隊..."));
@@ -1749,16 +1789,77 @@ public class L1ActionPc {
     }
 
     private void TeleportBoss(L1PcInstance pc, int bossId) {
-        L1Spawn spawn = SpawnBossTable.get().getBossSeach(bossId);
-        if (!IsBossSpawn(spawn)) {
-            _pc.sendPackets(new S_SystemMessage("尚未重生"));
-            return;
+        try {
+            _log.info("[BOSS傳送] 開始處理BOSS傳送 ID: " + bossId + " 玩家: " + pc.getName());
+
+            L1Spawn spawn = SpawnBossTable.get().getBossSeach(bossId);
+            if (spawn == null) {
+                _log.warn("[BOSS傳送] 找不到BOSS資料 ID: " + bossId);
+                _pc.sendPackets(new S_SystemMessage("找不到該BOSS資料，請聯繫GM"));
+                return;
+            }
+
+            _log.info("[BOSS傳送] BOSS名稱: " + spawn.getName() + " 是否存活: " + IsBossSpawn(spawn));
+
+            if (!IsBossSpawn(spawn)) {
+                _pc.sendPackets(new S_SystemMessage("尚未重生"));
+                return;
+            }
+
+            _log.info("[BOSS傳送] 檢查材料: " + ConfigOther.BOSS_MATERIAL + " 數量: " + ConfigOther.BOSS_COUNT);
+
+            if (!pc.getInventory().consumeItem(ConfigOther.BOSS_MATERIAL, ConfigOther.BOSS_COUNT)) {
+                _log.warn("[BOSS傳送] 材料不足 ID: " + bossId + " 玩家: " + pc.getName());
+                _pc.sendPackets(new S_SystemMessage("材料不足"));
+                return;
+            }
+
+            // 檢查座標是否有效
+            int x = spawn.getLocX();
+            int y = spawn.getLocY();
+            int mapId = spawn.getMapId();
+
+            _log.info("[BOSS傳送] 傳送座標 X: " + x + " Y: " + y + " Map: " + mapId);
+
+            // 修正座標檢查：允許地圖ID為0（某些BOSS確實在地圖0）
+            if (x <= 0 || y <= 0) {
+                _pc.sendPackets(new S_SystemMessage("BOSS座標資料錯誤，請聯繫GM"));
+                _log.error("BOSS座標資料錯誤 - ID: " + bossId + ", X: " + x + ", Y: " + y + ", Map: " + mapId);
+                return;
+            }
+
+            // 如果地圖ID為0，發出警告但允許傳送
+            if (mapId == 0) {
+                _log.warn("[BOSS傳送] BOSS地圖ID為0，但允許傳送 - ID: " + bossId + ", Map: " + mapId);
+            } else if (mapId < 0) {
+                _pc.sendPackets(new S_SystemMessage("BOSS地圖資料錯誤，請聯繫GM"));
+                _log.error("BOSS地圖資料錯誤 - ID: " + bossId + ", X: " + x + ", Y: " + y + ", Map: " + mapId);
+                return;
+            }
+
+            _log.info("[BOSS傳送] 開始執行傳送...");
+            _log.info("[BOSS傳送] 執行傳送參數 - 玩家: " + pc.getName() + ", 座標: (" + x + "," + y + "), 地圖: " + mapId + ", 方向: " + pc.getHeading());
+
+            try {
+                L1Teleport.teleport(pc, x, y, (short) mapId, pc.getHeading(), true);
+                _log.info("[BOSS傳送] 傳送呼叫完成 ID: " + bossId);
+
+                // 驗證傳送是否成功
+                _log.info("[BOSS傳送] 傳送後座標驗證 - 玩家當前位置: (" + pc.getX() + "," + pc.getY() + "), 地圖: " + pc.getMapId());
+
+                if (pc.getX() == x && pc.getY() == y && pc.getMapId() == mapId) {
+                    _log.info("[BOSS傳送] ✓ 傳送成功驗證通過 ID: " + bossId);
+                } else {
+                    _log.warn("[BOSS傳送] ⚠ 傳送後座標不符 - 預期: (" + x + "," + y + "," + mapId + "), 實際: (" + pc.getX() + "," + pc.getY() + "," + pc.getMapId() + ")");
+                }
+            } catch (Exception teleportError) {
+                _log.error("[BOSS傳送] 傳送執行時發生錯誤 - ID: " + bossId, teleportError);
+                _pc.sendPackets(new S_SystemMessage("傳送失敗，請聯繫GM檢查BOSS座標設定"));
+            }
+        } catch (Exception e) {
+            _pc.sendPackets(new S_SystemMessage("傳送時發生錯誤，請稍後再試"));
+            _log.error("BOSS傳送錯誤 - ID: " + bossId, e);
         }
-        if (!pc.getInventory().consumeItem(ConfigOther.BOSS_MATERIAL, ConfigOther.BOSS_COUNT)) {
-            _pc.sendPackets(new S_SystemMessage("材料不足"));
-            return;
-        }
-        L1Teleport.teleport(pc, spawn.getLocX(), spawn.getLocY(), spawn.getMapId(), pc.getHeading(), true);
     }
 
     /**

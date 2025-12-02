@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 紋樣系統
@@ -23,6 +24,10 @@ public class WenYangTable {
     private static final HashMap<Integer, Integer> _checkMaxEnchantLevelmaps = new HashMap<>();
     private static WenYangTable _instance;
     private final Map<String, L1WenYang> _itemIdIndex = new HashMap<>();
+
+    // 快取機制：避免重複查詢相同的紋樣資料
+    private final Map<String, L1WenYang> _cache = new ConcurrentHashMap<>();
+    private static final int MAX_CACHE_SIZE = 1000;
 
     private WenYangTable() {
         loadMagicCrystalItem();
@@ -135,9 +140,24 @@ public class WenYangTable {
             if (enchantLevel > checkMaxEnchantLevel) {
                 maxEnchantLevel = checkMaxEnchantLevel;
             }
-            final String checkKey = String.valueOf(type) + maxEnchantLevel;
-            if (_itemIdIndex.containsKey(checkKey)) {
-                return _itemIdIndex.get(checkKey);
+            final String cacheKey = String.valueOf(type) + maxEnchantLevel;
+
+            // 先檢查快取
+            L1WenYang cached = _cache.get(cacheKey);
+            if (cached != null) {
+                return cached;
+            }
+
+            // 快取沒有，從記憶體中查找
+            if (_itemIdIndex.containsKey(cacheKey)) {
+                L1WenYang wenYang = _itemIdIndex.get(cacheKey);
+
+                // 添加到快取（簡單的容量控制）
+                if (_cache.size() < MAX_CACHE_SIZE) {
+                    _cache.put(cacheKey, wenYang);
+                }
+
+                return wenYang;
             }
         }
         return null;

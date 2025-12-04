@@ -1447,9 +1447,9 @@ public class C_ItemCraft1 extends ClientBasePacket {
             if ((pc.hasSkillEffect(161)) && (!pc.isGm())) {
                 isStop = true;
             }
-            //			if ((pc.hasSkillEffect(1007)) && (!pc.isGm())) {
-            //				isStop = true;
-            //			}
+            if ((pc.hasSkillEffect(1007)) && (!pc.isGm())) {
+                isStop = true;
+            }
             //
             //			if (pc.hasSkillEffect(4002)) {
             //				isStop = true;
@@ -1977,11 +1977,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         }
                     }
                     // 中毒狀態
-                    if (pc.hasSkillEffect(STATUS_POISON_SILENCE)) {
-                        if (!pc.isGm()) {
-                            isStop = true;
-                        }
-                    }
+                    // 沉默毒不再限制廣播頻道，確保玩家仍可求助
                     // 你從現在被禁止閒談。
                     if (pc.hasSkillEffect(STATUS_CHAT_PROHIBITED)) {
                         isStop = true;
@@ -2067,11 +2063,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         }
                     }
                     // 中毒狀態
-                    if (pc.hasSkillEffect(STATUS_POISON_SILENCE)) {
-                        if (!pc.isGm()) {
-                            isStop = true;
-                        }
-                    }
+                    // 沉默毒不再限制交易頻道，確保玩家仍可求助
                     // 你從現在被禁止閒談。
                     if (pc.hasSkillEffect(STATUS_CHAT_PROHIBITED)) {
                         isStop = true;

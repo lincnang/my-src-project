@@ -1012,7 +1012,8 @@ public class L1SkillStop {
                             pc.sendPackets(new S_ServerMessage(288));
                         }
                         break;
-                    case STATUS_POISON:// 毒素效果
+                    case STATUS_POISON:// 普通毒素效果
+                    case STATUS_POISON_SILENCE:// 沉默毒素效果
                         cha.curePoison();
                         break;
                     case 3000:

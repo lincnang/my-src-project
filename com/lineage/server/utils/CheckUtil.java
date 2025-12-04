@@ -146,7 +146,7 @@ public class CheckUtil {
      */
     public static boolean getUseItemAll(final L1PcInstance pc) {
         // 使用統一控制狀態檢查，涵蓋所有限制行動的狀態
-        return !pc.isInAnyControlState();
+        return !pc.isInAnyControlState(false);
     }
 
     /**
@@ -156,7 +156,7 @@ public class CheckUtil {
      */
     public static boolean getUseItem_heal(final L1PcInstance pc) {
         // 使用統一控制狀態檢查，涵蓋所有限制行動的狀態
-        return !pc.isInAnyControlState();
+        return !pc.isInAnyControlState(false);
     }
 
     /**
@@ -166,7 +166,7 @@ public class CheckUtil {
      */
     public static boolean getUseItem(final L1PcInstance pc) {
         // 使用統一控制狀態檢查，涵蓋所有限制行動的狀態
-        return !pc.isInAnyControlState();
+        return !pc.isInAnyControlState(false);
     }
 
     /**

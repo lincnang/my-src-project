@@ -49,6 +49,10 @@ public class C_ChatWhisper extends ClientBasePacket {
                 whisperFrom.sendPackets(new S_ServerMessage(242));
                 return;
             }
+            if (whisperFrom.hasSkillEffect(1007) && !whisperFrom.isGm()) {
+                whisperFrom.sendPackets(new S_ServerMessage(242));
+                return;
+            }
             // 等級 %0 以下無法使用密談。
             if ((whisperFrom.getLevel() < ConfigAlt.WHISPER_CHAT_LEVEL) && !whisperFrom.isGm()) {
                 whisperFrom.sendPackets(new S_ServerMessage(404, String.valueOf(ConfigAlt.WHISPER_CHAT_LEVEL)));

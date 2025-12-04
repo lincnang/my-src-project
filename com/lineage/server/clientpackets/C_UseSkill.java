@@ -95,21 +95,6 @@ public class C_UseSkill extends ClientBasePacket {
             if (pc.hasSkillEffect(AREA_OF_SILENCE) && !isError) {
                 isError = true;
             }
-            if (pc.hasSkillEffect(STATUS_POISON_SILENCE) && !isError) {
-                isError = true;
-            }
-
-            // 使用統一控制狀態檢查，涵蓋所有限制行動的狀態
-            if (pc.isInAnyControlState() && !isError) {
-                isError = true;
-            }
-            if (isError) {
-                pc.setTeleport(false);
-                pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
-                // 285 \f1在此狀態下無法使用魔法。
-                pc.sendPackets(new S_ServerMessage(285));
-                return;
-            }
             // 加載封包內容
             final int row = readC();
             final int column = readC();
@@ -119,6 +104,19 @@ public class C_UseSkill extends ClientBasePacket {
                 return;
             }
             if (skillId < 0) {
+                return;
+            }
+            final boolean isCurePoisonSkill = (skillId == CURE_POISON);
+
+            // 使用統一控制狀態檢查，允許沉默毒施放解毒術
+            if (!isError && pc.isInAnyControlState(!isCurePoisonSkill)) {
+                isError = true;
+            }
+            if (isError) {
+                pc.setTeleport(false);
+                pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
+                // 285 \f1在此狀態下無法使用魔法。
+                pc.sendPackets(new S_ServerMessage(285));
                 return;
             }
             // 所有改被動的技能 都在這里加一遍比較靠譜

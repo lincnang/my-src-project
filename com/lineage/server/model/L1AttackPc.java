@@ -3476,25 +3476,31 @@ public class L1AttackPc extends L1AttackMode {
                     break;
                 case PC_NPC:
                     commitNpc();
-                    Random rand = new Random();
-                    int chance = rand.nextInt(100); // 生成0到99之間的隨機數
+                    if (ConfigAlt.DAMAGE_EFFECT_ENABLED && _damage > 0) {
+                        int chance = _random.nextInt(100); // 生成0到99之間的隨機數
+                        int effectId = 0;
 
-                    // 傷害攻擊特效顯示 2023.12.23
-                    if (_damage > 0 && _damage <= 100) {
-                        if (chance < 15) { // 50%的機率觸發
-                            _pc.sendPacketsAll(new S_SkillSound(_targetNpc.getId(), 16021)); // Great 16021
+                        // 傷害攻擊特效顯示 2023.12.23
+                        if (_damage <= 100) {
+                            if (chance < 60) { // 15%的機率觸發
+                                effectId = ConfigAlt.DAMAGE_EFFECT_LOW_GFX;
+                            }
+                        } else if (_damage <= 200) {
+                            if (chance < 40) { // 30%的機率觸發
+                                effectId = ConfigAlt.DAMAGE_EFFECT_MID_GFX;
+                            }
+                        } else if (_damage <= 300) {
+                            if (chance < 30) { // 20%的機率觸發
+                                effectId = ConfigAlt.DAMAGE_EFFECT_HIGH_GFX;
+                            }
+                        } else { // 300以上
+                            if (chance < 10) { // 10%的機率觸發
+                                effectId = ConfigAlt.DAMAGE_EFFECT_CRITICAL_GFX;
+                            }
                         }
-                    } else if (_damage > 100 && _damage <= 200) {
-                        if (chance < 30) { // 30%的機率觸發
-                            _pc.sendPacketsAll(new S_SkillSound(_targetNpc.getId(), 17304)); // Damage x1.5 17304
-                        }
-                    } else if (_damage > 200 && _damage <= 300) {
-                        if (chance < 20) { // 20%的機率觸發
-                            _pc.sendPacketsAll(new S_SkillSound(_targetNpc.getId(), 17261)); // Damage x2 17327
-                        }
-                    } else { // 300以上
-                        if (chance < 10) { // 10%的機率觸發
-                            _pc.sendPacketsAll(new S_SkillSound(_targetNpc.getId(), 17261)); // Critical 紫色 17261
+
+                        if (effectId > 0) {
+                            _pc.sendPackets(new S_SkillSound(_targetNpc.getId(), effectId));
                         }
                     }
 

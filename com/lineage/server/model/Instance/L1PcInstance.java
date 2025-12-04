@@ -9156,46 +9156,33 @@ public class L1PcInstance extends L1Character { // src015
 
     /**
      * 檢查是否處於任何控制狀態
-     * 包含所有限制行動的負面狀態和暈眩技能
      *
      * @return true:處於控制狀態 false:正常
      */
     public boolean isInAnyControlState() {
-        return isSleeped()
+        return isInAnyControlState(true);
+    }
+
+    /**
+     * 控制狀態檢查（可選擇是否將沉默毒素視為控制）
+     */
+    public boolean isInAnyControlState(boolean includeSilencePoison) {
+        boolean control = isSleeped()
             || isParalyzedX()
             || isParalyzed()
             // 基本控制狀態
-            || hasSkillEffect(L1SkillId.DESPERADO)           // 亡命之徒
-            || hasSkillEffect(L1SkillId.SHOCK_STUN)           // 衝擊之暈
-            || hasSkillEffect(L1SkillId.KINGDOM_STUN)         // 王者之劍暈眩
-            || hasSkillEffect(L1SkillId.TITAN_STUN)           // 泰坦之暈
-            || hasSkillEffect(L1SkillId.FIRESTUN)             // 火焰暈眩
-            || hasSkillEffect(L1SkillId.TRUEFIRESTUN)         // 真實火焰暈眩
-            || hasSkillEffect(L1SkillId.SHOCK_SKIN)           // 衝擊之盾
-            // 麻痺類技能
-            || hasSkillEffect(L1SkillId.STATUS_CURSE_PARALYZED) // 詛咒型麻痺
-            || hasSkillEffect(L1SkillId.STATUS_POISON_PARALYZED) // 毒性麻痺
-            || hasSkillEffect(L1SkillId.CURSE_PARALYZE)         // 詛咒麻痺
-            || hasSkillEffect(L1SkillId.CURSE_PARALYZE2)        // 詛咒麻痺2
-            || hasSkillEffect(L1SkillId.BONE_BREAK)           // 骷髏毀壞
-            || hasSkillEffect(L1SkillId.HAND_DARKNESS)        // 黑暗之手
-            || hasSkillEffect(L1SkillId.THUNDER_GRAB)         // 雷電抓取
-            // 凍結束縛類技能
-            || hasSkillEffect(L1SkillId.STATUS_FREEZE)         // 凍結狀態
-            || hasSkillEffect(L1SkillId.ICE_LANCE)             // 冰矛
-            || hasSkillEffect(L1SkillId.EARTH_BIND)           // 地面障礙
-            || hasSkillEffect(L1SkillId.ENTANGLE)             // 纏繞
-            // 其他控制技能
-            || hasSkillEffect(L1SkillId.PHANTASM)             // 幻象
-            || hasSkillEffect(L1SkillId.FOG_OF_SLEEPING)       // 霧之睡眠
-            || hasSkillEffect(L1SkillId.DARKNESS)             // 黑暗
-            || hasSkillEffect(L1SkillId.DARK_BLIND)           // 黑暗失明
-            || hasSkillEffect(L1SkillId.SLOW)                 // 緩速
-            || hasSkillEffect(L1SkillId.SILENCE)              // 靜默
-            || hasSkillEffect(L1SkillId.AREA_OF_SILENCE)       // 封印禁地
-            || hasSkillEffect(L1SkillId.STATUS_POISON_SILENCE) // 沉默毒素
-            || hasSkillEffect(L1SkillId.CUBE_SHOCK)           // 立方體衝擊
-            || hasSkillEffect(L1SkillId.STATUS_CUBE_SHOCK_TO_ENEMY); // 立方體衝擊(敵對)
+            || hasSkillEffect(L1SkillId.DESPERADO)
+            || hasSkillEffect(L1SkillId.SHOCK_STUN)
+            || hasSkillEffect(L1SkillId.KINGDOM_STUN)
+            || hasSkillEffect(L1SkillId.TITAN_STUN)
+            || hasSkillEffect(L1SkillId.FIRESTUN)
+            || hasSkillEffect(L1SkillId.TRUEFIRESTUN)
+            || hasSkillEffect(L1SkillId.SHOCK_SKIN);
+
+        if (!control && includeSilencePoison && hasSkillEffect(L1SkillId.STATUS_POISON_SILENCE)) {
+            control = true;
+        }
+        return control;
     }
 
     /**

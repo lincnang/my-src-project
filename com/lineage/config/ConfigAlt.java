@@ -19,6 +19,11 @@ public final class ConfigAlt {
     public static boolean ALT_NONPVP;
     public static boolean ALT_PUNISHMENT;
     public static boolean ALT_ATKMSG;
+    public static boolean DAMAGE_EFFECT_ENABLED;
+    public static int DAMAGE_EFFECT_LOW_GFX;
+    public static int DAMAGE_EFFECT_MID_GFX;
+    public static int DAMAGE_EFFECT_HIGH_GFX;
+    public static int DAMAGE_EFFECT_CRITICAL_GFX;
     public static boolean CLAN_ALLIANCE;
     public static int ALT_ITEM_DELETION_TIME;
     public static boolean ALT_WHO_COMMANDX;
@@ -90,6 +95,11 @@ public final class ConfigAlt {
             ALT_NONPVP = Boolean.parseBoolean(set.getProperty("NonPvP", "true"));
             ALT_PUNISHMENT = Boolean.parseBoolean(set.getProperty("Punishment", "true"));
             ALT_WARPUNISHMENT = Boolean.parseBoolean(set.getProperty("WarPunishment", "false"));
+            DAMAGE_EFFECT_ENABLED = Boolean.parseBoolean(set.getProperty("DamageEffectEnabled", "true"));
+            DAMAGE_EFFECT_LOW_GFX = Integer.parseInt(set.getProperty("DamageEffectLowGfx", "16021"));
+            DAMAGE_EFFECT_MID_GFX = Integer.parseInt(set.getProperty("DamageEffectMidGfx", "17304"));
+            DAMAGE_EFFECT_HIGH_GFX = Integer.parseInt(set.getProperty("DamageEffectHighGfx", "17261"));
+            DAMAGE_EFFECT_CRITICAL_GFX = Integer.parseInt(set.getProperty("DamageEffectCriticalGfx", "17261"));
             CLAN_ALLIANCE = Boolean.parseBoolean(set.getProperty("ClanAlliance", "true"));
             ALT_ITEM_DELETION_TIME = Integer.parseInt(set.getProperty("ItemDeletionTime", "10"));
             if (ALT_ITEM_DELETION_TIME > 60) {

@@ -1263,7 +1263,6 @@ public class L1ActionPc {
                     TeleportBoss(_pc, bossId);
                 } catch (NumberFormatException e) {
                 } catch (Exception e) {
-                    _pc.sendPackets(new S_SystemMessage("執行BOSS傳送時發生錯誤，請稍後再試"));
                 }
                 return;
             }
@@ -1790,26 +1789,21 @@ public class L1ActionPc {
 
     private void TeleportBoss(L1PcInstance pc, int bossId) {
         try {
-            _log.info("[BOSS傳送] 開始處理BOSS傳送 ID: " + bossId + " 玩家: " + pc.getName());
 
             L1Spawn spawn = SpawnBossTable.get().getBossSeach(bossId);
             if (spawn == null) {
-                _log.warn("[BOSS傳送] 找不到BOSS資料 ID: " + bossId);
                 _pc.sendPackets(new S_SystemMessage("找不到該BOSS資料，請聯繫GM"));
                 return;
             }
-
-            _log.info("[BOSS傳送] BOSS名稱: " + spawn.getName() + " 是否存活: " + IsBossSpawn(spawn));
 
             if (!IsBossSpawn(spawn)) {
                 _pc.sendPackets(new S_SystemMessage("尚未重生"));
                 return;
             }
 
-            _log.info("[BOSS傳送] 檢查材料: " + ConfigOther.BOSS_MATERIAL + " 數量: " + ConfigOther.BOSS_COUNT);
+
 
             if (!pc.getInventory().consumeItem(ConfigOther.BOSS_MATERIAL, ConfigOther.BOSS_COUNT)) {
-                _log.warn("[BOSS傳送] 材料不足 ID: " + bossId + " 玩家: " + pc.getName());
                 _pc.sendPackets(new S_SystemMessage("材料不足"));
                 return;
             }
@@ -1818,8 +1812,6 @@ public class L1ActionPc {
             int x = spawn.getLocX();
             int y = spawn.getLocY();
             int mapId = spawn.getMapId();
-
-            _log.info("[BOSS傳送] 傳送座標 X: " + x + " Y: " + y + " Map: " + mapId);
 
             // 修正座標檢查：允許地圖ID為0（某些BOSS確實在地圖0）
             if (x <= 0 || y <= 0) {
@@ -1830,35 +1822,23 @@ public class L1ActionPc {
 
             // 如果地圖ID為0，發出警告但允許傳送
             if (mapId == 0) {
-                _log.warn("[BOSS傳送] BOSS地圖ID為0，但允許傳送 - ID: " + bossId + ", Map: " + mapId);
             } else if (mapId < 0) {
                 _pc.sendPackets(new S_SystemMessage("BOSS地圖資料錯誤，請聯繫GM"));
                 _log.error("BOSS地圖資料錯誤 - ID: " + bossId + ", X: " + x + ", Y: " + y + ", Map: " + mapId);
                 return;
             }
 
-            _log.info("[BOSS傳送] 開始執行傳送...");
-            _log.info("[BOSS傳送] 執行傳送參數 - 玩家: " + pc.getName() + ", 座標: (" + x + "," + y + "), 地圖: " + mapId + ", 方向: " + pc.getHeading());
-
             try {
                 L1Teleport.teleport(pc, x, y, (short) mapId, pc.getHeading(), true);
-                _log.info("[BOSS傳送] 傳送呼叫完成 ID: " + bossId);
-
-                // 驗證傳送是否成功
-                _log.info("[BOSS傳送] 傳送後座標驗證 - 玩家當前位置: (" + pc.getX() + "," + pc.getY() + "), 地圖: " + pc.getMapId());
 
                 if (pc.getX() == x && pc.getY() == y && pc.getMapId() == mapId) {
-                    _log.info("[BOSS傳送] ✓ 傳送成功驗證通過 ID: " + bossId);
                 } else {
-                    _log.warn("[BOSS傳送] ⚠ 傳送後座標不符 - 預期: (" + x + "," + y + "," + mapId + "), 實際: (" + pc.getX() + "," + pc.getY() + "," + pc.getMapId() + ")");
                 }
             } catch (Exception teleportError) {
-                _log.error("[BOSS傳送] 傳送執行時發生錯誤 - ID: " + bossId, teleportError);
                 _pc.sendPackets(new S_SystemMessage("傳送失敗，請聯繫GM檢查BOSS座標設定"));
             }
         } catch (Exception e) {
             _pc.sendPackets(new S_SystemMessage("傳送時發生錯誤，請稍後再試"));
-            _log.error("BOSS傳送錯誤 - ID: " + bossId, e);
         }
     }
 

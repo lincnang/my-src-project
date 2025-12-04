@@ -13,11 +13,12 @@ public class L1ShopItem {
      */
     private final int _EnchantLevel;
     private int _dailyLimit = -1; // 新增每日限購數量屬性 (-1為不限制)
+    private int _requireLevel = 0; // 購買等級限制 (0為不限制)
     /**
      * 商城物品用
      *
      */
-    public L1ShopItem(int id, int itemId, int price, int packCount, int enchantlevel,int dailyLimit) {
+    public L1ShopItem(int id, int itemId, int price, int packCount, int enchantlevel,int dailyLimit, int requireLevel) {
         _id = id;
         _itemId = itemId;
         _item = ItemTable.get().getTemplate(itemId);
@@ -25,13 +26,14 @@ public class L1ShopItem {
         _packCount = packCount;
         _EnchantLevel = enchantlevel;
         _dailyLimit = dailyLimit; // 新增對應的賦值
+        _requireLevel = requireLevel; // 購買等級限制
     }
 
     /**
      * 一般商店物品用
      *
      */
-    public L1ShopItem(int itemId, int price, int packCount, int enchantlevel, int dailyLimit) {
+    public L1ShopItem(int itemId, int price, int packCount, int enchantlevel, int dailyLimit, int requireLevel) {
         _id = -1;
         _itemId = itemId;
         _item = ItemTable.get().getTemplate(itemId);
@@ -39,6 +41,7 @@ public class L1ShopItem {
         _packCount = packCount;
         _EnchantLevel = enchantlevel;
         _dailyLimit = dailyLimit; // 新增對應的賦值
+        _requireLevel = requireLevel; // 購買等級限制
     }
 
     public int getId() {
@@ -63,6 +66,10 @@ public class L1ShopItem {
 
     public int getDailyLimit() { // 新增對應的 getter 方法
         return this._dailyLimit;
+    }
+
+    public int getRequireLevel() { // 購買等級限制 getter
+        return this._requireLevel;
     }
 
     /**

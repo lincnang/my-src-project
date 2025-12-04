@@ -1722,7 +1722,7 @@ public class L1EquipmentSlot {  //src039
         }
         final int updatemr = eq.getUpdateMr();// 抗魔
         if (updatemr != 0) {
-            addMr += updatemr;
+            addMr -= updatemr;
         }
         final int updateac = eq.getUpdateAc();// 防禦
         if (updateac != 0) {
@@ -1730,7 +1730,7 @@ public class L1EquipmentSlot {  //src039
         }
         final int updatesp = eq.getUpdateSp();// 魔法攻擊
         if (updatesp != 0) {
-            addSp += updatesp;
+            addSp -= updatesp;
         }
         final int updatehpr = eq.getUpdateHpr();// 回血
         if (updatehpr != 0) {

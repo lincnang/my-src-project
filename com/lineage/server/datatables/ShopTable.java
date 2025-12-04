@@ -85,8 +85,9 @@ public class ShopTable {
                 /** [原碼] 出售強化物品 */
                 int enchantlevel = rs.getInt("enchant_level");
 
-                // --- ▼▼▼ 【修正一】在這裡新增，從資料庫讀取限購數量 ▼▼▼ ---
+                // --- ▼▼▼ 【修正一】在這裡新增，從資料庫讀取限購數量和等級限制 ▼▼▼ ---
                 int dailyLimit = rs.getInt("daily_limit");
+                int requireLevel = rs.getInt("require_level"); // 新增讀取等級限制
                 // --- ▲▲▲ ---
 
                 Connection conI = null;
@@ -114,14 +115,14 @@ public class ShopTable {
                 addSellList(itemId, sellingPrice, purchasingPrice, packCount);
                 packCount = packCount == 0 ? 1 : packCount;
                 if (sellingPrice >= 0) {
-                    // --- ▼▼▼ 【修正二】將讀取到的 dailyLimit 變數傳入建構子 ▼▼▼ ---
-                    L1ShopItem item = new L1ShopItem(itemId, sellingPrice, packCount, enchantlevel, dailyLimit);
+                    // --- ▼▼▼ 【修正二】將讀取到的 dailyLimit 和 requireLevel 變數傳入建構子 ▼▼▼ ---
+                    L1ShopItem item = new L1ShopItem(itemId, sellingPrice, packCount, enchantlevel, dailyLimit, requireLevel);
                     // --- ▲▲▲ ---
                     sellingList.add(item);
                 }
                 if (purchasingPrice >= 0) {
-                    // 玩家賣給商店的物品，不需要限購，所以維持 -1
-                    L1ShopItem item = new L1ShopItem(itemId, purchasingPrice, packCount, enchantlevel, -1);
+                    // 玩家賣給商店的物品，不需要限購和等級限制，所以維持 -1 和 0
+                    L1ShopItem item = new L1ShopItem(itemId, purchasingPrice, packCount, enchantlevel, -1, 0);
                     purchasingList.add(item);
                 }
             }

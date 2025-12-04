@@ -330,25 +330,34 @@ public class L1Shop {
             return;
         }
 
-        // --- ▼▼▼ 【修改一】購買前的限購檢查 ▼▼▼ ---
+        // --- ▼▼▼ 【修改一】購買前的限購檢查和等級檢查 ▼▼▼ ---
         for (final L1ShopBuyOrder order : orderList.getList()) {
             final L1ShopItem shopItem = order.getItem();
+            final int itemId = shopItem.getItemId();
+            final String itemName = ItemTable.get().getTemplate(itemId).getName();
+            
+            // 檢查等級限制
+            if (shopItem.getRequireLevel() > 0) {
+                if (pc.getLevel() < shopItem.getRequireLevel()) {
+                    pc.sendPackets(new S_ServerMessage(166, "【" + itemName + "】需要等級 " + shopItem.getRequireLevel() + " 才能購買。"));
+                    return;
+                }
+            }
+            
             // 檢查該物品是否有每日限購 (dailyLimit > 0)
             if (shopItem.getDailyLimit() > 0) {
-                final int itemId = shopItem.getItemId();
                 final int purchaseCount = order.getCount();
                 final int currentCount = ShopLimitReading.get().getPurchaseCount(pc.getId(), itemId);
 
                 // 檢查 "已購買數量 + 本次想買數量" 是否超過上限
                 if (currentCount + purchaseCount > shopItem.getDailyLimit()) {
-                    final String itemName = ItemTable.get().getTemplate(itemId).getName();
                     // 如果超過上限，發送提示訊息給玩家並中斷整個交易
                     pc.sendPackets(new S_ServerMessage(166, "【" + itemName + "】今日已達購買上限。"));
                     return;
                 }
             }
         }
-        // --- ▲▲▲ 限購檢查結束 ▲▲▲ ---
+        // --- ▲▲▲ 限購檢查和等級檢查結束 ▲▲▲ ---
 
         // 進行原有的購買條件檢查 (金錢、負重、空間等)
         if (!ensureSell(pc, orderList)) {

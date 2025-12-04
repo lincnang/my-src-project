@@ -29,15 +29,15 @@ public final class Config {
      * 客戶端對應
      */
     public static final String SRCVER = "Lineage8.15";
-    // 8.1 TW
+    // 8.1 TW - 更新為支援 2017/05/10 客戶端版本
     /*
      * 1b b8 a9 00 90 b5 a9 00 ba 6e cf 77 2d 3e a9 00 c3 86 1b 4f
      */
-    public static final int SVer = 161006201;
+    public static final int SVer = 1705102501;  // 更新：支援新版客戶端
     // /////////////////////////////////////////////
-    public static final int CVer = 161006201;
-    public static final int AVer = 2015090301;
-    public static final int NVer = 161006201;
+    public static final int CVer = 1705102501;  // 更新：支援新版客戶端
+    public static final int AVer = 1705102501;  // 更新：支援新版客戶端
+    public static final int NVer = 1705102501;  // 更新：支援新版客戶端
     /**
      * 伺服器素質選取方式 0:玩家自選 1:骰子隨機點
      */

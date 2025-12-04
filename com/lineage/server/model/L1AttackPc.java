@@ -1048,7 +1048,7 @@ public class L1AttackPc extends L1AttackMode {
                             int drain = (int)(weaponTotalDamage * 0.01); // 吸血量1%
                             if (drain < 1) drain = 1;
                             _pc.setCurrentHp(_pc.getCurrentHp() + drain);
-                            _pc.sendPackets(new S_SystemMessage("你啟動了雙重破壞吸血！恢復HP " + drain + " 點！"));
+                            _pc.sendPackets(new S_SystemMessage("啟動了狂暴吸血！恢復HP \" + drain + \" 點！"));
                         }
                     }
                 }
@@ -1081,13 +1081,13 @@ public class L1AttackPc extends L1AttackMode {
                 }
                 if (_pc.hasSkillEffect(DOUBLE_BREAK) && ThreadLocalRandom.current().nextInt(100) < totalchance2) {
                     weaponTotalDamage *= 2.0D;
-                    // 狂暴：1%機率吸血
+                    // 狂暴：5%機率吸血
                     if (_pc.hasDoubleBreakMaster()) {
-                        if (ThreadLocalRandom.current().nextInt(100) < 1) {
-                            int drain = (int)(weaponTotalDamage * 0.01); // 吸血量1%
+                        if (ThreadLocalRandom.current().nextInt(100) < 5) {
+                            int drain = (int)(weaponTotalDamage * 0.05); // 吸血量5%
                             if (drain < 1) drain = 1;
                             _pc.setCurrentHp(_pc.getCurrentHp() + drain);
-                            _pc.sendPackets(new S_SystemMessage("你啟動了雙重破壞吸血！恢復HP " + drain + " 點！"));
+                            _pc.sendPackets(new S_SystemMessage("啟動了狂暴吸血！恢復HP " + drain + " 點！"));
                         }
                     }
                 }

@@ -33,8 +33,8 @@ public class ChooseBoxItem extends ItemExecutor {
         final List<L1ShopItem> list = new ArrayList<>(opts.size());
         int index = 0;
         for (L1ChooseBoxOption o : opts) {
-            // price=0, packCount=數量, enchant=強化
-            L1ShopItem s = new L1ShopItem(o.getItemId(), 0, Math.max(1, o.getCount()), Math.max(0, o.getEnchant()), -1);
+            // price=0, packCount=數量, enchant=強化, dailyLimit=-1, requireLevel=0
+            L1ShopItem s = new L1ShopItem(o.getItemId(), 0, Math.max(1, o.getCount()), Math.max(0, o.getEnchant()), -1, 0);
             list.add(s);
             index++;
             pc.get_otherList().add_chooseData(index, o);

@@ -17,10 +17,10 @@ public class S_ServerVersion extends ServerBasePacket {
         writeC(0x00);
         //writeC(0x00);
         writeC(118); // Server Id= 118
-        writeD(0x6565d322); // server version
-        writeD(0x6565d322); // cache version
-        writeD(0x781bd67d); // auth version
-        writeD(0x6565d322); // npc version
+        writeD(0x65a03ea5); // server version - 更新為 1705102501 (2017/05/10)
+        writeD(0x65a03ea5); // cache version - 更新為 1705102501
+        writeD(0x65a03ea5); // auth version - 更新為 1705102501
+        writeD(0x65a03ea5); // npc version - 更新為 1705102501
         writeD(startTime);
         writeC(0); // newacc
         writeC(0); // eng

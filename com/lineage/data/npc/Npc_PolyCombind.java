@@ -289,7 +289,8 @@ public class Npc_PolyCombind extends NpcExecutor {
             if (card1 != null) {
                 stringBuilder.append(card1.getGfxid()).append(",");
                 if (card1.getNot() != 0) {
-                    World.get().broadcastPacketToAll(
+                    // 使用非阻塞廣播方法，避免卡頓
+                    World.get().broadcastPacketToAllAsync(
                             new S_SystemMessage("【公告】玩家 " + pc.getName() + " 成功合成了變身卡「" + newName + "」!")
                     );
                 }

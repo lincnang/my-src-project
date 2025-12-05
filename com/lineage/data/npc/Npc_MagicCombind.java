@@ -253,7 +253,8 @@ public class Npc_MagicCombind extends NpcExecutor {
             if (card1 != null) {
                 stringBuilder.append(card1.getGfxid()).append(",");
                 if (card1.getNot() != 0) {
-                    World.get().broadcastPacketToAll(
+                    // 使用非阻塞廣播方法，避免卡頓
+                    World.get().broadcastPacketToAllAsync(
                             new S_BlueMessage(166, "\\f=恭喜玩家\\fN【" + pc.getName() + "】\\f=合成了技能卡\\fN【" + item.getLogName() + "】"));
                 }
             }

@@ -242,7 +242,8 @@ public class Npc_HolyCombind extends NpcExecutor {
             final L1ItemInstance item = ItemTable.get().createItem(newHoly);
             item.setIdentified(true);
             pc.getInventory().storeItem(item);
-            World.get().broadcastPacketToAll(
+            // 使用非阻塞廣播方法，避免卡頓
+            World.get().broadcastPacketToAllAsync(
                     new S_BlueMessage(166, "\\f=恭喜玩家\\fN【" + pc.getName() + "】\\f=合成了聖物卡\\fN【" + item.getLogName() + "】"));
             pc.sendPacketsX8(new S_Sound(20360));
             pc.sendPackets(new S_SystemMessage("恭喜你合成了" + item.getLogName()));

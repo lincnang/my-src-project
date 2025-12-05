@@ -1072,6 +1072,18 @@ public class World { // src016
     }
 
     /**
+     * 送出全體封包（非阻塞版本，使用線程池處理）
+     * 適用於可能導致卡頓的大量廣播場景
+     */
+    public void broadcastPacketToAllAsync(final ServerBasePacket packet) {
+        com.lineage.server.thread.GeneralThreadPool.get().execute(() -> {
+            for (final L1PcInstance pc : getAllPlayers()) {
+                pc.sendPackets(packet);
+            }
+        });
+    }
+
+    /**
      * 送出全體封包
      *
      */

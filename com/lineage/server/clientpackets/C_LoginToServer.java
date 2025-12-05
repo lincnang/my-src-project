@@ -597,11 +597,12 @@ public class C_LoginToServer extends ClientBasePacket {
       }
 
     /**
-     * 應用指定類型紋樣的所有階段效果（累加效果）
+     * 應用指定類型紋樣的當前階段效果（不累加，只給當前等級）
      */
     private static void applyWenYangType(L1PcInstance pc, int type, int typeConstant) {
-        for (int level = 1; level <= pc.getWyLevel(type); level++) {
-            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(typeConstant, level);
+        int currentLevel = pc.getWyLevel(type);
+        if (currentLevel > 0) {
+            L1WenYang wenYang = WenYangTable.getInstance().getTemplate(typeConstant, currentLevel);
             if (wenYang != null) {
                 // 基礎屬性
                 int liliang = wenYang.getliliang();
@@ -644,6 +645,22 @@ public class C_LoginToServer extends ClientBasePacket {
                 int huimo = wenYang.gethuimo();
                 if (huimo != 0) {
                     pc.addMpr(huimo);
+                }
+                int ewai = wenYang.getewai();
+                if (ewai != 0) {
+                    pc.addDmgup(ewai);
+                }
+                int chenggong = wenYang.getchenggong();
+                if (chenggong != 0) {
+                    pc.addHitup(chenggong);
+                }
+                int mogong = wenYang.getmogong();
+                if (mogong != 0) {
+                    pc.addSp(mogong);
+                }
+                int mofang = wenYang.getmofang();
+                if (mofang != 0) {
+                    pc.addMr(mofang);
                 }
                 int dmg = wenYang.getDmg();
                 int dice_dmg = wenYang.getDiceDmg();
@@ -691,23 +708,20 @@ public class C_LoginToServer extends ClientBasePacket {
                 }
                 // 應用屬性防禦
                 applyWenYangAttributeDefense(pc, wenYang);
-                // 只有最高階段才顯示訊息和圖標
-                if (level == pc.getWyLevel(type)) {
-                    pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣第" + level + "階"));
-                    pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-                    pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-                    pc.sendPackets(new S_OwnCharStatus(pc));
-                    pc.sendPackets(new S_OwnCharStatus2(pc));
-                    pc.sendPackets(new S_SPMR(pc));
-                    pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1));
-                }
+                // 顯示訊息和圖標
+                pc.sendPackets(new S_SystemMessage("\\aB獲得" + wenYang.getNot() + "紋樣第" + currentLevel + "階"));
+                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
+                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
+                pc.sendPackets(new S_OwnCharStatus(pc));
+                pc.sendPackets(new S_OwnCharStatus2(pc));
+                pc.sendPackets(new S_SPMR(pc));
+                pc.sendPackets(new S_InventoryIcon(wenYang.get_buff_iconid(), true, wenYang.get_buff_stringid(), -1));
             }
         }
     }
 
     private static void addWyType6(L1PcInstance pc) {
         if (pc.getWyType6() == L1WenYang.WENYANG_TYPE_6 && pc.getWyLevel6() > 0) {
-            // 累加應用1到6階的所有效果
             applyWenYangType(pc, 6, pc.getWyType6());
         }
     }

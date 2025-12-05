@@ -1605,14 +1605,16 @@ public class L1AttackPc extends L1AttackMode {
             }
         }
         /**破除目標聖潔-台灣JAVA技術老爹*/
-        NewEnchantSystem NE_List = NewEnchantSystem.get().get2(_pc.getWeapon().getSafeEnchantLevel(), _pc.getWeapon().getEnchantLevel(), _pc.getWeapon().getItem().getType());
-        if (NE_List != null) {
-            if (NE_List.getsjj() && ThreadLocalRandom.current().nextInt(100) + 1 <= NE_List.getsjjjilv()) {//是否破除聖潔 返回幾率
-                if (_targetPc.hasSkillEffect(IMMUNE_TO_HARM)) {//判定玩家是否有聖潔
-                    _targetPc.removeSkillEffect(IMMUNE_TO_HARM);//移除目標聖潔
-                    _targetPc.sendPackets(new S_PacketBox(S_PacketBox.ICON_I2H, 1, 0));//解除玩家聖潔圖標
-                    _targetPc.broadcastPacketX8(new S_SkillSound(_targetPc.getId(), NE_List.gettexiao()));//破除聖潔觸發特效
-                    _targetPc.sendPackets(new S_ServerMessage(166, "對方武器有破除聖結界，聖結界已失效請小心！"));//給被打玩家發送文字封包
+        if (_pc.getWeapon() != null) {
+            NewEnchantSystem NE_List = NewEnchantSystem.get().get2(_pc.getWeapon().getSafeEnchantLevel(), _pc.getWeapon().getEnchantLevel(), _pc.getWeapon().getItem().getType());
+            if (NE_List != null) {
+                if (NE_List.getsjj() && ThreadLocalRandom.current().nextInt(100) + 1 <= NE_List.getsjjjilv()) {//是否破除聖潔 返回幾率
+                    if (_targetPc.hasSkillEffect(IMMUNE_TO_HARM)) {//判定玩家是否有聖潔
+                        _targetPc.removeSkillEffect(IMMUNE_TO_HARM);//移除目標聖潔
+                        _targetPc.sendPackets(new S_PacketBox(S_PacketBox.ICON_I2H, 1, 0));//解除玩家聖潔圖標
+                        _targetPc.broadcastPacketX8(new S_SkillSound(_targetPc.getId(), NE_List.gettexiao()));//破除聖潔觸發特效
+                        _targetPc.sendPackets(new S_ServerMessage(166, "對方武器有破除聖結界，聖結界已失效請小心！"));//給被打玩家發送文字封包
+                    }
                 }
             }
         }

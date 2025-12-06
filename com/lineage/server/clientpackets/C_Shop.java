@@ -248,7 +248,7 @@ public class C_Shop extends ClientBasePacket {
                 try {
                     SelectedPolyNum = Integer.parseInt(new String(chat, "big5").split("tradezone")[1].substring(0, 1));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    _log.error("解析商店變身代碼失敗", e);
                 }
                 L1PolyMorph.doPolyPraivateShop(pc, SelectedPolyNum);
                 pc.sendPacketsAll(new S_DoActionShop(pc.getId(), chat));// 擺攤動作
@@ -260,7 +260,8 @@ public class C_Shop extends ClientBasePacket {
                 /** 3.80 更動(個人商店取消變身) */
                 L1PolyMorph.undoPolyPrivateShop(pc);
             }
-        } catch (Exception localException) {
+        } catch (Exception e) {
+            _log.error("開設商店異常", e);
         } finally {
             over();
         }

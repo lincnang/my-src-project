@@ -1,6 +1,7 @@
 package com.lineage.server.datatables.sql;
 
 import com.lineage.DatabaseFactory;
+import com.lineage.server.IdFactory;
 import com.lineage.server.datatables.storage.LogEnchantStorage;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
@@ -21,7 +22,8 @@ public class LogEnchantTable implements LogEnchantStorage {
             cn = DatabaseFactory.get().getConnection();
             ps = cn.prepareStatement("INSERT INTO `日誌_衝裝紀錄` SET `id`=?,`item_id`=?,`char_id`=?,`item_name`=?,`count`=?,`is_equipped`=?,`enchantlvl`=?,`is_id`=?,`durability`=?,`charge_count`=?,`remaining_time`=?,`last_used`=?,`bless`=?,`attr_enchant_kind`=?,`attr_enchant_level`=?,`ItemAttack`=?,`ItemBowAttack`=?,`ItemReductionDmg`=?,`ItemSp`=?,`Itemprobability`=?,`ItemStr`=?,`ItemDex`=?,`ItemInt`=?,`ItemCon`=?,`ItemCha`=?,`ItemWis`=?,`datetime`=SYSDATE(),`ipmac`=?");
             int i = 0;
-            ps.setInt(++i, item.getId());
+            // 使用 IdFactory 生成獨立的日誌 ID
+            ps.setInt(++i, IdFactory.get().nextId());
             ps.setInt(++i, item.getItem().getItemId());
             ps.setInt(++i, pc.getId());
             ps.setString(++i, item.getItem().getName());
@@ -47,13 +49,20 @@ public class LogEnchantTable implements LogEnchantStorage {
             ps.setInt(++i, item.getItemCon());
             ps.setInt(++i, item.getItemCha());
             ps.setInt(++i, item.getItemWis());
-            StringBuilder ip = pc.getNetConnection().getIp();
-            StringBuilder mac = pc.getNetConnection().getMac();
-            ps.setString(++i, ip + "/" + mac);
+            String ipMac = "Unknown/Unknown";
+            if (pc.getNetConnection() != null) {
+                StringBuilder ip = pc.getNetConnection().getIp();
+                StringBuilder mac = pc.getNetConnection().getMac();
+                if (ip != null && mac != null) {
+                    ipMac = ip.toString() + "/" + mac.toString();
+                }
+            }
+            ps.setString(++i, ipMac);
             ps.execute();
 
         } catch (Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
+            _log.error("[附魔日誌] 記錄失敗 - 玩家: " + (pc != null ? pc.getName() : "Unknown") + 
+                " | 物品: " + (item != null ? item.getName() : "Unknown"), e);
         } finally {
             SQLUtil.close(ps);
             SQLUtil.close(cn);

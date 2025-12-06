@@ -1034,6 +1034,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
             Leader.setTempID(pc.getId());
             Leader.sendPackets(new S_Message_YN(97, pc.getName()));
         } catch (final Exception e) {
+            _log.error("加入血盟異常", e);
         } finally {
         }
     }
@@ -1088,6 +1089,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
             }
             this._pandoraitemlist.clear();
         } catch (Exception e2) {
+            _log.error("抽抽樂兌換異常", e2);
         } finally {
             this._pandoraitemlist.clear();
         }
@@ -2718,7 +2720,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                 day = rs.getInt("Day");
             }
         } catch (SQLException e) {
-            // _log.error(e.getLocalizedMessage(), e);
+            _log.error(e.getLocalizedMessage(), e);
         } finally {
             SQLUtil.close(pstm);
             SQLUtil.close(con);
@@ -2740,7 +2742,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                 objid = rs.getInt("objid");
             }
         } catch (SQLException e) {
-            // _log.error(e.getLocalizedMessage(), e);
+            _log.error(e.getLocalizedMessage(), e);
         } finally {
             SQLUtil.close(pstm);
             SQLUtil.close(con);
@@ -2760,7 +2762,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
             pstm.setString(1, objectId);
             pstm.executeUpdate();
         } catch (SQLException e) {
-            // _log.error(e.getLocalizedMessage(), e);
+            _log.error(e.getLocalizedMessage(), e);
         } finally {
             SQLUtil.close(pstm);
             SQLUtil.close(con);

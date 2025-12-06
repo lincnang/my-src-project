@@ -17,6 +17,7 @@ public class WriteLogTxt {
     private static final Log _log = LogFactory.getLog(WriteLogTxt.class);
 
     public static void Recording(final String name, final String info) {
+        FileOutputStream fos = null;
         try {
             SimpleDateFormat sdfmt = new SimpleDateFormat("yyyy-MM-dd");
             Date d = Calendar.getInstance().getTime();
@@ -31,16 +32,23 @@ public class WriteLogTxt {
             if (!file2.exists()) {
                 file2.createNewFile();
             }
-            final FileOutputStream fos = new FileOutputStream(path + "/" + filePath, true);
+            fos = new FileOutputStream(path + "/" + filePath, true);
             fos.write((info + " 時間：" + new Timestamp(System.currentTimeMillis()) + "\r\n").getBytes());
-            fos.close();
             /*
              * BufferedWriter out = new BufferedWriter(new FileWriter(
              * "AllLog/"+name+date+".txt", true)); out.write(info+" 時間："+ new
              * Timestamp(System.currentTimeMillis()) + "\r\n"); out.close();
              */
         } catch (IOException e) {
-            _log.error(e.getLocalizedMessage(), e);
+            _log.error("WriteLogTxt.Recording 失敗: " + e.getLocalizedMessage(), e);
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    _log.error("關閉 FileOutputStream 失敗", e);
+                }
+            }
         }
     }
 }

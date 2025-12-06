@@ -44,8 +44,14 @@ public final class ThreadPoolSetNew {
             set.load(is);
             is.close();
             if (set.getProperty("CAN_USE_ATTACK_SKILL") != null) {
-                for (String S : set.getProperty("CAN_USE_ATTACK_SKILL").split(",")) {
-                    CAN_USE_ATTACK_SKILL.add(Integer.parseInt(S));
+                String skillStr = set.getProperty("CAN_USE_ATTACK_SKILL").trim();
+                if (!skillStr.isEmpty()) {
+                    for (String S : skillStr.split(",")) {
+                        String trimmed = S.trim();
+                        if (!trimmed.isEmpty()) {
+                            CAN_USE_ATTACK_SKILL.add(Integer.parseInt(trimmed));
+                        }
+                    }
                 }
             }
             STOP_COUNT = Integer.parseInt(set.getProperty("STOP_COUNT", "3"));

@@ -304,7 +304,6 @@ public class Npc_DollCombind extends NpcExecutor {
                     if (card1 != null) {
                         stringBuilder.append(card1.getGfxid()).append(",");
                         if (card1.getNot() != 0) {
-                            // 使用非阻塞廣播方法，避免卡頓
                             World.get().broadcastPacketToAllAsync(
                                     new S_SystemMessage("【公告】玩家 " + pc.getName() + " 成功合成了娃娃卡「" + newName + "」!")
                             );
@@ -313,7 +312,7 @@ public class Npc_DollCombind extends NpcExecutor {
                     final String[] msg = stringBuilder.toString().split(",");
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
-                    pc.sendPackets(new S_Sound(20360)); // 修復：只發給自己，不廣播
+                    pc.sendPackets(new S_Sound(20360));
                     if (isPlayAnimation)
                         pc.sendPackets(new S_NPCTalkReturn(pc, "wwhccg", msg));
                     pc.sendPackets(new S_SystemMessage("恭喜你合成了" + item.getLogName()));
@@ -332,7 +331,7 @@ public class Npc_DollCombind extends NpcExecutor {
                     final String[] msg = stringBuilder.toString().split(",");
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
-                    pc.sendPackets(new S_Sound(20468)); // 修復：只發給自己，不廣播
+                    pc.sendPackets(new S_Sound(20468));
                     if (isPlayAnimation)
                         pc.sendPackets(new S_NPCTalkReturn(pc, "wwhcsb", msg));
                     pc.sendPackets(new S_SystemMessage("很遺憾合成失敗返還" + item.getLogName()));

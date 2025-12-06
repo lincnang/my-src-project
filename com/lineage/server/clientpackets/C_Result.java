@@ -415,7 +415,7 @@ public class C_Result extends ClientBasePacket {
                     break;
             }
         } catch (final Exception e) {
-            // _log.error(e.getLocalizedMessage(), e);
+            _log.error("物品操作結果處理異常", e);
         } finally {
             this.over();
         }

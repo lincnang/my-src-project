@@ -65,7 +65,7 @@ public class LineageDecoder extends FrameDecoder {
 
         // 防護:檢查封包長度是否合理（以有效負載衡量）
         if (payloadLen < MIN_ENCRYPTED_PAYLOAD || payloadLen > maxAllowed) {
-            _log.error("[LineageDecoder] 異常封包長度: length=" + length + ", payload=" + payloadLen + " from " + channel.getRemoteAddress());
+            _log.error("【封包異常】異常封包長度 (可能是版本不符或攻擊): length=" + length + ", payload=" + payloadLen + " from " + channel.getRemoteAddress());
             buffer.resetReaderIndex();
             channel.close(); // 關閉異常連線
             return null;

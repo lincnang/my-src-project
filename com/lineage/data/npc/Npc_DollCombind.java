@@ -313,7 +313,7 @@ public class Npc_DollCombind extends NpcExecutor {
                     final String[] msg = stringBuilder.toString().split(",");
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
-                    pc.sendPacketsX8(new S_Sound(20360));
+                    pc.sendPackets(new S_Sound(20360)); // 修復：只發給自己，不廣播
                     if (isPlayAnimation)
                         pc.sendPackets(new S_NPCTalkReturn(pc, "wwhccg", msg));
                     pc.sendPackets(new S_SystemMessage("恭喜你合成了" + item.getLogName()));
@@ -332,7 +332,7 @@ public class Npc_DollCombind extends NpcExecutor {
                     final String[] msg = stringBuilder.toString().split(",");
                     item.setIdentified(true);
                     pc.getInventory().storeItem(item);
-                    pc.sendPacketsX8(new S_Sound(20468));
+                    pc.sendPackets(new S_Sound(20468)); // 修復：只發給自己，不廣播
                     if (isPlayAnimation)
                         pc.sendPackets(new S_NPCTalkReturn(pc, "wwhcsb", msg));
                     pc.sendPackets(new S_SystemMessage("很遺憾合成失敗返還" + item.getLogName()));

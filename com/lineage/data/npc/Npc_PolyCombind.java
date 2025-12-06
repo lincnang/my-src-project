@@ -298,7 +298,7 @@ public class Npc_PolyCombind extends NpcExecutor {
             final String[] msg = stringBuilder.toString().split(",");
             item.setIdentified(true);
             pc.getInventory().storeItem(item);
-            pc.sendPacketsX8(new S_Sound(20360));
+            pc.sendPackets(new S_Sound(20360)); // 修復：只發給自己，不廣播
             if (isPlayAnimation) {
                 pc.sendPackets(new S_NPCTalkReturn(pc, "wwhccg", msg));
             }
@@ -336,7 +336,7 @@ public class Npc_PolyCombind extends NpcExecutor {
             item.setIdentified(true);
             pc.getInventory().storeItem(item);
 
-            pc.sendPacketsX8(new S_Sound(20468));
+            pc.sendPackets(new S_Sound(20468)); // 修復：只發給自己，不廣播
             if (isPlayAnimation) {
                 pc.sendPackets(new S_NPCTalkReturn(pc, "wwhcsb", msg));
             }

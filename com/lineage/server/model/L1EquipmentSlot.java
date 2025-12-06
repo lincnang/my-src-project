@@ -426,6 +426,7 @@ public class L1EquipmentSlot {  //src039
             case 21:// 靴
             case 25:// 盾牌
             case 47:// 脛甲
+            case 70:// 脛甲（修復：添加 case 70）
 			/*int es = armor.getEnchantLevel() - item.get_safeenchant();
 			if (es < 0) {
 				es = 0;

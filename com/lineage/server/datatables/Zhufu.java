@@ -156,23 +156,14 @@ public class Zhufu {
     }
 
     public L1Zhufu getTemplate(int itemid, int kind) {
+        // 精確匹配：只匹配itemid完全相同的配置
         for (L1Zhufu item : _itemidIndex.values()) {
-            if (item.getItemid() == itemid) {
+            if (item.getItemid() == itemid && item.getKind() == kind) {
                 return item;
             }
         }
 
-        L1Item item = ItemTable.get().getTemplate(itemid);
-        if (item == null) {
-            return null;
-        }
-
-        for (L1Zhufu item2 : _itemidIndex.values()) {
-            if (item2.getType() == item.getType() && item2.getItemid() == 0 && item2.getKind() == kind) {
-                return item2;
-            }
-        }
-
+        // 不再使用TYPE通用匹配，避免itemid=0/-1等配置被误用
         return null;
     }
 

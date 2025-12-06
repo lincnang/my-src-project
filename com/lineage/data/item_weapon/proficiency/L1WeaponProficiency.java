@@ -180,7 +180,10 @@ public class L1WeaponProficiency {
     public void setProficiencyType(int type) {
         PlayerWeaponProficiency proficiency = _weaponProficiency.get(type);
         if (proficiency != null) {
-            WeaponProficiency.addWeaponProficiencyStatus(_owner, proficiency.getType(), proficiency.getLevel(), 1);
+            // 只有達到指定EXP（等級>0）才給予能力
+            if (proficiency.getLevel() > 0) {
+                WeaponProficiency.addWeaponProficiencyStatus(_owner, proficiency.getType(), proficiency.getLevel(), 1);
+            }
             return;
         }
         proficiency = new PlayerWeaponProficiency();
@@ -189,7 +192,7 @@ public class L1WeaponProficiency {
         proficiency.setLevel(0);
         proficiency.setExp(0);
         CharacterWeaponProficiencyTable.getInstance().storeProficiency(_owner.getId(), type, proficiency);
-        _weaponProficiency.put(type, proficiency); // ←**多補這一行，避免map永遠查不到**
+        _weaponProficiency.put(type, proficiency);
     }
 
 

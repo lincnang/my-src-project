@@ -51,13 +51,14 @@ public class WeaponProficiency {
      */
     public static void addWeaponProficiencyStatus(final L1PcInstance pc, final int type, final int proficiencyLevel, final int add) {
         try {
+            // 等級為0時不給予任何能力
             if (proficiencyLevel <= 0) {
                 return;
             }
             final int maxProficienciesLevel = WeaponProficiencyTable.getMaxProficienciesLevel(type);// 最大等级
             final int level = Math.min(proficiencyLevel, maxProficienciesLevel);// 避免數據錯誤（超出最大等級設定）
             if (_all) {// 所有等級屬性加成全部啓用 默認關閉
-                for (int i = 0; i < level; ++i) {// 從1級開始計算 依次增加
+                for (int i = 1; i <= level; ++i) {// 從1級開始計算（跳過0級）
                     effect(pc, type, add, i);
                 }
                 return;
@@ -78,7 +79,7 @@ public class WeaponProficiency {
      */
     private static void effect(L1PcInstance pc, int type, int add, int level) {
         WeaponProficiency weaponProficiency = WeaponProficiencyTable.getProficiency(type, level);
-        if (weaponProficiency == null) {// 防粗心設定
+        if (weaponProficiency == null) {
             return;
         }
         if (weaponProficiency.getHP() != 0) {
@@ -87,7 +88,6 @@ public class WeaponProficiency {
         if (weaponProficiency.getMp() != 0) {
             pc.addMaxMp(weaponProficiency.getMp() * add);
         }
-        // 其他屬性請自行新增
     }
 
     public int getProficiencyLevel() {

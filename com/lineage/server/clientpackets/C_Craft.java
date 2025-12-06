@@ -103,6 +103,9 @@ public class C_Craft extends ClientBasePacket {
                 readC();
                 final int index = readC();
                 final int code = readC();
+                if (pc == null) {
+                    break;
+                }
                 if (index == 0x08) {
                     InvSwapTable.getInstance().toSaveSet(pc, code);
                 } else if (index == 0x10) {
@@ -110,12 +113,20 @@ public class C_Craft extends ClientBasePacket {
                 }
                 break;
             case DUNGEON_TIME: // 顯示計時地圖剩餘時間    8.1用不着-先注销
-                pc.sendPackets(new S_ACTION_UI(pc, S_ACTION_UI.DUNGEON_TIME));
+                if (pc != null) {
+                    pc.sendPackets(new S_ACTION_UI(pc, S_ACTION_UI.DUNGEON_TIME));
+                }
                 break;
             case SEAL: // 背包快捷封印道具按鈕
                 readH();
                 readH();
+                if (pc == null) {
+                    break;
+                }
                 final L1ItemInstance l1iteminstance1 = pc.getInventory().getItem(read4(read_size()));
+                if (l1iteminstance1 == null || l1iteminstance1.getItem() == null) {
+                    break;
+                }
                 if (l1iteminstance1.getBless() == 0 || l1iteminstance1.getBless() == 1 || l1iteminstance1.getBless() == 2 || l1iteminstance1.getBless() == 3) {
                     int Bless = 0;
                     switch (l1iteminstance1.getBless()) {

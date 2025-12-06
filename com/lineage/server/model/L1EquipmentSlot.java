@@ -45,10 +45,12 @@ public class L1EquipmentSlot {  //src039
      * @param weapon 要穿上的武器
      */
     private void setWeapon(L1ItemInstance weapon) {
-        // 處理祝福符（依照原本設計）
-        L1Zhufu zhufu = Zhufu.getInstance().getTemplate(weapon.getItem().getItemId(), 1);
-        if (zhufu != null && weapon.getBless() == 0) {
-            L1Zhufu.getAddZhufu(_owner, weapon.getItem().getItemId(), 1);
+        // 處理祝福化能力（只有bless=0且模板bless!=0才觸發）
+        if (weapon.getBless() == 0 && weapon.getItem().getBless() != 0) {
+            L1Zhufu zhufu = Zhufu.getInstance().getTemplate(weapon.getItem().getItemId(), 1);
+            if (zhufu != null) {
+                L1Zhufu.getAddZhufu(_owner, weapon.getItem().getItemId(), 1);
+            }
         }
 
         // 判斷是否為戰士副手武器
@@ -265,12 +267,16 @@ public class L1EquipmentSlot {  //src039
         _owner.addRegistSustain(-addRegistSustain);
 
         int itemId = weapon.getItem().getItemId();
-        L1Zhufu zhufu = Zhufu.getInstance().getTemplate(itemId, 1);
-        if (zhufu != null && weapon.getBless() == 0) {
-            L1Zhufu.getRedzhufuhua(_owner, itemId, 1);
+        
+        // 處理祝福化能力移除（只有bless=0且模板bless!=0才移除）
+        if (weapon.getBless() == 0 && weapon.getItem().getBless() != 0) {
+            L1Zhufu zhufu = Zhufu.getInstance().getTemplate(itemId, 1);
+            if (zhufu != null) {
+                L1Zhufu.getRedzhufuhua(_owner, itemId, 1);
+            }
         }
 
-        // ⚡️【重點】移除武器熟練度加成，一定要經過 normalizeWeaponType，否則有些特殊type資料會殘留
+        // ⚡️【重點】移除武器熟練度加成
         int type = weapon.getItem().getType();
         _owner.getProficiency().removeProficiency(L1WeaponProficiency.normalizeWeaponType(type));
     }
@@ -279,8 +285,6 @@ public class L1EquipmentSlot {  //src039
         L1Item item = armor.getItem();
         int itemId = armor.getItem().getItemId();
         int use_type = armor.getItem().getUseType();
-        // 祝福系統
-        L1Zhufu zhufu = Zhufu.getInstance().getTemplate(itemId, 2);
         int apc = 0;
         switch (use_type) {
             case 2: // 盔甲
@@ -492,8 +496,12 @@ public class L1EquipmentSlot {  //src039
                 }
             }
         }
-        if (zhufu != null && armor.getBless() == 0) {
-            L1Zhufu.getAddZhufu(_owner, itemId, 2);
+        // 處理祝福化能力（只有bless=0且模板bless!=0才觸發）
+        if (armor.getBless() == 0 && armor.getItem().getBless() != 0) {
+            L1Zhufu zhufu = Zhufu.getInstance().getTemplate(itemId, 2);
+            if (zhufu != null) {
+                L1Zhufu.getAddZhufu(_owner, itemId, 2);
+            }
         }
 
         armor.startEquipmentTimer(_owner);
@@ -508,10 +516,14 @@ public class L1EquipmentSlot {  //src039
             final L1ItemAttr attr = armor.get_ItemAttrName2();
             apc += attr.get_ac();
         }
-        L1Zhufu zhufu = Zhufu.getInstance().getTemplate(itemId, 2);
-        if (zhufu != null && armor.getBless() == 0) {
-            L1Zhufu.getRedzhufuhua(_owner, itemId, 2);
+        // 處理祝福化能力移除（只有bless=0且模板bless!=0才移除）
+        if (armor.getBless() == 0 && armor.getItem().getBless() != 0) {
+            L1Zhufu zhufu = Zhufu.getInstance().getTemplate(itemId, 2);
+            if (zhufu != null) {
+                L1Zhufu.getRedzhufuhua(_owner, itemId, 2);
+            }
         }
+        
         int use_type = armor.getItem().getUseType();
         switch (use_type) {
             case 2: // 盔甲

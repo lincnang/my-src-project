@@ -111,10 +111,8 @@ public class L1Zhufu {
             return;
         }
 
+        // 只查詢精確匹配，不使用TYPE通用匹配
         L1Zhufu zhufuhua = Zhufu.getInstance().getTemplate(itemid, kind);
-        if (zhufuhua == null) {
-            zhufuhua = Zhufu.getInstance().getTemplateByType(item.getType(), kind);
-        }
 
         if (zhufuhua != null) {
             if (zhufuhua.getAddStr() != 0) { // 力量
@@ -215,10 +213,8 @@ public class L1Zhufu {
             return;
         }
 
+        // 只查詢精確匹配，不使用TYPE通用匹配
         L1Zhufu zhufuhua = Zhufu.getInstance().getTemplate(itemid, kind);
-        if (zhufuhua == null) {
-            zhufuhua = Zhufu.getInstance().getTemplateByType(item.getType(), kind);
-        }
 
         if (zhufuhua != null) {
             if (zhufuhua.getAddStr() != 0) { // 力量

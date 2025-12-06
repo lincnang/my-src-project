@@ -1157,7 +1157,12 @@ public class L1ItemInstance extends L1Object {
         int type = getItem().getType();
         int type2 = getItem().getType2();
         if (_isRunning) {
-            _timer.cancel();
+            if (_timer != null) {
+                _timer.cancel();
+            }
+            if (_enchantFuture != null) {
+                _enchantFuture.cancel(false);
+            }
             int objid = getId();
             if ((pc != null) && (pc.getInventory().getItem(objid) != null) && (type == 2) && (type2 == 2) && (isEquipped())) {
                 pc.addAc(3);
@@ -1191,7 +1196,12 @@ public class L1ItemInstance extends L1Object {
             return;
         }
         if (_isRunning) {
-            _timer.cancel();
+            if (_timer != null) {
+                _timer.cancel();
+            }
+            if (_enchantFuture != null) {
+                _enchantFuture.cancel(false);
+            }
             setDmgByMagic(0);
             setHolyDmgByMagic(0);
             setHitByMagic(0);

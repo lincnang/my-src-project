@@ -7,8 +7,11 @@ import com.lineage.server.serverpackets.S_NPCTalkReturn;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.world.World;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class L1EquipCollect {
+    private static final Log _log = LogFactory.getLog(L1EquipCollect.class);
     private int _npcid;
     private String _action;
     private String _note;
@@ -214,7 +217,17 @@ public class L1EquipCollect {
         if (Materials != null) {
             for (int i = 0; i < Materials.length; ++i) {
                 L1ItemInstance temp = ItemTable.get().createItem(Materials[i]);
-                temp.setEnchantLevel(enchants[i]);
+                if (temp == null) {
+                    _log.error("L1EquipCollect 配置錯誤: 找不到道具 ID=" + Materials[i] + "。請檢查 materials 設定。");
+                    continue;
+                }
+                if (enchants != null) {
+                    if (i < enchants.length) {
+                        temp.setEnchantLevel(enchants[i]);
+                    } else {
+                        _log.warn("L1EquipCollect 配置警告: materials_enchants 陣列長度不足。道具 ID=" + Materials[i] + " (索引 " + i + ") 將使用預設強化等級 0。");
+                    }
+                }
                 temp.setIdentified(true);
                 switch (i) {
                     case 0:

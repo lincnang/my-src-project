@@ -2898,25 +2898,34 @@ public class L1SkillUse {
                 addMagicList(cha, false); // 更新右上角狀態圖示
             }
             if ((_skillId == DETECTION) || (_skillId == COUNTER_DETECTION) || (_skillId == FREEZING_BREATH) || (_skillId == ARM_BREAKER)) { // 無所類型技能
-                detection(_player);
+                if (_user instanceof L1NpcInstance) {
+                    final L1NpcInstance npc = (L1NpcInstance) _user;
+                    _log.warn("NPC使用了玩家專用技能(無所遁形類): NPCID=" + npc.getNpcId() + " Name=" + npc.getName() + " SkillId=" + _skillId + " MapId=" + npc.getMapId() + " Loc=" + npc.getX() + "," + npc.getY());
+                }
+                detection(_user);
             }
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
     }
 
-    private void detection(final L1PcInstance pc) {
-        if (!pc.isGmInvis() && pc.isInvisble()) { // 自分
-            pc.delInvis();
-            pc.beginInvisTimer();
+    private void detection(final L1Character cha) {
+        if (cha instanceof L1PcInstance) {
+            final L1PcInstance pc = (L1PcInstance) cha;
+            if (!pc.isGmInvis() && pc.isInvisble()) { // 自分
+                pc.delInvis();
+                pc.beginInvisTimer();
+            }
         }
-        for (final L1PcInstance tgt : World.get().getVisiblePlayer(pc)) {
+        for (final L1PcInstance tgt : World.get().getVisiblePlayer(cha)) {
             if (!tgt.isGmInvis() && tgt.isInvisble()) {
                 tgt.delInvis();
             }
         }
         // 偵測陷阱的處理
-        WorldTrap.get().onDetection(pc);
+        if (cha instanceof L1PcInstance) {
+            WorldTrap.get().onDetection((L1PcInstance) cha);
+        }
     }
 
     /**

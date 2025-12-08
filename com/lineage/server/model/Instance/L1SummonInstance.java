@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ScheduledFuture;
 
 public class L1SummonInstance extends L1NpcInstance {
     private static final long serialVersionUID = 1L;
@@ -30,6 +31,7 @@ public class L1SummonInstance extends L1NpcInstance {
     private boolean _isReturnToNature = false;
     private int _time = 0;
     private int _tempModel = 3;
+    private ScheduledFuture<?> _despawnFuture;
 
     /**
      * 召喚獸
@@ -310,6 +312,10 @@ public class L1SummonInstance extends L1NpcInstance {
     }
 
     public synchronized void deleteMe() {
+        if (_despawnFuture != null) {
+            _despawnFuture.cancel(false);
+            _despawnFuture = null;
+        }
         if (_master != null) {
             _master.removePet(this);
         }
@@ -538,5 +544,9 @@ public class L1SummonInstance extends L1NpcInstance {
 
     public void get_tempModel() {
         _currentPetStatus = _tempModel;
+    }
+
+    public void setDespawnFuture(ScheduledFuture<?> future) {
+        _despawnFuture = future;
     }
 }

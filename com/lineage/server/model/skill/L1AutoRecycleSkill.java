@@ -29,6 +29,9 @@ public class L1AutoRecycleSkill {
      * @return true=啟動自動循環, false=關閉自動循環
      */
     public static boolean toggleAutoRecycle(L1PcInstance pc, int skillId, int duration) {
+        if (duration <= 0) {
+            return false;
+        }
         String key = pc.getId() + "_" + skillId;
 
         // 取得技能名稱

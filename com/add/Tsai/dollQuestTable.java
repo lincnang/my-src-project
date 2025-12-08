@@ -14,6 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 娃娃任務編號表
@@ -23,6 +26,8 @@ import java.util.List;
 public class dollQuestTable implements DollQuestStorage {
     private static final Log _log = LogFactory.getLog(dollQuestTable.class);
     private static final List<dollQuest> _dollQuestIndex = new ArrayList<>();
+    // 優化查詢速度的緩存：帳號 -> 任務ID集合 (使用 ConcurrentHashMap 提升併發效能)
+    private static final Map<String, Set<Integer>> _questCache = new ConcurrentHashMap<>();
     private static dollQuestTable _instance;
 
     public static dollQuestTable get() {
@@ -50,6 +55,10 @@ public class dollQuestTable implements DollQuestStorage {
                 final int questId = rs.getInt("任務編號");
                 final dollQuest dollQuest = new dollQuest(account, questId);
                 _dollQuestIndex.add(dollQuest);
+                
+                // 更新緩存 (ConcurrentHashMap 支援併發，computeIfAbsent 是原子操作)
+                // 使用 ConcurrentHashMap.newKeySet() 創建線程安全的 Set
+                _questCache.computeIfAbsent(account, k -> ConcurrentHashMap.newKeySet()).add(questId);
                 t++;
             }
         } catch (final SQLException e) {
@@ -84,6 +93,9 @@ public class dollQuestTable implements DollQuestStorage {
             if (affectedRows > 0) {
                 final dollQuest dollQuest = new dollQuest(account, key);
                 _dollQuestIndex.add(dollQuest);
+                
+                // 更新緩存
+                _questCache.computeIfAbsent(account, k -> ConcurrentHashMap.newKeySet()).add(key);
 //                _log.info("娃娃卡任務記錄: 帳號=" + account + ", 任務編號=" + key);
             } else {
                 _log.info("娃娃卡任務已存在，跳過: 帳號=" + account + ", 任務編號=" + key);
@@ -118,13 +130,10 @@ public class dollQuestTable implements DollQuestStorage {
 
     public boolean IsQuest(L1PcInstance pc, int questId) {
         try {
-            if (_dollQuestIndex == null) {
-                return false;
-            }
-            for (dollQuest quest : _dollQuestIndex) {
-                if (quest.getAccount().equals(pc.getAccountName()) && quest.getQuestId() == questId) {
-                    return true;
-                }
+            // ConcurrentHashMap 讀取時不需要 synchronized 鎖，效能極高
+            Set<Integer> quests = _questCache.get(pc.getAccountName());
+            if (quests != null) {
+                return quests.contains(questId);
             }
             return false;
         } catch (Exception e) {

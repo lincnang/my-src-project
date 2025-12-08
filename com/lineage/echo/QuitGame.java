@@ -79,7 +79,7 @@ public class QuitGame {
             _log.error(e.getLocalizedMessage(), e);
         }
         try {
-            if (!pc.get_otherList().get_illusoryList().isEmpty()) {
+            if (pc.get_otherList() != null && !pc.get_otherList().get_illusoryList().isEmpty()) {
                 // 分身消除
                 final Object[] illList = pc.get_otherList().get_illusoryList().values().toArray();
                 for (final Object obj : illList) {
@@ -94,7 +94,9 @@ public class QuitGame {
         }
         try {
             // 清空特殊清單全部資料
-            pc.get_otherList().clearAll();
+            if (pc.get_otherList() != null) {
+                pc.get_otherList().clearAll();
+            }
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

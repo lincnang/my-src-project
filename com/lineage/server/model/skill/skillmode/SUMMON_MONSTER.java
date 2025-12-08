@@ -14,9 +14,6 @@ import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_ShowSummonList;
 import com.lineage.server.templates.L1Npc;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * 召喚術
  *
@@ -89,7 +86,7 @@ public class SUMMON_MONSTER extends SkillMode {
                 final L1SummonInstance summon = new L1SummonInstance(npcTemp, srcpc);
                 summon.setPetcost(summoncost);
                 // 創建 TimerTask
-                TimerTask despawnTask = new TimerTask() {
+                Runnable despawnTask = new Runnable() {
                     @Override
                     public void run() {
                         if (summon != null && !summon.isDead()) {
@@ -97,9 +94,9 @@ public class SUMMON_MONSTER extends SkillMode {
                         }
                     }
                 };
-                // 創建 Timer 實例，設置 7200 秒後執行
-                Timer timer = new Timer();
-                timer.schedule(despawnTask, 3600 * 1000); // 單位是毫秒，所以要乘以 1000
+                // 使用 GeneralThreadPool 替代 new Timer()
+                java.util.concurrent.ScheduledFuture<?> future = com.lineage.server.thread.GeneralThreadPool.get().schedule(despawnTask, 3600 * 1000);
+                summon.setDespawnFuture(future);
             }
             // 向玩家發送 S_InventoryIcon 封包
             srcpc.sendPackets(new S_InventoryIcon(13006, true, 5121, 5122, 3600));

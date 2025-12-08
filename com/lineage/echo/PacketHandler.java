@@ -48,12 +48,15 @@ public class PacketHandler extends PacketHandlerExecutor {
         if (decrypt.length <= 0) {
             return;
         }
-        // 一般的處理封包方式
+        
         final int i = decrypt[0] & 0xff;
-        if (ConfigLIN.opcode_C) { // 日版封包顯示
-            System.out.println("[C opocde] = " + i + "[Length] = " + decrypt.length);
-            System.out.println(DataToPacket(decrypt, decrypt.length));
-        }
+        
+        try {
+            // 一般的處理封包方式
+            if (ConfigLIN.opcode_C) { // 日版封包顯示
+                System.out.println("[C opocde] = " + i + "[Length] = " + decrypt.length);
+                System.out.println(DataToPacket(decrypt, decrypt.length));
+            }
         // try {
         //System.out.println("[Client] opcode = " + i);
         if (i == C_VOICE_CHAT) {
@@ -257,7 +260,10 @@ public class PacketHandler extends PacketHandlerExecutor {
         } else if (i == C_CLIENT_READY) {
             new C_ClientReady().start(decrypt, _client);
         } else {
-            new C_Unkonwn().start(decrypt, _client);
+                new C_Unkonwn().start(decrypt, _client);
+            }
+        } catch (Throwable e) {
+            _log.error("封包處理發生嚴重錯誤 (Opcode: " + i + ")", e);
         }
     }
 

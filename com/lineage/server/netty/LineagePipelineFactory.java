@@ -14,14 +14,16 @@ import org.jboss.netty.handler.timeout.IdleStateHandler;
  */
 public class LineagePipelineFactory implements ChannelPipelineFactory {
     
+    // 共用的 Timer 實例，避免每個連線產生一個執行緒
+    private static final HashedWheelTimer SHARED_TIMER = new HashedWheelTimer();
+
     @Override
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline pipeline = Channels.pipeline();
         
         // 0. Idle 逾時偵測（讀/寫/全閒置）
-        HashedWheelTimer timer = new HashedWheelTimer();
-        // 讀閒置 10 分鐘、寫閒置 10 分鐘、全閒置 15 分鐘（可依需求調整）
-        pipeline.addLast("idle", new IdleStateHandler(timer, 600, 600, 900));
+        // 使用共用的 Timer
+        pipeline.addLast("idle", new IdleStateHandler(SHARED_TIMER, 600, 600, 900));
 
         // 1. 解碼器 (處理接收封包)
         pipeline.addLast("decoder", new LineageDecoder());

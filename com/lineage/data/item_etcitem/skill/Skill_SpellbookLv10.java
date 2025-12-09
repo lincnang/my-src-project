@@ -31,6 +31,9 @@ public class Skill_SpellbookLv10 extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("魔法書 (召喚守護者)")) { //(終極返生術)>>召喚守護者
                 skillid = 74;
                 attribute = 1;
+            } else if (nameId.equalsIgnoreCase("魔法書 (黑暗之手)")) { //(終極返生術)>>召喚守護者
+                skillid = 62;
+                attribute = 1;
             } else if (nameId.equalsIgnoreCase("魔法書 (神聖迅猛:古代)")) { //召喚術>>神聖迅猛:古代
                 skillid = 75;
                 attribute = 1;

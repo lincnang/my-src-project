@@ -32,11 +32,9 @@ import com.lineage.server.clientpackets.AcceleratorChecker;
 import com.lineage.server.datatables.*;
 import com.lineage.server.datatables.lock.*;
 import com.lineage.server.datatables.sql.CharSkillTable;
-import com.lineage.server.templates.L1EmblemIcon;
 import com.lineage.server.datatables.sql.CharacterTable;
 import com.lineage.server.model.Instance.pcdelay.PcTelDelayAI;
 import com.lineage.server.model.*;
-import com.lineage.server.model.L1CastleLocation;
 import com.lineage.server.model.classes.L1ClassFeature;
 import com.lineage.server.model.monitor.L1PcInvisDelay;
 import com.lineage.server.model.skill.L1SkillId;
@@ -197,7 +195,7 @@ public class L1PcInstance extends L1Character { // src015
     // 轉生天賦
     private final int[] reincarnationSkill = new int[3];
     private final ArrayList<String> _ds = new ArrayList<>();
-    private final Timer _timeHandler = new Timer(true);
+    // private final Timer _timeHandler = new Timer(true);
     private final ArrayList<Integer> _targetId = new ArrayList<>();
     private final ArrayList<String> _attackenemy = new ArrayList<>();
     private final ArrayList<Integer> _autoattackNew = new ArrayList<>();
@@ -3014,7 +3012,8 @@ public class L1PcInstance extends L1Character { // src015
                     // 獲取攻擊者的武器
                     L1ItemInstance weapon = attacker.getWeapon();
                     // 如果觸發機率滿足、且為近戰攻擊、並且攻擊者的武器類型不為 17，則觸發反擊屏障
-                    if (isProbability && isShortDistance && weapon.getItem().getType() != 17) {
+                    boolean isNotType17 = (weapon == null) || (weapon.getItem().getType() != 17);
+                    if (isProbability && isShortDistance && isNotType17) {
                         isCounterBarrier = true;
                     }
                 }
@@ -14360,14 +14359,16 @@ public class L1PcInstance extends L1Character { // src015
     private class DeathReturnTime extends TimerTask {
         private final L1PcInstance _pc = null;
         private int _startTime = 0;
+        private ScheduledFuture<?> _future = null;
 
         private DeathReturnTime(L1PcInstance pc) {
             pc = _pc;
         }
 
         private void DeathTime() {
-            _timeHandler.schedule(this, 1000, 1000);
-            GeneralThreadPool.get().execute(this);
+            // _timeHandler.schedule(this, 1000, 1000);
+            // GeneralThreadPool.get().execute(this);
+            _future = GeneralThreadPool.get().scheduleAtFixedRate(this, 1000, 1000);
         }
 
         @Override
@@ -14382,7 +14383,9 @@ public class L1PcInstance extends L1Character { // src015
                     //                    AutoAttack2020_1 auto = new AutoAttack2020_1(L1PcInstance.this);
                     //                    auto.begin();
                     L1PcInstance.this.startPcAI();
-                    this.cancel();
+                    if (_future != null) {
+                        _future.cancel(false);
+                    }
                     break;
             }
         }

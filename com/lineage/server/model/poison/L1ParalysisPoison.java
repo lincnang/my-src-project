@@ -59,6 +59,16 @@ public class L1ParalysisPoison extends L1Poison {
         if (_timer != null) {
             _timer.interrupt();
         }
+        if (_target.hasSkillEffect(1009)) {
+            _target.killSkillEffectTimer(1009);
+            if (_target instanceof L1PcInstance) {
+                L1PcInstance _pc = (L1PcInstance) _target;
+                _pc.sendPackets(new S_Paralysis(1, false, 0));
+            }
+        }
+        if (_target.hasSkillEffect(1008)) {
+            _target.killSkillEffectTimer(1008);
+        }
     }
 
     private class ParalysisPoisonTimer extends Thread {

@@ -1,6 +1,7 @@
 package com.lineage.server;
 
 import com.lineage.DatabaseFactory;
+import com.lineage.DatabaseFactoryLogin;
 import com.lineage.server.datatables.lock.ServerReading;
 import com.lineage.server.utils.PerformanceTimer;
 import com.lineage.server.utils.SQLUtil;
@@ -10,38 +11,49 @@ import org.apache.commons.logging.LogFactory;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 啟動時掃 DB 找出 ID 缺口，先填洞；沒洞再成長 (max+1)。
- * 內含舊 API 相容：getId()/addMobId()/nextMobId()/addBigHotId()/nextBigHotId()
- * 適用於單機/單分流。若多分流，建議改用 DB 回收表方案。
+ * IdFactory - 修復版：安全的 ID 生成器
+ * 
+ * 修復內容：
+ * 1. 使用 AtomicInteger 確保線程安全
+ * 2. 定期回寫 current 到 DB
+ * 3. 新增日誌表到掃描清單
+ * 4. 移除危險的「填洞模式」
+ * 5. 改為純成長模式，確保 ID 永不重複
+ * 
+ * @author Fixed by GitHub Copilot CLI
+ * @date 2025-12-06
  */
 public final class IdFactory {
 
     private static final Log _log = LogFactory.getLog(IdFactory.class);
 
-    /** 最小發號下限（依你環境調整；要沿用舊值就改掉這裡） */
+    /** 最小發號下限 */
     private static final int MIN_ID = 10000;
+    
+    /** 回寫間隔：每生成多少個 ID 就回寫一次到 DB */
+    private static final int SAVE_INTERVAL = 1000;
 
     // ---------- Singleton ----------
     private IdFactory() {}
-    private static class Holder { private static final IdFactory I = new IdFactory(); }
-    /** 新入口 */
+    private static class Holder { 
+        private static final IdFactory I = new IdFactory(); 
+    }
+    
     public static IdFactory get() { return Holder.I; }
-    /** 舊入口相容：等同 get() */
     public static IdFactory getId() { return get(); }
 
     // ---------- 主序列狀態 ----------
-    /** 依序排序後的已用 ID（去重） */
-    private int[] usedIds = new int[0];
-    /** 指向「目前洞」的左端索引（usedIds[i] 與 usedIds[i+1] 形成一個可能有洞的區間） */
-    private int gapLeftIdx = -1;
-    /** 目前正在發的 ID（上次發出去的號碼）。下一個就是 current+1 */
-    private int current = 0;
-    /** true=填洞模式；false=成長模式 */
-    private boolean fillingGaps = false;
-    /** 併發保護 */
-    private final Object monitor = new Object();
+    /** 當前 ID（線程安全）*/
+    private final AtomicInteger current = new AtomicInteger(MIN_ID);
+    
+    /** 上次回寫到 DB 的 ID */
+    private volatile int lastSavedId = MIN_ID;
+    
+    /** 統計：已發出的 ID 數量 */
+    private final AtomicInteger issuedCount = new AtomicInteger(0);
 
     // ---------- 舊 API 相容：怪物對戰 / 大樂透 小序列 ----------
     private final Set<Integer> _MobblingSet = ConcurrentHashMap.newKeySet();
@@ -51,59 +63,75 @@ public final class IdFactory {
 
     // ============== 對外 API：主序列 ==============
 
-    /** 啟動時呼叫：掃描 DB，建立缺口索引 */
+    /**
+     * 啟動時呼叫：從 DB 讀取最大 ID，設定起始值
+     */
     public void load() {
         PerformanceTimer t = new PerformanceTimer();
-        this.usedIds = loadAllUsedIdsSorted();
-        initCursorFromGaps();
-        _log.info(String.format("IdFactory 啟動：模式=%s, start=%d, 已用筆數=%d (%d ms)",
-                fillingGaps ? "填洞" : "成長",
-                current + 1, usedIds.length, t.get()));
+        
+        // 從所有表中找出最大 ID
+        int maxIdFromDb = loadMaxIdFromAllTables();
+        
+        // 從 server_info 讀取上次保存的 maxId
+        int maxIdFromConfig = readServerBound();
+        
+        // 取兩者中的較大值，並加上安全邊界（+1000）
+        int startId = Math.max(maxIdFromDb, maxIdFromConfig) + 1000;
+        
+        // 確保不低於 MIN_ID
+        if (startId < MIN_ID) {
+            startId = MIN_ID;
+        }
+        
+        current.set(startId);
+        lastSavedId = startId;
+        
+        // 立即回寫到 DB
+        saveCurrentIdToDb();
+        
+        _log.info(String.format(
+            "IdFactory 啟動：起始ID=%d (DB最大=%d, Config最大=%d) (%d ms)",
+            startId, maxIdFromDb, maxIdFromConfig, t.get()
+        ));
     }
 
-    /** 取得下一個可用 ID（先填洞，沒洞才成長） */
+    /**
+     * 取得下一個可用 ID（純成長模式，保證不重複）
+     */
     public int nextId() {
-        synchronized (monitor) {
-            if (fillingGaps) {
-                // 目前洞的右界
-                final int right = usedIds[gapLeftIdx + 1];
-                if (current + 1 < right) {
-                    // 洞內還有空位
-                    current += 1;
-                    return current;
-                }
-                // 這個洞填完了 → 找下一個洞
-                if (advanceToNextGap()) {
-                    // 已切到下一個洞，發第一顆
-                    current += 1;
-                    return current;
-                }
-                // 沒洞了 → 切換到成長模式（max+1 開始）
-                switchToGrowth();
-                return ++current;
-            } else {
-                // 成長模式：一路往上加
-                return ++current;
-            }
+        int id = current.incrementAndGet();
+        int issued = issuedCount.incrementAndGet();
+        
+        // 每發出 SAVE_INTERVAL 個 ID，回寫一次到 DB
+        if (issued % SAVE_INTERVAL == 0) {
+            saveCurrentIdToDb();
         }
+        
+        return id;
     }
 
-    /** 回報「下一個將要發的 ID」（給停機回寫 maxid 或除錯用） */
+    /**
+     * 回報下一個將要發的 ID
+     */
     public int maxId() {
-        synchronized (monitor) {
-            return current + 1;
-        }
+        return current.get() + 1;
+    }
+    
+    /**
+     * 手動保存當前 ID（伺服器關閉時呼叫）
+     */
+    public void shutdown() {
+        saveCurrentIdToDb();
+        _log.info("IdFactory 關閉：最終ID=" + current.get() + ", 累計發出=" + issuedCount.get());
     }
 
     // ============== 相容 API：Mob / BigHot 小序列 ==============
 
-    /** 舊 API：記錄已用的 Mob ID（通常在載入既有資料時呼叫） */
     public void addMobId(int i) {
         _MobblingSet.add(i);
         if (i > _MobId) _MobId = i;
     }
 
-    /** 舊 API：發下一個 Mob ID（跳過已用） */
     public int nextMobId() {
         int cand = _MobId + 1;
         while (_MobblingSet.contains(cand)) {
@@ -114,13 +142,11 @@ public final class IdFactory {
         return cand;
     }
 
-    /** 舊 API：記錄已用的 BigHot ID */
     public void addBigHotId(int i) {
         _BigHotblingSet.add(i);
         if (i > _BigHotId) _BigHotId = i;
     }
 
-    /** 舊 API：發下一個 BigHot ID（跳過已用） */
     public int nextBigHotId() {
         int cand = _BigHotId + 1;
         while (_BigHotblingSet.contains(cand)) {
@@ -133,123 +159,100 @@ public final class IdFactory {
 
     // ============== 內部邏輯：主序列 ==============
 
-    /** 從 DB 撈出所有已用 id，去重、排序 */
-    private int[] loadAllUsedIdsSorted() {
-        Connection cn = null; PreparedStatement ps = null; ResultSet rs = null;
-        final List<Integer> list = new ArrayList<>(1 << 15);
+    /**
+     * 從所有相關表中找出最大的 ID
+     */
+    private int loadMaxIdFromAllTables() {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int maxId = 0;
+        
         try {
             cn = DatabaseFactory.get().getConnection();
+            
+            // 使用 UNION ALL 並取 MAX，效能更好
             ps = cn.prepareStatement(
-                    "SELECT id FROM (" +
-                            "  SELECT `id` FROM `character_items`" +
-                            "  UNION ALL SELECT `id` FROM `character_warehouse`" +
-                            "  UNION ALL SELECT `id` FROM `character_elf_warehouse`" +
-                            "  UNION ALL SELECT `id` FROM `clan_warehouse`" +
-                            "  UNION ALL SELECT `id` FROM `character_shopinfo`" +
-                            "  UNION ALL SELECT `objid` AS `id` FROM `characters`" +
-                            "  UNION ALL SELECT `clan_id` AS `id` FROM `clan_data`" +
-                            "  UNION ALL SELECT `id` FROM `character_teleport`" +
-                            "  UNION ALL SELECT `id` FROM `character_mail`" +
-                            "  UNION ALL SELECT `objid` AS `id` FROM `character_pets`" +
-                            ") t ORDER BY id"
+                "SELECT MAX(id) FROM (" +
+                "  SELECT MAX(`id`) AS id FROM `character_items`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `character_warehouse`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `character_elf_warehouse`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `clan_warehouse`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `character_shopinfo`" +
+                "  UNION ALL SELECT MAX(`objid`) FROM `characters`" +
+                "  UNION ALL SELECT MAX(`clan_id`) FROM `clan_data`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `character_teleport`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `character_mail`" +
+                "  UNION ALL SELECT MAX(`objid`) FROM `character_pets`" +
+                // ✅ 新增：日誌表
+                "  UNION ALL SELECT MAX(`id`) FROM `日誌_衝裝紀錄`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `日誌_商店購買紀錄`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `日誌_金幣買賣系統紀錄`" +
+                ") t"
             );
+            
             rs = ps.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                if (id > 0) list.add(id);
+            if (rs.next()) {
+                maxId = rs.getInt(1);
             }
+            
         } catch (SQLException e) {
-            _log.error("載入已用 ID 失敗", e);
+            _log.error("載入最大 ID 失敗", e);
         } finally {
-            SQLUtil.close(rs); SQLUtil.close(ps); SQLUtil.close(cn);
+            SQLUtil.close(rs);
+            SQLUtil.close(ps);
+            SQLUtil.close(cn);
         }
-        if (list.isEmpty()) {
-            return new int[0];
-        }
-        // 去重 + 排序（輸入已排序，這裡線性去重）
-        int[] arr = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) arr[i] = list.get(i);
-        int w = 0;
-        for (int i = 0; i < arr.length; i++) {
-            if (w == 0 || arr[i] != arr[w - 1]) {
-                arr[w++] = arr[i];
-            }
-        }
-        return Arrays.copyOf(arr, w);
+        
+        return maxId;
     }
 
-    /** 依據 usedIds 初始化游標：找第一個 >= MIN_ID 的缺口；沒有就成長模式 */
-    private void initCursorFromGaps() {
-        synchronized (monitor) {
-            if (usedIds.length == 0) {
-                // 沒資料 → 從 MIN_ID 與 server_info 安全下限的較大者開始成長
-                current = Math.max(MIN_ID, readServerBound()) - 1;
-                fillingGaps = false;
-                return;
-            }
-
-            // 先確保成長起點至少 >= MIN_ID 與 server_info 的 min/max
-            int growthStart = Math.max(usedIds[usedIds.length - 1] + 1, readServerBound());
-            if (growthStart < MIN_ID) growthStart = MIN_ID;
-
-            // 從陣列中掃第一個缺口，且缺口右界 > MIN_ID
-            gapLeftIdx = -1;
-            for (int i = 0; i < usedIds.length - 1; i++) {
-                int left = usedIds[i];
-                int right = usedIds[i + 1];
-                if (right - left > 1) {
-                    // 缺口 [left+1, right-1]
-                    int first = Math.max(left + 1, MIN_ID);
-                    if (first < right) {
-                        gapLeftIdx = i;
-                        current = first - 1;     // 讓下一次 nextId() 直接回 first
-                        fillingGaps = true;
-                        return;
-                    }
-                }
-            }
-
-            // 沒有任何可用缺口 → 成長模式
-            fillingGaps = false;
-            current = growthStart - 1;
+    /**
+     * 將當前 ID 回寫到 DB（server_info 表）
+     */
+    private void saveCurrentIdToDb() {
+        int currentId = current.get();
+        
+        // 如果沒有變化，不需要回寫
+        if (currentId == lastSavedId) {
+            return;
+        }
+        
+        Connection cn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            cn = DatabaseFactoryLogin.get().getConnection();
+            
+            // 更新 server_info 的 maxId
+            ps = cn.prepareStatement(
+                "UPDATE `server_info` SET `maxid` = ? WHERE `id` = ?"
+            );
+            ps.setInt(1, currentId);
+            ps.setInt(2, com.lineage.config.Config.SERVERNO);
+            ps.executeUpdate();
+            
+            lastSavedId = currentId;
+            
+            _log.debug("IdFactory 回寫：maxId=" + currentId);
+            
+        } catch (SQLException e) {
+            _log.error("回寫 ID 到 DB 失敗: " + currentId, e);
+        } finally {
+            SQLUtil.close(ps);
+            SQLUtil.close(cn);
         }
     }
 
-    /** 進到下一個可用缺口；回傳是否找到 */
-    private boolean advanceToNextGap() {
-        for (int i = gapLeftIdx + 1; i < usedIds.length - 1; i++) {
-            int left = usedIds[i];
-            int right = usedIds[i + 1];
-            if (right - left > 1) {
-                int first = Math.max(left + 1, MIN_ID);
-                if (first < right) {
-                    gapLeftIdx = i;
-                    current = first - 1;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /** 切換為成長模式（從 max+1 與 server_info 界限中擇大） */
-    private void switchToGrowth() {
-        int growthStart = Math.max(
-                (usedIds.length == 0 ? MIN_ID : usedIds[usedIds.length - 1] + 1),
-                readServerBound()
-        );
-        if (growthStart < MIN_ID) growthStart = MIN_ID;
-        fillingGaps = false;
-        current = growthStart;
-    }
-
-    /** 讀取 server_info 的 minId/maxId 作為安全下限（若讀不到回 0） */
+    /**
+     * 讀取 server_info 的 maxId
+     */
     private int readServerBound() {
         try {
-            int min = ServerReading.get().minId();
             int max = ServerReading.get().maxId();
-            return Math.max(min, max);
-        } catch (Throwable ignore) {
+            return Math.max(max, 0);
+        } catch (Throwable e) {
+            _log.warn("讀取 server_info maxId 失敗", e);
             return 0;
         }
     }

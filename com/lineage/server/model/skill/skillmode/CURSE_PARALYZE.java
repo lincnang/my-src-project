@@ -37,7 +37,7 @@ public class CURSE_PARALYZE extends SkillMode {
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
             pc.sendPacketsAll(new S_Poison(cha.getId(), 0));
-            pc.sendPackets(new S_Paralysis(1, false));
+            pc.sendPackets(new S_Paralysis(1, false, 0));
         } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1PetInstance))) {
             L1NpcInstance npc = (L1NpcInstance) cha;
             npc.broadcastPacketAll(new S_Poison(cha.getId(), 0));

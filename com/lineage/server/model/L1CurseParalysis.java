@@ -10,12 +10,17 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 詛咒麻痺處理 (木乃伊狀態)
+ * 包含麻痺前的延遲階段與正式麻痺階段的計時器控制
+ */
 public class L1CurseParalysis extends L1Paralysis {
     private static final Log _log = LogFactory.getLog(L1CurseParalysis.class);
     private final L1Character _target;
     private final int _delay;
     private final int _time;
-    private Thread _timer;
+    private volatile Thread _timer;
+    private volatile boolean _isCured = false;
 
     private L1CurseParalysis(L1Character cha, int delay, int time, int mode) {
         _target = cha;
@@ -56,11 +61,19 @@ public class L1CurseParalysis extends L1Paralysis {
     }
 
     public void cure() {
+        _isCured = true;
         _target.setPoisonEffect(0);
         _target.setParalaysis(null);
         if (_timer != null) {
             _timer.interrupt();
         }
+        if (_target instanceof L1PcInstance) {
+            L1PcInstance player = (L1PcInstance) _target;
+            if (!player.isDead()) {
+                player.sendPackets(new S_Paralysis(1, false, 0));
+            }
+        }
+        _target.setParalyzed(false);
     }
 
     private class ParalysisDelayTimer extends Thread {
@@ -76,12 +89,23 @@ public class L1CurseParalysis extends L1Paralysis {
                 ModelError.isError(L1CurseParalysis._log, e.getLocalizedMessage(), e);
                 return;
             }
+            if (_isCured) return;
+
             if ((_target instanceof L1PcInstance)) {
                 L1PcInstance player = (L1PcInstance) _target;
                 if (!player.isDead()) {
-                    player.sendPackets(new S_Paralysis(1, true));
+                    player.sendPackets(new S_Paralysis(1, true, _time));
                 }
             }
+
+            if (_isCured) {
+                if ((_target instanceof L1PcInstance)) {
+                    L1PcInstance player = (L1PcInstance) _target;
+                    player.sendPackets(new S_Paralysis(1, false, 0));
+                }
+                return;
+            }
+
             _target.setParalyzed(true);
             _timer = new L1CurseParalysis.ParalysisTimer();
             GeneralThreadPool.get().execute(_timer);
@@ -96,6 +120,7 @@ public class L1CurseParalysis extends L1Paralysis {
         }
 
         public void run() {
+            if (_isCured) return;
             _target.killSkillEffectTimer(1010);
             _target.setSkillEffect(1011, 0);
             try {
@@ -107,7 +132,7 @@ public class L1CurseParalysis extends L1Paralysis {
             if ((_target instanceof L1PcInstance)) {
                 L1PcInstance player = (L1PcInstance) _target;
                 if (!player.isDead()) {
-                    player.sendPackets(new S_Paralysis(1, false));
+                    player.sendPackets(new S_Paralysis(1, false, 0));
                 }
             }
             _target.setParalyzed(false);
@@ -115,7 +140,3 @@ public class L1CurseParalysis extends L1Paralysis {
         }
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.server.model.L1CurseParalysis JD-Core Version: 0.6.2
- */

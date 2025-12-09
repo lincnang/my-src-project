@@ -129,7 +129,10 @@ public class DmgAcMr {
      */
     public static double getDamage(L1PcInstance pc) {
         L1ItemInstance weapon = pc.getWeapon();
-        int weapontype = weapon.getItem().getType1();
+        int weapontype = 0;
+        if (weapon != null) {
+            weapontype = weapon.getItem().getType1();
+        }
         double dmg = 0;
         //System.out.println("pc.getSp():"+pc.getSp()+" pc.getTrueSp():"+pc.getTrueSp());
         int spByItem = pc.getSp() - pc.getTrueSp();

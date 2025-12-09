@@ -19,6 +19,11 @@ public class UNCANNY_DODGE extends SkillMode {
             srcpc.add_dodge(5);
             // 更新閃避率顯示
             srcpc.sendPackets(new S_PacketBoxIcon1(true, srcpc.get_dodge()));
+        } else {
+            // 如果已經有效果，則更新時間，但不重複增加閃避值
+            srcpc.setSkillEffect(UNCANNY_DODGE, integer * 1000);
+            // 確保閃避率顯示正確
+            srcpc.sendPackets(new S_PacketBoxIcon1(true, srcpc.get_dodge()));
         }
         // set icon time
         // srcpc.sendPackets(new S_PacketBox(21, integer / 16));

@@ -356,6 +356,10 @@ public final class SkillEnhanceTable {
      * CMD action: magic_cardv1 - 多技能同時顯示
      */
     public static boolean Cmd(L1PcInstance pc, String cmd) {
+        // 排除內掛指令 Au_ 開頭
+        if (cmd.toLowerCase().startsWith("au_")) {
+            return false;
+        }
         // 主清單（進入卡冊頁面）- 使用固定 ACTION 格式
         if ("magic_cardv1".equalsIgnoreCase(cmd)) {
             String[] dataImgs = getPlayerSkillIconsMixWithFixedAction(pc);
@@ -372,7 +376,7 @@ public final class SkillEnhanceTable {
         if (cmd.startsWith("skill_")) {
             try {
                 int skillId = Integer.parseInt(cmd.substring(6)); // 移除 "skill_" 前綴
-                return handleSkillAction(pc, skillId);
+                return handleSkillAction(pc, skillId, cmd);
             } catch (NumberFormatException e) {
                 System.out.println("【ERROR】無效的 skill_ 指令格式: " + cmd);
                 return false;
@@ -384,7 +388,7 @@ public final class SkillEnhanceTable {
             try {
                 String[] parts = cmd.split("_");
                 int skillId = Integer.parseInt(parts[parts.length - 1]);
-                return handleSkillAction(pc, skillId);
+                return handleSkillAction(pc, skillId, cmd);
             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                 System.out.println("【ERROR】無效的語義化指令格式: " + cmd);
                 return false;
@@ -440,7 +444,7 @@ public final class SkillEnhanceTable {
         if (actualAction.startsWith("skill_")) {
             try {
                 int skillId = Integer.parseInt(actualAction.substring(6));
-                                return handleSkillAction(pc, skillId);
+                                return handleSkillAction(pc, skillId, actualAction);
             } catch (NumberFormatException e) {
                 System.out.println("【ERROR】映射的 ACTION 格式錯誤: " + actualAction);
                 return false;
@@ -449,7 +453,7 @@ public final class SkillEnhanceTable {
             try {
                 String[] parts = actualAction.split("_");
                 int skillId = Integer.parseInt(parts[parts.length - 1]);
-                                return handleSkillAction(pc, skillId);
+                                return handleSkillAction(pc, skillId, actualAction);
             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                 System.out.println("【ERROR】映射的語義 ACTION 格式錯誤: " + actualAction);
                 return false;
@@ -458,7 +462,7 @@ public final class SkillEnhanceTable {
             // 如果映射到的是 magic 格式，直接查找對應技能
                         L1SkillEnhance enhance = _cmdMap.get(actualAction.toLowerCase());
             if (enhance != null) {
-                return handleSkillAction(pc, enhance.getSkillId());
+                return handleSkillAction(pc, enhance.getSkillId(), actualAction);
             } else {
                 System.out.println("【ERROR】找不到 magic ACTION 對應的技能: " + actualAction);
                 return false;
@@ -472,10 +476,10 @@ public final class SkillEnhanceTable {
     /**
      * 處理技能 ACTION 的通用方法
      */
-    private static boolean handleSkillAction(L1PcInstance pc, int skillId) {
+    private static boolean handleSkillAction(L1PcInstance pc, int skillId, String debugCmd) {
         Map<Integer, L1SkillEnhance> allLvMap = SkillEnhanceTable.get().getEnhanceBySkillId(skillId);
         if (allLvMap == null || allLvMap.isEmpty()) {
-            System.out.println("【ERROR】找不到技能ID " + skillId + " 的強化資料");
+            System.out.println("【ERROR】找不到技能ID " + skillId + " 的強化資料 (指令: " + debugCmd + ")");
             return false;
         }
 

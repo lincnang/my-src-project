@@ -683,7 +683,9 @@ public class L1MagicPc extends L1MagicMode {
         }
         // 神諭
         if (_targetPc.isWizard() && _targetPc.isOracle()) {
-            dmg += _targetPc.getAc() / 10;
+            if (_targetPc.getAc() < 0) {
+                dmg += _targetPc.getAc() / 10;
+            }
         }
         // 增幅防禦 傷害減免
         if (_targetPc.hasSkillEffect(REDUCTION_ARMOR)) {

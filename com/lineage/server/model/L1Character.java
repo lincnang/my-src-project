@@ -1473,7 +1473,13 @@ public class L1Character extends L1Object {
     }
 
     public int getRegistStun() {
-        return _registStun;
+        int val = _registStun;
+        if (this instanceof L1PcInstance) {
+            if (((L1PcInstance) this).isOracle()) {
+                val += 3;
+            }
+        }
+        return val;
     }
 
     public void addRegistStun(int i) {
@@ -1986,7 +1992,13 @@ public class L1Character extends L1Object {
     }
 
     public int getRegistFear() {
-        return this._registFear;
+        int val = this._registFear;
+        if (this instanceof L1PcInstance) {
+            if (((L1PcInstance) this).isOracle()) {
+                val += 3;
+            }
+        }
+        return val;
     }
 
     public boolean is_Hang_teleport() {

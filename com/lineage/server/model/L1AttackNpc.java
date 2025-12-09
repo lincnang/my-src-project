@@ -351,7 +351,9 @@ public class L1AttackNpc extends L1AttackMode {
         }
         // 神諭
         if (_targetPc.isWizard() && _targetPc.isOracle()) {
-            dmg += _targetPc.getAc() / 10;
+            if (_targetPc.getAc() < 0) {
+                dmg += _targetPc.getAc() / 10;
+            }
         }
         if (_targetPc.hasSkillEffect(REDUCTION_ARMOR)) {
             int targetPcLvl = Math.max(_targetPc.getLevel(), 50);

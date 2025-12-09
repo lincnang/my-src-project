@@ -145,9 +145,25 @@ public class L1AutoRecycleSkill {
                 // 自動施放技能
                 com.lineage.server.templates.L1Skills skill = com.lineage.server.datatables.SkillsTable.get().getTemplate(_skillId);
                 if (skill != null) {
-                    // 使用 L1SkillUse 施放技能
+                    // 檢查 HP/MP/材料
+                    if (_pc.getCurrentHp() < skill.getHpConsume() + 1) return;
+                    if (_pc.getCurrentMp() < skill.getMpConsume()) return;
+                    int itemConsume = skill.getItemConsumeId();
+                    int itemConsumeCount = skill.getItemConsumeCount();
+                    if (itemConsume != 0 && !_pc.getInventory().checkItem(itemConsume, itemConsumeCount)) {
+                        L1AutoRecycleSkill.stopAutoRecycle(_pc, _skillId);
+                        _pc.sendPackets(new com.lineage.server.serverpackets.S_SystemMessage("材料不足，停止 " + skill.getName() + " 自動循環。"));
+                        return;
+                    }
+
+                    // 執行消耗
+                    if (skill.getHpConsume() > 0) _pc.setCurrentHp(_pc.getCurrentHp() - skill.getHpConsume());
+                    if (skill.getMpConsume() > 0) _pc.setCurrentMp(_pc.getCurrentMp() - skill.getMpConsume());
+                    if (itemConsume != 0) _pc.getInventory().consumeItem(itemConsume, itemConsumeCount);
+
+                    // 使用 L1SkillUse 施放技能 (改用 TYPE_SPELLSC 以確保動畫顯示，並跳過內部消耗邏輯)
                     L1SkillUse skillUse = new L1SkillUse();
-                    skillUse.handleCommands(_pc, _skillId, _pc.getId(), _pc.getX(), _pc.getY(), 0, L1SkillUse.TYPE_NORMAL);
+                    skillUse.handleCommands(_pc, _skillId, _pc.getId(), _pc.getX(), _pc.getY(), 0, L1SkillUse.TYPE_SPELLSC);
 
                 } else {
                     _log.warn("[自動循環] 找不到技能模板 ID: " + _skillId + "，停止自動循環");

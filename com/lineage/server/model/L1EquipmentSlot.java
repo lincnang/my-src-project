@@ -417,6 +417,31 @@ public class L1EquipmentSlot {  //src039
         _owner.addRegistSustain(addRegistSustain);
         final int addKitType = item.get_kitType();
         this._owner.addArmorKit(addKitType);
+
+        if (item instanceof L1Armor) {
+            L1Armor l1armor = (L1Armor) item;
+            if (l1armor.get_influence_safe() != -1) {
+                int enchantDiff = armor.getEnchantLevel() - l1armor.get_safeenchant();
+                if (enchantDiff > 0) {
+                    _owner.addStr(l1armor.get_influence_str() * enchantDiff);
+                    _owner.addDex(l1armor.get_influence_dex() * enchantDiff);
+                    _owner.addCon(l1armor.get_influence_con() * enchantDiff);
+                    _owner.addInt(l1armor.get_influence_int() * enchantDiff);
+                    _owner.addWis(l1armor.get_influence_wis() * enchantDiff);
+                    _owner.addCha(l1armor.get_influence_cha() * enchantDiff);
+                    _owner.addSp(l1armor.get_influence_sp() * enchantDiff);
+                    _owner.addMr(l1armor.get_influence_mr() * enchantDiff);
+                    _owner.addMaxHp(l1armor.get_influence_hp() * enchantDiff);
+                    _owner.addMaxMp(l1armor.get_influence_mp() * enchantDiff);
+                    _owner.addDamageReductionByArmor(l1armor.get_influence_dmgR() * enchantDiff);
+                    _owner.addHitModifierByArmor(l1armor.get_influence_hitAndDmg() * enchantDiff);
+                    _owner.addDmgModifierByArmor(l1armor.get_influence_hitAndDmg() * enchantDiff);
+                    _owner.addBowHitModifierByArmor(l1armor.get_influence_bowHitAndDmg() * enchantDiff);
+                    _owner.addBowDmgModifierByArmor(l1armor.get_influence_bowHitAndDmg() * enchantDiff);
+                }
+            }
+        }
+
         switch (use_type) {
             case 2:// 盔甲
             case 22:// 頭盔
@@ -677,6 +702,31 @@ public class L1EquipmentSlot {  //src039
         _owner.addRegistSustain(-addRegistSustain);
         final int addKitType = item.get_kitType();
         this._owner.removeArmorKit(addKitType);
+
+        if (item instanceof L1Armor) {
+            L1Armor l1armor = (L1Armor) item;
+            if (l1armor.get_influence_safe() != -1) {
+                int enchantDiff = armor.getEnchantLevel() - l1armor.get_safeenchant();
+                if (enchantDiff > 0) {
+                    _owner.addStr(-(l1armor.get_influence_str() * enchantDiff));
+                    _owner.addDex(-(l1armor.get_influence_dex() * enchantDiff));
+                    _owner.addCon(-(l1armor.get_influence_con() * enchantDiff));
+                    _owner.addInt(-(l1armor.get_influence_int() * enchantDiff));
+                    _owner.addWis(-(l1armor.get_influence_wis() * enchantDiff));
+                    _owner.addCha(-(l1armor.get_influence_cha() * enchantDiff));
+                    _owner.addSp(-(l1armor.get_influence_sp() * enchantDiff));
+                    _owner.addMr(-(l1armor.get_influence_mr() * enchantDiff));
+                    _owner.addMaxHp(-(l1armor.get_influence_hp() * enchantDiff));
+                    _owner.addMaxMp(-(l1armor.get_influence_mp() * enchantDiff));
+                    _owner.addDamageReductionByArmor(-(l1armor.get_influence_dmgR() * enchantDiff));
+                    _owner.addHitModifierByArmor(-(l1armor.get_influence_hitAndDmg() * enchantDiff));
+                    _owner.addDmgModifierByArmor(-(l1armor.get_influence_hitAndDmg() * enchantDiff));
+                    _owner.addBowHitModifierByArmor(-(l1armor.get_influence_bowHitAndDmg() * enchantDiff));
+                    _owner.addBowDmgModifierByArmor(-(l1armor.get_influence_bowHitAndDmg() * enchantDiff));
+                }
+            }
+        }
+
         for (Integer key : ArmorSet.getAllSet().keySet()) {
             ArmorSet armorSet = (ArmorSet) ArmorSet.getAllSet().get(key);
             if ((armorSet.isPartOfSet(itemId)) && (_currentArmorSet.contains(armorSet)) && (!armorSet.isValid(_owner))) {

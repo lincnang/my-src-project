@@ -602,6 +602,8 @@ public class L1PcInventory extends L1Inventory {
                         range = 2;
                     } else if (!_owner.hasSkillEffect(L1SkillId.SHAPE_CHANGE)) {
                         range = 2;
+                    } else if (weapon.getItem().getType() == 18) {
+                        range = 2;
                     }
                 }
                 if (_owner.isKnight()) {

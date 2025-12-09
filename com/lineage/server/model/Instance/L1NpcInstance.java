@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ScheduledFuture;
 
 import static com.lineage.server.model.skill.L1SkillId.*;
 
@@ -121,6 +122,8 @@ public class L1NpcInstance extends L1Character {
     private int _work_time = -1;
     // ■■■■■■■■■■■■■ ＡＩ關連 ■■■■■■■■■■■
     private KIRTAS_Timer _kirtastimer;
+    private ScheduledFuture<?> _kirtasFuture;
+    private ScheduledFuture<?> _chatFuture;
     /**
      * 紅騎士 訓練副本 by darling
      **/
@@ -1629,6 +1632,12 @@ public class L1NpcInstance extends L1Character {
         _dropHateList.clear();
         _targetItemList.clear();
         _del_map.clear();
+        // 停止排程
+        if (_chatFuture != null) {
+            _chatFuture.cancel(false);
+            _chatFuture = null;
+        }
+        stopKIRTAS_Timer();
         // 移出世界
         World.get().removeVisibleObject(this);
         World.get().removeObject(this);
@@ -1868,13 +1877,20 @@ public class L1NpcInstance extends L1Character {
 
     public void startKIRTAS_Timer() {
         _kirtastimer = new KIRTAS_Timer(this);
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(_kirtastimer, 1000L, 1000L);
+        // Timer timer = new Timer(true);
+        // timer.scheduleAtFixedRate(_kirtastimer, 1000L, 1000L);
+        _kirtasFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(_kirtastimer, 1000L, 1000L);
     }
 
     public void stopKIRTAS_Timer() {
-        _kirtastimer.cancel();
-        _kirtastimer = null;
+        if (_kirtastimer != null) {
+            _kirtastimer.cancel();
+            _kirtastimer = null;
+        }
+        if (_kirtasFuture != null) {
+            _kirtasFuture.cancel(false);
+            _kirtasFuture = null;
+        }
     }
 
     public final int getbarrierTime() {
@@ -2268,7 +2284,7 @@ public class L1NpcInstance extends L1Character {
 
         if (this.hasSkillEffect(WIND_SHACKLE)) { // 風之枷鎖167
             if ((type == ATTACK_SPEED) || (type == MAGIC_SPEED)) {
-                sleepTime -= (sleepTime * 0.25); // 如果有勇水狀態，減少25%的睡眠時間
+                sleepTime += (sleepTime * 0.25); // 如果有勇水狀態，減少25%的睡眠時間
             }
         }
         return sleepTime; // 返回計算後的睡眠時間
@@ -2559,12 +2575,14 @@ public class L1NpcInstance extends L1Character {
         if (npcChat == null) {
             return;
         }
-        final Timer timer = new Timer(true);
+        // final Timer timer = new Timer(true);
         final L1NpcChatTimer npcChatTimer = new L1NpcChatTimer(this, npcChat);
         if (!npcChat.isRepeat()) {
-            timer.schedule(npcChatTimer, npcChat.getStartDelayTime());
+            // timer.schedule(npcChatTimer, npcChat.getStartDelayTime());
+            _chatFuture = com.lineage.server.thread.GeneralThreadPool.get().schedule(npcChatTimer, npcChat.getStartDelayTime());
         } else {
-            timer.scheduleAtFixedRate(npcChatTimer, npcChat.getStartDelayTime(), npcChat.getRepeatInterval());
+            // timer.scheduleAtFixedRate(npcChatTimer, npcChat.getStartDelayTime(), npcChat.getRepeatInterval());
+            _chatFuture = com.lineage.server.thread.GeneralThreadPool.get().scheduleAtFixedRate(npcChatTimer, npcChat.getStartDelayTime(), npcChat.getRepeatInterval());
         }
     }
 

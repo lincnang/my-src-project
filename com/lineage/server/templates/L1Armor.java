@@ -33,6 +33,21 @@ public class L1Armor extends L1Item {
     private int _kitType;
     private boolean _superRune;
 
+    private int _influence_safe = -1;
+    private int _influence_str = 0;
+    private int _influence_dex = 0;
+    private int _influence_con = 0;
+    private int _influence_int = 0;
+    private int _influence_wis = 0;
+    private int _influence_cha = 0;
+    private int _influence_sp = 0;
+    private int _influence_mr = 0;
+    private int _influence_hp = 0;
+    private int _influence_mp = 0;
+    private int _influence_dmgR = 0;
+    private int _influence_hitAndDmg = 0;
+    private int _influence_bowHitAndDmg = 0;
+
     public int get_ac() {
         return _ac;
     }
@@ -250,12 +265,48 @@ public class L1Armor extends L1Item {
     public void setSuperRune(final boolean i) {
         this._superRune = i;
     }
-    //public static int get_stunPVP2() {
-    //return _stunPVP2;
-    //}
-    //public void set_stunPVP2(int stunPVP2) {
-    //_stunPVP2 = stunPVP2;
-    //}
+
+    public int get_influence_safe() { return _influence_safe; }
+    public void set_influence_safe(int i) { _influence_safe = i; }
+
+    public int get_influence_str() { return _influence_str; }
+    public void set_influence_str(int i) { _influence_str = i; }
+
+    public int get_influence_dex() { return _influence_dex; }
+    public void set_influence_dex(int i) { _influence_dex = i; }
+
+    public int get_influence_con() { return _influence_con; }
+    public void set_influence_con(int i) { _influence_con = i; }
+
+    public int get_influence_int() { return _influence_int; }
+    public void set_influence_int(int i) { _influence_int = i; }
+
+    public int get_influence_wis() { return _influence_wis; }
+    public void set_influence_wis(int i) { _influence_wis = i; }
+
+    public int get_influence_cha() { return _influence_cha; }
+    public void set_influence_cha(int i) { _influence_cha = i; }
+
+    public int get_influence_sp() { return _influence_sp; }
+    public void set_influence_sp(int i) { _influence_sp = i; }
+
+    public int get_influence_mr() { return _influence_mr; }
+    public void set_influence_mr(int i) { _influence_mr = i; }
+
+    public int get_influence_hp() { return _influence_hp; }
+    public void set_influence_hp(int i) { _influence_hp = i; }
+
+    public int get_influence_mp() { return _influence_mp; }
+    public void set_influence_mp(int i) { _influence_mp = i; }
+
+    public int get_influence_dmgR() { return _influence_dmgR; }
+    public void set_influence_dmgR(int i) { _influence_dmgR = i; }
+
+    public int get_influence_hitAndDmg() { return _influence_hitAndDmg; }
+    public void set_influence_hitAndDmg(int i) { _influence_hitAndDmg = i; }
+
+    public int get_influence_bowHitAndDmg() { return _influence_bowHitAndDmg; }
+    public void set_influence_bowHitAndDmg(int i) { _influence_bowHitAndDmg = i; }
 }
 /*
  * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:

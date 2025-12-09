@@ -83,6 +83,9 @@ public class L1AttackPc extends L1AttackMode {
             _weaponSmall = _weapon.getItem().getDmgSmall();
             _weaponLarge = _weapon.getItem().getDmgLarge();
             _weaponRange = _weapon.getItem().getRange();
+            if (_weaponType2 == 18 && _weaponRange < 1) {
+                _weaponRange = 1;
+            }
             _weaponBless = _weapon.getItem().getBless();
             if (_weaponType != 20 && _weaponType != 62) {
                 _weaponEnchant = _weapon.getEnchantLevel() - _weapon.get_durability();
@@ -1691,7 +1694,9 @@ public class L1AttackPc extends L1AttackMode {
         }
         // 神諭
         if (_targetPc.isWizard() && _targetPc.isOracle()) {
-            dmg += _targetPc.getAc() / 10;
+            if (_targetPc.getAc() < 0) {
+                dmg += _targetPc.getAc() / 10;
+            }
         }
         if (_targetPc.hasSkillEffect(REDUCTION_ARMOR)) {// 增幅防禦減免
             int targetPcLvl = Math.max(_targetPc.getLevel(), 50);

@@ -267,6 +267,10 @@ public class L1WeaponProficiency {
             case 14: return 5; // 單手矛與雙手矛共用熟練度
             case 17: return 10;
             case 12: return 9;
+            case 8: return 2; // 飛刀 -> 匕首
+            case 10: return 8; // 鐵手甲 -> 鋼爪
+            case 11: return 8; // 鋼爪 -> 鋼爪
+            case 16: return 7; // 雙手魔杖 -> 魔杖
             default: return type;
         }
     }

@@ -91,6 +91,9 @@ public class C_Attack extends ClientBasePacket {
                 int range = 1;
                 if (pc.getWeapon() != null) {
                     range = pc.getWeapon().getItem().getRange();
+                    if (pc.getWeapon().getItem().getType() == 18 && range < 1) {
+                        range = 1;
+                    }
                     range = range < 0 ? 15 : range;
                 }
                 if ((target.getMapId() != pc.getMapId()) ||

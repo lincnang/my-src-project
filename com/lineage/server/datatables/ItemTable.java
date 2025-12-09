@@ -538,6 +538,20 @@ public class ItemTable {
                 armor.setPvpDmg_R(rs.getInt("PVP減免"));// 减免PVP傷害
                 armor.setDice_dmg(rs.getInt("機率給予爆擊"));
                 armor.setDmg(rs.getInt("機率給予爆擊值"));
+                armor.set_influence_safe(rs.getInt("influence_safe"));
+                armor.set_influence_str(rs.getInt("influence_str"));
+                armor.set_influence_dex(rs.getInt("influence_dex"));
+                armor.set_influence_con(rs.getInt("influence_con"));
+                armor.set_influence_int(rs.getInt("influence_int"));
+                armor.set_influence_wis(rs.getInt("influence_wis"));
+                armor.set_influence_cha(rs.getInt("influence_cha"));
+                armor.set_influence_sp(rs.getInt("influence_sp"));
+                armor.set_influence_mr(rs.getInt("influence_mr"));
+                armor.set_influence_hp(rs.getInt("influence_hp"));
+                armor.set_influence_mp(rs.getInt("influence_mp"));
+                armor.set_influence_dmgR(rs.getInt("influence_dmgR"));
+                armor.set_influence_hitAndDmg(rs.getInt("influence_hitAndDmg"));
+                armor.set_influence_bowHitAndDmg(rs.getInt("influence_bowHitAndDmg"));
                 ItemClass.get().addList(itemid, classname, 2);
                 result.put(armor.getItemId(), armor);
             }

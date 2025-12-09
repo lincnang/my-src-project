@@ -1687,6 +1687,34 @@ public class L1ItemStatus {
         int pw_sMpr = _itemPower.getMpr();
         int addexp = _item.getExpPoint();
         int pw_drd = _itemPower.getDamageReduction();
+
+        // 強化擴充能力顯示
+        if (_item instanceof L1Armor) {
+            L1Armor armor = (L1Armor) _item;
+            if (armor.get_influence_safe() != -1) {
+                int diff = _itemInstance.getEnchantLevel() - armor.get_safeenchant();
+                int multiplier = (diff > 0) ? diff : 0;
+
+                if (multiplier > 0) {
+                    pw_s1 += armor.get_influence_str() * multiplier;
+                    pw_s2 += armor.get_influence_dex() * multiplier;
+                    pw_s3 += armor.get_influence_con() * multiplier;
+                    pw_s4 += armor.get_influence_wis() * multiplier;
+                    pw_s5 += armor.get_influence_int() * multiplier;
+                    pw_s6 += armor.get_influence_cha() * multiplier;
+                    pw_sHp += armor.get_influence_hp() * multiplier;
+                    pw_sMp += armor.get_influence_mp() * multiplier;
+                    pw_sMr += armor.get_influence_mr() * multiplier;
+                    pw_sSp += armor.get_influence_sp() * multiplier;
+                    pw_drd += armor.get_influence_dmgR() * multiplier;
+                    pw_sHi += armor.get_influence_hitAndDmg() * multiplier;
+                    pw_sDg += armor.get_influence_hitAndDmg() * multiplier;
+                    pw_bHi += armor.get_influence_bowHitAndDmg() * multiplier;
+                    pw_bDg += armor.get_influence_bowHitAndDmg() * multiplier;
+                }
+            }
+        }
+
         int uhp = _item.get_up_hp_potion();// 增加藥水回復量%
         int uhp_num = _item.get_uhp_number();// 增加藥水回復指定量
         int add_hit = pw_sHi + hit;// 近距離命中率

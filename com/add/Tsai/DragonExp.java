@@ -96,17 +96,18 @@ public class DragonExp {
             rs = ps.executeQuery();
             while (rs.next()) {
                 final int objId = rs.getInt("ChaObjid");
-                if (CharObjidTable.get().isChar(objId) != null) {
-                    final int lastOutTime = rs.getInt("LastOutTime");
-                    final int storeExp = rs.getInt("StoreExp");
-                    final DragonExp rec = new DragonExp();
-                    rec.setLastLoginOutTime(lastOutTime);
-                    rec.setStoreExp(storeExp);
-                    _CACHE.put(objId, rec);
-                    count++;
-                } else {
-                    delete(objId); // 角色不存在，清掉遺孤
-                }
+                // 移除 CharObjidTable 依賴，避免因 CharObjidTable 載入失敗導致資料被誤刪或略過
+                // if (CharObjidTable.get().isChar(objId) != null) {
+                final int lastOutTime = rs.getInt("LastOutTime");
+                final int storeExp = rs.getInt("StoreExp");
+                final DragonExp rec = new DragonExp();
+                rec.setLastLoginOutTime(lastOutTime);
+                rec.setStoreExp(storeExp);
+                _CACHE.put(objId, rec);
+                count++;
+                // } else {
+                //    delete(objId); // 角色不存在，清掉遺孤 (風險過高，改為手動清理或忽略)
+                // }
             }
         } catch (final SQLException e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -122,16 +123,52 @@ public class DragonExp {
     public void restoreToPcOnLogin(final L1PcInstance pc) {
         if (pc == null) return;
         DragonExp rec = _CACHE.get(pc.getId());
+        
+        // 防呆機制：如果快取沒有，嘗試直接從 DB 讀取單筆 (Double Check)
+        if (rec == null) {
+            rec = loadFromDB(pc.getId());
+            if (rec != null) {
+                _CACHE.put(pc.getId(), rec);
+                _log.info("從 DB 補回龍之祝福快取: " + pc.getName());
+            }
+        }
+
         if (rec != null) {
             pc.setDragonExp(rec.getStoreExp());
         } else {
-            // 沒紀錄就視為 0，並建一筆（讓後續 flush 直接 upsert）
+            // 真的沒紀錄就視為 0，並建一筆（讓後續 flush 直接 upsert）
             pc.setDragonExp(0);
             DragonExp fresh = new DragonExp();
             fresh.setLastLoginOutTime(nowMinutes());
             fresh.setStoreExp(0);
             _CACHE.put(pc.getId(), fresh);
         }
+    }
+
+    // ====== 內部：單筆讀取 (防呆用) ======
+    private DragonExp loadFromDB(int objId) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        DragonExp rec = null;
+        try {
+            cn = DatabaseFactory.get().getConnection();
+            ps = cn.prepareStatement("SELECT `LastOutTime`,`StoreExp` FROM `日誌_龍之祝福` WHERE `ChaObjid`=?");
+            ps.setInt(1, objId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                rec = new DragonExp();
+                rec.setLastLoginOutTime(rs.getInt("LastOutTime"));
+                rec.setStoreExp(rs.getInt("StoreExp"));
+            }
+        } catch (SQLException e) {
+            _log.error("讀取單筆龍之祝福失敗: " + objId, e);
+        } finally {
+            SQLUtil.close(rs);
+            SQLUtil.close(ps);
+            SQLUtil.close(cn);
+        }
+        return rec;
     }
 
     // ====== 對外：把 pc 當前值落庫（登出/定時/關機都叫這個） ======

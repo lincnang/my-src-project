@@ -45,6 +45,21 @@ public class AcceleratorChecker {//src042
         }
     }
 
+    /**
+     * 重置檢測狀態 (用於傳送或速度劇烈變化後)
+     * 將最後動作時間設為當前時間，並清空違規計數
+     */
+    public void Reset() {
+        long now = System.nanoTime();
+        // 將所有動作的最後時間重置為現在，避免因時間差導致的誤判
+        for (ACT_TYPE each : ACT_TYPE.values()) {
+            _actTimers.put(each, now);
+        }
+        move_injusticeCount = 0;
+        move_justiceCount = 0;
+        moveResult = R_OK;
+    }
+
     public static void Setspeed() {
         CHECK_STRICTNESS = (ConfigPRO.CHECK_STRICTNESS - 5) / 100D;
         CHECK_MOVESTRICTNESS = (ConfigPRO.CHECK_MOVE_STRICTNESS - 5) / 100D;

@@ -36,7 +36,7 @@ public class ConSettingTable {
 
     private void load() {
         final String sql =
-                "SELECT 體質, 受到傷害減少, PVP傷害, PVP減免, 抗魔, 魔攻 FROM `系統_強化體質設置` WHERE 體質 IS NOT NULL";
+                "SELECT 體質, 受到傷害減少, PVP傷害, PVP減免, 抗魔, 魔攻, 血量 FROM `系統_強化體質設置` WHERE 體質 IS NOT NULL";
 
         Map<Integer, ConSetting> map = new HashMap<>();
         try (Connection con = DatabaseFactory.get().getConnection();
@@ -51,7 +51,8 @@ public class ConSettingTable {
                         rs.getInt("PVP傷害"),
                         rs.getInt("PVP減免"),
                         rs.getInt("抗魔"),
-                        rs.getInt("魔攻")
+                        rs.getInt("魔攻"),
+                        rs.getInt("血量")
                 );
                 map.put(conVal, s);
             }

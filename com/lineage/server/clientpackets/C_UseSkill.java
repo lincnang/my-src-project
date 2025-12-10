@@ -75,8 +75,26 @@ public class C_UseSkill extends ClientBasePacket {
                 pc.sendPackets(new S_ServerMessage(563));
                 return;
             }
+            // 加載封包內容
+            final int row = readC();
+            final int column = readC();
+            // 計算使用的技能編號(>> 1: 除) (<< 1: 乘) 3=*8
+            int skillId = (row << 3) + column + 1;
+            if (skillId == 5) {
+                skillId = 4;
+            }
+            if (skillId > 239) {
+                return;
+            }
+            if (skillId < 0) {
+                return;
+            }
+
             // 技能延遲狀態
             if (pc.isSkillDelay()) {
+                if (skillId == 4) {
+                    pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
+                }
                 return;
             }
             boolean isError = false;
@@ -95,17 +113,7 @@ public class C_UseSkill extends ClientBasePacket {
             if (pc.hasSkillEffect(AREA_OF_SILENCE) && !isError) {
                 isError = true;
             }
-            // 加載封包內容
-            final int row = readC();
-            final int column = readC();
-            // 計算使用的技能編號(>> 1: 除) (<< 1: 乘) 3=*8
-            final int skillId = (row << 3) + column + 1;
-            if (skillId > 239) {
-                return;
-            }
-            if (skillId < 0) {
-                return;
-            }
+            
             final boolean isCurePoisonSkill = (skillId == CURE_POISON);
 
             // 使用統一控制狀態檢查，允許沉默毒施放解毒術
@@ -226,12 +234,16 @@ public class C_UseSkill extends ClientBasePacket {
                         targetY = readH();
                         pc.setText(readS());
                         break;
-                    case 5:// 指定傳送 1100
+                    case 4:// 指定傳送 1100
                         if (!L1BuffUtil.getUseSkillTeleport(pc)) {
                             pc.setTeleport(false);
                             pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
                             return;
                         }
+                        targetId = readD();
+                        targetX = readH();
+                        targetY = readH();
+                        break;
                         /*
                     case MASS_TELEPORT:// 集體傳送術 1200
                         try {

@@ -10,9 +10,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 格蘭肯的憤怒
@@ -26,7 +23,9 @@ public class W_SK0018 extends L1WeaponSkillType {
     private static final Log _log = LogFactory.getLog(W_SK0018.class);
 
     // 執行緒調度器
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    // private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private static final java.util.Map<Integer, java.util.concurrent.ScheduledFuture<?>> _timers = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final java.util.Map<Integer, Integer> _stackCounts = new java.util.concurrent.ConcurrentHashMap<>();
 
     // 技能常數設定
     private static final int MAX_STACK = 5; // 最大疊加層數
@@ -72,24 +71,44 @@ public class W_SK0018 extends L1WeaponSkillType {
             L1PcInstance targetPc = (L1PcInstance) target;
 
             // 獲取當前疊加層數
-            int currentStacks = targetPc.getTemporaryEffect("PVP_DAMAGE_SKILL");
-            if (currentStacks >= MAX_STACK) {
-                targetPc.sendPackets(new S_SystemMessage("效果已達最大疊加層數。"));
-                return 0;
+            // int currentStacks = targetPc.getTemporaryEffect("PVP_DAMAGE_SKILL");
+            int currentStacks = _stackCounts.getOrDefault(targetPc.getId(), 0);
+            
+            // 取消舊的移除排程
+            java.util.concurrent.ScheduledFuture<?> future = _timers.remove(targetPc.getId());
+            if (future != null) {
+                future.cancel(false);
             }
 
-            // 增加疊加層數
-            currentStacks++;
-            targetPc.addTemporaryEffect("PVP_DAMAGE_SKILL", currentStacks, SKILL_DURATION_MS);
+            if (currentStacks < MAX_STACK) {
+                // 增加疊加層數
+                currentStacks++;
+                // targetPc.addTemporaryEffect("PVP_DAMAGE_SKILL", currentStacks, SKILL_DURATION_MS);
+                _stackCounts.put(targetPc.getId(), currentStacks);
 
-            // 套用技能效果（PVP 傷害減免 + 昏迷抗性減少）
-            applySkillEffects(targetPc, currentStacks);
+                // 套用單層效果 (累加)
+                // PVP減免是 +=，所以直接加負值
+                targetPc.setPvpDmg_R(PVP_DAMAGE_REDUCTION_PER_STACK);
+                // 昏迷抗性使用 addRegistStun
+                targetPc.addRegistStun(STUN_RESISTANCE_REDUCTION_PER_STACK);
+                
+                // 顯示提示訊息
+                int totalPvp = currentStacks * PVP_DAMAGE_REDUCTION_PER_STACK;
+                int totalStun = currentStacks * STUN_RESISTANCE_REDUCTION_PER_STACK;
+                targetPc.sendPackets(new S_SystemMessage(
+                        String.format("格蘭肯疊加到 %d 層：PVP減免 %d%%，昏迷抗性 %d%%。",
+                                currentStacks, totalPvp, totalStun)
+                ));
+            } else {
+                // 已達最大層數，僅刷新時間
+                targetPc.sendPackets(new S_SystemMessage("效果已達最大疊加層數。"));
+            }
 
-            // 排程移除效果
-            final int stacks = currentStacks;
-            boolean isLastStack = stacks == MAX_STACK;
-            scheduler.schedule(() -> removeSkillEffects(targetPc, stacks, isLastStack),
-                    SKILL_DURATION_MS, TimeUnit.MILLISECONDS);
+            // 排程移除效果 (移除所有層數)
+            final int stacksToRemove = currentStacks;
+            future = com.lineage.server.thread.GeneralThreadPool.get().schedule((Runnable) () -> removeSkillEffects(targetPc, stacksToRemove),
+                    SKILL_DURATION_MS);
+            _timers.put(targetPc.getId(), future);
 
             // 播放動畫，可用SQL欄位設定
             int animId = get_gfxid2(); // 建議統一和W_SK0017，資料庫填18856
@@ -113,23 +132,7 @@ public class W_SK0018 extends L1WeaponSkillType {
      * @param stacks 當前疊加層數
      */
     private void applySkillEffects(L1Character target, int stacks) {
-        if (target instanceof L1PcInstance) {
-            L1PcInstance targetPc = (L1PcInstance) target;
-
-            // 計算總減免值
-            int totalPvpReduction = PVP_DAMAGE_REDUCTION_PER_STACK * stacks;
-            int totalStunResistanceReduction = STUN_RESISTANCE_REDUCTION_PER_STACK * stacks;
-
-            // 設置效果
-            targetPc.setPvpDmg_R(totalPvpReduction);
-            targetPc.setHunmi(totalStunResistanceReduction);
-
-            // 顯示提示訊息
-            targetPc.sendPackets(new S_SystemMessage(
-                    String.format("格蘭肯疊加到 %d 層：PVP減免 %d%%，昏迷抗性 %d%%。",
-                            stacks, totalPvpReduction, totalStunResistanceReduction)
-            ));
-        }
+        // 已整合至 start_weapon_skill
     }
 
     /**
@@ -137,20 +140,24 @@ public class W_SK0018 extends L1WeaponSkillType {
      *
      * @param target      目標角色
      * @param stacks      要移除的層數
-     * @param isLastStack 是否是最後一層
      */
-    private void removeSkillEffects(L1Character target, int stacks, boolean isLastStack) {
+    private void removeSkillEffects(L1Character target, int stacks) {
         if (target instanceof L1PcInstance) {
             L1PcInstance targetPc = (L1PcInstance) target;
 
-            // 恢復效果
-            targetPc.setPvpDmg_R(0); // 移除所有 PVP 傷害減免
-            targetPc.setHunmi(0); // 移除所有昏迷抗性減少
+            // 恢復效果 (扣除之前增加的負值 = 加上正值)
+            int pvpRestore = stacks * -PVP_DAMAGE_REDUCTION_PER_STACK; // e.g. 5 * -(-1) = 5
+            int stunRestore = stacks * -STUN_RESISTANCE_REDUCTION_PER_STACK; // e.g. 5 * -(-2) = 10
+            
+            targetPc.setPvpDmg_R(pvpRestore);
+            targetPc.addRegistStun(stunRestore);
+            
+            // 清除暫存狀態
+            // targetPc.removeTemporaryEffect("PVP_DAMAGE_SKILL");
+            _stackCounts.remove(targetPc.getId());
+            _timers.remove(targetPc.getId());
 
-            // 只在最後一層移除時顯示訊息
-            if (isLastStack) {
-                targetPc.sendPackets(new S_SystemMessage("格蘭肯憤怒技能已恢復。"));
-            }
+            targetPc.sendPackets(new S_SystemMessage("格蘭肯憤怒技能已恢復。"));
         }
     }
 }

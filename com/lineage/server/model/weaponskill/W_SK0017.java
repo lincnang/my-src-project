@@ -20,7 +20,7 @@ public class W_SK0017 extends L1WeaponSkillType {
 
     private static final Log _log = LogFactory.getLog(W_SK0017.class);
     private static final Random _random = new Random();
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    // private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static final ConcurrentHashMap<Integer, ScheduledFuture<?>> diseaseTasks = new ConcurrentHashMap<>();
 
     public W_SK0017() {}
@@ -75,13 +75,13 @@ public class W_SK0017 extends L1WeaponSkillType {
                 if (previousTask != null && !previousTask.isDone()) {
                     previousTask.cancel(false);
                 }
-                ScheduledFuture<?> newTask = scheduler.schedule(() -> {
+                ScheduledFuture<?> newTask = com.lineage.server.thread.GeneralThreadPool.get().schedule((Runnable) () -> {
                     try {
                         removeDiseaseEffect(tgpc);
                     } catch (Exception e) {
                         _log.error("移除疾病術效果時發生例外: ", e);
                     }
-                }, 8, TimeUnit.SECONDS);
+                }, 8000L);
                 if (newTask != null) {
                     diseaseTasks.put(tgpc.getId(), newTask);
                 }
@@ -109,14 +109,17 @@ public class W_SK0017 extends L1WeaponSkillType {
     /** 疾病術自動移除邏輯 */
     private void removeDiseaseEffect(L1PcInstance tgpc) {
         synchronized (tgpc) {
+            // 移除自訂圖示 (修正為 false)
+            tgpc.sendPackets(new S_InventoryIcon(760, false, 4585, 7));
+            
             if (!tgpc.hasSkillEffect(L1SkillId.DISEASE)) {
                 _log.debug("疾病術效果已經不存在，無需再次移除。");
+                diseaseTasks.remove(tgpc.getId());
                 return;
             }
             L1SkillStop.stopSkill(tgpc, L1SkillId.DISEASE);
             tgpc.removeSkillEffect(L1SkillId.DISEASE);
             tgpc.sendPackets(new S_ServerMessage("惡魔王效果:疾病術的效果消失了！"));
-            tgpc.sendPackets(new S_InventoryIcon(760, true, 4585, 7));
             diseaseTasks.remove(tgpc.getId());
             _log.debug("疾病術效果已被移除，圖示也已關閉。");
         }

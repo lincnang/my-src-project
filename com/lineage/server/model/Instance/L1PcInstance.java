@@ -4689,7 +4689,7 @@ public class L1PcInstance extends L1Character { // src015
      *
      */
     public boolean isBrave() {
-        return hasSkillEffect(STATUS_BRAVE) || hasSkillEffect(FIRE_BLESS) || hasSkillEffect(BLOODLUST);
+        return hasSkillEffect(STATUS_BRAVE) || hasSkillEffect(FIRE_BLESS) || hasSkillEffect(BLOODLUST) || hasSkillEffect(Shadow_ACCELERATION);
     }
 
     /**

@@ -6,6 +6,7 @@ import com.lineage.data.event.RedBlueSet;
 import com.lineage.server.ActionCodes;
 import com.lineage.server.datatables.NpcTable;
 import com.lineage.server.datatables.SkillEnhanceTable;
+import com.lineage.server.datatables.SkillsNoCounterMagicTable;
 import com.lineage.server.datatables.SkillsTable;
 import com.lineage.server.model.*;
 import com.lineage.server.model.Instance.*;
@@ -421,6 +422,18 @@ public class L1SkillUse {
                 if (castle_area) {
                     pc.sendPackets(new S_ServerMessage("戰爭旗幟內禁止使用大地屏障。"));
                     return false;
+                }
+            }
+            // 負面魔法(攻擊、詛咒、機率、即死、變形) 安全區域禁止對玩家施放
+            int skillType = _skill.getType();
+            if (skillType == L1Skills.TYPE_ATTACK || skillType == L1Skills.TYPE_CURSE || 
+                skillType == L1Skills.TYPE_PROBABILITY || skillType == L1Skills.TYPE_DEATH ||
+                skillType == L1Skills.TYPE_CHANGE || _skillId == HAND_DARKNESS) {
+                if (_target instanceof L1PcInstance && _user != _target) {
+                    if (pc.isSafetyZone() || _target.isSafetyZone()) {
+                        pc.sendPackets(new S_ServerMessage(79)); // 沒有任何事情發生
+                        return false;
+                    }
                 }
             }
             /*
@@ -962,7 +975,7 @@ public class L1SkillUse {
                 if (!this._skill.getTarget().equals("none")) {
                     this._targetList.add(new TargetStatus(this._target));
                 }
-                if ((this._skillId != HEAL_ALL) && !(this._skill.getTarget().equals("attack") || (this._skill.getType() == L1Skills.TYPE_ATTACK))) {
+                if ((this._skillId != HEAL_ALL) && (this._skillId != DEATH_HEAL) && !(this._skill.getTarget().equals("attack") || (this._skill.getType() == L1Skills.TYPE_ATTACK))) {
                     // 攻擊系以外のスキルとH-A以外はターゲット自身を含める
                     this._targetList.add(new TargetStatus(this._user));
                 }
@@ -1674,6 +1687,12 @@ public class L1SkillUse {
             if (_skillId == skillId) {
                 _isCounterMagic = false; // 魔法屏障無效
                 break;
+            }
+        }
+        // 檢查資料庫設定 (skills_無法檔魔屏)
+        if (_isCounterMagic) {
+            if (SkillsNoCounterMagicTable.get().isNoCounterMagic(_skillId)) {
+                _isCounterMagic = false;
             }
         }
         // NPCにショックスタンを使用させるとonActionでNullPointerExceptionが發生するため
@@ -2430,15 +2449,19 @@ public class L1SkillUse {
                         pc.sendPackets(new S_SPMR(pc));// 防禦更新
                         pc.sendPackets(new S_PacketBoxIconAura(118, this._getBuffIconDuration));
                     } else if (this._skillId == DEATH_HEAL) { // 法師新技能 治愈逆行
-                        if (_target instanceof L1PcInstance) {
-                            L1PcInstance pc = (L1PcInstance) _target;
+                        if (cha instanceof L1PcInstance) {
+                            if (_user.getId() == cha.getId()) { // 不能對自己施放
+                                continue;
+                            }
+                            L1PcInstance pc = (L1PcInstance) cha;
                             if (pc.hasSkillEffect(DEATH_HEAL)) {
                                 pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, false, -1));
                                 pc.removeSkillEffect(DEATH_HEAL);
                             }
                             int chance = _random.nextInt(10) + 1;
+                            _skillTime = chance;
                             pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, true, chance));
-                            pc.setSkillEffect(DEATH_HEAL, chance * 1000);
+                            //pc.setSkillEffect(DEATH_HEAL, chance * 1000);
                             pc.sendPackets(new S_SkillSound(pc.getId(), 14501));
                             Broadcaster.broadcastPacket(pc, new S_SkillSound(pc.getId(), 14501));
                         }

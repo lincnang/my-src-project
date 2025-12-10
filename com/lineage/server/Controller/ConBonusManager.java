@@ -17,7 +17,7 @@ public class ConBonusManager {
     private static final Log _log = LogFactory.getLog(ConBonusManager.class);
     private static final ConBonusManager INSTANCE = new ConBonusManager();
 
-    private static class Applied { int dr; int pvpDmg; int pvpRed; int mr; int matk; }
+    private static class Applied { int dr; int pvpDmg; int pvpRed; int mr; int matk; int hp; }
     private final Map<Integer, Applied> appliedMap = new ConcurrentHashMap<>();
 
     public static ConBonusManager get() { return INSTANCE; }
@@ -31,6 +31,7 @@ public class ConBonusManager {
             safeSetPvpRed(pc, -old.pvpRed);
             safeAddMr(pc, -old.mr);
             safeAddMatk(pc, -old.matk);
+            safeAddMaxHp(pc, -old.hp);
         }
 
         final int totalCon = getTotalCon(pc);
@@ -42,12 +43,14 @@ public class ConBonusManager {
             neo.pvpRed = setting.pvpReduction;
             neo.mr = setting.mr;
             neo.matk = setting.magicAttack;
+            neo.hp = setting.hp;
 
             safeAddDmgR(pc, neo.dr);
             safeSetPvpDmg(pc, neo.pvpDmg);
             safeSetPvpRed(pc, neo.pvpRed);
             safeAddMr(pc, neo.mr);
             safeAddMatk(pc, neo.matk);
+            safeAddMaxHp(pc, neo.hp);
 
             appliedMap.put(pc.getId(), neo);
         }
@@ -63,6 +66,7 @@ public class ConBonusManager {
     private void safeAddMr(L1PcInstance pc, int v) { if (v != 0) { try { pc.addMr(v); } catch (Throwable ignore) {} } }
     // 體質表中的「魔攻」對應 Lineage 的 SP（法術攻擊力）
     private void safeAddMatk(L1PcInstance pc, int v) { if (v != 0) { try { pc.addSp(v); } catch (Throwable ignore) {} } }
+    private void safeAddMaxHp(L1PcInstance pc, int v) { if (v != 0) { try { pc.addMaxHp(v); } catch (Throwable ignore) {} } }
 }
 
 

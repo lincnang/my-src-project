@@ -16,7 +16,7 @@ public class W_SK0020 extends L1WeaponSkillType {
 
     private static final Log _log = LogFactory.getLog(W_SK0020.class);
     private static final int DEBUFF_DURATION = 8000; // BUFF 持續時間（毫秒）
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+    // private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
     private static final ConcurrentHashMap<Integer, ScheduledFuture<?>> effectTasks = new ConcurrentHashMap<>();
     private static final Random _random = new Random();
 
@@ -36,9 +36,9 @@ public class W_SK0020 extends L1WeaponSkillType {
             // ===== 機率判斷（採用 random1/random2 機率）=====
             int activationChance = random(weapon); // parent class 的 random() 會用 random1/random2 計算
             int chance = _random.nextInt(1000);
-            System.out.printf("[W_SK0020] 發動機率 debug: activationChance=%d, 隨機值=%d, random1=%d, random2=%d, 裝備ID=%d, 玩家=%s\n",
-                    activationChance, chance, get_random1(), get_random2(),
-                    weapon != null ? weapon.getItemId() : -1, pc != null ? pc.getName() : "null");
+            // System.out.printf("[W_SK0020] 發動機率 debug: activationChance=%d, 隨機值=%d, random1=%d, random2=%d, 裝備ID=%d, 玩家=%s\n",
+            //        activationChance, chance, get_random1(), get_random2(),
+            //        weapon != null ? weapon.getItemId() : -1, pc != null ? pc.getName() : "null");
             if (chance >= activationChance) return 0.0D;
 
             // ===== 強制移除勇敢狀態 =====
@@ -69,7 +69,11 @@ public class W_SK0020 extends L1WeaponSkillType {
     }
 
     private void scheduleBuffRemoval(L1PcInstance target) {
-        ScheduledFuture<?> future = scheduler.schedule(() -> removeHitBuff(target), DEBUFF_DURATION, TimeUnit.MILLISECONDS);
+        ScheduledFuture<?> previousTask = effectTasks.remove(target.getId());
+        if (previousTask != null && !previousTask.isDone()) {
+            previousTask.cancel(false);
+        }
+        ScheduledFuture<?> future = com.lineage.server.thread.GeneralThreadPool.get().schedule((Runnable) () -> removeHitBuff(target), (long) DEBUFF_DURATION);
         effectTasks.put(target.getId(), future);
     }
 

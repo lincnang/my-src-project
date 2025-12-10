@@ -342,6 +342,10 @@ public class Teleportation {
                 // System.out.println("移出清單");
             }
             pc.setTeleport(false);
+            // 傳送結束後重置加速器檢測，避免因地圖切換導致的誤判
+            if (pc.speed_Attack() != null) {
+                pc.speed_Attack().Reset();
+            }
             if (pc.hasSkillEffect(167)) {
                 pc.sendPackets(new S_PacketBoxWindShackle(pc.getId(), pc.getSkillEffectTimeSec(167)));
             }

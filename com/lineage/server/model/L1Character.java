@@ -239,6 +239,12 @@ public class L1Character extends L1Object {
                 pc.removeKnownObject(this);
                 pc.updateObject();
             }
+            if (this instanceof L1PcInstance) {
+                L1PcInstance pc = (L1PcInstance) this;
+                if (pc.isInParty()) {
+                    pc.getParty().updateMiniHP(pc);
+                }
+            }
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

@@ -329,6 +329,7 @@ public class GameServer {
             com.lineage.server.datatables.IntSettingTable.getInstance();
             com.lineage.server.datatables.WisSettingTable.getInstance();
             com.lineage.server.datatables.ConSettingTable.getInstance();
+            com.lineage.server.datatables.SkillsNoCounterMagicTable.get().load();
 
             // 可選：登入後或定時計畫觸發 reapply 由屬性setter保證動態回收/套用
 

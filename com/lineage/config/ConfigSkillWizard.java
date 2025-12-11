@@ -1,7 +1,6 @@
 package com.lineage.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
@@ -41,6 +40,14 @@ public final class ConfigSkillWizard {
      * 法師新技能 治癒逆行機率設定
      **/
     public static int DEATH_HEAL;
+    /**
+     * 古代啟示 魔法暴擊率提升
+     */
+    public static int ICE_LANCE_CRITICAL;
+    /**
+     * 古代啟示 魔法穿透比例
+     */
+    public static int ICE_LANCE_PENETRATION;
     /***/
     public static String NO_CD;
     /***/
@@ -64,6 +71,8 @@ public final class ConfigSkillWizard {
             Meteor_TO_Turn4 = Double.parseDouble(set.getProperty("Meteor_TO_Turn4", "1.0"));
             CURSE_SEC = set.getProperty("CURSE_SEC", "3~7");
             DEATH_HEAL = Integer.parseInt(set.getProperty("DEATH_HEAL", "20"));//法師新技能 治癒逆行機率設定
+            ICE_LANCE_CRITICAL = Integer.parseInt(set.getProperty("ICE_LANCE_CRITICAL", "100"));
+            ICE_LANCE_PENETRATION = Integer.parseInt(set.getProperty("ICE_LANCE_PENETRATION", "50"));
             NO_CD = set.getProperty("NO_CD", "null");
             HAS_SKILL = set.getProperty("HAS_SKILL", "null");
         } catch (final Exception e) {

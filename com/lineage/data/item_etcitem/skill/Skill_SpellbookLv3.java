@@ -32,7 +32,7 @@ public class Skill_SpellbookLv3 extends ItemExecutor {
         } else if (nameId.equalsIgnoreCase("$528")) {//(寒冰氣息)
             skillid = 20;
             attribute = 2;
-        } else if (nameId.equalsIgnoreCase("$30504")) {
+        } else if (nameId.equalsIgnoreCase("-")) {
             skillid = 80;
             attribute = 0;
         } else if (nameId.equalsIgnoreCase("-")) {

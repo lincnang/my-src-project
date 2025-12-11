@@ -60,8 +60,8 @@ public class PRIDE extends SkillMode {
         // 如果來源角色 `srcpc` 是目標玩家 `pc` 本人
         if (srcpc.getId() == pc.getId()) {
             // 為玩家設置 "PRIDE" 技能效果，持續時間為 `integer` 秒（乘以1000轉換為毫秒）
-            pc.setSkillEffect(L1SkillId.PRIDE, integer * 600);
-            pc.sendPackets(new S_InventoryIcon(10229, true, 3482, 600));
+            pc.setSkillEffect(L1SkillId.PRIDE, integer * 1000);
+            pc.sendPackets(new S_InventoryIcon(10229, true, 3482, integer));
             pc.sendPackets(new S_ServerMessage("\\fX提升最大體力與藥水恢復(" + integer + "秒)"));
         }
 

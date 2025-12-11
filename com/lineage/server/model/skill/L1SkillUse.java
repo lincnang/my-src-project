@@ -293,6 +293,25 @@ public class L1SkillUse {
             // System.out.println("檢查點2");
             return false;
         }
+        
+        // 負面魔法(攻擊、詛咒、機率、即死、變形) 安全區域禁止對玩家施放 (通用檢查，包含卷軸)
+        if (_user instanceof L1PcInstance) {
+            L1PcInstance pc = (L1PcInstance) _user;
+            int skillType = _skill.getType();
+            if (skillType == L1Skills.TYPE_ATTACK || skillType == L1Skills.TYPE_CURSE || 
+                skillType == L1Skills.TYPE_PROBABILITY || skillType == L1Skills.TYPE_DEATH ||
+                skillType == L1Skills.TYPE_CHANGE || _skillId == HAND_DARKNESS || _skillId == CANCELLATION) {
+                // 需先取得目標物件以進行判斷
+                L1Object targetObj = World.get().findObject(_targetID);
+                if (targetObj instanceof L1PcInstance && _user.getId() != _targetID) {
+                    L1PcInstance targetPc = (L1PcInstance) targetObj;
+                    if (pc.isSafetyZone() || targetPc.isSafetyZone()) {
+                        pc.sendPackets(new S_ServerMessage(79)); // 沒有任何事情發生
+                        return false;
+                    }
+                }
+            }
+        }
         // ファイアーウォール、ライフストリームは詠唱對象が座標
         // キューブは詠唱者の座標に配置されるため例外
         // id58火牢 id63治愈能量風暴
@@ -321,7 +340,7 @@ public class L1SkillUse {
         switch (_skillId) {
             // 可使用傳送戒指技能
             case TELEPORT:
-            case MASS_TELEPORT:
+            //case MASS_TELEPORT:
                 this._bookmarkId = target_id; // 日版記憶座標
                 this._bookmarkX = x; // 日版記憶座標
                 this._bookmarkY = y; // 日版記憶座標
@@ -405,6 +424,13 @@ public class L1SkillUse {
                     return false;
                 }
             }
+            
+            if (_skillId == MOVING_ACCELERATION) {
+                if (pc.hasSkillEffect(Shadow_ACCELERATION)) {
+                    pc.sendPackets(new S_ServerMessage("已存在施放暗影加速能力。"));
+                    return false;
+                }
+            }
             /*
              * // 正義屬性才可使用究極光裂術 if ((this._skillId == DISINTEGRATE) &&
              * (pc.getLawful() < 500)) { // このメッセージであってるか未確認 pc.sendPackets(new
@@ -422,18 +448,6 @@ public class L1SkillUse {
                 if (castle_area) {
                     pc.sendPackets(new S_ServerMessage("戰爭旗幟內禁止使用大地屏障。"));
                     return false;
-                }
-            }
-            // 負面魔法(攻擊、詛咒、機率、即死、變形) 安全區域禁止對玩家施放
-            int skillType = _skill.getType();
-            if (skillType == L1Skills.TYPE_ATTACK || skillType == L1Skills.TYPE_CURSE || 
-                skillType == L1Skills.TYPE_PROBABILITY || skillType == L1Skills.TYPE_DEATH ||
-                skillType == L1Skills.TYPE_CHANGE || _skillId == HAND_DARKNESS) {
-                if (_target instanceof L1PcInstance && _user != _target) {
-                    if (pc.isSafetyZone() || _target.isSafetyZone()) {
-                        pc.sendPackets(new S_ServerMessage(79)); // 沒有任何事情發生
-                        return false;
-                    }
                 }
             }
             /*
@@ -570,7 +584,7 @@ public class L1SkillUse {
         setCheckedUseSkill(false);
         switch (_skillId) {
             case TELEPORT:
-            case MASS_TELEPORT:
+            //case MASS_TELEPORT:
             case TELEPORT_TO_MATHER:
                 // 解除傳送鎖定
                 _player.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
@@ -797,7 +811,7 @@ public class L1SkillUse {
                     case CANCELLATION:
                     case SILENCE:
                         //				case DECAY_POTION: //藥水霜
-                    case MASS_TELEPORT:
+                    //case MASS_TELEPORT:
                     case DETECTION:
                     case COUNTER_DETECTION:
                     case ERASE_MAGIC:
@@ -812,6 +826,7 @@ public class L1SkillUse {
                     case REMOVE_CURSE:
                     case DARK_BLIND:
                     case PHANTASM:
+                    case DEATH_HEAL:
                         return true;
                     default:
                         return false;
@@ -1926,7 +1941,7 @@ public class L1SkillUse {
                             _heal *= -1;
                         }
                         if (cha.hasSkillEffect(DEATH_HEAL)) { // 法師新技能 治愈逆行
-                            _heal *= -1;
+                            _heal = (int) (_heal * -0.45);
                         }
 
                         // 王族天賦技能榮耀治愈
@@ -2052,7 +2067,7 @@ public class L1SkillUse {
                         }
                     }
 
-                    if (_skillId == MASS_TELEPORT) {
+                    /*if (_skillId == MASS_TELEPORT) {
                         if (!(_user instanceof L1PcInstance) || !(cha instanceof L1PcInstance)) {
                             // no-op
                         } else {
@@ -2112,7 +2127,7 @@ public class L1SkillUse {
                                 }
                             }
                         }
-                    }
+                    }*/
                 } else if (this._skillId == COUNTER_DETECTION) { // 強力無所遁形術
                     if (cha instanceof L1PcInstance) {
                         this._dmg = magic.calcMagicDamage(this._skillId);
@@ -2453,18 +2468,31 @@ public class L1SkillUse {
                             if (_user.getId() == cha.getId()) { // 不能對自己施放
                                 continue;
                             }
+                            // 避免雙重機率判斷：如果技能類型已經是機率或詛咒，則前面已經判斷過
+                            int skillType = _skill.getType();
+                            if (skillType != L1Skills.TYPE_CURSE && skillType != L1Skills.TYPE_PROBABILITY) {
+                                if (!magic.calcProbabilityMagic(DEATH_HEAL)) { // 命中判斷
+                                    continue;
+                                }
+                            }
                             L1PcInstance pc = (L1PcInstance) cha;
-                            if (pc.hasSkillEffect(DEATH_HEAL)) {
+                            /*if (pc.hasSkillEffect(DEATH_HEAL)) {
                                 pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, false, -1));
                                 pc.removeSkillEffect(DEATH_HEAL);
-                            }
-                            int chance = _random.nextInt(10) + 1;
+                            }*/
+                            int chance = 16; // 固定 16 秒
                             _skillTime = chance;
                             pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, true, chance));
-                            //pc.setSkillEffect(DEATH_HEAL, chance * 1000);
+                            //pc.setSkillEffect(DEATH_HEAL, chance * 1000); // 由 addMagicList 統一處理
                             pc.sendPackets(new S_SkillSound(pc.getId(), 14501));
                             Broadcaster.broadcastPacket(pc, new S_SkillSound(pc.getId(), 14501));
+                            pc.sendPackets(new S_SystemMessage("\\aB治癒逆行技能造成恢復能力轉為傷害值",17));
+                            if (_user instanceof L1PcInstance) {
+                                ((L1PcInstance) _user).sendPackets(new S_SystemMessage("對方中了治癒逆行!"));
+                            }
                         }
+
+
                     } else if (this._skillId == ABSOLUTE_BLADE) { // 騎士新技能 絕御之刃
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
@@ -2726,7 +2754,7 @@ public class L1SkillUse {
                         // 從 SkillEnhanceTable 讀取狂暴術的強化資料
                         L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(BERSERKERS, bookLevel);
                         // 預設加成數值
-                        int addAc = 10;
+                        int addAc = -10;
                         int addDmgup = 5;
                         // 如果存在強化資料，則取設定值
                         if (enhanceData != null) {
@@ -2992,11 +3020,11 @@ public class L1SkillUse {
             //			}
             //			break;
             // 集體傳送術
-            case MASS_TELEPORT:
-                if (this._user.getId() != cha.getId()) {
-                    return false;
-                }
-                break;
+            //case MASS_TELEPORT:
+            //    if (this._user.getId() != cha.getId()) {
+            //        return false;
+            //    }
+            //    break;
         }
         return true;
     }

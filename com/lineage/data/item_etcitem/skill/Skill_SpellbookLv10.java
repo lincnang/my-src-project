@@ -49,7 +49,7 @@ public class Skill_SpellbookLv10 extends ItemExecutor {
             } else if (nameId.equalsIgnoreCase("魔法書 (集體聖結界)")) { //集體聖結界
                 skillid = 79;
                 attribute = 1;
-            } else if (nameId.equalsIgnoreCase("魔法書(治愈逆行)")) { //治愈逆行
+            } else if (nameId.equalsIgnoreCase("$30504")) { //治愈逆行
                 skillid = 80;
                 attribute = 1;
             }
@@ -60,8 +60,3 @@ public class Skill_SpellbookLv10 extends ItemExecutor {
         }
     }
 }
-/*
- * Location: C:\Users\kenny\Downloads\奧茲之戰\Server_Game.jar Qualified Name:
- * com.lineage.data.item_etcitem.skill.Skill_SpellbookLv10 JD-Core Version:
- * 0.6.2
- */

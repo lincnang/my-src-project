@@ -4395,7 +4395,7 @@ public class L1PcInstance extends L1Character { // src015
     public int getOriginalMagicCritical() {
         int critical = 0;
         if (hasSkillEffect(ICE_LANCE)) { // 古代啟示 一定時間內提升魔法暴擊
-            critical += 50;
+            critical += ConfigSkillWizard.ICE_LANCE_CRITICAL;
         }
         return _originalMagicCritical + critical;
     }

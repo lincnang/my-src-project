@@ -14,6 +14,7 @@ import com.eric.gui.J_Main;
 import com.lineage.DatabaseFactory;
 import com.lineage.config.*;
 import com.lineage.data.event.BroadcastSet;
+import com.lineage.data.event.ShopXSet;
 import com.lineage.echo.ClientExecutor;
 import com.lineage.managerUI.Eva;
 import com.lineage.server.BroadcastController;
@@ -225,6 +226,9 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         }
 
                         // 如果 done為false 一律不執行
+                        if (var2 != -1 && var2 != 15 && pc.hasSkillEffect(PC_TEL_LOCK)) {
+                            pc.removeSkillEffect(PC_TEL_LOCK);
+                        }
                         if (var2 == 1) {
                             final StringBuilder stringBuilder = new StringBuilder();
                             for (int i = 0; i < 6; i++) {
@@ -334,24 +338,24 @@ public class C_ItemCraft1 extends ClientBasePacket {
                             pc.sendPackets(new S_NPCTalkReturn(pc, "ItemFast"));
                         }
                         //交易中心
-                        //						if (var2 == 14){
-                        ////							Npc_ShopX.get().talk(pc, WorldNpc.get().find(70535));
-                        //							pc.get_other().set_item(null);
-                        //
-                        //							final L1Item shopXcash = ItemTable.get().getTemplate(ShopXSet.ITEMID);
-                        //
-                        //							String[] info = new String[] { String.valueOf(ShopXSet.ADENA), String.valueOf(ShopXSet.DATE),
-                        //									//String.valueOf(ShopXSet.MIN), String.valueOf(ShopXSet.MAX) };
-                        //									String.valueOf(ShopXSet.MIN), String.valueOf(ShopXSet.MAX), String.valueOf(shopXcash.getName()) };
-                        //
-                        //							pc.sendPackets(new S_NPCTalkReturn(pc, "y_x_1", info));
-                        //						}
+                        if (var2 == 14){
+//							Npc_ShopX.get().talk(pc, WorldNpc.get().find(70535));
+                            pc.get_other().set_item(null);
+
+                            final L1Item shopXcash = ItemTable.get().getTemplate(ShopXSet.ITEMID);
+
+                            String[] info = new String[] { String.valueOf(ShopXSet.ADENA), String.valueOf(ShopXSet.DATE),
+                                    //String.valueOf(ShopXSet.MIN), String.valueOf(ShopXSet.MAX) };
+                                    String.valueOf(ShopXSet.MIN), String.valueOf(ShopXSet.MAX), String.valueOf(shopXcash.getName()) };
+
+                            pc.sendPackets(new S_NPCTalkReturn(pc, "y_x_1", info));
+                        }
                         //傳送
                         if (var2 == 15) { // pc傳送選擇鎖定指令
-                            if (pc.hasSkillEffect(PC_TEL_LOCK)) {
+                            /*if (pc.hasSkillEffect(PC_TEL_LOCK)) {
                                 pc.removeSkillEffect(PC_TEL_LOCK);
                                 return; // 防止重複傳送
-                            }
+                            }*/
                             pc.setSkillEffect(PC_TEL_LOCK, 20 * 1000); // 使用 SkillEffect 控制更好
                             pc.sendPackets(new S_NPCTalkReturn(pc, "y_t_0"));
                             pc.sendPackets(new S_SystemMessage("\\f3請在20秒內完成傳送地區選擇，超時後請重新打開此頁面。"));//

@@ -4,6 +4,7 @@ import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
+import com.lineage.server.serverpackets.S_OwnCharStatus;
 import com.lineage.server.serverpackets.S_SPMR;
 
 import static com.lineage.server.model.skill.L1SkillId.SHADOW_ARMOR;
@@ -20,7 +21,9 @@ public class SHADOW_ARMOR extends SkillMode {
                 if (!pc.hasSkillEffect(SHADOW_ARMOR)) {
                     pc.setSkillEffect(SHADOW_ARMOR, integer * 1000);
                     pc.addMr(5);
+                    pc.addAc(-3);
                     pc.sendPackets(new S_SPMR(pc));
+                    pc.sendPackets(new S_OwnCharStatus(pc));
                 }
             }
         }
@@ -39,7 +42,9 @@ public class SHADOW_ARMOR extends SkillMode {
         if ((cha instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) cha;
             pc.addMr(-5);
+            pc.addAc(3);
             pc.sendPackets(new S_SPMR(pc));
+            pc.sendPackets(new S_OwnCharStatus(pc));
         }
     }
 }

@@ -1218,6 +1218,10 @@ public class L1MagicPc extends L1MagicMode {
      */
     private int calcMrDefense(int dmg) {
         int mr = getTargetMr();
+        if (_pc.hasSkillEffect(ICE_LANCE)) { // 古代啟示 提升魔法穿透效果
+            // mr /= 2; // 穿透50% (MR減半)
+            mr -= (mr * ConfigSkillWizard.ICE_LANCE_PENETRATION / 100);
+        }
         double mrFloor = 0;
         if (mr < 100) {
             mrFloor = Math.floor((mr - _pc.getOriginalMagicHit()) / 2);

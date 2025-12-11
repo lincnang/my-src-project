@@ -26,6 +26,12 @@ public class CANCELLATION extends SkillMode {
 
     @Override
     public int start(final L1PcInstance srcpc, final L1Character cha, final L1Magic magic, final int integer) throws Exception {
+        if (srcpc != null && cha instanceof L1PcInstance && srcpc != cha) {
+            if (cha.isSafetyZone()) {
+                srcpc.sendPackets(new S_ServerMessage(79));
+                return 0;
+            }
+        }
         final int dmg = 0;// magic.calcMagicDamage(L1SkillId.CURE_POISON);
         // 對象是NPC
         if (cha instanceof L1NpcInstance) {

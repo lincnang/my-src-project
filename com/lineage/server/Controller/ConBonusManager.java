@@ -22,9 +22,15 @@ public class ConBonusManager {
 
     public static ConBonusManager get() { return INSTANCE; }
 
+    public void clear(L1PcInstance pc) {
+        if (pc == null) return;
+        appliedMap.remove(System.identityHashCode(pc));
+    }
+
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
-        Applied old = appliedMap.remove(pc.getId());
+        int key = System.identityHashCode(pc);
+        Applied old = appliedMap.remove(key);
         if (old != null) {
             safeAddDmgR(pc, -old.dr);
             safeSetPvpDmg(pc, -old.pvpDmg);
@@ -52,7 +58,7 @@ public class ConBonusManager {
             safeAddMatk(pc, neo.matk);
             safeAddMaxHp(pc, neo.hp);
 
-            appliedMap.put(pc.getId(), neo);
+            appliedMap.put(key, neo);
         }
 
         pc.sendPackets(new S_OwnCharStatus2(pc));

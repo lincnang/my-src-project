@@ -1,6 +1,10 @@
 package com.lineage.echo;
 
 import com.add.Tsai.DragonExp;
+import com.lineage.server.Controller.ConBonusManager;
+import com.lineage.server.Controller.IntBonusManager;
+import com.lineage.server.Controller.StrBonusManager;
+import com.lineage.server.Controller.WisBonusManager;
 import com.lineage.server.datatables.GetbackTable;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.L1Clan;
@@ -79,7 +83,7 @@ public class QuitGame {
             _log.error(e.getLocalizedMessage(), e);
         }
         try {
-            if (pc.get_otherList() != null && !pc.get_otherList().get_illusoryList().isEmpty()) {
+            if (pc.get_otherList() != null && pc.get_otherList().get_illusoryList() != null && !pc.get_otherList().get_illusoryList().isEmpty()) {
                 // 分身消除
                 final Object[] illList = pc.get_otherList().get_illusoryList().values().toArray();
                 for (final Object obj : illList) {
@@ -223,6 +227,11 @@ public class QuitGame {
             L1BookMark.WriteBookmark(pc); // 日版記憶座標
             // 人物登出前：登出清理掛鉤
             com.lineage.server.model.Instance.L1PcInstanceCleanupIntegration.onPlayerLogout(pc);
+            // 清除屬性加成管理器記錄
+            StrBonusManager.get().clear(pc);
+            ConBonusManager.get().clear(pc);
+            WisBonusManager.get().clear(pc);
+            IntBonusManager.get().clear(pc);
             // 人物登出
             pc.logout();
             // _log.error("人物離開遊戲的處理-人物登出");

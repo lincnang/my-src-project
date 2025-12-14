@@ -15,6 +15,10 @@ public class ADVANCE_SPIRIT extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
         if (!cha.hasSkillEffect(57)) {
             L1PcInstance pc = (L1PcInstance) cha;
+            if (pc.getAdvenHp() > 0) {
+                pc.addMaxHp(-pc.getAdvenHp());
+                pc.addMaxMp(-pc.getAdvenMp());
+            }
             // 原本基準加成值: 最大 HP/MP 的 1/5
             int baseBonusHp = pc.getBaseMaxHp() / 5;
             int baseBonusMp = pc.getBaseMaxMp() / 5;
@@ -58,6 +62,10 @@ public class ADVANCE_SPIRIT extends SkillMode {
     public int start(L1NpcInstance npc, L1Character cha, L1Magic magic, int integer) throws Exception {
         if (!cha.hasSkillEffect(57)) {
             L1PcInstance pc = (L1PcInstance) cha;
+            if (pc.getAdvenHp() > 0) {
+                pc.addMaxHp(-pc.getAdvenHp());
+                pc.addMaxMp(-pc.getAdvenMp());
+            }
             int baseBonusHp = pc.getBaseMaxHp() / 5;
             int baseBonusMp = pc.getBaseMaxMp() / 5;
 
@@ -102,6 +110,7 @@ public class ADVANCE_SPIRIT extends SkillMode {
             pc.addMaxMp(-pc.getAdvenMp());
             pc.setAdvenHp(0); // 清空加成值
             pc.setAdvenMp(0);
+            pc.setAdvenOriginalHp(0);
             pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
             if (pc.isInParty()) {
                 pc.getParty().updateMiniHP(pc);

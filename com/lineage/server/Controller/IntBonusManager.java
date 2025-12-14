@@ -35,8 +35,10 @@ public class IntBonusManager {
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
 
+        int key = System.identityHashCode(pc);
+
         // 1) 先回收舊加成
-        Applied old = appliedMap.remove(pc.getId());
+        Applied old = appliedMap.remove(key);
         if (old != null) {
             safeAddMagicDmgup(pc, -old.magicAttack);
             safeAddMagicHitup(pc, -old.magicHit);
@@ -60,7 +62,7 @@ public class IntBonusManager {
             safeAddMagicHitup(pc, neo.magicHit);
             // 魔法穿透率和忽略魔防存儲到applied記錄中，供攻擊時查詢
 
-            appliedMap.put(pc.getId(), neo);
+            appliedMap.put(key, neo);
 
             if (_log.isDebugEnabled()) {
                 _log.debug("智力加成套用 - 角色:" + pc.getName() + 
@@ -105,7 +107,7 @@ public class IntBonusManager {
     public int getMagicPenetration(L1PcInstance pc) {
         if (pc == null) return 0;
         
-        Applied applied = appliedMap.get(pc.getId());
+        Applied applied = appliedMap.get(System.identityHashCode(pc));
         if (applied != null) {
             return applied.magicPenetration;
         }
@@ -119,7 +121,7 @@ public class IntBonusManager {
     public int getIgnoreMagicDefense(L1PcInstance pc) {
         if (pc == null) return 0;
         
-        Applied applied = appliedMap.get(pc.getId());
+        Applied applied = appliedMap.get(System.identityHashCode(pc));
         if (applied != null) {
             return applied.ignoreMagicDefense;
         }
@@ -133,7 +135,7 @@ public class IntBonusManager {
     public int getMagicCritFx(L1PcInstance pc) {
         if (pc == null) return 0;
         
-        Applied applied = appliedMap.get(pc.getId());
+        Applied applied = appliedMap.get(System.identityHashCode(pc));
         if (applied != null) {
             return applied.magicCritFx;
         }
@@ -144,8 +146,15 @@ public class IntBonusManager {
     }
 
     /** 清理玩家數據（玩家離線時調用） */
+    public void clear(L1PcInstance pc) {
+        if (pc == null) return;
+        appliedMap.remove(System.identityHashCode(pc));
+    }
+
+    /** 清理玩家數據（玩家離線時調用） */
     public void clearPlayer(int playerId) {
-        appliedMap.remove(playerId);
+        // 為了兼容性保留，但實際上無法正確清理基於 identityHashCode 的記錄
+        // 建議改用 clear(L1PcInstance pc)
     }
 
     /** 獲取當前管理的玩家數量 */

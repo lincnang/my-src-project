@@ -1415,12 +1415,12 @@ public class L1AttackPc extends L1AttackMode {
             return dmg;
         }
         // 騎士 單手
-        if (_pc.isSWORD() && ThreadLocalRandom.current().nextInt(100) < 0.10 && !_pc.getWeapon().getItem().isTwohandedWeapon()) {
+        if (_pc.isSWORD() && ThreadLocalRandom.current().nextInt(100) < 0.10 && _pc.getWeapon() != null && !_pc.getWeapon().getItem().isTwohandedWeapon()) {
             // 0.05代表5%的概率
             dmg += _pc.getDmgup() * 0.10;  // 傷害增加1%
         }
         // 騎士 雙手
-        if (_pc.isSWORD_2() && ThreadLocalRandom.current().nextInt(100) < 0.15 && _pc.getWeapon().getItem().isTwohandedWeapon()) {
+        if (_pc.isSWORD_2() && ThreadLocalRandom.current().nextInt(100) < 0.15 && _pc.getWeapon() != null && _pc.getWeapon().getItem().isTwohandedWeapon()) {
             // 0.05代表5%的概率
             dmg += _pc.getDmgup() * 0.15;  // 傷害增加1%
         }

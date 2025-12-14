@@ -41,6 +41,10 @@ public final class ConfigSkillWizard {
      **/
     public static int DEATH_HEAL;
     /**
+     * 法師新技能 治癒逆行傷害倍率 (百分比)
+     */
+    public static int DEATH_HEAL_DAMAGE_RATE;
+    /**
      * 古代啟示 魔法暴擊率提升
      */
     public static int ICE_LANCE_CRITICAL;
@@ -71,6 +75,7 @@ public final class ConfigSkillWizard {
             Meteor_TO_Turn4 = Double.parseDouble(set.getProperty("Meteor_TO_Turn4", "1.0"));
             CURSE_SEC = set.getProperty("CURSE_SEC", "3~7");
             DEATH_HEAL = Integer.parseInt(set.getProperty("DEATH_HEAL", "20"));//法師新技能 治癒逆行機率設定
+            DEATH_HEAL_DAMAGE_RATE = Integer.parseInt(set.getProperty("DEATH_HEAL_DAMAGE_RATE", "45"));
             ICE_LANCE_CRITICAL = Integer.parseInt(set.getProperty("ICE_LANCE_CRITICAL", "100"));
             ICE_LANCE_PENETRATION = Integer.parseInt(set.getProperty("ICE_LANCE_PENETRATION", "50"));
             NO_CD = set.getProperty("NO_CD", "null");

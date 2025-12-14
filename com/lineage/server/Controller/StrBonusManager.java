@@ -27,12 +27,22 @@ public class StrBonusManager {
 
     public static StrBonusManager get() { return INSTANCE; }
 
+    /** 清除指定玩家的加成記錄（通常在登出時調用） */
+    public void clear(L1PcInstance pc) {
+        if (pc == null) return;
+        int key = System.identityHashCode(pc);
+        appliedMap.remove(key);
+        PcCritRepo.clear(pc.getId()); // PcCritRepo 似乎是用 ID，如果它也是靜態且用 ID，可能也有同樣問題，但這裡先不動它
+    }
+
     /** 對指定玩家重新套用一次（會先回收舊值） */
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
 
+        int key = System.identityHashCode(pc);
+
         // 1) 先回收舊加成
-        Applied old = appliedMap.remove(pc.getId());
+        Applied old = appliedMap.remove(key);
         if (old != null) {
             safeAddDmgup(pc, -old.atk);
             safeAddHitup(pc, -old.hit);
@@ -56,7 +66,7 @@ public class StrBonusManager {
             safeAddHitup(pc, neo.hit);
             PcCritRepo.set(pc.getId(), neo.critChance, neo.critPercent, neo.critFx);
 
-            appliedMap.put(pc.getId(), neo);
+            appliedMap.put(key, neo);
         }
 
         // 4) 刷新面板（讓玩家 UI 立刻顯示）

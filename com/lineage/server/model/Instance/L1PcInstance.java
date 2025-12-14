@@ -381,7 +381,10 @@ public class L1PcInstance extends L1Character { // src015
     private int _baseBowHitup = 0;
     private int _baseMr = 0;
     private int _advenHp;
+    private int _prideHp;
+    private int _prideOriginalHp;
     private int _advenMp;
+    private int _advenOriginalHp;
     private int _highLevel;
     private int _bonusStats;
     private int _otherStats;
@@ -3141,7 +3144,7 @@ public class L1PcInstance extends L1Character { // src015
         }
         Map<Integer, L1IllusoryInstance> illList = get_otherList().get_illusoryList();
         try {
-            if (!illList.isEmpty()) {
+            if (illList != null && !illList.isEmpty()) {
                 if (getId() != target.getId()) {
                     for (Iterator<L1IllusoryInstance> iter = illList.values().iterator(); iter.hasNext(); ) {
                         L1IllusoryInstance ill = iter.next();
@@ -4427,6 +4430,30 @@ public class L1PcInstance extends L1Character { // src015
 
     public void setAdvenHp(int i) {
         _advenHp = i;
+    }
+
+    public int getPrideHp() {
+        return _prideHp;
+    }
+
+    public void setPrideHp(int i) {
+        _prideHp = i;
+    }
+
+    public int getPrideOriginalHp() {
+        return _prideOriginalHp;
+    }
+
+    public void setPrideOriginalHp(int i) {
+        _prideOriginalHp = i;
+    }
+
+    public int getAdvenOriginalHp() {
+        return _advenOriginalHp;
+    }
+
+    public void setAdvenOriginalHp(int hp) {
+        _advenOriginalHp = hp;
     }
 
     public int getAdvenMp() {

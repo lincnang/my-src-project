@@ -436,7 +436,7 @@ public class L1SkillStop {
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;
                             pc.sendPackets(new S_SPMR(pc));
-                            pc.sendPackets(new S_PacketBoxIconAura(118, 0));
+                            pc.sendPackets(new S_PacketBoxIconAura(114, 0));
                         }
                         break;
                     case BRAVE_AURA://勇猛意志

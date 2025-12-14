@@ -22,9 +22,15 @@ public class WisBonusManager {
 
     public static WisBonusManager get() { return INSTANCE; }
 
+    public void clear(L1PcInstance pc) {
+        if (pc == null) return;
+        appliedMap.remove(System.identityHashCode(pc));
+    }
+
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
-        Applied old = appliedMap.remove(pc.getId());
+        int key = System.identityHashCode(pc);
+        Applied old = appliedMap.remove(key);
         if (old != null) {
             safeAddMr(pc, -old.mr);
             safeAddMpr(pc, -old.mpr);
@@ -38,7 +44,7 @@ public class WisBonusManager {
             neo.mpr = setting.mpr;
             safeAddMr(pc, neo.mr);
             safeAddMpr(pc, neo.mpr);
-            appliedMap.put(pc.getId(), neo);
+            appliedMap.put(key, neo);
         }
 
         pc.sendPackets(new S_OwnCharStatus2(pc));

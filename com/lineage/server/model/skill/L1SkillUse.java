@@ -1320,8 +1320,10 @@ public class L1SkillUse {
                 pc.sendPackets(new S_PacketBoxIconAura(148, this._getBuffIconDuration));
                 break;
             case FIRE_BLESS: // 舞躍之火
-                // pc.sendPackets(new S_PacketBoxIconAura(154,
-                // this._getBuffIconDuration));
+                pc.sendPackets(new S_PacketBoxIconAura(154, this._getBuffIconDuration));
+                break;
+            case ERASE_MAGIC: // 魔法消除
+                pc.sendPackets(new S_PacketBoxIconAura(152, this._getBuffIconDuration));
                 break;
             case STORM_EYE: // ストーム アイ
                 pc.sendPackets(new S_PacketBoxIconAura(155, this._getBuffIconDuration));
@@ -1433,6 +1435,17 @@ public class L1SkillUse {
             case COUNTER_BARRIER: // 反擊屏障 (skill_id=91)
                 // 發送反擊屏障 BUFF ICON (iconId=10187, stringId=1088)
                 pc.sendPackets(new S_InventoryIcon(10187, true, 1088, this._getBuffIconDuration));
+                break;
+            case DEATH_HEAL:
+            case ABSOLUTE_BLADE:
+            case ASSASSIN:
+            case BLAZING_SPIRITS:
+            case GRACE_AVATAR:
+            case SOUL_BARRIER:
+            case DESTROY:
+            case IMPACT:
+            case TITANL_RISING:
+                pc.sendPackets(new S_NewSkillIcon(this._skillId, true, this._getBuffIconDuration));
                 break;
         }
         pc.sendPackets(new S_OwnCharStatus(pc));
@@ -1941,7 +1954,8 @@ public class L1SkillUse {
                             _heal *= -1;
                         }
                         if (cha.hasSkillEffect(DEATH_HEAL)) { // 法師新技能 治愈逆行
-                            _heal = (int) (_heal * -0.45);
+                            // _heal = (int) (_heal * -0.45);
+                            _heal = (int) (_heal * -1 * (ConfigSkillWizard.DEATH_HEAL_DAMAGE_RATE / 100.0));
                         }
 
                         // 王族天賦技能榮耀治愈
@@ -2482,7 +2496,7 @@ public class L1SkillUse {
                             }*/
                             int chance = 16; // 固定 16 秒
                             _skillTime = chance;
-                            pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, true, chance));
+                            //pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, true, chance));
                             //pc.setSkillEffect(DEATH_HEAL, chance * 1000); // 由 addMagicList 統一處理
                             pc.sendPackets(new S_SkillSound(pc.getId(), 14501));
                             Broadcaster.broadcastPacket(pc, new S_SkillSound(pc.getId(), 14501));
@@ -2496,20 +2510,14 @@ public class L1SkillUse {
                     } else if (this._skillId == ABSOLUTE_BLADE) { // 騎士新技能 絕御之刃
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            if (pc.hasSkillEffect(ABSOLUTE_BLADE)) {
-                                pc.removeSkillEffect(ABSOLUTE_BLADE);
-                            }
                             pc.setSkillEffect(ABSOLUTE_BLADE, 8 * 1000);
-                            pc.sendPackets(new S_NewSkillIcon(ABSOLUTE_BLADE, true, 8));
+                            //pc.sendPackets(new S_NewSkillIcon(ABSOLUTE_BLADE, true, 8));
                         }
                     } else if (this._skillId == ASSASSIN) { // 黑妖新技能 暗殺者
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            if (pc.hasSkillEffect(ASSASSIN)) {
-                                pc.removeSkillEffect(ASSASSIN);
-                            }
                             pc.setSkillEffect(ASSASSIN, 15 * 1000);
-                            pc.sendPackets(new S_NewSkillIcon(ASSASSIN, true, 15));
+                            //pc.sendPackets(new S_NewSkillIcon(ASSASSIN, true, 15));
                         }
                     } else if (this._skillId == GRACE_AVATAR) { // 王族新技能 恩典庇護
                         if (cha instanceof L1PcInstance) {
@@ -2523,7 +2531,7 @@ public class L1SkillUse {
                             pc.addRegistStun(10 + pc.getGraceLv()); // 暈眩耐性（自分）
                             //pc.getResistance().addDESPERADO(10 + pc.getGraceLv()); // 恐怖耐性（自分）
                             pc.setSkillEffect(GRACE_AVATAR, 15 * 1000);
-                            pc.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
+                            //pc.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
                             pc.sendPackets(new S_SkillSound(pc.getId(), 14495));
                             Broadcaster.broadcastPacket(pc, new S_SkillSound(pc.getId(), 14495));
                             for (L1PcInstance player : World.get().getVisiblePlayer(pc, 18)) {// 18格範圍
@@ -2537,7 +2545,7 @@ public class L1SkillUse {
                                         player.addRegistSustain(10 + player.getGraceLv()); // 支撐耐性（隊友）
                                         player.addRegistStun(10 + player.getGraceLv()); // 暈眩耐性（隊友）
                                         //player.getResistance().addDESPERADO(10 + player.getGraceLv()); // 恐怖耐性（隊友）
-                                        player.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
+                                        //player.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
                                         player.setSkillEffect(GRACE_AVATAR, 15 * 1000);
                                         player.sendPackets(new S_ServerMessage(4734));
                                     }
@@ -2547,31 +2555,22 @@ public class L1SkillUse {
                     } else if (this._skillId == SOUL_BARRIER) { // 精靈新技能 魔力護盾
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            if (pc.hasSkillEffect(SOUL_BARRIER)) {
-                                pc.removeSkillEffect(SOUL_BARRIER);
-                            }
                             pc.setSkillEffect(SOUL_BARRIER, 600 * 1000);
-                            pc.sendPackets(new S_NewSkillIcon(SOUL_BARRIER, true, 600));
+                            //pc.sendPackets(new S_NewSkillIcon(SOUL_BARRIER, true, 600));
                         }
                     } else if (this._skillId == DESTROY) { // 龍騎士新技能 撕裂護甲
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            if (pc.hasSkillEffect(DESTROY)) {
-                                pc.removeSkillEffect(DESTROY);
-                            }
                             pc.setSkillEffect(DESTROY, 30 * 1000);
-                            pc.sendPackets(new S_NewSkillIcon(DESTROY, true, 30));
+                            //pc.sendPackets(new S_NewSkillIcon(DESTROY, true, 30));
                         }
                     } else if (this._skillId == IMPACT) { // 幻術師新技能 衝突強化
                         if (_user instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) _user;
                             if (_target instanceof L1PcInstance) {
                                 L1PcInstance target = (L1PcInstance) _target;
-                                if (target.hasSkillEffect(IMPACT)) {
-                                    target.removeSkillEffect(IMPACT);
-                                }
                                 target.setSkillEffect(IMPACT, 15 * 1000);
-                                target.sendPackets(new S_NewSkillIcon(IMPACT, true, 15));
+                                //target.sendPackets(new S_NewSkillIcon(IMPACT, true, 15));
                                 target.sendPackets(new S_SkillSound(target.getId(), 14513));
                                 Broadcaster.broadcastPacket(target, new S_SkillSound(target.getId(), 14513));
                                 int upskill = pc.getLevel() - 80;
@@ -2584,11 +2583,8 @@ public class L1SkillUse {
                     } else if (this._skillId == TITANL_RISING) { // 狂戰士新技能 泰坦狂暴
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            if (pc.hasSkillEffect(TITANL_RISING)) {
-                                pc.removeSkillEffect(TITANL_RISING);
-                            }
                             pc.setSkillEffect(TITANL_RISING, 2400 * 1000);
-                            pc.sendPackets(new S_NewSkillIcon(TITANL_RISING, true, 2400));
+                            //pc.sendPackets(new S_NewSkillIcon(TITANL_RISING, true, 2400));
                             int upHP = pc.getLevel() - 80;
                             if (upHP >= 5) {
                                 upHP = 5;
@@ -2754,7 +2750,7 @@ public class L1SkillUse {
                         // 從 SkillEnhanceTable 讀取狂暴術的強化資料
                         L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(BERSERKERS, bookLevel);
                         // 預設加成數值
-                        int addAc = -10;
+                        int addAc = 10;
                         int addDmgup = 5;
                         // 如果存在強化資料，則取設定值
                         if (enhanceData != null) {

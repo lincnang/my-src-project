@@ -3,6 +3,7 @@ package com.lineage.server;
 import com.lineage.DatabaseFactory;
 import com.lineage.DatabaseFactoryLogin;
 import com.lineage.server.datatables.lock.ServerReading;
+import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.utils.PerformanceTimer;
 import com.lineage.server.utils.SQLUtil;
 import org.apache.commons.logging.Log;
@@ -55,6 +56,9 @@ public final class IdFactory {
     /** 統計：已發出的 ID 數量 */
     private final AtomicInteger issuedCount = new AtomicInteger(0);
 
+    /** 初始化標記 */
+    private volatile boolean _initialized = false;
+
     // ---------- 舊 API 相容：怪物對戰 / 大樂透 小序列 ----------
     private final Set<Integer> _MobblingSet = ConcurrentHashMap.newKeySet();
     private final Set<Integer> _BigHotblingSet = ConcurrentHashMap.newKeySet();
@@ -89,6 +93,8 @@ public final class IdFactory {
         // 立即回寫到 DB
         saveCurrentIdToDb();
         
+        _initialized = true;
+
         _log.info(String.format(
             "IdFactory 啟動：起始ID=%d (DB最大=%d, Config最大=%d) (%d ms)",
             startId, maxIdFromDb, maxIdFromConfig, t.get()
@@ -99,12 +105,20 @@ public final class IdFactory {
      * 取得下一個可用 ID（純成長模式，保證不重複）
      */
     public int nextId() {
+        if (!_initialized) {
+            throw new IllegalStateException("IdFactory is not initialized. Call load() first.");
+        }
         int id = current.incrementAndGet();
         int issued = issuedCount.incrementAndGet();
         
         // 每發出 SAVE_INTERVAL 個 ID，回寫一次到 DB
         if (issued % SAVE_INTERVAL == 0) {
-            saveCurrentIdToDb();
+            GeneralThreadPool.get().execute(this::saveCurrentIdToDb);
+        }
+        
+        // 安全警告：接近 IdFactoryNpc 的範圍 (20億)
+        if (id >= 1900000000) {
+            _log.warn("CRITICAL WARNING: IdFactory ID is approaching 2 Billion! Current: " + id + ". Collision with IdFactoryNpc is imminent!");
         }
         
         return id;
@@ -132,7 +146,14 @@ public final class IdFactory {
         if (i > _MobId) _MobId = i;
     }
 
+    public void removeMobId(int i) {
+        _MobblingSet.remove(i);
+    }
+
     public int nextMobId() {
+        if (!_initialized) {
+            throw new IllegalStateException("IdFactory is not initialized. Call load() first.");
+        }
         int cand = _MobId + 1;
         while (_MobblingSet.contains(cand)) {
             cand++;
@@ -147,7 +168,14 @@ public final class IdFactory {
         if (i > _BigHotId) _BigHotId = i;
     }
 
+    public void removeBigHotId(int i) {
+        _BigHotblingSet.remove(i);
+    }
+
     public int nextBigHotId() {
+        if (!_initialized) {
+            throw new IllegalStateException("IdFactory is not initialized. Call load() first.");
+        }
         int cand = _BigHotId + 1;
         while (_BigHotblingSet.contains(cand)) {
             cand++;
@@ -188,6 +216,8 @@ public final class IdFactory {
                 "  UNION ALL SELECT MAX(`id`) FROM `日誌_衝裝紀錄`" +
                 "  UNION ALL SELECT MAX(`id`) FROM `日誌_商店購買紀錄`" +
                 "  UNION ALL SELECT MAX(`id`) FROM `日誌_金幣買賣系統紀錄`" +
+                "  UNION ALL SELECT MAX(`index_id`) FROM `clan_members`" +
+                "  UNION ALL SELECT MAX(`id`) FROM `dummy_fishing`" +
                 ") t"
             );
             

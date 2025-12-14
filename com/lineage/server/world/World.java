@@ -16,7 +16,6 @@ import com.lineage.server.serverpackets.S_PacketBoxGree;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.serverpackets.ServerBasePacket;
 import com.lineage.server.types.Point;
-import com.lineage.server.utils.ListMapUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -35,30 +34,32 @@ public class World { // src016
     private static final byte BITFLAG_IS_DOOR_IMPASSABLE_Y = (byte) 0x40;
     private static final byte[] HEADING_TABLE_X = {0, 1, 1, 1, 0, -1, -1, -1};
     private static final byte[] HEADING_TABLE_Y = {-1, -1, 0, 1, 1, 1, 0, -1};
-    private static final List<String> _htmlString = new ArrayList<>();
-    private static World _instance;
+    // FIX: 使用 ThreadLocal 解決多執行緒競爭問題
+    private static final ThreadLocal<List<String>> _htmlString = ThreadLocal.withInitial(ArrayList::new);
+    private static volatile World _instance;
     // 世界人物資料<pcName, Object>
     private final ConcurrentHashMap<String, L1PcInstance> _allPlayers;
     // 世界物件資料<Objid, Object>
     private final ConcurrentHashMap<Integer, L1Object> _allObjects;
     // 世界物件資料(區分地圖編號)<MapId, <Objid, Object>>
-    private final HashMap<Integer, ConcurrentHashMap<Integer, L1Object>> _visibleObjects;
+    // FIX: 使用 ConcurrentHashMap 解決併發修改異常
+    private final ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, L1Object>> _visibleObjects;
     // 紅騎士 訓練副本 by darling
     private final ConcurrentHashMap<Integer, L1ItemInstance> _allItems;
     // _allObjects 的 Collection
-    private Collection<L1Object> _allValues;
+    private volatile Collection<L1Object> _allValues;
     // 全部線上玩家
-    private Collection<L1PcInstance> _allPlayerValues;
-    private int _weather = 4;// 世界天氣狀況
-    private boolean _worldChatEnabled = true;// 允許廣播
-    private boolean _processingContributionTotal = false;// 計算貢獻度
+    private volatile Collection<L1PcInstance> _allPlayerValues;
+    private volatile int _weather = 4;// 世界天氣狀況
+    private volatile boolean _worldChatEnabled = true;// 允許廣播
+    private volatile boolean _processingContributionTotal = false;// 計算貢獻度
     // 紅騎士 訓練副本 by darling
-    private Collection<L1ItemInstance> _allItemValues;
+    private volatile Collection<L1ItemInstance> _allItemValues;
 
     public World() {
         _allPlayers = new ConcurrentHashMap<>(); // 世界人物資料
         _allObjects = new ConcurrentHashMap<>(); // 世界物件資料
-        _visibleObjects = new HashMap<>(); // 世界物件資料(區分地圖編號)
+        _visibleObjects = new ConcurrentHashMap<>(); // 世界物件資料(區分地圖編號)
         _allItems = new ConcurrentHashMap<>();// 紅騎士 訓練副本 by darling
         for (Integer mapid : MapsTable.get().getMaps().keySet()) {
             final ConcurrentHashMap<Integer, L1Object> map = new ConcurrentHashMap<>();
@@ -69,7 +70,11 @@ public class World { // src016
 
     public static World get() {
         if (_instance == null) {
-            _instance = new World();
+            synchronized (World.class) {
+                if (_instance == null) {
+                    _instance = new World();
+                }
+            }
         }
         return _instance;
     }
@@ -204,18 +209,23 @@ public class World { // src016
      *             otherInfo: 52行,可自行延伸對話檔內容<br>
      */
     public static void showHtmlInfo(L1PcInstance pc, String html) {
-        if (_htmlString.size() < 2) {
-            ListMapUtil.clear(_htmlString);
+        List<String> list = _htmlString.get();
+        if (list.size() < 2) {
+            _htmlString.remove();
             return;
         }
         try {
-            String[] texts = _htmlString.toArray(new String[0]);
+            String[] texts = list.toArray(new String[0]);
             pc.sendPackets(new S_NPCTalkReturn(pc.getId(), html, texts));
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         } finally {
-            ListMapUtil.clear(_htmlString);
+            _htmlString.remove();
         }
+    }
+
+    public void clearHtmlString() {
+        _htmlString.remove();
     }
 
     public Object getRegion(final Object object) {
@@ -226,7 +236,18 @@ public class World { // src016
      * 世界資料狀態全部重置
      */
     public void clear() {
-        _instance = new World();
+        _allPlayers.clear();
+        _allObjects.clear();
+        _visibleObjects.clear();
+        _allItems.clear();
+        _allValues = null;
+        _allPlayerValues = null;
+        _allItemValues = null;
+        
+        // 重新初始化地圖容器
+        for (Integer mapid : MapsTable.get().getMaps().keySet()) {
+            _visibleObjects.put(mapid, new ConcurrentHashMap<>());
+        }
     }
 
     /**
@@ -381,6 +402,10 @@ public class World { // src016
             if (object instanceof L1NpcInstance) {
                 WorldNpc.get().remove(object.getId());
             }
+            
+            // FIX: 確保物件從地圖可見性列表中移除，防止幽靈物件
+            removeVisibleObject(object);
+            
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
@@ -985,7 +1010,7 @@ public class World { // src016
      * 全部地圖(MAPID為KEY)世界資料
      *
      */
-    public final HashMap<Integer, ConcurrentHashMap<Integer, L1Object>> getVisibleObjects() {
+    public final ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, L1Object>> getVisibleObjects() {
         return _visibleObjects;
     }
 
@@ -1136,25 +1161,24 @@ public class World { // src016
      * 添加地圖
      */
     public void addMap(int mapid) {
-        final ConcurrentHashMap<Integer, L1Object> map = new ConcurrentHashMap<>();
-        _visibleObjects.put(mapid, map);
+        _visibleObjects.putIfAbsent(mapid, new ConcurrentHashMap<>());
     }
 
     /**
      * 清除地圖內物品
      */
     public void closeMap(int mapid) {
-        for (Map.Entry<Integer, L1Object> entry : _allObjects.entrySet()) {
-            L1Object object = entry.getValue();
-            if (object.getMapId() == mapid) {
+        final ConcurrentHashMap<Integer, L1Object> mapObjects = _visibleObjects.get(mapid);
+        if (mapObjects != null) {
+            for (L1Object object : mapObjects.values()) {
                 if (object instanceof L1DoorInstance) {
                     DoorSpawnTable.get().removeDoor((L1DoorInstance) object);
                 }
                 removeObject(object);
             }
+            mapObjects.clear();
         }
-        final ConcurrentHashMap<Integer, L1Object> map = new ConcurrentHashMap<>();
-        _visibleObjects.put(mapid, map);
+        _visibleObjects.put(mapid, new ConcurrentHashMap<>());
     }
 
     // 抽抽樂
@@ -1272,6 +1296,6 @@ public class World { // src016
     }
 
     public List<String> getHtmlString() {
-        return _htmlString;
+        return _htmlString.get();
     }
 }

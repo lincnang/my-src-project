@@ -30,7 +30,7 @@ public class L1ILL implements L1CommandExecutor {
     @Override
     public void execute(final L1PcInstance pc, final String cmdName, final String arg) {
         try {
-            if (pc.get_otherList().get_illusoryList().size() < 1) {
+            if (pc.get_otherList().get_illusoryList() != null && pc.get_otherList().get_illusoryList().size() < 1) {
                 int count = _random.nextInt(5) + 1;
                 for (int i = 0; i < count; i++) {
                     final L1Location loc = pc.getLocation().randomLocation(4, false);

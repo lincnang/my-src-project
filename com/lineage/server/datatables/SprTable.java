@@ -157,8 +157,10 @@ public class SprTable {
                 return _dataMap.get(sprid)._attackSpeed.get(actid);
             } else if (actid == ACTION_Attack) {
                 return 0;
-            } else {
+            } else if (_dataMap.get(sprid)._attackSpeed.containsKey(ACTION_Attack)) {
                 return _dataMap.get(sprid)._attackSpeed.get(ACTION_Attack);
+            } else {
+                _log.warn("SprTable: Missing attack speed for sprid=" + sprid + " actid=" + actid);
             }
         }
         return 0;
@@ -174,8 +176,10 @@ public class SprTable {
                 return _dataMap.get(sprid)._moveSpeed.get(actid);
             } else if (actid == ACTION_Walk) {
                 return 0;
-            } else {
+            } else if (_dataMap.get(sprid)._moveSpeed.containsKey(ACTION_Walk)) {
                 return _dataMap.get(sprid)._moveSpeed.get(ACTION_Walk);
+            } else {
+                _log.warn("SprTable: Missing move speed for sprid=" + sprid + " actid=" + actid);
             }
         }
         return 0;

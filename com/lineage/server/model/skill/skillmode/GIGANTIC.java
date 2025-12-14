@@ -16,6 +16,9 @@ public class GIGANTIC extends SkillMode {
         int dmg = 0;
         if (!cha.hasSkillEffect(GIGANTIC)) {
             final L1PcInstance pc = (L1PcInstance) cha;
+            if (pc.getGiganticHp() > 0) {
+                pc.addMaxHp(-pc.getGiganticHp());
+            }
             final int HP = (pc.getBaseMaxHp() / 100) * (pc.getLevel() / 2);
             pc.setGiganticHp(HP);
             pc.addMaxHp(pc.getGiganticHp());

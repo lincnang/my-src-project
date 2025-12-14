@@ -36,14 +36,22 @@ public class PRIDE extends SkillMode {
         // 將目標角色 `cha` 強制轉型為玩家角色 `L1PcInstance`
         final L1PcInstance pc = (L1PcInstance) cha;
 
-        // 如果目標角色 `cha` 沒有受到 "PRIDE" 技能效果影響
-        if (!cha.hasSkillEffect(L1SkillId.PRIDE)) {
+        synchronized (pc) {
             // 檢查來源角色 `srcpc` 的 ID 是否與目標玩家 `pc` 的 ID 相同（確認是否對自己施放技能）
             if (srcpc.getId() == pc.getId()) {
+                // 先移除舊的加成 (如果有)，確保數值不會無限疊加，並允許刷新數值
+                if (pc.getPrideHp() > 0) {
+                    pc.addMaxHp(-pc.getPrideHp());
+                    pc.add_up_hp_potion(-10);
+                }
                 // 計算冒險者的生命值增益量
-                pc.setAdvenHp(pc.getBaseMaxHp() * pc.getLevel() / 4 / 100);
+                int prideHp = pc.getBaseMaxHp() * pc.getLevel() / 4 / 100;
+                if (prideHp <= 0) {
+                    prideHp = 1;
+                }
+                pc.setPrideHp(prideHp);
                 // 增加玩家的最大生命值
-                pc.addMaxHp(pc.getAdvenHp());
+                pc.addMaxHp(pc.getPrideHp());
                 // 發送更新後的生命值訊息給玩家
                 pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
                 pc.add_up_hp_potion(10); //藥水回復
@@ -55,14 +63,14 @@ public class PRIDE extends SkillMode {
                     pc.getParty().updateMiniHP(pc);
                 }
             }
-        }
 
-        // 如果來源角色 `srcpc` 是目標玩家 `pc` 本人
-        if (srcpc.getId() == pc.getId()) {
-            // 為玩家設置 "PRIDE" 技能效果，持續時間為 `integer` 秒（乘以1000轉換為毫秒）
-            pc.setSkillEffect(L1SkillId.PRIDE, integer * 1000);
-            pc.sendPackets(new S_InventoryIcon(10229, true, 3482, integer));
-            pc.sendPackets(new S_ServerMessage("\\fX提升最大體力與藥水恢復(" + integer + "秒)"));
+            // 如果來源角色 `srcpc` 是目標玩家 `pc` 本人
+            if (srcpc.getId() == pc.getId()) {
+                // 為玩家設置 "PRIDE" 技能效果，持續時間為 `integer` 秒（乘以1000轉換為毫秒）
+                pc.setSkillEffect(L1SkillId.PRIDE, integer * 1000);
+                pc.sendPackets(new S_InventoryIcon(10229, true, 3482, integer));
+                pc.sendPackets(new S_ServerMessage("\\fX提升最大體力與藥水恢復(" + integer + "秒)"));
+            }
         }
 
         // 返回傷害值，這裡固定為0
@@ -98,14 +106,24 @@ public class PRIDE extends SkillMode {
         try {
             if (cha instanceof L1PcInstance) {
                 final L1PcInstance pc = (L1PcInstance) cha;
-                pc.addMaxHp(-pc.getAdvenHp());
-                pc.add_up_hp_potion(-10); //藥水回復
-                pc.setAdvenHp(0);
-                pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-                if (pc.isInParty()) { // 隊伍狀態
-                    pc.getParty().updateMiniHP(pc);
+                synchronized (pc) {
+                    // 如果玩家身上還有 PRIDE 效果，代表是重新施放導致的 stop 調用（或是並發），此時不應移除屬性
+                    if (pc.hasSkillEffect(L1SkillId.PRIDE)) {
+                        return;
+                    }
+
+                    if (pc.getPrideHp() > 0) {
+                        pc.addMaxHp(-pc.getPrideHp());
+                        pc.add_up_hp_potion(-10); //藥水回復
+                        pc.setPrideHp(0);
+                    }
+                    
+                    pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
+                    if (pc.isInParty()) { // 隊伍狀態
+                        pc.getParty().updateMiniHP(pc);
+                    }
+                    pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
                 }
-                pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
             }
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);

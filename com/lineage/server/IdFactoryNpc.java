@@ -8,12 +8,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class IdFactoryNpc {
     private static final Log _log = LogFactory.getLog(IdFactoryNpc.class);
     private static IdFactoryNpc _instance;
-    private Object _monitor;
     private AtomicInteger _nextId;
 
     public IdFactoryNpc() {
         try {
-            _monitor = new Object();
             _nextId = new AtomicInteger(2000000000);
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -28,15 +26,17 @@ public class IdFactoryNpc {
     }
 
     public int nextId() {
-        synchronized (_monitor) {
-            return _nextId.getAndIncrement();
+        int id = _nextId.getAndIncrement();
+        if (id < 0) { // Overflow check
+             _log.fatal("IdFactoryNpc ID Overflow! Resetting to 2000000000. This may cause conflicts if old NPCs are still alive.");
+             _nextId.set(2000000000);
+             return _nextId.getAndIncrement();
         }
+        return id;
     }
 
     public int maxId() {
-        synchronized (_monitor) {
-            return _nextId.get();
-        }
+        return _nextId.get();
     }
 }
 /*

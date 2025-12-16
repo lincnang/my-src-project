@@ -1029,6 +1029,49 @@ public class L1AttackPc extends L1AttackMode {
                 weaponTotalDamage += calcAmuletAttrDmg();// 屬性項鏈增傷計算
 
                 dmg = weaponTotalDamage + _statusDamage + _pc.getDmgup() + _pc.getOriginalDmgup();
+
+                // 魔法大師狀態：將物理傷害轉為魔法傷害
+  
+                // 儲存原始傷害，在魔法大師狀態時會直接設定最終傷害
+                double originalDmg = dmg;
+
+                if (_pc.isMagicMaster()) {
+                    
+                    if (_weaponType2 == 7 || _weaponType2 == 16) {
+                        
+                        // 計算魔法攻擊力（基於INT和SP）
+                        int intBonus = _pc.getInt() / 2;
+                        int spBonus = _pc.getSp();
+                        int magicDmg = intBonus + spBonus;
+
+                        
+                        if (_weapon != null) {
+                            int weaponMagicDmg = _weapon.getUpdateSp();
+                            magicDmg += weaponMagicDmg; // 武器魔法攻擊力
+                                                    }
+
+                        // 轉換部分物理傷害為魔法傷害
+                        int convertRate = 70; // 轉換50%的物理傷害為魔法傷害
+                        double convertedDmgDouble = originalDmg * convertRate / 100.0;
+                        double remainingPhysicalDmgDouble = originalDmg * (100 - convertRate) / 100.0;
+                        int convertedDmg = (int)convertedDmgDouble;
+                        int remainingPhysicalDmg = (int)remainingPhysicalDmgDouble;
+
+  
+                        // 最終傷害 = 剩餘物理傷害 + 魔法傷害 + 轉換傷害
+                        // 注意：這裡計算出的傷害將直接作為最終傷害，不會再經過減免計算
+                        dmg = remainingPhysicalDmg + magicDmg + convertedDmg;
+
+   
+                        // 魔法大師特效
+                        if (_targetPc != null) {
+                            _targetPc.sendPackets(new S_SkillSound(_targetPc.getId(), 7002));
+                            _targetPc.broadcastPacketAll(new S_SkillSound(_targetPc.getId(), 7002));
+                                                    }
+                    } else {
+                                            }
+                } else {
+                                    }
                 break;
             case 11: // 鋼爪
                 weaponTotalDamage += calcAttrEnchantDmg();   // 屬性武器增傷計算
@@ -1671,17 +1714,43 @@ public class L1AttackPc extends L1AttackMode {
                 ReiRandom = 4;
             }
         }
-        if (_pc.isElf() && _pc.getReincarnationSkill()[2] > 0 && RandomArrayList.getInc(100, 1) > 100 - ReiRandom - _pc.getReincarnationSkill()[2]) { // 妖精天賦技能傷害擊殺
-            _pc.sendPackets(new S_SystemMessage(L1SystemMessage.ShowMessage(8042))); // 發動天賦技能 傷害擊殺 無視玩家物理防禦
+        // 魔法大師狀態下只判斷魔法防禦
+        boolean isMagicMasterAttack = _pc.isMagicMaster() &&
+                                      (_weaponType2 == 7 || _weaponType2 == 16);
+
+        if (isMagicMasterAttack) {
+            
+            // 計算魔法防禦
+            int magicDefense = _targetPc.getBaseMr();
+            int magicReduction = 0;
+
+            // 魔法防禦計算（基於MR）
+            if (magicDefense > 0) {
+                magicReduction = magicDefense / 3; // MR每3點減免1點魔法傷害
+                if (magicReduction > dmg * 0.5) { // 最多減免50%傷害
+                    magicReduction = (int)(dmg * 0.5);
+                }
+                dmg -= magicReduction;
+                            }
+
+            // 魔法盾效果
+            if (_targetPc.hasSkillEffect(L1SkillId.SHIELD)) {
+                dmg = dmg / 2; // 魔法盾減免50%傷害
+                            }
         } else {
-            dmg -= calcPcDefense(); // 被攻擊者防禦力傷害減低
-        }
-        if (!_targetPc.hasSkillEffect(L1SkillId.negativeId13)) {
-            dmg -= _targetPc.getDamageReductionByArmor();// 防具減免計算
-        }
-        dmg -= _targetPc.dmgDowe();// 隨機傷害減免
-        if (_targetPc.getClanid() != 0) {
-            dmg -= getDamageReductionByClan(_targetPc);// 血盟技能減免
+            // 正常物理傷害計算
+            if (_pc.isElf() && _pc.getReincarnationSkill()[2] > 0 && RandomArrayList.getInc(100, 1) > 100 - ReiRandom - _pc.getReincarnationSkill()[2]) { // 妖精天賦技能傷害擊殺
+                _pc.sendPackets(new S_SystemMessage(L1SystemMessage.ShowMessage(8042))); // 發動天賦技能 傷害擊殺 無視玩家物理防禦
+            } else {
+                dmg -= calcPcDefense(); // 被攻擊者防禦力傷害減低
+            }
+            if (!_targetPc.hasSkillEffect(L1SkillId.negativeId13)) {
+                dmg -= _targetPc.getDamageReductionByArmor();// 防具減免計算
+            }
+            dmg -= _targetPc.dmgDowe();// 隨機傷害減免
+            if (_targetPc.getClanid() != 0) {
+                dmg -= getDamageReductionByClan(_targetPc);// 血盟技能減免
+            }
         }
         if (_pc.hasSkillEffect(L1SkillId.DESTROY)) { //龍騎士新技能 撕裂護甲
             if (_pc.getWeapon().getItem().getType() == 18) {
@@ -1721,7 +1790,8 @@ public class L1AttackPc extends L1AttackMode {
         }
 
         // 阻擋武器：完全格擋（物理專用；近/遠皆可；PVP/PVE皆適用）
-        if (_targetPc != null && _weapon != null) {
+        // 魔法大師攻擊跳過格擋判定
+        if (!isMagicMasterAttack && _targetPc != null && _weapon != null) {
             int block = 0;
             try { block = Math.max(0, Math.min(100, _targetPc.getBlockWeapon())); } catch (Throwable ignore) {}
             if (block > 0) {
@@ -1739,35 +1809,39 @@ public class L1AttackPc extends L1AttackMode {
         // 依詩蒂觸發處已整合至 L1AttackPower，這裡不再重複處理
 
         /** [原碼] 反叛者的盾牌 機率減免傷害 */
-        for (L1ItemInstance item : _targetPc.getInventory().getItems()) {
-            if (item.getItemId() == 400041 && item.isEquipped()) {
-                int r = ThreadLocalRandom.current().nextInt(100) + 1;
-                if (item.getEnchantLevel() * 2 >= r) {
-                    dmg -= 50;
-                    _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), 6320));
+        // 魔法大師攻擊跳過這些裝備減免
+        if (!isMagicMasterAttack) {
+            for (L1ItemInstance item : _targetPc.getInventory().getItems()) {
+                if (item.getItemId() == 400041 && item.isEquipped()) {
+                    int r = ThreadLocalRandom.current().nextInt(100) + 1;
+                    if (item.getEnchantLevel() * 2 >= r) {
+                        dmg -= 50;
+                        _targetPc.sendPacketsAll(new S_SkillSound(_targetPc.getId(), 6320));
+                    }
                 }
             }
+            if (_targetPc.getInventory().checkEquipped(404007)) {// 1階貝爾丹蒂 祝福長靴 //2017/4/21
+                dmg -= 1;
+            } else if (_targetPc.getInventory().checkEquipped(404085)) {// 2階貝爾丹蒂 祝福長靴
+                dmg -= 2;
+            } else if (_targetPc.getInventory().checkEquipped(404086)) {// 3階貝爾丹蒂 祝福長靴
+                dmg -= 3;
+            } else if (_targetPc.getInventory().checkEquipped(404087)) {// 4階貝爾丹蒂 祝福長靴
+                dmg -= 4;
+            } else if (_targetPc.getInventory().checkEquipped(404088)) {// 5階貝爾丹蒂 祝福長靴
+                dmg -= 5;
+            } else if (_targetPc.getInventory().checkEquipped(404089)) {// 6階貝爾丹蒂 祝福長靴
+                dmg -= 6;
+            } else if (_targetPc.getInventory().checkEquipped(404090)) {// 7階貝爾丹蒂 祝福長靴
+                dmg -= 7;
+            } else if (_targetPc.getInventory().checkEquipped(404091)) {// 8階貝爾丹蒂 祝福長靴
+                dmg -= 8;
+            } else if (_targetPc.getInventory().checkEquipped(404092)) {// 9階貝爾丹蒂 祝福長靴
+                dmg -= 9;
+            }
         }
-        if (_targetPc.getInventory().checkEquipped(404007)) {// 1階貝爾丹蒂 祝福長靴 //2017/4/21
-            dmg -= 1;
-        } else if (_targetPc.getInventory().checkEquipped(404085)) {// 2階貝爾丹蒂 祝福長靴
-            dmg -= 2;
-        } else if (_targetPc.getInventory().checkEquipped(404086)) {// 3階貝爾丹蒂 祝福長靴
-            dmg -= 3;
-        } else if (_targetPc.getInventory().checkEquipped(404087)) {// 4階貝爾丹蒂 祝福長靴
-            dmg -= 4;
-        } else if (_targetPc.getInventory().checkEquipped(404088)) {// 5階貝爾丹蒂 祝福長靴
-            dmg -= 5;
-        } else if (_targetPc.getInventory().checkEquipped(404089)) {// 6階貝爾丹蒂 祝福長靴
-            dmg -= 6;
-        } else if (_targetPc.getInventory().checkEquipped(404090)) {// 7階貝爾丹蒂 祝福長靴
-            dmg -= 7;
-        } else if (_targetPc.getInventory().checkEquipped(404091)) {// 8階貝爾丹蒂 祝福長靴
-            dmg -= 8;
-        } else if (_targetPc.getInventory().checkEquipped(404092)) {// 9階貝爾丹蒂 祝福長靴
-            dmg -= 9;
-        }
-        if (_targetPc.getPvpDmg_R() != 0) { // 减免PVP傷害
+        // 魔法大師攻擊跳過PVP傷害減免
+        if (!isMagicMasterAttack && _targetPc.getPvpDmg_R() != 0) { // 减免PVP傷害
             if (_targetPc.hasSkillEffect(L1SkillId.negativeId13)) {
                 dmg -= _targetPc.getPvpDmg_R() / 2;
             } else {
@@ -1827,21 +1901,27 @@ public class L1AttackPc extends L1AttackMode {
         }
 
         // 通用全傷害減免百分比（PvP/PvE 皆可套用；置於最後）
-        if (_targetPc != null) {
+        // 魔法大師攻擊跳過通用減免百分比
+        if (!isMagicMasterAttack && _targetPc != null) {
             int allp = _targetPc.getAllDmgReductionPercent();
             if (allp > 0) {
                 dmg -= (int) (((double) dmg * (double) allp) / 100.0);
             }
-            // 依詩蒂減益期間：額外增傷（以固定值表現，置於最後）
+        }
+
+        // 魔法大師攻擊跳過祝福化PVP減免
+        if (!isMagicMasterAttack && _targetPc.getzhufuPvpbai() != 0) {//祝福化PVP物理傷害減免百分比
+            dmg -= dmg / 100 * _targetPc.getzhufuPvpbai();
+        }
+
+        // 依詩蒂減益期間：額外增傷（這個保留，因為是增傷不是減免）
+        if (_targetPc != null) {
             try {
                 int extra = _targetPc.getYishidiDebuffDownActive();
                 if (extra > 0) {
                     dmg += extra;
                 }
             } catch (Throwable ignore) {}
-        }
-        if (_targetPc.getzhufuPvpbai() != 0) {//祝福化PVP物理傷害減免百分比
-            dmg -= dmg / 100 * _targetPc.getzhufuPvpbai();
         }
         // 其他減免計算
         boolean dmgX2 = false;

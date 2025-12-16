@@ -223,6 +223,8 @@ public class L1SkillMode {
             _skillMode.put(SILIAN_ASTROLOGY, new SILIAN_ASTROLOGY());// 絲莉安（私用）
             _skillMode.put(Blood_strength, new Blood_strength());// 力量之血
             _skillMode.put(ARMOR_BREAK, new ARMOR_BREAK());// 裝甲破壞
+            _skillMode.put(FOG_OF_SLEEPING, new FOG_OF_SLEEPING());// 魔法大師
+
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

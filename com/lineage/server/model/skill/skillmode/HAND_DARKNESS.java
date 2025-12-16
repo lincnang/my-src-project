@@ -35,6 +35,9 @@ public class HAND_DARKNESS extends SkillMode {
             srcpc.sendPackets(new com.lineage.server.serverpackets.S_ServerMessage("安全區域無法施放",17));
             return 0;
         }
+        if (!magic.calcProbabilityMagic(HAND_DARKNESS)) {
+            return 0;
+        }
         L1PcInstance targetPc = (L1PcInstance) cha;
         if (!targetPc.hasSkillEffect(HAND_DARKNESS) || cha.hasSkillEffect(Phantom_Blade)) {// 效果不可重疊 避免資源累積過多
             targetPc.setSkillEffect(HAND_DARKNESS, integer * 1000); // 秒數

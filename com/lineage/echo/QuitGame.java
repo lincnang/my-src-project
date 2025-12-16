@@ -207,7 +207,12 @@ public class QuitGame {
         try {
             // 移出各種處理清單
             pc.stopEtcMonitor();
-            DragonExp.get().addStoreExp(pc);
+            // 保存龍之祝福
+            try {
+                DragonExp.get().flushFromPc(pc);
+            } catch (Exception e) {
+                _log.error("玩家登出保存龍之祝福失敗: " + pc.getName(), e);
+            }
             // _log.error("人物離開遊戲的處理-移出各種處理清單");
             // 解除登入狀態
             pc.setOnlineStatus(0);

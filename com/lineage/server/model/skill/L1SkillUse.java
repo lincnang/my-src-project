@@ -67,7 +67,7 @@ public class L1SkillUse {
     private static final int[] CAST_WITH_INVIS = {1, 2, 3, 5, 8, 9, 12, 13, 14, 19,DETECTION, CALL_LIGHTNING,SUNBURST,21, 26, 31, 32, 35, 37, 44, 48, 49, 52, 54, 55, 57, 60, 61, 63, 67, 68, 69, 72, 73, 75, 78, 79, REDUCTION_ARMOR, BOUNCE_ATTACK, SOLID_CARRIAGE, Counter_attack, COUNTER_BARRIER, 97, 98, 99, 100, 101, 102, 104, 105, 106, 107, 109, 110, 111, 113, 114, 115, 116, 117, 118, 129, 130, 131, 133, 134, 137, 138, 146, 147, 148, 149, 150, 151, 155, 156, 158, 159, 163, 164, 165, 166, 168, 169, 170, 171, SOUL_OF_FLAME, ADDITIONAL_FIRE, DRAGON_SKIN, AWAKEN_ANTHARAS, AWAKEN_FAFURION, AWAKEN_VALAKAS, MIRROR_IMAGE, ILLUSION_OGRE, ILLUSION_LICH, PATIENCE, ILLUSION_DIA_GOLEM, INSIGHT, ILLUSION_AVATAR};
 
     // 設定魔法屏障不可抵擋的魔法
-    private static final int[] EXCEPT_COUNTER_MAGIC = {1, 2, 3, 5, 8, 9, 12,
+    /*private static final int[] EXCEPT_COUNTER_MAGIC = {1, 2, 3, 5, 8, 9, 12,
             13, 14, 19, 21, 26, 31, 32, 35, 37, 42, 43, 48, 49, 52, 54, 55,
             57, 60, 61, 63, 67, 68, 69, 72, 73, 75, IMMUNE_TO_HARM2, 78, 79,
             SHOCK_STUN, KINGDOM_STUN, REDUCTION_ARMOR, BOUNCE_ATTACK, SOLID_CARRIAGE,
@@ -75,7 +75,7 @@ public class L1SkillUse {
             111, 113, 114, 115, 116, 117, 118, 129, 130, 131, 132, 134, 137, 138, 146, 147, 148, 149,
             150, 151, 155, 156, 158, 159, 161, 163, 164, 165, 166, 168, 169, 170, 171, 194, 213, SOUL_OF_FLAME, ADDITIONAL_FIRE,
             DRAGON_SKIN, AWAKEN_ANTHARAS, AWAKEN_FAFURION, AWAKEN_VALAKAS, MIRROR_IMAGE, ILLUSION_OGRE, ILLUSION_LICH, PATIENCE,
-            ILLUSION_DIA_GOLEM, INSIGHT, ILLUSION_AVATAR, 10026, EMPIRE, 10027, 10028, 10029, 41472, GIGANTIC, Blood_strength};
+            ILLUSION_DIA_GOLEM, INSIGHT, ILLUSION_AVATAR, 10026, EMPIRE, 10027, 10028, 10029, 41472, GIGANTIC, Blood_strength};*/
     /**
      * 不允許重複的技能組
      */
@@ -251,8 +251,9 @@ public class L1SkillUse {
         _targetList = new ArrayList<>(); // ターゲットリストの初期化
         _skill = SkillsTable.get().getTemplate(skillid);
         if (_skill == null) {
-            // System.out.println("檢查點1");
             return false;
+        }
+        if (skillid == 76) {
         }
         _skillId = skillid;
         _targetX = x;
@@ -271,11 +272,11 @@ public class L1SkillUse {
             _npc = (L1NpcInstance) attacker;
             _user = _npc;
         }
-        if (_skill.getTarget().equals("none")) {
+        if (_skill.getTarget().equals("none") || _skill.getTarget().equals("buff")) {
             _targetID = _user.getId();
             _targetX = _user.getX();
             _targetY = _user.getY();
-        } else {
+                    } else {
             _targetID = target_id;
         }
         switch (type) {
@@ -536,7 +537,12 @@ public class L1SkillUse {
      */
     public void handleCommands(final L1PcInstance player, final int skillId, final int targetId, final int x, final int y, final int timeSecs, final int type, final L1Character attacker) {
         try {
-            // 事前チェックをしているか？
+            // 安全檢查：確保 player 不為 null
+            if (player == null) {
+                System.out.println("[ERROR] [L1SkillUse] player is null for skillId: " + skillId);
+                return;
+            }
+              // 事前チェックをしているか？
             if (!isCheckedUseSkill()) {
                 final boolean isUseSkill = checkUseSkill(player, skillId, targetId, x, y, timeSecs, type, attacker);
                 if (!isUseSkill) {
@@ -549,7 +555,10 @@ public class L1SkillUse {
                     if (!_isGlanceCheckFail || (_skill.getArea() > 0) || _skill.getTarget().equals("none")) {
                         runSkill();
                         useConsume();
-                        sendGrfx(true);
+                        // 魔法大師技能由技能模式自己處理特效
+                        if (_skillId != FOG_OF_SLEEPING) {
+                            sendGrfx(true);
+                        }
                         sendFailMessageHandle();
                         setDelay();
                     }
@@ -707,8 +716,8 @@ public class L1SkillUse {
         if (_skill.getTarget().equals("none") && (_skill.getType() == L1Skills.TYPE_ATTACK) && ((cha instanceof L1CrownInstance) || (cha instanceof L1DwarfInstance) || (cha instanceof L1EffectInstance) || (cha instanceof L1FieldObjectInstance) || (cha instanceof L1FurnitureInstance) || (cha instanceof L1HousekeeperInstance) || (cha instanceof L1MerchantInstance) || (cha instanceof L1TeleporterInstance))) {
             return false;
         }
-        // 攻擊系スキルで對像が自分は對像外
-        if ((_skill.getType() == L1Skills.TYPE_ATTACK) && (cha.getId() == _user.getId())) {
+        // 攻擊系スキルで對像が自分は對像外（魔法大師除外）
+        if ((_skill.getType() == L1Skills.TYPE_ATTACK) && (cha.getId() == _user.getId()) && (_skillId != FOG_OF_SLEEPING)) {
             return false;
         }
         // ターゲットが自分でH-Aの場合效果無し
@@ -805,7 +814,7 @@ public class L1SkillUse {
                     case DARKNESS:
                     case WEAKNESS:
                     case DISEASE:
-                    case FOG_OF_SLEEPING:
+                    //case FOG_OF_SLEEPING: // 魔法大師改為自我施放，不需要穿透絕對屏障
                         //				case MASS_SLOW:
                     case SLOW:
                     case CANCELLATION:
@@ -935,7 +944,10 @@ public class L1SkillUse {
                 this._targetList.add(new TargetStatus(this._user));
                 return;
             }
-            if ((this._skill.getTargetTo() == L1Skills.TARGET_TO_ME) && ((this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK)) {
+            // 對於目標為自己或buff/none類型的技能，只添加使用者一次
+            if ((this._skill.getTargetTo() == L1Skills.TARGET_TO_ME && ((this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK))
+                || this._skill.getTarget().equals("buff")
+                || (this._skill.getTarget().equals("none") && (this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK)) {
                 this._targetList.add(new TargetStatus(this._user)); // ターゲットは使用者のみ
                 return;
             }
@@ -950,7 +962,7 @@ public class L1SkillUse {
                     return; // 射程範圍外
                 }
             }
-            if ((!this.isTarget(this._target)) && !(this._skill.getTarget().equals("none"))) {
+            if ((!this.isTarget(this._target)) && !(this._skill.getTarget().equals("none")) && !(this._skill.getTarget().equals("buff"))) {
                 // 對像が違うのでスキルが發動しない。
                 return;
             }
@@ -984,15 +996,35 @@ public class L1SkillUse {
                         return;
                     }
                 }
-                this._targetList.add(new TargetStatus(this._target));
+                // 對於目標為"buff"的技能，目標就是使用者自己
+                if (!this._skill.getTarget().equals("buff")) {
+                    this._targetList.add(new TargetStatus(this._target));
+                } else {
+                    if (this._skillId == FOG_OF_SLEEPING) {
+                        System.out.println("[DEBUG] [L1SkillUse] 單一目標，目標為buff，跳過添加目標");
+                    }
+                }
                 // 範圍攻擊
             } else {
-                if (!this._skill.getTarget().equals("none")) {
+                if (!this._skill.getTarget().equals("none") && !this._skill.getTarget().equals("buff")) {
                     this._targetList.add(new TargetStatus(this._target));
                 }
                 if ((this._skillId != HEAL_ALL) && (this._skillId != DEATH_HEAL) && !(this._skill.getTarget().equals("attack") || (this._skill.getType() == L1Skills.TYPE_ATTACK))) {
                     // 攻擊系以外のスキルとH-A以外はターゲット自身を含める
-                    this._targetList.add(new TargetStatus(this._user));
+                    // 但對於目標為"buff"的技能，不要重複添加（前面已經添加過）
+                    if (!this._skill.getTarget().equals("buff")) {
+                        if (this._skillId == FOG_OF_SLEEPING) {
+                            System.out.println("[DEBUG] [L1SkillUse] 範圍攻擊，非攻擊系技能，添加使用者到目標列表");
+                        }
+                        this._targetList.add(new TargetStatus(this._user));
+                        if (this._skillId == FOG_OF_SLEEPING) {
+
+                        }
+                    } else {
+                        if (this._skillId == FOG_OF_SLEEPING) {
+
+                        }
+                    }
                 }
                 List<L1Object> objects;
                 // 全畫面物件
@@ -1049,7 +1081,7 @@ public class L1SkillUse {
     private void sendFailMessageHandle() {
         // 攻擊スキル以外で對像を指定するスキルが失敗した場合は失敗したメッセージをクライアントに送信
         // ※攻擊スキルは障害物があっても成功時と同じアクションであるべき。
-        if ((_skill.getType() != L1Skills.TYPE_ATTACK) && !_skill.getTarget().equals("none") && (_targetList.size() == 0)) {
+        if ((_skill.getType() != L1Skills.TYPE_ATTACK) && !_skill.getTarget().equals("none") && !_skill.getTarget().equals("buff") && (_targetList.size() == 0)) {
             sendFailMessage();
         }
     }
@@ -1689,7 +1721,7 @@ public class L1SkillUse {
      * 發動技能效果
      */
     private void runSkill() {
-        switch (_skillId) {
+                switch (_skillId) {
             //            case LIFE_STREAM:// 法師技能(治愈能量風暴)
             //                L1SpawnUtil.spawnEffect(81169, _skill.getBuffDuration(), _targetX, _targetY, _user.getMapId(), _user, 0);
             //                return;
@@ -1711,12 +1743,12 @@ public class L1SkillUse {
                 return;
         }
         // 魔法屏障不可抵擋的魔法
-        for (final int skillId : EXCEPT_COUNTER_MAGIC) {
+        /*for (final int skillId : EXCEPT_COUNTER_MAGIC) {
             if (_skillId == skillId) {
                 _isCounterMagic = false; // 魔法屏障無效
                 break;
             }
-        }
+        }*/
         // 檢查資料庫設定 (skills_無法檔魔屏)
         if (_isCounterMagic) {
             if (SkillsNoCounterMagicTable.get().isNoCounterMagic(_skillId)) {
@@ -1973,6 +2005,8 @@ public class L1SkillUse {
                 }
                 // TODO SKILL移轉
                 final SkillMode mode = L1SkillMode.get().getSkill(this._skillId);
+                if (this._skillId == FOG_OF_SLEEPING) {
+                }
                 if (mode != null) {// 具有skillmode
                     // 施展者是PC
                     if (this._user instanceof L1PcInstance) {
@@ -1986,7 +2020,12 @@ public class L1SkillUse {
                             //							this._dmg = mode.start(this._player, cha, magic, this._targetID);
                             //							break;
                             default:
-                                this._dmg = mode.start(this._player, cha, magic, this._getBuffIconDuration);
+                                        this._dmg = mode.start(this._player, cha, magic, this._getBuffIconDuration);
+                                if (this._skillId == FOG_OF_SLEEPING) {
+                                    // 檢查玩家狀態
+                                    if (this._player != null) {
+                                    }
+                                }
                                 break;
                         }
                     }
@@ -2990,12 +3029,12 @@ public class L1SkillUse {
             }
         }
         switch (this._skillId) {
-            // 沉睡之霧
-            //            case FOG_OF_SLEEPING:
-            //                if (this._user.getId() == cha.getId()) {
-            //                    return false;
-            //                }
-            //                break;
+            // 沉睡之霧 (魔法大師) - 改為自我施放的BUFF技能
+            /*case FOG_OF_SLEEPING:
+                if (this._user.getId() == cha.getId()) {
+                    return false;
+                }
+                break;*/
             // 集體緩速術
             //		case MASS_SLOW:
             //			if (this._user.getId() == cha.getId()) {

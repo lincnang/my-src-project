@@ -295,6 +295,7 @@ public class L1MagicPc extends L1MagicMode {
             case 157:// 大地屏障
             case 161:// 封印禁地
             case 173:// 污濁之水
+            case HAND_DARKNESS:// 黑暗之手
                 probability = (int) (l1skills.getProbabilityDice() / 10.0D * (attackLevel - defenseLevel));
                 probability += l1skills.getProbabilityValue();
                 probability -= getTargetMr() / 10;
@@ -1092,7 +1093,7 @@ public class L1MagicPc extends L1MagicMode {
                 _targetPc.setSkillEffect(RESIST_FEAR, 15 * 1000);
                 _targetPc.add_dodge_down(5);
                 _targetPc.sendPackets(new S_PacketBoxIcon1(false, _targetPc.get_dodge_down()));
-                _targetPc.sendPackets(new S_InventoryIcon(13008, true, 2747, 15));
+                _targetPc.sendPackets(new S_InventoryIcon(13008, true, 5120, 15));
             }
         }
         // 6. 魔攻來源加成

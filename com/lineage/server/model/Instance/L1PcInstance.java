@@ -840,6 +840,8 @@ public class L1PcInstance extends L1Character { // src015
     private int _leechGfx2 = 0;
     // 正義滿角色名稱變黃
     private boolean _LawfulName = false;
+    // 魔法大師狀態
+    private boolean _magicMaster = false;
     private L1ArmorKitPower _armorKitPower;
     private ArrayList<Integer> _armorKit;
     // 特效驗證系統
@@ -5212,9 +5214,7 @@ public class L1PcInstance extends L1Character { // src015
         if (hasSkillEffect(29)) {
             removeSkillEffect(29);
         }
-        if (hasSkillEffect(76)) {
-            removeSkillEffect(76);
-        }
+        // 移除FOG_OF_SLEEPING (76) - 魔法大師技能不應該被清除
         if (hasSkillEffect(152)) {
             removeSkillEffect(152);
         }
@@ -10233,6 +10233,20 @@ public class L1PcInstance extends L1Character { // src015
      */
     public void setLawfulName(final boolean flag) {
         _LawfulName = flag;
+    }
+
+    /**
+     * 魔法大師狀態
+     */
+    public boolean isMagicMaster() {
+        return _magicMaster;
+    }
+
+    /**
+     * 魔法大師狀態
+     */
+    public void setMagicMaster(boolean flag) {
+        _magicMaster = flag;
     }
 
     public final L1ArmorKitPower getArmorKitPower() {

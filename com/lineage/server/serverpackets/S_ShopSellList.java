@@ -135,8 +135,8 @@ public class S_ShopSellList extends ServerBasePacket {
     }
 
     public S_ShopSellList(final L1PcInstance pc) {
-        Integer[] autoSkillTable = new Integer[]{77,65,132, 1, 33, 20, 25, 27, 43, 54, 60, 187, 225};
-        Integer[] autoSkillIconTable = new Integer[]{10916,10904,1755, 386, 643, 655, 398, 401, 661, 659, 653, 3081, 6191};
+        Integer[] autoSkillTable = new Integer[]{77,65,132, 1, 33, 20, 25, 27, 43, 54, 60, 187, 225,45};
+        Integer[] autoSkillIconTable = new Integer[]{10916,10904,1755, 386, 643, 655, 398, 401, 661, 659, 653, 3081, 6191,10496};
         writeC(S_BUY_LIST);
         writeD(pc.getId());
         ArrayList<Integer> skills = new ArrayList<>();

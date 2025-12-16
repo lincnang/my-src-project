@@ -44,6 +44,8 @@ public class S_NewSkillIcon extends ServerBasePacket {
                 byteWrite(7461);
             } else if (skillId == L1SkillId.Blood_strength) { // 狂戰士新技能 力量之血
                 byteWrite(10883);
+            } else if (skillId == L1SkillId.FOG_OF_SLEEPING) { // 法師新技能 魔法大師
+                byteWrite(7470);
                 //} else if (skillId == L1SkillId.STATUS_CASHSCROLL3) { // 強化戰鬥卷軸 vs 龍之石 狀態 圖標
                 //byteWrite(2430);
             }
@@ -87,6 +89,9 @@ public class S_NewSkillIcon extends ServerBasePacket {
             } else if (skillId == L1SkillId.Blood_strength) // 狂戰士新技能 力量之血
             {
                 msgNum = 4741;
+            } else if (skillId == L1SkillId.FOG_OF_SLEEPING) // 法師新技能 魔法大師
+            {
+                msgNum = 4742;
             }
             byteWrite(msgNum);
             writeC(0x48);

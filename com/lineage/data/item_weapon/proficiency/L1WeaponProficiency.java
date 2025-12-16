@@ -39,27 +39,8 @@ public class L1WeaponProficiency {
             }
 
             int type = pc.getWeapon().getItem().getType();
-            String jumpCmd;
-
-            switch (type) {
-                case 1: jumpCmd = "die_J_1"; break;
-                case 2: jumpCmd = "die_J_2"; break;
-                case 3: jumpCmd = "die_J_3"; break;
-                case 4: jumpCmd = "die_J_4"; break;
-                case 5: jumpCmd = "die_J_5"; break;
-                case 6: jumpCmd = "die_J_6"; break;
-                case 7: jumpCmd = "die_J_7"; break;
-                case 8: jumpCmd = "die_J_8"; break;
-                case 9: jumpCmd = "die_J_10"; break;
-                case 10: jumpCmd = "die_J_11"; break;
-                case 11: jumpCmd = "die_J_12"; break;
-                default:
-                    pc.sendPackets(new S_SystemMessage("尚未支援的武器類型: " + type));
-                    return true;
-            }
-
-            Cmd(pc, jumpCmd); // 執行跳轉
-            return true;
+            int profType = normalizeWeaponType(type);
+            return showWeaponInfo(pc, profType);
         }
 
         // 個別武器類型對應
@@ -72,8 +53,21 @@ public class L1WeaponProficiency {
         if (cmd.equalsIgnoreCase("die_J_7")) return showWeaponInfo(pc, 7);
         if (cmd.equalsIgnoreCase("die_J_8")) return showWeaponInfo(pc, 8);
         if (cmd.equalsIgnoreCase("die_J_9")) return showWeaponInfo(pc, 9);
-        if (cmd.equalsIgnoreCase("die_J_10")) return showWeaponInfo(pc, 10);
-        if (cmd.equalsIgnoreCase("die_J_11")) return showWeaponInfo(pc, 11);
+        if (cmd.equalsIgnoreCase("die_J_10")) {
+            if (pc.getWeapon() != null) {
+                int type = pc.getWeapon().getItem().getType();
+                if (type == 11 || type == 10) return showWeaponInfo(pc, 8);
+            }
+            return showWeaponInfo(pc, 10);
+        }
+        if (cmd.equalsIgnoreCase("die_J_11")) {
+            if (pc.getWeapon() != null) {
+                int type = pc.getWeapon().getItem().getType();
+                if (type == 11 || type == 10) return showWeaponInfo(pc, 8);
+            }
+            return showWeaponInfo(pc, 11);
+        }
+        if (cmd.equalsIgnoreCase("die_J_12")) return showWeaponInfo(pc, 8);
 
         return false;
     }
@@ -154,7 +148,7 @@ public class L1WeaponProficiency {
 
     // 🔧 輔助方法：取得武器名稱
     private static String getWeaponTypeName(int type) {
-        switch (normalizeWeaponType(type)) {
+        switch (type) {
             case 1: return "單手劍";
             case 2: return "匕首";
             case 3: return "雙手劍";
@@ -292,7 +286,9 @@ public class L1WeaponProficiency {
                 return;
             }
             if (getProficiencyExp(type) >= weaponProficiency.getExp()) {
+                WeaponProficiency.addWeaponProficiencyStatus(pc, type, level - 1, -1);
                 setProficiencyLevel(type, level);
+                WeaponProficiency.addWeaponProficiencyStatus(pc, type, level, 1);
             }
             final int maxLv = WeaponProficiencyTable.getMaxProficienciesLevel(type);
             WeaponProficiency maxProficiency = WeaponProficiencyTable.getProficiency(type, maxLv);

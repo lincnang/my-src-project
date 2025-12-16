@@ -815,16 +815,13 @@ public class L1SkillStop {
                             npc.setParalyzed(false);
                         }
                         break;
-                        /*
-                    case FOG_OF_SLEEPING://沉睡之霧
-                        cha.setSleeped(false);
+                    case FOG_OF_SLEEPING://魔法大師
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_SLEEP, false));
-                            pc.sendPackets(new S_OwnCharStatus(pc));
+                            // 移除魔法大師狀態
+                            pc.setMagicMaster(false);
                         }
                         break;
-                        */
                     case ABSOLUTE_BARRIER://絕對屏障
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;

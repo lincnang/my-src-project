@@ -83,7 +83,7 @@ public class C_UseSkill extends ClientBasePacket {
             if (skillId == 5) {
                 skillId = 4;
             }
-            if (skillId > 239) {
+              if (skillId > 239) {
                 return;
             }
             if (skillId < 0) {
@@ -117,8 +117,10 @@ public class C_UseSkill extends ClientBasePacket {
             final boolean isCurePoisonSkill = (skillId == CURE_POISON);
 
             // 使用統一控制狀態檢查，允許沉默毒施放解毒術
-            if (!isError && pc.isInAnyControlState(!isCurePoisonSkill)) {
-                isError = true;
+            if (!isError) {
+                if (pc.isInAnyControlState(!isCurePoisonSkill)) {
+                    isError = true;
+                }
             }
             if (isError) {
                 pc.setTeleport(false);
@@ -147,8 +149,6 @@ public class C_UseSkill extends ClientBasePacket {
             }
             // 技能合法判斷
             if (!pc.isSkillMastery(skillId)) {
-                // _log.info(pc.getAccountName() + ":" + pc.getName() + "(" +
-                // pc.getType() + ") 非法技能:" + skillId);
                 return;
             }
             // 城戰旗幟內 - 技能魔法限制

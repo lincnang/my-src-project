@@ -340,7 +340,8 @@ public class L1MobSkillUse {
             }
             if (canUseSkill) {
                 if (!pc.hasSkillEffect(skillid)) {
-                    skillUse.handleCommands(null, skillid, pc.getId(), pc.getX(), pc.getY(), time, // 時間
+                    // 傳入目標玩家作為 player 參數
+                    skillUse.handleCommands(pc, skillid, pc.getId(), pc.getX(), pc.getY(), time, // 時間
                             L1SkillUse.TYPE_GMBUFF, _attacker);
                 }
             }
@@ -685,7 +686,9 @@ public class L1MobSkillUse {
             if (getMobSkillTemplate().getLeverage(idx) > 0) {
                 skillUse.setLeverage(getMobSkillTemplate().getLeverage(idx));
             }
-            skillUse.handleCommands(null, skillid, _target.getId(), _target.getX(), _target.getX(), 0, L1SkillUse.TYPE_NORMAL, _attacker);
+            // 如果目標是玩家，傳入玩家實例；如果是NPC，傳入null
+            L1PcInstance targetPlayer = (_target instanceof L1PcInstance) ? (L1PcInstance) _target : null;
+            skillUse.handleCommands(targetPlayer, skillid, _target.getId(), _target.getX(), _target.getY(), 0, L1SkillUse.TYPE_NORMAL, _attacker);
             L1Skills skill = SkillsTable.get().getTemplate(skillid);
             if ((skill.getTarget().equals("attack")) && (skillid != L1SkillId.TURN_UNDEAD)) {
                 _sleepTime = _attacker.getNpcTemplate().getAtkMagicSpeed();

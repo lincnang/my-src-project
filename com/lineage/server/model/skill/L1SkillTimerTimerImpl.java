@@ -17,7 +17,7 @@ public class L1SkillTimerTimerImpl implements L1SkillTimer, Runnable {
     public L1SkillTimerTimerImpl(L1Character cha, int skillId, int timeMillis) {
         _cha = cha;
         _skillId = skillId;
-        _remainingTime = (timeMillis / 1000);
+        _remainingTime = timeMillis;
     }
 
     public void run() {
@@ -34,7 +34,7 @@ public class L1SkillTimerTimerImpl implements L1SkillTimer, Runnable {
         kill();
         try {
             L1SkillStop.stopSkill(_cha, _skillId);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
     }

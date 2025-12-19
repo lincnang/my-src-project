@@ -5,10 +5,7 @@ import com.lineage.server.model.Instance.L1NpcInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
-import com.lineage.server.serverpackets.S_InventoryIcon;
-import com.lineage.server.serverpackets.S_SkillSound;
 import com.lineage.server.serverpackets.S_SystemMessage;
-import com.lineage.server.serverpackets.S_UseAttackSkill;
 import com.lineage.server.templates.L1Skills;
 
 import static com.lineage.server.model.skill.L1SkillId.FOG_OF_SLEEPING;
@@ -42,71 +39,6 @@ public class FOG_OF_SLEEPING extends SkillMode {
         // 設定魔法大師狀態給施放者
         srcpc.setSkillEffect(FOG_OF_SLEEPING, duration * 1000);
 
-        // 從資料庫讀取施法動作ID (action_id)
-        int actionId = skill.getActionId();
-
-        // 從資料庫讀取施法特效ID
-        int castGfx = skill.getCastGfx();
-
-        // 從資料庫讀取範圍類型
-        int area = skill.getArea();
-
-        // 直接在核心設定BUFF圖標ID和訊息ID（不從資料庫讀取）
-        int buffIconId = 10546;  // BUFF圖標ID
-        int startMsgId = 5126;   // 開始訊息ID
-        int endMsgId = 5124;     // 結束訊息ID
-
-        
-        // 播放施法動作和特效
-        if (castGfx > 0 && actionId > 0) {
-            // 使用施放者自己作為目標，這樣會面向正確的方向
-            srcpc.sendPackets(new S_UseAttackSkill(srcpc, srcpc.getId(), castGfx,
-                                                  srcpc.getX(), srcpc.getY(), actionId, 0));
-
-            // 廣播給周圍玩家看見施法動作
-            srcpc.broadcastPacketAll(new S_UseAttackSkill(srcpc, srcpc.getId(), castGfx,
-                                                         srcpc.getX(), srcpc.getY(), actionId, 0));
-        }
-
-        // 播放特效ID 21448
-        if (castGfx == 40318) {  // 檢查是否為魔法大師特效
-            srcpc.sendPackets(new S_SkillSound(srcpc.getId(), 21448));
-            srcpc.broadcastPacketAll(new S_SkillSound(srcpc.getId(), 21448));
-        }
-
-        // 顯示BUFF圖標（只發送給施法者自己）
-        if (buffIconId > 0) {
-            // 使用資料庫設定的BUFF圖標ID
-            srcpc.sendPackets(new S_InventoryIcon(buffIconId, true, startMsgId, duration));
-        }
-
-        // 發送系統訊息（可選）
-        // 如果需要發送訊息，取消註釋以下代碼：
-        /*
-        if (startMsgId > 0 && startMsg != null && !startMsg.isEmpty()) {
-            srcpc.sendPackets(new S_ServerMessage(startMsgId));
-        }
-        */
-
-        /*
-        // 發送純粹的音效（如果不想要動作）
-        if (castGfx > 0) {
-            srcpc.sendPackets(new S_SkillSound(srcpc.getId(), castGfx));
-            srcpc.broadcastPacketAll(new S_SkillSound(srcpc.getId(), castGfx));
-        }
-
-        // 從資料庫讀取BUFF圖標ID
-        int buffIconId = skill.getBuffIconid();
-        if (buffIconId > 0) {
-            srcpc.sendPackets(new S_NewSkillIcon(FOG_OF_SLEEPING, true, duration * 1000));
-        }
-
-        // 從資料庫讀取系統訊息ID
-        int msgId = skill.getSysmsgIdHappen();
-        if (msgId > 0) {
-            srcpc.sendPackets(new S_ServerMessage(msgId));
-        }
-        */
 
         // 設置魔法大師狀態
         srcpc.setMagicMaster(true);
@@ -133,15 +65,15 @@ public class FOG_OF_SLEEPING extends SkillMode {
         if (cha instanceof L1PcInstance) {
             L1PcInstance pc = (L1PcInstance) cha;
 
-            // 直接在核心設定BUFF圖標ID和訊息ID（不從資料庫讀取）
-            int buffIconId = 10546;  // BUFF圖標ID
-            int endMsgId = 5124;     // 結束訊息ID
-
-            // 移除BUFF圖標（只發送給施法者自己）
-            if (buffIconId > 0) {
-                // 移除BUFF圖標
-                pc.sendPackets(new S_InventoryIcon(buffIconId, false, endMsgId, 0));
-            }
+//            // 直接在核心設定BUFF圖標ID和訊息ID（不從資料庫讀取）
+//            int buffIconId = 10546;  // BUFF圖標ID
+//            int endMsgId = 5124;     // 結束訊息ID
+//
+//            // 移除BUFF圖標（只發送給施法者自己）
+//            if (buffIconId > 0) {
+//                // 移除BUFF圖標
+//                pc.sendPackets(new S_InventoryIcon(buffIconId, false, endMsgId, 0));
+//            }
 
             // 移除狀態
             pc.setMagicMaster(false);

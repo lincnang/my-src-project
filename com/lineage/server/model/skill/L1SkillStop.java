@@ -721,9 +721,9 @@ public class L1SkillStop {
                             int rawLv = pc.getSkillLevel(BERSERKERS);
                             // 只有吃書後才取強化
                             L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(BERSERKERS, rawLv);
-                            // 預設移除數值
-                            int removeAc = 10;
-                            int removeDmgup = 5;
+                            // 預設移除數值（移除狂暴術時要恢復防禦，扣除攻擊加成）
+                            int removeAc = 10;       // AC -10 (恢復防禦)
+                            int removeDmgup = 5;     // 傷害 -5 (移除攻擊加成)
                             // 若有強化資料則以設定值為準
                             if (enhanceData != null) {
                                 removeAc = enhanceData.getSetting1();
@@ -734,15 +734,15 @@ public class L1SkillStop {
                                 if (removeDmgup < -200) removeDmgup = -200;
                                 if (removeDmgup > 200) removeDmgup = 200;
                             }
-                            // 用負值扣除加成效果
-                            cha.addAc(-removeAc);
-                            cha.addDmgup(-removeDmgup);
+                            // 恢復效果：減少AC（提升防禦），減少傷害
+                            cha.addAc(-removeAc);       // 減少AC（恢復防禦）
+                            cha.addDmgup(-removeDmgup); // 減少傷害
                             // 重新啟動 HP 回復
                             pc.startHpRegeneration();
                         } else {
-                            // 若角色不是 L1PcInstance，可直接扣除預設值
-                            cha.addAc(-10);
-                            cha.addDmgup(-5);
+                            // 若角色不是 L1PcInstance，恢復預設值
+                            cha.addAc(-10);  // 減少AC（恢復防禦）
+                            cha.addDmgup(-5); // 減少傷害
                         }
                         break;
                     case HASTE://加速術
@@ -792,14 +792,19 @@ public class L1SkillStop {
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
 
-                            // 確保邏輯只執行一次
-                            if (!pc.hasSkillEffect(L1SkillId.DISEASE)) {
-                                break; // 如果效果已經移除，直接退出
-                            }
-                            // 正確移除效果
+                            // 注意：不要在這裡調用 removeSkillEffect，因為它已經在被移除的過程中
+                            // removeSkillEffect 是由呼叫者（通常是 L1Character.removeSkillEffect）處理的
+
+                            // 恢復效果
                             pc.addDmgup(6); // 恢復傷害加成
                             pc.addAc(-12);  // 恢復 AC 減益
-                            pc.removeSkillEffect(L1SkillId.DISEASE); // 標記效果已被移除
+
+                            // 強制發送 AC 更新封包給客戶端
+                            pc.sendPackets(new S_OwnCharAttrDef(pc));
+                            pc.sendPackets(new S_OwnCharStatus(pc));
+
+                            // 關閉自訂圖示
+                            pc.sendPackets(new S_InventoryIcon(760, false, 4585, 7));
                         }
                         break;
                     //                    case ICE_LANCE://冰矛圍籬

@@ -735,7 +735,7 @@ public class L1ItemStatus {
         String msg = null;
         this._os.writeC(39);
         this._os.writeS("詳細數值如下");
-        if (!doll.getPowerList().isEmpty()) {
+        if (doll != null && doll.getPowerList() != null && !doll.getPowerList().isEmpty()) {
             for (L1DollExecutor power : doll.getPowerList()) {
                 if (power.getDollAc() != 0) { // 防禦
                     _os.writeC(56);
@@ -900,7 +900,7 @@ public class L1ItemStatus {
                 }
             }
         }
-        if (doll.get_level() > 0) { // 娃娃等級
+        if (doll != null && doll.get_level() > 0) { // 娃娃等級
             //_os.writeC(0x27);
             //_os.writeS("娃娃等級 " + doll.get_level());
             _os.writeC(26); // desc-c.tbl -> 1184行

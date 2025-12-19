@@ -76,13 +76,31 @@ public class L1ParalysisPoison extends L1Poison {
         }
 
         public void run() {
-            _target.setSkillEffect(1008, 0);
+            // 檢查目標是否仍然有效
+            if (_target == null) {
+                return;
+            }
+
+            try {
+                _target.setSkillEffect(1008, 0);
+            } catch (Exception e) {
+                // 捕獲可能的並發異常
+                System.err.println("Error in ParalysisPoisonTimer.setSkillEffect: " + e.getMessage());
+                return;
+            }
+
             try {
                 TimeUnit.MILLISECONDS.sleep(_delay);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
             }
+
+            // 再次檢查目標
+            if (_target == null) {
+                return;
+            }
+
             _effectId = 2;
             _target.setPoisonEffect(2);
             if ((_target instanceof L1PcInstance)) {
@@ -104,15 +122,39 @@ public class L1ParalysisPoison extends L1Poison {
         }
 
         public void run() {
-            _target.killSkillEffectTimer(1008);
-            _target.setSkillEffect(1009, 0);
+            // 檢查目標是否仍然有效
+            if (_target == null) {
+                return;
+            }
+
+            try {
+                _target.killSkillEffectTimer(1008);
+                _target.setSkillEffect(1009, 0);
+            } catch (Exception e) {
+                // 捕獲可能的並發異常
+                System.err.println("Error in ParalysisTimer - phase 1: " + e.getMessage());
+                return;
+            }
+
             try {
                 TimeUnit.MILLISECONDS.sleep(_time);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
             }
-            _target.killSkillEffectTimer(1009);
+
+            // 再次檢查目標
+            if (_target == null) {
+                return;
+            }
+
+            try {
+                _target.killSkillEffectTimer(1009);
+            } catch (Exception e) {
+                System.err.println("Error in ParalysisTimer - phase 2: " + e.getMessage());
+                return;
+            }
+
             if ((_target instanceof L1PcInstance)) {
                 L1PcInstance player = (L1PcInstance) _target;
                 if (!player.isDead()) {

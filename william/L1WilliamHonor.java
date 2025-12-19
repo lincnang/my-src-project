@@ -2,6 +2,7 @@ package william;
 
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.*;
+import com.lineage.server.Controller.IntBonusManager;
 
 
 public class L1WilliamHonor {
@@ -189,6 +190,10 @@ public class L1WilliamHonor {
         pc.addDex(HonorSkill.getAddDex());
         pc.addCon(HonorSkill.getAddCon());
         pc.addInt(HonorSkill.getAddInt());
+        // 智力變動後重新套用智力加成
+        if (HonorSkill.getAddInt() != 0) {
+            IntBonusManager.get().reapply(pc);
+        }
         pc.addWis(HonorSkill.getAddWis());
         pc.addCha(HonorSkill.getAddCha());
         pc.addHpr(HonorSkill.getAddHpr());
@@ -237,6 +242,10 @@ public class L1WilliamHonor {
         pc.addDex(-HonorSkill.getAddDex());
         pc.addCon(-HonorSkill.getAddCon());
         pc.addInt(-HonorSkill.getAddInt());
+        // 智力變動後重新套用智力加成
+        if (HonorSkill.getAddInt() != 0) {
+            IntBonusManager.get().reapply(pc);
+        }
         pc.addWis(-HonorSkill.getAddWis());
         pc.addCha(-HonorSkill.getAddCha());
         pc.addHpr(-HonorSkill.getAddHpr());

@@ -4,6 +4,7 @@ import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
 import com.lineage.server.serverpackets.S_OwnCharStatus2;
+import com.lineage.server.Controller.IntBonusManager;
 
 public class PANIC extends SkillMode {
     public int start(L1PcInstance srcpc, L1Character cha, L1Magic magic, int integer) throws Exception {
@@ -15,6 +16,8 @@ public class PANIC extends SkillMode {
                 pc.addDex(-1);
                 pc.addWis(-1);
                 pc.addInt(-1);
+                // 智力變動後重新套用智力加成
+                IntBonusManager.get().reapply(pc);
                 pc.setSkillEffect(217, integer * 1000);
                 pc.sendPackets(new S_OwnCharStatus2(pc));
                 pc.sendDetails();// 7.6
@@ -46,6 +49,8 @@ public class PANIC extends SkillMode {
             pc.addDex(1);
             pc.addWis(1);
             pc.addInt(1);
+            // 智力變動後重新套用智力加成
+            IntBonusManager.get().reapply(pc);
             pc.sendPackets(new S_OwnCharStatus2(pc));
             pc.sendDetails();// 7.6
         } else if (((cha instanceof L1MonsterInstance)) || ((cha instanceof L1SummonInstance)) || ((cha instanceof L1PetInstance))) {

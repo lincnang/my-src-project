@@ -7,6 +7,7 @@ import com.lineage.server.datatables.RewardAcTable;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.map.L1Map;
 import com.lineage.server.model.poison.L1Poison;
+import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.model.skill.L1SkillStop;
 import com.lineage.server.model.skill.L1SkillTimer;
 import com.lineage.server.model.skill.L1SkillTimerCreator;
@@ -39,6 +40,7 @@ public class L1Character extends L1Object {
     private static Random _random = new Random();
     private final Map<Integer, L1NpcInstance> _petlist = new HashMap<>();
     private final HashMap<Integer, L1SkillTimer> _skillEffect = new HashMap<>();
+    private final Object _skillEffectLock = new Object();
     private final Map<Integer, L1ItemDelay.ItemDelayTimer> _itemdelay = new HashMap<>();
     private final Map<Integer, L1FollowerInstance> _followerlist = new HashMap<>();
     private final Map<Integer, L1DollInstance> _dolls = new HashMap<>();
@@ -760,12 +762,25 @@ public class L1Character extends L1Object {
      *
      */
     private void addSkillEffect(int skillId, int timeMillis) {
-        L1SkillTimer timer = null;
-        if (timeMillis > 0) {
-            timer = L1SkillTimerCreator.create(this, skillId, timeMillis);
-            timer.begin();
+        synchronized (_skillEffectLock) {
+            L1SkillTimer timer = null;
+            if (timeMillis > 0) {
+                try {
+                    // 轉換毫秒為秒（L1SkillTimer 使用秒作為單位）
+                    int timeSeconds = timeMillis >= 1000 ? timeMillis / 1000 : timeMillis;
+                    if (skillId == L1SkillId.DISEASE) {
+                        System.out.println("疾病術計時器創建：timeMillis=" + timeMillis + "ms, timeSeconds=" + timeSeconds + "s");
+                    }
+                    timer = L1SkillTimerCreator.create(this, skillId, timeSeconds);
+                    if (timer != null) {
+                        timer.begin();
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error creating skill timer for skillId=" + skillId);
+                }
+            }
+            _skillEffect.put(skillId, timer);
         }
-        _skillEffect.put(skillId, timer);
     }
 
     /**
@@ -773,15 +788,37 @@ public class L1Character extends L1Object {
      *
      */
     public void setSkillEffect(int skillId, int timeMillis) {
-        L1SkillTimer timer = (L1SkillTimer) _skillEffect.get(skillId);
-        if (timer != null) {// 已有計時器
-            int remainingTimeMills = timer.getRemainingTime();
-            timeMillis /= 1000;
-            if ((remainingTimeMills >= 0) && ((remainingTimeMills < timeMillis) || (timeMillis == 0))) {
-                timer.setRemainingTime(timeMillis);
+        synchronized (_skillEffectLock) {
+            L1SkillTimer timer = (L1SkillTimer) _skillEffect.get(skillId);
+            if (timer != null) {// 已有計時器
+                int remainingTimeMills = timer.getRemainingTime();
+                timeMillis /= 1000;
+                // 修復：對於永久性技能（timeMillis == 0），不應該修改計時器
+                if (timeMillis > 0 && (remainingTimeMills >= 0) && (remainingTimeMills < timeMillis)) {
+                    timer.setRemainingTime(timeMillis);
+                }
+            } else {// 沒有計時器
+                // 直接在同步塊內處理，避免重複進入同步
+                L1SkillTimer newTimer = null;
+                if (timeMillis > 0) {
+                    // 轉換毫秒為秒（L1SkillTimer 使用秒作為單位）
+                    int timeSeconds = timeMillis >= 1000 ? timeMillis / 1000 : timeMillis;
+                    if (skillId == L1SkillId.DISEASE) {
+                    }
+                    try {
+                        newTimer = L1SkillTimerCreator.create(this, skillId, timeSeconds);
+                        if (newTimer != null) {
+                            newTimer.begin();
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error creating skill timer for skillId=" + skillId);
+                    }
+                } else {
+                    // 對於永久性技能（timeMillis == 0），不創建計時器
+                    // 但仍然要將技能加入到效果清單中
+                }
+                _skillEffect.put(skillId, newTimer);
             }
-        } else {// 沒有計時器
-            addSkillEffect(skillId, timeMillis);
         }
     }
 
@@ -790,12 +827,14 @@ public class L1Character extends L1Object {
      *
      */
     public void removeSkillEffect(int skillId) {
-        boolean hadEffect = _skillEffect.containsKey(skillId);
-        L1SkillTimer timer = _skillEffect.remove(skillId);
-        if (timer != null) {
-            timer.end();
-        } else if (hadEffect) {
-            L1SkillStop.stopSkill(this, skillId);
+        synchronized (_skillEffectLock) {
+            boolean hadEffect = _skillEffect.containsKey(skillId);
+            L1SkillTimer timer = _skillEffect.remove(skillId);
+            if (timer != null) {
+                timer.end();
+            } else if (hadEffect) {
+                L1SkillStop.stopSkill(this, skillId);
+            }
         }
     }
 
@@ -803,12 +842,14 @@ public class L1Character extends L1Object {
      * 刪除全部技能效果
      */
     public void clearAllSkill() {
-        for (L1SkillTimer timer : _skillEffect.values()) {
-            if (timer != null) {
-                timer.end();
+        synchronized (_skillEffectLock) {
+            for (L1SkillTimer timer : _skillEffect.values()) {
+                if (timer != null) {
+                    timer.end();
+                }
             }
+            _skillEffect.clear();
         }
-        _skillEffect.clear();
     }
 
     /**
@@ -816,9 +857,11 @@ public class L1Character extends L1Object {
      *
      */
     public void killSkillEffectTimer(int skillId) {
-        L1SkillTimer timer = (L1SkillTimer) _skillEffect.remove(skillId);
-        if (timer != null) {
-            timer.kill();
+        synchronized (_skillEffectLock) {
+            L1SkillTimer timer = (L1SkillTimer) _skillEffect.remove(skillId);
+            if (timer != null) {
+                timer.kill();
+            }
         }
     }
 
@@ -826,32 +869,42 @@ public class L1Character extends L1Object {
      * 刪除全部技能計時器
      */
     public void clearSkillEffectTimer() {
-        for (L1SkillTimer timer : _skillEffect.values()) {
-            if (timer != null) {
-                timer.kill();
+        synchronized (_skillEffectLock) {
+            for (L1SkillTimer timer : _skillEffect.values()) {
+                if (timer != null) {
+                    timer.kill();
+                }
             }
+            _skillEffect.clear();
         }
-        _skillEffect.clear();
     }
 
     public boolean hasSkillEffect(int skillId) {
-        return _skillEffect.containsKey(skillId);
+        synchronized (_skillEffectLock) {
+            return _skillEffect.containsKey(skillId);
+        }
     }
 
     public Set<Integer> getSkillEffect() {
-        return _skillEffect.keySet();
+        synchronized (_skillEffectLock) {
+            return new HashSet<>(_skillEffect.keySet());
+        }
     }
 
     public boolean getSkillisEmpty() {
-        return _skillEffect.isEmpty();
+        synchronized (_skillEffectLock) {
+            return _skillEffect.isEmpty();
+        }
     }
 
     public int getSkillEffectTimeSec(int skillId) {
-        L1SkillTimer timer = (L1SkillTimer) _skillEffect.get(skillId);
-        if (timer == null) {
-            return -1;
+        synchronized (_skillEffectLock) {
+            L1SkillTimer timer = (L1SkillTimer) _skillEffect.get(skillId);
+            if (timer == null) {
+                return -1;
+            }
+            return timer.getRemainingTime();
         }
-        return timer.getRemainingTime();
     }
 
     //newdoll

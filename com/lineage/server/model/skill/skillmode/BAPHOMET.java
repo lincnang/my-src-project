@@ -6,6 +6,7 @@ import com.lineage.server.model.L1Character;
 import com.lineage.server.model.L1Magic;
 import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.serverpackets.*;
+import com.lineage.server.Controller.IntBonusManager;
 
 /**
  * <font color=#00800>42516 巴風特雕像)</font><BR>
@@ -32,6 +33,8 @@ public class BAPHOMET extends SkillMode {
             srcpc.addStr(1);
             srcpc.addDex(1);
             srcpc.addInt(1);
+            // 智力變動後重新套用智力加成
+            IntBonusManager.get().reapply(srcpc);
             srcpc.sendPackets(new S_HPUpdate(srcpc.getCurrentHp(), srcpc.getMaxHp()));
             srcpc.sendPackets(new S_MPUpdate(srcpc));
             srcpc.sendPackets(new S_OwnCharAttrDef(srcpc));
@@ -66,6 +69,10 @@ public class BAPHOMET extends SkillMode {
         srcpc.addStr(-1);
         srcpc.addDex(-1);
         srcpc.addInt(-1);
+        // 智力變動後重新套用智力加成
+        if (srcpc instanceof L1PcInstance) {
+            IntBonusManager.get().reapply((L1PcInstance) srcpc);
+        }
         if ((srcpc instanceof L1PcInstance)) {
             L1PcInstance pc = (L1PcInstance) srcpc;
             pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));

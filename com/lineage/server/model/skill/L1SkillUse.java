@@ -67,7 +67,7 @@ public class L1SkillUse {
     private static final int[] CAST_WITH_INVIS = {1, 2, 3, 5, 8, 9, 12, 13, 14, 19,DETECTION, CALL_LIGHTNING,SUNBURST,21, 26, 31, 32, 35, 37, 44, 48, 49, 52, 54, 55, 57, 60, 61, 63, 67, 68, 69, 72, 73, 75, 78, 79, REDUCTION_ARMOR, BOUNCE_ATTACK, SOLID_CARRIAGE, Counter_attack, COUNTER_BARRIER, 97, 98, 99, 100, 101, 102, 104, 105, 106, 107, 109, 110, 111, 113, 114, 115, 116, 117, 118, 129, 130, 131, 133, 134, 137, 138, 146, 147, 148, 149, 150, 151, 155, 156, 158, 159, 163, 164, 165, 166, 168, 169, 170, 171, SOUL_OF_FLAME, ADDITIONAL_FIRE, DRAGON_SKIN, AWAKEN_ANTHARAS, AWAKEN_FAFURION, AWAKEN_VALAKAS, MIRROR_IMAGE, ILLUSION_OGRE, ILLUSION_LICH, PATIENCE, ILLUSION_DIA_GOLEM, INSIGHT, ILLUSION_AVATAR};
 
     // 設定魔法屏障不可抵擋的魔法
-    /*private static final int[] EXCEPT_COUNTER_MAGIC = {1, 2, 3, 5, 8, 9, 12,
+    private static final int[] EXCEPT_COUNTER_MAGIC = {1, 2, 3, 5, 8, 9, 12,
             13, 14, 19, 21, 26, 31, 32, 35, 37, 42, 43, 48, 49, 52, 54, 55,
             57, 60, 61, 63, 67, 68, 69, 72, 73, 75, IMMUNE_TO_HARM2, 78, 79,
             SHOCK_STUN, KINGDOM_STUN, REDUCTION_ARMOR, BOUNCE_ATTACK, SOLID_CARRIAGE,
@@ -75,7 +75,7 @@ public class L1SkillUse {
             111, 113, 114, 115, 116, 117, 118, 129, 130, 131, 132, 134, 137, 138, 146, 147, 148, 149,
             150, 151, 155, 156, 158, 159, 161, 163, 164, 165, 166, 168, 169, 170, 171, 194, 213, SOUL_OF_FLAME, ADDITIONAL_FIRE,
             DRAGON_SKIN, AWAKEN_ANTHARAS, AWAKEN_FAFURION, AWAKEN_VALAKAS, MIRROR_IMAGE, ILLUSION_OGRE, ILLUSION_LICH, PATIENCE,
-            ILLUSION_DIA_GOLEM, INSIGHT, ILLUSION_AVATAR, 10026, EMPIRE, 10027, 10028, 10029, 41472, GIGANTIC, Blood_strength};*/
+            ILLUSION_DIA_GOLEM, INSIGHT, ILLUSION_AVATAR, 10026, EMPIRE, 10027, 10028, 10029, 41472, GIGANTIC, Blood_strength};
     /**
      * 不允許重複的技能組
      */
@@ -247,13 +247,15 @@ public class L1SkillUse {
      * @return true:檢查通過 ;false:檢查未通過
      */
     public boolean checkUseSkill(L1PcInstance player, int skillid, int target_id, int x, int y, int time, int type, L1Character attacker, int actid, int gfxid) {
+
+        // 調試：檢查 _targetList 初始狀態
+
         setCheckedUseSkill(true);
         _targetList = new ArrayList<>(); // ターゲットリストの初期化
         _skill = SkillsTable.get().getTemplate(skillid);
         if (_skill == null) {
+            // System.out.println("檢查點1");
             return false;
-        }
-        if (skillid == 76) {
         }
         _skillId = skillid;
         _targetX = x;
@@ -272,11 +274,11 @@ public class L1SkillUse {
             _npc = (L1NpcInstance) attacker;
             _user = _npc;
         }
-        if (_skill.getTarget().equals("none") || _skill.getTarget().equals("buff")) {
+        if (_skill.getTarget().equals("none")) {
             _targetID = _user.getId();
             _targetX = _user.getX();
             _targetY = _user.getY();
-                    } else {
+        } else {
             _targetID = target_id;
         }
         switch (type) {
@@ -294,14 +296,14 @@ public class L1SkillUse {
             // System.out.println("檢查點2");
             return false;
         }
-        
+
         // 負面魔法(攻擊、詛咒、機率、即死、變形) 安全區域禁止對玩家施放 (通用檢查，包含卷軸)
         if (_user instanceof L1PcInstance) {
             L1PcInstance pc = (L1PcInstance) _user;
             int skillType = _skill.getType();
-            if (skillType == L1Skills.TYPE_ATTACK || skillType == L1Skills.TYPE_CURSE || 
-                skillType == L1Skills.TYPE_PROBABILITY || skillType == L1Skills.TYPE_DEATH ||
-                skillType == L1Skills.TYPE_CHANGE || _skillId == HAND_DARKNESS || _skillId == CANCELLATION) {
+            if (skillType == L1Skills.TYPE_ATTACK || skillType == L1Skills.TYPE_CURSE ||
+                    skillType == L1Skills.TYPE_PROBABILITY || skillType == L1Skills.TYPE_DEATH ||
+                    skillType == L1Skills.TYPE_CHANGE || _skillId == HAND_DARKNESS || _skillId == CANCELLATION) {
                 // 需先取得目標物件以進行判斷
                 L1Object targetObj = World.get().findObject(_targetID);
                 if (targetObj instanceof L1PcInstance && _user.getId() != _targetID) {
@@ -341,7 +343,7 @@ public class L1SkillUse {
         switch (_skillId) {
             // 可使用傳送戒指技能
             case TELEPORT:
-            //case MASS_TELEPORT:
+                //case MASS_TELEPORT:
                 this._bookmarkId = target_id; // 日版記憶座標
                 this._bookmarkX = x; // 日版記憶座標
                 this._bookmarkY = y; // 日版記憶座標
@@ -364,10 +366,11 @@ public class L1SkillUse {
         if (!(object instanceof L1Character)) { // ターゲットがキャラクター以外の場合何もしない。
             // System.out.println("檢查點3");
             checkedResult = false;
+        } else {
         }
         // 技能發動 目標清單判定
         makeTargetList();
-        //防無延遲的技能
+        // NO_CD (無視原版冷卻) 技能列表
         if (this._user instanceof L1PcInstance) {
             L1PcInstance pc = (L1PcInstance) this._user;
             if (!ConfigOtherSet2.NO_CD.equals("null")) {
@@ -381,21 +384,27 @@ public class L1SkillUse {
                     }
                     i++;
                 }
+                // NO_CD = 無視原版冷卻，改用標準化的4秒冷卻
                 if (nocd && this._type != 4) {
-                    if (pc.hasSkillEffect(40000)) {
-                        return false;
+                    // 檢查是否有相同技能的4秒冷卻
+                    if (pc.hasSkillEffect(_skillId)) {
+                        return false; // 4秒內無法再次使用
                     }
-                    if (!pc.hasSkillEffect(40000) && this._skill.getReuseDelay() > 0) {
-                        pc.setSkillEffect(40000, this._skill.getReuseDelay());
-                    }
+
+                    // 設置4秒標準冷卻（使用技能ID作為效果ID）
+                    pc.setSkillEffect(_skillId, 4000); // 固定4秒
+                    // 跳過後續的延遲設置
+                    return true;
                 }
             }
         }
+        
         if ((_targetList.size() == 0) && (_user instanceof L1NpcInstance)) {
             // System.out.println("檢查點4");
             checkedResult = false;
         }
         // 事前チェックここまで
+
         return checkedResult;
     }
 
@@ -425,7 +434,7 @@ public class L1SkillUse {
                     return false;
                 }
             }
-            
+
             if (_skillId == MOVING_ACCELERATION) {
                 if (pc.hasSkillEffect(Shadow_ACCELERATION)) {
                     pc.sendPackets(new S_ServerMessage("已存在施放暗影加速能力。"));
@@ -537,13 +546,10 @@ public class L1SkillUse {
      */
     public void handleCommands(final L1PcInstance player, final int skillId, final int targetId, final int x, final int y, final int timeSecs, final int type, final L1Character attacker) {
         try {
-            // 安全檢查：確保 player 不為 null
-            if (player == null) {
-                System.out.println("[ERROR] [L1SkillUse] player is null for skillId: " + skillId);
-                return;
-            }
-              // 事前チェックをしているか？
-            if (!isCheckedUseSkill()) {
+            
+            // 事前チェックをしているか？
+            boolean checked = isCheckedUseSkill();
+            if (!checked) {
                 final boolean isUseSkill = checkUseSkill(player, skillId, targetId, x, y, timeSecs, type, attacker);
                 if (!isUseSkill) {
                     failSkill();
@@ -552,13 +558,12 @@ public class L1SkillUse {
             }
             switch (type) {
                 case TYPE_NORMAL: // 魔法詠唱時
+                    // 重置 glance check fail 標記
+                    _isGlanceCheckFail = false;
                     if (!_isGlanceCheckFail || (_skill.getArea() > 0) || _skill.getTarget().equals("none")) {
                         runSkill();
                         useConsume();
-                        // 魔法大師技能由技能模式自己處理特效
-                        if (_skillId != FOG_OF_SLEEPING) {
-                            sendGrfx(true);
-                        }
+                        sendGrfx(true);
                         sendFailMessageHandle();
                         setDelay();
                     }
@@ -567,6 +572,8 @@ public class L1SkillUse {
                     runSkill();
                     break;
                 case TYPE_SPELLSC: // スペルスクロール使用時（HPMP材料消費なし）
+                    // 重置 glance check fail 標記
+                    _isGlanceCheckFail = false;
                     runSkill();
                     sendGrfx(true);
                     setDelay();
@@ -582,7 +589,20 @@ public class L1SkillUse {
             }
             setCheckedUseSkill(false);// 將檢查狀態初始化
         } catch (final Exception e) {
+            // 詳細記錄技能錯誤
             _log.error(e.getLocalizedMessage(), e);
+
+            // 同時輸出到控制台以便即時查看
+            System.err.println("\n=== 技能發生錯誤 ===");
+            System.err.println("技能 ID: " + _skillId);
+            if (_skill != null) {
+                System.err.println("技能名稱: " + _skill.getName());
+                System.err.println("技能類型: " + _skill.getType());
+            }
+            System.err.println("目標 ID: " + _targetID);
+            System.err.println("錯誤訊息: " + e.getMessage());
+            e.printStackTrace();
+            System.err.println("===================\n");
         }
     }
 
@@ -593,7 +613,7 @@ public class L1SkillUse {
         setCheckedUseSkill(false);
         switch (_skillId) {
             case TELEPORT:
-            //case MASS_TELEPORT:
+                //case MASS_TELEPORT:
             case TELEPORT_TO_MATHER:
                 // 解除傳送鎖定
                 _player.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
@@ -616,7 +636,7 @@ public class L1SkillUse {
             return false;
         }
         final L1Skills skill = SkillsTable.get().getTemplate(_skillId);
-        if ((skill != null) && skill.getTarget().equals("attack")) { // 修正只判斷為攻擊類型才限制
+                if ((skill != null) && skill.getTarget().equals("attack")) { // 修正只判斷為攻擊類型才限制
             if (cha instanceof L1PcInstance) {
                 L1PcInstance targetPc = (L1PcInstance) cha;
                 if (targetPc.get_redbluejoin() != 0 && _player.get_redbluejoin() != 0) {
@@ -716,13 +736,36 @@ public class L1SkillUse {
         if (_skill.getTarget().equals("none") && (_skill.getType() == L1Skills.TYPE_ATTACK) && ((cha instanceof L1CrownInstance) || (cha instanceof L1DwarfInstance) || (cha instanceof L1EffectInstance) || (cha instanceof L1FieldObjectInstance) || (cha instanceof L1FurnitureInstance) || (cha instanceof L1HousekeeperInstance) || (cha instanceof L1MerchantInstance) || (cha instanceof L1TeleporterInstance))) {
             return false;
         }
-        // 攻擊系スキルで對像が自分は對像外（魔法大師除外）
-        if ((_skill.getType() == L1Skills.TYPE_ATTACK) && (cha.getId() == _user.getId()) && (_skillId != FOG_OF_SLEEPING)) {
+        // 攻擊系スキルで對像が自分は對像外
+        if ((_skill.getType() == L1Skills.TYPE_ATTACK) && (cha.getId() == _user.getId())) {
             return false;
         }
         // ターゲットが自分でH-Aの場合效果無し
+        // HEAL_ALL 不能以自己為目標（根據 idea_381_dei 的正確實現）
         if ((cha.getId() == _user.getId()) && (_skillId == HEAL_ALL)) {
             return false;
+        }
+
+        // 調試：檢查是否為隊友或血盟成員
+        if (cha instanceof L1PcInstance && _user instanceof L1PcInstance) {
+            L1PcInstance pc = (L1PcInstance) cha;
+            L1PcInstance user = (L1PcInstance) _user;
+
+            // 檢查隊友
+            if (pc.isInParty() && user.isInParty() && pc.getParty() != null && user.getParty() != null && pc.getParty().isMember(user)) {
+                // HEAL_ALL 對隊友生效
+                if (_skillId == HEAL_ALL) {
+                    return true;
+                }
+            }
+
+            // 檢查血盟
+            if (pc.getClanid() > 0 && user.getClanid() > 0 && pc.getClanid() == user.getClanid()) {
+                // HEAL_ALL 對血盟成員生效
+                if (_skillId == HEAL_ALL) {
+                    return true;
+                }
+            }
         }
         if ((((_skill.getTargetTo() & L1Skills.TARGET_TO_PC) == L1Skills.TARGET_TO_PC) || ((_skill.getTargetTo() & L1Skills.TARGET_TO_CLAN) == L1Skills.TARGET_TO_CLAN) || ((_skill.getTargetTo() & L1Skills.TARGET_TO_PARTY) == L1Skills.TARGET_TO_PARTY)) && (cha.getId() == _user.getId()) && (_skillId != HEAL_ALL)) {
             return true; // ターゲットがパーティーかクラン員のものは自分に效果がある。（ただし、ヒールオールは除外）
@@ -777,7 +820,8 @@ public class L1SkillUse {
             }
             return false; // 攻擊スキルでPKモードじゃない場合
         }
-        if ((!_user.glanceCheck(cha.getX(), cha.getY())) && (!_skill.isThrough())) {
+        boolean glanceResult = _user.glanceCheck(cha.getX(), cha.getY());
+        if ((!glanceResult) && (!_skill.isThrough())) {
             // エンチャント、復活スキルは障害物の判定をしない
             if (!((_skill.getType() == L1Skills.TYPE_CHANGE) || (_skill.getType() == L1Skills.TYPE_RESTORE))) {
                 _isGlanceCheckFail = true;
@@ -814,13 +858,13 @@ public class L1SkillUse {
                     case DARKNESS:
                     case WEAKNESS:
                     case DISEASE:
-                    //case FOG_OF_SLEEPING: // 魔法大師改為自我施放，不需要穿透絕對屏障
+                    case FOG_OF_SLEEPING:
                         //				case MASS_SLOW:
                     case SLOW:
                     case CANCELLATION:
                     case SILENCE:
                         //				case DECAY_POTION: //藥水霜
-                    //case MASS_TELEPORT:
+                        //case MASS_TELEPORT:
                     case DETECTION:
                     case COUNTER_DETECTION:
                     case ERASE_MAGIC:
@@ -944,11 +988,22 @@ public class L1SkillUse {
                 this._targetList.add(new TargetStatus(this._user));
                 return;
             }
-            // 對於目標為自己或buff/none類型的技能，只添加使用者一次
-            if ((this._skill.getTargetTo() == L1Skills.TARGET_TO_ME && ((this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK))
-                || this._skill.getTarget().equals("buff")
-                || (this._skill.getTarget().equals("none") && (this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK)) {
+            if ((this._skill.getTargetTo() == L1Skills.TARGET_TO_ME) && ((this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK)) {
                 this._targetList.add(new TargetStatus(this._user)); // ターゲットは使用者のみ
+                return;
+            }
+
+            // NATURES_BLESSING 特殊處理：以施法者為目標
+            if (this._skillId == NATURES_BLESSING) {
+                if (_user instanceof L1PcInstance) {
+                    ((L1PcInstance)_user).sendPackets(new S_SystemMessage("\\aE體力回復術：添加施法者到目標列表"));
+                }
+                this._targetList.add(new TargetStatus(this._user));
+                return;
+            }
+            // 無所遁形術不需要目標
+            if ((_skillId == DETECTION) || (_skillId == COUNTER_DETECTION)) {
+                this._targetList.add(new TargetStatus(this._user));
                 return;
             }
             // 具有攻擊距離設置
@@ -962,7 +1017,7 @@ public class L1SkillUse {
                     return; // 射程範圍外
                 }
             }
-            if ((!this.isTarget(this._target)) && !(this._skill.getTarget().equals("none")) && !(this._skill.getTarget().equals("buff"))) {
+            if ((!this.isTarget(this._target)) && !(this._skill.getTarget().equals("none"))) {
                 // 對像が違うのでスキルが發動しない。
                 return;
             }
@@ -989,48 +1044,34 @@ public class L1SkillUse {
             }
             // 單一目標攻擊
             if (this._skill.getArea() == 0) {
-                if (!this._user.glanceCheck(this._target.getX(), this._target.getY())) { // 直線上に障害物があるか
+                boolean glanceResult = this._user.glanceCheck(this._target.getX(), this._target.getY());
+                if (!glanceResult) { // 直線上に障害物があるか
                     if (((this._skill.getType() & L1Skills.TYPE_ATTACK) == L1Skills.TYPE_ATTACK) && (this._skillId != 10026) && (this._skillId != 10027) && (this._skillId != 10028) && (this._skillId != 10029)) { // 安息攻擊以外の攻擊スキル
                         // ダメージも發生しないし、ダメージモーションも發生しないが、スキルは發動
                         this._targetList.add(new TargetStatus(this._target, false));
                         return;
                     }
                 }
-                // 對於目標為"buff"的技能，目標就是使用者自己
-                if (!this._skill.getTarget().equals("buff")) {
-                    this._targetList.add(new TargetStatus(this._target));
-                } else {
-                    if (this._skillId == FOG_OF_SLEEPING) {
-                        System.out.println("[DEBUG] [L1SkillUse] 單一目標，目標為buff，跳過添加目標");
-                    }
-                }
+                this._targetList.add(new TargetStatus(this._target));
                 // 範圍攻擊
             } else {
-                if (!this._skill.getTarget().equals("none") && !this._skill.getTarget().equals("buff")) {
+                if (!this._skill.getTarget().equals("none")) {
                     this._targetList.add(new TargetStatus(this._target));
                 }
-                if ((this._skillId != HEAL_ALL) && (this._skillId != DEATH_HEAL) && !(this._skill.getTarget().equals("attack") || (this._skill.getType() == L1Skills.TYPE_ATTACK))) {
-                    // 攻擊系以外のスキルとH-A以外はターゲット自身を含める
-                    // 但對於目標為"buff"的技能，不要重複添加（前面已經添加過）
-                    if (!this._skill.getTarget().equals("buff")) {
-                        if (this._skillId == FOG_OF_SLEEPING) {
-                            System.out.println("[DEBUG] [L1SkillUse] 範圍攻擊，非攻擊系技能，添加使用者到目標列表");
-                        }
-                        this._targetList.add(new TargetStatus(this._user));
-                        if (this._skillId == FOG_OF_SLEEPING) {
-
-                        }
-                    } else {
-                        if (this._skillId == FOG_OF_SLEEPING) {
-
-                        }
-                    }
+                // 根據 idea_381_dei 的邏輯，HEAL_ALL 不應該將施法者加入目標列表
+                if ((this._skillId != HEAL_ALL) &&
+                    !(this._skill.getTarget().equals("attack") || (this._skill.getType() == L1Skills.TYPE_ATTACK))) {
+                    // 攻擊系以外のスキルはターゲット自身を含める（HEAL_ALL除外）
+                    this._targetList.add(new TargetStatus(this._user));
                 }
                 List<L1Object> objects;
                 // 全畫面物件
                 if (this._skill.getArea() == -1) {
                     objects = World.get().getVisibleObjects(this._user);
-                    // 指定範圍物件
+                // HEAL_ALL 特殊處理：以施法者為中心搜索範圍內的隊友和血盟成員
+                } else if (this._skillId == HEAL_ALL) {
+                    objects = World.get().getVisibleObjects(this._user, this._skill.getArea());
+                // 指定範圍物件
                 } else {
                     objects = World.get().getVisibleObjects(this._target, this._skill.getArea());
                 }
@@ -1081,7 +1122,7 @@ public class L1SkillUse {
     private void sendFailMessageHandle() {
         // 攻擊スキル以外で對像を指定するスキルが失敗した場合は失敗したメッセージをクライアントに送信
         // ※攻擊スキルは障害物があっても成功時と同じアクションであるべき。
-        if ((_skill.getType() != L1Skills.TYPE_ATTACK) && !_skill.getTarget().equals("none") && !_skill.getTarget().equals("buff") && (_targetList.size() == 0)) {
+        if ((_skill.getType() != L1Skills.TYPE_ATTACK) && !_skill.getTarget().equals("none") && (_targetList.size() == 0)) {
             sendFailMessage();
         }
     }
@@ -1263,13 +1304,27 @@ public class L1SkillUse {
      */
     private void addMagicList(final L1Character cha, final boolean repetition) {
         /// System.out.println("111111111111");
+        // DISEASE (疾病術) 不在此處理，已經在 runSkill 中直接處理
+        if (_skillId == DISEASE) {
+            return;
+        }
+        // 檢查 cha 是否為 null
+        if (cha == null) {
+            _log.error("addMagicList: cha 為 null，技能ID=" + _skillId);
+            return;
+        }
         if (_skillTime == 0) {
             _getBuffDuration = _skill.getBuffDuration() * 1000; // 效果時間
             if (_skill.getBuffDuration() == 0) {
                 if (_skillId == INVISIBILITY) { // インビジビリティ
                     cha.setSkillEffect(INVISIBILITY, 0);
+                } else if (_skillId == BLIND_HIDING) { // 暗隱術
+                    // 暗隱術也有特殊的處理，但不要直接 return
+                    _getBuffDuration = 60000; // 預設 60 秒
+                } else {
+                    // 其他永久性技能也需要繼續處理，不直接 return
                 }
-                return;
+                // 移除 return，讓後續的 sendIcon 等處理能正常執行
             }
         } else {
             _getBuffDuration = _skillTime * 1000; // パラメータのtimeが0以外なら、效果時間として設定する
@@ -1300,7 +1355,22 @@ public class L1SkillUse {
         */
         final SkillMode mode = L1SkillMode.get().getSkill(this._skillId);
         if (mode == null) {// 沒有class
+            // NATURES_BLESSING 特殊處理：不設置長時間效果，避免影響連續施放
+            if (_skillId == NATURES_BLESSING) {
+                if (cha instanceof L1PcInstance) {
+                    ((L1PcInstance)cha).sendPackets(new S_SystemMessage("\\aE體力回復術：不設置技能效果，允許連續施放"));
+                }
+                // 不設置技能效果，直接返回
+                return;
+            }
             cha.setSkillEffect(_skillId, _getBuffDuration);// 給予技能效果時間
+        } else {
+            // NATURES_BLESSING 在 SkillMode 中的特殊處理
+            if (_skillId == NATURES_BLESSING && cha instanceof L1PcInstance) {
+                ((L1PcInstance)cha).sendPackets(new S_SystemMessage("\\aE體力回復術：SkillMode處理，但仍允許連續施放"));
+                // 不調用 mode.start()，避免可能的延遲設置
+                return;
+            }
         }
         // 發送技能圖示（首次施放和重複施放都需要發送）
         if (cha instanceof L1PcInstance) {
@@ -1352,10 +1422,8 @@ public class L1SkillUse {
                 pc.sendPackets(new S_PacketBoxIconAura(148, this._getBuffIconDuration));
                 break;
             case FIRE_BLESS: // 舞躍之火
-                pc.sendPackets(new S_PacketBoxIconAura(154, this._getBuffIconDuration));
-                break;
-            case ERASE_MAGIC: // 魔法消除
-                pc.sendPackets(new S_PacketBoxIconAura(152, this._getBuffIconDuration));
+                // pc.sendPackets(new S_PacketBoxIconAura(154,
+                // this._getBuffIconDuration));
                 break;
             case STORM_EYE: // ストーム アイ
                 pc.sendPackets(new S_PacketBoxIconAura(155, this._getBuffIconDuration));
@@ -1381,11 +1449,10 @@ public class L1SkillUse {
             case PHYSICAL_ENCHANT_DEX: // フィジカル エンチャント：DEX
                 pc.sendPackets(new S_Dexup(pc, 5, this._getBuffIconDuration));
                 break;
-            //		case PHYSICAL_ENCHANT_INT_DEX_STR:
-            //			{
-            //				pc.sendPackets(new S_InventoryIcon(10534, true, 2747, this._getBuffIconDuration));
-            //			}
-            //			break;
+            case PHYSICAL_ENCHANT_INT_DEX_STR: // 體質強化
+                // 2025-12-19 修復：恢復體質強化圖標顯示
+                pc.sendPackets(new S_InventoryIcon(10534, true, 2747, this._getBuffIconDuration));
+                break;
             case HASTE: //加速術41
             case GREATER_HASTE: //強力加速術
                 pc.sendPackets(new S_SkillHaste(pc.getId(), 1, this._getBuffIconDuration));
@@ -1467,17 +1534,6 @@ public class L1SkillUse {
             case COUNTER_BARRIER: // 反擊屏障 (skill_id=91)
                 // 發送反擊屏障 BUFF ICON (iconId=10187, stringId=1088)
                 pc.sendPackets(new S_InventoryIcon(10187, true, 1088, this._getBuffIconDuration));
-                break;
-            case DEATH_HEAL:
-            case ABSOLUTE_BLADE:
-            case ASSASSIN:
-            case BLAZING_SPIRITS:
-            case GRACE_AVATAR:
-            case SOUL_BARRIER:
-            case DESTROY:
-            case IMPACT:
-            case TITANL_RISING:
-                pc.sendPackets(new S_NewSkillIcon(this._skillId, true, this._getBuffIconDuration));
                 break;
         }
         pc.sendPackets(new S_OwnCharStatus(pc));
@@ -1677,6 +1733,7 @@ public class L1SkillUse {
             } else { // 補助魔法或詛咒魔法
                 if ((_skillId != TELEPORT) && (_skillId != MASS_TELEPORT) && (_skillId != TELEPORT_TO_MATHER)) {
                     // 魔法を使う動作のエフェクトは使用者だけ
+                    // NPC 施放無所遁形術時顯示動作
                     this._user.broadcastPacketAll(new S_DoActionGFX(this._user.getId(), _actid));
                     this._user.broadcastPacketAll(new S_SkillSound(targetid, _gfxid));
                 }
@@ -1712,8 +1769,19 @@ public class L1SkillUse {
 
     // 技能使用延遲的處理
     private void setDelay() {
-        if (this._skill.getReuseDelay() > 0) {
-            L1SkillDelay.onSkillUse(_user, _skill.getReuseDelay());
+        int delay = this._skill.getReuseDelay();
+        
+        // NO_CD 技能已經在 checkUseSkill 中處理了4秒標準冷卻，這裡不需要特殊處理
+
+        if (delay > 0) {
+            L1SkillDelay.onSkillUse(_user, delay);
+        } else {
+            // 對於沒有延遲的技能，確保清除延遲標記
+            if (_user instanceof L1PcInstance) {
+                L1PcInstance pc = (L1PcInstance) _user;
+                // 確保沒有殘留的延遲標記
+                pc.setSkillDelay(false);
+            }
         }
     }
 
@@ -1721,7 +1789,7 @@ public class L1SkillUse {
      * 發動技能效果
      */
     private void runSkill() {
-                switch (_skillId) {
+        switch (_skillId) {
             //            case LIFE_STREAM:// 法師技能(治愈能量風暴)
             //                L1SpawnUtil.spawnEffect(81169, _skill.getBuffDuration(), _targetX, _targetY, _user.getMapId(), _user, 0);
             //                return;
@@ -1743,12 +1811,12 @@ public class L1SkillUse {
                 return;
         }
         // 魔法屏障不可抵擋的魔法
-        /*for (final int skillId : EXCEPT_COUNTER_MAGIC) {
+        for (final int skillId : EXCEPT_COUNTER_MAGIC) {
             if (_skillId == skillId) {
                 _isCounterMagic = false; // 魔法屏障無效
                 break;
             }
-        }*/
+        }
         // 檢查資料庫設定 (skills_無法檔魔屏)
         if (_isCounterMagic) {
             if (SkillsNoCounterMagicTable.get().isNoCounterMagic(_skillId)) {
@@ -1826,6 +1894,9 @@ public class L1SkillUse {
                 undeadType = 0;
                 ts = iter.next();
                 cha = ts.getTarget();
+                if (cha == null) {
+                    continue;
+                }
                 // System.out.println("發動技能效果");
                 if (_npc != null) {
                     // 施展者是寵物 XXX
@@ -1847,6 +1918,13 @@ public class L1SkillUse {
                 }
                 if (!ts.isCalc() || !this.isTargetCalc(cha)) {
                     ts.isCalc(false);
+                    // DEBUG: 記錄跳過的目標
+                    if (_user instanceof L1PcInstance) {
+                        L1PcInstance pc = (L1PcInstance) _user;
+                        _log.info("DEBUG: 跳過目標 " + cha.getName() +
+                                  ", isCalc=" + ts.isCalc() +
+                                  ", isTargetCalc=" + this.isTargetCalc(cha));
+                    }
                     continue; // 計算する必要がない。不需要計算
                 }
                 final L1Magic magic = new L1Magic(_user, cha);
@@ -1986,8 +2064,7 @@ public class L1SkillUse {
                             _heal *= -1;
                         }
                         if (cha.hasSkillEffect(DEATH_HEAL)) { // 法師新技能 治愈逆行
-                            // _heal = (int) (_heal * -0.45);
-                            _heal = (int) (_heal * -1 * (ConfigSkillWizard.DEATH_HEAL_DAMAGE_RATE / 100.0));
+                            _heal = (int) (_heal * -0.45);
                         }
 
                         // 王族天賦技能榮耀治愈
@@ -2005,8 +2082,6 @@ public class L1SkillUse {
                 }
                 // TODO SKILL移轉
                 final SkillMode mode = L1SkillMode.get().getSkill(this._skillId);
-                if (this._skillId == FOG_OF_SLEEPING) {
-                }
                 if (mode != null) {// 具有skillmode
                     // 施展者是PC
                     if (this._user instanceof L1PcInstance) {
@@ -2020,12 +2095,7 @@ public class L1SkillUse {
                             //							this._dmg = mode.start(this._player, cha, magic, this._targetID);
                             //							break;
                             default:
-                                        this._dmg = mode.start(this._player, cha, magic, this._getBuffIconDuration);
-                                if (this._skillId == FOG_OF_SLEEPING) {
-                                    // 檢查玩家狀態
-                                    if (this._player != null) {
-                                    }
-                                }
+                                this._dmg = mode.start(this._player, cha, magic, this._getBuffIconDuration);
                                 break;
                         }
                     }
@@ -2035,12 +2105,52 @@ public class L1SkillUse {
                     }
                 } else {// 沒有skillmode
                     // ■■■■ 個別處理のあるスキルのみ書いてください。 ■■■■
-                    // 需要個別處理的技能（無法簡單以技能的屬系做判斷）
-                    // すでにスキルを使用濟みの場合なにもしない 重複使用無效的技能
-                    // ただしショックスタンは重ねがけ出來るため例外 衝擊之暈例外
-                    if (cha.hasSkillEffect(this._skillId)) {// 目標身上已有此技能效果
-                        this.addMagicList(cha, true); // 更新右上角狀態圖示及效果時間
-                        continue;// 略過以下處理
+                    // 需要個別處理的技能（無法簡單以技能の屬系做判斷）
+                    // 2025-12-19 修復：移除重複檢查，允許BUFF重新施放
+                    // 原因：舊の邏輯只更新圖示但不更新效果，導致BUFF無法刷新
+                    // 解決：先移除舊效果，然後讓後續代碼重新施放
+                    // 2025-12-19 更新：排除一次性技能（如HEAL_ALL）
+
+                    
+                    // 一次性技能不需要重複檢查處理
+                    if ((this._skillId == HEAL_ALL) ||
+                        (this._skillId == FULL_HEAL) ||
+                        (this._skillId == EXTRA_HEAL) ||
+                        (this._skillId == GREATER_HEAL) ||
+                        (this._skillId == NATURES_TOUCH) ||
+                        // 特殊持續性技能（需要直接覆蓋）
+                        (this._skillId == LIGHT) || // 日光術（魔法之星）
+                        (this._skillId == INVISIBILITY) || // 隱身術（特殊處理，BuffDuration=0）
+                        // 有特殊處理的技能
+                        (this._skillId == CURSE_PARALYZE) || // 木乃伊
+                        (this._skillId == CURSE_PARALYZE2) || // 木乃伊2
+                        (this._skillId == SHAPE_CHANGE) || // 變身術
+                        (this._skillId == BLESSED_ARMOR) || // 祝福盔甲
+                        (this._skillId == BLESS_WEAPON) || // 祝福武器
+                        (this._skillId == SHADOW_FANG) || // 影之牙
+                        // 攻擊性技能也不需要重複檢查
+                        (this._skillId == TORNADO) || // 黑暗之星（龍捲風）
+                        (this._skillId == VAMPIRIC_TOUCH) || // 吸血術
+                        (this._skillId == WEAKNESS)) { // 弱化術
+                        // 這些都是一次性技能，直接跳過重複檢查
+                    } else if (cha.hasSkillEffect(this._skillId)) {// 目標身上已有此技能效果
+                        // 疾病術特殊處理：需要重複覆蓋但不能完全移除
+                        if (this._skillId == DISEASE) {
+                            // 疾病術需要直接覆蓋，不做任何處理
+                            // 讓後續的DISEASE處理邏輯（第2266行）來覆蓋效果
+                        } else {
+                            // 特殊處理：隱身術和其他永久性技能不需要先移除
+                            if (this._skillId == INVISIBILITY ||
+                                this._skillId == BLIND_HIDING ||
+                                _skill.getBuffDuration() == 0) {
+                                // 對於永久性技能，不執行 killSkillEffectTimer
+                                // 避免影響到技能的正常運作
+                            } else {
+                                // 其他時間性BUFF先移除舊效果
+                                cha.killSkillEffectTimer(this._skillId);
+                            }
+                        }
+                        // 注意：不要使用continue，讓後續代碼正常執行重新施放
                     }
                 }
 
@@ -2196,7 +2306,7 @@ public class L1SkillUse {
                         this._dmg = 0;
                     }
                     // ★★★ 回覆系スキル ★★★ 恢復系技能
-                } else if (/*(this._skillId == HEAL) ||*/ (this._skillId == EXTRA_HEAL) || (this._skillId == GREATER_HEAL) || (this._skillId == FULL_HEAL) || (this._skillId == HEAL_ALL) || (this._skillId == NATURES_TOUCH) || (this._skillId == NATURES_BLESSING)) {
+                } else if (/*(this._skillId == HEAL) ||*/ (this._skillId == EXTRA_HEAL) || (this._skillId == GREATER_HEAL) || (this._skillId == FULL_HEAL) || (this._skillId == HEAL_ALL) || (this._skillId == NATURES_TOUCH)) {
                     if (this._user instanceof L1PcInstance) {
                         cha.removeSkillEffect(WATER_LIFE); // 水之元氣
                     }
@@ -2274,7 +2384,7 @@ public class L1SkillUse {
                         final L1PcInstance pc = (L1PcInstance) cha;
                         pc.addDmgup(-6);
                         pc.addAc(12);
-                        pc.setSkillEffect(L1SkillId.DISEASE, 8000);
+                        pc.setSkillEffect(L1SkillId.DISEASE, 8000); // 8秒
                     }
                 }/* else if (this._skillId == ICE_LANCE) { // アイスランス
                     // 計算攻擊是否成功
@@ -2535,7 +2645,7 @@ public class L1SkillUse {
                             }*/
                             int chance = 16; // 固定 16 秒
                             _skillTime = chance;
-                            //pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, true, chance));
+                            pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, true, chance));
                             //pc.setSkillEffect(DEATH_HEAL, chance * 1000); // 由 addMagicList 統一處理
                             pc.sendPackets(new S_SkillSound(pc.getId(), 14501));
                             Broadcaster.broadcastPacket(pc, new S_SkillSound(pc.getId(), 14501));
@@ -2549,14 +2659,20 @@ public class L1SkillUse {
                     } else if (this._skillId == ABSOLUTE_BLADE) { // 騎士新技能 絕御之刃
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
+                            if (pc.hasSkillEffect(ABSOLUTE_BLADE)) {
+                                pc.removeSkillEffect(ABSOLUTE_BLADE);
+                            }
                             pc.setSkillEffect(ABSOLUTE_BLADE, 8 * 1000);
-                            //pc.sendPackets(new S_NewSkillIcon(ABSOLUTE_BLADE, true, 8));
+                            pc.sendPackets(new S_NewSkillIcon(ABSOLUTE_BLADE, true, 8));
                         }
                     } else if (this._skillId == ASSASSIN) { // 黑妖新技能 暗殺者
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
+                            if (pc.hasSkillEffect(ASSASSIN)) {
+                                pc.removeSkillEffect(ASSASSIN);
+                            }
                             pc.setSkillEffect(ASSASSIN, 15 * 1000);
-                            //pc.sendPackets(new S_NewSkillIcon(ASSASSIN, true, 15));
+                            pc.sendPackets(new S_NewSkillIcon(ASSASSIN, true, 15));
                         }
                     } else if (this._skillId == GRACE_AVATAR) { // 王族新技能 恩典庇護
                         if (cha instanceof L1PcInstance) {
@@ -2570,7 +2686,7 @@ public class L1SkillUse {
                             pc.addRegistStun(10 + pc.getGraceLv()); // 暈眩耐性（自分）
                             //pc.getResistance().addDESPERADO(10 + pc.getGraceLv()); // 恐怖耐性（自分）
                             pc.setSkillEffect(GRACE_AVATAR, 15 * 1000);
-                            //pc.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
+                            pc.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
                             pc.sendPackets(new S_SkillSound(pc.getId(), 14495));
                             Broadcaster.broadcastPacket(pc, new S_SkillSound(pc.getId(), 14495));
                             for (L1PcInstance player : World.get().getVisiblePlayer(pc, 18)) {// 18格範圍
@@ -2584,7 +2700,7 @@ public class L1SkillUse {
                                         player.addRegistSustain(10 + player.getGraceLv()); // 支撐耐性（隊友）
                                         player.addRegistStun(10 + player.getGraceLv()); // 暈眩耐性（隊友）
                                         //player.getResistance().addDESPERADO(10 + player.getGraceLv()); // 恐怖耐性（隊友）
-                                        //player.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
+                                        player.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, true, 15));
                                         player.setSkillEffect(GRACE_AVATAR, 15 * 1000);
                                         player.sendPackets(new S_ServerMessage(4734));
                                     }
@@ -2594,22 +2710,31 @@ public class L1SkillUse {
                     } else if (this._skillId == SOUL_BARRIER) { // 精靈新技能 魔力護盾
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
+                            if (pc.hasSkillEffect(SOUL_BARRIER)) {
+                                pc.removeSkillEffect(SOUL_BARRIER);
+                            }
                             pc.setSkillEffect(SOUL_BARRIER, 600 * 1000);
-                            //pc.sendPackets(new S_NewSkillIcon(SOUL_BARRIER, true, 600));
+                            pc.sendPackets(new S_NewSkillIcon(SOUL_BARRIER, true, 600));
                         }
                     } else if (this._skillId == DESTROY) { // 龍騎士新技能 撕裂護甲
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
+                            if (pc.hasSkillEffect(DESTROY)) {
+                                pc.removeSkillEffect(DESTROY);
+                            }
                             pc.setSkillEffect(DESTROY, 30 * 1000);
-                            //pc.sendPackets(new S_NewSkillIcon(DESTROY, true, 30));
+                            pc.sendPackets(new S_NewSkillIcon(DESTROY, true, 30));
                         }
                     } else if (this._skillId == IMPACT) { // 幻術師新技能 衝突強化
                         if (_user instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) _user;
                             if (_target instanceof L1PcInstance) {
                                 L1PcInstance target = (L1PcInstance) _target;
+                                if (target.hasSkillEffect(IMPACT)) {
+                                    target.removeSkillEffect(IMPACT);
+                                }
                                 target.setSkillEffect(IMPACT, 15 * 1000);
-                                //target.sendPackets(new S_NewSkillIcon(IMPACT, true, 15));
+                                target.sendPackets(new S_NewSkillIcon(IMPACT, true, 15));
                                 target.sendPackets(new S_SkillSound(target.getId(), 14513));
                                 Broadcaster.broadcastPacket(target, new S_SkillSound(target.getId(), 14513));
                                 int upskill = pc.getLevel() - 80;
@@ -2622,8 +2747,11 @@ public class L1SkillUse {
                     } else if (this._skillId == TITANL_RISING) { // 狂戰士新技能 泰坦狂暴
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
+                            if (pc.hasSkillEffect(TITANL_RISING)) {
+                                pc.removeSkillEffect(TITANL_RISING);
+                            }
                             pc.setSkillEffect(TITANL_RISING, 2400 * 1000);
-                            //pc.sendPackets(new S_NewSkillIcon(TITANL_RISING, true, 2400));
+                            pc.sendPackets(new S_NewSkillIcon(TITANL_RISING, true, 2400));
                             int upHP = pc.getLevel() - 80;
                             if (upHP >= 5) {
                                 upHP = 5;
@@ -2788,20 +2916,27 @@ public class L1SkillUse {
                         int bookLevel = pc.getSkillLevel(BERSERKERS);
                         // 從 SkillEnhanceTable 讀取狂暴術的強化資料
                         L1SkillEnhance enhanceData = SkillEnhanceTable.get().getEnhanceData(BERSERKERS, bookLevel);
-                        // 預設加成數值
-                        int addAc = 10;
-                        int addDmgup = 5;
+                        // 預設加成數值：狂暴術應該是犧牲防禦換取攻擊力
+                        int addAc = 10;       // AC +10 (降低防禦)
+                        int addDmgup = 5;     // 傷害 +5 (增加攻擊)
                         // 如果存在強化資料，則取設定值
                         if (enhanceData != null) {
                             addAc = enhanceData.getSetting1();
                             addDmgup = enhanceData.getSetting2();
                         }
-                        pc.addAc(addAc);
-                        pc.addDmgup(addDmgup);
+                        pc.addAc(addAc);       // 增加AC（降低防禦）
+                        pc.addDmgup(addDmgup); // 增加傷害
                         pc.stopHpRegeneration();
+                        // 設定技能持續時間 - 修復無限疊加漏洞
+                        pc.setSkillEffect(BERSERKERS, this._getBuffIconDuration * 1000);
+                        // 顯示技能圖示
+                        pc.sendPackets(new S_PacketBoxIconAura(166, this._getBuffIconDuration));
                         // 準備提示訊息
-                        String msg = "技能等級：lv." + bookLevel + "，額外增加：AC +" + addAc + "，傷害加成 +" + addDmgup;
-                        // 提示玩家：送出系統訊息與/或提示音效
+                        String msg = "狂暴術啟動！防禦降低 " + addAc + "，攻擊力提升 " + addDmgup;
+                        if (bookLevel > 1) {
+                            msg += " (技能等級: lv." + bookLevel + ")";
+                        }
+                        // 提示玩家：送出系統訊息
                         pc.sendPackets(new S_SystemMessage(msg));
 
                     } else if (this._skillId == GREATER_HASTE) { // グレーター ヘイスト
@@ -3029,12 +3164,12 @@ public class L1SkillUse {
             }
         }
         switch (this._skillId) {
-            // 沉睡之霧 (魔法大師) - 改為自我施放的BUFF技能
-            /*case FOG_OF_SLEEPING:
-                if (this._user.getId() == cha.getId()) {
-                    return false;
-                }
-                break;*/
+            // 沉睡之霧
+            //            case FOG_OF_SLEEPING:
+            //                if (this._user.getId() == cha.getId()) {
+            //                    return false;
+            //                }
+            //                break;
             // 集體緩速術
             //		case MASS_SLOW:
             //			if (this._user.getId() == cha.getId()) {

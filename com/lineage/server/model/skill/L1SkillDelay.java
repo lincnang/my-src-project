@@ -13,7 +13,9 @@ public class L1SkillDelay {
             cha.setSkillDelay(true);
             GeneralThreadPool.get().schedule(new SkillDelayTimer(cha), time);
         } catch (Exception e) {
-            _log.error(e.getLocalizedMessage(), e);
+            _log.error("設置技能延遲時發生錯誤: " + e.getLocalizedMessage(), e);
+            // 如果設置失敗，確保清除延遲標記
+            cha.setSkillDelay(false);
         }
     }
 
@@ -25,7 +27,11 @@ public class L1SkillDelay {
         }
 
         public void run() {
-            stopDelayTimer();
+            try {
+                stopDelayTimer();
+            } catch (Exception e) {
+                _log.error("清除技能延遲時發生錯誤: " + e.getLocalizedMessage(), e);
+            }
         }
 
         public void stopDelayTimer() {

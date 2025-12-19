@@ -316,7 +316,9 @@ public class L1DollInstance2 extends L1NpcInstance {  //src016
                             break;
                         case 11:// 毒咒 1650
                             L1SkillUse skillUse = new L1SkillUse();
-                            skillUse.handleCommands(null, _skillid, target.getId(), target.getX(), target.getX(), 0, L1SkillUse.TYPE_GMBUFF, this);
+                            // 如果目標是玩家，傳入玩家實例
+                            L1PcInstance targetPc = (target instanceof L1PcInstance) ? (L1PcInstance) target : null;
+                            skillUse.handleCommands(targetPc, _skillid, target.getId(), target.getX(), target.getY(), 0, L1SkillUse.TYPE_GMBUFF, this);
                             break;
                         case 5000:// 火焰衝擊
                             if (target instanceof L1PcInstance) {

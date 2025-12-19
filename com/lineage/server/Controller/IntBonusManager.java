@@ -65,12 +65,6 @@ public class IntBonusManager {
             appliedMap.put(key, neo);
 
             if (_log.isDebugEnabled()) {
-                _log.debug("智力加成套用 - 角色:" + pc.getName() + 
-                          ", 智力:" + totalInt + 
-                          ", 魔攻加成:" + neo.magicAttack + 
-                          ", 魔法命中:" + neo.magicHit + 
-                          ", 穿透率:" + neo.magicPenetration + "%" + 
-                          ", 忽略魔防:" + neo.ignoreMagicDefense);
             }
         }
 
@@ -85,21 +79,21 @@ public class IntBonusManager {
 
     /** 安全地添加魔攻加成 */
     private void safeAddMagicDmgup(L1PcInstance pc, int v) {
-        if (v != 0) { 
-            try { 
-                // 使用現有的魔攻加成方法，如果沒有可以添加到現有的dmgup中
-                pc.addDmgup(v); 
-            } catch (Throwable ignore) {} 
+        if (v != 0) {
+            try {
+                // 使用 SP (Spell Power) 作為魔攻加成
+                pc.addSp(v);
+            } catch (Throwable ignore) {}
         }
     }
 
     /** 安全地添加魔法命中加成 */
     private void safeAddMagicHitup(L1PcInstance pc, int v) {
-        if (v != 0) { 
-            try { 
-                // 使用現有的命中加成方法
-                pc.addHitup(v); 
-            } catch (Throwable ignore) {} 
+        if (v != 0) {
+            try {
+                // 使用專門的魔法命中加成方法
+                pc.addOriginalMagicHit(v);
+            } catch (Throwable ignore) {}
         }
     }
 

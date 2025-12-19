@@ -1211,6 +1211,10 @@ public class L1EquipmentSlot {  //src039
         }
         this._owner.addInt(get_addint);// 智力
         this._owner.addCha(get_addcha);// 魅力
+        // 智力變動後重新套用智力加成
+        if (get_addint != 0) {
+            com.lineage.server.Controller.IntBonusManager.get().reapply(this._owner);
+        }
         // 7.6
         if (get_addstr != 0 || get_adddex != 0 || get_addcon != 0 || get_addwis != 0 || get_addint != 0 || item.getWeightReduction() != 0) {
             _owner.sendDetails();
@@ -1678,6 +1682,10 @@ public class L1EquipmentSlot {  //src039
         }
         this._owner.addInt(get_addint);// 智力
         this._owner.addCha(get_addcha);// 魅力
+        // 智力變動後重新套用智力加成
+        if (get_addint != 0) {
+            com.lineage.server.Controller.IntBonusManager.get().reapply(this._owner);
+        }
         // 7.6
         if (get_addstr != 0 || get_adddex != 0 || get_addcon != 0 || get_addwis != 0 || get_addint != 0 || item.getWeightReduction() != 0) {
             _owner.sendDetails();
@@ -2157,6 +2165,10 @@ public class L1EquipmentSlot {  //src039
         }
         this._owner.addInt((byte) -get_addint);// 智力
         this._owner.addCha((byte) -get_addcha);// 魅力
+        // 智力變動後重新套用智力加成
+        if (get_addint != 0) {
+            com.lineage.server.Controller.IntBonusManager.get().reapply(this._owner);
+        }
         //7.6
         if (get_addstr != 0 || get_adddex != 0 || get_addcon != 0 || get_addwis != 0 || get_addint != 0 || item.getWeightReduction() != 0) {
             _owner.sendDetails();
@@ -2626,6 +2638,10 @@ public class L1EquipmentSlot {  //src039
         }
         this._owner.addInt((byte) -get_addint);// 智力
         this._owner.addCha((byte) -get_addcha);// 魅力
+        // 智力變動後重新套用智力加成
+        if (get_addint != 0) {
+            com.lineage.server.Controller.IntBonusManager.get().reapply(this._owner);
+        }
         // 7.6
         if (get_addstr != 0 || get_adddex != 0 || get_addcon != 0 || get_addwis != 0 || get_addint != 0 || item.getWeightReduction() != 0) {
             _owner.sendDetails();

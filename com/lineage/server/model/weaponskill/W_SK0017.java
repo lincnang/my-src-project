@@ -20,8 +20,6 @@ public class W_SK0017 extends L1WeaponSkillType {
 
     private static final Log _log = LogFactory.getLog(W_SK0017.class);
     private static final Random _random = new Random();
-    // private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private static final ConcurrentHashMap<Integer, ScheduledFuture<?>> diseaseTasks = new ConcurrentHashMap<>();
 
     public W_SK0017() {}
 
@@ -51,40 +49,24 @@ public class W_SK0017 extends L1WeaponSkillType {
             }
 
             // === 3. 移除舊的疾病術狀態 ===
-            synchronized (target) {
-                if (target.hasSkillEffect(L1SkillId.DISEASE)) {
-                    L1SkillStop.stopSkill(target, L1SkillId.DISEASE);
-                    target.removeSkillEffect(L1SkillId.DISEASE);
-                }
-            }
+            // 注意：不要在這裡恢復舊的疾病術效果，會立即恢復防禦
+            // 直接施放新的疾病術，讓系統自動覆蓋
 
             // === 4. 施放疾病術 ===
             L1SkillUse skillUse = new L1SkillUse();
             skillUse.handleCommands(pc, L1SkillId.DISEASE, target.getId(), target.getX(), target.getY(), 8000,
                     L1SkillUse.TYPE_GMBUFF);
 
-            // === 5. 處理玩家目標的圖示/訊息與定時器 ===
+            // === 5. 處理玩家目標的圖示/訊息 ===
             if (target instanceof L1PcInstance) {
                 L1PcInstance tgpc = (L1PcInstance) target;
                 tgpc.sendPackets(new S_ServerMessage("\\f3惡魔王效果:疾病術的降低了防禦與攻擊！"));
                 tgpc.sendPackets(new S_InventoryIcon(760, true, 4585, 7));
                 pc.sendPacketsAll(new S_SkillSound(target.getId(), 26195));
 
-                // 定時8秒後自動移除疾病術
-                ScheduledFuture<?> previousTask = diseaseTasks.remove(tgpc.getId());
-                if (previousTask != null && !previousTask.isDone()) {
-                    previousTask.cancel(false);
-                }
-                ScheduledFuture<?> newTask = com.lineage.server.thread.GeneralThreadPool.get().schedule((Runnable) () -> {
-                    try {
-                        removeDiseaseEffect(tgpc);
-                    } catch (Exception e) {
-                        _log.error("移除疾病術效果時發生例外: ", e);
-                    }
-                }, 8000L);
-                if (newTask != null) {
-                    diseaseTasks.put(tgpc.getId(), newTask);
-                }
+                // 注意：移除自定義定時器
+                // L1SkillUse.setSkillEffect 已經創建了 8 秒的 L1SkillTimer
+                // L1SkillTimer 會在 8 秒後自動調用 stopSkill 並恢復 AC
             }
 
             // === 6. 傷害計算 ===
@@ -106,22 +88,4 @@ public class W_SK0017 extends L1WeaponSkillType {
         }
     }
 
-    /** 疾病術自動移除邏輯 */
-    private void removeDiseaseEffect(L1PcInstance tgpc) {
-        synchronized (tgpc) {
-            // 移除自訂圖示 (修正為 false)
-            tgpc.sendPackets(new S_InventoryIcon(760, false, 4585, 7));
-            
-            if (!tgpc.hasSkillEffect(L1SkillId.DISEASE)) {
-                _log.debug("疾病術效果已經不存在，無需再次移除。");
-                diseaseTasks.remove(tgpc.getId());
-                return;
-            }
-            L1SkillStop.stopSkill(tgpc, L1SkillId.DISEASE);
-            tgpc.removeSkillEffect(L1SkillId.DISEASE);
-            tgpc.sendPackets(new S_ServerMessage("惡魔王效果:疾病術的效果消失了！"));
-            diseaseTasks.remove(tgpc.getId());
-            _log.debug("疾病術效果已被移除，圖示也已關閉。");
-        }
-    }
-}
+  }

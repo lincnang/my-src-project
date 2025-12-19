@@ -97,7 +97,8 @@ public class C_UseSkill extends ClientBasePacket {
                 }
                 return;
             }
-            boolean isError = false;
+
+                        boolean isError = false;
             // 變身限制
             final int polyId = pc.getTempCharGfx();
             final L1PolyMorph poly = PolyTable.get().getTemplate(polyId);
@@ -149,6 +150,11 @@ public class C_UseSkill extends ClientBasePacket {
             }
             // 技能合法判斷
             if (!pc.isSkillMastery(skillId)) {
+                // 2025-12-19 調試：記錄未學習的技能
+                if (skillId == TORNADO) {
+                    _log.info("玩家 " + pc.getName() + " 嘗試施放黑暗之星(TORNADO, ID:" + skillId + ")，但未學習此技能");
+                    pc.sendPackets(new S_SystemMessage("\\aE您還未學習黑暗之星技能"));
+                }
                 return;
             }
             // 城戰旗幟內 - 技能魔法限制

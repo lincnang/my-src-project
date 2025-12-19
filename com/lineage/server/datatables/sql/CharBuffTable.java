@@ -235,7 +235,8 @@ public class CharBuffTable implements CharBuffStorage {
         if (ItemBuffSet.START) {
             ItemBuffTable.get().checkBuffSave(pc);
         }
-        pc.clearSkillEffectTimer();
+        // 不直接清除所有定時器，而是只清除需要保存的技能的舊定時器
+        // pc.clearSkillEffectTimer();
     }
 
     /**
@@ -254,6 +255,8 @@ public class CharBuffTable implements CharBuffStorage {
                     if (skill_id == SHAPE_CHANGE) {// 變身
                         L1PolyMorph.doPoly(pc, poly_id, remaining_time, L1PolyMorph.MORPH_BY_LOGIN, true);
                     } else {// 除了變身以外的其他技能
+                        // 先清除舊的定時器（如果存在）
+                        pc.killSkillEffectTimer(skill_id);
                         switch (skill_id) {
                             case STATUS_BRAVE3:
                                 pc.sendPackets(new S_PacketBoxThirdSpeed(remaining_time));

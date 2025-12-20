@@ -210,26 +210,47 @@ public class CharMapTimeTable implements CharMapTimeStorage {
      */
     @Override
     public void clearAllTime() {
+        // 清除記憶體中的時間記錄
+        int clearedMapCount = _timeMap.size();
         for (final HashMap<Integer, Integer> list : _timeMap.values()) {
             if (list != null) {
                 list.clear();
             }
         }
         _timeMap.clear();
+
+        // 清除記憶體中的獎勵時間記錄
+        int clearedBonusCount = _bonusMap.size();
         for (final HashMap<Integer, Integer> list : _bonusMap.values()) {
             if (list != null) {
                 list.clear();
             }
         }
         _bonusMap.clear();
+
         Connection cn = null;
         PreparedStatement ps = null;
+        int deletedRows = 0;
+
         try {
             cn = DatabaseFactory.get().getConnection();
+            if (cn == null || cn.isClosed()) {
+                _log.error("無法取得資料庫連線進行地圖時間清除！");
+                throw new SQLException("資料庫連線失敗");
+            }
+
             ps = cn.prepareStatement("DELETE FROM `character_maps_time`");
-            ps.execute();
+            deletedRows = ps.executeUpdate();
+
+            _log.info("地圖時間重置完成，已清除 " + deletedRows + " 筆記錄");
+
         } catch (final SQLException e) {
-            _log.error(e.getLocalizedMessage(), e);
+            _log.error("清除地圖時間紀錄失敗! 錯誤訊息: " + e.getMessage(), e);
+            // 重新拋出例外，讓上層知道失敗
+            throw new RuntimeException("資料庫清除地圖時間失敗", e);
+        } catch (final Exception e) {
+            _log.error("清除地圖時間紀錄時發生未預期的錯誤", e);
+            throw new RuntimeException("清除地圖時間時發生錯誤", e);
         } finally {
             SQLUtil.close(ps);
             SQLUtil.close(cn);

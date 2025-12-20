@@ -19,7 +19,7 @@ public class SHAPE_CHANGE extends SkillMode {
         int dmg = 0;
         final Random _random = new Random();
 //        final int[] polyArray = {29, 945, 947, 979, 1037, 1039, 3860, 3861, 3862, 3863, 3864, 3865, 3904, 3906, 95, 146, 2374, 2376, 2377, 2378, 3866, 3867, 3868, 3869, 3870, 3871, 3872, 3873, 3874, 3875, 3876};
-        final int[] polyArray = {945,29,95,11346,11340,11339,11330}; //變形術
+        final int[] polyArray = {29,95,11346,11340,11339,11330}; //變形術
         final int pid = _random.nextInt(polyArray.length);
         final int polyId = polyArray[pid];
         if (cha instanceof L1PcInstance) {

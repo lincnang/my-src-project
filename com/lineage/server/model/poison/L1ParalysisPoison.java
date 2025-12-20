@@ -81,10 +81,22 @@ public class L1ParalysisPoison extends L1Poison {
                 return;
             }
 
+            // 額外檢查：確保目標沒有被銷毀
+            if (_target.isDead() || _target.getMaxHp() <= 0) {
+                return;
+            }
+
             try {
-                _target.setSkillEffect(1008, 0);
+                // 使用 hasSkillEffect 檢查，避免設置無效的技能效果
+                if (!_target.hasSkillEffect(1008)) {
+                    // 如果時間為 0，不創建計時器，僅標記狀態
+                    _target.setSkillEffect(1008, 0);
+                }
+            } catch (NullPointerException e) {
+                // 捕獲特定的 NullPointerException
+                System.err.println("ParalysisPoisonTimer NPE caught - target may be destroyed");
             } catch (Exception e) {
-                // 捕獲可能的並發異常
+                // 捕獲其他的並發異常
                 System.err.println("Error in ParalysisPoisonTimer.setSkillEffect: " + e.getMessage());
                 return;
             }

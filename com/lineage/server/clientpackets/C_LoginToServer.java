@@ -74,6 +74,9 @@ public class C_LoginToServer extends ClientBasePacket {
 				}*/
                 pc.getInventory().equippedLoad();
                 pc.getInventory().viewItem();
+
+                // 裝備載入後更新屬性防禦（狀態更新由 setInt 自動處理）
+                pc.sendPackets(new S_OwnCharAttrDef(pc));
             }
             // 登入時恢復冷卻，並顯示對應技能 ICON 倒數
             try {
@@ -1896,6 +1899,10 @@ public class C_LoginToServer extends ClientBasePacket {
                             // 不再恢復 HOT/ICON（ICON 僅在施放時顯示冷卻秒）
                         }
                     } catch (Throwable ignore) {}
+
+                    // 智力加成系統重新套用，並同步魔攻面板
+                    IntBonusManager.get().reapply(_pc);
+                    _pc.sendPackets(new S_SPMR(_pc));
 
                     _pc.sendPackets(new S_SystemMessage("\\aB所有能力加成載入完成。", 17));
 

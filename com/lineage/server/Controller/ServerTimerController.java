@@ -30,6 +30,7 @@ public class ServerTimerController implements Runnable {
     private static final Log _log = LogFactory.getLog(ServerTimerController.class);
     private static ServerTimerController _instance;
     private boolean _isShopResetDone = false; // <-- 【修改二】新增執行旗標
+    private boolean _isMapResetDone = false; // 地圖重置執行旗標
     public ServerTimerController() {
         GeneralThreadPool.get().execute(this);
     }
@@ -135,32 +136,63 @@ public class ServerTimerController implements Runnable {
      * 重置地圖使用時間
      */
     private void MapRestartChack() {
+        // 檢查配置是否存在
+        if (ConfigOtherSet2.Reset_Map_Time == null) {
+            if (!_isMapResetDone) { // 只記錄一次錯誤
+                _log.error("Reset_Map_Time 配置未設定！請在額外系統設置.properties 中設定 Reset_Map_Time");
+                _isMapResetDone = true; // 避免重複記錄錯誤
+            }
+            return;
+        }
+
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY); // 時
         int minute = Calendar.getInstance().get(Calendar.MINUTE); // 分
         int second = Calendar.getInstance().get(Calendar.SECOND); // 秒
-        if (hour == ConfigOtherSet2.Reset_Map_Time[0] && minute == ConfigOtherSet2.Reset_Map_Time[1] && second == ConfigOtherSet2.Reset_Map_Time[2]) {
-            final Collection<L1PcInstance> allpc = World.get().getAllPlayers();
-            if (allpc.isEmpty()) {
-                return;
-            }
-			/*for (final Iterator<L1PcInstance> iter = allpc.iterator(); iter.hasNext();) {
-				final L1PcInstance pc = iter.next();
-				final L1MapsLimitTime mapsLimitTime = MapsGroupTable.get().findGroupMap(pc.getMapId());
-				if (mapsLimitTime != null) {
-					L1Teleport.teleport(pc, mapsLimitTime.getOutMapX(), mapsLimitTime.getOutMapY(), mapsLimitTime.getOutMapId(), pc.getHeading(), true);
-				}
-			}*/
-            for (final L1PcInstance pc : allpc) {
-                final L1MapsLimitTime mapsLimitTime = MapsGroupTable.get().findGroupMap(pc.getMapId());
-                if (mapsLimitTime != null) {
-                    L1Teleport.teleport(pc, mapsLimitTime.getOutMapX(), mapsLimitTime.getOutMapY(), mapsLimitTime.getOutMapId(), pc.getHeading(), true);
+
+        // 使用時間範圍判斷（給予10秒緩衝時間）
+        if (hour == ConfigOtherSet2.Reset_Map_Time[0] &&
+            minute == ConfigOtherSet2.Reset_Map_Time[1] &&
+            second >= 0 && second <= 10) {
+
+            // 避免重複執行
+            if (!_isMapResetDone) {
+                _log.info("========== 開始執行地圖時間重置 ==========");
+
+                try {
+                    final Collection<L1PcInstance> allpc = World.get().getAllPlayers();
+
+                    // 傳送在限制地圖中的玩家（無論是否有玩家都要執行清除）
+                    for (final L1PcInstance pc : allpc) {
+                        final L1MapsLimitTime mapsLimitTime = MapsGroupTable.get().findGroupMap(pc.getMapId());
+                        if (mapsLimitTime != null) {
+                            L1Teleport.teleport(pc,
+                                mapsLimitTime.getOutMapX(),
+                                mapsLimitTime.getOutMapY(),
+                                mapsLimitTime.getOutMapId(),
+                                pc.getHeading(), true);
+                        }
+                    }
+
+                    // 清除全部地圖入場時間紀錄（無論是否有玩家都要執行）
+                    CharMapTimeReading.get().clearAllTime();
+
+                    // 發送系統提示訊息
+                    World.get().broadcastPacketToAll(new S_SystemMessage("目前所有地圖使用時間已重置完畢。"));
+
+                } catch (Exception e) {
+                    _log.error("地圖時間重置過程中發生錯誤", e);
                 }
+
+                _isMapResetDone = true;
+                _log.info("========== 地圖時間重置執行完成 ==========");
             }
-            // 清除全部地圖入場時間紀錄
-            CharMapTimeReading.get().clearAllTime();
-            _log.info("------- 目前所有地圖使用時間已重置完畢 -------");
-            // 發送系統提示訊息
-            World.get().broadcastPacketToAll(new S_SystemMessage("目前所有地圖使用時間已重置完畢。"));
+        }
+
+        // 在下一分鐘重置旗標，為隔天準備
+        if (hour == ConfigOtherSet2.Reset_Map_Time[0] &&
+            minute == (ConfigOtherSet2.Reset_Map_Time[1] + 1) % 60 &&
+            second == 0) {
+            _isMapResetDone = false;
         }
     }
 

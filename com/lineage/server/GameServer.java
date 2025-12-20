@@ -434,6 +434,9 @@ public class GameServer {
             // 假人
             FakeNpcController fakeNpcController = FakeNpcController.getInstance();
             GeneralThreadPool.get().execute(fakeNpcController);
+            // 啟動時間控制器（處理地圖重置等功能）
+            ServerTimerController.getInstance();
+            _log.info("時間控制器已啟動 - 地圖時間重置功能已啟用");
             Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
             DeNameTable.get().load();
             DeClanTable.get().loadIcon();// 虛擬血盟盟徽

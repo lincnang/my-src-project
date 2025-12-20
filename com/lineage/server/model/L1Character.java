@@ -777,9 +777,17 @@ public class L1Character extends L1Object {
                     }
                 } catch (Exception e) {
                     System.err.println("Error creating skill timer for skillId=" + skillId);
+                    timer = null; // 確保失敗時 timer 為 null
                 }
             }
-            _skillEffect.put(skillId, timer);
+
+            // 修復：防止插入 null 值到 Map 中
+            if (timer != null) {
+                _skillEffect.put(skillId, timer);
+            } else {
+                // 如果 timer 為 null，移除任何現存的計時器
+                _skillEffect.remove(skillId);
+            }
         }
     }
 
@@ -1439,6 +1447,11 @@ public class L1Character extends L1Object {
     public void setInt(int i) {
         _trueInt = ((short) i);
         _int = ((short) RangeInt.ensure(i, 1, 254));
+        // 智力變更時通知客戶端更新狀態（僅當值真正改變時）
+        if (this instanceof L1PcInstance && _int != _trueInt) {
+            L1PcInstance pc = (L1PcInstance) this;
+            pc.sendPackets(new S_OwnCharStatus(pc));
+        }
     }
 
     public void addInt(int i) {

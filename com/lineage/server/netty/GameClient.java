@@ -43,6 +43,12 @@ public class GameClient {
     private boolean handshakeSent = false;
     private volatile boolean versionVerified = false;
 
+    // === 限速機制（僅對已登入角色） ===
+    private volatile long rateLimitWindowStart = 0; // 當前視窗開始時間
+    private volatile int packetsInWindow = 0; // 當前視窗內的封包數量
+    private static final int MAX_PACKETS_PER_SECOND = 100; // 每秒最大封包數
+    private static final int RATE_LIMIT_BURST = 150; // 突發上限
+
     /**
      * 建構子
      * @param channel Netty Channel
@@ -281,6 +287,54 @@ public class GameClient {
 
     public void setActiveChar(L1PcInstance pc) {
         this.activeChar = pc;
+    }
+
+    /**
+     * 檢查封包速率限制（僅對已登入角色）
+     * @return true 可繼續處理，false 超過限制
+     */
+    public boolean checkRateLimit() {
+        // 只有已登入角色才受限速
+        if (activeChar == null || !versionVerified) {
+            return true;
+        }
+
+        long now = System.currentTimeMillis();
+
+        // 初始化視窗
+        if (rateLimitWindowStart == 0) {
+            rateLimitWindowStart = now;
+            packetsInWindow = 1;
+            return true;
+        }
+
+        // 檢查是否需要重置視窗
+        long windowElapsed = now - rateLimitWindowStart;
+        if (windowElapsed >= 1000) { // 超過1秒
+            rateLimitWindowStart = now;
+            packetsInWindow = 1;
+            return true;
+        }
+
+        // 增加計數
+        packetsInWindow++;
+
+        // 檢查是否超過限制
+        if (packetsInWindow > RATE_LIMIT_BURST) {
+            _log.warn("[RateLimit] Player " + activeChar.getName() + " exceeded burst limit: " +
+                      packetsInWindow + " packets in " + windowElapsed + "ms");
+            return false;
+        }
+
+        if (packetsInWindow > MAX_PACKETS_PER_SECOND) {
+            // 記錄但允許（可能為正常突發）
+            if (_log.isDebugEnabled()) {
+                _log.debug("[RateLimit] Player " + activeChar.getName() + " high rate: " +
+                          packetsInWindow + " packets in " + windowElapsed + "ms");
+            }
+        }
+
+        return true;
     }
 
     public boolean isClosed() {

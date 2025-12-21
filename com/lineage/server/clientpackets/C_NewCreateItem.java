@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 樂天堂火神製作(DB化)
@@ -30,16 +31,38 @@ public class C_NewCreateItem extends ClientBasePacket {
     private static final String C_NEW_CREATEITEM = "[C] C_NewCreateItem";
     private static final Log _log = LogFactory.getLog(C_NewCreateItem.class);
 
+    // 節流機制：防止製作請求被濫用
+    private static final long CRAFT_COOLDOWN_MS = 200; // 0.2秒冷卻時間
+    private static final ConcurrentHashMap<Integer, Long> _lastCraftTime = new ConcurrentHashMap<>();
+
+    // 清理機制
+    private static volatile long _lastCleanupTime = 0;
+    private static final long CLEANUP_INTERVAL_MS = 30 * 60 * 1000; // 30分鐘清理一次
+    private static final int MAX_IDLE_TIME_MS = 10 * 60 * 1000; // 10分鐘未使用則清理
+
     @Override
     public void start(final byte[] decrypt, final ClientExecutor client) {
         try {
-            // 資料載入
-            read(decrypt);
-            final int type = this.readH();
             final L1PcInstance pc = client.getActiveChar();
             if (pc == null) {
                 return;
             }
+
+            // === 節流檢查（防止製作請求濫用） ===
+            int pcId = pc.getId();
+            Long lastUsed = _lastCraftTime.get(pcId);
+            long now = System.currentTimeMillis();
+            if (lastUsed != null && now - lastUsed < CRAFT_COOLDOWN_MS) {
+                return; // 冷卻中，直接返回
+            }
+            _lastCraftTime.put(pcId, now);
+
+            // 定期清理過期的資料
+            cleanupExpiredEntries(now);
+
+            // 資料載入
+            read(decrypt);
+            final int type = this.readH();
             switch (type) {
                 case 54:// 比較製作物品列表，如果不同則發送新的物品製作列表
                     int length = this.readH();
@@ -457,5 +480,56 @@ public class C_NewCreateItem extends ClientBasePacket {
     @Override
     public String getType() {
         return C_NEW_CREATEITEM;
+    }
+
+    /**
+     * 清理過期的製作記錄
+     */
+    private static void cleanupExpiredEntries(long now) {
+        // 檢查是否需要執行清理
+        if (now - _lastCleanupTime < CLEANUP_INTERVAL_MS) {
+            return;
+        }
+
+        try {
+            int cleanedCount = 0;
+            long expireTime = now - MAX_IDLE_TIME_MS;
+
+            // 遍歷並移除過期條目
+            java.util.Iterator<java.util.Map.Entry<Integer, Long>> iterator =
+                _lastCraftTime.entrySet().iterator();
+
+            while (iterator.hasNext()) {
+                java.util.Map.Entry<Integer, Long> entry = iterator.next();
+                if (entry.getValue() < expireTime) {
+                    iterator.remove();
+                    cleanedCount++;
+                }
+            }
+
+            _lastCleanupTime = now;
+
+            if (cleanedCount > 0 && _log.isDebugEnabled()) {
+                _log.debug("[C_NewCreateItem] Cleaned up " + cleanedCount +
+                          " expired craft entries. Current size: " + _lastCraftTime.size());
+            }
+        } catch (Exception e) {
+            _log.error("[C_NewCreateItem] Error during cleanup", e);
+        }
+    }
+
+    /**
+     * 手動清理所有製作記錄（用於測試或維護）
+     */
+    public static void clearCraftCache() {
+        _lastCraftTime.clear();
+        _log.info("[C_NewCreateItem] All craft cache cleared");
+    }
+
+    /**
+     * 獲取當前快取大小（用於監控）
+     */
+    public static int getCacheSize() {
+        return _lastCraftTime.size();
     }
 }

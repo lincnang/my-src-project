@@ -81,10 +81,22 @@ public class L1SkillStop {
             } else {// 沒有SkillMode
                 if ((cha instanceof L1PcInstance)) {
                     L1PcInstance pc = (L1PcInstance) cha;
-                    for (int i = 0; i < ItemTable.itembuff.size(); i++) {
-                        if (skillId == (Integer) ItemTable.itembuff.get(i)) {
+                    // 使用 toArray() 同時快照兩個列表以確保一致性
+                    Integer[] itemBuffArray = ItemTable.itembuff.toArray(new Integer[0]);
+                    Object[] itemBuffsArray = ItemTable.itembuffs.toArray(new Object[0]);
+
+                    // 確保兩個陣列長度一致（保護性檢查）
+                    if (itemBuffArray.length != itemBuffsArray.length) {
+                        _log.warn("[L1SkillStop] itembuff and itembuffs length mismatch: " +
+                                  itemBuffArray.length + " vs " + itemBuffsArray.length);
+                        // 如果長度不匹配，取較小的長度以避免索引越界
+                    }
+                    int minLength = Math.min(itemBuffArray.length, itemBuffsArray.length);
+
+                    for (int i = 0; i < minLength; i++) {
+                        if (skillId == itemBuffArray[i]) {
                             L1Item temper = ItemTable.get().getTemplate(skillId);
-                            String[] status = ((String) ItemTable.itembuffs.get(i)).split(" ");
+                            String[] status = ((String) itemBuffsArray[i]).split(" ");
                             int _str = Integer.parseInt(status[1]);
                             int _dex = Integer.parseInt(status[2]);
                             int _int = Integer.parseInt(status[3]);
@@ -120,6 +132,10 @@ public class L1SkillStop {
                 if (ItemBuffSet.START && ItemBuffTable.get().checkItem(skillId)) {
                     if (cha instanceof L1PcInstance) {
                         final L1PcInstance pc = (L1PcInstance) cha;
+                        // 確保技能計時器也被移除
+                        if (pc.hasSkillEffect(skillId)) {
+                            pc.killSkillEffectTimer(skillId);
+                        }
                         ItemBuffTable.get().remove(pc, skillId);
                     }
                 }
@@ -177,6 +193,13 @@ public class L1SkillStop {
                     case ADENA_CHECK_TIMER:
                         if (cha instanceof L1PcInstance) {
                             final L1PcInstance pc = (L1PcInstance) cha;
+
+                            // 檢查玩家是否已斷線
+                            if (pc.getNetConnection() == null) {
+                                // 玩家已離線，直接返回，不寫 log
+                                return;
+                            }
+
                             final long adenaCount = pc.getInventory().countItems(44070);
                             if (adenaCount > 0) {
                                 final long difference = adenaCount - pc.getShopAdenaRecord();
@@ -466,28 +489,24 @@ public class L1SkillStop {
                     case DEATH_HEAL: // 法師新技能 治癒逆行
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.removeSkillEffect(DEATH_HEAL);
                             pc.sendPackets(new S_NewSkillIcon(DEATH_HEAL, false, -1));
                         }
                         break;
                     case ABSOLUTE_BLADE: // 騎士新技能 絕禦之刃
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.removeSkillEffect(ABSOLUTE_BLADE);
                             pc.sendPackets(new S_NewSkillIcon(ABSOLUTE_BLADE, false, -1));
                         }
                         break;
                     case ASSASSIN: // 黑妖新技能 暗殺者
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.removeSkillEffect(ASSASSIN);
                             pc.sendPackets(new S_NewSkillIcon(ASSASSIN, false, -1));
                         }
                         break;
                     case BLAZING_SPIRITS: // 黑妖新技能 熾烈鬥志
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.removeSkillEffect(BLAZING_SPIRITS);
                             pc.sendPackets(new S_NewSkillIcon(BLAZING_SPIRITS, false, -1));
                         }
                         break;
@@ -497,28 +516,24 @@ public class L1SkillStop {
                             pc.addRegistSustain(-10 + (pc.getGraceLv() * -1)); // 支撐耐性
                             pc.addRegistStun(-10 + (pc.getGraceLv() * -1)); // 暈眩耐性
                             //pc.getResistance().addDESPERADO(-10 + (pc.getGraceLv() * -1)); // 恐怖耐性
-                            pc.removeSkillEffect(GRACE_AVATAR);
                             pc.sendPackets(new S_NewSkillIcon(GRACE_AVATAR, false, -1));
                         }
                         break;
                     case SOUL_BARRIER: // 精靈新技能 魔力護盾
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.removeSkillEffect(SOUL_BARRIER);
                             pc.sendPackets(new S_NewSkillIcon(SOUL_BARRIER, false, -1));
                         }
                         break;
                     case DESTROY: // 龍騎士新技能 撕裂護甲
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.removeSkillEffect(DESTROY);
                             pc.sendPackets(new S_NewSkillIcon(DESTROY, false, -1));
                         }
                         break;
                     case IMPACT: // 幻術師新技能 衝突強化
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.removeSkillEffect(IMPACT);
                             pc.sendPackets(new S_NewSkillIcon(IMPACT, false, -1));
                             pc.setImpactUp(0);
                         }
@@ -526,7 +541,6 @@ public class L1SkillStop {
                     case TITANL_RISING: // 狂戰士新技能 泰坦狂暴
                         if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
-                            pc.removeSkillEffect(TITANL_RISING);
                             pc.sendPackets(new S_NewSkillIcon(TITANL_RISING, false, -1));
                             pc.setRisingUp(0);
                         }
@@ -795,16 +809,19 @@ public class L1SkillStop {
                             // 注意：不要在這裡調用 removeSkillEffect，因為它已經在被移除的過程中
                             // removeSkillEffect 是由呼叫者（通常是 L1Character.removeSkillEffect）處理的
 
-                            // 恢復效果
+                            // 恢復效果（DISEASE: -6 傷害, +12 AC）
                             pc.addDmgup(6); // 恢復傷害加成
                             pc.addAc(-12);  // 恢復 AC 減益
 
-                            // 強制發送 AC 更新封包給客戶端
+                            // 發送狀態更新
                             pc.sendPackets(new S_OwnCharAttrDef(pc));
                             pc.sendPackets(new S_OwnCharStatus(pc));
-
-                            // 關閉自訂圖示
                             pc.sendPackets(new S_InventoryIcon(760, false, 4585, 7));
+
+                            if (_log.isDebugEnabled()) {
+                                _log.debug("[L1SkillStop] DISEASE effect removed from " + pc.getName() +
+                                          " (dmg+6, ac-12)");
+                            }
                         }
                         break;
                     //                    case ICE_LANCE://冰矛圍籬
@@ -821,10 +838,18 @@ public class L1SkillStop {
                         }
                         break;
                     case FOG_OF_SLEEPING://魔法大師
-                        if ((cha instanceof L1PcInstance)) {
+                        if (cha instanceof L1PcInstance) {
                             L1PcInstance pc = (L1PcInstance) cha;
+
+                            // 不要調用 removeSkillEffect！
+                            // 這個方法已經在 removeSkillEffect 的調用鏈中
+                            // 調用 removeSkillEffect 會導致無限循環！
+
                             // 移除魔法大師狀態
                             pc.setMagicMaster(false);
+
+                            // 通知玩家狀態結束
+                            pc.sendPackets(new S_ServerMessage("\\f3魔法大師效果已結束"));
                         }
                         break;
                     case ABSOLUTE_BARRIER://絕對屏障
@@ -905,6 +930,8 @@ public class L1SkillStop {
                     case EXP100: // 第一段經驗加倍效果
                         if (cha instanceof L1PcInstance) {
                             final L1PcInstance pc = (L1PcInstance) cha;
+                            // 移除技能效果
+                            pc.removeSkillEffect(skillId);
                             // 2402 經驗直加倍效果消失！
                             pc.sendPackets(new S_ServerMessage("第一段，經驗加倍效果消失！"));
                             pc.sendPackets(new S_PacketBoxCooking(pc, 32, 0));
@@ -921,6 +948,8 @@ public class L1SkillStop {
                     case SEXP500: // 第二段經驗加倍效果
                         if ((cha instanceof L1PcInstance)) {
                             L1PcInstance pc = (L1PcInstance) cha;
+                            // 移除技能效果
+                            pc.removeSkillEffect(skillId);
                             pc.sendPackets(new S_ServerMessage("第二段經驗加倍效果消失！"));
                         }
                         break;
@@ -1668,6 +1697,17 @@ public class L1SkillStop {
                         break;
                 }
             }
+
+            // 注意：不再需要額外的強制移除邏輯
+            // L1Character.removeSkillEffect() 會處理：
+            // 1. 如果有 timer -> 停止 timer
+            // 2. 如果沒有 timer 但有效果 -> 調用 stopSkill（這裡）
+            // 3. removeSkillEffect 已經從 _skillEffect 移除了
+
+            // 為了避免重複執行，stopSkill 應該是冪等的
+            // 所有的恢復操作（addStr, addDex 等）應該能安全地重複執行
+            // 或者我們可以檢查當前狀態避免重複恢復
+
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }

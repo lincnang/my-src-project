@@ -92,6 +92,16 @@ public class LineageDecoder extends FrameDecoder {
             } catch (Throwable ignore) { }
         }
 
+        // 檢查速率限制（僅對已登入角色）
+        GameClient client = NettyChannelRegistry.client(channel);
+        if (client != null) {
+            if (!client.checkRateLimit()) {
+                _log.error("[RateLimit] Exceeded packet rate limit, closing channel: " + channel.getRemoteAddress());
+                channel.close();
+                return null;
+            }
+        }
+
         // 導流到多執行緒解密池，並停止往上游傳遞
         DecoderManager.get().submit(channel, encrypted);
         return null;

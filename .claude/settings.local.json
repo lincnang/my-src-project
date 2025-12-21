@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(javac:*)",
+      "Bash(java:*)",
+      "Bash(find:*)",
+      "Bash(move:*)",
+      "Bash(git checkout:*)",
+      "Bash(dir:*)"
+    ]
+  }
+}

@@ -146,6 +146,13 @@ public final class Config {
     public static int PC_SCHEDULER_POOL_SIZE;
     public static int AI_SCHEDULER_POOL_SIZE;
 
+    // Decoder 解密池配置
+    public static int DECODER_WORKER_THREADS;
+    public static int DECODER_QUEUE_CAPACITY;
+    public static int DECODER_CLEANUP_INTERVAL_MINUTES;
+    public static int DECODER_MAX_PRE_VERIFY_LOGGED;
+    public static boolean DECODER_PERFORMANCE_MONITORING;
+
     
 
     public static void load() throws ConfigErrorException {
@@ -220,6 +227,28 @@ public final class Config {
             RESTART_LOGIN = Integer.parseInt(set.getProperty("restartlogin", "30"));
             NEWS = Boolean.parseBoolean(set.getProperty("News", "false"));
             // POWER = Integer.parseInt(set.getProperty("power", "0"));
+
+            // Decoder 解密池配置
+            DECODER_WORKER_THREADS = Integer.parseInt(set.getProperty("DecoderWorkerThreads", "0"));
+            DECODER_QUEUE_CAPACITY = Integer.parseInt(set.getProperty("DecoderQueueCapacity", "8192"));
+            DECODER_CLEANUP_INTERVAL_MINUTES = Integer.parseInt(set.getProperty("DecoderCleanupIntervalMinutes", "5"));
+            DECODER_MAX_PRE_VERIFY_LOGGED = Integer.parseInt(set.getProperty("DecoderMaxPreVerifyLogged", "10000"));
+            DECODER_PERFORMANCE_MONITORING = Boolean.parseBoolean(set.getProperty("DecoderPerformanceMonitoring", "false"));
+
+            // 套用限制
+            if (DECODER_WORKER_THREADS != 0) {
+                DECODER_WORKER_THREADS = Math.max(1,
+                    Math.min(DECODER_WORKER_THREADS, Runtime.getRuntime().availableProcessors()));
+            }
+            if (DECODER_QUEUE_CAPACITY <= 0) {
+                DECODER_QUEUE_CAPACITY = 8192;
+            }
+            DECODER_QUEUE_CAPACITY = Math.max(1024, Math.min(DECODER_QUEUE_CAPACITY, 65536));
+            DECODER_CLEANUP_INTERVAL_MINUTES = Math.max(1,
+                Math.min(DECODER_CLEANUP_INTERVAL_MINUTES, 60));
+            DECODER_MAX_PRE_VERIFY_LOGGED = Math.max(1000,
+                Math.min(DECODER_MAX_PRE_VERIFY_LOGGED, 100000));
+
             if (NEWS) {
                 Announcements.get().load();
             }

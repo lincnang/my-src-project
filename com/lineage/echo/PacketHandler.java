@@ -48,10 +48,23 @@ public class PacketHandler extends PacketHandlerExecutor {
         if (decrypt.length <= 0) {
             return;
         }
-        
+
         final int i = decrypt[0] & 0xff;
-        
+
+        // 記錄處理開始時間
+        final long startTime = System.currentTimeMillis();
+        String charName = "Unknown";
+        String clientIP = "Unknown";
+
         try {
+            // 取得角色名稱和IP（如果有）
+            if (_client != null && _client.getActiveChar() != null) {
+                charName = _client.getActiveChar().getName();
+            }
+            if (_client != null && _client.getIp() != null) {
+                clientIP = _client.getIp().toString().replace("/", "");
+            }
+
             // 一般的處理封包方式
             if (ConfigLIN.opcode_C) { // 日版封包顯示
                 System.out.println("[C opocde] = " + i + "[Length] = " + decrypt.length);
@@ -262,8 +275,93 @@ public class PacketHandler extends PacketHandlerExecutor {
         } else {
                 new C_Unkonwn().start(decrypt, _client);
             }
+
+            // 檢查處理耗時
+            final long endTime = System.currentTimeMillis();
+            final long duration = endTime - startTime;
+
+            // 如果處理時間超過 50ms，記錄詳細信息
+            if (duration > 50) {
+                // 獲取操作類型識別
+                String operationType = getOperationType(i);
+
+                // 如果超過 100ms，記錄調用堆疊
+                if (duration > 100) {
+                    StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("[VERY_SLOW_PACKET] ").append(String.format(
+                        "Opcode: %d (%s), Duration: %dms, Char: %s, IP: %s, Length: %d\n",
+                        i, operationType, duration, charName, clientIP, decrypt.length
+                    ));
+
+                    // 記錄關鍵的調用堆疊（最多5層）
+                    int count = 0;
+                    for (int j = 3; j < stackTrace.length && count < 5; j++) {
+                        StackTraceElement element = stackTrace[j];
+                        if (!element.getClassName().startsWith("java.") &&
+                            !element.getClassName().startsWith("sun.")) {
+                            sb.append("  at ").append(element.toString()).append("\n");
+                            count++;
+                        }
+                    }
+
+                    _log.error(sb.toString());
+                } else {
+                    _log.warn(String.format(
+                        "[SLOW_PACKET] Opcode: %d (%s), Duration: %dms, Char: %s, IP: %s, Length: %d",
+                        i, operationType, duration, charName, clientIP, decrypt.length
+                    ));
+                }
+            }
+
         } catch (Throwable e) {
-            _log.error("封包處理發生嚴重錯誤 (Opcode: " + i + ")", e);
+            // 也記錄異常發生前的處理時間
+            final long endTime = System.currentTimeMillis();
+            final long duration = endTime - startTime;
+
+            _log.error(String.format(
+                "封包處理發生嚴重錯誤 (Opcode: %d, Duration: %dms, Char: %s, IP: %s)",
+                i, duration, charName, clientIP
+            ), e);
+        }
+    }
+
+    /**
+     * 獲取 Opcode 對應的操作類型
+     */
+    private String getOperationType(int opcode) {
+        switch (opcode) {
+            case C_MOVE: return "移動";
+            case C_ATTACK: return "攻擊";
+            case C_USE_ITEM: return "使用物品";
+            case C_USE_SPELL: return "施法";
+            case C_GET: return "撿取物品";
+            case C_DROP: return "丟棄物品";
+            case C_CHAT: return "聊天";
+            case C_TELL: return "私聊";
+            case C_DIALOG: return "NPC對話";
+            case C_EXTENDED_PROTOBUF: return "製作/合成";
+            case C_CHANGE_DIRECTION: return "轉向";
+            case C_PERSONAL_SHOP: return "商店";
+            case C_SAVEIO: return "儲存設定";
+            case 163: // W12
+                return "W12/W13(未知)";
+            default:
+                // 嘗試從 OpcodesClient 獲取名稱
+                try {
+                    java.lang.reflect.Field[] fields = OpcodesClient.class.getDeclaredFields();
+                    for (java.lang.reflect.Field field : fields) {
+                        if (field.getType() == int.class) {
+                            field.setAccessible(true);
+                            if (field.getInt(null) == opcode) {
+                                return field.getName();
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    // 忽略錯誤
+                }
+                return "Opcode_" + opcode;
         }
     }
 

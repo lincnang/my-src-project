@@ -3,6 +3,7 @@ package com.lineage.server.model.weaponskill;
 import com.lineage.server.model.Instance.L1ItemInstance;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.model.L1Character;
+import com.lineage.server.monitor.PerformanceMonitor;
 import com.lineage.server.serverpackets.S_InventoryIcon;
 import com.lineage.server.serverpackets.S_SkillSound;
 import com.lineage.server.serverpackets.S_SystemMessage;
@@ -10,6 +11,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * 格蘭肯的憤怒
@@ -22,10 +25,88 @@ public class W_SK0018 extends L1WeaponSkillType {
 
     private static final Log _log = LogFactory.getLog(W_SK0018.class);
 
+    // 節流機制：防止技能被濫用
+    private static final long SKILL_COOLDOWN_MS = 300; // 0.3秒冷卻時間
+    private static final ConcurrentHashMap<Integer, Long> _lastUsedTime = new ConcurrentHashMap<>();
+
     // 執行緒調度器
     // private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static final java.util.Map<Integer, java.util.concurrent.ScheduledFuture<?>> _timers = new java.util.concurrent.ConcurrentHashMap<>();
     private static final java.util.Map<Integer, Integer> _stackCounts = new java.util.concurrent.ConcurrentHashMap<>();
+
+    // 清理機制：定期清理無效的玩家資料
+    private static long lastCleanupTime = 0;
+    private static final long CLEANUP_INTERVAL_MS = 5 * 60 * 1000; // 5分鐘清理一次
+
+    /**
+     * 清理無效的玩家資料（斷線的玩家）
+     */
+    private static void cleanupInvalidPlayers() {
+        long now = System.currentTimeMillis();
+        if (now - lastCleanupTime < CLEANUP_INTERVAL_MS) {
+            return;
+        }
+
+        try {
+            com.lineage.server.world.World world = com.lineage.server.world.World.get();
+
+            // 方法1：使用 World.findObject() - 高效查找
+            java.util.List<Integer> offlinePlayerIds = new java.util.ArrayList<>();
+
+            for (Integer playerId : _timers.keySet()) {
+                // 使用 findObject 查找玩家
+                com.lineage.server.model.L1Object obj = world.findObject(playerId);
+
+                // 檢查是否為在線玩家
+                boolean isOnline = false;
+                if (obj instanceof com.lineage.server.model.Instance.L1PcInstance) {
+                    com.lineage.server.model.Instance.L1PcInstance pc =
+                        (com.lineage.server.model.Instance.L1PcInstance) obj;
+                    isOnline = pc.getNetConnection() != null;
+                }
+
+                if (!isOnline) {
+                    offlinePlayerIds.add(playerId);
+                }
+            }
+
+            // 清理離線玩家的資料
+            for (Integer playerId : offlinePlayerIds) {
+                ScheduledFuture<?> future = _timers.remove(playerId);
+                if (future != null) {
+                    future.cancel(false);
+                }
+                _stackCounts.remove(playerId);
+
+                if (_log.isDebugEnabled()) {
+                    _log.debug("[W_SK0018] Cleaned up offline player ID: " + playerId);
+                }
+            }
+
+            lastCleanupTime = now;
+
+            // 記錄清理統計
+            if (_log.isDebugEnabled()) {
+                java.util.Collection<com.lineage.server.model.Instance.L1PcInstance> allPlayers = null;
+                int onlineCount = 0;
+
+                try {
+                    allPlayers = world.getAllPlayers();
+                    if (allPlayers != null) {
+                        onlineCount = allPlayers.size();
+                    }
+                } catch (Exception e) {
+                    _log.warn("[W_SK0018] Error getting online player count", e);
+                }
+
+                _log.debug("[W_SK0018] Cleanup completed. Timers: " + _timers.size() +
+                          ", Stacks: " + _stackCounts.size() + ", Online: " + onlineCount +
+                          ", Cleaned: " + offlinePlayerIds.size());
+            }
+        } catch (Exception e) {
+            _log.error("[W_SK0018] Error during cleanup", e);
+        }
+    }
 
     // 技能常數設定
     private static final int MAX_STACK = 5; // 最大疊加層數
@@ -56,7 +137,20 @@ public class W_SK0018 extends L1WeaponSkillType {
     @Override
     public double start_weapon_skill(final L1PcInstance pc, final L1Character target,
                                      final L1ItemInstance weapon, final double srcdmg) {
-        try {
+        try (PerformanceMonitor.PerformanceTracker tracker =
+             PerformanceMonitor.trackSkill("GRANKEN_FURY", pc != null ? pc.getName() : "Unknown")) {
+
+            // === 0. 節流檢查（防止技能濫用） ===
+            if (pc != null) {
+                int pcId = pc.getId();
+                Long lastUsed = _lastUsedTime.get(pcId);
+                long now = System.currentTimeMillis();
+                if (lastUsed != null && now - lastUsed < SKILL_COOLDOWN_MS) {
+                    return srcdmg; // 冷卻中，直接返回原傷害
+                }
+                _lastUsedTime.put(pcId, now);
+            }
+
             // === 1. 機率判斷（直接用SQL欄位 random1, random2） ===
             int activationChance = random(weapon); // L1WeaponSkillType 的 random(weapon)
             int chance = _random.nextInt(1000);
@@ -69,6 +163,9 @@ public class W_SK0018 extends L1WeaponSkillType {
             }
 
             L1PcInstance targetPc = (L1PcInstance) target;
+
+            // 定期清理無效資料
+            cleanupInvalidPlayers();
 
             // 獲取當前疊加層數
             // int currentStacks = targetPc.getTemporaryEffect("PVP_DAMAGE_SKILL");
@@ -145,13 +242,22 @@ public class W_SK0018 extends L1WeaponSkillType {
         if (target instanceof L1PcInstance) {
             L1PcInstance targetPc = (L1PcInstance) target;
 
+            // 檢查玩家是否仍在線上
+            if (targetPc.getNetConnection() == null) {
+                // 玩家已斷線，只清理靜態資料
+                _stackCounts.remove(targetPc.getId());
+                _timers.remove(targetPc.getId());
+                _log.debug("[W_SK0018] Player disconnected, removing effect data for ID: " + targetPc.getId());
+                return;
+            }
+
             // 恢復效果 (扣除之前增加的負值 = 加上正值)
             int pvpRestore = stacks * -PVP_DAMAGE_REDUCTION_PER_STACK; // e.g. 5 * -(-1) = 5
             int stunRestore = stacks * -STUN_RESISTANCE_REDUCTION_PER_STACK; // e.g. 5 * -(-2) = 10
-            
+
             targetPc.setPvpDmg_R(pvpRestore);
             targetPc.addRegistStun(stunRestore);
-            
+
             // 清除暫存狀態
             // targetPc.removeTemporaryEffect("PVP_DAMAGE_SKILL");
             _stackCounts.remove(targetPc.getId());

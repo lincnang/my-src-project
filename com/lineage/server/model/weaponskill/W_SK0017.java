@@ -7,6 +7,7 @@ import com.lineage.server.model.L1Character;
 import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.model.skill.L1SkillStop;
 import com.lineage.server.model.skill.L1SkillUse;
+import com.lineage.server.monitor.PerformanceMonitor;
 import com.lineage.server.serverpackets.S_InventoryIcon;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
@@ -21,6 +22,10 @@ public class W_SK0017 extends L1WeaponSkillType {
     private static final Log _log = LogFactory.getLog(W_SK0017.class);
     private static final Random _random = new Random();
 
+    // 節流機制：防止技能被濫用
+    private static final long SKILL_COOLDOWN_MS = 500; // 0.5秒冷卻時間
+    private static final ConcurrentHashMap<Integer, Long> _lastUsedTime = new ConcurrentHashMap<>();
+
     public W_SK0017() {}
 
     public static L1WeaponSkillType get() {
@@ -30,6 +35,17 @@ public class W_SK0017 extends L1WeaponSkillType {
     @Override
     public double start_weapon_skill(final L1PcInstance pc, final L1Character target, final L1ItemInstance weapon, final double srcdmg) {
         try {
+            // === 0. 節流檢查（防止技能濫用） ===
+            if (pc != null) {
+                int pcId = pc.getId();
+                Long lastUsed = _lastUsedTime.get(pcId);
+                long now = System.currentTimeMillis();
+                if (lastUsed != null && now - lastUsed < SKILL_COOLDOWN_MS) {
+                    return srcdmg; // 冷卻中，直接返回原傷害
+                }
+                _lastUsedTime.put(pcId, now);
+            }
+
             // === 1. 判斷技能發動機率（使用 random1/random2） ===
             int activationChance = random(weapon); // parent class 的 random() 會用 random1/random2 算出千分比
             int chance = _random.nextInt(1000);
@@ -48,14 +64,29 @@ public class W_SK0017 extends L1WeaponSkillType {
                 pc.sendPackets(new S_SkillSound(target.getId(), animId)); // 攻擊者也能看到
             }
 
-            // === 3. 移除舊的疾病術狀態 ===
-            // 注意：不要在這裡恢復舊的疾病術效果，會立即恢復防禦
-            // 直接施放新的疾病術，讓系統自動覆蓋
+            // === 3. 處理舊的疾病術狀態 ===
+            // 如果已有疾病術，正確地移除舊效果
+            if (target.hasSkillEffect(L1SkillId.DISEASE)) {
+                // 使用 removeSkillEffect 確保完整流程
+                // 這會：
+                // 1. 停止計時器
+                // 2. 呼叫 stopSkill 恢復所有數值
+                // 3. 發送必要的狀態更新封包
+                target.removeSkillEffect(L1SkillId.DISEASE);
+
+                _log.debug("[W_SK0017] Removed old DISEASE effect from " +
+                          (target instanceof L1PcInstance ? ((L1PcInstance) target).getName() : "NPC"));
+            }
 
             // === 4. 施放疾病術 ===
-            L1SkillUse skillUse = new L1SkillUse();
-            skillUse.handleCommands(pc, L1SkillId.DISEASE, target.getId(), target.getX(), target.getY(), 8000,
-                    L1SkillUse.TYPE_GMBUFF);
+            try (PerformanceMonitor.PerformanceTracker tracker =
+                 PerformanceMonitor.trackSkill("DISEASE_CAST",
+                    target instanceof L1PcInstance ? ((L1PcInstance) target).getName() : "NPC")) {
+
+                L1SkillUse skillUse = new L1SkillUse();
+                skillUse.handleCommands(pc, L1SkillId.DISEASE, target.getId(), target.getX(), target.getY(), 8000,
+                        L1SkillUse.TYPE_GMBUFF);
+            }
 
             // === 5. 處理玩家目標的圖示/訊息 ===
             if (target instanceof L1PcInstance) {

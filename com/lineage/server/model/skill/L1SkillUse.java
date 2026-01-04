@@ -272,11 +272,12 @@ public class L1SkillUse {
             _npc = (L1NpcInstance) attacker;
             _user = _npc;
         }
-        if (_skill.getTarget().equals("none") || _skill.getTarget().equals("buff")) {
+
+        if (_skill.getTarget().equals("none")) {
             _targetID = _user.getId();
             _targetX = _user.getX();
             _targetY = _user.getY();
-                    } else {
+        } else {
             _targetID = target_id;
         }
         switch (type) {
@@ -537,9 +538,9 @@ public class L1SkillUse {
      */
     public void handleCommands(final L1PcInstance player, final int skillId, final int targetId, final int x, final int y, final int timeSecs, final int type, final L1Character attacker) {
         try {
-            // 安全檢查：確保 player 不為 null
-            if (player == null) {
-                System.out.println("[ERROR] [L1SkillUse] player is null for skillId: " + skillId);
+            // 安全檢查：player 和 attacker 至少要有一個不為 null
+            if (player == null && attacker == null) {
+                System.out.println("[ERROR] [L1SkillUse] player and attacker are both null for skillId: " + skillId);
                 return;
             }
               // 事前チェックをしているか？
@@ -944,10 +945,7 @@ public class L1SkillUse {
                 this._targetList.add(new TargetStatus(this._user));
                 return;
             }
-            // 對於目標為自己或buff/none類型的技能，只添加使用者一次
-            if ((this._skill.getTargetTo() == L1Skills.TARGET_TO_ME && ((this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK))
-                || this._skill.getTarget().equals("buff")
-                || (this._skill.getTarget().equals("none") && (this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK)) {
+            if ((this._skill.getTargetTo() == L1Skills.TARGET_TO_ME && ((this._skill.getType() & L1Skills.TYPE_ATTACK) != L1Skills.TYPE_ATTACK))) {
                 this._targetList.add(new TargetStatus(this._user)); // ターゲットは使用者のみ
                 return;
             }
@@ -962,7 +960,7 @@ public class L1SkillUse {
                     return; // 射程範圍外
                 }
             }
-            if ((!this.isTarget(this._target)) && !(this._skill.getTarget().equals("none")) && !(this._skill.getTarget().equals("buff"))) {
+            if ((!this.isTarget(this._target)) && !(this._skill.getTarget().equals("none"))) {
                 // 對像が違うのでスキルが發動しない。
                 return;
             }
@@ -996,35 +994,15 @@ public class L1SkillUse {
                         return;
                     }
                 }
-                // 對於目標為"buff"的技能，目標就是使用者自己
-                if (!this._skill.getTarget().equals("buff")) {
-                    this._targetList.add(new TargetStatus(this._target));
-                } else {
-                    if (this._skillId == FOG_OF_SLEEPING) {
-                        System.out.println("[DEBUG] [L1SkillUse] 單一目標，目標為buff，跳過添加目標");
-                    }
-                }
+                this._targetList.add(new TargetStatus(this._target));
                 // 範圍攻擊
             } else {
-                if (!this._skill.getTarget().equals("none") && !this._skill.getTarget().equals("buff")) {
+                if (!_skill.getTarget().equals("none")) {
                     this._targetList.add(new TargetStatus(this._target));
                 }
                 if ((this._skillId != HEAL_ALL) && (this._skillId != DEATH_HEAL) && !(this._skill.getTarget().equals("attack") || (this._skill.getType() == L1Skills.TYPE_ATTACK))) {
                     // 攻擊系以外のスキルとH-A以外はターゲット自身を含める
-                    // 但對於目標為"buff"的技能，不要重複添加（前面已經添加過）
-                    if (!this._skill.getTarget().equals("buff")) {
-                        if (this._skillId == FOG_OF_SLEEPING) {
-                            System.out.println("[DEBUG] [L1SkillUse] 範圍攻擊，非攻擊系技能，添加使用者到目標列表");
-                        }
-                        this._targetList.add(new TargetStatus(this._user));
-                        if (this._skillId == FOG_OF_SLEEPING) {
-
-                        }
-                    } else {
-                        if (this._skillId == FOG_OF_SLEEPING) {
-
-                        }
-                    }
+                    this._targetList.add(new TargetStatus(this._user));
                 }
                 List<L1Object> objects;
                 // 全畫面物件

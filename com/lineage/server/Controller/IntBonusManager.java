@@ -85,11 +85,11 @@ public class IntBonusManager {
 
     /** 安全地添加魔攻加成 */
     private void safeAddMagicDmgup(L1PcInstance pc, int v) {
-        if (v != 0) { 
-            try { 
-                // 使用現有的魔攻加成方法，如果沒有可以添加到現有的dmgup中
-                pc.addDmgup(v); 
-            } catch (Throwable ignore) {} 
+        if (v != 0) {
+            try {
+                // 魔攻使用 SP（法術攻擊力）
+                pc.addSp(v);
+            } catch (Throwable ignore) {}
         }
     }
 

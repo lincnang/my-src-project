@@ -1,10 +1,7 @@
 package com.lineage.echo;
 
 import com.add.Tsai.DragonExp;
-import com.lineage.server.Controller.ConBonusManager;
-import com.lineage.server.Controller.IntBonusManager;
-import com.lineage.server.Controller.StrBonusManager;
-import com.lineage.server.Controller.WisBonusManager;
+import com.lineage.server.Controller.*;
 import com.lineage.server.datatables.GetbackTable;
 import com.lineage.server.model.Instance.*;
 import com.lineage.server.model.L1Clan;
@@ -234,6 +231,7 @@ public class QuitGame {
             com.lineage.server.model.Instance.L1PcInstanceCleanupIntegration.onPlayerLogout(pc);
             // 清除屬性加成管理器記錄
             StrBonusManager.get().clear(pc);
+            DexBonusManager.get().clear(pc);
             ConBonusManager.get().clear(pc);
             WisBonusManager.get().clear(pc);
             IntBonusManager.get().clear(pc);

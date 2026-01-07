@@ -38,7 +38,7 @@ public class StrSettingTable {
 
     private void load() {
         final String sql =
-                "SELECT 力量, 攻擊, 命中, 爆擊機率, 爆擊百分比倍率, 爆擊特效 " +
+                "SELECT 力量, PVP攻擊, PVP命中, PVE攻擊, PVE命中, 爆擊機率, 爆擊百分比倍率, 爆擊特效 " +
                         "FROM `系統_強化力量設置` WHERE 力量 IS NOT NULL";
 
         Map<Integer, StrSetting> map = new HashMap<>();
@@ -50,8 +50,10 @@ public class StrSettingTable {
                 int str = rs.getInt("力量");
                 StrSetting s = new StrSetting(
                         str,
-                        rs.getInt("攻擊"),
-                        rs.getInt("命中"),
+                        rs.getInt("PVP攻擊"),
+                        rs.getInt("PVP命中"),
+                        rs.getInt("PVE攻擊"),
+                        rs.getInt("PVE命中"),
                         rs.getInt("爆擊機率"),
                         rs.getInt("爆擊百分比倍率"),
                         rs.getInt("爆擊特效")

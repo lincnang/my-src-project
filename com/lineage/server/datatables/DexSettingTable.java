@@ -38,7 +38,7 @@ public class DexSettingTable {
 
     private void load() {
         final String sql =
-                "SELECT 敏捷, 攻擊, 命中, 爆擊機率, 爆擊百分比倍率, 爆擊特效 " +
+                "SELECT 敏捷, PVP攻擊, PVP命中, PVE攻擊, PVE命中, 爆擊機率, 爆擊百分比倍率, 爆擊特效 " +
                         "FROM `系統_強化敏捷設置` WHERE 敏捷 IS NOT NULL";
 
         Map<Integer, DexSetting> map = new HashMap<>();
@@ -50,8 +50,10 @@ public class DexSettingTable {
                 int dex = rs.getInt("敏捷");
                 DexSetting s = new DexSetting(
                         dex,
-                        rs.getInt("攻擊"),
-                        rs.getInt("命中"),
+                        rs.getInt("PVP攻擊"),
+                        rs.getInt("PVP命中"),
+                        rs.getInt("PVE攻擊"),
+                        rs.getInt("PVE命中"),
                         rs.getInt("爆擊機率"),
                         rs.getInt("爆擊百分比倍率"),
                         rs.getInt("爆擊特效")

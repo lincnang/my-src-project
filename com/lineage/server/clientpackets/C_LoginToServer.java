@@ -12,6 +12,7 @@ import com.lineage.data.event.ice.IceQueenThread;
 import com.lineage.data.npc.Npc_clan;
 import com.lineage.echo.ClientExecutor;
 import com.lineage.server.CheckFightTimeController;
+import com.lineage.server.Controller.DexBonusManager;
 import com.lineage.server.Controller.StrBonusManager;
 import com.lineage.server.Manly.L1WenYang;
 import com.lineage.server.Manly.WenYangTable;
@@ -1041,8 +1042,6 @@ public class C_LoginToServer extends ClientBasePacket {
             pc.removeAICheck(20000, pc.getAICheck());// 刪除AI檢測
             login_Artiface.forIntensifyArmor(pc);// 登入時裝備強化
 
-            StrBonusManager.get().reapply(pc);
-
             if (ConfigFreeKill.FREE_FIGHT_SWITCH) { //隨機掃街啟動開關
                 StringBuilder sbr = CheckFightTimeController.getInstance().getMapList2();
                 if (sbr != null) {
@@ -1060,8 +1059,9 @@ public class C_LoginToServer extends ClientBasePacket {
             //L1QuestNew.getInstance();
             // 精靈的祝賀禮物
             CharacterGiftTable.getInstance().sendPacket(pc);
-            // 角色資料、背包、裝備、登入還原的 BUFF 都完成後 → 依《能力力量設置》回收+套用加成（內含面板刷新）
+            // 角色資料、背包、裝備、登入還原的 BUFF 都完成後 → 依《能力力量/敏捷設置》回收+套用加成（內含面板刷新）
             StrBonusManager.get().reapply(pc);
+            DexBonusManager.get().reapply(pc);
             getUpdate(pc);// 其他狀態更新
             //TODO 修改以下部分無法正常被加載的問題 by 聖子默默
             // 斷點測試結果是原來的代碼寫法以下所有內容均無法載入

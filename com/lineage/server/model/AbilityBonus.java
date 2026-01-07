@@ -51,8 +51,8 @@ public final class AbilityBonus {
         if (useStr) {
             StrSetting s = StrSettingTable.getInstance().findByStr(str);
             if (s != null) {
-                sum.atk = s.atk;
-                sum.hit = s.hit;
+                sum.atk = s.pvpAtk;
+                sum.hit = s.pvpHit;
                 sum.critChance = s.critChance;
                 sum.critPercent = s.critPercent;
                 sum.critFx = s.critFx;
@@ -61,8 +61,8 @@ public final class AbilityBonus {
         } else {
             DexSetting d = DexSettingTable.getInstance().findByDex(dex);
             if (d != null) {
-                sum.atk = d.atk;
-                sum.hit = d.hit;
+                sum.atk = d.pvpAtk;
+                sum.hit = d.pvpHit;
                 sum.critChance = d.critChance;
                 sum.critPercent = d.critPercent;
                 sum.critFx = d.critFx;

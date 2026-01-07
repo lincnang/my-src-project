@@ -199,8 +199,9 @@ public class L1AttackPc extends L1AttackMode {
         if (_weaponType != 20 && _weaponType != 62) {
             // 依據力量計算近戰命中加成
             _hitRate += CalcStat.calcStrHit(_pc.getStr(), _pc.getBaseStr());
-            // 武器附加命中 + 玩家命中加成 + 武器強化影響 (每強化 +0.5，取整數)
-            _hitRate += (int) (_weaponAddHit + _pc.getHitup() + /* _pc.getOriginalHitup() + */ _weaponEnchant * 0.5D);
+            // 武器附加命中 + 武器強化影響 (每強化 +0.5，取整數)
+            // getHitup() 在外部統一加，避免重複
+            _hitRate += (int) (_weaponAddHit + /* _pc.getOriginalHitup() + */ _weaponEnchant * 0.5D);
             // 防具對近戰命中的額外修正
             _hitRate += _pc.getHitModifierByArmor();
             // 遠程武器：弓或十字弓
@@ -286,9 +287,8 @@ public class L1AttackPc extends L1AttackMode {
         }
         // 基礎命中計算
         hitRateFunc(); // 使用前面定義的命中率計算方法 (等級 + 力敏加成 + 武器強化 + 防具 + BUFF)
-        // 額外命中加成
-        _hitRate += _pc.getHitup();  // 玩家本身命中加成
-        _hitRate += com.lineage.server.model.AbilityBonus.hitBonus(_pc); // 能力加成 (例如職業加成)
+        int[] bonus = getAbilityBonus();
+        _hitRate += bonus[1] + _pc.getHitup();  // 加成 + 原本裝備/BUFF
         // 攻擊者骰子值 = 1~20 + 命中率 - 10
         int attackerDice = ThreadLocalRandom.current().nextInt(20) + 1 + _hitRate - 10;
         // ===============================
@@ -438,8 +438,8 @@ public class L1AttackPc extends L1AttackMode {
             return false;
         }
         hitRateFunc(); // 計算命中率（7.6新版公式）
-        _hitRate += _pc.getHitup();
-        _hitRate += com.lineage.server.model.AbilityBonus.hitBonus(_pc);
+        int[] bonus = getPveBonus();
+        _hitRate += bonus[1] + _pc.getHitup();  // 加成 + 原本裝備/BUFF
         int pcHit = _hitRate; // 玩家命中率
         // 根據職業調整命中率（自定義倍率設定）
         if (_pc.isCrown()) {
@@ -1008,6 +1008,82 @@ public class L1AttackPc extends L1AttackMode {
     }
 
     /**
+     * 計算 PVP STR vs DEX 加成
+     * @return [0]=攻擊加成, [1]=命中加成
+     */
+    private int[] getPvpBonus() {
+        int strAtk = com.lineage.server.Controller.StrBonusManager.getPvpAtk(_pc);
+        int dexAtk = com.lineage.server.Controller.DexBonusManager.getPvpAtk(_pc);
+        int strHit = com.lineage.server.Controller.StrBonusManager.getPvpHit(_pc);
+        int dexHit = com.lineage.server.Controller.DexBonusManager.getPvpHit(_pc);
+
+        int atk = Math.max(strAtk, dexAtk);
+        int hit = Math.max(strHit, dexHit);
+
+        return new int[]{atk, hit};
+    }
+
+    /**
+     * 計算 PVE STR vs DEX 加成
+     * @return [0]=攻擊加成, [1]=命中加成
+     */
+    private int[] getPveBonus() {
+        int strAtk = com.lineage.server.Controller.StrBonusManager.getPveAtk(_pc);
+        int dexAtk = com.lineage.server.Controller.DexBonusManager.getPveAtk(_pc);
+        int strHit = com.lineage.server.Controller.StrBonusManager.getPveHit(_pc);
+        int dexHit = com.lineage.server.Controller.DexBonusManager.getPveHit(_pc);
+
+        int atk = Math.max(strAtk, dexAtk);
+        int hit = Math.max(strHit, dexHit);
+
+        return new int[]{atk, hit};
+    }
+
+    /**
+     * 統一計算 STR vs DEX 加成（PvP/PvE 共用）- 預設使用 PVP
+     * @return [0]=攻擊加成, [1]=命中加成
+     */
+    private int[] getAbilityBonus() {
+        return getPvpBonus();
+    }
+
+    /**
+     * 統一獲取 STR vs DEX 爆擊加成（PvP/PvE 共用）
+     * @return [0]=爆擊率, [1]=爆擊倍率, [2]=爆擊特效
+     */
+    private int[] getAbilityCrit() {
+        com.lineage.server.Controller.StrBonusManager.Applied strApplied =
+                com.lineage.server.Controller.StrBonusManager.getApplied(_pc);
+        com.lineage.server.Controller.DexBonusManager.Applied dexApplied =
+                com.lineage.server.Controller.DexBonusManager.getApplied(_pc);
+
+        int critChance = 0, critPercent = 0, critFx = 0;
+
+        if (strApplied != null && dexApplied != null) {
+            if (strApplied.critChance > dexApplied.critChance ||
+                (strApplied.critChance == dexApplied.critChance && strApplied.critPercent >= dexApplied.critPercent)) {
+                critChance = strApplied.critChance;
+                critPercent = strApplied.critPercent;
+                critFx = strApplied.critFx;
+            } else {
+                critChance = dexApplied.critChance;
+                critPercent = dexApplied.critPercent;
+                critFx = dexApplied.critFx;
+            }
+        } else if (strApplied != null) {
+            critChance = strApplied.critChance;
+            critPercent = strApplied.critPercent;
+            critFx = strApplied.critFx;
+        } else if (dexApplied != null) {
+            critChance = dexApplied.critChance;
+            critPercent = dexApplied.critPercent;
+            critFx = dexApplied.critFx;
+        }
+
+        return new int[]{critChance, critPercent, critFx};
+    }
+
+    /**
      * 屬性加成、道具加成、力量加成、初始加成計算
      */
     private double weaponDamage2(double weaponTotalDamage) {
@@ -1028,6 +1104,7 @@ public class L1AttackPc extends L1AttackMode {
                 weaponTotalDamage += calcAttrEnchantDmg();// 屬性武器增傷計算
                 weaponTotalDamage += calcAmuletAttrDmg();// 屬性項鏈增傷計算
 
+                // STR/DEX 加成由呼叫者自行計算 (PVP用getPvpBonus, PVE用getPveBonus)
                 dmg = weaponTotalDamage + _statusDamage + _pc.getDmgup() + _pc.getOriginalDmgup();
 
                 // 魔法大師狀態：將物理傷害轉為魔法傷害
@@ -1534,26 +1611,13 @@ public class L1AttackPc extends L1AttackMode {
         _weaponTotalDamage = _weaponDamage + _weaponAddDmg + _weaponEnchant;
         double dmg = weaponDamage2(_weaponTotalDamage); // 屬性加成、道具加成、力量加成、初始加成計算
         dmg = pcDmgMode(dmg);// 其他增傷計算
-        dmg += _pc.getDmgup();
-        // ===【能力表整合】力量 vs 敏捷：取較高一邊套用 ===
-        // 這三個局部變數用來「延後」到最終階段再做爆擊（避免被後續減傷稀釋）
-        int abilCritChance = 0;    // 爆擊率（%）
-        int abilCritPercent = 0;   // 爆擊傷害倍率（%）
-        int abilCritFx = 0;        // 爆擊特效ID（若有）
-
-        {
-            // 從 AbilityBonus 取回依照 Str/Dex 較高者的加成
-            com.lineage.server.model.AbilityBonus.Sum sum =
-                    com.lineage.server.model.AbilityBonus.from(_pc);
-
-            // 1) 先把「固定攻擊加成」加到當前 dmg（這是固定加值，不等爆擊）
-            dmg += sum.atk;
-
-            // 2) 爆擊參數留到最終套用（避免被後面一大串減傷稀釋）
-            abilCritChance  = sum.critChance;
-            abilCritPercent = sum.critPercent;
-            abilCritFx      = sum.critFx;
-        }
+        int[] bonus = getAbilityBonus();
+        dmg += bonus[0];  // STR/DEX PVP 加成
+        // ===【能力表整合】獲取爆擊加成===
+        int[] crit = getAbilityCrit();
+        int abilCritChance = crit[0];
+        int abilCritPercent = crit[1];
+        int abilCritFx = crit[2];
             //妖精被動鷹眼
             if (_pc.isElf() && _pc.isEagle()) {
             int baseChance = 10; // 基礎發動率為 10%
@@ -2442,28 +2506,16 @@ public class L1AttackPc extends L1AttackMode {
         _weaponTotalDamage = _weaponDamage + _weaponAddDmg + _weaponEnchant;
         _weaponTotalDamage += calcMaterialBlessDmg();// 武器材質、祝福狀態增傷計算
         double dmg = weaponDamage2(_weaponTotalDamage);// 屬性加成、道具加成、力量加成、初始加成計算
+
         dmg = pcDmgMode(dmg);// 其他增傷計算
-        dmg += _pc.getDmgup();
+        int[] bonus = getPveBonus();
+        dmg += bonus[0];  // STR/DEX PVE 加成
         dmg += _pc.getDamageIncreasePVE(); // PVE打怪攻擊力加成
-        // ===【能力表整合】力量 vs 敏捷：取較高一邊套用（只加攻擊；爆擊留到最後統一判定）===
-        int abilCritChance = 0;   // 爆擊率（%）
-        int abilCritPercent = 0;  // 爆擊倍率（%）
-        int abilCritFx = 0;       // 爆擊特效ID
-        {
-            // 依 Str>=Dex→用力量表；Dex>Str→用敏捷表
-            com.lineage.server.model.AbilityBonus.Sum sum =
-                    com.lineage.server.model.AbilityBonus.from(_pc);
-
-            // 固定攻擊加成先加進 dmg（這是加法，不用等到最後）
-            dmg += sum.atk;
-
-            // 命中屬於命中流程，不在這裡動，以免影響你原本的 _isHit 判定
-
-            // 爆擊參數先存，等所有減免都跑完再一次套用（確保是最終爆擊）
-            abilCritChance  = sum.critChance;
-            abilCritPercent = sum.critPercent;
-            abilCritFx      = sum.critFx;
-        }
+        // ===【能力表整合】獲取爆擊加成===
+        int[] crit = getAbilityCrit();
+        int abilCritChance = crit[0];
+        int abilCritPercent = crit[1];
+        int abilCritFx = crit[2];
         if (_pc.isElf() && _pc.isEagle()) {
             int baseChance = 10; // 基礎發動率為 10%
             int bonusChance = 0;

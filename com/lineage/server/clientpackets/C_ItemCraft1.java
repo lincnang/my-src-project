@@ -231,7 +231,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         }
                         if (var2 == 1) {
                             final StringBuilder stringBuilder = new StringBuilder();
-                            for (int i = 0; i < 6; i++) {
+                            for (int i = 0; i < 7; i++) {
                                 stringBuilder.append(dollTable.get().getDollHaveGroup(pc, i + 1)).append(",");
                                 stringBuilder.append(dollTable.get().getDollGroupSize(i + 1)).append(",");
                             }
@@ -241,7 +241,7 @@ public class C_ItemCraft1 extends ClientBasePacket {
                         //表情符號修改 娃娃圖鑑
                         if (var2 == 3) {
                             final StringBuilder stringBuilder = new StringBuilder();
-                            for (int i = 0; i < 6; i++) {
+                            for (int i = 0; i < 7; i++) {
                                 stringBuilder.append(ACardTable.get().getCardHaveGroup(pc, i + 1)).append(",");
                                 stringBuilder.append(ACardTable.get().getCardGroupSize(i + 1)).append(",");
                             }

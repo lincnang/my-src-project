@@ -420,8 +420,9 @@ public class L1EquipmentSlot {  //src039
 
         if (item instanceof L1Armor) {
             L1Armor l1armor = (L1Armor) item;
-            if (l1armor.get_influence_safe() != -1) {
-                int enchantDiff = armor.getEnchantLevel() - l1armor.get_safeenchant();
+            int influenceSafe = l1armor.get_influence_safe();
+            if (influenceSafe >= 0) {
+                int enchantDiff = armor.getEnchantLevel() - influenceSafe + (influenceSafe == 0 ? 0 : 1);
                 if (enchantDiff > 0) {
                     _owner.addStr(l1armor.get_influence_str() * enchantDiff);
                     _owner.addDex(l1armor.get_influence_dex() * enchantDiff);
@@ -705,8 +706,9 @@ public class L1EquipmentSlot {  //src039
 
         if (item instanceof L1Armor) {
             L1Armor l1armor = (L1Armor) item;
-            if (l1armor.get_influence_safe() != -1) {
-                int enchantDiff = armor.getEnchantLevel() - l1armor.get_safeenchant();
+            int influenceSafe = l1armor.get_influence_safe();
+            if (influenceSafe >= 0) {
+                int enchantDiff = armor.getEnchantLevel() - influenceSafe + (influenceSafe == 0 ? 0 : 1);
                 if (enchantDiff > 0) {
                     _owner.addStr(-(l1armor.get_influence_str() * enchantDiff));
                     _owner.addDex(-(l1armor.get_influence_dex() * enchantDiff));

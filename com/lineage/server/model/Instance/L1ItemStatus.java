@@ -1691,8 +1691,9 @@ public class L1ItemStatus {
         // 強化擴充能力顯示
         if (_item instanceof L1Armor) {
             L1Armor armor = (L1Armor) _item;
-            if (armor.get_influence_safe() != -1) {
-                int diff = _itemInstance.getEnchantLevel() - armor.get_safeenchant();
+            int influenceSafe = armor.get_influence_safe();
+            if (influenceSafe >= 0) {
+                int diff = _itemInstance.getEnchantLevel() - influenceSafe + (influenceSafe == 0 ? 0 : 1);
                 int multiplier = (diff > 0) ? diff : 0;
 
                 if (multiplier > 0) {

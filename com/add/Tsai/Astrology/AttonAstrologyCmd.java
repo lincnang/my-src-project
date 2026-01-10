@@ -46,7 +46,7 @@ public class AttonAstrologyCmd {
         }
         return _instance;
     }
-    
+
     /**
      * 清理玩家數據，防止記憶體洩漏
      */
@@ -67,7 +67,10 @@ public class AttonAstrologyCmd {
      * 指令入口
      */
     public boolean Cmd(final L1PcInstance pc, final String cmd) {
-
+        // abu 指令由所有星盤共用，需要特別處理
+        if (cmd.startsWith("abu")) {
+            return handleAbu(pc, cmd);
+        }
 
         if (!"astr2".equals(cmd) && pc.getAstrologyPlateType() != 1) return false;
         try {
@@ -87,6 +90,7 @@ public class AttonAstrologyCmd {
                     pc.sendPackets(new S_SystemMessage("星盤編號異常:" + id + "，請通知管理員"));
                     return true;
                 }
+                // 前置檢查統一由 checkEndAstrologyQuest 處理
                 if (checkEndAstrologyQuest(pc, id)) {
                     return true;
                 }
@@ -95,10 +99,12 @@ public class AttonAstrologyCmd {
                     quest = new AstrologyQuest(pc.getId(), qk(id), data.get_cards());
                     AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.get_cards());
                 }
-                // 檢查守護石
-                if (!pc.getInventory().checkItem(11618, 1)) {
-                    if (data.getQuestId() > 0 && !pc.getQuest().isEnd(data.getNeedQuestId())) {
-                        pc.sendPackets(new S_SystemMessage("前置任務未完成"));
+                // 檢查需求道具（依資料庫設定）
+                if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
+                    int needItemId = Integer.parseInt(data.getNeedItemId());
+                    int needItemNum = Integer.parseInt(data.getNeedItemCount());
+                    if (!pc.getInventory().checkItem(needItemId, needItemNum)) {
+                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
                         updateUI(pc, "t_atton");
                         return true;
                     }
@@ -132,60 +138,6 @@ public class AttonAstrologyCmd {
                 return true;
             }
 
-            // 抽卡解鎖
-            if (cmd.startsWith("abu")) {
-                int astrologyType = pc.getAstrologyType();
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(astrologyType));
-                if (quest == null) {
-                    return true;
-                }
-                if (!pc.getInventory().checkItem(11618, 1)) {
-                    pc.sendPackets(new S_SystemMessage("缺少守護石，無法啟用！"));
-                    pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
-                    return true;
-                }
-                pc.getInventory().consumeItem(11618, 1);
-                int rnd = ThreadLocalRandom.current().nextInt(100) + 1;
-                if (quest.getNum() == 1) {
-                    rnd = 100;
-                }
-                if (rnd < 85) {
-                    pc.sendPackets(new S_SystemMessage("開啟守護星，失敗"));
-                    AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), quest.getNum() - 1);
-                    pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + (quest.getNum() - 1), msg));
-                    return true;
-                }
-                AttonAstrologyData data = AttonAstrologyTable.get().getData(astrologyType);
-                if (data != null) {
-                    boolean unlockSuccess = false;
-                    if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
-                        int needItemId = Integer.parseInt(data.getNeedItemId());
-                        int needItemNum = Integer.parseInt(data.getNeedItemCount());
-                        if (pc.getInventory().checkItem(needItemId, needItemNum)) {
-                            pc.getInventory().consumeItem(needItemId, needItemNum);
-                            unlockSuccess = true;
-                        } else {
-                            pc.sendPackets(new S_SystemMessage("道具不足"));
-                        }
-                    } else {
-                        unlockSuccess = true;
-                    }
-                    if (unlockSuccess) {
-                        pc.getQuest().set_step(data.getQuestId(), 255);
-                        AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), 1);
-                        AstrologyQuestReading.get().delQuest(pc.getId(), qk(astrologyType));
-                        // 任務完成即給能力：非技能節點直接生效
-                        if (data.getSkillId() == 0) {
-                            pc.addAstrologyPower(data, astrologyType);
-                            pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
-                        }
-                    }
-                    updateUI(pc, "t_atton");
-                    pc.sendPackets(new S_PacketBoxGree(1));
-                }
-                return true;
-            }
-
             // 其他不認識指令
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -194,17 +146,69 @@ public class AttonAstrologyCmd {
     }
 
     /**
+     * 處理 abu 抽卡解鎖指令
+     */
+    private boolean handleAbu(final L1PcInstance pc, final String cmd) {
+        // 檢查 plateType 是否正確
+        if (pc.getAstrologyPlateType() != 1) {
+            return false;
+        }
+        try {
+            final String[] msg = "".split(",");
+            int astrologyType = pc.getAstrologyType();
+            AttonAstrologyData data = AttonAstrologyTable.get().getData(astrologyType);
+            if (data == null) {
+                return false; // 不是阿頓的節點，讓其他星盤處理
+            }
+            AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(astrologyType));
+            if (quest == null) {
+                return false;
+            }
+            // 檢查並扣除需求道具（依資料庫設定，無論成功失敗都扣除）
+            if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
+                int needItemId = Integer.parseInt(data.getNeedItemId());
+                int needItemNum = Integer.parseInt(data.getNeedItemCount());
+                if (!pc.getInventory().checkItem(needItemId, needItemNum)) {
+                    pc.sendPackets(new S_SystemMessage("需求道具不足，無法啟用！"));
+                    pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
+                    return true;
+                }
+                pc.getInventory().consumeItem(needItemId, needItemNum);
+            }
+            int rnd = ThreadLocalRandom.current().nextInt(100) + 1;
+            if (quest.getNum() == 1) {
+                rnd = 100;
+            }
+            if (rnd < 85) {
+                pc.sendPackets(new S_SystemMessage("開啟守護星，失敗"));
+                AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), quest.getNum() - 1);
+                pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + (quest.getNum() - 1), msg));
+                return true;
+            }
+            // 成功
+            pc.getQuest().set_step(data.getQuestId(), 255);
+            AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), 1);
+            AstrologyQuestReading.get().delQuest(pc.getId(), qk(astrologyType));
+            // 任務完成即給能力：非技能節點直接生效
+            if (data.getSkillId() == 0) {
+                pc.addAstrologyPower(data, astrologyType);
+                pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
+            }
+            updateUI(pc, "t_atton");
+            pc.sendPackets(new S_PacketBoxGree(1));
+            return true;
+        } catch (Exception e) {
+            _log.error("阿頓星盤 abu 指令處理錯誤", e);
+            return false;
+        }
+    }
+
+    /**
      * 判斷前置星盤是否解鎖
+     * 前置檢查統一由此處理，使用 calcPrevType 規則
      */
     public boolean checkEndAstrologyQuest(L1PcInstance pc, int key) {
-        // 以資料表『前置編號』優先；若未設定則退回舊的 calcPrevType 規則
-        AttonAstrologyData cur = AttonAstrologyTable.get().getData(key);
-        int prevType = -1;
-        if (cur != null && cur.getNeedQuestId() > 0) {
-            prevType = cur.getNeedQuestId();
-        } else {
-            prevType = calcPrevType(key);
-        }
+        int prevType = calcPrevType(key);
         if (prevType < 0) return false;
         AttonAstrologyData prev = AttonAstrologyTable.get().getData(prevType);
         if (prev != null && !pc.getQuest().isEnd(prev.getQuestId())) {

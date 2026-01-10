@@ -114,6 +114,7 @@ public class AstrologyCmd {
                     pc.sendPackets(new S_SystemMessage("星盤編號異常:" + id + ",請通知管理員"));
                     return true; // 攔截
                 }
+                // 前置檢查統一由 checkEndAstrologyQuest 處理
                 if (checkEndAstrologyQuest(pc, id)) {
                     return true; // 攔截
                 }
@@ -122,9 +123,10 @@ public class AstrologyCmd {
                     quest = new AstrologyQuest(pc.getId(), id, data.get_cards());
                     AstrologyQuestReading.get().storeQuest(pc.getId(), id, data.get_cards());
                 }
-                if (!pc.getInventory().checkItem(11618, 1)) {
-                    if (data.get_questId() > 0 && !pc.getQuest().isEnd(data.get_needQuestId())) {
-                        pc.sendPackets(new S_SystemMessage("前置任務未完成"));
+                // 檢查需求道具（依資料庫設定）
+                if (data.getNeedItemID() != 0) {
+                    if (!pc.getInventory().checkItem(data.getNeedItemID(), data.getNeedItemNum())) {
+                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
                         UpdateInfo(pc, "t_zeus");
                         return true; // 攔截
                     }
@@ -156,12 +158,19 @@ public class AstrologyCmd {
                 if (quest == null) {
                     return true; // 攔截
                 }
-                if (!pc.getInventory().checkItem(11618, 1)) {
-                    pc.sendPackets(new S_SystemMessage("缺少守護石，無法啟用！"));
-                    pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
+                AstrologyData data = Astrology1Table.get().getAstrology(astrologyType);
+                if (data == null) {
                     return true; // 攔截
                 }
-                pc.getInventory().consumeItem(11618, 1);
+                // 檢查並扣除需求道具（依資料庫設定，無論成功失敗都扣除）
+                if (data.getNeedItemID() != 0) {
+                    if (!pc.getInventory().checkItem(data.getNeedItemID(), data.getNeedItemNum())) {
+                        pc.sendPackets(new S_SystemMessage("需求道具不足，無法啟用！"));
+                        pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
+                        return true; // 攔截
+                    }
+                    pc.getInventory().consumeItem(data.getNeedItemID(), data.getNeedItemNum());
+                }
                 int rnd = ThreadLocalRandom.current().nextInt(100) + 1;
                 if (quest.getNum() == 1) {
                     rnd = 100;
@@ -172,32 +181,17 @@ public class AstrologyCmd {
                     pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + (quest.getNum() - 1), msg));
                     return true; // 攔截
                 }
-                AstrologyData data = Astrology1Table.get().getAstrology(astrologyType);
-                if (data != null) {
-                    boolean unlockSuccess = false;
-                    if (data.getNeedItemID() != 0) {
-                        if (pc.getInventory().checkItem(data.getNeedItemID(), data.getNeedItemNum())) {
-                            pc.getInventory().consumeItem(data.getNeedItemID(), data.getNeedItemNum());
-                            unlockSuccess = true;
-                        } else {
-                            pc.sendPackets(new S_SystemMessage("道具不足"));
-                        }
-                    } else {
-                        unlockSuccess = true;
-                    }
-                    if (unlockSuccess) {
-                        pc.getQuest().set_step(data.get_questId(), 255);
-                        AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
-                        AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
-                        // 解鎖即永久：非技能節點立即套用能力
-                        if (data.get_skillId() == 0) {
-                            pc.addAstrologyPower(data, astrologyType);
-                            pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
-                        }
-                    }
-                    UpdateInfo(pc, "t_zeus");
-                    pc.sendPackets(new S_PacketBoxGree(1));
+                // 成功
+                pc.getQuest().set_step(data.get_questId(), 255);
+                AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
+                AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
+                // 解鎖即永久：非技能節點立即套用能力
+                if (data.get_skillId() == 0) {
+                    pc.addAstrologyPower(data, astrologyType);
+                    pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
                 }
+                UpdateInfo(pc, "t_zeus");
+                pc.sendPackets(new S_PacketBoxGree(1));
                 return true; // 攔截
             }
 

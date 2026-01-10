@@ -7,10 +7,7 @@ import com.add.MJBookQuestSystem.Loader.UserWeekQuestLoader;
 import com.add.MJBookQuestSystem.UserMonsterBook;
 import com.add.MJBookQuestSystem.UserWeekQuest;
 import com.add.Mobbling.L1MobSpList;
-import com.add.Tsai.Astrology.Astrology1Table;
-import com.add.Tsai.Astrology.AstrologyData;
-import com.add.Tsai.Astrology.AttonAstrologyData;
-import com.add.Tsai.Astrology.AttonAstrologyTable;
+import com.add.Tsai.Astrology.*;
 import com.add.Tsai.collect;
 import com.lineage.DatabaseFactory;
 import com.lineage.config.*;
@@ -141,6 +138,9 @@ public class L1PcInstance extends L1Character { // src015
      */
     private static final ConcurrentHashMap<Integer, AstrologyData> ASTROLOGY_DATA_MAP = Maps.newConcurrentHashMap();
     private final Map<Integer, AttonAstrologyData> ATTON_ASTROLOGY_DATA_MAP = new ConcurrentHashMap<>();
+    private final Map<Integer, SilianAstrologyData> SILIAN_ASTROLOGY_DATA_MAP = new ConcurrentHashMap<>();
+    private final Map<Integer, GritAstrologyData> GRIT_ASTROLOGY_DATA_MAP = new ConcurrentHashMap<>();
+    private final Map<Integer, YishidiAstrologyData> YISHIDI_ASTROLOGY_DATA_MAP = new ConcurrentHashMap<>();
 
     private static BufferedWriter out;
     // 日版記憶座標
@@ -9584,6 +9584,33 @@ public class L1PcInstance extends L1Character { // src015
         ATTON_ASTROLOGY_DATA_MAP.put(key, data);
     }
 
+    // 絲莉安星盤 Silian
+    public final void addAstrologyPower(SilianAstrologyData data, int key) {
+        if (SILIAN_ASTROLOGY_DATA_MAP.containsKey(key)) {
+            return;
+        }
+        SilianAstrologyTable.effectBuff(this, data, 1);
+        SILIAN_ASTROLOGY_DATA_MAP.put(key, data);
+    }
+
+    // 格立特星盤 Grit
+    public final void addAstrologyPower(GritAstrologyData data, int key) {
+        if (GRIT_ASTROLOGY_DATA_MAP.containsKey(key)) {
+            return;
+        }
+        GritAstrologyTable.effectBuff(this, data, 1);
+        GRIT_ASTROLOGY_DATA_MAP.put(key, data);
+    }
+
+    // 依詩蒂星盤 Yishidi
+    public final void addAstrologyPower(YishidiAstrologyData data, int key) {
+        if (YISHIDI_ASTROLOGY_DATA_MAP.containsKey(key)) {
+            return;
+        }
+        YishidiAstrologyTable.effectBuff(this, data, 1);
+        YISHIDI_ASTROLOGY_DATA_MAP.put(key, data);
+    }
+
     // ======= 絲莉安/阿頓 共用的擴充屬性（被動減傷類） =======
     private int _tripleArrowReduction = 0; // 被三重矢攻擊時，固定減傷值
     private int _rangedDmgReductionPercent = 0; // 遭受遠距離攻擊時減免百分比
@@ -9932,6 +9959,42 @@ public class L1PcInstance extends L1Character { // src015
             setLeechAmount(0);
             setLeechGfx1(0);
             setLeechGfx2(0);
+        }
+    }
+
+    // 移除所有絲莉安星盤效果
+    public final void clearSilianAstrologyPower() {
+        try {
+            for (SilianAstrologyData v : SILIAN_ASTROLOGY_DATA_MAP.values()) {
+                SilianAstrologyTable.effectBuff(this, v, -1);
+            }
+        } catch (Exception ignore) {
+        } finally {
+            SILIAN_ASTROLOGY_DATA_MAP.clear();
+        }
+    }
+
+    // 移除所有格立特星盤效果
+    public final void clearGritAstrologyPower() {
+        try {
+            for (GritAstrologyData v : GRIT_ASTROLOGY_DATA_MAP.values()) {
+                GritAstrologyTable.effectBuff(this, v, -1);
+            }
+        } catch (Exception ignore) {
+        } finally {
+            GRIT_ASTROLOGY_DATA_MAP.clear();
+        }
+    }
+
+    // 移除所有依詩蒂星盤效果
+    public final void clearYishidiAstrologyPower() {
+        try {
+            for (YishidiAstrologyData v : YISHIDI_ASTROLOGY_DATA_MAP.values()) {
+                YishidiAstrologyTable.effectBuff(this, v, -1);
+            }
+        } catch (Exception ignore) {
+        } finally {
+            YISHIDI_ASTROLOGY_DATA_MAP.clear();
         }
     }
 

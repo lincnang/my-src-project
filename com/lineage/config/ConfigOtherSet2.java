@@ -127,6 +127,10 @@ public final class ConfigOtherSet2 {
      * 妈祖狀態經驗倍數
      */
     public static double Mazu_Exp;
+    /**
+     * 武器經驗倍率 (預設500 = 1倍, 設越小獲得越快)
+     */
+    public static int Weapon_Exp_Rate;
     public static boolean APPRENTICE_SWITCH;
     public static int APPRENTICE_LEVEL;
     public static int APPRENTICE_EXP_BONUS;
@@ -289,6 +293,8 @@ public final class ConfigOtherSet2 {
             LEAVES_MAXEXP = Integer.parseInt(set.getProperty("LEAVES_MAXEXP", "500"));
             // 妈祖狀態經驗倍數
             Mazu_Exp = Double.parseDouble(set.getProperty("Mazu_Exp", "1.0"));
+            // 武器經驗倍率 (預設500 = 1倍, 設越小獲得越快)
+            Weapon_Exp_Rate = Integer.parseInt(set.getProperty("Weapon_Exp_Rate", "500"));
             APPRENTICE_SWITCH = Boolean.parseBoolean(set.getProperty("Apprentice_Switch", "true"));
             APPRENTICE_LEVEL = Integer.parseInt(set.getProperty("Apprentice_Level", "70"));
             APPRENTICE_EXP_BONUS = Integer.parseInt(set.getProperty("Apprentice_Exp_Bonus", "0"));

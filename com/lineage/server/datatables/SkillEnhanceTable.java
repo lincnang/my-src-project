@@ -360,6 +360,12 @@ public final class SkillEnhanceTable {
         if (cmd.toLowerCase().startsWith("au_")) {
             return false;
         }
+        // 排除星盤指令（避免與技能強化衝突）
+        if (cmd.startsWith("tza_") || cmd.startsWith("tat_") ||
+            cmd.startsWith("tgr_") || cmd.startsWith("trs_") ||
+            cmd.startsWith("tsi_")) {
+            return false;
+        }
         // 主清單（進入卡冊頁面）- 使用固定 ACTION 格式
         if ("magic_cardv1".equalsIgnoreCase(cmd)) {
             String[] dataImgs = getPlayerSkillIconsMixWithFixedAction(pc);

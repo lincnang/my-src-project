@@ -30,9 +30,9 @@ public class holyBookCmd {
     public boolean Cmd(final L1PcInstance pc, final String cmd) {
         try {
             final StringBuilder stringBuilder = new StringBuilder();
-            int size = holyTable.get().holySize();
-            for (int i = 0; i <= size; i++) {
-                final holy holy1 = holyTable.get().getHoly(i);
+            Integer[] holyIds = holyTable.get().getHolyIndex();
+            for (Integer id : holyIds) {
+                final holy holy1 = holyTable.get().getHoly(id);
                 //獲取列表id
                 if (holy1 != null) {//列表ID空白不啟動
                     // 聖物系統使用共用表格 character_娃娃卡帳號
@@ -95,6 +95,8 @@ public class holyBookCmd {
                     }
                     break;
                 case "holyset":
+                    // 聖物套卡的「需求的變身卡編號」對應聖物表的流水號
+                    // 需要用聖物表來取得對應的聖物任務編號 (24000+)
                     int questId = holyTable.get().getQuestIdByHolyId(pc.getHolyId());
                     HolySet(pc, questId);
                     ok = true;
@@ -164,8 +166,8 @@ public class holyBookCmd {
                     IDX_FIRE = 20, IDX_WIND = 21, IDX_EARTH = 22, IDX_WATER = 23;
 
             // 1. 先統計最大能力
-            for (int i = 0; i <= holyTable.get().holySize(); i++) {
-                final holy holy = holyTable.get().getHoly(i);
+            for (Integer id : holyTable.get().getHolyIndex()) {
+                final holy holy = holyTable.get().getHoly(id);
                 if (holy != null) {
                     max[IDX_STR] += holy.getAddStr();
                     max[IDX_DEX] += holy.getAddDex();
@@ -193,8 +195,8 @@ public class holyBookCmd {
                     max[IDX_WATER] += holy.getAddWater();
                 }
             }
-            for (int i = 0; i <= holySetTable.get().HolySize(); i++) {
-                final holyPolySet holys = holySetTable.get().getHoly(i);
+            for (Integer id : holySetTable.get().getHolyIds()) {
+                final holyPolySet holys = holySetTable.get().getHoly(id);
                 if (holys != null) {
                     max[IDX_STR] += holys.getAddStr();
                     max[IDX_DEX] += holys.getAddDex();
@@ -223,8 +225,8 @@ public class holyBookCmd {
                 }
             }
             // 2. 統計玩家已獲得（有解鎖的）
-            for (int i = 0; i <= holyTable.get().holySize(); i++) {
-                final holy holy = holyTable.get().getHoly(i);
+            for (Integer id : holyTable.get().getHolyIndex()) {
+                final holy holy = holyTable.get().getHoly(id);
                 if (holy != null && dollQuestTable.get().IsQuest(pc, holy.getQuestId())) {
                     current[IDX_STR] += holy.getAddStr();
                     current[IDX_DEX] += holy.getAddDex();
@@ -252,8 +254,8 @@ public class holyBookCmd {
                     current[IDX_WATER] += holy.getAddWater();
                 }
             }
-            for (int i = 0; i <= holySetTable.get().HolySize(); i++) {
-                final holyPolySet holys = holySetTable.get().getHoly(i);
+            for (Integer id : holySetTable.get().getHolyIds()) {
+                final holyPolySet holys = holySetTable.get().getHoly(id);
                 if (holys != null && dollQuestTable.get().IsQuest(pc, holys.getQuestId())) {
                     current[IDX_STR] += holys.getAddStr();
                     current[IDX_DEX] += holys.getAddDex();
@@ -299,14 +301,15 @@ public class holyBookCmd {
         try {
             final StringBuilder stringBuilder = new StringBuilder();//建立一個新的字符串
             holySetTable holyJketTable = holySetTable.get();//獲取變身組合套卡
-            for (int i = 0; i < holyJketTable.HolySize(); i++) {//檢查變身組合DB資料
+            Integer[] holySetIds = holyJketTable.getHolyIds();
+            for (Integer id : holySetIds) {//檢查變身組合DB資料
 
-                final holyPolySet holy = holyJketTable.getHoly(i);//獲取卡片
+                final holyPolySet holy = holyJketTable.getHoly(id);//獲取卡片
                 if (holy != null && holy.hasGroup()) {//檢查變身組合DB資料
                     boolean anyTaskUncompleted = false;
+
                     if (!holy.hasNeedQuests(questId))
                         continue;
-                    ;
                     stringBuilder.append(holy.getMsg1()).append(",");
 
                     for (int j = 0; j < holy.getNeedQuest().length; j++) {
@@ -327,6 +330,8 @@ public class holyBookCmd {
             if (stringBuilder.length() > 0) {
                 final String[] clientStrAry = stringBuilder.toString().split(",");
                 pc.sendPackets(new S_NPCTalkReturn(pc, "Holy_D10", clientStrAry));
+            } else {
+                pc.sendPackets(new S_SystemMessage("沒有找到相關的聖物套裝資訊。"));
             }
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
@@ -373,12 +378,12 @@ public class holyBookCmd {
         try {//變身卡指令
             boolean ok = false;//變身卡指令
             final StringBuilder stringBuilder = new StringBuilder();//建立一個新的字符串
-            for (int i = 0; i <= holyTable.get().holySize(); i++) {//檢查變身卡DB資料
+            for (Integer id : holyTable.get().getHolyIndex()) {//檢查變身卡DB資料
 
-                final holy holy = holyTable.get().getHoly(i);//獲取卡片
+                final holy holy = holyTable.get().getHoly(id);//獲取卡片
                 if (holy != null) {//檢查變身卡DB資料
                     if (cmd.equals(holy.getCmd())) {//檢查變身卡DB資料
-                        pc.setHolyId(i);
+                        pc.setHolyId(id);
 
                         if (dollQuestTable.get().IsQuest(pc, holy.getQuestId())) {
                             stringBuilder.append(holy.getAddcgfxid()).append(",");    // 0

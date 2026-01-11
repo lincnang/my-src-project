@@ -294,6 +294,8 @@ public class GameServer {
             L1FireSmithCrystalTable.get().load();
             // PC檢查時間軸 by terry0412
             CheckTimeController.getInstance().start();
+            // 伺服器時間控制器 (地圖重置、商店限購重置等)
+            ServerTimerController.getInstance();
             // 建立資料 [地圖群組設置資料 (入場時間限制)] by terry0412
             MapsGroupTable.get().load();
             // 載入資料 [地圖入場時間紀錄] by terry0412

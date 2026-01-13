@@ -1693,6 +1693,13 @@ public class L1AttackPc extends L1AttackMode {
         int DmgR = _targetPc.getDmgR() // 物理傷害減免
                 + _targetPc.getDamageReductionByArmor(); // 被攻擊者防具增加全部傷害減免
 
+        // 無視傷害減免（直接扣除數值）
+        int ignoreReduction = _pc.getDamageReductionIgnore();
+        if (ignoreReduction > 0 && DmgR > 0) {
+            DmgR -= ignoreReduction;
+            if (DmgR < 0) DmgR = 0;
+        }
+
         boolean isDmgR;
         if (DmgR != 0) {
             final int IgnoreDmgR = _pc.getIgnoreDmgR();
@@ -1809,7 +1816,14 @@ public class L1AttackPc extends L1AttackMode {
                 dmg -= calcPcDefense(); // 被攻擊者防禦力傷害減低
             }
             if (!_targetPc.hasSkillEffect(L1SkillId.negativeId13)) {
-                dmg -= _targetPc.getDamageReductionByArmor();// 防具減免計算
+                // 防具減免計算（扣除無視傷害減免）
+                int armorReduction = _targetPc.getDamageReductionByArmor();
+                ignoreReduction = _pc.getDamageReductionIgnore();
+                if (ignoreReduction > 0 && armorReduction > 0) {
+                    armorReduction -= ignoreReduction;
+                    if (armorReduction < 0) armorReduction = 0;
+                }
+                dmg -= armorReduction;
             }
             dmg -= _targetPc.dmgDowe();// 隨機傷害減免
             if (_targetPc.getClanid() != 0) {

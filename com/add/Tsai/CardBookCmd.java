@@ -461,7 +461,7 @@ public class CardBookCmd {
             prog.setExp(0);
             CardAwakenProgressTable.get().upsert(prog);
             CardQuestTable.get().storeQuest(pc.getAccountName(), cfg.getSuccessQuestId(), new CardQuest(pc.getAccountName(), cfg.getSuccessQuestId()));
-            World.get().broadcastPacketToAll(new S_PacketBoxGree(24));
+            pc.sendPackets(new S_PacketBoxGree(24));
             pc.sendPacketsX8(new S_Sound(20360));
             pc.sendPackets(new S_SystemMessage("\\f=覺醒成功！"));
         } else {
@@ -469,7 +469,7 @@ public class CardBookCmd {
             int newExp = (prog.getExp() * keep) / 100;
             prog.setExp(newExp);
             CardAwakenProgressTable.get().upsert(prog);
-            World.get().broadcastPacketToAll(new S_PacketBoxGree(16));
+            pc.sendPackets(new S_PacketBoxGree(16));
             pc.sendPackets(new S_SystemMessage("\\f=覺醒失敗，經驗返回 " + keep + "%"));
         }
         // 刷新畫面顯示最新階段/EXP

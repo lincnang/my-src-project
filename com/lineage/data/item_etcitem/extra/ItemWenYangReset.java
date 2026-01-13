@@ -40,7 +40,7 @@ public class ItemWenYangReset extends ItemExecutor {
             if (ok) {
                 // 追加：清掉 characters 主表對應欄位
                 new MySqlCharacterStorage().resetWenYangByType(pc, resetType);
-                World.get().broadcastPacketToAll((new S_PacketBoxGree(23)));
+                pc.sendPackets(new S_PacketBoxGree(23));
                 pc.sendPackets(new S_SystemMessage("\\aB已重置紋樣強化與成功次數。"));
             } else {
                 pc.sendPackets(new S_SystemMessage("沒有可重置的紋樣紀錄。"));

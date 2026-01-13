@@ -68,6 +68,7 @@ public final class ExtraPolyPowerTable//src014
         pc.add_regist_freeze(value.getRegistFreeze() * negative); // 增加冰凍抗性
         pc.addRegistSustain(value.getRegistSustain() * negative); // 增加持續性異常抗性
         pc.addRegistBlind(value.getRegistBlind() * negative); // 增加失明抗性
+        pc.addRegistFear(value.getRegistFear() * negative); // 增加恐怖抗性
         pc.set_expadd(value.getExpPoint() * negative); // 增加經驗
         pc.add_up_hp_potion(value.get_up_hp_potion() * negative); // 藥水回復
         pc.setPvpDmg(value.getPvpDmg() * negative); // PVP攻擊
@@ -76,6 +77,7 @@ public final class ExtraPolyPowerTable//src014
         pc.addStunLevel(value.getStunLevel() * negative); // 昏迷命中
         pc.addCloseCritical(value.getCloseCritical() * negative); // 近距離爆擊率
         pc.addBowCritical(value.getBowCritical() * negative); // 遠距離爆擊率
+        pc.addDamageReductionIgnore(value.getIgnoreReduction() * negative); // 無視傷害減免
 
         pc.sendPackets(new S_OwnCharStatus(pc));
         //pc.sendPackets(new S_OwnCharAttrDef(pc));
@@ -109,149 +111,88 @@ public final class ExtraPolyPowerTable//src014
         }
         if (negative == 1 && !skipDisplay) {
             // 设定一个对话档，玩家自行设定 pc.getloginpoly() == 1 时才显示
-            powerInfos(pc, value, pc.getloginpoly() == 1);
+            powerInfos(pc, value);
         }
     }
 
     // （移除）光圈特效連播
 
     /**
-     * 視窗展示變身額外能力值<br>
-     * <font color="ff0000">自已檢查一下是否有遺漏的屬性</font><br>
-     * <font color="00ff00">理论上是没有遗漏的</font>
+     * 視窗展示變身額外能力值
      *
      * @param pc    展示對象
      * @param value 能力值
-     * @param show  true = 不顯示
      */
-    public static void powerInfos(L1PcInstance pc, L1PolyPower value, boolean show) {
+    public static void powerInfos(L1PcInstance pc, L1PolyPower value) {
         try {
-            if (show) {
-                pc.sendPackets(new S_AllChannelsChat("當前變身具備額外能力值加成", 44));
-                return;
-            }
-            final List<String> powers = World.get().getHtmlString();// 任意需要內容說明的位置直接照抄此條 1
-            powers.add("---- 變身附加能力值 ----");// 然後使用 add 添加說明內容 2
-            if (value.getAc() != 0) {
-                powers.add("防禦: " + value.getAc());
-            }
-            if (value.getHp() != 0) {
-                powers.add("體力: " + value.getHp());
-            }
-            if (value.getMp() != 0) {
-                powers.add("魔力: " + value.getMp());
-            }
-            if (value.getHpr() != 0) {
-                powers.add("體力恢復: " + value.getHpr());
-            }
-            if (value.getMpr() != 0) {
-                powers.add("魔力恢復: " + value.getMpr());
-            }
-            if (value.getStr() != 0) {
-                powers.add("力量: " + value.getStr());
-            }
-            if (value.getCon() != 0) {
-                powers.add("體質: " + value.getCon());
-            }
-            if (value.getDex() != 0) {
-                powers.add("敏捷: " + value.getDex());
-            }
-            if (value.getWis() != 0) {
-                powers.add("精神: " + value.getWis());
-            }
-            if (value.getCha() != 0) {
-                powers.add("魅力: " + value.getCha());
-            }
-            if (value.getInt() != 0) {
-                powers.add("智力: " + value.getInt());
-            }
-            if (value.getSp() != 0) {
-                powers.add("魔攻: " + value.getSp());
-            }
-            if (value.getMr() != 0) {
-                powers.add("魔防: " + value.getMr());
-            }
-            if (value.getHitModifier() != 0) {
-                powers.add("近戰命中: " + value.getHitModifier());
-            }
-            if (value.getDmgModifier() != 0) {
-                powers.add("近戰傷害: " + value.getDmgModifier());
-            }
-            if (value.getBowHitModifier() != 0) {
-                powers.add("遠程命中: " + value.getBowHitModifier());
-            }
-            if (value.getBowDmgModifier() != 0) {
-                powers.add("遠程傷害: " + value.getBowDmgModifier());
-            }
-            if (value.getMagicDmgModifier() != 0) {
-                powers.add("魔法傷害: " + value.getMagicDmgModifier());
-            }
-            if (value.getMagicDmgReduction() != 0) {
-                powers.add("魔法減傷: " + value.getMagicDmgReduction());
-            }
-            if (value.getReductionDmg() != 0) {
-                powers.add("傷害減免: " + value.getReductionDmg());
-            }
-            if (value.getDefenseWater() != 0) {
-                powers.add("水屬性防禦: " + value.getDefenseWater());
-            }
-            if (value.getDefenseWind() != 0) {
-                powers.add("風屬性防禦: " + value.getDefenseWind());
-            }
-            if (value.getDefenseFire() != 0) {
-                powers.add("火屬性防禦: " + value.getDefenseFire());
-            }
-            if (value.getDefenseEarth() != 0) {
-                powers.add("地屬性防禦: " + value.getDefenseEarth());
-            }
-            if (value.getRegistStun() != 0) {
-                powers.add("昏迷耐性: " + value.getRegistStun());
-            }
-            if (value.getRegistStone() != 0) {
-                powers.add("石化耐性: " + value.getRegistStone());
-            }
-            if (value.getRegistSleep() != 0) {
-                powers.add("睡眠耐性: " + value.getRegistSleep());
-            }
-            if (value.getRegistFreeze() != 0) {
-                powers.add("冰凍耐性: " + value.getRegistFreeze());
-            }
-            if (value.getRegistSustain() != 0) {
-                powers.add("支撐耐性: " + value.getRegistSustain());
-            }
-            if (value.getRegistBlind() != 0) {
-                powers.add("暗黑耐性: " + value.getRegistBlind());
-            }
-            if (value.getExpPoint() != 0) {
-                powers.add("經驗 + " + value.getExpPoint() + "%"); // 例如: "經驗 + 10%"
-            }
-            if (value.get_up_hp_potion() != 0) {
-                powers.add("藥水恢復 + " + value.get_up_hp_potion() + "%"); // 藥水回復
-            }
-            if (value.getPvpDmg() != 0) {
-                powers.add("PVP傷害 + " + value.getPvpDmg() + "攻擊"); //PVP攻擊
-            }
-            if (value.getPvpDmg_R() != 0) {
-                powers.add("PVP減免 + " + value.getPvpDmg_R() + "減免"); //PVP減免
-            }
-            if (value.getOriginalMagicHit() != 0) {
-                powers.add("魔法命中 + " + value.getOriginalMagicHit() + "%"); //魔法命中
-            }
-            if (value.getStunLevel() != 0) {
-                powers.add("昏迷命中 + " + value.getStunLevel() + "%"); //魔法命中
-            }
-            if (value.getCloseCritical() != 0) {
-                powers.add("近距離爆擊 + " + value.getCloseCritical() + "%"); //近距離爆擊
-            }
-            if (value.getBowCritical() != 0) {
-                powers.add("遠距離爆擊 + " + value.getBowCritical() + "%"); //遠距離爆擊
-            }
-            if (powers.size() < 2) {// 因為第一行為標題，所以內容範圍最少要2條
-                ListMapUtil.clear(powers);
-                return;
-            }
-            powers.add(" ");
-            World.showHtmlInfo(pc, "otherInfo");// 任意需要內容說明的位置直接照抄此條 3
+            // 顏色分類:
+            // 3  = 標題 (青色)
+            // 12 = 基礎屬性 (粉色) - HP/MP/恢復/防禦
+            // 11 = 屬性點 (黃色) - 力量/敏捷等
+            // 4  = 魔法相關 (綠色) - 魔攻/魔防/魔法命中
+            // 15 = 攻擊相關 (紅色) - 命中/傷害/暴擊
+            // 17 = 防禦減傷 (藍色) - 減傷/抗性
+            // 19 = 元素屬性 (橙色)
+            // 26 = PVP相關 (紫色)
+            // 1  = 其他 (白色) - 經驗/藥水
+
+            pc.sendPackets(new S_SystemMessage("---- 變身附加能力值 ----", 3));
+
+            // 基礎屬性 (粉色 12)
+            if (value.getHp() != 0) pc.sendPackets(new S_SystemMessage("體力:+" + value.getHp(), 12));
+            if (value.getMp() != 0) pc.sendPackets(new S_SystemMessage("魔力:+" + value.getMp(), 12));
+            if (value.getHpr() != 0) pc.sendPackets(new S_SystemMessage("體力恢復:+" + value.getHpr(), 12));
+            if (value.getMpr() != 0) pc.sendPackets(new S_SystemMessage("魔力恢復:+" + value.getMpr(), 12));
+            if (value.getAc() != 0) pc.sendPackets(new S_SystemMessage("防禦:+" + value.getAc(), 12));
+
+            // 屬性點 (黃色 11)
+            if (value.getStr() != 0) pc.sendPackets(new S_SystemMessage("力量:+" + value.getStr(), 11));
+            if (value.getCon() != 0) pc.sendPackets(new S_SystemMessage("體質:+" + value.getCon(), 11));
+            if (value.getDex() != 0) pc.sendPackets(new S_SystemMessage("敏捷:+" + value.getDex(), 11));
+            if (value.getWis() != 0) pc.sendPackets(new S_SystemMessage("精神:+" + value.getWis(), 11));
+            if (value.getCha() != 0) pc.sendPackets(new S_SystemMessage("魅力:+" + value.getCha(), 11));
+            if (value.getInt() != 0) pc.sendPackets(new S_SystemMessage("智力:+" + value.getInt(), 11));
+
+            // 魔法相關 (綠色 4)
+            if (value.getSp() != 0) pc.sendPackets(new S_SystemMessage("魔攻:+" + value.getSp(), 4));
+            if (value.getMr() != 0) pc.sendPackets(new S_SystemMessage("魔防:+" + value.getMr(), 4));
+            if (value.getMagicDmgModifier() != 0) pc.sendPackets(new S_SystemMessage("魔法傷害:+" + value.getMagicDmgModifier(), 4));
+            if (value.getMagicDmgReduction() != 0) pc.sendPackets(new S_SystemMessage("魔法減傷:+" + value.getMagicDmgReduction(), 4));
+            if (value.getOriginalMagicHit() != 0) pc.sendPackets(new S_SystemMessage("魔法命中:+" + value.getOriginalMagicHit() + "%", 4));
+
+            // 攻擊相關 (紅色 15)
+            if (value.getHitModifier() != 0) pc.sendPackets(new S_SystemMessage("近戰命中:+" + value.getHitModifier(), 15));
+            if (value.getDmgModifier() != 0) pc.sendPackets(new S_SystemMessage("近戰傷害:+" + value.getDmgModifier(), 15));
+            if (value.getBowHitModifier() != 0) pc.sendPackets(new S_SystemMessage("遠程命中:+" + value.getBowHitModifier(), 15));
+            if (value.getBowDmgModifier() != 0) pc.sendPackets(new S_SystemMessage("遠程傷害:+" + value.getBowDmgModifier(), 15));
+            if (value.getCloseCritical() != 0) pc.sendPackets(new S_SystemMessage("近距離爆擊:+" + value.getCloseCritical() + "%", 15));
+            if (value.getBowCritical() != 0) pc.sendPackets(new S_SystemMessage("遠距離爆擊:+" + value.getBowCritical() + "%", 15));
+            if (value.getStunLevel() != 0) pc.sendPackets(new S_SystemMessage("昏迷命中:+" + value.getStunLevel() + "%", 15));
+
+            // 防禦減傷 (藍色 17)
+            if (value.getReductionDmg() != 0) pc.sendPackets(new S_SystemMessage("傷害減免:+" + value.getReductionDmg(), 17));
+            if (value.getRegistStun() != 0) pc.sendPackets(new S_SystemMessage("昏迷耐性:+" + value.getRegistStun(), 17));
+            if (value.getRegistStone() != 0) pc.sendPackets(new S_SystemMessage("石化耐性:+" + value.getRegistStone(), 17));
+            if (value.getRegistSleep() != 0) pc.sendPackets(new S_SystemMessage("睡眠耐性:+" + value.getRegistSleep(), 17));
+            if (value.getRegistFreeze() != 0) pc.sendPackets(new S_SystemMessage("冰凍耐性:+" + value.getRegistFreeze(), 17));
+            if (value.getRegistSustain() != 0) pc.sendPackets(new S_SystemMessage("支撐耐性:+" + value.getRegistSustain(), 17));
+            if (value.getRegistBlind() != 0) pc.sendPackets(new S_SystemMessage("暗黑耐性:+" + value.getRegistBlind(), 17));
+            if (value.getRegistFear() != 0) pc.sendPackets(new S_SystemMessage("恐怖耐性:+" + value.getRegistFear(), 17));
+            if (value.getIgnoreReduction() != 0) pc.sendPackets(new S_SystemMessage("無視傷害減免:+" + value.getIgnoreReduction(), 17));
+
+            // 元素屬性 (橙色 19)
+            if (value.getDefenseWater() != 0) pc.sendPackets(new S_SystemMessage("水屬性防禦:+" + value.getDefenseWater(), 19));
+            if (value.getDefenseWind() != 0) pc.sendPackets(new S_SystemMessage("風屬性防禦:+" + value.getDefenseWind(), 19));
+            if (value.getDefenseFire() != 0) pc.sendPackets(new S_SystemMessage("火屬性防禦:+" + value.getDefenseFire(), 19));
+            if (value.getDefenseEarth() != 0) pc.sendPackets(new S_SystemMessage("地屬性防禦:+" + value.getDefenseEarth(), 19));
+
+            // PVP相關 (紫色 26)
+            if (value.getPvpDmg() != 0) pc.sendPackets(new S_SystemMessage("PVP傷害:+" + value.getPvpDmg() + "攻擊", 17));
+            if (value.getPvpDmg_R() != 0) pc.sendPackets(new S_SystemMessage("PVP減免:+" + value.getPvpDmg_R() + "減免", 17));
+
+            // 其他 (白色 1)
+            if (value.getExpPoint() != 0) pc.sendPackets(new S_SystemMessage("經驗值:+" + value.getExpPoint() + "%", 1));
+            if (value.get_up_hp_potion() != 0) pc.sendPackets(new S_SystemMessage("藥水恢復:+" + value.get_up_hp_potion() + "%", 1));
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         }
@@ -298,6 +239,11 @@ public final class ExtraPolyPowerTable//src014
                 int regist_freeze = rs.getInt("寒冰耐性");
                 int regist_sustain = rs.getInt("支撑耐性");
                 int regist_blind = rs.getInt("暗黑耐性");
+                int regist_fear = 0;
+                try {
+                    regist_fear = rs.getInt("恐怖耐性");
+                } catch (Exception ignored) {
+                }
                 int EXP = rs.getInt("EXP");
                 int potion = rs.getInt("藥水恢復");
                 int PVP = rs.getInt("PVP攻擊");
@@ -311,7 +257,12 @@ public final class ExtraPolyPowerTable//src014
                     skinId = rs.getInt("光環編號"); // SPR 外觀（可填 #19547/#19548 類）
                 } catch (Exception ignored) {
                 }
-                L1PolyPower polyPower = new L1PolyPower(polyId, ac, hp, mp, hpr, mpr, str, con, dex, wis, cha, intel, sp, mr, hit_modifier, dmg_modifier, bow_hit_modifier, bow_dmg_modifier, magic_dmg_modifier, magic_dmg_reduction, reduction_dmg, defense_water, defense_wind, defense_fire, defense_earth, regist_stun, regist_stone, regist_sleep, regist_freeze, regist_sustain, regist_blind, EXP, potion, PVP, PVP_R, magic_hit, StunLv, CloseCritical, BowCritical, skinId);
+                int ignoreReduction = 0;
+                try {
+                    ignoreReduction = rs.getInt("無視傷害減免");
+                } catch (Exception ignored) {
+                }
+                L1PolyPower polyPower = new L1PolyPower(polyId, ac, hp, mp, hpr, mpr, str, con, dex, wis, cha, intel, sp, mr, hit_modifier, dmg_modifier, bow_hit_modifier, bow_dmg_modifier, magic_dmg_modifier, magic_dmg_reduction, reduction_dmg, defense_water, defense_wind, defense_fire, defense_earth, regist_stun, regist_stone, regist_sleep, regist_freeze, regist_sustain, regist_blind, regist_fear, EXP, potion, PVP, PVP_R, magic_hit, StunLv, CloseCritical, BowCritical, skinId, ignoreReduction);
                 _polyList.put(polyId, polyPower);
             }
         } catch (SQLException e) {

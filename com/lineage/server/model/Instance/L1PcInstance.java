@@ -418,6 +418,7 @@ public class L1PcInstance extends L1Character { // src015
     private int _originalConWeightReduction = 0;
     private int _hasteItemEquipped = 0;
     private int _damageReductionByArmor = 0;
+    private int _damageReductionIgnore = 0; // 無視傷害減免
     private int _hitModifierByArmor = 0;
     private int _dmgModifierByArmor = 0;
     private int _bowHitModifierByArmor = 0;
@@ -5236,6 +5237,15 @@ public class L1PcInstance extends L1Character { // src015
 
     public void addDamageReductionByArmor(int i) {
         _damageReductionByArmor += i;
+    }
+
+    // 無視傷害減免
+    public int getDamageReductionIgnore() {
+        return _damageReductionIgnore;
+    }
+
+    public void addDamageReductionIgnore(int i) {
+        _damageReductionIgnore += i;
     }
 
     public int getHitModifierByArmor() {

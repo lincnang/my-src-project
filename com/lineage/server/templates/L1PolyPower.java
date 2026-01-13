@@ -33,6 +33,7 @@ public class L1PolyPower // src014
     private final int _regist_freeze;
     private final int _regist_sustain;
     private final int _regist_blind;
+    private final int _regist_fear; // 恐怖耐性
     private int _addexp;
     private int _add_potion;
     private int _add_PVP;
@@ -42,8 +43,9 @@ public class L1PolyPower // src014
     private int _addCloseCritical;
     private int _addBowCritical;
     private int _skinId;
+    private int _ignoreReduction; // 無視傷害減免
 
-    public L1PolyPower(int polyId, int ac, int hp, int mp, int hpr, int mpr, int str, int con, int dex, int wis, int cha, int intel, int sp, int mr, int hit_modifier, int dmg_modifier, int bow_hit_modifier, int bow_dmg_modifier, int magic_dmg_modifier, int magic_dmg_reduction, int reduction_dmg, int defense_water, int defense_wind, int defense_fire, int defense_earth, int regist_stun, int regist_stone, int regist_sleep, int regist_freeze, int regist_sustain, int regist_blind, int Exp, int potion, int PVP, int PVP_R, int magic_hit, int StunLv, int CloseCritical, int BowCritical, int skinId) {
+    public L1PolyPower(int polyId, int ac, int hp, int mp, int hpr, int mpr, int str, int con, int dex, int wis, int cha, int intel, int sp, int mr, int hit_modifier, int dmg_modifier, int bow_hit_modifier, int bow_dmg_modifier, int magic_dmg_modifier, int magic_dmg_reduction, int reduction_dmg, int defense_water, int defense_wind, int defense_fire, int defense_earth, int regist_stun, int regist_stone, int regist_sleep, int regist_freeze, int regist_sustain, int regist_blind, int regist_fear, int Exp, int potion, int PVP, int PVP_R, int magic_hit, int StunLv, int CloseCritical, int BowCritical, int skinId, int ignoreReduction) {
         this._polyId = polyId;
         this._ac = ac;
         this._hp = hp;
@@ -75,6 +77,7 @@ public class L1PolyPower // src014
         this._regist_freeze = regist_freeze;
         this._regist_sustain = regist_sustain;
         this._regist_blind = regist_blind;
+        this._regist_fear = regist_fear;
         this._addexp = Exp;
         this._add_potion = potion;
         this._add_PVP = PVP;
@@ -84,6 +87,7 @@ public class L1PolyPower // src014
         this._addCloseCritical = CloseCritical;
         this._addBowCritical = BowCritical;
         this._skinId = skinId;
+        this._ignoreReduction = ignoreReduction;
     }
 
     public final int getPolyId() {
@@ -210,6 +214,10 @@ public class L1PolyPower // src014
         return this._regist_blind;
     }
 
+    public final int getRegistFear() {
+        return this._regist_fear;
+    }
+
     /**
      * 經驗
      *
@@ -287,6 +295,13 @@ public class L1PolyPower // src014
 
     public int getSkinId() {
         return _skinId;
+    }
+
+    /**
+     * 無視傷害減免
+     */
+    public int getIgnoreReduction() {
+        return _ignoreReduction;
     }
 
 

@@ -142,18 +142,10 @@ public class ServerRestartTimer extends TimerTask {
                     CharacterQuestReading.get().delQuest2(j);
                     _log.info("------- 刪除每日任務編號:" + j + " -------");
                 }
-                if (QuestMobSet.START) {
-                    if (ServerQuestMobTable.get().getQuestMobListId() != null) {
-                        for (Integer questIdEx : ServerQuestMobTable.get().getQuestMobListId()) {
-                            CharacterQuestReading.get().delQuest2(questIdEx);
-                            _log.info("------- 刪除每日狩獵任務編號:" + questIdEx + " -------");
-                        }
-                    }
-                }
+                // 系統_主線系統 不刪除，永久保留任務進度
                 World.get().broadcastServerMessage("\\fX目前所有每日任務已重置完畢。");
                 ConfigOtherSet2.QUEST_SET_RESET_TIME = null;
                 _log.info("------- 刪除每日任務完成 -------");
-                _log.info("------- 刪除每日狩獵任務完成 -------");
             }
             // 媽祖狀態
             if (ConfigOtherSet2.MAZU_RESET_TIME != null && ConfigOtherSet2.MAZU_RESET_TIME.before(cals)) {

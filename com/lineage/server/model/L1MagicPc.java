@@ -593,8 +593,10 @@ public class L1MagicPc extends L1MagicMode {
                     case 20: // 闇盲咒術
                     case 40: // 黑闇之影
                         probability -= _targetPc.getRegistBlind();
-                    case 230:
-                        probability -= this._targetPc.getRegistFear();
+                        break;
+                    case HAND_DARKNESS: // 黑暗之手
+                    case 230: // 亡命之徒
+                        probability -= this._targetPc.getRegistFear(); // 恐怖耐性抵抗
                 }
                 break;
         }

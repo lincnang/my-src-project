@@ -32,29 +32,31 @@ public final class IdFactory {
     private static final Log _log = LogFactory.getLog(IdFactory.class);
 
     /** 最小發號下限 */
-    private static final int MIN_ID = 10000;
-    
-    /** 回寫間隔：每生成多少個 ID 就回寫一次到 DB */
-    private static final int SAVE_INTERVAL = 1000;
+    private static final int MIN_ID = 10000; // 從 10000 開始，保留 0-9999 給系統或測試用
 
     // ---------- Singleton ----------
     private IdFactory() {}
-    private static class Holder { 
-        private static final IdFactory I = new IdFactory(); 
+    private static class Holder {
+        private static final IdFactory I = new IdFactory();
     }
-    
+
     public static IdFactory get() { return Holder.I; }
     public static IdFactory getId() { return get(); }
+    public static IdFactory getInstance() { return get(); } // 相容舊代碼
 
-    // ---------- 主序列狀態 ----------
-    /** 當前 ID（線程安全）*/
-    private final AtomicInteger current = new AtomicInteger(MIN_ID);
+    // ---------- 主序列狀態 (BitSet 模式) ----------
     
-    /** 上次回寫到 DB 的 ID */
-    private volatile int lastSavedId = MIN_ID;
+    /** 
+     * 主要 ID 佔用表 (20億 bit ~= 238MB RAM)
+     * BitSet 會自動擴充，但在 Java heap 允許的情況下這是長久營運最強效能解
+     */
+    private final BitSet _allUsedIds = new BitSet(2000000000);
     
-    /** 統計：已發出的 ID 數量 */
-    private final AtomicInteger issuedCount = new AtomicInteger(0);
+    /** 線程鎖，保護 BitSet 操作 */
+    private final Object _monitor = new Object();
+    
+    /** 下次搜尋的起始點，避免每次都從頭找 */
+    private int _nextSearchStart = MIN_ID;
 
     /** 初始化標記 */
     private volatile boolean _initialized = false;
@@ -68,75 +70,65 @@ public final class IdFactory {
     // ============== 對外 API：主序列 ==============
 
     /**
-     * 啟動時呼叫：從 DB 讀取最大 ID，設定起始值
+     * 啟動時呼叫：載入整個 DB 的 ID 使用狀況到 BitSet
      */
     public void load() {
         PerformanceTimer t = new PerformanceTimer();
         
-        // 從所有表中找出最大 ID
-        int maxIdFromDb = loadMaxIdFromAllTables();
-        
-        // 從 server_info 讀取上次保存的 maxId
-        int maxIdFromConfig = readServerBound();
-        
-        // 取兩者中的較大值，並加上安全邊界（+1000）
-        int startId = Math.max(maxIdFromDb, maxIdFromConfig) + 1000;
-        
-        // 確保不低於 MIN_ID
-        if (startId < MIN_ID) {
-            startId = MIN_ID;
-        }
-        
-        current.set(startId);
-        lastSavedId = startId;
-        
-        // 立即回寫到 DB
-        saveCurrentIdToDb();
+        // 1. 載入並標記所有已使用的 ID
+        int count = loadAllUsedIds();
         
         _initialized = true;
 
         _log.info(String.format(
-            "IdFactory 啟動：起始ID=%d (DB最大=%d, Config最大=%d) (%d ms)",
-            startId, maxIdFromDb, maxIdFromConfig, t.get()
+            "IdFactory (Recycle Mode) 啟動：已標記 %d 個佔用 ID (搜尋起點: %d) (%d ms)",
+            count, _nextSearchStart, t.get()
         ));
     }
 
     /**
-     * 取得下一個可用 ID（純成長模式，保證不重複）
+     * 取得下一個可用 ID (自動填補空號)
      */
     public int nextId() {
         if (!_initialized) {
             throw new IllegalStateException("IdFactory is not initialized. Call load() first.");
         }
-        int id = current.incrementAndGet();
-        int issued = issuedCount.incrementAndGet();
         
-        // 每發出 SAVE_INTERVAL 個 ID，回寫一次到 DB
-        if (issued % SAVE_INTERVAL == 0) {
-            GeneralThreadPool.get().execute(this::saveCurrentIdToDb);
+        synchronized (_monitor) {
+            // 從 _nextSearchStart 開始找第一個 false (未使用) 的 bit
+            int nextFreeId = _allUsedIds.nextClearBit(_nextSearchStart);
+            
+            // 安全警告：接近 IdFactoryNpc 的範圍 (20億)
+            if (nextFreeId >= 1900000000) {
+                _log.warn("CRITICAL WARNING: IdFactory ID is approaching 2 Billion! Current: " + nextFreeId);
+                // 這裡不 throw exception，讓它繼續跑到盡頭，但管理者應該要介入了
+            }
+            
+            // 標記為使用
+            _allUsedIds.set(nextFreeId);
+            
+            // 更新下次搜尋點 (+1)，這樣就不會每次都從頭掃
+            _nextSearchStart = nextFreeId + 1;
+            
+            return nextFreeId;
         }
-        
-        // 安全警告：接近 IdFactoryNpc 的範圍 (20億)
-        if (id >= 1900000000) {
-            _log.warn("CRITICAL WARNING: IdFactory ID is approaching 2 Billion! Current: " + id + ". Collision with IdFactoryNpc is imminent!");
-        }
-        
-        return id;
     }
 
     /**
-     * 回報下一個將要發的 ID
+     * 回報下一個將要發的 ID (預估值)
      */
     public int maxId() {
-        return current.get() + 1;
+        synchronized (_monitor) {
+            return _allUsedIds.nextClearBit(_nextSearchStart);
+        }
     }
     
     /**
-     * 手動保存當前 ID（伺服器關閉時呼叫）
+     * BitSet 模式下不需要特別保存 maxId，因為每次啟動都重掃全表
+     * 但為了相容性保留空方法
      */
     public void shutdown() {
-        saveCurrentIdToDb();
-        _log.info("IdFactory 關閉：最終ID=" + current.get() + ", 累計發出=" + issuedCount.get());
+        _log.info("IdFactory 關閉。");
     }
 
     // ============== 相容 API：Mob / BigHot 小序列 ==============
@@ -188,102 +180,62 @@ public final class IdFactory {
     // ============== 內部邏輯：主序列 ==============
 
     /**
-     * 從所有相關表中找出最大的 ID
+     * 從所有相關表中找出所有已使用的 ID 並標記到 BitSet
      */
-    private int loadMaxIdFromAllTables() {
+    private int loadAllUsedIds() {
         Connection cn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        int maxId = 0;
+        int count = 0;
         
         try {
             cn = DatabaseFactory.get().getConnection();
             
-            // 使用 UNION ALL 並取 MAX，效能更好
-            ps = cn.prepareStatement(
-                "SELECT MAX(id) FROM (" +
-                "  SELECT MAX(`id`) AS id FROM `character_items`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `character_warehouse`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `character_elf_warehouse`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `clan_warehouse`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `character_shopinfo`" +
-                "  UNION ALL SELECT MAX(`objid`) FROM `characters`" +
-                "  UNION ALL SELECT MAX(`clan_id`) FROM `clan_data`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `character_teleport`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `character_mail`" +
-                "  UNION ALL SELECT MAX(`objid`) FROM `character_pets`" +
-                // ✅ 新增：日誌表
-                "  UNION ALL SELECT MAX(`id`) FROM `日誌_衝裝紀錄`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `日誌_商店購買紀錄`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `日誌_金幣買賣系統紀錄`" +
-                "  UNION ALL SELECT MAX(`index_id`) FROM `clan_members`" +
-                "  UNION ALL SELECT MAX(`id`) FROM `dummy_fishing`" +
-                ") t"
-            );
+            // 這裡必須包含所有可能存有 ID 的表，包括 LOG 表，防止 ID 重複發放導致 LOG 錯亂
+            String sql = 
+                "SELECT id FROM (" +
+                "  SELECT `id` FROM `character_items`" +
+                "  UNION ALL SELECT `id` FROM `character_warehouse`" +
+                "  UNION ALL SELECT `id` FROM `character_elf_warehouse`" +
+                "  UNION ALL SELECT `id` FROM `clan_warehouse`" +
+                "  UNION ALL SELECT `id` FROM `character_shopinfo`" +
+                "  UNION ALL SELECT `objid` AS `id` FROM `characters`" +
+                "  UNION ALL SELECT `clan_id` AS `id` FROM `clan_data`" +
+                "  UNION ALL SELECT `id` FROM `character_teleport`" +
+                "  UNION ALL SELECT `id` FROM `character_mail`" +
+                "  UNION ALL SELECT `objid` AS `id` FROM `character_pets`" +
+                // ✅ 重要：將日誌表也納入佔用判定，這是「填洞模式」唯一的安全實作方式
+                "  UNION ALL SELECT `id` FROM `日誌_衝裝紀錄`" +
+                "  UNION ALL SELECT `id` FROM `日誌_商店購買紀錄`" +
+                "  UNION ALL SELECT `id` FROM `日誌_金幣買賣系統紀錄`" +
+                "  UNION ALL SELECT `index_id` AS `id` FROM `clan_members`" +
+                "  UNION ALL SELECT `id` FROM `dummy_fishing`" +
+                ") t";
             
+            ps = cn.prepareStatement(sql);
             rs = ps.executeQuery();
-            if (rs.next()) {
-                maxId = rs.getInt(1);
+            
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                if (id >= 0) {
+                    _allUsedIds.set(id);
+                    count++;
+                }
             }
             
+            // 將 MIN_ID 以前的所有 ID 都標記為佔用，確保不發出太小的 ID
+            _allUsedIds.set(0, MIN_ID);
+            
+            // 設定搜尋起點：從 MIN_ID 開始找第一個空位
+            _nextSearchStart = _allUsedIds.nextClearBit(MIN_ID);
+            
         } catch (SQLException e) {
-            _log.error("載入最大 ID 失敗", e);
+            _log.error("載入 ID 佔用表失敗", e);
         } finally {
             SQLUtil.close(rs);
             SQLUtil.close(ps);
             SQLUtil.close(cn);
         }
-        
-        return maxId;
-    }
-
-    /**
-     * 將當前 ID 回寫到 DB（server_info 表）
-     */
-    private void saveCurrentIdToDb() {
-        int currentId = current.get();
-        
-        // 如果沒有變化，不需要回寫
-        if (currentId == lastSavedId) {
-            return;
-        }
-        
-        Connection cn = null;
-        PreparedStatement ps = null;
-        
-        try {
-            cn = DatabaseFactoryLogin.get().getConnection();
-            
-            // 更新 server_info 的 maxId
-            ps = cn.prepareStatement(
-                "UPDATE `server_info` SET `maxid` = ? WHERE `id` = ?"
-            );
-            ps.setInt(1, currentId);
-            ps.setInt(2, com.lineage.config.Config.SERVERNO);
-            ps.executeUpdate();
-            
-            lastSavedId = currentId;
-            
-            _log.debug("IdFactory 回寫：maxId=" + currentId);
-            
-        } catch (SQLException e) {
-            _log.error("回寫 ID 到 DB 失敗: " + currentId, e);
-        } finally {
-            SQLUtil.close(ps);
-            SQLUtil.close(cn);
-        }
-    }
-
-    /**
-     * 讀取 server_info 的 maxId
-     */
-    private int readServerBound() {
-        try {
-            int max = ServerReading.get().maxId();
-            return Math.max(max, 0);
-        } catch (Throwable e) {
-            _log.warn("讀取 server_info maxId 失敗", e);
-            return 0;
-        }
+        return count;
     }
 }

@@ -1,6 +1,7 @@
 package com.lineage.server.thread;
 
 import com.lineage.config.Config;
+import com.lineage.config.ThreadPoolSet;
 import com.lineage.server.model.monitor.L1PcMonitor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,12 +39,31 @@ public class GeneralThreadPool {//src032
             com.lineage.config.ThreadPoolSet.load();
         } catch (Exception e) {
         }
-        // 計算基礎執行緒池大小
-        int maxPlayers = Config.MAX_ONLINE_USERS;
-        int corePoolSize = calculateCorePoolSize(maxPlayers);
+
+        // 優先使用外部配置，否則根據最大玩家數計算
+        int corePoolSize;
+        int pcSchedulerSize;
+
+        if (ThreadPoolSet.SCHEDULER_CORE_POOL > 0) {
+            // 使用外部配置的 SchedulerCorePool
+            corePoolSize = ThreadPoolSet.SCHEDULER_CORE_POOL;
+        } else {
+            // 根據最大玩家數計算
+            corePoolSize = calculateCorePoolSize(Config.MAX_ONLINE_USERS);
+        }
+
+        if (ThreadPoolSet.PC_SCHEDULER_POOL > 0) {
+            // 使用外部配置的 PcSchedulerPool
+            pcSchedulerSize = ThreadPoolSet.PC_SCHEDULER_POOL;
+        } else {
+            // 根據 corePoolSize 計算，最少20
+            pcSchedulerSize = Math.max(20, corePoolSize / 4);
+        }
+
         // 1. 主要執行緒池（動態，用於即時任務）
         _executor = Executors.newCachedThreadPool(
                 new PriorityThreadFactory("MainExecutor", Thread.NORM_PRIORITY));
+
         // 2. 通用排程池（AI、系統、技能、高低優先級任務共用）
     _scheduler = Executors.newScheduledThreadPool(corePoolSize,
         new PriorityThreadFactory("GeneralScheduler", Thread.NORM_PRIORITY));
@@ -55,9 +75,8 @@ public class GeneralThreadPool {//src032
         ste.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
         ste.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
     }
+
         // 3. 玩家專用排程池（處理玩家獨立任務，如 L1PcMonitor）
-        // 若有配置可在外部調整，這裡採用穩健的動態值
-        int pcSchedulerSize = Math.max(20, corePoolSize / 4);
     _pcScheduler = Executors.newScheduledThreadPool(pcSchedulerSize,
         new PriorityThreadFactory("PcScheduler", Thread.NORM_PRIORITY));
     if (_pcScheduler instanceof ScheduledThreadPoolExecutor) {

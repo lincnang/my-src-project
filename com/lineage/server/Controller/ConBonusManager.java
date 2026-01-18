@@ -29,39 +29,41 @@ public class ConBonusManager {
 
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
-        int key = System.identityHashCode(pc);
-        Applied old = appliedMap.remove(key);
-        if (old != null) {
-            safeAddDmgR(pc, -old.dr);
-            safeSetPvpDmg(pc, -old.pvpDmg);
-            safeSetPvpRed(pc, -old.pvpRed);
-            safeAddMr(pc, -old.mr);
-            safeAddMatk(pc, -old.matk);
-            safeAddMaxHp(pc, -old.hp);
+        synchronized (pc) {
+            int key = System.identityHashCode(pc);
+            Applied old = appliedMap.remove(key);
+            if (old != null) {
+                safeAddDmgR(pc, -old.dr);
+                safeSetPvpDmg(pc, -old.pvpDmg);
+                safeSetPvpRed(pc, -old.pvpRed);
+                safeAddMr(pc, -old.mr);
+                safeAddMatk(pc, -old.matk);
+                safeAddMaxHp(pc, -old.hp);
+            }
+
+            final int totalCon = getTotalCon(pc);
+            ConSetting setting = ConSettingTable.getInstance().findByCon(totalCon);
+            if (setting != null) {
+                Applied neo = new Applied();
+                neo.dr = setting.dmgReduction;
+                neo.pvpDmg = setting.pvpDamage;
+                neo.pvpRed = setting.pvpReduction;
+                neo.mr = setting.mr;
+                neo.matk = setting.magicAttack;
+                neo.hp = setting.hp;
+
+                safeAddDmgR(pc, neo.dr);
+                safeSetPvpDmg(pc, neo.pvpDmg);
+                safeSetPvpRed(pc, neo.pvpRed);
+                safeAddMr(pc, neo.mr);
+                safeAddMatk(pc, neo.matk);
+                safeAddMaxHp(pc, neo.hp);
+
+                appliedMap.put(key, neo);
+            }
+
+            pc.sendPackets(new S_OwnCharStatus2(pc));
         }
-
-        final int totalCon = getTotalCon(pc);
-        ConSetting setting = ConSettingTable.getInstance().findByCon(totalCon);
-        if (setting != null) {
-            Applied neo = new Applied();
-            neo.dr = setting.dmgReduction;
-            neo.pvpDmg = setting.pvpDamage;
-            neo.pvpRed = setting.pvpReduction;
-            neo.mr = setting.mr;
-            neo.matk = setting.magicAttack;
-            neo.hp = setting.hp;
-
-            safeAddDmgR(pc, neo.dr);
-            safeSetPvpDmg(pc, neo.pvpDmg);
-            safeSetPvpRed(pc, neo.pvpRed);
-            safeAddMr(pc, neo.mr);
-            safeAddMatk(pc, neo.matk);
-            safeAddMaxHp(pc, neo.hp);
-
-            appliedMap.put(key, neo);
-        }
-
-        pc.sendPackets(new S_OwnCharStatus2(pc));
     }
 
     private int getTotalCon(L1PcInstance pc) { return pc.getCon(); }

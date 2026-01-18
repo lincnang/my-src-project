@@ -197,40 +197,69 @@ public class C_LoginToServer extends ClientBasePacket {
 
     private static void addHolySetStatus(L1PcInstance pc) {
         try {
+            int addStr=0, addDex=0, addCon=0, addInt=0, addWis=0, addCha=0, addAc=0;
+            int addMaxHp=0, addMaxMp=0, addHpr=0, addMpr=0;
+            int addDmgup=0, addBowDmgup=0, addHitup=0, addBowHitup=0;
+            int addDmgR=0, addMagicDmgR=0, addSp=0, addMagicHit=0, addMr=0;
+            int addFire=0, addWater=0, addWind=0, addEarth=0;
+
             for (Integer i : holySetTable.get().getHolyIds()) {
-                //for (int i = 0; i <= holySetTable.get().HolySize(); i++) {//檢查收藏系統DB資料
                 final holyPolySet holyPolySet = holySetTable.get().getHoly(i);
                 if (holyPolySet != null) {
                     if (pc.getQuest().get_step(holyPolySet.getQuestId()) != 0) {
-                        pc.addStr(holyPolySet.getAddStr());
-                        pc.addDex(holyPolySet.getAddDex());
-                        pc.addCon(holyPolySet.getAddCon());
-                        pc.addInt(holyPolySet.getAddInt());
-                        pc.addWis(holyPolySet.getAddWis());
-                        pc.addCha(holyPolySet.getAddCha());
-                        pc.addAc(holyPolySet.getAddAc());
-                        pc.addMaxHp(holyPolySet.getAddHp());
-                        pc.addMaxMp(holyPolySet.getAddMp());
-                        pc.addHpr(holyPolySet.getAddHpr());
-                        pc.addMpr(holyPolySet.getAddMpr());
-                        pc.addDmgup(holyPolySet.getAddDmg());
-                        pc.addBowDmgup(holyPolySet.getAddBowDmg());
-                        pc.addHitup(holyPolySet.getAddHit());
-                        pc.addBowHitup(holyPolySet.getAddBowHit());
-                        pc.addDamageReductionByArmor(holyPolySet.getAddDmgR());
-                        pc.addMagicDmgReduction(holyPolySet.getAddMagicDmgR());
-                        pc.addSp(holyPolySet.getAddSp());
-                        pc.addMagicDmgUp(holyPolySet.getAddMagicHit());
-                        pc.addMr(holyPolySet.getAddMr());
-                        pc.addFire(holyPolySet.getAddFire());
-                        pc.addWater(holyPolySet.getAddWater());
-                        pc.addWind(holyPolySet.getAddWind());
-                        pc.addEarth(holyPolySet.getAddEarth());
-                        //						pc.sendPackets(new S_SystemMessage(cards.getMsg1()));
-                        pc.sendPackets(new S_OwnCharStatus(pc));
+                        addStr += holyPolySet.getAddStr();
+                        addDex += holyPolySet.getAddDex();
+                        addCon += holyPolySet.getAddCon();
+                        addInt += holyPolySet.getAddInt();
+                        addWis += holyPolySet.getAddWis();
+                        addCha += holyPolySet.getAddCha();
+                        addAc += holyPolySet.getAddAc();
+                        addMaxHp += holyPolySet.getAddHp();
+                        addMaxMp += holyPolySet.getAddMp();
+                        addHpr += holyPolySet.getAddHpr();
+                        addMpr += holyPolySet.getAddMpr();
+                        addDmgup += holyPolySet.getAddDmg();
+                        addBowDmgup += holyPolySet.getAddBowDmg();
+                        addHitup += holyPolySet.getAddHit();
+                        addBowHitup += holyPolySet.getAddBowHit();
+                        addDmgR += holyPolySet.getAddDmgR();
+                        addMagicDmgR += holyPolySet.getAddMagicDmgR();
+                        addSp += holyPolySet.getAddSp();
+                        addMagicHit += holyPolySet.getAddMagicHit();
+                        addMr += holyPolySet.getAddMr();
+                        addFire += holyPolySet.getAddFire();
+                        addWater += holyPolySet.getAddWater();
+                        addWind += holyPolySet.getAddWind();
+                        addEarth += holyPolySet.getAddEarth();
                     }
                 }
             }
+            if (addStr != 0) pc.addStr(addStr);
+            if (addDex != 0) pc.addDex(addDex);
+            if (addCon != 0) pc.addCon(addCon);
+            if (addInt != 0) pc.addInt(addInt);
+            if (addWis != 0) pc.addWis(addWis);
+            if (addCha != 0) pc.addCha(addCha);
+            if (addAc != 0) pc.addAc(addAc);
+            if (addMaxHp != 0) pc.addMaxHp(addMaxHp);
+            if (addMaxMp != 0) pc.addMaxMp(addMaxMp);
+            if (addHpr != 0) pc.addHpr(addHpr);
+            if (addMpr != 0) pc.addMpr(addMpr);
+            if (addDmgup != 0) pc.addDmgup(addDmgup);
+            if (addBowDmgup != 0) pc.addBowDmgup(addBowDmgup);
+            if (addHitup != 0) pc.addHitup(addHitup);
+            if (addBowHitup != 0) pc.addBowHitup(addBowHitup);
+            if (addDmgR != 0) pc.addDamageReductionByArmor(addDmgR);
+            if (addMagicDmgR != 0) pc.addMagicDmgReduction(addMagicDmgR);
+            if (addSp != 0) pc.addSp(addSp);
+            if (addMagicHit != 0) pc.addMagicDmgUp(addMagicHit);
+            if (addMr != 0) pc.addMr(addMr);
+            if (addFire != 0) pc.addFire(addFire);
+            if (addWater != 0) pc.addWater(addWater);
+            if (addWind != 0) pc.addWind(addWind);
+            if (addEarth != 0) pc.addEarth(addEarth);
+            
+            // pc.sendPackets(new S_OwnCharStatus(pc));
         } catch (Exception e) {
             _log.error("載入聖物套装狀態時發生錯誤: " + pc.getName(), e);
         }
@@ -239,51 +268,93 @@ public class C_LoginToServer extends ClientBasePacket {
     private static void addHolysStatus(L1PcInstance pc) {
         //聖物系統
         try {
+            int addStr=0, addDex=0, addCon=0, addInt=0, addWis=0, addCha=0, addAc=0;
+            int addMaxHp=0, addMaxMp=0, addHpr=0, addMpr=0;
+            int addDmgup=0, addBowDmgup=0, addHitup=0, addBowHitup=0;
+            int addDmgR=0, addMagicDmgR=0, addSp=0, addMagicHit=0, addMr=0;
+            int addFire=0, addWater=0, addWind=0, addEarth=0;
+            int addDodge=0, addEvasion=0, addPotion=0, addWeight=0, addExp=0;
+            int addStun=0, addSustain=0, addStone=0, addFreeze=0, addBlind=0, addSleep=0;
+
             for (Integer i : holyTable.get().getHolyIndex()) {
-                //for (int i = 0; i <= holyTable.get().holySize(); i++) {
                 final holy holy = holyTable.get().getHoly(i);
                 if (holy != null) {
                     if (pc.getQuest().get_step(holy.getQuestId()) != 0) {
-                        pc.addStr(holy.getAddStr());
-                        pc.addDex(holy.getAddDex());
-                        pc.addCon(holy.getAddCon());
-                        pc.addInt(holy.getAddInt());
-                        pc.addWis(holy.getAddWis());
-                        pc.addCha(holy.getAddCha());
-                        pc.addAc(holy.getAddAc());
-                        pc.addMaxHp(holy.getAddHp());
-                        pc.addMaxMp(holy.getAddMp());
-                        pc.addHpr(holy.getAddHpr());
-                        pc.addMpr(holy.getAddMpr());
-                        pc.addDmgup(holy.getAddDmg());
-                        pc.addBowDmgup(holy.getAddBowDmg());
-                        pc.addHitup(holy.getAddHit());
-                        pc.addBowHitup(holy.getAddBowHit());
-                        pc.addDamageReductionByArmor(holy.getAddDmgR());
-                        pc.addMagicDmgReduction(holy.getAddMagicDmgR());
-                        pc.addSp(holy.getAddSp());
-                        pc.addMagicDmgUp(holy.getAddMagicHit());
-                        pc.addMr(holy.getAddMr());
-                        pc.addFire(holy.getAddFire());
-                        pc.addWater(holy.getAddWater());
-                        pc.addWind(holy.getAddWind());
-                        pc.addEarth(holy.getAddEarth());
-                        pc.add_dodge(holy.getShanbi());
-                        pc.set_evasion(holy.getHuibi());
-                        pc.add_up_hp_potion(holy.getYaoshui());
-                        pc.addWeightReduction(holy.getFuzhong());
-                        pc.setExpPoint(holy.getExp());
-                        pc.addRegistStun(holy.getHunmi());
-                        pc.addRegistSustain(holy.getZhicheng());
-                        pc.addRegistStone(holy.getShihua());
-                        pc.add_regist_freeze(holy.getHanbing());
-                        pc.addRegistBlind(holy.getAnhei());
-                        pc.addRegistSleep(holy.getShuimian());
-                        //						pc.sendPackets(new S_SystemMessage(card.getMsg1()));
-                        pc.sendPackets(new S_OwnCharStatus(pc));
+                        addStr += holy.getAddStr();
+                        addDex += holy.getAddDex();
+                        addCon += holy.getAddCon();
+                        addInt += holy.getAddInt();
+                        addWis += holy.getAddWis();
+                        addCha += holy.getAddCha();
+                        addAc += holy.getAddAc();
+                        addMaxHp += holy.getAddHp();
+                        addMaxMp += holy.getAddMp();
+                        addHpr += holy.getAddHpr();
+                        addMpr += holy.getAddMpr();
+                        addDmgup += holy.getAddDmg();
+                        addBowDmgup += holy.getAddBowDmg();
+                        addHitup += holy.getAddHit();
+                        addBowHitup += holy.getAddBowHit();
+                        addDmgR += holy.getAddDmgR();
+                        addMagicDmgR += holy.getAddMagicDmgR();
+                        addSp += holy.getAddSp();
+                        addMagicHit += holy.getAddMagicHit();
+                        addMr += holy.getAddMr();
+                        addFire += holy.getAddFire();
+                        addWater += holy.getAddWater();
+                        addWind += holy.getAddWind();
+                        addEarth += holy.getAddEarth();
+                        addDodge += holy.getShanbi();
+                        addEvasion += holy.getHuibi();
+                        addPotion += holy.getYaoshui();
+                        addWeight += holy.getFuzhong();
+                        addExp += holy.getExp();
+                        addStun += holy.getHunmi();
+                        addSustain += holy.getZhicheng();
+                        addStone += holy.getShihua();
+                        addFreeze += holy.getHanbing();
+                        addBlind += holy.getAnhei();
+                        addSleep += holy.getShuimian();
                     }
                 }
             }
+            if (addStr != 0) pc.addStr(addStr);
+            if (addDex != 0) pc.addDex(addDex);
+            if (addCon != 0) pc.addCon(addCon);
+            if (addInt != 0) pc.addInt(addInt);
+            if (addWis != 0) pc.addWis(addWis);
+            if (addCha != 0) pc.addCha(addCha);
+            if (addAc != 0) pc.addAc(addAc);
+            if (addMaxHp != 0) pc.addMaxHp(addMaxHp);
+            if (addMaxMp != 0) pc.addMaxMp(addMaxMp);
+            if (addHpr != 0) pc.addHpr(addHpr);
+            if (addMpr != 0) pc.addMpr(addMpr);
+            if (addDmgup != 0) pc.addDmgup(addDmgup);
+            if (addBowDmgup != 0) pc.addBowDmgup(addBowDmgup);
+            if (addHitup != 0) pc.addHitup(addHitup);
+            if (addBowHitup != 0) pc.addBowHitup(addBowHitup);
+            if (addDmgR != 0) pc.addDamageReductionByArmor(addDmgR);
+            if (addMagicDmgR != 0) pc.addMagicDmgReduction(addMagicDmgR);
+            if (addSp != 0) pc.addSp(addSp);
+            if (addMagicHit != 0) pc.addMagicDmgUp(addMagicHit);
+            if (addMr != 0) pc.addMr(addMr);
+            if (addFire != 0) pc.addFire(addFire);
+            if (addWater != 0) pc.addWater(addWater);
+            if (addWind != 0) pc.addWind(addWind);
+            if (addEarth != 0) pc.addEarth(addEarth);
+            if (addDodge != 0) pc.add_dodge(addDodge);
+            if (addEvasion != 0) pc.set_evasion(addEvasion);
+            if (addPotion != 0) pc.add_up_hp_potion(addPotion);
+            if (addWeight != 0) pc.addWeightReduction(addWeight);
+            if (addExp != 0) pc.set_expadd(addExp);
+            if (addStun != 0) pc.addRegistStun(addStun);
+            if (addSustain != 0) pc.addRegistSustain(addSustain);
+            if (addStone != 0) pc.addRegistStone(addStone);
+            if (addFreeze != 0) pc.add_regist_freeze(addFreeze);
+            if (addBlind != 0) pc.addRegistBlind(addBlind);
+            if (addSleep != 0) pc.addRegistSleep(addSleep);
+            
+            // pc.sendPackets(new S_OwnCharStatus(pc));
         } catch (Exception e) {
             _log.error("載入聖物狀態時發生錯誤: " + pc.getName(), e);
         }
@@ -291,40 +362,69 @@ public class C_LoginToServer extends ClientBasePacket {
 
     private static void addDollSetStatus(L1PcInstance pc) {
         try {
+            int addStr=0, addDex=0, addCon=0, addInt=0, addWis=0, addCha=0, addAc=0;
+            int addMaxHp=0, addMaxMp=0, addHpr=0, addMpr=0;
+            int addDmgup=0, addBowDmgup=0, addHitup=0, addBowHitup=0;
+            int addDmgR=0, addMagicDmgR=0, addSp=0, addMagicHit=0, addMr=0;
+            int addFire=0, addWater=0, addWind=0, addEarth=0;
+
             for (Integer i : dollSetTable.get().getDollIds()) {
-                //for (int i = 0; i <= dollSetTable.get().CardDollSize(); i++) {//檢查收藏系統DB資料
                 final dollPolySet dollPolySet = dollSetTable.get().getDoll(i);
                 if (dollPolySet != null) {
                     if (dollQuestTable.get().IsQuest(pc, dollPolySet.getQuestId())) {
-                        pc.addStr(dollPolySet.getAddStr());
-                        pc.addDex(dollPolySet.getAddDex());
-                        pc.addCon(dollPolySet.getAddCon());
-                        pc.addInt(dollPolySet.getAddInt());
-                        pc.addWis(dollPolySet.getAddWis());
-                        pc.addCha(dollPolySet.getAddCha());
-                        pc.addAc(dollPolySet.getAddAc());
-                        pc.addMaxHp(dollPolySet.getAddHp());
-                        pc.addMaxMp(dollPolySet.getAddMp());
-                        pc.addHpr(dollPolySet.getAddHpr());
-                        pc.addMpr(dollPolySet.getAddMpr());
-                        pc.addDmgup(dollPolySet.getAddDmg());
-                        pc.addBowDmgup(dollPolySet.getAddBowDmg());
-                        pc.addHitup(dollPolySet.getAddHit());
-                        pc.addBowHitup(dollPolySet.getAddBowHit());
-                        pc.addDamageReductionByArmor(dollPolySet.getAddDmgR());
-                        pc.addMagicDmgReduction(dollPolySet.getAddMagicDmgR());
-                        pc.addSp(dollPolySet.getAddSp());
-                        pc.addMagicDmgUp(dollPolySet.getAddMagicHit());
-                        pc.addMr(dollPolySet.getAddMr());
-                        pc.addFire(dollPolySet.getAddFire());
-                        pc.addWater(dollPolySet.getAddWater());
-                        pc.addWind(dollPolySet.getAddWind());
-                        pc.addEarth(dollPolySet.getAddEarth());
-                        //						pc.sendPackets(new S_SystemMessage(cards.getMsg1()));
-                        pc.sendPackets(new S_OwnCharStatus(pc));
+                        addStr += dollPolySet.getAddStr();
+                        addDex += dollPolySet.getAddDex();
+                        addCon += dollPolySet.getAddCon();
+                        addInt += dollPolySet.getAddInt();
+                        addWis += dollPolySet.getAddWis();
+                        addCha += dollPolySet.getAddCha();
+                        addAc += dollPolySet.getAddAc();
+                        addMaxHp += dollPolySet.getAddHp();
+                        addMaxMp += dollPolySet.getAddMp();
+                        addHpr += dollPolySet.getAddHpr();
+                        addMpr += dollPolySet.getAddMpr();
+                        addDmgup += dollPolySet.getAddDmg();
+                        addBowDmgup += dollPolySet.getAddBowDmg();
+                        addHitup += dollPolySet.getAddHit();
+                        addBowHitup += dollPolySet.getAddBowHit();
+                        addDmgR += dollPolySet.getAddDmgR();
+                        addMagicDmgR += dollPolySet.getAddMagicDmgR();
+                        addSp += dollPolySet.getAddSp();
+                        addMagicHit += dollPolySet.getAddMagicHit();
+                        addMr += dollPolySet.getAddMr();
+                        addFire += dollPolySet.getAddFire();
+                        addWater += dollPolySet.getAddWater();
+                        addWind += dollPolySet.getAddWind();
+                        addEarth += dollPolySet.getAddEarth();
                     }
                 }
             }
+            if (addStr != 0) pc.addStr(addStr);
+            if (addDex != 0) pc.addDex(addDex);
+            if (addCon != 0) pc.addCon(addCon);
+            if (addInt != 0) pc.addInt(addInt);
+            if (addWis != 0) pc.addWis(addWis);
+            if (addCha != 0) pc.addCha(addCha);
+            if (addAc != 0) pc.addAc(addAc);
+            if (addMaxHp != 0) pc.addMaxHp(addMaxHp);
+            if (addMaxMp != 0) pc.addMaxMp(addMaxMp);
+            if (addHpr != 0) pc.addHpr(addHpr);
+            if (addMpr != 0) pc.addMpr(addMpr);
+            if (addDmgup != 0) pc.addDmgup(addDmgup);
+            if (addBowDmgup != 0) pc.addBowDmgup(addBowDmgup);
+            if (addHitup != 0) pc.addHitup(addHitup);
+            if (addBowHitup != 0) pc.addBowHitup(addBowHitup);
+            if (addDmgR != 0) pc.addDamageReductionByArmor(addDmgR);
+            if (addMagicDmgR != 0) pc.addMagicDmgReduction(addMagicDmgR);
+            if (addSp != 0) pc.addSp(addSp);
+            if (addMagicHit != 0) pc.addMagicDmgUp(addMagicHit);
+            if (addMr != 0) pc.addMr(addMr);
+            if (addFire != 0) pc.addFire(addFire);
+            if (addWater != 0) pc.addWater(addWater);
+            if (addWind != 0) pc.addWind(addWind);
+            if (addEarth != 0) pc.addEarth(addEarth);
+            
+            // pc.sendPackets(new S_OwnCharStatus(pc));
         } catch (Exception e) {
             _log.error("載入娃娃套装狀態時發生錯誤: " + pc.getName(), e);
         }
@@ -333,51 +433,93 @@ public class C_LoginToServer extends ClientBasePacket {
     private static void addDollsStatus(L1PcInstance pc) {
         //娃娃系統
         try {
+            int addStr=0, addDex=0, addCon=0, addInt=0, addWis=0, addCha=0, addAc=0;
+            int addMaxHp=0, addMaxMp=0, addHpr=0, addMpr=0;
+            int addDmgup=0, addBowDmgup=0, addHitup=0, addBowHitup=0;
+            int addDmgR=0, addMagicDmgR=0, addSp=0, addMagicHit=0, addMr=0;
+            int addFire=0, addWater=0, addWind=0, addEarth=0;
+            int addDodge=0, addEvasion=0, addPotion=0, addWeight=0, addExp=0;
+            int addStun=0, addSustain=0, addStone=0, addFreeze=0, addBlind=0, addSleep=0;
+
             for (Integer i : dollTable.get().getDollsIndex()) {
-                //for (int i = 0; i <= dollTable.get().dollSize(); i++) {
                 final doll doll = dollTable.get().getDoll(i);
                 if (doll != null) {
                     if (dollQuestTable.get().IsQuest(pc, doll.getQuestId())) {
-                        pc.addStr(doll.getAddStr());
-                        pc.addDex(doll.getAddDex());
-                        pc.addCon(doll.getAddCon());
-                        pc.addInt(doll.getAddInt());
-                        pc.addWis(doll.getAddWis());
-                        pc.addCha(doll.getAddCha());
-                        pc.addAc(doll.getAddAc());
-                        pc.addMaxHp(doll.getAddHp());
-                        pc.addMaxMp(doll.getAddMp());
-                        pc.addHpr(doll.getAddHpr());
-                        pc.addMpr(doll.getAddMpr());
-                        pc.addDmgup(doll.getAddDmg());
-                        pc.addBowDmgup(doll.getAddBowDmg());
-                        pc.addHitup(doll.getAddHit());
-                        pc.addBowHitup(doll.getAddBowHit());
-                        pc.addDamageReductionByArmor(doll.getAddDmgR());
-                        pc.addMagicDmgReduction(doll.getAddMagicDmgR());
-                        pc.addSp(doll.getAddSp());
-                        pc.addMagicDmgUp(doll.getAddMagicHit());
-                        pc.addMr(doll.getAddMr());
-                        pc.addFire(doll.getAddFire());
-                        pc.addWater(doll.getAddWater());
-                        pc.addWind(doll.getAddWind());
-                        pc.addEarth(doll.getAddEarth());
-                        pc.add_dodge(doll.getShanbi());
-                        pc.set_evasion(doll.getHuibi());
-                        pc.add_up_hp_potion(doll.getYaoshui());
-                        pc.addWeightReduction(doll.getFuzhong());
-                        pc.setExpPoint(doll.getExp());
-                        pc.addRegistStun(doll.getHunmi());
-                        pc.addRegistSustain(doll.getZhicheng());
-                        pc.addRegistStone(doll.getShihua());
-                        pc.add_regist_freeze(doll.getHanbing());
-                        pc.addRegistBlind(doll.getAnhei());
-                        pc.addRegistSleep(doll.getShuimian());
-                        //						pc.sendPackets(new S_SystemMessage(card.getMsg1()));
-                        pc.sendPackets(new S_OwnCharStatus(pc));
+                        addStr += doll.getAddStr();
+                        addDex += doll.getAddDex();
+                        addCon += doll.getAddCon();
+                        addInt += doll.getAddInt();
+                        addWis += doll.getAddWis();
+                        addCha += doll.getAddCha();
+                        addAc += doll.getAddAc();
+                        addMaxHp += doll.getAddHp();
+                        addMaxMp += doll.getAddMp();
+                        addHpr += doll.getAddHpr();
+                        addMpr += doll.getAddMpr();
+                        addDmgup += doll.getAddDmg();
+                        addBowDmgup += doll.getAddBowDmg();
+                        addHitup += doll.getAddHit();
+                        addBowHitup += doll.getAddBowHit();
+                        addDmgR += doll.getAddDmgR();
+                        addMagicDmgR += doll.getAddMagicDmgR();
+                        addSp += doll.getAddSp();
+                        addMagicHit += doll.getAddMagicHit();
+                        addMr += doll.getAddMr();
+                        addFire += doll.getAddFire();
+                        addWater += doll.getAddWater();
+                        addWind += doll.getAddWind();
+                        addEarth += doll.getAddEarth();
+                        addDodge += doll.getShanbi();
+                        addEvasion += doll.getHuibi();
+                        addPotion += doll.getYaoshui();
+                        addWeight += doll.getFuzhong();
+                        addExp += doll.getExp();
+                        addStun += doll.getHunmi();
+                        addSustain += doll.getZhicheng();
+                        addStone += doll.getShihua();
+                        addFreeze += doll.getHanbing();
+                        addBlind += doll.getAnhei();
+                        addSleep += doll.getShuimian();
                     }
                 }
             }
+            if (addStr != 0) pc.addStr(addStr);
+            if (addDex != 0) pc.addDex(addDex);
+            if (addCon != 0) pc.addCon(addCon);
+            if (addInt != 0) pc.addInt(addInt);
+            if (addWis != 0) pc.addWis(addWis);
+            if (addCha != 0) pc.addCha(addCha);
+            if (addAc != 0) pc.addAc(addAc);
+            if (addMaxHp != 0) pc.addMaxHp(addMaxHp);
+            if (addMaxMp != 0) pc.addMaxMp(addMaxMp);
+            if (addHpr != 0) pc.addHpr(addHpr);
+            if (addMpr != 0) pc.addMpr(addMpr);
+            if (addDmgup != 0) pc.addDmgup(addDmgup);
+            if (addBowDmgup != 0) pc.addBowDmgup(addBowDmgup);
+            if (addHitup != 0) pc.addHitup(addHitup);
+            if (addBowHitup != 0) pc.addBowHitup(addBowHitup);
+            if (addDmgR != 0) pc.addDamageReductionByArmor(addDmgR);
+            if (addMagicDmgR != 0) pc.addMagicDmgReduction(addMagicDmgR);
+            if (addSp != 0) pc.addSp(addSp);
+            if (addMagicHit != 0) pc.addMagicDmgUp(addMagicHit);
+            if (addMr != 0) pc.addMr(addMr);
+            if (addFire != 0) pc.addFire(addFire);
+            if (addWater != 0) pc.addWater(addWater);
+            if (addWind != 0) pc.addWind(addWind);
+            if (addEarth != 0) pc.addEarth(addEarth);
+            if (addDodge != 0) pc.add_dodge(addDodge);
+            if (addEvasion != 0) pc.set_evasion(pc.get_evasion() + addEvasion);
+            if (addPotion != 0) pc.add_up_hp_potion(addPotion);
+            if (addWeight != 0) pc.addWeightReduction(addWeight);
+            if (addExp != 0) pc.setExpPoint(pc.getExpPoint() + addExp);
+            if (addStun != 0) pc.addRegistStun(addStun);
+            if (addSustain != 0) pc.addRegistSustain(addSustain);
+            if (addStone != 0) pc.addRegistStone(addStone);
+            if (addFreeze != 0) pc.add_regist_freeze(addFreeze);
+            if (addBlind != 0) pc.addRegistBlind(addBlind);
+            if (addSleep != 0) pc.addRegistSleep(addSleep);
+            
+            // pc.sendPackets(new S_OwnCharStatus(pc));
         } catch (Exception e) {
             _log.error("載入娃娃狀態時發生錯誤: " + pc.getName(), e);
         }
@@ -385,40 +527,69 @@ public class C_LoginToServer extends ClientBasePacket {
 
     private static void addCollectSetStatus(L1PcInstance pc) {
         try {
+            int addStr=0, addDex=0, addCon=0, addInt=0, addWis=0, addCha=0, addAc=0;
+            int addMaxHp=0, addMaxMp=0, addHpr=0, addMpr=0;
+            int addDmgup=0, addBowDmgup=0, addHitup=0, addBowHitup=0;
+            int addDmgR=0, addMagicDmgR=0, addSp=0, addMagicHit=0, addMr=0;
+            int addFire=0, addWater=0, addWind=0, addEarth=0;
+
             for (Integer i : collectSetTable.get().getCollectIds()) {
-                //for (int i = 0; i <= collectSetTable.get().getCollectSize(); i++) {//檢查收藏系統DB資料
                 final collectPolySet cards = collectSetTable.get().getCard(i);
                 if (cards != null) {
                     if (pc.getQuest().get_step(cards.getQuestId()) != 0) {
-                        pc.addStr(cards.getAddStr());
-                        pc.addDex(cards.getAddDex());
-                        pc.addCon(cards.getAddCon());
-                        pc.addInt(cards.getAddInt());
-                        pc.addWis(cards.getAddWis());
-                        pc.addCha(cards.getAddCha());
-                        pc.addAc(cards.getAddAc());
-                        pc.addMaxHp(cards.getAddHp());
-                        pc.addMaxMp(cards.getAddMp());
-                        pc.addHpr(cards.getAddHpr());
-                        pc.addMpr(cards.getAddMpr());
-                        pc.addDmgup(cards.getAddDmg());
-                        pc.addBowDmgup(cards.getAddBowDmg());
-                        pc.addHitup(cards.getAddHit());
-                        pc.addBowHitup(cards.getAddBowHit());
-                        pc.addDamageReductionByArmor(cards.getAddDmgR());
-                        pc.addMagicDmgReduction(cards.getAddMagicDmgR());
-                        pc.addSp(cards.getAddSp());
-                        pc.addMagicDmgUp(cards.getAddMagicHit());
-                        pc.addMr(cards.getAddMr());
-                        pc.addFire(cards.getAddFire());
-                        pc.addWater(cards.getAddWater());
-                        pc.addWind(cards.getAddWind());
-                        pc.addEarth(cards.getAddEarth());
-                        // pc.sendPackets(new S_SystemMessage(cards.getMsg1()));
-                        pc.sendPackets(new S_OwnCharStatus(pc));
+                        addStr += cards.getAddStr();
+                        addDex += cards.getAddDex();
+                        addCon += cards.getAddCon();
+                        addInt += cards.getAddInt();
+                        addWis += cards.getAddWis();
+                        addCha += cards.getAddCha();
+                        addAc += cards.getAddAc();
+                        addMaxHp += cards.getAddHp();
+                        addMaxMp += cards.getAddMp();
+                        addHpr += cards.getAddHpr();
+                        addMpr += cards.getAddMpr();
+                        addDmgup += cards.getAddDmg();
+                        addBowDmgup += cards.getAddBowDmg();
+                        addHitup += cards.getAddHit();
+                        addBowHitup += cards.getAddBowHit();
+                        addDmgR += cards.getAddDmgR();
+                        addMagicDmgR += cards.getAddMagicDmgR();
+                        addSp += cards.getAddSp();
+                        addMagicHit += cards.getAddMagicHit();
+                        addMr += cards.getAddMr();
+                        addFire += cards.getAddFire();
+                        addWater += cards.getAddWater();
+                        addWind += cards.getAddWind();
+                        addEarth += cards.getAddEarth();
                     }
                 }
             }
+            if (addStr != 0) pc.addStr(addStr);
+            if (addDex != 0) pc.addDex(addDex);
+            if (addCon != 0) pc.addCon(addCon);
+            if (addInt != 0) pc.addInt(addInt);
+            if (addWis != 0) pc.addWis(addWis);
+            if (addCha != 0) pc.addCha(addCha);
+            if (addAc != 0) pc.addAc(addAc);
+            if (addMaxHp != 0) pc.addMaxHp(addMaxHp);
+            if (addMaxMp != 0) pc.addMaxMp(addMaxMp);
+            if (addHpr != 0) pc.addHpr(addHpr);
+            if (addMpr != 0) pc.addMpr(addMpr);
+            if (addDmgup != 0) pc.addDmgup(addDmgup);
+            if (addBowDmgup != 0) pc.addBowDmgup(addBowDmgup);
+            if (addHitup != 0) pc.addHitup(addHitup);
+            if (addBowHitup != 0) pc.addBowHitup(addBowHitup);
+            if (addDmgR != 0) pc.addDamageReductionByArmor(addDmgR);
+            if (addMagicDmgR != 0) pc.addMagicDmgReduction(addMagicDmgR);
+            if (addSp != 0) pc.addSp(addSp);
+            if (addMagicHit != 0) pc.addMagicDmgUp(addMagicHit);
+            if (addMr != 0) pc.addMr(addMr);
+            if (addFire != 0) pc.addFire(addFire);
+            if (addWater != 0) pc.addWater(addWater);
+            if (addWind != 0) pc.addWind(addWind);
+            if (addEarth != 0) pc.addEarth(addEarth);
+            
+            // pc.sendPackets(new S_OwnCharStatus(pc));
         } catch (Exception e) {
             _log.error("載入收藏套装狀態時發生錯誤: " + pc.getName(), e);
         }
@@ -427,52 +598,93 @@ public class C_LoginToServer extends ClientBasePacket {
     private static void addCollectsStatus(L1PcInstance pc) {
         //收藏系統
         try {
+            int addStr=0, addDex=0, addCon=0, addInt=0, addWis=0, addCha=0, addAc=0;
+            int addMaxHp=0, addMaxMp=0, addHpr=0, addMpr=0;
+            int addDmgup=0, addBowDmgup=0, addHitup=0, addBowHitup=0;
+            int addDmgR=0, addMagicDmgR=0, addSp=0, addMagicHit=0, addMr=0;
+            int addFire=0, addWater=0, addWind=0, addEarth=0;
+            int addDodge=0, addEvasion=0, addPotion=0, addWeight=0, addExp=0;
+            int addStun=0, addSustain=0, addStone=0, addFreeze=0, addBlind=0, addSleep=0;
+
             for (Integer i : collectTable.get().getCollectIds()) {
-                //for (int i = 0; i <= collectTable.get().CollectSize(); i++) {
                 final collect card = collectTable.get().getCollect(i);
                 if (card != null) {
                     if (pc.getQuest().get_step(card.getQuestId()) != 0) {
-                        pc.addStr(card.getAddStr());
-                        pc.addDex(card.getAddDex());
-                        pc.addCon(card.getAddCon());
-                        pc.addInt(card.getAddInt());
-                        pc.addWis(card.getAddWis());
-                        pc.addCha(card.getAddCha());
-                        pc.addAc(card.getAddAc());
-                        pc.addMaxHp(card.getAddHp());
-                        pc.addMaxMp(card.getAddMp());
-                        pc.addHpr(card.getAddHpr());
-                        pc.addMpr(card.getAddMpr());
-                        pc.addDmgup(card.getAddDmg());
-                        pc.addBowDmgup(card.getAddBowDmg());
-                        pc.addHitup(card.getAddHit());
-                        pc.addBowHitup(card.getAddBowHit());
-                        pc.addDamageReductionByArmor(card.getAddDmgR());
-                        pc.addMagicDmgReduction(card.getAddMagicDmgR());
-                        pc.addSp(card.getAddSp());
-                        pc.addMagicDmgUp(card.getAddMagicHit());
-                        pc.addMr(card.getAddMr());
-                        pc.addFire(card.getAddFire());
-                        pc.addWater(card.getAddWater());
-                        pc.addWind(card.getAddWind());
-                        pc.addEarth(card.getAddEarth());
-                        pc.add_dodge(card.getShanbi());
-                        pc.set_evasion(card.getHuibi());
-                        pc.add_up_hp_potion(card.getYaoshui());
-                        pc.addWeightReduction(card.getFuzhong());
-                        pc.setExpPoint(card.getExp());
-                        pc.addRegistStun(card.getHunmi());
-                        pc.addRegistSustain(card.getZhicheng());
-                        pc.addRegistStone(card.getShihua());
-                        pc.add_regist_freeze(card.getHanbing());
-                        pc.addRegistBlind(card.getAnhei());
-                        pc.addRegistSleep(card.getShuimian());
-                        // pc.sendPackets(new S_SystemMessage(card.getMsg1()));
-                        pc.sendPackets(new S_OwnCharStatus(pc));
-                        // 移除延遲以提高載入速度
+                        addStr += card.getAddStr();
+                        addDex += card.getAddDex();
+                        addCon += card.getAddCon();
+                        addInt += card.getAddInt();
+                        addWis += card.getAddWis();
+                        addCha += card.getAddCha();
+                        addAc += card.getAddAc();
+                        addMaxHp += card.getAddHp();
+                        addMaxMp += card.getAddMp();
+                        addHpr += card.getAddHpr();
+                        addMpr += card.getAddMpr();
+                        addDmgup += card.getAddDmg();
+                        addBowDmgup += card.getAddBowDmg();
+                        addHitup += card.getAddHit();
+                        addBowHitup += card.getAddBowHit();
+                        addDmgR += card.getAddDmgR();
+                        addMagicDmgR += card.getAddMagicDmgR();
+                        addSp += card.getAddSp();
+                        addMagicHit += card.getAddMagicHit();
+                        addMr += card.getAddMr();
+                        addFire += card.getAddFire();
+                        addWater += card.getAddWater();
+                        addWind += card.getAddWind();
+                        addEarth += card.getAddEarth();
+                        addDodge += card.getShanbi();
+                        addEvasion += card.getHuibi();
+                        addPotion += card.getYaoshui();
+                        addWeight += card.getFuzhong();
+                        addExp += card.getExp();
+                        addStun += card.getHunmi();
+                        addSustain += card.getZhicheng();
+                        addStone += card.getShihua();
+                        addFreeze += card.getHanbing();
+                        addBlind += card.getAnhei();
+                        addSleep += card.getShuimian();
                     }
                 }
             }
+            if (addStr != 0) pc.addStr(addStr);
+            if (addDex != 0) pc.addDex(addDex);
+            if (addCon != 0) pc.addCon(addCon);
+            if (addInt != 0) pc.addInt(addInt);
+            if (addWis != 0) pc.addWis(addWis);
+            if (addCha != 0) pc.addCha(addCha);
+            if (addAc != 0) pc.addAc(addAc);
+            if (addMaxHp != 0) pc.addMaxHp(addMaxHp);
+            if (addMaxMp != 0) pc.addMaxMp(addMaxMp);
+            if (addHpr != 0) pc.addHpr(addHpr);
+            if (addMpr != 0) pc.addMpr(addMpr);
+            if (addDmgup != 0) pc.addDmgup(addDmgup);
+            if (addBowDmgup != 0) pc.addBowDmgup(addBowDmgup);
+            if (addHitup != 0) pc.addHitup(addHitup);
+            if (addBowHitup != 0) pc.addBowHitup(addBowHitup);
+            if (addDmgR != 0) pc.addDamageReductionByArmor(addDmgR);
+            if (addMagicDmgR != 0) pc.addMagicDmgReduction(addMagicDmgR);
+            if (addSp != 0) pc.addSp(addSp);
+            if (addMagicHit != 0) pc.addMagicDmgUp(addMagicHit);
+            if (addMr != 0) pc.addMr(addMr);
+            if (addFire != 0) pc.addFire(addFire);
+            if (addWater != 0) pc.addWater(addWater);
+            if (addWind != 0) pc.addWind(addWind);
+            if (addEarth != 0) pc.addEarth(addEarth);
+            if (addDodge != 0) pc.add_dodge(addDodge);
+            if (addEvasion != 0) pc.set_evasion(addEvasion);
+            if (addPotion != 0) pc.add_up_hp_potion(addPotion);
+            if (addWeight != 0) pc.addWeightReduction(addWeight);
+            if (addExp != 0) pc.set_expadd(addExp);
+            if (addStun != 0) pc.addRegistStun(addStun);
+            if (addSustain != 0) pc.addRegistSustain(addSustain);
+            if (addStone != 0) pc.addRegistStone(addStone);
+            if (addFreeze != 0) pc.add_regist_freeze(addFreeze);
+            if (addBlind != 0) pc.addRegistBlind(addBlind);
+            if (addSleep != 0) pc.addRegistSleep(addSleep);
+            
+            // pc.sendPackets(new S_OwnCharStatus(pc));
         } catch (Exception e) {
             _log.error("載入狀態時發生錯誤: " + pc.getName(), e);
         }
@@ -480,41 +692,69 @@ public class C_LoginToServer extends ClientBasePacket {
 
     private static void addCardSetStatus(L1PcInstance pc) {
         try {
+            int addStr=0, addDex=0, addCon=0, addInt=0, addWis=0, addCha=0, addAc=0;
+            int addMaxHp=0, addMaxMp=0, addHpr=0, addMpr=0;
+            int addDmgup=0, addBowDmgup=0, addHitup=0, addBowHitup=0;
+            int addDmgR=0, addMagicDmgR=0, addSp=0, addMagicHit=0, addMr=0;
+            int addFire=0, addWater=0, addWind=0, addEarth=0;
+
             for (Integer i : CardSetTable.get().getCardIds()) {
-                //for (int i = 0; i <= CardSetTable.get().CardCardSize(); i++) {//檢查變身組合DB資料
                 final CardPolySet cards = CardSetTable.get().getCard(i);
                 if (cards != null) {
                     if (CardQuestTable.get().IsQuest(pc, cards.getQuestId())) {
-                        pc.addStr(cards.getAddStr());
-                        pc.addDex(cards.getAddDex());
-                        pc.addCon(cards.getAddCon());
-                        pc.addInt(cards.getAddInt());
-                        pc.addWis(cards.getAddWis());
-                        pc.addCha(cards.getAddCha());
-                        pc.addAc(cards.getAddAc());
-                        pc.addMaxHp(cards.getAddHp());
-                        pc.addMaxMp(cards.getAddMp());
-                        pc.addHpr(cards.getAddHpr());
-                        pc.addMpr(cards.getAddMpr());
-                        pc.addDmgup(cards.getAddDmg());
-                        pc.addBowDmgup(cards.getAddBowDmg());
-                        pc.addHitup(cards.getAddHit());
-                        pc.addBowHitup(cards.getAddBowHit());
-                        pc.addDamageReductionByArmor(cards.getAddDmgR());
-                        pc.addMagicDmgReduction(cards.getAddMagicDmgR());
-                        pc.addSp(cards.getAddSp());
-                        pc.addMagicDmgUp(cards.getAddMagicHit());
-                        pc.addMr(cards.getAddMr());
-                        pc.addFire(cards.getAddFire());
-                        pc.addWater(cards.getAddWater());
-                        pc.addWind(cards.getAddWind());
-                        pc.addEarth(cards.getAddEarth());
-                        // pc.sendPackets(new S_SystemMessage(cards.getMsg1()));
-                        pc.sendPackets(new S_OwnCharStatus(pc));
-                        // 移除延遲以提高載入速度
+                        addStr += cards.getAddStr();
+                        addDex += cards.getAddDex();
+                        addCon += cards.getAddCon();
+                        addInt += cards.getAddInt();
+                        addWis += cards.getAddWis();
+                        addCha += cards.getAddCha();
+                        addAc += cards.getAddAc();
+                        addMaxHp += cards.getAddHp();
+                        addMaxMp += cards.getAddMp();
+                        addHpr += cards.getAddHpr();
+                        addMpr += cards.getAddMpr();
+                        addDmgup += cards.getAddDmg();
+                        addBowDmgup += cards.getAddBowDmg();
+                        addHitup += cards.getAddHit();
+                        addBowHitup += cards.getAddBowHit();
+                        addDmgR += cards.getAddDmgR();
+                        addMagicDmgR += cards.getAddMagicDmgR();
+                        addSp += cards.getAddSp();
+                        addMagicHit += cards.getAddMagicHit();
+                        addMr += cards.getAddMr();
+                        addFire += cards.getAddFire();
+                        addWater += cards.getAddWater();
+                        addWind += cards.getAddWind();
+                        addEarth += cards.getAddEarth();
                     }
                 }
             }
+            if (addStr != 0) pc.addStr(addStr);
+            if (addDex != 0) pc.addDex(addDex);
+            if (addCon != 0) pc.addCon(addCon);
+            if (addInt != 0) pc.addInt(addInt);
+            if (addWis != 0) pc.addWis(addWis);
+            if (addCha != 0) pc.addCha(addCha);
+            if (addAc != 0) pc.addAc(addAc);
+            if (addMaxHp != 0) pc.addMaxHp(addMaxHp);
+            if (addMaxMp != 0) pc.addMaxMp(addMaxMp);
+            if (addHpr != 0) pc.addHpr(addHpr);
+            if (addMpr != 0) pc.addMpr(addMpr);
+            if (addDmgup != 0) pc.addDmgup(addDmgup);
+            if (addBowDmgup != 0) pc.addBowDmgup(addBowDmgup);
+            if (addHitup != 0) pc.addHitup(addHitup);
+            if (addBowHitup != 0) pc.addBowHitup(addBowHitup);
+            if (addDmgR != 0) pc.addDamageReductionByArmor(addDmgR);
+            if (addMagicDmgR != 0) pc.addMagicDmgReduction(addMagicDmgR);
+            if (addSp != 0) pc.addSp(addSp);
+            if (addMagicHit != 0) pc.addMagicDmgUp(addMagicHit);
+            if (addMr != 0) pc.addMr(addMr);
+            if (addFire != 0) pc.addFire(addFire);
+            if (addWater != 0) pc.addWater(addWater);
+            if (addWind != 0) pc.addWind(addWind);
+            if (addEarth != 0) pc.addEarth(addEarth);
+            
+            // pc.sendPackets(new S_OwnCharStatus(pc));
         } catch (Exception e) {
             _log.error("載入狀態時發生錯誤: " + pc.getName(), e);
         }
@@ -523,52 +763,93 @@ public class C_LoginToServer extends ClientBasePacket {
     private static void addCardsStatus(L1PcInstance pc) {
         //卡片鑲嵌系統
         try {
+            int addStr=0, addDex=0, addCon=0, addInt=0, addWis=0, addCha=0, addAc=0;
+            int addMaxHp=0, addMaxMp=0, addHpr=0, addMpr=0;
+            int addDmgup=0, addBowDmgup=0, addHitup=0, addBowHitup=0;
+            int addDmgR=0, addMagicDmgR=0, addSp=0, addMagicHit=0, addMr=0;
+            int addFire=0, addWater=0, addWind=0, addEarth=0;
+            int addDodge=0, addEvasion=0, addPotion=0, addWeight=0, addExp=0;
+            int addStun=0, addSustain=0, addStone=0, addFreeze=0, addBlind=0, addSleep=0;
+
             for (Integer i : ACardTable.get().getCardIndex()) {
-                //for (int i = 0; i <= ACardTable.get().ACardSize(); i++) {
                 final ACard card = ACardTable.get().getCard(i);
                 if (card != null) {
                     if (CardQuestTable.get().IsQuest(pc, card.getQuestId())) {
-                        pc.addStr(card.getAddStr());
-                        pc.addDex(card.getAddDex());
-                        pc.addCon(card.getAddCon());
-                        pc.addInt(card.getAddInt());
-                        pc.addWis(card.getAddWis());
-                        pc.addCha(card.getAddCha());
-                        pc.addAc(card.getAddAc());
-                        pc.addMaxHp(card.getAddHp());
-                        pc.addMaxMp(card.getAddMp());
-                        pc.addHpr(card.getAddHpr());
-                        pc.addMpr(card.getAddMpr());
-                        pc.addDmgup(card.getAddDmg());
-                        pc.addBowDmgup(card.getAddBowDmg());
-                        pc.addHitup(card.getAddHit());
-                        pc.addBowHitup(card.getAddBowHit());
-                        pc.addDamageReductionByArmor(card.getAddDmgR());
-                        pc.addMagicDmgReduction(card.getAddMagicDmgR());
-                        pc.addSp(card.getAddSp());
-                        pc.addMagicDmgUp(card.getAddMagicHit());
-                        pc.addMr(card.getAddMr());
-                        pc.addFire(card.getAddFire());
-                        pc.addWater(card.getAddWater());
-                        pc.addWind(card.getAddWind());
-                        pc.addEarth(card.getAddEarth());
-                        pc.add_dodge(card.getShanbi());
-                        pc.set_evasion(card.getHuibi());
-                        pc.add_up_hp_potion(card.getYaoshui());
-                        pc.addWeightReduction(card.getFuzhong());
-                        pc.setExpPoint(card.getExp());
-                        pc.addRegistStun(card.getHunmi());
-                        pc.addRegistSustain(card.getZhicheng());
-                        pc.addRegistStone(card.getShihua());
-                        pc.add_regist_freeze(card.getHanbing());
-                        pc.addRegistBlind(card.getAnhei());
-                        pc.addRegistSleep(card.getShuimian());
-                        // pc.sendPackets(new S_SystemMessage(card.getMsg1()));
-                        pc.sendPackets(new S_OwnCharStatus(pc));
-                        // 移除延遲以提高載入速度
+                        addStr += card.getAddStr();
+                        addDex += card.getAddDex();
+                        addCon += card.getAddCon();
+                        addInt += card.getAddInt();
+                        addWis += card.getAddWis();
+                        addCha += card.getAddCha();
+                        addAc += card.getAddAc();
+                        addMaxHp += card.getAddHp();
+                        addMaxMp += card.getAddMp();
+                        addHpr += card.getAddHpr();
+                        addMpr += card.getAddMpr();
+                        addDmgup += card.getAddDmg();
+                        addBowDmgup += card.getAddBowDmg();
+                        addHitup += card.getAddHit();
+                        addBowHitup += card.getAddBowHit();
+                        addDmgR += card.getAddDmgR();
+                        addMagicDmgR += card.getAddMagicDmgR();
+                        addSp += card.getAddSp();
+                        addMagicHit += card.getAddMagicHit();
+                        addMr += card.getAddMr();
+                        addFire += card.getAddFire();
+                        addWater += card.getAddWater();
+                        addWind += card.getAddWind();
+                        addEarth += card.getAddEarth();
+                        addDodge += card.getShanbi();
+                        addEvasion += card.getHuibi();
+                        addPotion += card.getYaoshui();
+                        addWeight += card.getFuzhong();
+                        addExp += card.getExp();
+                        addStun += card.getHunmi();
+                        addSustain += card.getZhicheng();
+                        addStone += card.getShihua();
+                        addFreeze += card.getHanbing();
+                        addBlind += card.getAnhei();
+                        addSleep += card.getShuimian();
                     }
                 }
             }
+            if (addStr != 0) pc.addStr(addStr);
+            if (addDex != 0) pc.addDex(addDex);
+            if (addCon != 0) pc.addCon(addCon);
+            if (addInt != 0) pc.addInt(addInt);
+            if (addWis != 0) pc.addWis(addWis);
+            if (addCha != 0) pc.addCha(addCha);
+            if (addAc != 0) pc.addAc(addAc);
+            if (addMaxHp != 0) pc.addMaxHp(addMaxHp);
+            if (addMaxMp != 0) pc.addMaxMp(addMaxMp);
+            if (addHpr != 0) pc.addHpr(addHpr);
+            if (addMpr != 0) pc.addMpr(addMpr);
+            if (addDmgup != 0) pc.addDmgup(addDmgup);
+            if (addBowDmgup != 0) pc.addBowDmgup(addBowDmgup);
+            if (addHitup != 0) pc.addHitup(addHitup);
+            if (addBowHitup != 0) pc.addBowHitup(addBowHitup);
+            if (addDmgR != 0) pc.addDamageReductionByArmor(addDmgR);
+            if (addMagicDmgR != 0) pc.addMagicDmgReduction(addMagicDmgR);
+            if (addSp != 0) pc.addSp(addSp);
+            if (addMagicHit != 0) pc.addMagicDmgUp(addMagicHit);
+            if (addMr != 0) pc.addMr(addMr);
+            if (addFire != 0) pc.addFire(addFire);
+            if (addWater != 0) pc.addWater(addWater);
+            if (addWind != 0) pc.addWind(addWind);
+            if (addEarth != 0) pc.addEarth(addEarth);
+            if (addDodge != 0) pc.add_dodge(addDodge);
+            if (addEvasion != 0) pc.set_evasion(pc.get_evasion() + addEvasion);
+            if (addPotion != 0) pc.add_up_hp_potion(addPotion);
+            if (addWeight != 0) pc.addWeightReduction(addWeight);
+            if (addExp != 0) pc.setExpPoint(pc.getExpPoint() + addExp);
+            if (addStun != 0) pc.addRegistStun(addStun);
+            if (addSustain != 0) pc.addRegistSustain(addSustain);
+            if (addStone != 0) pc.addRegistStone(addStone);
+            if (addFreeze != 0) pc.add_regist_freeze(addFreeze);
+            if (addBlind != 0) pc.addRegistBlind(addBlind);
+            if (addSleep != 0) pc.addRegistSleep(addSleep);
+            
+            // pc.sendPackets(new S_OwnCharStatus(pc)); // 已移除循環內的封包發送
         } catch (Exception e) {
             _log.error("載入狀態時發生錯誤: " + pc.getName(), e);
         }
@@ -1875,6 +2156,13 @@ public class C_LoginToServer extends ClientBasePacket {
                     _pc.addSilianAstrologyPowers(); // 絲莉安星盤：自動套用所有非技能節點
                     _pc.addGritAstrologyPowers();   // 格立特星盤：自動套用所有非技能節點
                     _pc.addYishidiAstrologyPowers(); // 依詩蒂星盤：自動套用所有非技能節點
+
+                    // 一次性發送更新封包，避免過程中頻繁發送
+                    _pc.sendPackets(new S_OwnCharStatus(_pc));
+                    _pc.sendPackets(new S_OwnCharStatus2(_pc));
+                    _pc.sendPackets(new S_SPMR(_pc));
+                    _pc.sendPackets(new S_HPUpdate(_pc.getCurrentHp(), _pc.getMaxHp()));
+                    _pc.sendPackets(new S_MPUpdate(_pc.getCurrentMp(), _pc.getMaxMp()));
 
                     // 讀回絲莉安各技能冷卻（若仍在未來，轉回毫秒放入記憶體）
                     try {

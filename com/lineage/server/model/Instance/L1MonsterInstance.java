@@ -55,6 +55,9 @@ public class L1MonsterInstance extends L1NpcInstance {
     private long _lasthprtime = 0;
     // 怪物上次回魔時間
     private long _lastmprtime = 0;
+    
+    // HP條更新頻率控制
+    private long _lastHpBarTime = 0;
 
     public L1MonsterInstance(final L1Npc template) {
         super(template);
@@ -772,7 +775,13 @@ public class L1MonsterInstance extends L1NpcInstance {
             if (ConfigOther.HPBAR) {
                 if (attacker instanceof L1PcInstance) {
                     L1PcInstance player = (L1PcInstance) attacker;
-                    player.sendPackets(new S_HPMeter(this));
+                    // 優化：只有在 HP 變化量大於一定比例，或是每隔一段時間才發送更新，避免高頻率攻擊造成封包風暴
+                    // 這裡採用簡單的時間閥值控制 (例如 200ms)
+                    long now = System.currentTimeMillis();
+                    if (now - this._lastHpBarTime > 200) { 
+                        player.sendPackets(new S_HPMeter(this));
+                        this._lastHpBarTime = now;
+                    }
                 }
                 // 讓寵物或召喚怪攻擊時也看得到怪物血條 by terry0412
                 if (atkpc == null) {

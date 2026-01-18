@@ -35,47 +35,50 @@ public class IntBonusManager {
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
 
-        int key = System.identityHashCode(pc);
+        // ★ 加上鎖定避免同一玩家多執行緒並發修改導致數值錯亂(無限疊加)
+        synchronized (pc) {
+            int key = System.identityHashCode(pc);
 
-        // 1) 先回收舊加成
-        Applied old = appliedMap.remove(key);
-        if (old != null) {
-            safeAddMagicDmgup(pc, -old.magicAttack);
-            safeAddMagicHitup(pc, -old.magicHit);
-            // 魔法穿透率和忽略魔防在攻擊時動態計算，不需要回收
-        }
-
-        // 2) 查表：依目前智力值取對應設定
-        final int totalInt = getTotalInt(pc);
-        IntSetting setting = IntSettingTable.getInstance().findByInt(totalInt);
-
-        // 3) 套用新加成（有設定才套）
-        if (setting != null) {
-            Applied neo = new Applied();
-            neo.magicAttack = setting.magicAttack;
-            neo.magicHit = setting.magicHit;
-            neo.magicPenetration = setting.magicPenetration;
-            neo.ignoreMagicDefense = setting.ignoreMagicDefense;
-            neo.magicCritFx = setting.magicCritFx;
-
-            safeAddMagicDmgup(pc, neo.magicAttack);
-            safeAddMagicHitup(pc, neo.magicHit);
-            // 魔法穿透率和忽略魔防存儲到applied記錄中，供攻擊時查詢
-
-            appliedMap.put(key, neo);
-
-            if (_log.isDebugEnabled()) {
-                _log.debug("智力加成套用 - 角色:" + pc.getName() + 
-                          ", 智力:" + totalInt + 
-                          ", 魔攻加成:" + neo.magicAttack + 
-                          ", 魔法命中:" + neo.magicHit + 
-                          ", 穿透率:" + neo.magicPenetration + "%" + 
-                          ", 忽略魔防:" + neo.ignoreMagicDefense);
+            // 1) 先回收舊加成
+            Applied old = appliedMap.remove(key);
+            if (old != null) {
+                safeAddMagicDmgup(pc, -old.magicAttack);
+                safeAddMagicHitup(pc, -old.magicHit);
+                // 魔法穿透率和忽略魔防在攻擊時動態計算，不需要回收
             }
-        }
 
-        // 4) 刷新面板（讓玩家 UI 立刻顯示）
-        pc.sendPackets(new S_OwnCharStatus2(pc));
+            // 2) 查表：依目前智力值取對應設定
+            final int totalInt = getTotalInt(pc);
+            IntSetting setting = IntSettingTable.getInstance().findByInt(totalInt);
+
+            // 3) 套用新加成（有設定才套）
+            if (setting != null) {
+                Applied neo = new Applied();
+                neo.magicAttack = setting.magicAttack;
+                neo.magicHit = setting.magicHit;
+                neo.magicPenetration = setting.magicPenetration;
+                neo.ignoreMagicDefense = setting.ignoreMagicDefense;
+                neo.magicCritFx = setting.magicCritFx;
+
+                safeAddMagicDmgup(pc, neo.magicAttack);
+                safeAddMagicHitup(pc, neo.magicHit);
+                // 魔法穿透率和忽略魔防存儲到applied記錄中，供攻擊時查詢
+
+                appliedMap.put(key, neo);
+
+                if (_log.isDebugEnabled()) {
+                    _log.debug("智力加成套用 - 角色:" + pc.getName() + 
+                            ", 智力:" + totalInt + 
+                            ", 魔攻加成:" + neo.magicAttack + 
+                            ", 魔法命中:" + neo.magicHit + 
+                            ", 穿透率:" + neo.magicPenetration + "%" + 
+                            ", 忽略魔防:" + neo.ignoreMagicDefense);
+                }
+            }
+
+            // 4) 刷新面板（讓玩家 UI 立刻顯示）
+            pc.sendPackets(new S_OwnCharStatus2(pc));
+        }
     }
 
     /** 取得「對應查表」的智力值：有 total/true 的話換成你的專案方法 */

@@ -29,25 +29,27 @@ public class WisBonusManager {
 
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
-        int key = System.identityHashCode(pc);
-        Applied old = appliedMap.remove(key);
-        if (old != null) {
-            safeAddMr(pc, -old.mr);
-            safeAddMpr(pc, -old.mpr);
-        }
+        synchronized (pc) {
+            int key = System.identityHashCode(pc);
+            Applied old = appliedMap.remove(key);
+            if (old != null) {
+                safeAddMr(pc, -old.mr);
+                safeAddMpr(pc, -old.mpr);
+            }
 
-        final int totalWis = getTotalWis(pc);
-        WisSetting setting = WisSettingTable.getInstance().findByWis(totalWis);
-        if (setting != null) {
-            Applied neo = new Applied();
-            neo.mr = setting.mr;
-            neo.mpr = setting.mpr;
-            safeAddMr(pc, neo.mr);
-            safeAddMpr(pc, neo.mpr);
-            appliedMap.put(key, neo);
-        }
+            final int totalWis = getTotalWis(pc);
+            WisSetting setting = WisSettingTable.getInstance().findByWis(totalWis);
+            if (setting != null) {
+                Applied neo = new Applied();
+                neo.mr = setting.mr;
+                neo.mpr = setting.mpr;
+                safeAddMr(pc, neo.mr);
+                safeAddMpr(pc, neo.mpr);
+                appliedMap.put(key, neo);
+            }
 
-        pc.sendPackets(new S_OwnCharStatus2(pc));
+            pc.sendPackets(new S_OwnCharStatus2(pc));
+        }
     }
 
     private int getTotalWis(L1PcInstance pc) { return pc.getWis(); }

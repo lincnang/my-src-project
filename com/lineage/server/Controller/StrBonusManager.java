@@ -44,35 +44,37 @@ public class StrBonusManager {
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
 
-        int key = System.identityHashCode(pc);
+        synchronized (pc) {
+            int key = System.identityHashCode(pc);
 
-        // 1) 先回收舊加成記錄
-        Applied old = appliedMap.remove(key);
-        if (old != null) {
-            PcCritRepo.clear(pc.getId());
+            // 1) 先回收舊加成記錄
+            Applied old = appliedMap.remove(key);
+            if (old != null) {
+                PcCritRepo.clear(pc.getId());
+            }
+
+            // 2) 查表：依目前力量值取對應設定
+            final int totalStr = getTotalStr(pc);
+            StrSetting setting = StrSettingTable.getInstance().findByStr(totalStr);
+
+            // 3) 套用新加成（有設定才套）
+            if (setting != null) {
+                Applied neo = new Applied();
+                neo.pvpAtk = setting.pvpAtk;
+                neo.pvpHit = setting.pvpHit;
+                neo.pveAtk = setting.pveAtk;
+                neo.pveHit = setting.pveHit;
+                neo.critChance = setting.critChance;
+                neo.critPercent = setting.critPercent;
+                neo.critFx = setting.critFx;
+
+                PcCritRepo.set(pc.getId(), neo.critChance, neo.critPercent, neo.critFx);
+                appliedMap.put(key, neo);
+            }
+
+            // 4) 刷新面板（讓玩家 UI 立刻顯示）
+            pc.sendPackets(new S_OwnCharStatus2(pc));
         }
-
-        // 2) 查表：依目前力量值取對應設定
-        final int totalStr = getTotalStr(pc);
-        StrSetting setting = StrSettingTable.getInstance().findByStr(totalStr);
-
-        // 3) 套用新加成（有設定才套）
-        if (setting != null) {
-            Applied neo = new Applied();
-            neo.pvpAtk = setting.pvpAtk;
-            neo.pvpHit = setting.pvpHit;
-            neo.pveAtk = setting.pveAtk;
-            neo.pveHit = setting.pveHit;
-            neo.critChance = setting.critChance;
-            neo.critPercent = setting.critPercent;
-            neo.critFx = setting.critFx;
-
-            PcCritRepo.set(pc.getId(), neo.critChance, neo.critPercent, neo.critFx);
-            appliedMap.put(key, neo);
-        }
-
-        // 4) 刷新面板（讓玩家 UI 立刻顯示）
-        pc.sendPackets(new S_OwnCharStatus2(pc));
     }
 
     /** 取得「對應查表」的力量值 */

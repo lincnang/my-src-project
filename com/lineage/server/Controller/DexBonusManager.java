@@ -43,34 +43,36 @@ public class DexBonusManager {
     public void reapply(L1PcInstance pc) {
         if (pc == null) return;
 
-        int key = System.identityHashCode(pc);
+        synchronized (pc) {
+            int key = System.identityHashCode(pc);
 
-        // 1) 先回收舊加成記錄
-        Applied old = appliedMap.remove(key);
-        if (old != null) {
-            // 不寫入 getDmgup/getHitup，所以不需要回收
+            // 1) 先回收舊加成記錄
+            Applied old = appliedMap.remove(key);
+            if (old != null) {
+                // 不寫入 getDmgup/getHitup，所以不需要回收
+            }
+
+            // 2) 查表：依目前敏捷值取對應設定
+            final int totalDex = getTotalDex(pc);
+            DexSetting setting = DexSettingTable.getInstance().findByDex(totalDex);
+
+            // 3) 套用新加成（有設定才套）
+            if (setting != null) {
+                Applied neo = new Applied();
+                neo.pvpAtk = setting.pvpAtk;
+                neo.pvpHit = setting.pvpHit;
+                neo.pveAtk = setting.pveAtk;
+                neo.pveHit = setting.pveHit;
+                neo.critChance = setting.critChance;
+                neo.critPercent = setting.critPercent;
+                neo.critFx = setting.critFx;
+
+                appliedMap.put(key, neo);
+            }
+
+            // 4) 刷新面板（讓玩家 UI 立刻顯示）
+            pc.sendPackets(new S_OwnCharStatus2(pc));
         }
-
-        // 2) 查表：依目前敏捷值取對應設定
-        final int totalDex = getTotalDex(pc);
-        DexSetting setting = DexSettingTable.getInstance().findByDex(totalDex);
-
-        // 3) 套用新加成（有設定才套）
-        if (setting != null) {
-            Applied neo = new Applied();
-            neo.pvpAtk = setting.pvpAtk;
-            neo.pvpHit = setting.pvpHit;
-            neo.pveAtk = setting.pveAtk;
-            neo.pveHit = setting.pveHit;
-            neo.critChance = setting.critChance;
-            neo.critPercent = setting.critPercent;
-            neo.critFx = setting.critFx;
-
-            appliedMap.put(key, neo);
-        }
-
-        // 4) 刷新面板（讓玩家 UI 立刻顯示）
-        pc.sendPackets(new S_OwnCharStatus2(pc));
     }
 
     /** 取得「對應查表」的敏捷值 */

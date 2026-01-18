@@ -160,68 +160,69 @@ public class L1WilliamHonor {
     }
 
     public static void getHonorSkill(L1PcInstance pc) {
+        synchronized (pc) {
+            int honorlevel = pc.getHonorLevel(); // ✅ 補上這行
+            // 🛡️ 阻擋等級 0 → 不套用任何威望能力
+            if (honorlevel <= 0 || pc.isHonorSkillApplied()) return;
 
-        int honorlevel = pc.getHonorLevel(); // ✅ 補上這行
-        // 🛡️ 阻擋等級 0 → 不套用任何威望能力
-        if (honorlevel <= 0 || pc.isHonorSkillApplied()) return;
+            // ✅ 取得資料表設定的能力模板
+            L1WilliamHonor HonorSkill = Honor.getInstance().getTemplate(honorlevel);
 
-        // ✅ 取得資料表設定的能力模板
-        L1WilliamHonor HonorSkill = Honor.getInstance().getTemplate(honorlevel);
+            if (HonorSkill == null) {
+                return;
+            }
+            if (HonorSkill.getIsActive() == 0) {
+                return;
+            }
+            if (HonorSkill.getHonorLevel() != honorlevel) {
+                return;
+            }
 
-        if (HonorSkill == null) {
-            return;
+            // 標記已套用過
+            pc.setHonorSkillApplied(true);
+            // 能力加成
+            pc.addMaxHp(HonorSkill.getAddHp());
+            pc.setCurrentHp(pc.getMaxHp());
+            pc.addMaxMp(HonorSkill.getAddMp());
+            pc.setCurrentMp(pc.getMaxMp());
+            pc.addStr(HonorSkill.getAddStr());
+            pc.addDex(HonorSkill.getAddDex());
+            pc.addCon(HonorSkill.getAddCon());
+            pc.addInt(HonorSkill.getAddInt());
+            pc.addWis(HonorSkill.getAddWis());
+            pc.addCha(HonorSkill.getAddCha());
+            pc.addHpr(HonorSkill.getAddHpr());
+            pc.addMpr(HonorSkill.getAddMpr());
+            pc.addEarth(HonorSkill.getAddEarth());
+            pc.addWater(HonorSkill.getAddWater());
+            pc.addFire(HonorSkill.getAddFire());
+            pc.addWind(HonorSkill.getAddWind());
+            pc.addRegistStun(HonorSkill.getAddStun());
+            pc.addRegistStone(HonorSkill.getAddStone());
+            pc.addRegistSleep(HonorSkill.getAddSleep());
+            pc.add_regist_freeze(HonorSkill.getAddFreeze());
+            pc.addRegistSustain(HonorSkill.getAddSustain());
+            pc.addRegistBlind(HonorSkill.getAddBlind());
+            pc.addMr(HonorSkill.getAddMr());
+            pc.addSp(HonorSkill.getAddSp());
+            pc.addOriginalMagicHit(HonorSkill.getMagicHit());
+            pc.addHitModifierByArmor(HonorSkill.getAddHit());
+            pc.addBowHitModifierByArmor(HonorSkill.getAddBowHit());
+            pc.addDmgModifierByArmor(HonorSkill.getAddDmg());
+            pc.addBowDmgModifierByArmor(HonorSkill.getAddBowDmg());
+            pc.addAc(-HonorSkill.getAddAC());
+            pc.add_magic_modifier_dmg(HonorSkill.getAddMagiDmg());
+            pc.add_magic_reduction_dmg(HonorSkill.getAddReductionMagiDmg());
+            pc.setPvpDmg_R(HonorSkill.getDamageReductionByArmorForPK());
+            pc.setPvpDmg(HonorSkill.getDmgupForPK());
+            pc.addStunLevel(HonorSkill.getStunLevel());
+            pc.addBlockWeapon(HonorSkill.getBlockWeapon());
+            pc.sendPackets(new S_OwnCharStatus(pc));
+            pc.sendPackets(new S_SPMR(pc));
+            pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
+            pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
+            pc.sendPackets(new S_Ability(0, true));
         }
-        if (HonorSkill.getIsActive() == 0) {
-            return;
-        }
-        if (HonorSkill.getHonorLevel() != honorlevel) {
-            return;
-        }
-
-        // 標記已套用過
-        pc.setHonorSkillApplied(true);
-        // 能力加成
-        pc.addMaxHp(HonorSkill.getAddHp());
-        pc.setCurrentHp(pc.getMaxHp());
-        pc.addMaxMp(HonorSkill.getAddMp());
-        pc.setCurrentMp(pc.getMaxMp());
-        pc.addStr(HonorSkill.getAddStr());
-        pc.addDex(HonorSkill.getAddDex());
-        pc.addCon(HonorSkill.getAddCon());
-        pc.addInt(HonorSkill.getAddInt());
-        pc.addWis(HonorSkill.getAddWis());
-        pc.addCha(HonorSkill.getAddCha());
-        pc.addHpr(HonorSkill.getAddHpr());
-        pc.addMpr(HonorSkill.getAddMpr());
-        pc.addEarth(HonorSkill.getAddEarth());
-        pc.addWater(HonorSkill.getAddWater());
-        pc.addFire(HonorSkill.getAddFire());
-        pc.addWind(HonorSkill.getAddWind());
-        pc.addRegistStun(HonorSkill.getAddStun());
-        pc.addRegistStone(HonorSkill.getAddStone());
-        pc.addRegistSleep(HonorSkill.getAddSleep());
-        pc.add_regist_freeze(HonorSkill.getAddFreeze());
-        pc.addRegistSustain(HonorSkill.getAddSustain());
-        pc.addRegistBlind(HonorSkill.getAddBlind());
-        pc.addMr(HonorSkill.getAddMr());
-        pc.addSp(HonorSkill.getAddSp());
-        pc.addOriginalMagicHit(HonorSkill.getMagicHit());
-        pc.addHitModifierByArmor(HonorSkill.getAddHit());
-        pc.addBowHitModifierByArmor(HonorSkill.getAddBowHit());
-        pc.addDmgModifierByArmor(HonorSkill.getAddDmg());
-        pc.addBowDmgModifierByArmor(HonorSkill.getAddBowDmg());
-        pc.addAc(-HonorSkill.getAddAC());
-        pc.add_magic_modifier_dmg(HonorSkill.getAddMagiDmg());
-        pc.add_magic_reduction_dmg(HonorSkill.getAddReductionMagiDmg());
-        pc.setPvpDmg_R(HonorSkill.getDamageReductionByArmorForPK());
-        pc.setPvpDmg(HonorSkill.getDmgupForPK());
-        pc.addStunLevel(HonorSkill.getStunLevel());
-        pc.addBlockWeapon(HonorSkill.getBlockWeapon());
-        pc.sendPackets(new S_OwnCharStatus(pc));
-        pc.sendPackets(new S_SPMR(pc));
-        pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-        pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-        pc.sendPackets(new S_Ability(0, true));
     }
 
     public static void delHonorSkill(L1PcInstance pc, int honorlevel) {

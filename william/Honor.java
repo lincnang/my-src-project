@@ -244,22 +244,24 @@ public class Honor {
      */
     public void checkHonor(L1PcInstance pc, boolean fromMission, boolean forceTeleport) {
         if (pc == null) return;
-        clearOldStageEntries();
+        synchronized (pc) {
+            clearOldStageEntries();
 
-        int currentHonor = pc.getHonor();
-        int currentLevel = pc.getHonorLevel();
-        int realLevel = getHonorLevel(currentHonor);
+            int currentHonor = pc.getHonor();
+            int currentLevel = pc.getHonorLevel();
+            int realLevel = getHonorLevel(currentHonor);
 
-        // ✅ 只允許升階，不允許掉階
-        if (realLevel > currentLevel) {
-            applyHonorUpgrade(pc, realLevel);
-            return;
-        }
+            // ✅ 只允許升階，不允許掉階
+            if (realLevel > currentLevel) {
+                applyHonorUpgrade(pc, realLevel);
+                return;
+            }
         
-        // ✅ 特殊情況：在任務中且積分達標，強制觸發升階效果（重新套用能力）
-        if (realLevel == currentLevel && fromMission && forceTeleport) {
-            applyHonorUpgrade(pc, realLevel);
-            return;
+            // ✅ 特殊情況：在任務中且積分達標，強制觸發升階效果（重新套用能力）
+            if (realLevel == currentLevel && fromMission && forceTeleport) {
+                applyHonorUpgrade(pc, realLevel);
+                return;
+            }
         }
         
         // ✅ 積分不足不處理（保持當前爵位等級）

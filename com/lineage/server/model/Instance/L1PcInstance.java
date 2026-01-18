@@ -2509,6 +2509,18 @@ public class L1PcInstance extends L1Character { // src015
         CharBuffReading.get().deleteBuff(this);
         CharBuffReading.get().saveBuff(this);
         getMap().setPassable(getLocation(), true);
+
+        // ★ 清理屬性加成管理器的暫存資料 (避免 Memory Leak 與 ID 碰撞導致數值錯亂)
+        try {
+            com.lineage.server.Controller.StrBonusManager.get().clear(this);
+            com.lineage.server.Controller.DexBonusManager.get().clear(this);
+            com.lineage.server.Controller.ConBonusManager.get().clear(this);
+            com.lineage.server.Controller.IntBonusManager.get().clear(this);
+            com.lineage.server.Controller.WisBonusManager.get().clear(this);
+        } catch (Exception e) {
+            _log.error("BonusManager clear error", e);
+        }
+
         if (getClanid() != 0) {
             L1Clan clan = WorldClan.get().getClan(getClanname());
             if (clan != null && clan.getWarehouseUsingChar() == getId()) {

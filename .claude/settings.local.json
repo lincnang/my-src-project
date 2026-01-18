@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(rm:*)",
+      "Bash(del:*)",
+      "Bash(cmd.exe /c \"del /F \\\\?\\D:\\IntelliJ-workspace\\idea_815\\src\\nul\")",
+      "Bash(if not exist \"D:\\IntelliJ-workspace\\idea_815\\docs\" mkdir \"D:\\IntelliJ-workspace\\idea_815\\docs\")"
+    ]
+  }
+}

@@ -26,10 +26,12 @@ public final class ConfigDoll {
     public static int[] DOLL_LIST_3;//給與娃娃列陣
     public static int[] DOLL_LIST_4;//給與娃娃列陣
     public static int[] DOLL_LIST_5;//給與娃娃列陣
+    public static int[] DOLL_LIST_6;//給與娃娃列陣
     public static int CONSUME2;//合成幾率
     public static int CONSUME3;//合成幾率
     public static int CONSUME4;//合成幾率
     public static int CONSUME5;//合成幾率
+    public static int CONSUME6;//合成幾率
     public static int ZUIDAJILV2;//合成二階段最大幾率
     public static int ZUIXIAOJILV2;//合成二階段最小几率
     public static int ZENGJIAJILV2;//合成二階段增加幾率數量
@@ -46,10 +48,15 @@ public final class ConfigDoll {
     public static int ZUIXIAOJILV5;//合成五階段最小几率
     public static int ZENGJIAJILV5;//合成五階段增加幾率數量
     public static int SHULIANG5;//合成五階段需要的娃娃數量
+    public static int ZUIDAJILV6;//合成六階段最大機率
+    public static int ZUIXIAOJILV6;//合成六階段最小機率
+    public static int ZENGJIAJILV6;//合成六階段增加機率數量
+    public static int SHULIANG6;//合成六階段需要的娃娃數量
     public static List<Integer> DOLL1 = new ArrayList<>();//倉庫封包判定1階段
     public static List<Integer> DOLL2 = new ArrayList<>();//倉庫封包判定2階段
     public static List<Integer> DOLL3 = new ArrayList<>();//倉庫封包判定3階段
     public static List<Integer> DOLL4 = new ArrayList<>();//倉庫封包判定4階段
+    public static List<Integer> DOLL5 = new ArrayList<>();//倉庫封包判定5階段
 
     public static void load() throws ConfigErrorException {
         final PerformanceTimer timer = new PerformanceTimer();
@@ -64,29 +71,35 @@ public final class ConfigDoll {
             DOLL_LIST_3 = toIntArray(set.getProperty("Doll_List3", ""), ",");
             DOLL_LIST_4 = toIntArray(set.getProperty("Doll_List4", ""), ",");
             DOLL_LIST_5 = toIntArray(set.getProperty("Doll_List5", ""), ",");
+            DOLL_LIST_6 = toIntArray(set.getProperty("Doll_List6", ""), "");
             CONSUME2 = Integer.parseInt(set.getProperty("Consume2", "50"));
             CONSUME3 = Integer.parseInt(set.getProperty("Consume3", "50"));
             CONSUME4 = Integer.parseInt(set.getProperty("Consume4", "50"));
             CONSUME5 = Integer.parseInt(set.getProperty("Consume5", "50"));
+            CONSUME6 = Integer.parseInt(set.getProperty("Consume6", "50"));
             ZUIDAJILV2 = Integer.parseInt(set.getProperty("ZUIDAJILV2", "50"));
             ZUIDAJILV3 = Integer.parseInt(set.getProperty("ZUIDAJILV3", "50"));
             ZUIDAJILV4 = Integer.parseInt(set.getProperty("ZUIDAJILV4", "50"));
             ZUIDAJILV5 = Integer.parseInt(set.getProperty("ZUIDAJILV5", "50"));
+            ZUIDAJILV6 = Integer.parseInt(set.getProperty("ZUIDAJILV6", "50"));
             ////////////////////////////////////////////////////////////////////
             ZUIXIAOJILV2 = Integer.parseInt(set.getProperty("ZUIXIAOJILV2", "10"));
             ZUIXIAOJILV3 = Integer.parseInt(set.getProperty("ZUIXIAOJILV3", "10"));
             ZUIXIAOJILV4 = Integer.parseInt(set.getProperty("ZUIXIAOJILV4", "10"));
             ZUIXIAOJILV5 = Integer.parseInt(set.getProperty("ZUIXIAOJILV5", "10"));
+            ZUIXIAOJILV6 = Integer.parseInt(set.getProperty("ZUIXIAOJILV6", "10"));
             ////////////////////////////////////////////////////////////////////
             ZENGJIAJILV2 = Integer.parseInt(set.getProperty("ZENGJIAJILV2", "10"));
             ZENGJIAJILV3 = Integer.parseInt(set.getProperty("ZENGJIAJILV3", "10"));
             ZENGJIAJILV4 = Integer.parseInt(set.getProperty("ZENGJIAJILV4", "10"));
             ZENGJIAJILV5 = Integer.parseInt(set.getProperty("ZENGJIAJILV5", "10"));
+            ZENGJIAJILV6 = Integer.parseInt(set.getProperty("ZENGJIAJILV6", "10"));
             ////////////////////////////////////////////////////////////////////
             SHULIANG2 = Integer.parseInt(set.getProperty("SHULIANG2", "2"));
             SHULIANG3 = Integer.parseInt(set.getProperty("SHULIANG3", "2"));
             SHULIANG4 = Integer.parseInt(set.getProperty("SHULIANG4", "2"));
             SHULIANG5 = Integer.parseInt(set.getProperty("SHULIANG5", "2"));
+            SHULIANG6 = Integer.parseInt(set.getProperty("SHULIANG6", "2"));
             if (set.getProperty("doll1") != null) {
                 for (final String str : set.getProperty("doll1").split(",")) {
                     DOLL1.add(Integer.parseInt(str));
@@ -105,6 +118,11 @@ public final class ConfigDoll {
             if (set.getProperty("doll4") != null) {
                 for (final String str : set.getProperty("doll4").split(",")) {
                     DOLL4.add(Integer.parseInt(str));
+                }
+            }
+            if (set.getProperty("doll5") != null) {
+                for (final String str : set.getProperty("doll5").split(",")) {
+                    DOLL5.add(Integer.parseInt(str));
                 }
             }
         } catch (Exception e) {

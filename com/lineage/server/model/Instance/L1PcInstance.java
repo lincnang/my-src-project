@@ -1022,10 +1022,12 @@ public class L1PcInstance extends L1Character { // src015
     private int _dollcount2 = 0;//增加減少娃娃數量3
     private int _dollcount3 = 0;//增加減少娃娃數量4
     private int _dollcount4 = 0;//增加減少娃娃數量5
+    private int _dollcount5 = 0;//增加減少娃娃數量6
     private int _dollrun2 = 0;//娃娃合成幾率2階段
     private int _dollrun3 = 0;//娃娃合成幾率3階段
     private int _dollrun4 = 0;//娃娃合成幾率4階段
     private int _dollrun5 = 0;//娃娃合成幾率5階段
+    private int _dollrun6 = 0;//娃娃合成幾率6階段
     /////////////////////////////////////魔法合成///////////////////////////////////////
     private int _Magiccount = 0;//增加減少娃娃數量2
     private int _Magiccount2 = 0;//增加減少娃娃數量3
@@ -1158,10 +1160,12 @@ public class L1PcInstance extends L1Character { // src015
     private int _polycount2 = 0;//增加減少變身卡數量3
     private int _polycount3 = 0;//增加減少變身卡數量4
     private int _polycount4 = 0;//增加減少變身卡數量5
+    private int _polycount5 = 0;//增加減少變身卡數量6
     private int _polyrun2 = 0;//變身卡合成幾率2階段
     private int _polyrun3 = 0;//變身卡合成幾率3階段
     private int _polyrun4 = 0;//變身卡合成幾率4階段
     private int _polyrun5 = 0;//變身卡合成幾率5階段
+    private int _polyrun6 = 0;//變身卡合成幾率6階段
     /////////////////////////////////////聖物卡合成///////////////////////////////////////
     // 聖物合成進度屬性
     private int _holyCount = 0;    // 二階合成次數
@@ -12558,6 +12562,22 @@ public class L1PcInstance extends L1Character { // src015
         _dollrun5 = i;
     }
 
+    public int getDollCount5() {
+        return _dollcount5;
+    }
+
+    public void setDollCount5(int i) {
+        _dollcount5 = i;
+    }
+
+    public int getDollrun6() {
+        return _dollrun6;
+    }
+
+    public void setDollrun6(int i) {
+        _dollrun6 = i;
+    }
+
     public int getMagicCount() {
         return _Magiccount;
     }
@@ -13464,6 +13484,22 @@ public class L1PcInstance extends L1Character { // src015
 
     public void setpolyrun5(int i) {
         _polyrun5 = i;
+    }
+
+    public int getpolyCount5() {
+        return _polycount5;
+    }
+
+    public void setpolyCount5(int i) {
+        _polycount5 = i;
+    }
+
+    public int getpolyrun6() {
+        return _polyrun6;
+    }
+
+    public void setpolyrun6(int i) {
+        _polyrun6 = i;
     }
     //----------------------------聖物合成----------------------------------------------//
     public int getHolyCount() {

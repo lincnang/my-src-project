@@ -77,6 +77,9 @@ public class C_Result extends ClientBasePacket {
             // 資料載入
             this.read(decrypt);
             final L1PcInstance pc = client.getActiveChar();
+            if (pc == null) { // 玩家物件為空（角色載入中或連線異常）
+                return;
+            }
             if (pc.isGhost()) { // 鬼魂模式
                 return;
             }

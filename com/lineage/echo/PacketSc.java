@@ -10,14 +10,12 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 封包輸出管理
+ * 封包輸出管理 (改用 BlockingQueue 阻塞式等待，降低 CPU 使用與延遲)
  *
  * @author dexc
  */
@@ -28,8 +26,8 @@ public class PacketSc implements Runnable {
     private static final int STAT_QUEUE_THRESHOLD = 200;
     private static final int STAT_BYTES_THRESHOLD = 128 * 1024;
 
-    private final Queue<byte[]> _queue;
-    private final AtomicInteger _queueSize;
+    /** 使用 BlockingQueue 支援阻塞式等待 */
+    private final BlockingQueue<byte[]> _queue;
     private final ClientExecutor _client;
     private final EncryptExecutor _executor;
     private final Cipher _keys;
@@ -37,13 +35,15 @@ public class PacketSc implements Runnable {
     private int _statPackets;
     private long _statBytes;
     private int _statMaxQueue;
+    /** 統計用的佇列大小快照 */
+    private volatile int _currentQueueSize = 0;
 
     public PacketSc(final ClientExecutor client, final EncryptExecutor executor) {
         _client = client;
         _keys = client.get_keys();
         _executor = executor;
-        _queue = new ConcurrentLinkedQueue<>();
-        _queueSize = new AtomicInteger();
+        // 使用 LinkedBlockingQueue，容量設為 Integer.MAX_VALUE (無限制)
+        _queue = new LinkedBlockingQueue<byte[]>();
     }
 
     /**
@@ -51,16 +51,19 @@ public class PacketSc implements Runnable {
      *
      */
     private void requestWork(final byte[] data) {
-        _queue.offer(data);
-        int currentSize = _queueSize.incrementAndGet();
-        
-        // 診斷代碼: 當佇列突然堆積超過閾值時，印出是誰塞進來的
-        if (currentSize > 150 && currentSize % 50 == 0) {
-            _log.info("[High Queue Debug] CurrentSize=" + currentSize + ", Source Trace:");
-            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            // 印出前 8 層堆疊，跳過前 2 層 (getStackTrace 和 requestWork 自己)
-            for (int i = 2; i < Math.min(stackTrace.length, 10); i++) {
-                _log.info("    at " + stackTrace[i]);
+        // BlockingQueue.offer() 會立即返回 true/false
+        boolean added = _queue.offer(data);
+        if (added) {
+            _currentQueueSize = _queue.size();
+
+            // 診斷代碼: 當佇列突然堆積超過閾值時，印出是誰塞進來的
+            if (_currentQueueSize > 150 && _currentQueueSize % 50 == 0) {
+                _log.info("[High Queue Debug] CurrentSize=" + _currentQueueSize + ", Source Trace:");
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+                // 印出前 8 層堆疊，跳過前 2 層 (getStackTrace 和 requestWork 自己)
+                for (int i = 2; i < Math.min(stackTrace.length, 10); i++) {
+                    _log.info("    at " + stackTrace[i]);
+                }
             }
         }
     }
@@ -71,20 +74,10 @@ public class PacketSc implements Runnable {
      */
     public void encrypt(final ServerBasePacket packet) throws Exception {
         final byte[] encrypt = packet.getContent();
-        // _log.info("加密封包: 長度: "+encrypt.length);
         if ((encrypt.length > 0) && (_executor.out() != null)) {
-            /*
-             * final int opid = encrypt[0]; if (opid == -1) { _log.error(
-             * "拒絕發送: " + packet.getType() + " OPID: " + opid); return; }
-             */
             if (ConfigLIN.opcode_S) {
                 _log.info("服務端: " + packet.getType() + "\nOP ID: " + (encrypt[0] & 0xff) + "\nInfo:\n" + PacketPrint.get().printData(encrypt, encrypt.length));
             }
-            /*
-             * char ac[] = new char[encrypt.length]; ac =
-             * UChar8.fromArray(encrypt); // 加密 ac = _keys.encrypt(ac); if (ac
-             * == null) { return; } encrypt = UByte8.fromArray(ac);
-             */
             // 記錄明文封包供診斷（反射呼叫，避免編譯期依賴）
             try {
                 java.lang.reflect.Method m = _client.getClass().getMethod("traceOutbound", byte[].class);
@@ -100,44 +93,64 @@ public class PacketSc implements Runnable {
     public void run() {
         try {
             while (_client.get_socket() != null) {
-                int queued = _queueSize.get();
-                if (queued > _statMaxQueue) {
-                    _statMaxQueue = queued;
+                byte[] data = null;
+
+                try {
+                    // 阻塞式等待：有封包立即取回，沒封包最多等 3 秒
+                    // 這樣就不需要 sleep 輪詢，降低 CPU 使用
+                    data = _queue.poll(3000, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    // 被中斷，繼續迴圈
+                    continue;
                 }
-                boolean hasPacket = false;
-                for (final Iterator<byte[]> iter = _queue.iterator(); iter.hasNext(); ) {
-                    final byte[] decrypt = iter.next();// 返回迭代的下一個元素。
-                    // 從迭代器指向的 collection 中移除迭代器返回的最後一個元素
-                    iter.remove();
-                    int newSize = _queueSize.decrementAndGet();
-                    if (newSize < 0) {
-                        _queueSize.set(0);
+
+                if (data != null) {
+                    // 更新統計
+                    int currentSize = _queue.size();
+                    _currentQueueSize = currentSize;
+                    if (currentSize > _statMaxQueue) {
+                        _statMaxQueue = currentSize;
                     }
-                    outPacket(decrypt);
-                    recordStat(decrypt.length + 2);
-                    hasPacket = true;
-                    /* 移除可疑的異常停頓 by 聖子默默
-                     * TimeUnit.MILLISECONDS.sleep(1);
-                     */
-                }
-                if (hasPacket) {
+
+                    // 輸出封包
+                    outPacket(data);
+                    recordStat(data.length + 2);
+
+                    // 立即 flush 確保送出
+                    try {
+                        _executor.out().flush();
+                    } catch (IOException e) {
+                        _executor.stop();
+                    }
+
+                    // 繼續處理佇列中剩餘的封包（非阻塞）
+                    while ((data = _queue.poll()) != null) {
+                        currentSize = _queue.size();
+                        _currentQueueSize = currentSize;
+                        if (currentSize > _statMaxQueue) {
+                            _statMaxQueue = currentSize;
+                        }
+
+                        outPacket(data);
+                        recordStat(data.length + 2);
+                    }
+
+                    // 處理完一批後統一 flush
                     try {
                         _executor.out().flush();
                     } catch (IOException e) {
                         _executor.stop();
                     }
                 }
+
                 maybeLogStats(System.currentTimeMillis());
-                // 隊列為空 休眠
-                TimeUnit.MILLISECONDS.sleep(10);
             }
-            // finalize();
         } catch (final Exception e) {
             _log.error(e.getLocalizedMessage(), e);
         } finally {
             // 移除此 collection 中的所有元素
             _queue.clear();
-            _queueSize.set(0);
+            _currentQueueSize = 0;
         }
     }
 
@@ -153,16 +166,8 @@ public class PacketSc implements Runnable {
             _executor.out().write((outLength >> 8) & 0xff);
             // 將 decrypt.length 個位元組從指定的 byte 陣列寫入此輸出流。
             _executor.out().write(decrypt);
-            // 刷新此輸出流並強制寫出所有緩衝的輸出位元組。
-            //_executor.out().flush();
-            /*
-             * long tt = System.currentTimeMillis(); _log.info("加密封包: 長度: "
-             * +decrypt.length+"/"+(tt - _client.TTL.get(1)));
-             * _client.TTL.put(1, tt);
-             */
         } catch (final IOException e) {
             // 輸出異常
-            // _log.error(e.getLocalizedMessage(), e);
             _executor.stop();
         }
     }
@@ -170,7 +175,7 @@ public class PacketSc implements Runnable {
     public void stop() {
         // 移除此 collection 中的所有元素
         _queue.clear();
-        _queueSize.set(0);
+        _currentQueueSize = 0;
     }
 
     private void recordStat(int bytes) {

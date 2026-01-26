@@ -259,6 +259,18 @@ public class World { // src016
             if (object == null) {
                 throw new NullPointerException();
             }
+            
+            // 安全機制：檢查 ID 是否重複 (避免客戶端崩潰或伺服器資料錯亂)
+            if (_allObjects.containsKey(object.getId())) {
+                L1Object old = _allObjects.get(object.getId());
+                if (old != null && old != object) {
+                    _log.warn(String.format("CRITICAL: Object ID Collision detected! ID: %d. Overwriting %s with %s.", 
+                            object.getId(), old.getClass().getSimpleName(), object.getClass().getSimpleName()));
+                    // 強制移除舊物件，確保索引一致性
+                    removeObject(old); 
+                }
+            }
+
             _allObjects.put(object.getId(), object);
             if (object instanceof L1ItemInstance) {
                 WorldItem.get().put(object.getId(), (L1ItemInstance) object);

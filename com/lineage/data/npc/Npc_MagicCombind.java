@@ -12,7 +12,11 @@ import com.lineage.server.templates.L1MagicHeCheng;
 import com.lineage.server.world.World;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+
+import com.lineage.server.thread.GeneralThreadPool;
 
 /**
  * 魔法卡合成NPC主控類
@@ -20,6 +24,16 @@ import java.util.concurrent.ThreadLocalRandom;
  * 技術老爹 製作
  */
 public class Npc_MagicCombind extends NpcExecutor {
+    // 供合成流程使用的簡單結構
+    private static class ItemConsume {
+        L1ItemInstance itemInstance;
+        int count;
+        ItemConsume(L1ItemInstance itemInstance, int count) {
+            this.itemInstance = itemInstance;
+            this.count = count;
+        }
+    }
+
     private final int[] Magic1 = ConfigMagic.Magic_LIST_1;
     private final int[] Magic2 = ConfigMagic.Magic_LIST_2;
     private final int[] Magic3 = ConfigMagic.Magic_LIST_3;
@@ -133,22 +147,6 @@ public class Npc_MagicCombind extends NpcExecutor {
                 || cmd.equalsIgnoreCase("magic_C") || cmd.equalsIgnoreCase("magic_C_total")
                 || cmd.equalsIgnoreCase("magic_D") || cmd.equalsIgnoreCase("magic_D_total")) {
             new Npc_MagicCombind().action(pc, null, cmd, 0);
-            
-            // ✅ 合成完刷新頁面（無論成功、失敗或材料不足）
-            String[] data = new String[3];
-            if (cmd.toLowerCase().startsWith("magic_a")) {
-                data[0] = String.valueOf(ConfigMagic.CONSUME2 + pc.getMagicrun2());
-                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang2", data));
-            } else if (cmd.toLowerCase().startsWith("magic_b")) {
-                data[0] = String.valueOf(ConfigMagic.CONSUME3 + pc.getMagicrun3());
-                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang3", data));
-            } else if (cmd.toLowerCase().startsWith("magic_c")) {
-                data[0] = String.valueOf(ConfigMagic.CONSUME4 + pc.getMagicrun4());
-                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang4", data));
-            } else if (cmd.toLowerCase().startsWith("magic_d")) {
-                data[0] = String.valueOf(ConfigMagic.CONSUME5 + pc.getMagicrun5());
-                pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "magicchang5", data));
-            }
             return true;
         }
         return false;
@@ -157,7 +155,7 @@ public class Npc_MagicCombind extends NpcExecutor {
     /** 合成主邏輯，支援 magic_A, magic_B, magic_C, magic_D 指令 */
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
         int[] oldMagics = null;
-        int newMagic = 0;
+        int[] newMagics = null;
         int chance = 0;
         int needcount = 0;
         switch (cmd) {
@@ -166,43 +164,49 @@ public class Npc_MagicCombind extends NpcExecutor {
                 chance = ConfigMagic.CONSUME2 + pc.getMagicrun2();
                 needcount = ConfigMagic.SHULIANG2 + pc.getMagicCount();
                 oldMagics = Magic1;
-                newMagic = Magic2[ThreadLocalRandom.current().nextInt(Magic2.length)];
+                newMagics = Magic2;
                 break;
             case "magic_B":
             case "magic_B_total":
                 chance = ConfigMagic.CONSUME3 + pc.getMagicrun3();
                 needcount = ConfigMagic.SHULIANG3 + pc.getMagicCount2();
                 oldMagics = Magic2;
-                newMagic = Magic3[ThreadLocalRandom.current().nextInt(Magic3.length)];
+                newMagics = Magic3;
                 break;
             case "magic_C":
             case "magic_C_total":
                 chance = ConfigMagic.CONSUME4 + pc.getMagicrun4();
                 needcount = ConfigMagic.SHULIANG4 + pc.getMagicCount3();
                 oldMagics = Magic3;
-                newMagic = Magic4[ThreadLocalRandom.current().nextInt(Magic4.length)];
+                newMagics = Magic4;
                 break;
             case "magic_D":
             case "magic_D_total":
                 chance = ConfigMagic.CONSUME5 + pc.getMagicrun5();
                 needcount = ConfigMagic.SHULIANG5 + pc.getMagicCount4();
                 oldMagics = Magic4;
-                newMagic = Magic5[ThreadLocalRandom.current().nextInt(Magic5.length)];
+                newMagics = Magic5;
                 break;
             default:
                 pc.sendPackets(new S_SystemMessage("指令錯誤!"));
                 return;
         }
 
-        // 堆疊扣除材料
-        class ItemConsume {
-            L1ItemInstance itemInstance;
-            int count;
-            ItemConsume(L1ItemInstance itemInstance, int count) {
-                this.itemInstance = itemInstance;
-                this.count = count;
-            }
+        // 判斷是否為批量合成模式
+        boolean isTotalMode = cmd.toLowerCase().contains("_total");
+
+        // 批量合成模式：異步執行避免卡頓
+        if (isTotalMode) {
+            final int[] fOldMagics = oldMagics;
+            final int[] fNewMagics = newMagics;
+            final int fChance = chance;
+            final int fNeedcount = needcount;
+            final String fCmd = cmd;
+            GeneralThreadPool.get().schedule(() -> doBatchCombine(pc, fCmd, fOldMagics, fNewMagics, fChance, fNeedcount), 100);
+            return;
         }
+
+        // ========== 單次合成模式（原有邏輯） ==========
         boolean enough = false;
         ArrayList<ItemConsume> consumeList = new ArrayList<>();
         if (oldMagics != null) {
@@ -244,6 +248,13 @@ public class Npc_MagicCombind extends NpcExecutor {
         pc.setMagicrun4(0);
         pc.setMagicrun5(0);
 
+        // 執行單次合成
+        int newMagic = newMagics[ThreadLocalRandom.current().nextInt(newMagics.length)];
+        doSingleCombine(pc, newMagic, chance, consumeList);
+    }
+
+    // ======================== 單次合成結果處理 ========================
+    private void doSingleCombine(L1PcInstance pc, int newMagic, int chance, ArrayList<ItemConsume> consumeList) {
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             // 成功
             final L1ItemInstance item = ItemTable.get().createItem(newMagic);
@@ -253,7 +264,6 @@ public class Npc_MagicCombind extends NpcExecutor {
             if (card1 != null) {
                 stringBuilder.append(card1.getGfxid()).append(",");
                 if (card1.getNot() != 0) {
-                    // 使用非阻塞廣播方法，避免卡頓
                     World.get().broadcastPacketToAllAsync(
                             new S_BlueMessage(166, "\\f=恭喜玩家\\fN【" + pc.getName() + "】\\f=合成了技能卡\\fN【" + item.getLogName() + "】"));
                 }
@@ -274,5 +284,144 @@ public class Npc_MagicCombind extends NpcExecutor {
             pc.sendPacketsX8(new S_Sound(20468));
             pc.sendPackets(new S_SystemMessage("很遺憾合成失敗返還" + item.getLogName()));
         }
+    }
+
+    // ======================== 批量合成流程（一次性計算） ========================
+    private void doBatchCombine(L1PcInstance pc, String cmd, int[] oldMagics, int[] newMagics, int chance, int needcount) {
+        // ========== 步驟1：一次性收集所有材料 ==========
+        final ArrayList<ItemConsume> consumeList = new ArrayList<>();
+        int totalAvailable = 0;
+
+        if (oldMagics != null) {
+            for (int oldMagic : oldMagics) {
+                L1ItemInstance[] cards = pc.getInventory().findItemsId(oldMagic);
+                if (cards != null) {
+                    for (L1ItemInstance card : cards) {
+                        int count = (int) card.getCount();
+                        consumeList.add(new ItemConsume(card, count));
+                        totalAvailable += count;
+                    }
+                }
+            }
+        }
+
+        if (totalAvailable < needcount) {
+            pc.sendPackets(new S_SystemMessage("你的技能卡不足【" + needcount + "】個"));
+            sendBackToPage(pc, cmd);
+            return;
+        }
+
+        int maxCombine = totalAvailable / needcount;
+
+        // ========== 步驟2：一次性扣除所有材料 ==========
+        for (ItemConsume ic : consumeList) {
+            pc.getInventory().removeItem(ic.itemInstance, ic.count);
+        }
+
+        // 重置全部階段加成
+        pc.setMagicCount(0);
+        pc.setMagicCount2(0);
+        pc.setMagicCount3(0);
+        pc.setMagicCount4(0);
+        pc.setMagicrun2(0);
+        pc.setMagicrun3(0);
+        pc.setMagicrun4(0);
+        pc.setMagicrun5(0);
+
+        // ========== 步驟3：一次性計算結果（按成功率直接計算） ==========
+        final Map<Integer, Integer> successItems = new HashMap<>();
+        final Map<Integer, Integer> failReturnItems = new HashMap<>();
+        final Map<Integer, String> announceCards = new HashMap<>();
+
+        int successCount = 0;
+        int failCount = 0;
+
+        for (int i = 0; i < maxCombine; i++) {
+            int newMagic = newMagics[ThreadLocalRandom.current().nextInt(newMagics.length)];
+            if (ThreadLocalRandom.current().nextInt(100) < chance) {
+                // 成功
+                successCount++;
+                successItems.merge(newMagic, 1, Integer::sum);
+                // 檢查是否需要公告
+                final L1MagicHeCheng card1 = MagicHeChengTable.getInstance().getTemplate(newMagic);
+                if (card1 != null && card1.getNot() != 0) {
+                    L1ItemInstance tempItem = ItemTable.get().createItem(newMagic);
+                    if (tempItem != null && tempItem.getItem() != null) {
+                        announceCards.put(newMagic, tempItem.getLogName());
+                    }
+                }
+            } else {
+                // 失敗 - 返還一階卡
+                failCount++;
+                int backId = oldMagics[ThreadLocalRandom.current().nextInt(oldMagics.length)];
+                failReturnItems.merge(backId, 1, Integer::sum);
+            }
+        }
+
+        // ========== 步驟4：一次性給予所有結果道具 ==========
+        // 給予成功的道具
+        for (Map.Entry<Integer, Integer> entry : successItems.entrySet()) {
+            L1ItemInstance item = ItemTable.get().createItem(entry.getKey());
+            if (item != null && item.getItem() != null) {
+                item.setIdentified(true);
+                if (entry.getValue() > 1) {
+                    item.setCount(entry.getValue());
+                }
+                pc.getInventory().storeItem(item);
+            }
+        }
+
+        // 給予失敗返還的道具
+        for (Map.Entry<Integer, Integer> entry : failReturnItems.entrySet()) {
+            L1ItemInstance item = ItemTable.get().createItem(entry.getKey());
+            if (item != null && item.getItem() != null) {
+                item.setIdentified(true);
+                if (entry.getValue() > 1) {
+                    item.setCount(entry.getValue());
+                }
+                pc.getInventory().storeItem(item);
+            }
+        }
+
+        // ========== 步驟5：發送公告和結果 ==========
+        if (!announceCards.isEmpty()) {
+            for (String cardName : announceCards.values()) {
+                World.get().broadcastPacketToAllAsync(
+                        new S_BlueMessage(166, "\\f=恭喜玩家\\fN【" + pc.getName() + "】\\f=合成了技能卡\\fN【" + cardName + "】"));
+            }
+        }
+
+        pc.sendPacketsX8(new S_Sound(successCount > 0 ? 20360 : 20468));
+        pc.sendPackets(new S_SystemMessage("批量合成完成！成功: " + successCount + " 次，失敗: " + failCount + " 次"));
+        if (successCount > 0) {
+            pc.sendPackets(new S_PacketBoxGree(15));
+        } else {
+            pc.sendPackets(new S_PacketBoxGree(16));
+        }
+
+        sendBackToPage(pc, cmd);
+    }
+
+    // 返回對應的合成頁面
+    private void sendBackToPage(L1PcInstance pc, String cmd) {
+        String htmlPage = "";
+        String[] data = new String[3];
+
+        if (cmd.toLowerCase().contains("magic_a")) {
+            htmlPage = "magicchang2";
+            data[0] = String.valueOf(ConfigMagic.CONSUME2);
+        } else if (cmd.toLowerCase().contains("magic_b")) {
+            htmlPage = "magicchang3";
+            data[0] = String.valueOf(ConfigMagic.CONSUME3);
+        } else if (cmd.toLowerCase().contains("magic_c")) {
+            htmlPage = "magicchang4";
+            data[0] = String.valueOf(ConfigMagic.CONSUME4);
+        } else if (cmd.toLowerCase().contains("magic_d")) {
+            htmlPage = "magicchang5";
+            data[0] = String.valueOf(ConfigMagic.CONSUME5);
+        }
+
+        if (!htmlPage.isEmpty())
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), htmlPage, data));
     }
 }

@@ -18,6 +18,8 @@ import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.world.World;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Npc_PolyCombind extends NpcExecutor {
@@ -35,6 +37,7 @@ public class Npc_PolyCombind extends NpcExecutor {
     private final int[] poly3 = Configpoly.poly_LIST_3;
     private final int[] poly4 = Configpoly.poly_LIST_4;
     private final int[] poly5 = Configpoly.poly_LIST_5;
+    private final int[] poly6 = Configpoly.poly_LIST_6;
 
     public static Npc_PolyCombind get() {
         return new Npc_PolyCombind();
@@ -89,6 +92,11 @@ public class Npc_PolyCombind extends NpcExecutor {
         if ("poly_D1".equalsIgnoreCase(cmd)) {
             String[] data = { String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5()), "", "" };
             pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind5", data));
+            return true;
+        }
+        if ("poly_E1".equalsIgnoreCase(cmd)) {
+            String[] data = { String.valueOf(Configpoly.CONSUME6 + pc.getpolyrun6()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind6", data));
             return true;
         }
 
@@ -149,12 +157,27 @@ public class Npc_PolyCombind extends NpcExecutor {
             pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind5", data));
             return true;
         }
+        if ("poly_E11".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME6 + pc.getpolyrun6() < Configpoly.ZUIDAJILV6)
+                pc.setpolyrun6(pc.getpolyrun6() + Configpoly.ZENGJIAJILV6);
+            String[] data = { String.valueOf(Configpoly.CONSUME6 + pc.getpolyrun6()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind6", data));
+            return true;
+        }
+        if ("poly_E12".equalsIgnoreCase(cmd)) {
+            if (Configpoly.CONSUME6 + pc.getpolyrun6() > Configpoly.ZUIXIAOJILV6)
+                pc.setpolyrun6(pc.getpolyrun6() - Configpoly.ZENGJIAJILV6);
+            String[] data = { String.valueOf(Configpoly.CONSUME6 + pc.getpolyrun6()), "", "" };
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "polycombind6", data));
+            return true;
+        }
 
         // 合成主流程直接呼叫 action
         if (cmd.equalsIgnoreCase("poly_A") || cmd.equalsIgnoreCase("poly_A_total") ||
                 cmd.equalsIgnoreCase("poly_B") || cmd.equalsIgnoreCase("poly_B_total") ||
                 cmd.equalsIgnoreCase("poly_C") || cmd.equalsIgnoreCase("poly_C_total") ||
-                cmd.equalsIgnoreCase("poly_D") || cmd.equalsIgnoreCase("poly_D_total")) {
+                cmd.equalsIgnoreCase("poly_D") || cmd.equalsIgnoreCase("poly_D_total") ||
+                cmd.equalsIgnoreCase("poly_E") || cmd.equalsIgnoreCase("poly_E_total")) {
             new Npc_PolyCombind().action(pc, null, cmd, 0);
             return true;
         }
@@ -164,7 +187,7 @@ public class Npc_PolyCombind extends NpcExecutor {
     // ======================== 主合成流程 ========================
     public void action(L1PcInstance pc, L1NpcInstance npc, String cmd, long amount) {
         int[] oldpolys = null;
-        int newpoly = 0;
+        int[] newpolys = null;
         int chance = 0;
         int needcount = 0;
         switch (cmd) {
@@ -173,34 +196,56 @@ public class Npc_PolyCombind extends NpcExecutor {
                 chance = Configpoly.CONSUME2 + pc.getpolyrun2();
                 needcount = Configpoly.SHULIANG2 + pc.getpolyCount();
                 oldpolys = poly1;
-                newpoly = poly2[ThreadLocalRandom.current().nextInt(poly2.length)];
+                newpolys = poly2;
                 break;
             case "poly_B":
             case "poly_B_total":
                 chance = Configpoly.CONSUME3 + pc.getpolyrun3();
                 needcount = Configpoly.SHULIANG3 + pc.getpolyCount2();
                 oldpolys = poly2;
-                newpoly = poly3[ThreadLocalRandom.current().nextInt(poly3.length)];
+                newpolys = poly3;
                 break;
             case "poly_C":
             case "poly_C_total":
                 chance = Configpoly.CONSUME4 + pc.getpolyrun4();
                 needcount = Configpoly.SHULIANG4 + pc.getpolyCount3();
                 oldpolys = poly3;
-                newpoly = poly4[ThreadLocalRandom.current().nextInt(poly4.length)];
+                newpolys = poly4;
                 break;
             case "poly_D":
             case "poly_D_total":
                 chance = Configpoly.CONSUME5 + pc.getpolyrun5();
                 needcount = Configpoly.SHULIANG5 + pc.getpolyCount4();
                 oldpolys = poly4;
-                newpoly = poly5[ThreadLocalRandom.current().nextInt(poly5.length)];
+                newpolys = poly5;
+                break;
+            case "poly_E":
+            case "poly_E_total":
+                chance = Configpoly.CONSUME6 + pc.getpolyrun6();
+                needcount = Configpoly.SHULIANG6 + pc.getpolyCount5();
+                oldpolys = poly5;
+                newpolys = poly6;
                 break;
             default:
                 pc.sendPackets(new S_SystemMessage("指令錯誤!"));
                 return;
         }
 
+        // 判斷是否為批量合成模式
+        boolean isTotalMode = cmd.contains("_total");
+
+        // 批量合成模式：異步執行避免卡頓
+        if (isTotalMode) {
+            final int[] fOldpolys = oldpolys;
+            final int[] fNewpolys = newpolys;
+            final int fChance = chance;
+            final int fNeedcount = needcount;
+            final String fCmd = cmd;
+            GeneralThreadPool.get().schedule(() -> doBatchCombine(pc, fCmd, fOldpolys, fNewpolys, fChance, fNeedcount), 100);
+            return;
+        }
+
+        // 單次合成模式（原有邏輯）
         // 消耗卡片統計（使用類別頂端的 ItemConsume 結構）
         boolean enough = false;
         ArrayList<ItemConsume> consumeList = new ArrayList<>();
@@ -229,18 +274,21 @@ public class Npc_PolyCombind extends NpcExecutor {
             String[] data = new String[3];
 
             // 判斷回到哪一個階段畫面
-            if (cmd.equalsIgnoreCase("A") || cmd.equalsIgnoreCase("A_Total")) {
+            if (cmd.equalsIgnoreCase("poly_A")) {
                 htmlPage = "polycombind2";
                 data[0] = String.valueOf(Configpoly.CONSUME2 + pc.getpolyrun2());
-            } else if (cmd.equalsIgnoreCase("B") || cmd.equalsIgnoreCase("B_Total")) {
+            } else if (cmd.equalsIgnoreCase("poly_B")) {
                 htmlPage = "polycombind3";
                 data[0] = String.valueOf(Configpoly.CONSUME3 + pc.getpolyrun3());
-            } else if (cmd.equalsIgnoreCase("C") || cmd.equalsIgnoreCase("C_Total")) {
+            } else if (cmd.equalsIgnoreCase("poly_C")) {
                 htmlPage = "polycombind4";
                 data[0] = String.valueOf(Configpoly.CONSUME4 + pc.getpolyrun4());
-            } else if (cmd.equalsIgnoreCase("D") || cmd.equalsIgnoreCase("D_Total")) {
+            } else if (cmd.equalsIgnoreCase("poly_D")) {
                 htmlPage = "polycombind5";
                 data[0] = String.valueOf(Configpoly.CONSUME5 + pc.getpolyrun5());
+            } else if (cmd.equalsIgnoreCase("poly_E")) {
+                htmlPage = "polycombind6";
+                data[0] = String.valueOf(Configpoly.CONSUME6 + pc.getpolyrun6());
             }
 
             if (!htmlPage.isEmpty())
@@ -248,28 +296,162 @@ public class Npc_PolyCombind extends NpcExecutor {
             return;
         }
 
-
         // 扣除材料
         for (ItemConsume ic : consumeList) {
             pc.getInventory().removeItem(ic.itemInstance, ic.count);
         }
 
         // 重置全部階段加成
-        pc.setpolyCount(0); pc.setpolyCount2(0); pc.setpolyCount3(0); pc.setpolyCount4(0);
-        pc.setpolyrun2(0); pc.setpolyrun3(0); pc.setpolyrun4(0); pc.setpolyrun5(0);
+        pc.setpolyCount(0); pc.setpolyCount2(0); pc.setpolyCount3(0); pc.setpolyCount4(0); pc.setpolyCount5(0);
+        pc.setpolyrun2(0); pc.setpolyrun3(0); pc.setpolyrun4(0); pc.setpolyrun5(0); pc.setpolyrun6(0);
 
-        boolean isPlayAnimation = !cmd.contains("_total");
-        // 非阻塞：先送動畫，再延遲執行合成結果
-        if (isPlayAnimation) {
-            try { pc.sendHtmlCastGfx(new String[3]); } catch (Exception ignored) {}
-            final int fNewpoly = newpoly;
-            final int fChance = chance;
-            final ArrayList<ItemConsume> fConsumeList = new ArrayList<>(consumeList);
-            GeneralThreadPool.get().schedule(() -> doPolyCombine(pc, isPlayAnimation, fNewpoly, fChance, fConsumeList), 2100);
+        // 單次合成模式：播放動畫，延遲執行
+        try { pc.sendHtmlCastGfx(new String[3]); } catch (Exception ignored) {}
+        final int fNewpoly = newpolys[ThreadLocalRandom.current().nextInt(newpolys.length)];
+        final int fChance = chance;
+        final ArrayList<ItemConsume> fConsumeList = new ArrayList<>(consumeList);
+        GeneralThreadPool.get().schedule(() -> doPolyCombine(pc, true, fNewpoly, fChance, fConsumeList), 2100);
+    }
+
+    // ======================== 批量合成流程（一次性計算） ========================
+    private void doBatchCombine(L1PcInstance pc, String cmd, int[] oldpolys, int[] newpolys, int chance, int needcount) {
+        // ========== 步驟1：一次性收集所有材料 ==========
+        final ArrayList<ItemConsume> consumeList = new ArrayList<>();
+        int totalAvailable = 0;
+
+        if (oldpolys != null) {
+            for (int oldpoly : oldpolys) {
+                L1ItemInstance[] polys = pc.getInventory().findItemsId(oldpoly);
+                if (polys != null) {
+                    for (L1ItemInstance poly : polys) {
+                        int count = (int) poly.getCount();
+                        consumeList.add(new ItemConsume(poly, count));
+                        totalAvailable += count;
+                    }
+                }
+            }
+        }
+
+        if (totalAvailable < needcount) {
+            pc.sendPackets(new S_SystemMessage("你的變身卡不足【" + needcount + "】個"));
+            sendBackToPage(pc, cmd);
             return;
         }
-        // 直接執行合成結果（無動畫/批量）
-        doPolyCombine(pc, false, newpoly, chance, consumeList);
+
+        int maxCombine = totalAvailable / needcount;
+
+        // ========== 步驟2：一次性扣除所有材料 ==========
+        for (ItemConsume ic : consumeList) {
+            pc.getInventory().removeItem(ic.itemInstance, ic.count);
+        }
+
+        // 重置全部階段加成
+        pc.setpolyCount(0); pc.setpolyCount2(0); pc.setpolyCount3(0); pc.setpolyCount4(0); pc.setpolyCount5(0);
+        pc.setpolyrun2(0); pc.setpolyrun3(0); pc.setpolyrun4(0); pc.setpolyrun5(0); pc.setpolyrun6(0);
+
+        // ========== 步驟3：一次性計算結果（按成功率直接計算） ==========
+        final Map<Integer, Integer> successItems = new HashMap<>();
+        final Map<Integer, Integer> failReturnItems = new HashMap<>();
+        final Map<Integer, String> announceCards = new HashMap<>();
+
+        // 直接按成功率計算成功/失敗數量
+        int successCount = 0;
+        int failCount = 0;
+
+        for (int i = 0; i < maxCombine; i++) {
+            int newpoly = newpolys[ThreadLocalRandom.current().nextInt(newpolys.length)];
+            if (ThreadLocalRandom.current().nextInt(100) < chance) {
+                // 成功
+                successCount++;
+                successItems.merge(newpoly, 1, Integer::sum);
+                // 檢查是否需要公告
+                final L1polyHeCheng card1 = polyHeChengTable.getInstance().getTemplate(newpoly);
+                if (card1 != null && card1.getNot() != 0) {
+                    L1ItemInstance tempItem = ItemTable.get().createItem(newpoly);
+                    if (tempItem != null && tempItem.getItem() != null) {
+                        announceCards.put(newpoly, tempItem.getLogName());
+                    }
+                }
+            } else {
+                // 失敗 - 返還一階卡
+                failCount++;
+                int backId = oldpolys[ThreadLocalRandom.current().nextInt(oldpolys.length)];
+                failReturnItems.merge(backId, 1, Integer::sum);
+            }
+        }
+
+        // ========== 步驟4：一次性給予所有結果道具 ==========
+        // 給予成功的道具
+        for (Map.Entry<Integer, Integer> entry : successItems.entrySet()) {
+            L1ItemInstance item = ItemTable.get().createItem(entry.getKey());
+            if (item != null && item.getItem() != null) {
+                item.setIdentified(true);
+                if (entry.getValue() > 1) {
+                    item.setCount(entry.getValue());
+                }
+                pc.getInventory().storeItem(item);
+            }
+        }
+
+        // 給予失敗返還的道具
+        for (Map.Entry<Integer, Integer> entry : failReturnItems.entrySet()) {
+            L1ItemInstance item = ItemTable.get().createItem(entry.getKey());
+            if (item != null && item.getItem() != null) {
+                item.setIdentified(true);
+                if (entry.getValue() > 1) {
+                    item.setCount(entry.getValue());
+                }
+                pc.getInventory().storeItem(item);
+            }
+        }
+
+        // ========== 步驟5：發送公告和結果 ==========
+        if (!announceCards.isEmpty()) {
+            StringBuilder announceMsg = new StringBuilder();
+            announceMsg.append("【公告】玩家 ").append(pc.getName()).append(" 在批量合成中成功合成了");
+            if (announceCards.size() == 1) {
+                announceMsg.append("變身卡「").append(announceCards.values().iterator().next()).append("」！");
+            } else {
+                announceMsg.append("多張稀有變身卡！");
+            }
+            World.get().broadcastPacketToAllAsync(new S_SystemMessage(announceMsg.toString()));
+        }
+
+        pc.sendPackets(new S_Sound(successCount > 0 ? 20360 : 20468));
+        pc.sendPackets(new S_SystemMessage("批量合成完成！成功: " + successCount + " 次，失敗: " + failCount + " 次"));
+        if (successCount > 0) {
+            pc.sendPackets(new S_PacketBoxGree(15));
+        } else {
+            pc.sendPackets(new S_PacketBoxGree(16));
+        }
+
+        sendBackToPage(pc, cmd);
+    }
+
+    // 返回對應的合成頁面
+    private void sendBackToPage(L1PcInstance pc, String cmd) {
+        String htmlPage = "";
+        String[] data = new String[3];
+
+        if (cmd.contains("poly_A")) {
+            htmlPage = "polycombind2";
+            data[0] = String.valueOf(Configpoly.CONSUME2);
+        } else if (cmd.contains("poly_B")) {
+            htmlPage = "polycombind3";
+            data[0] = String.valueOf(Configpoly.CONSUME3);
+        } else if (cmd.contains("poly_C")) {
+            htmlPage = "polycombind4";
+            data[0] = String.valueOf(Configpoly.CONSUME4);
+        } else if (cmd.contains("poly_D")) {
+            htmlPage = "polycombind5";
+            data[0] = String.valueOf(Configpoly.CONSUME5);
+        } else if (cmd.contains("poly_E")) {
+            htmlPage = "polycombind6";
+            data[0] = String.valueOf(Configpoly.CONSUME6);
+        }
+
+        if (!htmlPage.isEmpty())
+            pc.sendPackets(new S_NPCTalkReturn(pc.getId(), htmlPage, data));
     }
 
     private void doPolyCombine(L1PcInstance pc, boolean isPlayAnimation, int newpoly, int chance, ArrayList<ItemConsume> consumeList) {

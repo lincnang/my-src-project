@@ -394,6 +394,7 @@ public class GameServer {
             com.add.Tsai.Astrology.GritAstrologyTable.get().load();   // 格立特星盤資料
             com.add.Tsai.Astrology.YishidiAstrologyTable.get().load(); // 依詩蒂星盤資料
             AstrologyQuestReading.get().load();//星盤任務
+		com.add.Tsai.Astrology.AstrologyHistoryTable.get().load(); // 載入星盤解鎖紀錄
             //TODO 玩家武器熟練度
             WeaponProficiencyTable.getInstance().loadProficiency();
             CharacterWeaponProficiencyTable.getInstance().load();

@@ -8,6 +8,7 @@ import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.model.skill.L1SkillStop;
 import com.lineage.server.model.skill.L1SkillUse;
 import com.lineage.server.serverpackets.S_InventoryIcon;
+import com.lineage.server.serverpackets.S_OwnCharStatus;
 import com.lineage.server.serverpackets.S_ServerMessage;
 import com.lineage.server.serverpackets.S_SkillSound;
 import org.apache.commons.logging.Log;
@@ -119,6 +120,7 @@ public class W_SK0017 extends L1WeaponSkillType {
             }
             L1SkillStop.stopSkill(tgpc, L1SkillId.DISEASE);
             tgpc.removeSkillEffect(L1SkillId.DISEASE);
+            tgpc.sendPackets(new S_OwnCharStatus(tgpc));
             tgpc.sendPackets(new S_ServerMessage("惡魔王效果:疾病術的效果消失了！"));
             diseaseTasks.remove(tgpc.getId());
             _log.debug("疾病術效果已被移除，圖示也已關閉。");

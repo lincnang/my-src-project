@@ -9570,7 +9570,7 @@ public class L1PcInstance extends L1Character { // src015
             AstrologyData data = Astrology1Table.get().getAstrology(key);
             Optional.ofNullable(data).ifPresent(effect -> {
                 try {
-                    if (getQuest().isEnd(data.get_questId())) {
+                    if (com.add.Tsai.Astrology.AstrologyHistoryTable.get().isUnlocked(getId(), data.get_questId())) {
                         // 舊星盤：僅自動套用非技能節點（skillId==0），技能節點需玩家點擊切換
                         if (data.get_skillId() == 0) {
                             addAstrologyPower(data, key);
@@ -9899,7 +9899,7 @@ public class L1PcInstance extends L1Character { // src015
             AttonAstrologyData data = AttonAstrologyTable.get().getData(key);
             if (data == null) continue;
             try {
-                if (getQuest().isEnd(data.getQuestId()) && data.getSkillId() == 0) {
+                if (com.add.Tsai.Astrology.AstrologyHistoryTable.get().isUnlocked(getId(), data.getQuestId()) && data.getSkillId() == 0) {
                     addAstrologyPower(data, key);
                     java.util.concurrent.TimeUnit.MILLISECONDS.sleep(5);
                 }
@@ -9917,7 +9917,7 @@ public class L1PcInstance extends L1Character { // src015
             com.add.Tsai.Astrology.SilianAstrologyData data = com.add.Tsai.Astrology.SilianAstrologyTable.get().getData(key);
             if (data == null) continue;
             try {
-                if (getQuest().isEnd(data.getQuestId()) && data.getSkillId() == 0) {
+                if (com.add.Tsai.Astrology.AstrologyHistoryTable.get().isUnlocked(getId(), data.getQuestId()) && data.getSkillId() == 0) {
                     // 轉為阿頓模型套用：僅用到 Hp/耐性/負重/HPR/MPR/減傷/特效
                     // 直接使用絲莉安專用 effectBuff
                     com.add.Tsai.Astrology.SilianAstrologyTable.effectBuff(this, data, 1);
@@ -9937,7 +9937,7 @@ public class L1PcInstance extends L1Character { // src015
             com.add.Tsai.Astrology.GritAstrologyData data = com.add.Tsai.Astrology.GritAstrologyTable.get().getData(key);
             if (data == null) continue;
             try {
-                if (getQuest().isEnd(data.getQuestId()) && data.getSkillId() == 0) {
+                if (com.add.Tsai.Astrology.AstrologyHistoryTable.get().isUnlocked(getId(), data.getQuestId()) && data.getSkillId() == 0) {
                     com.add.Tsai.Astrology.GritAstrologyTable.effectBuff(this, data, 1);
                     java.util.concurrent.TimeUnit.MILLISECONDS.sleep(5);
                 }
@@ -9959,7 +9959,7 @@ public class L1PcInstance extends L1Character { // src015
             com.add.Tsai.Astrology.YishidiAstrologyData data = com.add.Tsai.Astrology.YishidiAstrologyTable.get().getData(key);
             if (data == null) continue;
             try {
-                if (getQuest().isEnd(data.getQuestId()) && data.getSkillId() == 0) {
+                if (com.add.Tsai.Astrology.AstrologyHistoryTable.get().isUnlocked(getId(), data.getQuestId()) && data.getSkillId() == 0) {
                     com.add.Tsai.Astrology.YishidiAstrologyTable.effectBuff(this, data, 1);
                     java.util.concurrent.TimeUnit.MILLISECONDS.sleep(5);
                 }

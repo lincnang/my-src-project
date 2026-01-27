@@ -131,7 +131,7 @@ public class AstrologyCmd {
                         return true; // 攔截
                     }
                 }
-                if (pc.getQuest().isEnd(data.get_questId())) {
+                if (AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.get_questId())) {
                     // 非技能節點：再次點選顯示「星盤已解鎖」
                     if (data.get_skillId() == 0) {
                         pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
@@ -182,10 +182,13 @@ public class AstrologyCmd {
                     return true; // 攔截
                 }
                 // 成功
-                pc.getQuest().set_step(data.get_questId(), 255);
+                // pc.getQuest().set_step(data.get_questId(), 255); // 改用 AstrologyHistoryTable 記錄
                 AstrologyQuestReading.get().updateQuest(pc.getId(), astrologyType, 1);
                 AstrologyQuestReading.get().delQuest(pc.getId(), astrologyType);
-                // 解鎖即永久：非技能節點立即套用能力
+                // 新增解鎖紀錄
+                AstrologyHistoryTable.get().add(pc.getId(), data.get_questId());
+
+                pc.sendPackets(new S_SystemMessage("恭喜您解鎖[" + data.getName() + "]"));                // 解鎖即永久：非技能節點立即套用能力
                 if (data.get_skillId() == 0) {
                     pc.addAstrologyPower(data, astrologyType);
                     pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
@@ -268,7 +271,7 @@ public class AstrologyCmd {
 
         }
         AstrologyData data = Astrology1Table.get().getAstrology(astrologyType);
-        if (pc.getQuest().isEnd(data.get_questId())) { // 已解鎖 任務完成已記錄
+        if (AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.get_questId())) { // 已解鎖 任務完成已記錄
             return false;
         }
         pc.sendPackets(new S_SystemMessage("請先解鎖[" + data.getName() + "]", 1));
@@ -283,7 +286,7 @@ public class AstrologyCmd {
                 final AstrologyData data = Astrology1Table.get().getAstrology(i);
                 if (data != null) {
                     // 根據任務完成狀態選擇顯示的圖片編號
-                    if (pc.getQuest().isEnd(data.get_questId())) {
+                    if (AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.get_questId())) {
                         builder.append(data.getAddcgfxid()).append(",");
                     } else {
                         builder.append(data.getAddhgfxid()).append(",");

@@ -45,7 +45,7 @@ public final class A_ResolventTable {
             SQLUtil.close(ps);
             SQLUtil.close(cn);
         }
-        _log.info("讀取-> [其他]_武防溶解歷練值設置資料數量: " + _resolvent.size() + "(" + timer.get() + "ms)");
+        _log.info("讀取->[其他]_武防溶解歷練值設置資料數量: " + _resolvent.size() + "(" + timer.get() + "ms)");
     }
 
     public int getCrystalCount(final int itemId) {

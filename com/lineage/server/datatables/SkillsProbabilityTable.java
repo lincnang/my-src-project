@@ -72,7 +72,7 @@ public class SkillsProbabilityTable {
             SQLUtil.close(pstm);
             SQLUtil.close(con);
         }
-        _log.info("讀取->寶_負面技能幾率DB化設置資料數量: " + this._skills.size() + "(" + timer.get() + "ms)");
+        _log.info("讀取->負面技能機率設置資料數量: " + this._skills.size() + "(" + timer.get() + "ms)");
     }
 
     public L1Skills getTemplate(final int skill_id) {

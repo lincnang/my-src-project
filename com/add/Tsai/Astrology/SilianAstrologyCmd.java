@@ -100,7 +100,7 @@ public class SilianAstrologyCmd {
                     }
                 }
                 // 已完成
-                if (pc.getQuest().isEnd(data.getQuestId())) {
+                if (AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.getQuestId())) {
                     if (data.getSkillId() > 0) {
                         // 僅切換技能節點效果：移除上一個技能節點，不清除一般加成
                         Integer prevBtn = _SILIAN_LAST_BTN.get(pc.getId());
@@ -176,9 +176,13 @@ public class SilianAstrologyCmd {
                 return true;
             }
             // 成功
-            pc.getQuest().set_step(data.getQuestId(), 255);
+            // pc.getQuest().set_step(data.getQuestId(), 255); // 改用 AstrologyHistoryTable
             AstrologyQuestReading.get().updateQuest(pc.getId(), qk(astrologyType), 1);
             AstrologyQuestReading.get().delQuest(pc.getId(), qk(astrologyType));
+            // 新增解鎖紀錄
+            AstrologyHistoryTable.get().add(pc.getId(), data.getQuestId());
+
+            pc.sendPackets(new S_SystemMessage("恭喜您解鎖[" + data.getNote() + "]"));
             // 任務完成即給能力：非技能節點直接生效
             if (data.getSkillId() == 0) {
                 pc.addAstrologyPower(data, astrologyType);
@@ -201,7 +205,7 @@ public class SilianAstrologyCmd {
         int prevType = calcPrevType(key);
         if (prevType < 0) return false;
         SilianAstrologyData prev = SilianAstrologyTable.get().getData(prevType);
-        if (prev != null && !pc.getQuest().isEnd(prev.getQuestId())) {
+        if (prev != null && !AstrologyHistoryTable.get().isUnlocked(pc.getId(), prev.getQuestId())) {
             pc.sendPackets(new S_SystemMessage("請先解鎖[" + prev.getNote() + "]"));
             return true;
         }
@@ -228,7 +232,7 @@ public class SilianAstrologyCmd {
             for (Integer order : orders) {
                 SilianAstrologyData data = SilianAstrologyTable.get().getData(order);
                 if (data == null) continue;
-                int img = pc.getQuest().isEnd(data.getQuestId())
+                int img = AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.getQuestId())
                         ? data.getCompleteGfxId()
                         : data.getIncompleteGfxId();
                 builder.append(img).append(",");

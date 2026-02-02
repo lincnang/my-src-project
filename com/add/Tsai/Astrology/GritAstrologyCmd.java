@@ -82,22 +82,8 @@ public class GritAstrologyCmd {
                 if (checkEndAstrologyQuest(pc, id)) {
                     return true;
                 }
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
-                if (quest == null) {
-                    quest = new AstrologyQuest(pc.getId(), qk(id), data.getCards());
-                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.getCards());
-                }
-                // 檢查需求道具（依資料庫設定）
-                if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
-                    int needItemId = Integer.parseInt(data.getNeedItemId());
-                    int needItemNum = Integer.parseInt(data.getNeedItemCount());
-                    if (!pc.getInventory().checkItem(needItemId, needItemNum)) {
-                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
-                        updateUI(pc, "t_gretel");
-                        return true;
-                    }
-                }
-                // 已完成
+
+                // 修正：優先檢查是否已經解鎖
                 if (AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.getQuestId())) {
                     if (data.getSkillId() > 0) {
                         // 僅切換技能節點效果：移除上一個技能節點，不清除一般加成
@@ -121,6 +107,23 @@ public class GritAstrologyCmd {
                     updateUI(pc, "t_gretel");
                     return true;
                 }
+
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
+                if (quest == null) {
+                    quest = new AstrologyQuest(pc.getId(), qk(id), data.getCards());
+                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.getCards());
+                }
+                // 檢查需求道具（依資料庫設定）
+                if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
+                    int needItemId = Integer.parseInt(data.getNeedItemId());
+                    int needItemNum = Integer.parseInt(data.getNeedItemCount());
+                    if (!pc.getInventory().checkItem(needItemId, needItemNum)) {
+                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
+                        updateUI(pc, "t_gretel");
+                        return true;
+                    }
+                }
+                
                 pc.setAstrologyType(id);
                 pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
                 return true;

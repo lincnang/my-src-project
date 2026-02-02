@@ -82,7 +82,6 @@ public class CardAwakenConfigTable {
             SQLUtil.close(ps);
             SQLUtil.close(cn);
         }
-        _log.info("讀取->系統_變身卡覺醒設定: " + count + "(" + timer.get() + "ms)");
     }
 
     private int[] parseItemList(String listStr) {

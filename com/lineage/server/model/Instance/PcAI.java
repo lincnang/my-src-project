@@ -4,6 +4,7 @@ import com.lineage.server.datatables.ItemTable;
 import com.lineage.server.model.Instance.pcdelay.PcTelDelayAI;
 import com.lineage.server.model.L1Object;
 import com.lineage.server.model.L1Teleport;
+import com.lineage.server.model.skill.L1SkillId;
 import com.lineage.server.serverpackets.S_SystemMessage;
 import com.lineage.server.templates.L1Item;
 import com.lineage.server.thread.GeneralThreadPool;
@@ -147,6 +148,23 @@ public class PcAI implements Runnable {
             if (_pc == null || _pc.getOnlineStatus() == 0 || _pc.isDead() || _pc.getCurrentHp() <= 0 || _pc.isGhost() || !_pc.isActivated() || _pc.getNetConnection().getIp() == null || !_pc.getMap().isAutoBot()) {
                 return true;
             }
+
+            // 狀態檢查：若被暈眩、凍結或強力拘束，暫時跳過本次AI執行 (不停止AI，等待狀態解除)
+            // isParalyzedX() 已包含: SHOCK_STUN, KINGDOM_STUN, PHANTASM, EARTH_BIND, BONE_BREAK, 詛咒/毒素麻痺
+            if (_pc.isParalyzed() || _pc.isParalyzedX() || _pc.isSleeped()
+                    || _pc.hasSkillEffect(L1SkillId.STATUS_FREEZE)    // 凍結 (冰矛等)
+                    || _pc.hasSkillEffect(L1SkillId.DESPERADO)        // 亡命之徒
+                    || _pc.hasSkillEffect(L1SkillId.POWERGRIP)        // 拘束移動
+                    || _pc.hasSkillEffect(L1SkillId.EMPIRE)           // 暈眩之劍 (王族)
+                    || _pc.hasSkillEffect(L1SkillId.EIF_EMPIRE)       // 精靈之暈 (妖精)
+                    || _pc.hasSkillEffect(L1SkillId.Shadow_Daze)      // 暗影暈眩 (黑妖)
+                    || _pc.hasSkillEffect(L1SkillId.TITAN_STUN)       // 泰坦之暈 (戰士)
+                    || _pc.hasSkillEffect(L1SkillId.Warrior_Charge)   // 戰士衝鋒
+                    || _pc.hasSkillEffect(L1SkillId.FIRESTUN)         // 火焰之暈
+                    || _pc.hasSkillEffect(L1SkillId.TRUEFIRESTUN)) {  // 真·火焰之暈
+                return false; // 返回 false 表示繼續排程，但不執行後續動作
+            }
+
             // 遇見BOSS飛
             this.ConfirmTheBOSS(_pc);
             // 檢查自動購買物品

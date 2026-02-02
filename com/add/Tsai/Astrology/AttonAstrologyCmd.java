@@ -94,22 +94,8 @@ public class AttonAstrologyCmd {
                 if (checkEndAstrologyQuest(pc, id)) {
                     return true;
                 }
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
-                if (quest == null) {
-                    quest = new AstrologyQuest(pc.getId(), qk(id), data.get_cards());
-                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.get_cards());
-                }
-                // 檢查需求道具（依資料庫設定）
-                if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
-                    int needItemId = Integer.parseInt(data.getNeedItemId());
-                    int needItemNum = Integer.parseInt(data.getNeedItemCount());
-                    if (!pc.getInventory().checkItem(needItemId, needItemNum)) {
-                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
-                        updateUI(pc, "t_atton");
-                        return true;
-                    }
-                }
-                // 已完成
+
+                // 修正：優先檢查是否已經解鎖，若已解鎖則直接切換技能或顯示訊息，不檢查/消耗道具
                 if (AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.getQuestId())) {
                     if (data.getSkillId() > 0) {
                         // 僅切換技能節點效果：移除上一個技能節點，不清除一般加成
@@ -133,6 +119,23 @@ public class AttonAstrologyCmd {
                     updateUI(pc, "t_atton");
                     return true;
                 }
+
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
+                if (quest == null) {
+                    quest = new AstrologyQuest(pc.getId(), qk(id), data.get_cards());
+                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.get_cards());
+                }
+                // 檢查需求道具（依資料庫設定）
+                if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
+                    int needItemId = Integer.parseInt(data.getNeedItemId());
+                    int needItemNum = Integer.parseInt(data.getNeedItemCount());
+                    if (!pc.getInventory().checkItem(needItemId, needItemNum)) {
+                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
+                        updateUI(pc, "t_atton");
+                        return true;
+                    }
+                }
+                
                 pc.setAstrologyType(id);
                 pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
                 return true;

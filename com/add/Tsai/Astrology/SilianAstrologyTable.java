@@ -119,8 +119,9 @@ public class SilianAstrologyTable {
         pc.addMaxHp(value.getAddHp() * negative);
         pc.addRegistStun(value.getStunResist() * negative);
         pc.addWeightReduction(value.getAddWeightLimit() * negative);
-        if (value.getHpr() != 0) pc.addHpr(value.getHpr() * negative);
-        if (value.getMpr() != 0) pc.addMpr(value.getMpr() * negative);
+        // 註記：Hpr 與 Mpr 移至 SilianRegen 主動施放，不再此增加常駐恢復速度
+        // if (value.getHpr() != 0) pc.addHpr(value.getHpr() * negative);
+        // if (value.getMpr() != 0) pc.addMpr(value.getMpr() * negative);
         if (value.getTripleArrowReduction() != 0) pc.addTripleArrowReduction(value.getTripleArrowReduction() * negative);
         if (value.getRangedDmgReductionPercent() != 0) pc.addRangedDmgReductionPercent(value.getRangedDmgReductionPercent() * negative);
         if (value.getStunDmgReduction() != 0) pc.addStunDmgReduction(value.getStunDmgReduction() * negative);

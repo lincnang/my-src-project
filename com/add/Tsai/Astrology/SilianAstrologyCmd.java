@@ -84,22 +84,8 @@ public class SilianAstrologyCmd {
                 if (checkEndAstrologyQuest(pc, id)) {
                     return true;
                 }
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
-                if (quest == null) {
-                    quest = new AstrologyQuest(pc.getId(), qk(id), data.get_cards());
-                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.get_cards());
-                }
-                // 檢查需求道具（依資料庫設定）
-                if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
-                    int needItemId = Integer.parseInt(data.getNeedItemId());
-                    int needItemNum = Integer.parseInt(data.getNeedItemCount());
-                    if (!pc.getInventory().checkItem(needItemId, needItemNum)) {
-                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
-                        updateUI(pc, "t_silian");
-                        return true;
-                    }
-                }
-                // 已完成
+
+                // 修正：優先檢查是否已經解鎖
                 if (AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.getQuestId())) {
                     if (data.getSkillId() > 0) {
                         // 僅切換技能節點效果：移除上一個技能節點，不清除一般加成
@@ -115,6 +101,17 @@ public class SilianAstrologyCmd {
                         _SILIAN_SKILLS.put(pc.getId(), data.getSkillId());
                         _SILIAN_SKILL_NAMES.put(pc.getId(), data.getNote());
                         pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getNote() + "已開啟！", 1));
+
+                        // 處理啟動道具：先回收其他啟動道具，再發放當前技能的啟動道具
+                        if (data.getGrantItemId() > 0) {
+                            SilianAstrologyTable.get().revokeGrantItems(pc, data.getGrantItemId());
+                            if (!pc.getInventory().checkItem(data.getGrantItemId())) {
+                                com.lineage.data.cmd.CreateNewItem.createNewItem(pc, data.getGrantItemId(), 1);
+                            }
+                        } else {
+                            // 若此技能無對應道具，則回收所有相關道具
+                            SilianAstrologyTable.get().revokeGrantItems(pc, 0);
+                        }
                     } else {
                         // 非技能節點：直接套用一次性的屬性加成並記錄，避免重複
                         pc.addAstrologyPower(data, id);
@@ -123,6 +120,23 @@ public class SilianAstrologyCmd {
                     updateUI(pc, "t_silian");
                     return true;
                 }
+
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), qk(id));
+                if (quest == null) {
+                    quest = new AstrologyQuest(pc.getId(), qk(id), data.get_cards());
+                    AstrologyQuestReading.get().storeQuest(pc.getId(), qk(id), data.get_cards());
+                }
+                // 檢查需求道具（依資料庫設定）
+                if (data.getNeedItemId() != null && !data.getNeedItemId().isEmpty()) {
+                    int needItemId = Integer.parseInt(data.getNeedItemId());
+                    int needItemNum = Integer.parseInt(data.getNeedItemCount());
+                    if (!pc.getInventory().checkItem(needItemId, needItemNum)) {
+                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
+                        updateUI(pc, "t_silian");
+                        return true;
+                    }
+                }
+                
                 pc.setAstrologyType(id);
                 pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
                 return true;
@@ -183,8 +197,35 @@ public class SilianAstrologyCmd {
             AstrologyHistoryTable.get().add(pc.getId(), data.getQuestId());
 
             pc.sendPackets(new S_SystemMessage("恭喜您解鎖[" + data.getNote() + "]"));
-            // 任務完成即給能力：非技能節點直接生效
-            if (data.getSkillId() == 0) {
+            
+            // 任務完成即給能力
+            if (data.getSkillId() > 0) {
+                // 技能節點：自動切換為剛解鎖的技能
+                Integer prevBtn = _SILIAN_LAST_BTN.get(pc.getId());
+                if (prevBtn != null && prevBtn != astrologyType) {
+                    SilianAstrologyData prevData = SilianAstrologyTable.get().getData(prevBtn);
+                    if (prevData != null) {
+                        SilianAstrologyTable.effectBuff(pc, prevData, -1);
+                    }
+                }
+                SilianAstrologyTable.effectBuff(pc, data, 1);
+                _SILIAN_LAST_BTN.put(pc.getId(), astrologyType);
+                _SILIAN_SKILLS.put(pc.getId(), data.getSkillId());
+                _SILIAN_SKILL_NAMES.put(pc.getId(), data.getNote());
+                
+                // 發放啟動道具
+                if (data.getGrantItemId() > 0) {
+                    SilianAstrologyTable.get().revokeGrantItems(pc, data.getGrantItemId());
+                    if (!pc.getInventory().checkItem(data.getGrantItemId())) {
+                        com.lineage.data.cmd.CreateNewItem.createNewItem(pc, data.getGrantItemId(), 1);
+                    }
+                } else {
+                    SilianAstrologyTable.get().revokeGrantItems(pc, 0);
+                }
+                pc.sendPackets(new S_SystemMessage("星盤技能：" + data.getNote() + "已開啟！", 1));
+
+            } else {
+                // 非技能節點：直接生效
                 pc.addAstrologyPower(data, astrologyType);
                 pc.sendPackets(new S_SystemMessage("星盤已解鎖"));
             }
@@ -213,11 +254,41 @@ public class SilianAstrologyCmd {
     }
 
     /**
-     * 計算前置星盤編號（依資料庫規則，可依實際調整）
+     * 計算前置星盤編號
+     * 規劃路線：0 -> 3 -> (2, 5 同時開啟)
      */
     private int calcPrevType(int key) {
-        if (key == 0) return -1;
-        if (key > 0) return key - 1;
+        switch (key) {
+            case 0: return -1;
+            case 3: return 0;
+            case 2: case 5: return 3;
+            case 1:  return 2;
+            case 4:  return 1;
+            case 6:  return 4;
+            case 10:  return 6;
+            case 13:  return 10;
+
+            case 7:  return 5;
+            case 11: return 7;
+            case 8:  return 7;
+
+            case 9:  return 8;
+            case 12:  return 9;
+            case 15:  return 12;
+            case 17:  return 15;
+            case 19:  return 17;
+
+            case 14:  return 11;
+            case 16:  return 14;
+            case 18:  return 16;
+            case 20:  return 18;
+            case 21:  return 20;
+            case 22:  return 21;
+
+
+            default:
+                if (key >= 1 && key <= 22) return key - 1;
+        }
         return -1;
     }
 

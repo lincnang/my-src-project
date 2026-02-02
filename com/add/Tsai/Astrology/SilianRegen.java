@@ -40,7 +40,7 @@ public final class SilianRegen {
         // 清除HOT持久化（改為瞬間回復，HOT不再使用）
         // 不再使用 HOT 持久化
 
-        // 顯示ICON與逐秒回復設定（固定5秒，與冷卻獨立）
+        // 顯示ICON與逐秒回復設定（固定5秒，實現 HoT 緩回效果）
         final int healTimeSec = 5;
         long now2 = System.currentTimeMillis();
         long until = now2 + healTimeSec * 1000L;

@@ -61,7 +61,6 @@ public class CardAwakenProgressTable {
             SQLUtil.close(ps);
             SQLUtil.close(cn);
         }
-        _log.info("讀取->character_變身卡覺醒: " + count + "(" + timer.get() + "ms)");
     }
 
     private String key(String account, int cardId) { return account + "|" + cardId; }

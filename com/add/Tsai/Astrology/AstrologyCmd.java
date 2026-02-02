@@ -118,19 +118,9 @@ public class AstrologyCmd {
                 if (checkEndAstrologyQuest(pc, id)) {
                     return true; // 攔截
                 }
-                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), id);
-                if (quest == null) {
-                    quest = new AstrologyQuest(pc.getId(), id, data.get_cards());
-                    AstrologyQuestReading.get().storeQuest(pc.getId(), id, data.get_cards());
-                }
-                // 檢查需求道具（依資料庫設定）
-                if (data.getNeedItemID() != 0) {
-                    if (!pc.getInventory().checkItem(data.getNeedItemID(), data.getNeedItemNum())) {
-                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
-                        UpdateInfo(pc, "t_zeus");
-                        return true; // 攔截
-                    }
-                }
+
+                // 修正：優先檢查是否已經解鎖
+                // 如果已解鎖，直接處理技能切換，不需要檢查或消耗道具
                 if (AstrologyHistoryTable.get().isUnlocked(pc.getId(), data.get_questId())) {
                     // 非技能節點：再次點選顯示「星盤已解鎖」
                     if (data.get_skillId() == 0) {
@@ -147,6 +137,22 @@ public class AstrologyCmd {
                     UpdateInfo(pc, "t_zeus");
                     return true; // 攔截
                 }
+
+                // 尚未解鎖才進行道具檢查
+                if (data.getNeedItemID() != 0) {
+                    if (!pc.getInventory().checkItem(data.getNeedItemID(), data.getNeedItemNum())) {
+                        pc.sendPackets(new S_SystemMessage("需求道具不足"));
+                        UpdateInfo(pc, "t_zeus");
+                        return true; // 攔截
+                    }
+                }
+
+                AstrologyQuest quest = AstrologyQuestReading.get().get(pc.getId(), id);
+                if (quest == null) {
+                    quest = new AstrologyQuest(pc.getId(), id, data.get_cards());
+                    AstrologyQuestReading.get().storeQuest(pc.getId(), id, data.get_cards());
+                }
+                
                 pc.setAstrologyType(id);
                 pc.sendPackets(new S_NPCTalkReturn(pc, "t_but" + quest.getNum(), msg));
                 return true; // 攔截

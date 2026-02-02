@@ -71,12 +71,12 @@ public class L1SkinInstance extends L1NpcInstance {
                 return;
             }
             //if (this._master.getMoveSpeed() != this._srcMoveSpeed) {
-            set_srcMoveSpeed(this._master.getMoveSpeed());
-            setMoveSpeed(this._srcMoveSpeed);
+            set_srcMoveSpeed(1);
+            setMoveSpeed(1);
             //}
             //if (this._master.getBraveSpeed() != this._srcBraveSpeed) {
-            set_srcBraveSpeed(this._master.getBraveSpeed());
-            setBraveSpeed(this._srcBraveSpeed);
+            set_srcBraveSpeed(1);
+            setBraveSpeed(1);
             //}
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);

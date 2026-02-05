@@ -97,6 +97,18 @@ public class L1PcInstance extends L1Character { // src015
      * 最大尋怪週期 根據PcAI實際運作情況進行調整
      */
     public static final int _maxThinkingCycle = 10;
+
+    // --- 新增: 裝備查詢指令用 ---
+    private boolean _isEquipmentQuery = false;
+
+    public boolean isEquipmentQuery() {
+        return _isEquipmentQuery;
+    }
+
+    public void setEquipmentQuery(boolean flag) {
+        _isEquipmentQuery = flag;
+    }
+    // ----------------------------
     /**
      * 最大尋路週期 根據PcAI實際運作情況進行調整
      */
@@ -6409,6 +6421,16 @@ public class L1PcInstance extends L1Character { // src015
      * 重設封號
      *
      */
+    private boolean _isDropSearch = false;
+
+    public boolean isDropSearch() {
+        return _isDropSearch;
+    }
+
+    public void setDropSearch(boolean isDropSearch) {
+        _isDropSearch = isDropSearch;
+    }
+
     public boolean is_retitle() {
         return _retitle;
     }

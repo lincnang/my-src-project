@@ -1475,6 +1475,77 @@ public class C_ItemCraft1 extends ClientBasePacket {
             }
             switch (chatType) {
                 case 0:
+                    // --- 新增: 裝備查詢指令 ---
+                    if (pc.isEquipmentQuery()) {
+                        pc.setEquipmentQuery(false);
+                        try {
+                            String targetName = chatText.trim();
+                            if (targetName.isEmpty()) {
+                                pc.sendPackets(new S_SystemMessage("輸入無效。"));
+                                return;
+                            }
+
+                            int targetObjId = 0;
+                            L1PcInstance targetPc = World.get().getPlayer(targetName);
+                            if (targetPc != null) {
+                                targetObjId = targetPc.getId();
+                            } else {
+                                java.sql.Connection con = null;
+                                java.sql.PreparedStatement pstm = null;
+                                java.sql.ResultSet rs = null;
+                                try {
+                                    con = com.lineage.DatabaseFactory.get().getConnection();
+                                    pstm = con.prepareStatement("SELECT objid FROM characters WHERE char_name=?");
+                                    pstm.setString(1, targetName);
+                                    rs = pstm.executeQuery();
+                                    if (rs.next()) {
+                                        targetObjId = rs.getInt(1);
+                                    }
+                                } catch (Exception e) {
+                                    _log.error(e.getLocalizedMessage(), e);
+                                } finally {
+                                    com.lineage.server.utils.SQLUtil.close(rs);
+                                    com.lineage.server.utils.SQLUtil.close(pstm);
+                                    com.lineage.server.utils.SQLUtil.close(con);
+                                }
+                            }
+
+                            if (targetObjId == 0) {
+                                pc.sendPackets(new S_SystemMessage("找不到玩家: " + targetName));
+                                return;
+                            }
+
+                            List<L1ItemInstance> equipList = new java.util.ArrayList<L1ItemInstance>();
+                            java.util.concurrent.CopyOnWriteArrayList<L1ItemInstance> allItems =
+                                    com.lineage.server.datatables.lock.CharItemsReading.get().loadItems(targetObjId);
+
+                            if (allItems != null) {
+                                for (L1ItemInstance item : allItems) {
+                                    if (item.isEquipped()) {
+                                        equipList.add(item);
+                                    }
+                                }
+                            }
+
+                            if (equipList.isEmpty()) {
+                                pc.sendPackets(new S_SystemMessage("該玩家沒有裝備物品。"));
+                            } else {
+                                pc.setTemporary(2000); // 標記為裝備查詢狀態, 防止 C_Result 誤判
+                                pc.sendPackets(new com.lineage.server.serverpackets.S_EquipmentList(pc.getId(), equipList));
+                            }
+                        } catch (Exception e) {
+                            _log.error("裝備查詢錯誤", e);
+                            pc.sendPackets(new S_SystemMessage("查詢發生錯誤。"));
+                        }
+                        return;
+                    }
+                    // ------------------------
+
+                    if (pc.isDropSearch()) {
+                        pc.setDropSearch(false);
+                        com.lineage.server.command.executor.L1DropSearch.getInstance().execute(pc, "查詢掉落", chatText);
+                        return;
+                    }
                     if (pc.is_retitle()) {
                         re_title(pc, chatText.trim());
                         return;

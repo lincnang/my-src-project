@@ -384,6 +384,80 @@ public class L1ActionPc {
      */
     public void action(final String cmd, final long amount) {
         try {
+            if (cmd.equalsIgnoreCase("equipment")) {
+                _pc.setEquipmentQuery(true);
+                _pc.sendPackets(new com.lineage.server.serverpackets.S_SystemMessage("請輸入想查詢的玩家名稱:"));
+                return;
+            }
+            if (cmd.equalsIgnoreCase("Drops_01")) {
+                _pc.setDropSearch(true);
+                _pc.sendPackets(new com.lineage.server.serverpackets.S_SystemMessage("請輸入想查詢的物品名稱:"));
+                return;
+            }
+            if (cmd.startsWith("查詢掉落 ") || cmd.startsWith("Drops_")) {
+                String itemName = "";
+                if (cmd.startsWith("查詢掉落 ")) {
+                    itemName = cmd.substring(5).trim();
+                } else {
+                    itemName = cmd.substring(6).trim();
+                }
+
+                if (itemName.length() > 0) {
+                     java.sql.Connection con = null;
+                    java.sql.PreparedStatement pstm = null;
+                    java.sql.ResultSet rs = null;
+                    try {
+                        con = com.lineage.DatabaseFactory.get().getConnection();
+                        // 1. 找出物品 ID
+                        String itemSql = "SELECT item_id, name FROM weapon WHERE name LIKE ? UNION ALL " +
+                                         "SELECT item_id, name FROM armor WHERE name LIKE ? UNION ALL " +
+                                         "SELECT item_id, name FROM etcitem WHERE name LIKE ?";
+                        pstm = con.prepareStatement(itemSql);
+                        String search = "%" + itemName + "%";
+                        pstm.setString(1, search);
+                        pstm.setString(2, search);
+                        pstm.setString(3, search);
+                        rs = pstm.executeQuery();
+                        
+                        java.util.List<Integer> itemIds = new java.util.ArrayList<>();
+                        java.util.Map<Integer, String> itemNames = new java.util.HashMap<>();
+                        while (rs.next()) {
+                            int id = rs.getInt(1);
+                            itemIds.add(id);
+                            itemNames.put(id, rs.getString(2));
+                        }
+                        com.lineage.server.utils.SQLUtil.close(rs);
+                        com.lineage.server.utils.SQLUtil.close(pstm);
+
+                        if (itemIds.isEmpty()) {
+                            _pc.sendPackets(new com.lineage.server.serverpackets.S_SystemMessage("找不到物品: " + itemName));
+                        } else {
+                            java.text.DecimalFormat df = new java.text.DecimalFormat("#.####%");
+                            pstm = con.prepareStatement("SELECT mobId, chance FROM droplist WHERE itemId = ?");
+                            for (int id : itemIds) {
+                                pstm.setInt(1, id);
+                                rs = pstm.executeQuery();
+                                while (rs.next()) {
+                                    int mobId = rs.getInt(1);
+                                    int chance = rs.getInt(2);
+                                    String mobName = com.lineage.server.datatables.NpcTable.get().getNpcName(mobId);
+                                    double rate = (double) chance / 1000000.0;
+                                    _pc.sendPackets(new com.lineage.server.serverpackets.S_SystemMessage(
+                                        itemNames.get(id) + " -> " + mobName + " (" + df.format(rate) + ")"));
+                                }
+                                com.lineage.server.utils.SQLUtil.close(rs);
+                            }
+                        }
+                    } catch (Exception e) {
+                        _log.error(e.getLocalizedMessage(), e);
+                    } finally {
+                        com.lineage.server.utils.SQLUtil.close(pstm);
+                        com.lineage.server.utils.SQLUtil.close(con);
+                    }
+                }
+                return;
+            }
+
             if (_pc.hasSkillEffect(PC_TEL_LOCK)) { // pc傳送選擇鎖定指令
                 //            if (_pc.isNewTeleport()) {
                 if (cmd.equals("up")) {
@@ -1449,8 +1523,8 @@ public class L1ActionPc {
                     return;
                 }
                 _pc.set_unfreezingTime(10);// 延遲10秒
-            } else if (cmd.equalsIgnoreCase("locerr2")) {// 修正人物錯位
-                _pc.set_misslocTime(5);// 延遲5秒
+        } else if (cmd.equalsIgnoreCase("locerr2")) {// 修正人物錯位
+            _pc.set_misslocTime(5);// 延遲5秒
             } else if (cmd.equalsIgnoreCase("qt")) {// 查看執行中任務
                 showStartQuest(_pc, _pc.getId());
             } else if (cmd.equalsIgnoreCase("quest")) {// 查看可執行任務

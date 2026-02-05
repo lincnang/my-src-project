@@ -137,7 +137,8 @@ public class C_Result extends ClientBasePacket {
                     /** End */
                     /** [原碼] 自動練功技能 */
                     // 避免與自選寶箱(temporary==99)衝突
-                    if (npcObjectId == pc.getId() && pc.getTemporary() != 99) {
+                    // 避免與裝備查詢(temporary==2000)衝突
+                    if (npcObjectId == pc.getId() && pc.getTemporary() != 99 && pc.getTemporary() != 2000) {
                         if (size > 1) {
                             pc.sendPackets(new S_ServerMessage("\\fR一次只能選擇一個技能。"));
                             return;
@@ -200,6 +201,9 @@ public class C_Result extends ClientBasePacket {
                                     break;
                                 case 99:
                                     this.mode_choose_box(pc, size); // 自選寶箱
+                                    break;
+                                case 2000: // 裝備查詢
+                                    pc.sendPackets(new S_SystemMessage("此功能只有查詢"));
                                     break;
                             }
                             return;

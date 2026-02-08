@@ -149,6 +149,19 @@ public class PcAI implements Runnable {
                 return true;
             }
 
+            // 掛機時間檢查
+            if (com.lineage.config.ThreadPoolSetNew.checktimeguaji) {
+                java.util.Calendar date = java.util.Calendar.getInstance();
+                int nowHour = date.get(java.util.Calendar.HOUR_OF_DAY);
+                for (int hour : com.lineage.config.ThreadPoolSetNew.GUAJI_ITEM) {
+                    if (nowHour == hour) {
+                        _pc.setActivated(false);
+                        _pc.sendPackets(new com.lineage.server.serverpackets.S_SystemMessage("自動狩獵已停止(掛機時間限制)。"));
+                        return true;
+                    }
+                }
+            }
+
             // 狀態檢查：若被暈眩、凍結或強力拘束，暫時跳過本次AI執行 (不停止AI，等待狀態解除)
             // isParalyzedX() 已包含: SHOCK_STUN, KINGDOM_STUN, PHANTASM, EARTH_BIND, BONE_BREAK, 詛咒/毒素麻痺
             if (_pc.isParalyzed() || _pc.isParalyzedX() || _pc.isSleeped()

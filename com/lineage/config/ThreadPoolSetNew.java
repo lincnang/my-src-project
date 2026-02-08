@@ -35,6 +35,17 @@ public final class ThreadPoolSetNew {
     public static int ITEMADENA9;
     public static int ITEMADENA10;
     public static int ITEMADENA11;
+
+    /**
+     * 是否啟用掛機時間檢查 (如每日上限)
+     */
+    public static boolean checktimeguaji;
+
+    /**
+     * 掛機限制時間 (小時陣列, 這些小時內不允許掛機)
+     */
+    public static int[] GUAJI_ITEM;
+
     public static ArrayList<Integer> CAN_USE_ATTACK_SKILL = new ArrayList<>();
 
     public static void load() throws ConfigErrorException {
@@ -75,10 +86,34 @@ public final class ThreadPoolSetNew {
             ITEMADENA9 = Integer.parseInt(set.getProperty("ITEMADENA9", "1500"));
             ITEMADENA10 = Integer.parseInt(set.getProperty("ITEMADENA10", "20000"));
             ITEMADENA11 = Integer.parseInt(set.getProperty("ITEMADENA11", "0"));
+
+            checktimeguaji = Boolean.parseBoolean(set.getProperty("checktimeguaji", "true"));
+            GUAJI_ITEM = toIntArray(set.getProperty("GUAJI_ITEM", ""), ",");
+
         } catch (final Exception e) {
             throw new ConfigErrorException("設置檔案遺失: " + THREAD_POOL_FILE);
         } finally {
             set.clear();
         }
+    }
+
+    /**
+     * 將設定字串（以 type 分隔）轉換為 int 陣列
+     * 
+     * @param text
+     *            設定檔中取得的字串
+     * @param type
+     *            分隔符號（通常為逗號）
+     * @return int[]
+     */
+    public static int[] toIntArray(final String text, final String type) {
+        java.util.StringTokenizer st = new java.util.StringTokenizer(text, type);
+        int[] iReturn = new int[st.countTokens()];
+        int i = 0;
+        while (i < iReturn.length) {
+            iReturn[i] = Integer.parseInt(st.nextToken().trim());
+            i++;
+        }
+        return iReturn;
     }
 }

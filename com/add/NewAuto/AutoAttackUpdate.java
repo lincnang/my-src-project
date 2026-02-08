@@ -235,6 +235,22 @@ public class AutoAttackUpdate {
                     if (_pc.isActivated()) {
                         _pc.stopPcAI();
                     } else {
+                        // 掛機時間檢查
+                        if (ThreadPoolSetNew.checktimeguaji) {
+                            java.util.Calendar date = java.util.Calendar.getInstance();
+                            int nowHour = date.get(java.util.Calendar.HOUR_OF_DAY);
+                            boolean isRestricted = false;
+                            for (int hour : ThreadPoolSetNew.GUAJI_ITEM) {
+                                if (nowHour == hour) {
+                                    isRestricted = true;
+                                    break;
+                                }
+                            }
+                            if (isRestricted) {
+                                _pc.sendPackets(new S_SystemMessage("此時間未開放使用掛機。"));
+                                return false;
+                            }
+                        }
                         _pc.startPcAI();
                         _pc.sendPackets(new S_CloseList(_pc.getId()));
                     }

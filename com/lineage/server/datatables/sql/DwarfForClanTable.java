@@ -213,7 +213,6 @@ public class DwarfForClanTable implements DwarfForClanStorage {
     }
 
     public void insertItem(String clan_name, L1ItemInstance item) {
-        _log.warn("血盟:" + clan_name + " 加入血盟倉庫數據:" + item.getNumberedName(item.getCount(), false) + " OBJID:" + item.getId());
         addItem(clan_name, item);
         Connection con = null;
         PreparedStatement pstm = null;

@@ -122,7 +122,7 @@ public class L1Inventory extends L1Object {
      * @param item  物品
      * @param count 數量
      * @param type  模式 0:個人/角色專屬/精靈倉庫 1:血盟倉庫
-     * @return 0:成功 1:超過數量
+     * @return 0:成功 1:超過數量 4:不可存倉
      */
     public int checkAddItemToWarehouse(final L1ItemInstance item, final long count, final int type) {
         if (item == null) {
@@ -131,10 +131,9 @@ public class L1Inventory extends L1Object {
         if (item.getCount() <= 0 || count <= 0) {
             return -1;
         }
-        // 不可存倉
-        if (!item.getItem().isWarehouseable()) {
-            return WAREHOUSE_OVER;
-        }
+        // 移除不可存倉檢查，讓物品可以顯示在倉庫列表中
+        // 實際存入時會在 tradeItem 或其他地方進行檢查
+
         int maxSize = 100;
         if (type == WAREHOUSE_TYPE_PERSONAL) {
             maxSize = ConfigAlt.MAX_PERSONAL_WAREHOUSE_ITEM;

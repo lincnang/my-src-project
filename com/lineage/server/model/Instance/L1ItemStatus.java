@@ -320,11 +320,13 @@ public class L1ItemStatus {
         this._os.writeC(this._item.getMaterial());
         this._os.writeD(this._itemInstance.getWeight());
         showItemDelTimer();
+        showWarehouseRestriction();
         // 昇華能力顯示
         if (_itemInstance.getSublimation() != null) {
             CharItemSublimation sub = _itemInstance.getSublimation();
 
         }
+        showWarehouseRestriction();
         return _os;
     }
     /**
@@ -336,6 +338,20 @@ public class L1ItemStatus {
             String dTime = "$376"+ delTime.format(iTime);
             _os.writeC(0x27);
             _os.writeS(dTime);
+        }
+    }
+
+    /**
+     * 顯示倉庫限制說明（不可存倉/不可存盟倉）
+     */
+    private void showWarehouseRestriction() {
+        if (!_item.isWarehouseable()) {
+            _os.writeC(0x27);
+            _os.writeS("\\f9不可存倉");
+        }
+        if (!_item.isClanWarehouseable()) {
+            _os.writeC(0x27);
+            _os.writeS("\\f9不可存盟倉");
         }
     }
 
@@ -629,6 +645,7 @@ public class L1ItemStatus {
         this._os.writeC(this._item.getMaterial());
         this._os.writeD(this._itemInstance.getWeight());
         showItemDelTimer();
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -724,6 +741,7 @@ public class L1ItemStatus {
             as.clear();
         }
         showItemDelTimer();
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -952,6 +970,7 @@ public class L1ItemStatus {
 			}
 		}*/
         showItemDelTimer();
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -1154,6 +1173,7 @@ public class L1ItemStatus {
         this._os.writeC(this._item.getMaterial());
         this._os.writeD(this._itemInstance.getWeight());
         showItemDelTimer();
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -1167,6 +1187,7 @@ public class L1ItemStatus {
             card_id = Integer.parseInt(cardmode);
         }
         if (card_id == 0) {
+            showWarehouseRestriction();
             return _os;
         }
         int freeze = 0;
@@ -1334,6 +1355,7 @@ public class L1ItemStatus {
             as.clear();
         }
         showItemDelTimer();
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -1373,6 +1395,7 @@ public class L1ItemStatus {
         } finally {
             as.clear();
         }
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -1488,6 +1511,7 @@ public class L1ItemStatus {
         } finally {
             as.clear();
         }
+        showWarehouseRestriction();
         return _os;
     }
     // TODO 防具類
@@ -1515,6 +1539,7 @@ public class L1ItemStatus {
 				_os.writeS("無法強化");
 			}
 		}*/
+        showWarehouseRestriction();
         return _os;
     }
     // TODO 飾品類
@@ -1533,6 +1558,7 @@ public class L1ItemStatus {
                             _itemInstance.getId()
             );
             // 回傳一個空的或預設的資料流，避免伺服器崩潰
+            showWarehouseRestriction();
             return _os;
         }
 
@@ -2842,6 +2868,7 @@ public class L1ItemStatus {
             this._os.writeS("爆擊傷害 " + pw_dmg);
         }
         showItemDelTimer();
+        showWarehouseRestriction();
         // checkArmorSet(); // 套裝能力顯示 - 已註釋，防止重複顯示
         return _os;
     }
@@ -3844,6 +3871,7 @@ public class L1ItemStatus {
             }
         }
         showItemDelTimer();
+        showWarehouseRestriction();
         // checkArmorSet(); // 套裝能力顯示 - 已註釋，防止重複顯示
         return _os;
     }
@@ -4535,6 +4563,7 @@ public class L1ItemStatus {
             }
         }
         showItemDelTimer();
+        showWarehouseRestriction();
         // checkArmorSet(); // 套裝能力顯示 - 已註釋，防止重複顯示
         return _os;
     }
@@ -5416,6 +5445,7 @@ public class L1ItemStatus {
             as.clear();
         }
         showItemDelTimer();
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -5556,6 +5586,7 @@ public class L1ItemStatus {
             as.clear();
         }
         showItemDelTimer();
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -5649,6 +5680,7 @@ public class L1ItemStatus {
         } finally {
             as.clear();
         }
+        showWarehouseRestriction();
         return _os;
     }
 
@@ -5738,6 +5770,7 @@ public class L1ItemStatus {
         } finally {
             as.clear();
         }
+        showWarehouseRestriction();
         return _os;
     }
 

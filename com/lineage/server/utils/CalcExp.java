@@ -355,19 +355,41 @@ public class CalcExp {
             /*
              * if (exp_rate > 1.0D) { addExp *= exp_rate; }
              */
-            if ((LeavesSet.START) && (pc.get_other().get_leaves_time_exp() > 0)) {// 還有剩餘經驗額度
-                int add = (int) (addExp * 0.77D);// 額外獲得77%經驗值
-                int add2 = pc.get_other().get_leaves_time_exp() - add;
-                if (add2 > 0) {// 計算後還有剩餘經驗額度
-                    pc.get_other().set_leaves_time_exp(add2);
+            // [修正] 處理 殷海薩(Leaves) 與 龍之祝福(DragonExp) 的經驗加成
+            int totalBonusExp = 0;
+
+            // 1. 處理傳統殷海薩 (LeavesSet)
+            if ((LeavesSet.START) && (pc.get_other().get_leaves_time_exp() > 0)) {
+                int bonus = (int) (addExp * 0.77D); // 額外獲得 77%
+                int remaining = pc.get_other().get_leaves_time_exp() - bonus;
+                if (remaining > 0) {
+                    pc.get_other().set_leaves_time_exp(remaining);
                     pc.sendPackets(new S_PacketBoxExp(pc.get_other().get_leaves_time_exp() / LeavesSet.EXP));
-                } else {// 計算後已經消耗完經驗額度
-                    add = pc.get_other().get_leaves_time_exp();
+                } else {
+                    bonus = pc.get_other().get_leaves_time_exp();
                     pc.get_other().set_leaves_time_exp(0);
                     pc.sendPackets(new S_PacketBoxExp());
                 }
-                addExp += add;
+                totalBonusExp += bonus;
             }
+
+            // 2. 處理龍之祝福 (DragonExp) - 優先順序視需求而定，此處累加
+            if (pc.getDragonExp() > 0) {
+                int bonus = (int) (addExp * 0.77D); // 龍之祝福同樣給予 77% (可依需求調整)
+                int currentDragonExp = pc.getDragonExp();
+                if (currentDragonExp >= bonus) {
+                    pc.setDragonExp(currentDragonExp - bonus);
+                    totalBonusExp += bonus;
+                } else {
+                    totalBonusExp += currentDragonExp;
+                    pc.setDragonExp(0);
+                }
+                // 同步更新 DragonExp 快取/DB (定時任務也會存，但此處建議即時同步重要變動)
+                // com.add.Tsai.DragonExp.get().flushFromPc(pc);
+            }
+
+            addExp += totalBonusExp;
+
             addExp *= add(pc);// 經驗加倍道具
             addExp *= ExpMeteUpTable.get().getRate(pc.getMeteLevel());
             /* [原碼] 修正經驗值大於2147483647會變負值.暴等 */

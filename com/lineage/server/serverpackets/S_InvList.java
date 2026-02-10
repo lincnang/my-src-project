@@ -57,8 +57,12 @@ public class S_InvList extends ServerBasePacket {
             if ((item.getItem().get_safeenchant() < 0) || (item.getItem().getUseType() == -3) || (item.getItem().getUseType() == -2)) {
                 statusX |= 8;
             }
+            // 設定可存倉標誌，讓物品顯示在列表中
+            statusX |= 16;
             if (item.getBless() >= 128) {
                 statusX = 32;
+                // 設定可存倉標誌，讓物品顯示在列表中
+                statusX |= 16;
                 if (item.isIdentified()) {
                     statusX |= 1;
                     statusX |= 2;
@@ -93,9 +97,24 @@ public class S_InvList extends ServerBasePacket {
             }
             writeD(item.getId()); // 3.80 物品世界流水編號
             writeD(8);// 0:一般 2:? 8:釣魚-獲得道具
-            writeD(0);
+            int warehouseBit = 0;
+            // 設定標誌讓物品顯示在列表中，實際限制由伺服器控制
+            if (item.getItem().isWarehouseable()) {
+                warehouseBit |= 1;
+            } else {
+                // 即使不可存倉也設定標誌，讓物品顯示在列表中
+                warehouseBit |= 1;
+            }
+            if (item.getItem().isClanWarehouseable()) {
+                warehouseBit |= 4;
+            } else {
+                // 即使不可存盟倉也設定標誌，讓物品顯示在列表中
+                warehouseBit |= 4;
+            }
+            writeD(warehouseBit);
             // 7:可刪除,2:不可刪除,3:封印狀態
-            writeC(item.getBless() >= 128 ? 3 : item.getItem().isTradable() ? 7 : 2);
+            // 強制設定為可刪除，讓物品能顯示在倉庫列表中
+            writeC(item.getBless() >= 128 ? 3 : 7);
             int type = item.getItem().getType();
             int type2 = item.getItem().getType2();
             if (type == 15 && type2 == 2) {

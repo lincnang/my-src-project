@@ -952,11 +952,6 @@ public class C_Result extends ClientBasePacket {
                 pc.sendPackets(new S_ServerMessage("獎勵物品無法轉移"));
                 return;
             }
-            if (!item.getItem().isTradable()) {
-                // 210 \f1%0%d是不可轉移的…
-                pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
-                break;
-            }
             if (item.get_time() != null) {
                 // \f1%0%d是不可轉移的…
                 pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
@@ -998,10 +993,18 @@ public class C_Result extends ClientBasePacket {
                     break;
                 }
             }
+
+            // 檢查倉庫容量
             if (pc.getDwarfForElfInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_PERSONAL) == L1Inventory.SIZE_OVER) {
                 pc.sendPackets(new S_ServerMessage(75)); // \f1以上置場所。
                 break;
             }
+            // 檢查是否可存倉，顯示警告並阻止
+            if (!item.getItem().isWarehouseable()) {
+                pc.sendPackets(new S_ServerMessage("\\f9此物品不可存倉！"));
+                break;
+            }
+            // 所有檢查通過後，才執行存入動作
             pc.getInventory().tradeItem(objectId, count, pc.getDwarfForElfInventory());
             // pc.turnOnOffLight();
             //精靈倉庫存入記錄
@@ -1100,11 +1103,6 @@ public class C_Result extends ClientBasePacket {
                         break;
                     }
                     final L1ItemInstance item = (L1ItemInstance) object;
-                    if (!item.getItem().isTradable()) {
-                        // 210 \f1%0%d是不可轉移的…
-                        pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
-                        break;
-                    }
                     if (item.get_time() != null) {
                         // \f1%0%d是不可轉移的…
                         pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
@@ -1155,12 +1153,22 @@ public class C_Result extends ClientBasePacket {
                             break;
                         }
                     }
+                    // 檢查倉庫容量
                     if (clan.getDwarfForClanInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_CLAN) == L1Inventory.SIZE_OVER) {
                         pc.sendPackets(new S_ServerMessage(75)); // \f1以上置場所。
                         break;
                     }
-                    RecordTable.get().recordeWarehouse_clan(pc.getName(), "領取", "盟倉", item.getAllName(), count, item
-                            .getId(), pc.getIp());
+                    // 檢查是否可存倉，顯示警告並阻止
+                    if (!item.getItem().isWarehouseable()) {
+                        pc.sendPackets(new S_ServerMessage("\\f9此物品不可存倉！"));
+                        break;
+                    }
+                    // 檢查是否可存血盟倉，顯示警告並阻止
+                    if (!item.getItem().isClanWarehouseable()) {
+                        pc.sendPackets(new S_ServerMessage("\\f9此物品不可存盟倉！"));
+                        break;
+                    }
+                    // 所有檢查通過後，才執行存入動作
                     pc.getInventory().tradeItem(objectId, count, clan.getDwarfForClanInventory());
                     clan.getDwarfForClanInventory().writeHistory(pc, item, count, 0); // 血盟倉庫存入紀錄
                     // pc.turnOnOffLight();
@@ -1255,15 +1263,12 @@ public class C_Result extends ClientBasePacket {
                 break;
             }
             final L1ItemInstance item = (L1ItemInstance) object;
+            // tradeControl 檢查 - 獎勵物品顯示警告並阻止
             if (ServerGmCommandTable.tradeControl.contains(item.getId())) {
-                pc.sendPackets(new S_ServerMessage("獎勵物品無法轉移"));
-                return;
-            }
-            if (item.getCount() <= 0) {
+                pc.sendPackets(new S_ServerMessage("\\f9獎勵物品無法轉移！"));
                 break;
             }
-            if (!item.getItem().isTradable()) {
-                pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
+            if (item.getCount() <= 0) {
                 break;
             }
             if (item.get_time() != null) {
@@ -1274,7 +1279,16 @@ public class C_Result extends ClientBasePacket {
                 pc.sendPackets(new S_ServerMessage("預防作弊啟動，85級以下無法做此動作"));
                 return;
             }
-            pc.getInventory().tradeItem(objectId, count, pc.getDwarfInventory());
+            // 檢查倉庫容量
+            if (pc.getDwarfInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_PERSONAL) == L1Inventory.SIZE_OVER) {
+                pc.sendPackets(new S_ServerMessage(75));
+                break;
+            }
+            // 檢查是否可存倉，顯示警告並阻止
+            if (!item.getItem().isWarehouseable()) {
+                pc.sendPackets(new S_ServerMessage("\\f9此物品不可存倉！"));
+                break;
+            }
             // 寵物
             final Object[] petlist = pc.getPetList().values().toArray();
             for (final Object petObject : petlist) {
@@ -1307,14 +1321,8 @@ public class C_Result extends ClientBasePacket {
                     break;
                 }
             }
-            if (pc.getDwarfInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_PERSONAL) == L1Inventory.SIZE_OVER) {
-                pc.sendPackets(new S_ServerMessage(75));
-                break;
-            }
-            if (pc.getDwarfInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_PERSONAL) == L1Inventory.WAREHOUSE_OVER) {
-                pc.sendPackets(new S_ServerMessage(item.getName() + "此物品無法存入倉庫"));
-                break;
-            }
+            // 所有檢查通過後，才執行存入動作
+            pc.getInventory().tradeItem(objectId, count, pc.getDwarfInventory());
             // 帳號倉庫存入記錄
             WriteLogTxt.Recording("帳號倉庫存入記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】帳號:【" + pc.getAccountName() + "】帳號倉庫存入【" + "+" + item.getEnchantLevel() + " " + item.getItem().getName() + "】 物品【" + item.getCount() + "】個" + "OBJID:" + item.getId() + "】.");
             RecordTable.get().recordeWarehouse_pc(pc.getName(), "存入", "個倉", item.getAllName(), count, item.getId(), pc.getIp());
@@ -1409,11 +1417,6 @@ public class C_Result extends ClientBasePacket {
             if (item.getCount() <= 0) {
                 break;
             }
-            if (!item.getItem().isTradable()) {
-                // 210 \f1%0%d是不可轉移的…
-                pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
-                break;
-            }
             if (item.get_time() != null) {
                 // \f1%0%d是不可轉移的…
                 pc.sendPackets(new S_ServerMessage(210, item.getItem().getNameId()));
@@ -1451,15 +1454,21 @@ public class C_Result extends ClientBasePacket {
                     break;
                 }
             }
+            // 檢查倉庫容量
             if (pc.getDwarfForChaInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_PERSONAL) == L1Inventory.SIZE_OVER) {
                 pc.sendPackets(new S_ServerMessage(75)); // \f1以上置場所。
                 break;
             }
+            // 檢查是否可存倉，顯示警告並阻止
+            if (!item.getItem().isWarehouseable()) {
+                pc.sendPackets(new S_ServerMessage("\\f9此物品不可存倉！"));
+                break;
+            }
+            // 所有檢查通過後，才執行存入動作
+            pc.getInventory().tradeItem(objectId, count, pc.getDwarfForChaInventory());
             //角色倉庫存入記錄
             WriteLogTxt.Recording("角色倉庫存入記錄", "IP(" + pc.getNetConnection().getIp() + ")玩家:【" + pc.getName() + "】帳號:【" + pc.getAccountName() + "】角色倉庫存入【" + "+" + item.getEnchantLevel() + " " + item.getItem().getName() + "】 物品【" + item.getCount() + "】個" + "OBJID:" + item.getId() + "】.");
-            RecordTable.get().recordWarehouse_char_pc(pc.getName(), "存入", "角倉", item.getAllName(), count, item.getId(), pc
-                    .getIp());
-            pc.getInventory().tradeItem(objectId, count, pc.getDwarfForChaInventory());
+            RecordTable.get().recordWarehouse_char_pc(pc.getName(), "存入", "角倉", item.getAllName(), count, item.getId(), pc.getIp());
             Eva.LogWareHouseAppend("專屬倉庫存入", pc.getName(), pc.getClanname(), item, count, item.getId());
             // pc.turnOnOffLight();
         }

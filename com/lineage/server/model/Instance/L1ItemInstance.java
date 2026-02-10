@@ -1522,11 +1522,18 @@ public class L1ItemInstance extends L1Object {
         if (getItem().get_safeenchant() < 0) {
             statusX |= 8; // 無法強化
         }
+        if (getItem().isWarehouseable()) {
+            statusX |= 16; // 倉庫保管功能
+        }
         if (ItemRestrictionsTable.RESTRICTIONS.contains(getItemId())) {
             statusX |= 16; // 倉庫保管功能
         }
         final int bless = getBless();
         if (bless >= 128 && bless <= 131) {
+            statusX = 32;
+            if (getItem().isWarehouseable()) {
+                statusX |= 16;
+            }
             statusX |= 2; // 無法交易
             statusX |= 4; // 無法刪除
             statusX |= 8; // 無法強化

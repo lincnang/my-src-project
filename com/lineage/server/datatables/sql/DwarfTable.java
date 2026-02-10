@@ -252,7 +252,6 @@ public class DwarfTable implements DwarfStorage {
     }
 
     public void insertItem(String account_name, L1ItemInstance item) {
-        _log.warn("帳號:" + account_name + " 加入帳號倉庫數據:" + item.getNumberedName(item.getCount(), false) + " OBJID:" + item.getId());
         addItem(account_name, item);
         Connection co = null;
         PreparedStatement ps = null;
@@ -338,7 +337,6 @@ public class DwarfTable implements DwarfStorage {
         // System.out.println("倉庫物品資料刪除 : SQL");
         CopyOnWriteArrayList<L1ItemInstance> list = _itemList.get(account_name);
         if (list != null) {
-            _log.warn("帳號:" + account_name + " 帳號倉庫物品移出 :" + item.getNumberedName(item.getCount(), false) + " OBJID:" + item.getId());
             list.remove(item);
             Connection co = null;
             PreparedStatement pstm = null;

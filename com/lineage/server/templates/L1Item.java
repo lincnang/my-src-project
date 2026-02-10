@@ -60,8 +60,10 @@ public abstract class L1Item implements Serializable {
     private int _meteLevel;
     // 最高使用需求 (轉生次數) by terry0412
     private int _meteLevelMAX;
-    // 是否可存倉
+    // 是否可存倉 (0=可存, 1=不可存)
     private boolean _isWarehouseable = true;
+    // 是否可存血盟倉 (0=可存, 1=不可存, 預設可存)
+    private boolean _isClanWarehouseable = true;
     // 增加PVP傷害
     private int _PvpDmg = 0;
     // 减免PVP傷害
@@ -848,6 +850,18 @@ public abstract class L1Item implements Serializable {
 
     public void setWarehouseable(boolean flag) {
         _isWarehouseable = flag;
+    }
+
+    /**
+     * 是否可存血盟倉
+     * @return true=可存血盟倉, false=不可存血盟倉 (資料庫: 0=可存, 1=不可存)
+     */
+    public boolean isClanWarehouseable() {
+        return _isClanWarehouseable;
+    }
+
+    public void setClanWarehouseable(boolean flag) {
+        _isClanWarehouseable = flag;
     }
 
     public int get_up_hp_potion() {

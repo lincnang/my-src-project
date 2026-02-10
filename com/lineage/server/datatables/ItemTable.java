@@ -338,8 +338,10 @@ public class ItemTable {
                 item.setMeteLevel(rs.getInt("MeteLevel"));
                 // 最高使用需求 (轉生次數) by terry0412
                 item.setMeteLevelMAX(rs.getInt("MeteLevelMAX"));
-                // 是否可存倉
+                // 是否可存倉 (0=可存, 1=不可存)
                 item.setWarehouseable(rs.getInt("是否可存倉") == 0);
+                // 是否可存血盟倉 (0=可存, 1=不可存)
+                item.setClanWarehouseable(rs.getInt("是否可存血盟倉") == 0);
                 ItemClass.get().addList(itemid, classname, 0);
                 result.put(item.getItemId(), item);
             }
@@ -431,6 +433,10 @@ public class ItemTable {
                 //weapon.set_stunPVP(rs.getInt("stunPVP"));
                 weapon.setPvpDmg(rs.getInt("PVP傷害"));// 增加PVP傷害
                 weapon.setPvpDmg_R(rs.getInt("PVP減免"));// 减免PVP傷害
+                // 是否可存倉 (0=可存, 1=不可存)
+                weapon.setWarehouseable(rs.getInt("是否可存倉") == 0);
+                // 是否可存血盟倉 (0=可存, 1=不可存)
+                weapon.setClanWarehouseable(rs.getInt("是否可存血盟倉") == 0);
                 ItemClass.get().addList(itemid, classname, 1);
                 result.put(weapon.getItemId(), weapon);
             }
@@ -536,6 +542,10 @@ public class ItemTable {
                 armor.setSuperRune(rs.getBoolean("是否附魔超能系統"));
                 armor.setPvpDmg(rs.getInt("PVP傷害"));// 增加PVP傷害
                 armor.setPvpDmg_R(rs.getInt("PVP減免"));// 减免PVP傷害
+                // 是否可存倉 (0=可存, 1=不可存)
+                armor.setWarehouseable(rs.getInt("是否可存倉") == 0);
+                // 是否可存血盟倉 (0=可存, 1=不可存)
+                armor.setClanWarehouseable(rs.getInt("是否可存血盟倉") == 0);
                 armor.setDice_dmg(rs.getInt("機率給予爆擊"));
                 armor.setDmg(rs.getInt("機率給予爆擊值"));
                 armor.set_influence_safe(rs.getInt("influence_safe"));

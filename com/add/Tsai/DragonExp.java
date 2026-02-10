@@ -1,6 +1,7 @@
 package com.add.Tsai;
 
 import com.lineage.DatabaseFactory;
+import com.lineage.data.event.LeavesSet;
 import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.thread.GeneralThreadPool;
 import com.lineage.server.utils.PerformanceTimer;
@@ -204,6 +205,7 @@ public class DragonExp {
         _log.info("開始恢復龍之祝福: " + pc.getName() + " (ID: " + pc.getId() + ")");
 
         DragonExp rec = _CACHE.get(pc.getId());
+        int nowMin = nowMinutes();
 
         // 防呆機制：如果快取沒有，嘗試直接從 DB 讀取單筆 (Double Check)
         if (rec == null) {
@@ -217,14 +219,36 @@ public class DragonExp {
             }
         }
 
+        // 計算離線累積 (比照 LeavesSet 邏輯，但對象是 DragonExp)
         if (rec != null) {
+            if (com.lineage.data.event.LeavesSet.START) {
+                int lastOut = rec.getLastLoginOutTime();
+                if (lastOut > 0 && nowMin > lastOut) {
+                    int deltaMin = nowMin - lastOut;
+                    int timeStep = com.lineage.data.event.LeavesSet.TIME;
+                    int expStep = com.lineage.data.event.LeavesSet.EXP;
+                    int maxExp = com.lineage.data.event.LeavesSet.MAXEXP;
+
+                    if (timeStep > 0) {
+                        int addN = deltaMin / timeStep;
+                        if (addN > 0) {
+                            int newExp = rec.getStoreExp() + (addN * expStep);
+                            if (newExp > maxExp) {
+                                newExp = maxExp;
+                            }
+                            rec.setStoreExp(newExp);
+                            _log.info("龍之祝福離線累計: " + pc.getName() + " +" + (addN * expStep) + " (總額: " + newExp + ")");
+                        }
+                    }
+                }
+            }
             pc.setDragonExp(rec.getStoreExp());
             _log.info("成功恢復龍之祝福: " + pc.getName() + ", Exp: " + rec.getStoreExp());
         } else {
             // 真的沒紀錄就視為 0，並建一筆（讓後續 flush 直接 upsert）
             pc.setDragonExp(0);
             DragonExp fresh = new DragonExp();
-            fresh.setLastLoginOutTime(nowMinutes());
+            fresh.setLastLoginOutTime(nowMin);
             fresh.setStoreExp(0);
             _CACHE.put(pc.getId(), fresh);
             _log.info("創建新的龍之祝福記錄: " + pc.getName());

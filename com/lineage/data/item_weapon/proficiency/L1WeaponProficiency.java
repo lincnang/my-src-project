@@ -4,6 +4,9 @@ import com.lineage.server.model.Instance.L1PcInstance;
 import com.lineage.server.serverpackets.S_NPCTalkReturn;
 import com.lineage.server.serverpackets.S_SystemMessage;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +15,8 @@ import java.util.concurrent.TimeUnit;
  * @author 聖子默默
  */
 public class L1WeaponProficiency {
+
+    private static final Log _log = LogFactory.getLog(L1WeaponProficiency.class);
 
     private final L1PcInstance _owner;
     private HashMap<Integer, PlayerWeaponProficiency> _weaponProficiency;
@@ -237,8 +242,25 @@ public class L1WeaponProficiency {
             return;
         }
 
-        addProficiencyExp(type, exp);
-        onChangeProficiencyExp(_owner, type, getProficiencyLevel(type) + 1);
+        // 核心邏輯：每擊殺一隻怪物獲得 0.0001%
+        // 0.0001% 代表需要擊殺 1,000,000 隻怪才能完成一個等級
+        int level = getProficiencyLevel(type);
+        WeaponProficiency currLv = WeaponProficiencyTable.getProficiency(type, level);
+        WeaponProficiency nextLv = WeaponProficiencyTable.getProficiency(type, level + 1);
+
+        if (nextLv != null) {
+            int currThreshold = (currLv != null) ? currLv.getExp() : 0;
+            int nextThreshold = nextLv.getExp();
+            int gap = nextThreshold - currThreshold;
+
+            // 計算公式：總差距 * (Weapon_Exp_Rate / 1,000,000)
+            // 這裡的 exp 參數就是傳進來的 ConfigOtherSet2.Weapon_Exp_Rate
+            long addValue = Math.max(1, Math.round((double) gap * exp / 1000000.0));
+
+            addProficiencyExp(type, (int) addValue);
+            // 檢查是否升級
+            onChangeProficiencyExp(type);
+        }
     }
     /**
      * 將特殊武器類型轉換為主類型（例如 type=18 → 11）
@@ -275,31 +297,40 @@ public class L1WeaponProficiency {
     /**
      * 熟練度經驗達到升級時提升等級
      *
-     * @param pc 玩家
      * @param type 武器類型
-     * @param level 熟練度等級
      */
-    private void onChangeProficiencyExp(L1PcInstance pc, int type, int level) {
+    private void onChangeProficiencyExp(int type) {
         try {
-            WeaponProficiency weaponProficiency = WeaponProficiencyTable.getProficiency(type, level);
-            if (weaponProficiency == null) {
-                return;
+            while (true) {
+                int level = getProficiencyLevel(type);
+                int nextLevel = level + 1;
+                WeaponProficiency nextProf = WeaponProficiencyTable.getProficiency(type, nextLevel);
+
+                if (nextProf == null) {
+                    break;
+                }
+
+                if (getProficiencyExp(type) >= nextProf.getExp()) {
+                    // 移除上一級屬性
+                    WeaponProficiency.addWeaponProficiencyStatus(_owner, type, level, -1);
+                    // 設置新等級
+                    setProficiencyLevel(type, nextLevel);
+                    // 增加新等級屬性
+                    WeaponProficiency.addWeaponProficiencyStatus(_owner, type, nextLevel, 1);
+
+                    // 檢查是否達到最大等級
+                    final int maxLv = WeaponProficiencyTable.getMaxProficienciesLevel(type);
+                    if (nextLevel >= maxLv) {
+                        setProficiencyExp(type, nextProf.getExp());
+                        setProficiencyEnd(type);
+                        break;
+                    }
+                } else {
+                    break;
+                }
             }
-            if (getProficiencyExp(type) >= weaponProficiency.getExp()) {
-                WeaponProficiency.addWeaponProficiencyStatus(pc, type, level - 1, -1);
-                setProficiencyLevel(type, level);
-                WeaponProficiency.addWeaponProficiencyStatus(pc, type, level, 1);
-            }
-            final int maxLv = WeaponProficiencyTable.getMaxProficienciesLevel(type);
-            WeaponProficiency maxProficiency = WeaponProficiencyTable.getProficiency(type, maxLv);
-            if (maxProficiency != null && level >= maxLv) {// 最大等级
-                TimeUnit.MILLISECONDS.sleep(10);
-                setProficiencyLevel(type, maxLv);
-                setProficiencyExp(type, maxProficiency.getExp());
-                setProficiencyEnd(type);
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            _log.error(e.getLocalizedMessage(), e);
         }
     }
 

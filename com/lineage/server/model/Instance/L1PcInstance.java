@@ -13795,26 +13795,13 @@ public class L1PcInstance extends L1Character { // src015
     }
 
     /**
-     * 設置積分
-     * 修改：只允許升級，不允許降級（爵位等級永久保留）
+     * 設置積分（僅更新數值，升階由 Honor.checkHonor() 統一控制）
      */
     public void setHonor(int honor) {
         if (honor < 0) {
             honor = 0;
         }
-
         _Honor = honor;
-
-        int oldLevel = getHonorLevel();
-        int newLevel = Honor.getInstance().getHonorLevel(honor);
-
-        // ✅ 只在新等級更高時才升級，不會降級
-        if (newLevel > oldLevel) {
-            L1WilliamHonor.delHonorSkill(this, oldLevel);
-            setHonorLevel(newLevel);
-            L1WilliamHonor.getHonorSkill(this);
-            sendPackets(new S_SystemMessage("★ 威望等級提升至 Lv." + newLevel + "，能力已更新！"));
-        }
     }
 
 

@@ -881,20 +881,21 @@ public class L1MonsterInstance extends L1NpcInstance {
 
                         if (roll < rand) {
                             int beforeHonor = pc.getHonor();
+                            int beforeLevel = pc.getHonorLevel();
                             int afterHonor = beforeHonor + honor;
                             pc.setHonor(afterHonor);
-                            // 抓升級前的階段 max 分數
-                            int stageLevel = Honor.getInstance().getHonorLevel(beforeHonor);
-                            L1WilliamHonor honorData = Honor.getInstance().getTemplate(stageLevel);
-                            int nextMax = (honorData != null) ? honorData.getHonorMax() : 99999;
+                            // 以玩家實際的下一階段為目標
+                            int nextLevel = beforeLevel + 1;
+                            L1WilliamHonor honorData = Honor.getInstance().getTemplate(nextLevel);
+                            int requiredHonor = (honorData != null) ? honorData.getHonorMin() : 99999;
 
-                            pc.sendPackets(new S_SystemMessage("\\fR目前爵位積分：" + afterHonor + " / " + nextMax));
+                            pc.sendPackets(new S_SystemMessage("\\fR目前爵位積分：" + afterHonor + " / " + requiredHonor));
 
-                            // 判斷是否完成任務
+                            // 判斷是否完成任務（積分達到下一階段門檻）
                             if (NpcHonorTable.get().isTargetNpc(npcId)
-                                    && beforeHonor < nextMax && afterHonor >= nextMax) {
+                                    && beforeHonor < requiredHonor && afterHonor >= requiredHonor) {
                                 Honor.getInstance().markDailyQuestComplete(pc);
-                                Honor.getInstance().checkHonor(pc, true, true); // 加入強制傳送參數
+                                Honor.getInstance().checkHonor(pc, true, true);
                             }
                         }
                     }

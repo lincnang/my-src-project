@@ -73,7 +73,7 @@ public class Honor {
         }
 
         int currentHonor = pc.getHonor();
-        int requiredHonor = targetStage.getHonorMax();
+        int requiredHonor = targetStage.getHonorMin();
         int remain = requiredHonor - currentHonor;
 
         if (remain > 0) {
@@ -239,8 +239,7 @@ public class Honor {
     }
 
     /**
-     * 檢查並處理玩家威望升級
-     * 修改：爵位升級後記錄當下等級，不掉階
+     * 檢查並處理玩家威望升級（每次只升一級，避免跨階）
      */
     public void checkHonor(L1PcInstance pc, boolean fromMission, boolean forceTeleport) {
         if (pc == null) return;
@@ -249,23 +248,16 @@ public class Honor {
 
             int currentHonor = pc.getHonor();
             int currentLevel = pc.getHonorLevel();
-            int realLevel = getHonorLevel(currentHonor);
+            int nextLevel = currentLevel + 1;
 
-            // ✅ 只允許升階，不允許掉階
-            if (realLevel > currentLevel) {
-                applyHonorUpgrade(pc, realLevel);
-                return;
-            }
-        
-            // ✅ 特殊情況：在任務中且積分達標，強制觸發升階效果（重新套用能力）
-            if (realLevel == currentLevel && fromMission && forceTeleport) {
-                applyHonorUpgrade(pc, realLevel);
-                return;
+            L1WilliamHonor nextStage = getTemplate(nextLevel);
+            if (nextStage == null) return; // 已達最高等級
+
+            // 積分達到下一階段門檻才升階
+            if (currentHonor >= nextStage.getHonorMin()) {
+                applyHonorUpgrade(pc, nextLevel);
             }
         }
-        
-        // ✅ 積分不足不處理（保持當前爵位等級）
-        // 註：realLevel < currentLevel 時不會執行任何操作，爵位等級保持不變
     }
 
     private void applyHonorUpgrade(L1PcInstance pc, int level) {

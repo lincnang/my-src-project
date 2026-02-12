@@ -65,7 +65,18 @@ public final class CheckTimeController implements Runnable {
                         final int limit_time = mapsLimitTime.getLimitTime() + pc.getMapsBonusTime(order_id);
                         // 允許時間已到
                         if (used_time > limit_time) {
-                            L1Teleport.teleport(pc, mapsLimitTime.getOutMapX(), mapsLimitTime.getOutMapY(), mapsLimitTime.getOutMapId(), pc.getHeading(), true);
+                            int newX = mapsLimitTime.getOutMapX();
+                            int newY = mapsLimitTime.getOutMapY();
+                            int range = mapsLimitTime.getRange();
+                            if (range > 0) {
+                                int rndX = (int) (Math.random() * (range + 1));
+                                int rndY = (int) (Math.random() * (range + 1));
+                                if (Math.random() > 0.5) rndX = -rndX;
+                                if (Math.random() > 0.5) rndY = -rndY;
+                                newX += rndX;
+                                newY += rndY;
+                            }
+                            L1Teleport.teleport(pc, newX, newY, mapsLimitTime.getOutMapId(), pc.getHeading(), true);
                         } else {
                             checkTime(pc, used_time, limit_time);
                             // 入場時間+1

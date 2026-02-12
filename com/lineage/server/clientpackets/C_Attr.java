@@ -1317,34 +1317,21 @@ public class C_Attr extends ClientBasePacket {
             pc.sendPackets(new S_ServerMessage(629));
             return;
         }
-        final int HEADING_TABLE_X[] = {0, 1, 1, 1, 0, -1, -1, -1};
-        final int HEADING_TABLE_Y[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+        
         final L1Map map = leader.getMap();
         int locX = leader.getX();
         int locY = leader.getY();
-        int heading = leader.getCallClanHeading();
-        locX += HEADING_TABLE_X[heading];
-        locY += HEADING_TABLE_Y[heading];
-        heading = (heading + 4) % 4;
-        /*
-         * final Random random = new Random(); locX += (random.nextInt(6) - 3);
-         * locY += (random.nextInt(6) - 3);
-         */
-        boolean isExsistCharacter = false;
-        for (final L1Object object : World.get().getVisibleObjects(leader, 1)) {
-            if (object instanceof L1Character) {
-                final L1Character cha = (L1Character) object;
-                if ((cha.getX() == locX) && (cha.getY() == locY) && (cha.getMapId() == mapId)) {
-                    isExsistCharacter = true;
-                    break;
-                }
-            }
+        int heading = leader.getHeading();
+
+        // 隨機範圍2格
+        locX += (int)(Math.random() * 5) - 2;
+        locY += (int)(Math.random() * 5) - 2;
+
+        if (!map.isPassable(locX, locY, null)) {
+            locX = leader.getX();
+            locY = leader.getY();
         }
-        if (((locX == 0) && (locY == 0)) || !map.isPassable(locX, locY, null) || isExsistCharacter) {
-            // 627 因你要去的地方有障礙物以致於無法直接傳送到該處。
-            pc.sendPackets(new S_ServerMessage(627));
-            return;
-        }
+        
         L1Teleport.teleport(pc, locX, locY, mapId, heading, true, L1Teleport.CALL_CLAN);
     }
 

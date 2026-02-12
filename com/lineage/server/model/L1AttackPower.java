@@ -103,9 +103,17 @@ public class L1AttackPower {
                     if (rand < attrEffectChance) {
                         int gfxId = attrWeapon.getGfxId();
                         if (gfxId > 0) {
-                            _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), gfxId));
+                            S_SkillSound packet = new S_SkillSound(_target.getId(), gfxId);
+                            _target.broadcastPacketX8(packet);
+                            if (_targetPc != null) {
+                                _targetPc.sendPackets(packet);
+                            }
                         } else {
-                            _pc.sendPacketsX8(new S_SkillSound(_pc.getId(), 7749)); // 預設屬性特效
+                            S_SkillSound packet = new S_SkillSound(_target.getId(), 7749); // 預設屬性特效
+                            _target.broadcastPacketX8(packet);
+                            if (_targetPc != null) {
+                                _targetPc.sendPackets(packet);
+                            }
                         }
                     }
                 }
@@ -194,9 +202,17 @@ public class L1AttackPower {
                     if (attrWeapon.getTypeRange() > 0 && attrWeapon.getTypeRangeDmg() > 0) { // 遠程攻擊
                         int gfxId = attrWeapon.getGfxId();
                         if (gfxId == 0) {
-                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), 7749));
+                            S_SkillSound packet = new S_SkillSound(_target.getId(), 7749);
+                            _target.broadcastPacketX8(packet);
+                            if (_targetPc != null) {
+                                _targetPc.sendPackets(packet);
+                            }
                         } else {
-                            _pc.sendPacketsAll(new S_SkillSound(_pc.getId(), gfxId));
+                            S_SkillSound packet = new S_SkillSound(_target.getId(), gfxId);
+                            _target.broadcastPacketX8(packet);
+                            if (_targetPc != null) {
+                                _targetPc.sendPackets(packet);
+                            }
                         }
                         int dmg = attrWeapon.getTypeRangeDmg();
                         Iterator<?> localIterator1;

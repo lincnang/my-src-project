@@ -33,8 +33,9 @@ public final class L1MapsLimitTime {
     private final int _outMapX; // 地圖X軸 (時間到強制傳送回村)
     private final int _outMapY; // 地圖Y軸 (時間到強制傳送回村)
     private final short _outMapId; // 地圖ID (時間到強制傳送回村)
+    private final int _range; // 回村座標隨機範圍
 
-    public L1MapsLimitTime(final int orderId, final List<Integer> mapList, final String mapName, final int limitTime, final int outMapX, final int outMapY, final short outMapId) {
+    public L1MapsLimitTime(final int orderId, final List<Integer> mapList, final String mapName, final int limitTime, final int outMapX, final int outMapY, final short outMapId, int range) {
         _orderId = orderId;
         _mapList = mapList;
         _mapName = mapName;
@@ -42,6 +43,11 @@ public final class L1MapsLimitTime {
         _outMapX = outMapX;
         _outMapY = outMapY;
         _outMapId = outMapId;
+        _range = range;
+    }
+    
+    public L1MapsLimitTime(final int orderId, final List<Integer> mapList, final String mapName, final int limitTime, final int outMapX, final int outMapY, final short outMapId) {
+    	this(orderId, mapList, mapName, limitTime, outMapX, outMapY, outMapId, 0);
     }
 
     public int getOrderId() {
@@ -70,5 +76,9 @@ public final class L1MapsLimitTime {
 
     public short getOutMapId() {
         return _outMapId;
+    }
+    
+    public int getRange() {
+        return _range;
     }
 }

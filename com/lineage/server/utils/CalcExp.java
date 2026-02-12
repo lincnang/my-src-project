@@ -402,8 +402,9 @@ public class CalcExp {
             int finalExp = (int) Math.min(addExp, 18032546);
             pc.addExp(finalExp);
             L1WeaponProficiency proficiency = pc.getProficiency();
-            if (proficiency != null) {//TODO 玩家武器熟練度經驗
-                pc.getProficiency().addProficiencyExp(finalExp / ConfigOtherSet2.Weapon_Exp_Rate);// 請自行設定經驗值獲取方式
+            if (proficiency != null) {
+                // 直接傳入設定檔中的倍率，不再參考怪物經驗
+                pc.getProficiency().addProficiencyExp(ConfigOtherSet2.Weapon_Exp_Rate);
             }
         } catch (Exception e) {
             _log.error(e.getLocalizedMessage(), e);

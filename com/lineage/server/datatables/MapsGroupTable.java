@@ -56,13 +56,19 @@ public final class MapsGroupTable {
                 final int outMapX = rs.getInt("out_x");
                 final int outMapY = rs.getInt("out_y");
                 final short outMapId = rs.getShort("out_map");
+                int range = 0;
+                try {
+                	range = rs.getInt("範圍");
+                } catch (Exception e) {
+                	// 兼容舊資料庫，如果沒有範圍欄位則預設為0
+                }
                 // 建立入場地圖列表
                 final List<Integer> mapList = new ArrayList<>();
                 for (final String map_str : mapIds.split(",")) {
                     mapList.add(Integer.parseInt(map_str));
                 }
                 // 建立暫存組
-                final L1MapsLimitTime mapsLimitTime = new L1MapsLimitTime(order_id, mapList, mapName, limitTime, outMapX, outMapY, outMapId);
+                final L1MapsLimitTime mapsLimitTime = new L1MapsLimitTime(order_id, mapList, mapName, limitTime, outMapX, outMapY, outMapId, range);
                 _mapsGroup.put(order_id, mapsLimitTime);
             }
         } catch (final SQLException e) {
